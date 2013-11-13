@@ -5,10 +5,10 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import city.interfaces.MarketEmployee;
+import city.interfaces.MarketCashier;
 import base.Role;
 
-public class MarketCashierRole extends Role implements MarketEmployee {
+public class MarketCashierRole extends Role implements MarketCashier {
 
 //  Data
 //	=====================================================================	

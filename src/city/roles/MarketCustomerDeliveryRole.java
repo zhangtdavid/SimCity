@@ -3,10 +3,11 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
 import base.Role;
 
-public class MarketCustomerDeliveryRole extends Role implements MarketEmployee {
+public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
 
 //  Data
 //	=====================================================================	

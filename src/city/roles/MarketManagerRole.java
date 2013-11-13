@@ -6,10 +6,10 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import city.interfaces.MarketEmployee;
+import city.interfaces.MarketManager;
 import base.Role;
 
-public class MarketManagerRole extends Role implements MarketEmployee {
+public class MarketManagerRole extends Role implements MarketManager {
 //  Data
 //	=====================================================================	
 //	Market market;

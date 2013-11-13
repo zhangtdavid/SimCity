@@ -2,13 +2,13 @@ package city.tests.mock;
 
 import utilities.EventLog;
 import base.Mock;
-import city.interfaces.Market;
+import city.interfaces.MarketCashier;
 
-public class MockMarket extends Mock implements Market {
+public class MockMarketCashier extends Mock implements MarketCashier {
 	
 	public EventLog log = new EventLog();
 
-	public MockMarket(String name) {
+	public MockMarketCashier(String name) {
 		super(name);
 		// TODO Auto-generated constructor stub
 	}
