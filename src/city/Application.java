@@ -18,8 +18,10 @@ public class Application {
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
 	
-	// One interval is the simulation's equivalent of a half-hour
-	public static final int INTERVAL = 10000;
+	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
+	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
+	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
+	public static enum BANK_SERVICES {accountCreate, acctClose, moneyWithdraw, loanRequest};
 	
     /**
      * Main routine to start the program.
@@ -56,9 +58,10 @@ public class Application {
 		PersonAgent p1 = new PersonAgent(date);
 		WaiterRole p1r1 = new WaiterRole();
 		
-		p1.addRole(p1r1);
+		p1.setOccupation(p1r1);
 		
 		people.add(p1);
+		p1.startThread();
 	}
 
 }

@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface Bank {
+public interface BankCustomer {
 
 	// Data
 	
@@ -18,6 +18,6 @@ public interface Bank {
 	
 	// Utilities
 	
-	// Classes	
+	// Classes
 	
 }
