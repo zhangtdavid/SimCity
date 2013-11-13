@@ -1,7 +1,7 @@
 package city.roles;
 
+import city.Role;
 import city.interfaces.MarketEmployee;
-import base.Role;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 

@@ -1,18 +1,27 @@
 package city.agents;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
-import base.Agent;
-import base.Role;
+import city.Agent;
+import city.Role;
 import city.interfaces.Person;
 
 public class PersonAgent extends Agent implements Person {
 	
 	// Data
 	
-	public List<Role> roles;
+	private Date date;
+	
+	public List<Role> roles = new ArrayList<Role>();
 	
 	// Constructor
+	
+	public PersonAgent(Date d) {
+		super();
+		date = d;
+	}
 	
 	// Messages
 	
@@ -39,6 +48,12 @@ public class PersonAgent extends Agent implements Person {
 	// Getters
 	
 	// Setters
+	
+	@Override
+	public void setDate(Date d) {
+		date = d;
+		stateChanged();
+	}
 	
 	// Utilities
 	

@@ -1,6 +1,6 @@
 package city.agents;
 
-import base.Agent;
+import city.Agent;
 import city.interfaces.Restaurant;
 
 public class RestaurantAgent extends Agent implements Restaurant {

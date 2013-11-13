@@ -1,6 +1,6 @@
 package city.roles;
 
-import base.Role;
+import city.Role;
 import city.interfaces.BankTeller;
 
 public class BankTellerRole extends Role implements BankTeller {

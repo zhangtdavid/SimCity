@@ -1,9 +1,11 @@
-package base;
+package city;
 
 /**
- * This is the base class for all mocks.
+ * The base class for all SimCity201 mocks.
+ * 
+ * Mocks are coded for agents, roles, and animations.
  */
-public class Mock {
+public abstract class Mock {
 	private String name;
 
 	public Mock(String name) {

@@ -1,4 +1,4 @@
-package base;
+package city;
 
 import city.agents.PersonAgent;
 
