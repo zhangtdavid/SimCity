@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.interfaces.MarketCustomer;
-import base.Role;
+import city.Role;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
 

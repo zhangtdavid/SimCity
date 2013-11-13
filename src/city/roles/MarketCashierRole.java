@@ -6,7 +6,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.interfaces.MarketCashier;
-import base.Role;
+import city.Role;
 
 public class MarketCashierRole extends Role implements MarketCashier {
 

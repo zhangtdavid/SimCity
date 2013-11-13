@@ -5,7 +5,7 @@ import java.util.Map;
 
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
-import base.Role;
+import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
 

@@ -1,8 +1,6 @@
 package city.interfaces;
 
-import java.util.Date;
-
-public interface Person {
+public interface Bus {
 
 	// Data
 	
@@ -18,10 +16,8 @@ public interface Person {
 	
 	// Setters
 	
-	public void setDate(Date d);
-	
 	// Utilities
 	
-	// Classes
+	// Classes	
 	
 }

@@ -7,7 +7,7 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import city.interfaces.MarketManager;
-import base.Role;
+import city.Role;
 
 public class MarketManagerRole extends Role implements MarketManager {
 //  Data

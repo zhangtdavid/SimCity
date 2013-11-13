@@ -1,6 +1,6 @@
 package city.tests.gui.mock;
 
-import base.Mock;
+import city.Mock;
 import city.animations.interfaces.Person;
 
 public class MockPersonAnimation extends Mock implements Person {

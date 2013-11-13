@@ -9,21 +9,8 @@ public class MainFrame extends JFrame {
 	
 	private static final long serialVersionUID = -1848134216103293730L;
 	
-	static MainFrame mainFrame;
     private static int WINDOWX = 1100;
     private static int WINDOWY = 700;
-	
-    /**
-     * Main routine to start the GUI window
-     * 
-     * When the program is started, this is the first call. It opens the GUI window
-     * and starts all further program behavior.
-     *
-     * @param args no input required
-     */
-	public static void main(String[] args) {
-		mainFrame = new MainFrame();
-	}
 	
     /**
      * Constructor method

@@ -1,7 +1,7 @@
 package city.tests.mock;
 
 import utilities.EventLog;
-import base.Mock;
+import city.Mock;
 import city.interfaces.MarketCustomerDelivery;
 
 public class MockMarketCustomerDelivery extends Mock implements MarketCustomerDelivery {

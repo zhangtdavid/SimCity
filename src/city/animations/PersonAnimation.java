@@ -2,10 +2,10 @@ package city.animations;
 
 import java.awt.Graphics2D;
 
-import base.Animation;
+import city.Animation;
 import city.animations.interfaces.Person;
 
-public class PersonAnimation implements Animation, Person {
+public class PersonAnimation extends Animation implements Person {
 
 	@Override
 	public void updatePosition() {

@@ -1,10 +1,10 @@
-package city.agents;
+package city.roles;
 
-import city.Agent;
-import city.interfaces.Market;
+import city.Role;
+import city.interfaces.BusPassenger;
 
-public class MarketAgent extends Agent implements Market {
-
+public class BusPassengerRole extends Role implements BusPassenger {
+	
 	// Data
 	
 	// Constructor

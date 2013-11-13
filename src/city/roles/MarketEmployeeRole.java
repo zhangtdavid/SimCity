@@ -3,8 +3,8 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.Role;
 import city.interfaces.MarketEmployee;
-import base.Role;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 
