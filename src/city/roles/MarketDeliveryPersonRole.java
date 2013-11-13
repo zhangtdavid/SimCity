@@ -5,8 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import city.interfaces.MarketDeliveryPerson;
 import city.Role;
+import city.interfaces.MarketDeliveryPerson;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
 
@@ -15,6 +15,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	Market market; TODO
 	
 	MarketCashierRole cashier;
+	private List<Role> roles = new ArrayList<Role>();
 //	Car car;
 //  CarPassengerRole
 
@@ -65,7 +66,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		}
 		
 		Boolean blocking = false;
-		for (Role r : roles) if (r.active) {
+		for (Role r : roles) if (r.getActive()) {
 			blocking  = true;
 			r.runScheduler();
 			break;
@@ -73,8 +74,6 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		
 		// Scheduler disposition
 		return blocking;
-		
-		return false;
 	}
 	
 //  Actions
