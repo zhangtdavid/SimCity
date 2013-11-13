@@ -11,8 +11,8 @@ public abstract class Role {
 	
 	// Data
 	
-	public PersonAgent person;
-	public Boolean active;
+	private PersonAgent person;
+	private Boolean active;
 	
 	// Constructor
 	
@@ -30,10 +30,22 @@ public abstract class Role {
 		return person;
 	}
 	
+	public Boolean getActive() {
+		return active;
+	}
+	
 	// Setters
 	
 	public void setPerson(PersonAgent p) {
 		this.person = p;
+	}
+	
+	public void setActive() {
+		this.active = true;
+	}
+	
+	public void setInactive() {
+		this.active = false;
 	}
 	
 	// Utilities
