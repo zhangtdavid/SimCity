@@ -58,12 +58,12 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	private enum TransactionState
 	{Pending, Calculating, ReceivedPayment};
 
-	private List<MyDeliveryTruck> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryTruck>());
-	private class MyDeliveryTruck {
+	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
+	private class MyDeliveryPerson {
 		MarketDeliveryPersonRole deliveryPerson;
 		boolean available;
 		
-		public MyDeliveryTruck(MarketDeliveryPersonRole d) {
+		public MyDeliveryPerson(MarketDeliveryPersonRole d) {
 			deliveryPerson = d;
 			available = true;
 		}
@@ -114,12 +114,12 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	Delivery Truck
 //	---------------------------------------------------------------
 	public void msgDeliveringItems(MarketDeliveryPersonRole d) {
-		MyDeliveryTruck deliveryTruck = findTruck(d);
+		MyDeliveryPerson deliveryTruck = findTruck(d);
 		deliveryTruck.available = false;
 	}
 	
 	public void msgFinishedDeliveringItems(MarketDeliveryPersonRole d) {
-		MyDeliveryTruck deliveryTruck = findTruck(d);
+		MyDeliveryPerson deliveryTruck = findTruck(d);
 		deliveryTruck.available = true;
 	}
 	
@@ -172,9 +172,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgPaymentReceived();
 		else {
 			t.customerDelivery.msgPaymentReceived();
-			for(MyDeliveryTruck dt : deliveryPeople ){
+			for(MyDeliveryPerson dt : deliveryPeople ){
 				if(dt.available == true) {
-					dt.msgDeliverOrder(t.customerDelivery, t.collectedItems);
+					dt.deliveryPerson.msgDeliverOrder(t.customerDelivery, t.collectedItems);
 				}
 			}
 		}
@@ -207,8 +207,8 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		return null;
 	}
 	
-	private MyDeliveryTruck findTruck(MarketDeliveryPersonRole d) {
-		for(MyDeliveryTruck t : deliveryPeople){
+	private MyDeliveryPerson findTruck(MarketDeliveryPersonRole d) {
+		for(MyDeliveryPerson t : deliveryPeople){
 			if(t.deliveryPerson == d) {
 				return t;		
 			}
