@@ -58,17 +58,21 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	private enum TransactionState
 	{Pending, Calculating, ReceivedPayment};
 
-	private List<MyDeliveryTruck> deliveryTrucks = Collections.synchronizedList(new ArrayList<MyDeliveryTruck>());
+	private List<MyDeliveryTruck> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryTruck>());
 	private class MyDeliveryTruck {
-		DeliveryTruck truck;
+		MarketDeliveryPersonRole deliveryPerson;
 		boolean available;
 		
-		public MyDeliveryTruck(DeliveryTruck t) {
-			truck = t;
+		public MyDeliveryTruck(MarketDeliveryPersonRole d) {
+			deliveryPerson = d;
 			available = true;
 		}
 	}
 	
+//	Gui
+//	---------------------------------------------------------------
+//	private MarketCashierGui marketCashierGui;
+
 //	Constructor
 //	---------------------------------------------------------------
 	public MarketCashierRole() {
@@ -83,12 +87,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public void msgComputeBill(MarketEmployeeRole e, MarketCustomerRole c, Map<String, Integer> order, Map<String, Integer> collectedItems) {
 		System.out.println("Market customer received msgComputeBill");
 		transactions.add(new Transaction(e, c, order, collectedItems));
+		stateChanged();
 	}
 	
 	public void msgHereIsPayment(MarketCustomerRole c, double money) {
 		Transaction t = findTransaction(c);
 		t.payment = money;
 		t.s = TransactionState.ReceivedPayment;
+		stateChanged();
 	}
 
 	
@@ -107,13 +113,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //	Delivery Truck
 //	---------------------------------------------------------------
-	public void msgDeliveringItems(DeliveryTruck dt) {
-		MyDeliveryTruck deliveryTruck = findTruck(dt);
+	public void msgDeliveringItems(MarketDeliveryPersonRole d) {
+		MyDeliveryTruck deliveryTruck = findTruck(d);
 		deliveryTruck.available = false;
 	}
 	
-	public void msgFinishedDeliveringItems(DeliveryTruck dt) {
-		MyDeliveryTruck deliveryTruck = findTruck(dt);
+	public void msgFinishedDeliveringItems(MarketDeliveryPersonRole d) {
+		MyDeliveryTruck deliveryTruck = findTruck(d);
 		deliveryTruck.available = true;
 	}
 	
@@ -166,7 +172,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgPaymentReceived();
 		else {
 			t.customerDelivery.msgPaymentReceived();
-			for(MyDeliveryTruck dt : deliveryTrucks ){
+			for(MyDeliveryTruck dt : deliveryPeople ){
 				if(dt.available == true) {
 					dt.msgDeliverOrder(t.customerDelivery, t.collectedItems);
 				}
@@ -184,7 +190,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //  Utilities
 //	=====================================================================	
 	private Transaction findTransaction(MarketCustomerRole c) {
-		for(Transaction t : transactions ){
+		for(Transaction t : transactions){
 			if(t.customer == c) {
 				return t;		
 			}
@@ -193,7 +199,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	}
 	
 	private Transaction findTransaction(MarketCustomerDeliveryRole c) {
-		for(Transaction t : transactions ){
+		for(Transaction t : transactions){
 			if(t.customerDelivery == c) {
 				return t;		
 			}
@@ -201,9 +207,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		return null;
 	}
 	
-	private MyDeliveryTruck findTruck(DeliveryTruck dt) {
-		for(MyDeliveryTruck t : deliveryTrucks ){
-			if(t.truck == dt) {
+	private MyDeliveryTruck findTruck(MarketDeliveryPersonRole d) {
+		for(MyDeliveryTruck t : deliveryPeople){
+			if(t.deliveryPerson == d) {
 				return t;		
 			}
 		}
