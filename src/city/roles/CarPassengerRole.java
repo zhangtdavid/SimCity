@@ -1,25 +1,23 @@
 package city.roles;
 
 import city.Role;
-import city.agents.PersonAgent;
 import city.interfaces.CarPassenger;
 import city.agents.CarAgent;
+import city.Building;
 
 public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
-	PersonAgent myPerson; // Person this role is part of
 	enum CarPassengerState {NOTDRIVING, GOINGTOCAR, DRIVING};
 	CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
 	enum CarPassengerEvent {NONE, WANTTODRIVE, ATCAR, ATDESTINATION};
 	CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
 	CarAgent myCar; // Car this person is getting into
 	Building destination; // Building this car is going to
-	CarPassengerGui myGui; // GUI for animation
+//	CarPassengerGui myGui; // GUI for animation
 	
 	// Constructor
-	CarPassengerRole(PersonAgent p, CarAgent c) { // Pass in the person and car this role is assigned to
-		myPerson = p;
+	CarPassengerRole(CarAgent c) { // Pass in the person and car this role is assigned to
 		myCar = c;
 	}
 	
@@ -65,7 +63,8 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Actions
 	void goToCar() {
-		myGui.doGoToCar(myCar); // This will call a msg to the GUI, which will animate and then call msgImAtCar() on this passenger
+//		myGui.doGoToCar(myCar); // This will call a msg to the GUI, which will animate and then call msgImAtCar() on this passenger
+		msgImAtCar();
 	}
 
 	void driveCar() {
@@ -73,17 +72,17 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	}
 
 	void getOutOfCar() {
-		myGui.doGetOutOfCar(myCar); // This will pause this agent until the animation is finished
+//		myGui.doGetOutOfCar(myCar); // This will pause this agent until the animation is finished
 		myState = CarPassengerState.NOTDRIVING; // Reset state and event
 		myEvent = CarPassengerEvent.NONE;
-		myPerson.deactivateRole(this); // Tell personagent this role is done transporting 
+		this.setInactive();
 	}
 	// Getters
 	
 	// Setters
-	void setGui(CarPassengerGui gui) {
-		myGui = gui;
-	}
+//	void setGui(CarPassengerGui gui) {
+//		myGui = gui;
+//	}
 	// Utilities
 	
 	// Classes
