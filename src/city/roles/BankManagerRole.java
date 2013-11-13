@@ -1,9 +1,9 @@
-package city.agents;
+package city.roles;
 
-import city.Agent;
-import city.interfaces.Bank;
+import city.Role;
+import city.interfaces.BankManager;
 
-public class BankAgent extends Agent implements Bank {
+public class BankManagerRole extends Role implements BankManager {
 
 	// Data
 	
