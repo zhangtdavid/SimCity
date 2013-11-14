@@ -68,6 +68,11 @@ public class Application {
 	public static class CityMap {
 		private static HashMap<String, List<Building>> map = new HashMap<String, List<Building>>();
 		
+		public void addBuilding(String type, Building b) {
+			if(map.containsKey(type))
+				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		}
+		
 	}
 
 }
