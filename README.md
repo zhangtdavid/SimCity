@@ -16,12 +16,13 @@ The SimCity201 project is divided between two code folders. `lib` is insignifica
 
 Inside `src` are multiple packages:
 
-* `base` contains the `Agent`, `Animation`, `Role`, and `Mock` abstract classes. 
+* `city` contains the `Agent`, `Animation`, `Building`, `Mock`, and `Role` abstract classes. It also contains the `Application` class.
 * `city.agents` contains all classes which extend `Agent`.
 * `city.animations` contains all classes which extend `Animation`.
 * `city.animations.interfaces` contains interfaces to all classes in `city.animations`.
+* `city.buildings` contains all classes which extend `Building`.
 * `city.gui` contains various classes for displaying the program GUI. These classes are separate from the classes in `city.animations` since they don't represent any type of agent, only the chrome/controls for the GUI itself.
-* `city.interfaces` contains interfaces to all classes in `city.agents` and `city.roles`.
+* `city.interfaces` contains interfaces to all classes in `city.agents` and `city.roles`. Since buildings do not require testing, they do not have interfaces.
 * `city.roles` contains all classes which extend `Role`.
 * `city.tests` contains test classes for all classes in `city.agents` and `city.roles`.
 * `city.tests.gui.mock` contains mocks for all classes in `city.animations`.

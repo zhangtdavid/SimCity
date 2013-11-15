@@ -28,7 +28,6 @@ public class PersonAgent extends Agent implements Person {
      * Create a Person.
      * 
      * @param startDate the current simulation Date
-     * @param occupation the single Role that is the Person's occupation
      */
 	public PersonAgent(Date startDate) {
 		super();
@@ -94,6 +93,12 @@ public class PersonAgent extends Agent implements Person {
 	public void addRole(Role r) {
 		roles.add(r);
 		r.setPerson(this);
+	}
+	
+	private boolean shouldGoToWork() {
+		boolean disposition = false;
+		// if (!occupation.getActive()) {}
+		return disposition;
 	}
 	
 	// Classes

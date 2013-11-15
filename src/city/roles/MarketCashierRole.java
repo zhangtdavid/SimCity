@@ -154,7 +154,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		t.s = TransactionState.Calculating;
 
 		for (String s: t.collectedItems.keySet()) {
-        	t.bill += t.collectedItems.get(s)*prices.get(s);
+        	// t.bill += t.collectedItems.get(s)*prices.get(s);
         }
         // notify customer if there is a difference between order and collected items
 
@@ -174,7 +174,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customerDelivery.msgPaymentReceived();
 			for(MyDeliveryTruck dt : deliveryPeople ){
 				if(dt.available == true) {
-					dt.msgDeliverOrder(t.customerDelivery, t.collectedItems);
+					// dt.msgDeliverOrder(t.customerDelivery, t.collectedItems);
 				}
 			}
 		}
