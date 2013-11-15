@@ -22,7 +22,7 @@ public abstract class Agent implements AbstractAgent {
      *
      * @return true iff some action was executed that might have changed the state.
      */
-    public abstract boolean runScheduler();
+    protected abstract boolean runScheduler();
     
     /**
      * Return agent name for messages.  Default is to return Java instance name.
