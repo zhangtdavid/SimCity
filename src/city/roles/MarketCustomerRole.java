@@ -3,7 +3,10 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
+import city.interfaces.MarketEmployee;
+import city.interfaces.MarketManager;
 import city.Role;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
@@ -13,9 +16,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
     private Map<String, Integer> order = new HashMap<String, Integer>();
     private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
 
-	private MarketManagerRole manager;
-	private MarketCashierRole cashier;
-	private MarketEmployeeRole employee;
+	private MarketManager manager;
+	private MarketCashier cashier;
+	private MarketEmployee employee;
 	
 	int loc;
 	
@@ -55,7 +58,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();
 	}
 	
-	public void msgWhatWouldYouLike(MarketEmployeeRole e, int loc) {
+	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
 		System.out.println("Market customer received msgWhatWouldYouLike");
 		event = MarketCustomerEvent.AskedForOrder;
 		employee = e;
@@ -158,12 +161,27 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //		return back to normal person role
 
 	}
-	// Getters
 	
 	// Setters
 	
 //  Utilities
 //	=====================================================================	
+	// Getters
+	public MarketManager getManager() {
+		return manager;
+	}
 	
+	public MarketCashier getCashier() {
+		return cashier;
+	}
+	
+	// Setters
+	public MarketManager setManager() {
+		return manager;
+	}
+	
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
 	// Classes
 }

@@ -6,13 +6,17 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomer;
+import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.Role;
 
 public class MarketManagerRole extends Role implements MarketManager {
 //  Data
 //	=====================================================================	
-//	Market market;
+	private MarketBuilding market;
 	
 	// TODO move to market class
 	public Map<String, Integer> marketInventory = new ConcurrentHashMap<String, Integer>();
@@ -24,10 +28,10 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	---------------------------------------------------------------
 	private List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
 	private class MyMarketEmployee {
-		MarketEmployeeRole employee;
+		MarketEmployee employee;
 		MarketEmployeeState s;
 		
-		public MyMarketEmployee(MarketEmployeeRole employee) {
+		public MyMarketEmployee(MarketEmployee employee) {
 			this.employee = employee;
 			s = MarketEmployeeState.Available;
 		}
@@ -39,14 +43,14 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	---------------------------------------------------------------
 	private List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
 	private class MyMarketCustomer {
-		MarketCustomerRole customer;
-		MarketCustomerDeliveryRole customerDelivery;
+		MarketCustomer customer;
+		MarketCustomerDelivery customerDelivery;
 		
-		public MyMarketCustomer(MarketCustomerRole customer) {
+		public MyMarketCustomer(MarketCustomer customer) {
 			this.customer = customer;
 			customerDelivery = null;
 		}
-		public MyMarketCustomer(MarketCustomerDeliveryRole customer) {
+		public MyMarketCustomer(MarketCustomerDelivery customer) {
 			customer = null;
 			this.customerDelivery = customer;
 		}
@@ -55,15 +59,16 @@ public class MarketManagerRole extends Role implements MarketManager {
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketManagerRole() {
-		super(); // TODO
+	public MarketManagerRole(MarketBuilding market) {
+		super();
+		this.market = market;
 	}
 	
 //  Messages
 //	=====================================================================
 //	Customer (In Person)
 //	---------------------------------------------------------------
-	public void msgIWouldLikeToPlaceAnOrder(MarketCustomerRole c) {
+	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
 		System.out.println("Market manager received msgIWouldLikeToPlaceAnOrder");
 		
 		customers.add(new MyMarketCustomer(c));
@@ -72,7 +77,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
-	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDeliveryRole c) {
+	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c) {
 		System.out.println("Market manager received msgIWouldLikeToPlaceADeliveryOrder");
 
 		customers.add(new MyMarketCustomer(c));
@@ -81,7 +86,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Employee
 //	---------------------------------------------------------------
-	public void msgIAmAvailableToAssist(MarketEmployeeRole e) {
+	public void msgIAmAvailableToAssist(MarketEmployee e) {
 		System.out.println("Market manager received msgIAmAvailableToAssist");
 		
 		MyMarketEmployee tempEmployee = findEmployee(e);
@@ -136,7 +141,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Utilities
 //=====================================================================
-	private MyMarketEmployee findEmployee(MarketEmployeeRole me) {
+	private MyMarketEmployee findEmployee(MarketEmployee me) {
 		for(MyMarketEmployee e : employees ){
 			if(e.employee == me) {
 				return e;		

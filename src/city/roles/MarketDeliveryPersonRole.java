@@ -6,7 +6,11 @@ import java.util.List;
 import java.util.Map;
 
 import city.agents.CarAgent;
+import city.interfaces.CarPassenger;
+import city.interfaces.MarketCashier;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
+import city.interfaces.MarketManager;
 import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
@@ -15,14 +19,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================	
 //	Market market; TODO
 	
-	MarketCashierRole cashier;
+	private MarketCashier cashier;
 	private List<Role> roles = new ArrayList<Role>();
 
-	CarAgent car;
-	CarPassengerRole carPassenger;
+	private CarAgent car;
+	private CarPassenger carPassenger;
 
-	MarketCustomerDeliveryRole customerDelivery;
-	Map<String, Integer> collectedItems;
+	private MarketCustomerDelivery customerDelivery;
+	private Map<String, Integer> collectedItems;
 	
 //	CityMap
 	
@@ -42,7 +46,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================	
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgDeliverOrder(MarketCustomerDeliveryRole c, Map<String, Integer> i) {
+	public void msgDeliverOrder(MarketCustomerDelivery c, Map<String, Integer> i) {
 		System.out.println("Market customer received msgDeliverOrder");
 		customerDelivery = c;
         for (String s: i.keySet()) {
@@ -61,7 +65,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		}
 		
 		// Role Scheduler
-		Boolean blocking = false;
+		boolean blocking = false;
 		for (Role r : roles) if (r.getActive()) {
 			if (carPassenger.getActive()) {
 				blocking  = true;
@@ -82,20 +86,26 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //        	deliveryTruckGui.doGoToAddress();
 //        }
         // notify customer if there is a difference between order and collected items
-		// switch into CarPassengerRole;
+		// switch into CarPassenger;
 		
 		customerDelivery.msgHereIsOrder(collectedItems);
 		cashier.msgFinishedDeliveringItems(this);
 		customerDelivery = null;
 	}
-		
-	// Getters
-	
-	// Setters
 	
 //  Utilities
 //	=====================================================================	
-//	private Transaction findTransaction(MarketCustomerRole c) {
+	// Getters
+	public MarketCashier getCashier() {
+		return cashier;
+	}
+	
+	// Setters	
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
+	
+	//	private Transaction findTransaction(MarketCustomerRole c) {
 //		for(Transaction t : transactions ){
 //			if(t.customer == c) {
 //				return t;		

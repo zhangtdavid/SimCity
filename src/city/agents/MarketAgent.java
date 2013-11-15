@@ -1,9 +1,8 @@
 package city.agents;
 
 import city.Agent;
-import city.interfaces.Market;
 
-public class MarketAgent extends Agent implements Market {
+public class MarketAgent extends Agent {
 
 	// Data
 	

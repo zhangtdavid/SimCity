@@ -1,5 +1,9 @@
 package city.interfaces;
 
+import java.util.Map;
+
+import city.roles.MarketCustomerDeliveryRole;
+
 public interface MarketDeliveryPerson {
 
 	// Data
@@ -7,6 +11,7 @@ public interface MarketDeliveryPerson {
 	// Constructor
 	
 	// Messages
+	public abstract void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<String, Integer> i);
 	
 	// Scheduler
 	

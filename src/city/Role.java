@@ -1,6 +1,7 @@
 package city;
 
 import city.agents.PersonAgent;
+import city.buildings.MarketBuilding;
 
 /**
  * The base class for all SimCity201 roles.
@@ -12,13 +13,17 @@ public abstract class Role {
 	// Data
 	
 	private PersonAgent person;
-	private Boolean active;
+	private boolean active;
 	
 	// Constructor
 	
 	// Messages
 	
 	// Scheduler
+	
+	public Role() {
+		active = false;
+    }
 	
 	public abstract boolean runScheduler();	
 	
@@ -30,7 +35,7 @@ public abstract class Role {
 		return person;
 	}
 	
-	public Boolean getActive() {
+	public boolean getActive() {
 		return active;
 	}
 	
