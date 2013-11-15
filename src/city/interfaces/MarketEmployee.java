@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface MarketEmployee {
+public interface MarketEmployee extends AbstractRole {
 
 	// Data
 	

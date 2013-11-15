@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface BankTeller {
+public interface BankTeller extends AbstractRole {
 
 	// Data
 	

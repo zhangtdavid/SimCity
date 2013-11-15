@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface MarketCashier {
+public interface MarketCashier extends AbstractRole {
 
 	// Data
 	

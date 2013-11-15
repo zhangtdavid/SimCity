@@ -3,13 +3,14 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import utilities.StringUtil;
+import city.interfaces.AbstractAgent;
 
 /**
  * The base class for all SimCity201 agents.
  */
-public abstract class Agent {
+public abstract class Agent implements AbstractAgent {
 	
-    public Semaphore stateChange = new Semaphore(1, true);
+    private Semaphore stateChange = new Semaphore(1, true);
     private AgentThread agentThread;
     
     protected Agent() { }
@@ -21,35 +22,35 @@ public abstract class Agent {
      *
      * @return true iff some action was executed that might have changed the state.
      */
-    protected abstract boolean runScheduler();
+    public abstract boolean runScheduler();
     
     /**
      * Return agent name for messages.  Default is to return Java instance name.
      * 
      * @return String the agent name or the Java instance name.
      */
-    protected String getName() {
+    public String getName() {
         return StringUtil.shortName(this);
     }
     
     /**
      * Agent code calls this method to activate the scheduler.
      */
-    protected void stateChanged() {
+    public void stateChanged() {
         stateChange.release();
     }
 
     /**
      * Print message.
      */
-    protected void print(String msg) {
+    public void print(String msg) {
         print(msg, null);
     }
 
     /**
      * Print message with exception stack trace.
      */
-    protected void print(String msg, Throwable e) {
+    public void print(String msg, Throwable e) {
         StringBuffer sb = new StringBuffer();
         sb.append(getName());
         sb.append(": ");

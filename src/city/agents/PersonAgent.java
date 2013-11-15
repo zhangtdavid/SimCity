@@ -44,7 +44,7 @@ public class PersonAgent extends Agent implements Person {
 	// Scheduler
 	
 	@Override
-	protected boolean runScheduler() {
+	public boolean runScheduler() {
 		// Central Scheduler
 		
 		// Role Scheduler

@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface BankManager {
+public interface BankManager extends AbstractRole {
 
 	// Data
 	

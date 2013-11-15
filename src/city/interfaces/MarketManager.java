@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface MarketManager {
+public interface MarketManager extends AbstractRole {
 
 	// Data
 	

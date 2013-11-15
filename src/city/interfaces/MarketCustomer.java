@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface MarketCustomer {
+public interface MarketCustomer extends AbstractRole {
 
 	// Data
 	

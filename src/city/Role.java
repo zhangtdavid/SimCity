@@ -1,14 +1,14 @@
 package city;
 
-import utilities.StringUtil;
 import city.agents.PersonAgent;
+import city.interfaces.AbstractRole;
 
 /**
  * The base class for all SimCity201 roles.
  * 
  * Roles are like unthreaded agents, having messages, actions, and a scheduler.
  */
-public abstract class Role {
+public abstract class Role implements AbstractRole {
 	
 	// Data
 	
@@ -52,7 +52,7 @@ public abstract class Role {
 	// Utilities
 	
 	protected void stateChanged() {
-		person.stateChange.release();
+		person.stateChanged();
 	}
 	
     protected void print(String msg) {

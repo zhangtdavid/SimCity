@@ -5,7 +5,7 @@ import java.util.Date;
 import city.Agent;
 import city.Role;
 
-public interface Person {
+public interface Person extends AbstractAgent {
 
 	// Data
 	
