@@ -1,5 +1,6 @@
 package city;
 
+import utilities.StringUtil;
 import city.agents.PersonAgent;
 import city.buildings.MarketBuilding;
 
@@ -58,5 +59,13 @@ public abstract class Role {
 	protected void stateChanged() {
 		person.stateChange.release();
 	}
+	
+    protected void print(String msg) {
+        person.print(msg);
+    }
+
+    protected void print(String msg, Throwable e) {
+        person.print(msg, e);
+    }
 
 }

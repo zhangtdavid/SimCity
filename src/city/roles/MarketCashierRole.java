@@ -161,7 +161,11 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		t.s = TransactionState.Calculating;
 
 		for (String s: t.collectedItems.keySet()) {
+<<<<<<< HEAD
         	t.bill += t.collectedItems.get(s)*market.prices.get(s);
+=======
+        	// t.bill += t.collectedItems.get(s)*prices.get(s);
+>>>>>>> a893fa42ee2cc0e35972aebd933a142b6347b5aa
         }
         // notify customer if there is a difference between order and collected items
 
