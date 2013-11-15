@@ -7,23 +7,23 @@ package city;
  */
 public abstract class Building {
 	private String name;
-	private Role owner;
+	private Role manager;
 
-	public Building(String name, Role owner) {
+	public Building(String name, Role manager) {
 		this.name = name;
-		this.owner = owner;
+		this.manager = manager;
 	}
 
 	public String getName() {
 		return name;
 	}
 	
-	public Role getRole() {
-		return owner;
+	public Role getManager() {
+		return manager;
 	}
 	
-	public void setRole(Role newOwner) {
-		owner = newOwner;
+	public void setManager(Role manager) {
+		this.manager = manager;
 	}
 
 	public String toString() {

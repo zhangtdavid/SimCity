@@ -1,12 +1,19 @@
 package city.interfaces;
 
-public interface MarketCustomerDelivery extends AbstractRole {
+import java.util.Map;
 
+public interface MarketCustomerDelivery extends AbstractRole {
+	
 	// Data
 	
 	// Constructor
 	
 	// Messages
+	
+	public abstract void msgWhatWouldYouLike(MarketEmployee e);
+	public abstract void msgHereIsBill(double bill);
+	public abstract void msgPaymentReceived();
+	public abstract void msgHereIsOrder(Map<String, Integer> collectedItems);
 	
 	// Scheduler
 	

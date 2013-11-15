@@ -3,8 +3,10 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
+import city.interfaces.MarketManager;
 import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
@@ -14,9 +16,9 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
     private Map<String, Integer> order = new HashMap<String, Integer>();
     private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
 
-	private MarketManagerRole manager;
-	private MarketCashierRole cashier;
-	private MarketEmployeeRole employee;
+	private MarketManager manager;
+	private MarketCashier cashier;
+	private MarketEmployee employee;
 		
 	double money;
 	double bill;
@@ -40,7 +42,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Messages
 //	=====================================================================	
-	public void msgWhatWouldYouLike(MarketEmployeeRole e) {
+	public void msgWhatWouldYouLike(MarketEmployee e) {
 		System.out.println("Market customerDelivery received msgWhatWouldYouLike");
 		event = MarketCustomerEvent.AskedForOrder;
 		employee = e;
@@ -107,13 +109,26 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //		double payment = checkBill(); TODO
 //		cashier.msgHereIsPayment(this, payment);			
 	}
-
-	// Getters
-	
-	// Setters
 	
 //  Utilities
 //	=====================================================================	
+	// Getters
+	public MarketManager getManager() {
+		return manager;
+	}
+	
+	public MarketCashier getCashier() {
+		return cashier;
+	}
+	
+	// Setters
+	public MarketManager setManager() {
+		return manager;
+	}
+	
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
 	
 	// Classes
 }

@@ -48,7 +48,7 @@ public class PersonAgent extends Agent implements Person {
 		// Central Scheduler
 		
 		// Role Scheduler
-		Boolean blocking = false;
+		boolean blocking = false;
 		for (Role r : roles) if (r.getActive()) {
 			blocking  = true;
 			r.runScheduler();

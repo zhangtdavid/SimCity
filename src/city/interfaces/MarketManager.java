@@ -8,6 +8,10 @@ public interface MarketManager extends AbstractRole {
 	
 	// Messages
 	
+	public abstract void msgIWouldLikeToPlaceAnOrder(MarketCustomer c);
+	public abstract void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c);
+	public abstract void msgIAmAvailableToAssist(MarketEmployee e);
+
 	// Scheduler
 	
 	// Actions

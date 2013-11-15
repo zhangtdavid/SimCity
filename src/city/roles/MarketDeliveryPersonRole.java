@@ -5,8 +5,13 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
-import city.Role;
+import city.agents.CarAgent;
+import city.interfaces.CarPassenger;
+import city.interfaces.MarketCashier;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
+import city.interfaces.MarketManager;
+import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
 
@@ -14,23 +19,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================	
 //	Market market; TODO
 	
-	MarketCashierRole cashier;
+	private MarketCashier cashier;
 	private List<Role> roles = new ArrayList<Role>();
-//	Car car;
-//  CarPassengerRole
 
-	private List<Delivery> deliveries = Collections.synchronizedList(new ArrayList<Delivery>());
-	private class Delivery {
-		MarketCustomerDeliveryRole customerDelivery;
-		Map<String, Integer> collectedItems;
-		
-		public Delivery(MarketCustomerDeliveryRole c, Map<String, Integer> i) {
-			customerDelivery = c;
-	        for (String s: i.keySet()) {
-	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-	        }
-	    }
-	}
+	private CarAgent car;
+	private CarPassenger carPassenger;
+
+	private MarketCustomerDelivery customerDelivery;
+	private Map<String, Integer> collectedItems;
 	
 //	CityMap
 	
@@ -42,16 +38,21 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	---------------------------------------------------------------
 	public MarketDeliveryPersonRole() {
 		super(); // TODO
+//		car = new CarAgent();
+		carPassenger = new CarPassengerRole(car);
     }
 	
 //  Messages
 //	=====================================================================	
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgDeliverOrder(MarketCustomerDeliveryRole c, Map<String, Integer> collectedItems) {
+	public void msgDeliverOrder(MarketCustomerDelivery c, Map<String, Integer> i) {
 		System.out.println("Market customer received msgDeliverOrder");
-		deliveries.add(new Delivery(c, collectedItems));
-		stateChanged();
+		customerDelivery = c;
+        for (String s: i.keySet()) {
+        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
+        }
+        stateChanged();
 	}
 	
 //  Scheduler
@@ -59,17 +60,17 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 	@Override
 	public boolean runScheduler() {
-		synchronized(deliveries) {
-			if (deliveries.size() > 0) {
-				deliverItems();
-			}
+		if (customerDelivery != null) {
+			deliverItems();
 		}
 		
-		Boolean blocking = false;
+		// Role Scheduler
+		boolean blocking = false;
 		for (Role r : roles) if (r.getActive()) {
-			blocking  = true;
-			r.runScheduler();
-			break;
+			if (carPassenger.getActive()) {
+				blocking  = true;
+				carPassenger.runScheduler();
+			}
 		}
 		
 		// Scheduler disposition
@@ -85,18 +86,26 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //        	deliveryTruckGui.doGoToAddress();
 //        }
         // notify customer if there is a difference between order and collected items
-		// switch into CarPassengerRole;
+		// switch into CarPassenger;
 		
+		customerDelivery.msgHereIsOrder(collectedItems);
 		cashier.msgFinishedDeliveringItems(this);
+		customerDelivery = null;
 	}
-		
-	// Getters
-	
-	// Setters
 	
 //  Utilities
 //	=====================================================================	
-//	private Transaction findTransaction(MarketCustomerRole c) {
+	// Getters
+	public MarketCashier getCashier() {
+		return cashier;
+	}
+	
+	// Setters	
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
+	
+	//	private Transaction findTransaction(MarketCustomerRole c) {
 //		for(Transaction t : transactions ){
 //			if(t.customer == c) {
 //				return t;		

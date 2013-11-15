@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import java.util.Map;
+
 public interface MarketDeliveryPerson extends AbstractRole {
 
 	// Data
@@ -7,6 +9,8 @@ public interface MarketDeliveryPerson extends AbstractRole {
 	// Constructor
 	
 	// Messages
+	
+	public abstract void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<String, Integer> i);
 	
 	// Scheduler
 	

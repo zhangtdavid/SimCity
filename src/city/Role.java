@@ -13,13 +13,17 @@ public abstract class Role implements AbstractRole {
 	// Data
 	
 	private PersonAgent person;
-	private Boolean active;
+	private boolean active;
 	
 	// Constructor
 	
 	// Messages
 	
 	// Scheduler
+	
+	public Role() {
+		active = false;
+    }
 	
 	public abstract boolean runScheduler();	
 	
@@ -31,7 +35,7 @@ public abstract class Role implements AbstractRole {
 		return person;
 	}
 	
-	public Boolean getActive() {
+	public boolean getActive() {
 		return active;
 	}
 	

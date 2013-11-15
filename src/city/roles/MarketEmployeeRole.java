@@ -4,20 +4,25 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.Role;
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCashier;
+import city.interfaces.MarketCustomer;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
+import city.interfaces.MarketManager;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //  Data
 //	=====================================================================
-//	Market market;
+	private MarketBuilding market;
 	
 	private int loc; // location at front counter
 	
-	MarketManagerRole manager;
-	MarketCashierRole cashier;
-	private MarketCustomerRole customer;
-	private MarketCustomerDeliveryRole customerDelivery;
+	private MarketManager manager;
+	private MarketCashier cashier;
+	private MarketCustomer customer;
+	private MarketCustomerDelivery customerDelivery;
 	
 	private enum MarketEmployeeState
 	{None, AskedForOrder};
@@ -39,8 +44,9 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketEmployeeRole() {
-		super(); // TODO
+	public MarketEmployeeRole(MarketBuilding market) {
+		super();
+		this.market = market;
         for (String s: order.keySet()) {
         	collectedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
@@ -48,21 +54,21 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //  Messages
 //	=====================================================================
-	public void msgAssistCustomer(MarketCustomerRole c) {
+	public void msgAssistCustomer(MarketCustomer c) {
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = c;
 		customerDelivery = null;
 		stateChanged();
 	}
 	
-	public void msgAssistCustomerDelivery(MarketCustomerDeliveryRole c) {
+	public void msgAssistCustomerDelivery(MarketCustomerDelivery c) {
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = null;
 		customerDelivery = c;
 		stateChanged();
 	}
 	
-	public void msgHereIsMyOrder(MarketCustomerRole c, Map<String, Integer> o) {
+	public void msgHereIsMyOrder(MarketCustomer c, Map<String, Integer> o) {
 		if (customer == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
             for (String item: o.keySet()) {
@@ -72,7 +78,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		}
 	}
 
-	public void msgHereIsMyDeliveryOrder(MarketCustomerDeliveryRole c, Map<String, Integer> o) {
+	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
 		if (customerDelivery == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
             for (String item: o.keySet()) {
@@ -179,11 +185,25 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 
 	
+//  Utilities
+//	=====================================================================	
 	// Getters
+	public MarketManager getManager() {
+		return manager;
+	}
+	
+	public MarketCashier getCashier() {
+		return cashier;
+	}
 	
 	// Setters
+	public MarketManager setManager() {
+		return manager;
+	}
 	
-	// Utilities
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
 	
 	// Classes
 }
