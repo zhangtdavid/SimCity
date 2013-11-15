@@ -1,5 +1,7 @@
 package city;
 
+import city.agents.PersonAgent;
+
 /**
  * The base class for all SimCity201 mocks.
  * 
@@ -18,6 +20,19 @@ public abstract class Mock {
 
 	public String toString() {
 		return this.getClass().getName() + ": " + name;
+	}
+	
+	public boolean getActive() {
+		// TODO
+		return false;
+	}
+	
+	public void setActive() {
+		// TODO
+	}
+	
+	public void setInactive() {
+		// TODO
 	}
 
 }

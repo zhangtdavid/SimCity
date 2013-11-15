@@ -10,11 +10,10 @@ import java.util.TimerTask;
 import city.agents.PersonAgent;
 import city.gui.MainFrame;
 import city.interfaces.Person;
-import city.roles.WaiterRole;
+import city.roles.BankTellerRole;
 
 public class Application {
-	
-	private static MainFrame mainFrame;
+
 	private static List<Person> people = new ArrayList<Person>();
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
@@ -23,6 +22,7 @@ public class Application {
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICES {accountCreate, acctClose, moneyWithdraw, loanRequest};
+	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
 	
     /**
      * Main routine to start the program.
@@ -48,7 +48,7 @@ public class Application {
 		timer.scheduleAtFixedRate(tt, 0, INTERVAL);
 		
 		// Open the animation GUI
-		mainFrame = new MainFrame();
+		new MainFrame();
 	}
 	
 	/**
@@ -57,7 +57,7 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		PersonAgent p1 = new PersonAgent(date);
-		WaiterRole p1r1 = new WaiterRole();
+		BankTellerRole p1r1 = new BankTellerRole();
 		
 		p1.setOccupation(p1r1);
 		
