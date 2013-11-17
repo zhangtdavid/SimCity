@@ -1,11 +1,16 @@
-package city.animations;
+package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
-import city.Animation;
+import city.MockAnimation;
 import city.animations.interfaces.AnimatedPerson;
 
-public class PersonAnimation extends Animation implements AnimatedPerson {
+public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson {
+
+	public MockAnimatedPerson() {
+		// TODO
+		
+	}
 
 	@Override
 	public void updatePosition() {

@@ -2,7 +2,13 @@ package city.interfaces;
 
 import java.awt.Graphics2D;
 
-public interface AbstractAnimation {
+/**
+ * This interface specifies the absolute minimum an interface or class representing an animation must provide.
+ * 
+ * The following code uses AnimationInterface:
+ * 		- 
+ */
+public interface AnimationInterface {
 	
 	// Data
 	

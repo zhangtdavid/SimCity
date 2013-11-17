@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface Bus extends AbstractAgent {
+public interface Bus extends AgentInterface {
 
 	// Data
 	

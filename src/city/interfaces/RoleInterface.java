@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface AbstractRole {
+public interface RoleInterface {
 	
 	// Data
 	
@@ -8,16 +8,20 @@ public interface AbstractRole {
 	
 	// Messages
 	
-	// Scheduler	
+	// Scheduler
+	
+	public boolean runScheduler();
 	
 	// Actions
 	
 	// Getters
 	
+	public Person getPerson();
 	public boolean getActive();
 	
 	// Setters
 	
+	public void setPerson(Person p);
 	public void setActive();
 	public void setInactive();
 	
