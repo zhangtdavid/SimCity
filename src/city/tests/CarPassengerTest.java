@@ -3,15 +3,18 @@ package city.tests;
 import city.buildings.BusStopBuilding;
 import city.roles.CarPassengerRole;
 import city.tests.mock.MockCar;
+import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class CarPassengerTest extends TestCase {
+	MockPerson person = new MockPerson(); 
 	MockCar car = new MockCar("Mock Car");
 	CarPassengerRole passenger = new CarPassengerRole(car);
 	BusStopBuilding destination = new BusStopBuilding("BusStop1"); 
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		passenger.setPerson(person);
 	}
 	
 	public void testOneNormalCarPassengerScenario() {
