@@ -2,7 +2,7 @@ package city.interfaces;
 
 import city.Building;
 
-public interface CarPassenger extends AbstractRole {
+public interface CarPassenger extends RoleInterface {
 
 	// Data
 	

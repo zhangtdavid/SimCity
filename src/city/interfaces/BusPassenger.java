@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface BusPassenger extends AbstractRole {
+public interface BusPassenger extends RoleInterface {
 
 	// Data
 	

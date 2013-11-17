@@ -2,7 +2,7 @@ package city.interfaces;
 
 import java.util.Map;
 
-public interface MarketCustomerDelivery extends AbstractRole {
+public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Data
 	

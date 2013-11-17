@@ -2,7 +2,7 @@ package city.interfaces;
 
 import java.util.Map;
 
-public interface MarketEmployee extends AbstractRole {
+public interface MarketEmployee extends RoleInterface {
 	
 	// Data
 	

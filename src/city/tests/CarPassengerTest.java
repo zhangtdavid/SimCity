@@ -7,7 +7,7 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class CarPassengerTest extends TestCase {
-	MockPerson person = new MockPerson(); 
+	MockPerson person = new MockPerson("Person"); 
 	MockCar car = new MockCar("Mock Car");
 	CarPassengerRole passenger = new CarPassengerRole(car);
 	BusStopBuilding destination = new BusStopBuilding("BusStop1"); 

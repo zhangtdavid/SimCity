@@ -1,7 +1,7 @@
 package city.interfaces;
 import city.buildings.BusStopBuilding;
 
-public interface Bus extends AbstractAgent {
+public interface Bus extends AgentInterface {
 
 	void msgImOnBus(BusPassenger busPassengerRole,BusStopBuilding destination);
 

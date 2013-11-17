@@ -2,18 +2,15 @@ package city.tests.mock;
 
 import java.util.Map;
 
-import utilities.EventLog;
-import city.Mock;
+import city.MockRole;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
 
-public class MockMarketCustomerDelivery extends Mock implements MarketCustomerDelivery {
-	
-	public EventLog log = new EventLog();
+public class MockMarketCustomerDelivery extends MockRole implements MarketCustomerDelivery {
 
-	public MockMarketCustomerDelivery(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+	public MockMarketCustomerDelivery() {
+		// TODO Auto-generated method stub
+		
 	}
 
 	@Override
@@ -39,6 +36,5 @@ public class MockMarketCustomerDelivery extends Mock implements MarketCustomerDe
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 }

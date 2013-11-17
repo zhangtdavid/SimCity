@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 
 import city.Agent;
 import city.Role;
+import city.interfaces.Car;
 import city.interfaces.Person;
 
 public class PersonAgent extends Agent implements Person {
@@ -15,10 +16,11 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Date date;
 	private Role occupation;
-	private Agent car; // TODO replace this with the appropriate object type
+	private Car car;
+	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private city.animations.interfaces.Person animation;
+	private city.animations.interfaces.AnimatedPerson animation;
 	private enum State {none, goingToOccupation, goingToBank, goingToRestaurant, goingToMarket, goingHome, atOccupation, atBank, atRestaurant, atMarket, atHome, leavingOccupation };
 	private State state; 
 	
@@ -63,6 +65,11 @@ public class PersonAgent extends Agent implements Person {
 	
 	// Getters
 	
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	
 	// Setters
 	
 	@Override
@@ -78,12 +85,12 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setAnimation(city.animations.interfaces.Person p) {
+	public void setAnimation(city.animations.interfaces.AnimatedPerson p) {
 		animation = p;
 	}
 
 	@Override
-	public void setCar(Agent c) {
+	public void setCar(Car c) {
 		car = c;
 	}
 	
