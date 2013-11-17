@@ -3,7 +3,7 @@ package city.interfaces;
 import city.Building;
 import city.agents.CarAgent;
 
-public interface CarPassenger extends AbstractRole {
+public interface CarPassenger extends RoleInterface {
 
 	// Data
 	

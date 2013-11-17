@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface Car extends AbstractAgent {
+public interface Car extends AgentInterface {
 
 	// Data
 	
