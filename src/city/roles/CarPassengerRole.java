@@ -8,23 +8,21 @@ import city.Building;
 public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
-	enum CarPassengerState {NOTDRIVING, GOINGTOCAR, DRIVING};
-	CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
-	enum CarPassengerEvent {NONE, WANTTODRIVE, ATCAR, ATDESTINATION};
-	CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
-	Car myCar; // Car this person is getting into
-	Building destination; // Building this car is going to
+	public enum CarPassengerState {NOTDRIVING, GOINGTOCAR, DRIVING};
+	public CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
+	public enum CarPassengerEvent {NONE, WANTTODRIVE, ATCAR, ATDESTINATION};
+	public CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
+	public Car myCar; // Car this person is getting into
+	public Building destination; // Building this car is going to
 //	CarPassengerGui myGui; // GUI for animation
 	
 	// Constructor
-	CarPassengerRole(Car c) { // Pass in the person and car this role is assigned to
+	public CarPassengerRole(Car c) { // Pass in the person and car this role is assigned to
 		myCar = c;
 	}
 	
 	// Messages
-	public void msgImGoingToDrive(Building dest, Car c) { // From personagent, telling this role he/she wants to drive
-		destination = dest;
-		myCar = c;
+	public void msgImGoingToDrive() { // From setactive, telling this role he/she wants to drive
 		myEvent = CarPassengerEvent.WANTTODRIVE;
 		stateChanged();
 	}
@@ -83,7 +81,13 @@ public class CarPassengerRole extends Role implements CarPassenger {
 //	void setGui(CarPassengerGui gui) {
 //		myGui = gui;
 //	}
+	
 	// Utilities
+	public void setActive(Building dest) {
+		destination = dest;
+		setActive();
+		msgImGoingToDrive();
+	}
 	
 	// Classes
 

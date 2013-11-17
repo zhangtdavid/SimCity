@@ -11,7 +11,7 @@ public class BusStopBuilding extends Building {
 	BusStopBuilding previousStop = null;
 	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
 	
-	BusStopBuilding(String name) {
+	public BusStopBuilding(String name) {
 		super(name, null);
 	}
 	
