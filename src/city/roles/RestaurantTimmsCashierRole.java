@@ -6,6 +6,7 @@ import java.util.List;
 
 import city.Role;
 import city.animations.RestaurantTimmsCashierAnimation;
+import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -18,7 +19,6 @@ import city.interfaces.RestaurantTimmsWaiter;
 public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
 	// Data
 	
-	private String name;
 	public int moneyOnHand;
 	public int moneyCollected;
 	public int moneyOwed;
@@ -32,9 +32,8 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	
 	// Constructor
 	
-	public RestaurantTimmsCashierRole(String name){
-		super();
-		this.name = name;
+	public RestaurantTimmsCashierRole(Person p){
+		super(p);
 		this.moneyOnHand = CASH_MIN + (int)(Math.random() * ((CASH_MAX - CASH_MIN) + 1));
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
@@ -194,11 +193,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	}
 	
 	// Get
-	
-	public String getName() {
-		return this.name;
-	}
-	
+
 	public RestaurantTimmsCashierAnimation getAnimation() {
 		return this.animation;
 	}

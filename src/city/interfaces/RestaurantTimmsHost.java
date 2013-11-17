@@ -2,7 +2,7 @@ package city.interfaces;
 
 import city.animations.interfaces.RestaurantTimmsAnimatedHost;
 
-public interface RestaurantTimmsHost {
+public interface RestaurantTimmsHost extends RoleInterface {
 	
 	public abstract void msgWantSeat(RestaurantTimmsCustomer customer);
 	public abstract void msgDoNotWantSeat(RestaurantTimmsCustomer customer);

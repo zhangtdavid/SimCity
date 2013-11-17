@@ -3,7 +3,7 @@ package city.interfaces;
 import city.Application;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 
-public interface RestaurantTimmsCustomer {
+public interface RestaurantTimmsCustomer extends RoleInterface {
 	
 	public abstract void msgGoToRestaurant();
 	public abstract void msgRestaurantFull();

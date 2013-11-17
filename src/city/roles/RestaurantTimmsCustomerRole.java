@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
+import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
@@ -23,7 +24,6 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	public enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
 	private State state = State.none;
 	
-	private String name;
 	public int pickiness;
 	public int hunger;
 	private int tableNumber;
@@ -48,10 +48,9 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private Integer MONEY_MAX = 12;
 	
 	// Constructor
-	
-	public RestaurantTimmsCustomerRole(String name, RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
-		super();
-		this.name = name;
+
+	public RestaurantTimmsCustomerRole(Person p, RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
+		super(p);
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.hunger = 5;
@@ -179,6 +178,9 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 //			}
 //		}
 		
+		// TODO temporary replacement for market
+		orderItem = Application.MARKET_ITEMS.steak;
+
 		// Otherwise, he will leave
 		if (orderItem == null) {
 			waiter.msgDoNotWantFood(this);
@@ -272,11 +274,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	// Get
-	
-	public String getName() {
-		return this.name;
-	}
-	
+
 	public String getState() {
 		return this.state.toString();
 	}

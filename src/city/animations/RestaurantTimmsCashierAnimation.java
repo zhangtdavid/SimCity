@@ -31,10 +31,12 @@ public class RestaurantTimmsCashierAnimation extends Animation implements Restau
     /**
      * Since the cashier does not move, this method simply returns void.
      */
+	@Override
     public void updatePosition() {
         return;
     }
 
+	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(COLOR);
 		g.fillRect(xPos, yPos, WIDTH, HEIGHT);

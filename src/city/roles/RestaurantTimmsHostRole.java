@@ -21,7 +21,6 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	private List<RestaurantTimmsWaiter> waiters = new ArrayList<RestaurantTimmsWaiter>();
 	private Collection<Table> tables = new ArrayList<Table>();
 	
-	private String name;
 	private RestaurantTimmsWaiter waiterWantingBreak;
 	private RestaurantTimmsHostAnimation animation;
 	
@@ -29,9 +28,8 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	
 	// Constructor
 
-	public RestaurantTimmsHostRole(String name) {
+	public RestaurantTimmsHostRole() {
 		super();
-		this.name = name;
 		this.waiterWantingBreak = null;
 	}
 
@@ -112,10 +110,6 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	}
 	
 	// Get
-	
-	public String getName() {
-		return this.name;
-	}
 	
 	public RestaurantTimmsHostAnimation getAnimation() {
 		return this.animation;

@@ -1,8 +1,8 @@
 package city.animations.interfaces;
 
-import city.interfaces.AbstractAnimation;
+import city.interfaces.AnimationInterface;
 
-public interface RestaurantTimmsAnimatedHost extends AbstractAnimation {
+public interface RestaurantTimmsAnimatedHost extends AnimationInterface {
 
 	// Data
 	

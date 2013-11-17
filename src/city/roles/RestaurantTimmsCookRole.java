@@ -27,7 +27,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	private Integer speed;
 	private Timer timer = new Timer();
-	private String name;
+
 	private RestaurantTimmsCookAnimation animation;
 	private RestaurantTimmsCashier cashier;
 	
@@ -40,10 +40,9 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Constructor
 	
-	public RestaurantTimmsCookRole(String name, RestaurantTimmsCashier c){
+	public RestaurantTimmsCookRole(RestaurantTimmsCashier c){
 		super();
 		this.speed = 3;
-		this.name = name;
 		this.cashier = c;
 		
 // TODO		
@@ -179,10 +178,6 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	}
 	
 	// Get
-	
-	public String getName() {
-		return this.name;
-	}
 	
 	public RestaurantTimmsCookAnimation getAnimation() {
 		return this.animation;

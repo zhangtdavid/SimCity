@@ -10,6 +10,7 @@ import java.util.concurrent.Semaphore;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
+import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -22,7 +23,6 @@ import city.interfaces.RestaurantTimmsWaiter;
 public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWaiter {
 	// Data
 	
-	private String name;
 	private Boolean wantsBreak;
 	private int tiredness;
 	private String menuItem;
@@ -46,9 +46,8 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	// Constructor
 	
-	public RestaurantTimmsWaiterRole(String name, RestaurantTimmsCook cook, RestaurantTimmsHost host, RestaurantTimmsCashier cashier, int homePosition) {
-		super();
-		this.name = name;
+	public RestaurantTimmsWaiterRole(Person p, RestaurantTimmsCook cook, RestaurantTimmsHost host, RestaurantTimmsCashier cashier, int homePosition) {
+		super(p);
 		this.wantsBreak = false;
 		this.tiredness = 15;
 		this.cook = cook;
@@ -75,7 +74,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		waiterHover.release();
 	}
 	
-	public void msgSeatCustomer(RestaurantTimmsCustomer c, Integer n) {
+	public void msgSeatCustomer(RestaurantTimmsCustomer c, int n) {
 		print("msgSeatCustomer");
 		this.lastMessage = "msgSeatCustomer";
 		customers.add(new InternalCustomer(c, n, InternalCustomer.State.seat));
@@ -297,10 +296,6 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	}
 	
 	// Get
-
-	public String getName() {
-		return this.name;
-	}
 	
 	public RestaurantTimmsHost getHost() {
 		return this.host;
