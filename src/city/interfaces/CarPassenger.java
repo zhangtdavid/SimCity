@@ -1,7 +1,6 @@
 package city.interfaces;
 
 import city.Building;
-import city.agents.CarAgent;
 
 public interface CarPassenger extends AbstractRole {
 
@@ -10,7 +9,7 @@ public interface CarPassenger extends AbstractRole {
 	// Constructor
 	
 	// Messages
-	public abstract void msgImGoingToDrive(Building dest, CarAgent c);
+	public abstract void msgImGoingToDrive(Building dest, Car c);
 	public abstract void msgImAtCar();
 	public abstract void msgImAtDestination();
 	

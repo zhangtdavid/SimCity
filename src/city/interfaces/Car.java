@@ -1,6 +1,10 @@
 package city.interfaces;
 
+import city.Building;
+
 public interface Car extends AbstractAgent {
+
+	abstract void msgIWantToDrive(CarPassenger carPassenger, Building destination);
 
 	// Data
 	

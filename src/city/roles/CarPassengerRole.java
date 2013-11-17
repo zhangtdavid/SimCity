@@ -1,8 +1,8 @@
 package city.roles;
 
 import city.Role;
+import city.interfaces.Car;
 import city.interfaces.CarPassenger;
-import city.agents.CarAgent;
 import city.Building;
 
 public class CarPassengerRole extends Role implements CarPassenger {
@@ -12,17 +12,17 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
 	enum CarPassengerEvent {NONE, WANTTODRIVE, ATCAR, ATDESTINATION};
 	CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
-	CarAgent myCar; // Car this person is getting into
+	Car myCar; // Car this person is getting into
 	Building destination; // Building this car is going to
 //	CarPassengerGui myGui; // GUI for animation
 	
 	// Constructor
-	CarPassengerRole(CarAgent c) { // Pass in the person and car this role is assigned to
+	CarPassengerRole(Car c) { // Pass in the person and car this role is assigned to
 		myCar = c;
 	}
 	
 	// Messages
-	public void msgImGoingToDrive(Building dest, CarAgent c) { // From personagent, telling this role he/she wants to drive
+	public void msgImGoingToDrive(Building dest, Car c) { // From personagent, telling this role he/she wants to drive
 		destination = dest;
 		myCar = c;
 		myEvent = CarPassengerEvent.WANTTODRIVE;
