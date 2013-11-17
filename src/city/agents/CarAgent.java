@@ -3,7 +3,7 @@ package city.agents;
 import city.Agent;
 import city.Building;
 import city.interfaces.Car;
-import city.roles.CarPassengerRole;
+import city.interfaces.CarPassenger;
 
 public class CarAgent extends Agent implements Car {
 
@@ -12,7 +12,7 @@ public class CarAgent extends Agent implements Car {
 	CarState myState = CarState.NOTDRIVING; // State of car
 	enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
 	CarEvent myEvent = CarEvent.NONE; // Event for car
-	CarPassengerRole carPassenger; // Current passenger
+	CarPassenger carPassenger; // Current passenger
 	Building destination; // Destination to go to
 	//CarGui myGui; // GUI for animations
 	
@@ -23,8 +23,8 @@ public class CarAgent extends Agent implements Car {
 	}
 	
 	// Messages
-	public void msgIWantToDrive(CarPassengerRole cpr, Building dest) { // From CarPassengerRole, tells car to go somewhere
-		carPassenger = cpr;
+	public void msgIWantToDrive(CarPassenger cp, Building dest) { // From CarPassengerRole, tells car to go somewhere
+		carPassenger = cp;
 		destination = dest;
 		myEvent = CarEvent.PASSENGERENTERED;
 		stateChanged();

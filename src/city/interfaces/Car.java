@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import city.Building;
+
 public interface Car {
 
 	// Data
@@ -7,6 +9,7 @@ public interface Car {
 	// Constructor
 	
 	// Messages
+	abstract void msgIWantToDrive(CarPassenger carPassenger, Building destination);
 	
 	// Scheduler
 	
