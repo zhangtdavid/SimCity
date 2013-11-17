@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import city.Agent;
 import city.interfaces.Bus;
-import city.roles.BusPassengerRole;
+import city.interfaces.BusPassenger;
 import city.buildings.BusStopBuilding;
 
 public class BusAgent extends Agent implements Bus {
@@ -35,10 +35,10 @@ public class BusAgent extends Agent implements Bus {
 		stateChanged();
 	}
 
-	public void msgImOffBus(BusPassengerRole bpr) { // From BusPassengerRole, role has gotten off bus
+	public void msgImOffBus(BusPassenger bp) { // From BusPassengerRole, role has gotten off bus
 		earnedMoney += busFare; // Add fare to money
 		for(MyBusPassenger mbp : passengerList) { // Set this role's state to OFFBUS  
-			if(mbp.bpr == bpr) {
+			if(mbp.bp == bp) {
 				mbp.myPassengerState = PassengerState.OFFBUS;
 				break;
 			}
@@ -46,10 +46,10 @@ public class BusAgent extends Agent implements Bus {
 		stateChanged();
 	}
 
-	public void msgImOnBus(BusPassengerRole bpr, BusStopBuilding dest) { // From BusPassengerRole, role has gotten on bus
+	public void msgImOnBus(BusPassenger bp, BusStopBuilding dest) { // From BusPassengerRole, role has gotten on bus
 		earnedMoney += busFare; // Add fare to money
 		for(MyBusPassenger mbp : passengerList) { // Set this role's state to ONBUS and its destination
-			if(mbp.bpr == bpr) {
+			if(mbp.bp == bp) {
 				mbp.myPassengerState = PassengerState.ONBUS;
 				mbp.destination = dest;
 				break;
@@ -103,7 +103,7 @@ public class BusAgent extends Agent implements Bus {
 			if(mbp.destination == currentStop) { // If a passenger has the same stop
 				passengersDroppedOff = true; // Set flag to true
 				mbp.myPassengerState = PassengerState.GETTINGOFFBUS; // Set this passenger's state to getting off
-				mbp.bpr.msgImAtYourDestination(); // Message this passenger to get off
+				mbp.bp.msgImAtYourDestination(); // Message this passenger to get off
 			}
 		}
 		currentStop = nextStop; // Assign the next stop to the current stop
@@ -117,10 +117,10 @@ public class BusAgent extends Agent implements Bus {
 
 	void notifyPassengersAtStopToGetOn() { // Tells passengers at stop to get on the bus
 		boolean passengersPickedUp = false; // Flag to see if passengers got on
-		for(BusPassengerRole bpr : currentStop.waitingList) {
+		for(BusPassenger bp : currentStop.waitingList) {
 			passengersPickedUp = true; // Set flag to true
-			passengerList.add(new MyBusPassenger(bpr)); // Add this passenger to the passengerList
-			bpr.msgBusIsHere(this); // Message this passenger to get on
+			passengerList.add(new MyBusPassenger(bp)); // Add this passenger to the passengerList
+			bp.msgBusIsHere(this); // Message this passenger to get on
 		}
 		// If no passengers were picked up
 		if(passengersPickedUp == false) {
@@ -143,11 +143,11 @@ public class BusAgent extends Agent implements Bus {
 	enum PassengerState {GETTINGONBUS, ONBUS, GETTINGOFFBUS, OFFBUS};
 	class MyBusPassenger {
 		PassengerState myPassengerState = PassengerState.GETTINGONBUS;
-		BusPassengerRole bpr;
+		BusPassenger bp;
 		BusStopBuilding destination;
 		
-		MyBusPassenger(BusPassengerRole bpr_) {
-			bpr = bpr_;
+		MyBusPassenger(BusPassenger bp_) {
+			bp = bp_;
 		}
 	}
 }
