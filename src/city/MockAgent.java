@@ -39,7 +39,7 @@ public abstract class MockAgent implements AgentInterface {
 	
     @Override
 	public void stateChanged() {}
-    
+
     @Override
     public void print(String msg) {}
     
