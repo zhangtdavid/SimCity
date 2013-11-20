@@ -7,23 +7,13 @@ package city;
  */
 public abstract class Building {
 	private String name;
-	private Role manager;
 
-	public Building(String name, Role manager) {
+	public Building(String name) {
 		this.name = name;
-		this.manager = manager;
 	}
 
 	public String getName() {
 		return name;
-	}
-	
-	public Role getManager() {
-		return manager;
-	}
-	
-	public void setManager(Role manager) {
-		this.manager = manager;
 	}
 
 	public String toString() {

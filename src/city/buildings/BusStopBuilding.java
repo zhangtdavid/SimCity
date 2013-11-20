@@ -12,11 +12,11 @@ public class BusStopBuilding extends Building {
 	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
 	
 	public BusStopBuilding(String name) {
-		super(name, null);
+		super(name);
 	}
 	
 	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {
-		super(name, null);
+		super(name);
 		this.nextStop = nextStop; // Assign the nextStop argument to this stop's nextStop
 		nextStop.previousStop = this; // Assign the nextStop's previousStop to this
 		this.previousStop = previousStop; // Assign the previousStop argument to this stop's previousStop
