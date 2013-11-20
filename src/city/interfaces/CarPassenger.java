@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import city.Building;
-
 public interface CarPassenger extends RoleInterface {
 
 	// Data
@@ -12,9 +10,6 @@ public interface CarPassenger extends RoleInterface {
 	abstract void msgImGoingToDrive();
 	abstract void msgImAtCar();
 	abstract void msgImAtDestination();
-	
-	public abstract boolean getActive(); // TODO Why is this necessary?
-	public abstract boolean runScheduler();
 
 	// Scheduler
 	
