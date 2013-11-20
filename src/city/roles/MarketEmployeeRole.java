@@ -160,18 +160,17 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 	private void collectItems() {
         for (String item: order.keySet()) {
-        	// TODO make market class with marketInventory
-//        	if (marketInventory.get(item) < order.get(item) && marketInventory.get(item) > 0) {
-//        		collectedItems.set(item, collectedItems.get(item) + marketInventory.get(item));
-//        		marketInventory.set(item, 0);
-//        	}
-//        	else if (marketInventory.get(item) >= order.get(item)) {
-//        		marketInventory.set(item, marketInventory.get(item) - order.get(item));
-//        		collectedItems.set(item, order.get(item));
-////        		marketEmployeeGui.doCollectItems(order);
-//        	}
-//        	if (marketInventory.get(item) < 10)
-//        		manager.msgItemLow();
+        	if (market.inventory.get(item) < order.get(item) && market.inventory.get(item) > 0) {
+        		collectedItems.put(item, collectedItems.get(item) + market.inventory.get(item));
+        		market.inventory.put(item, 0);
+        	}
+        	else if (market.inventory.get(item) >= order.get(item)) {
+        		market.inventory.put(item, market.inventory.get(item) - order.get(item));
+        		collectedItems.put(item, order.get(item));
+//        		marketEmployeeGui.doCollectItems(order);
+        	}
+        	if (market.inventory.get(item) < 10)
+        		manager.msgItemLow();
 //        	marketEmployeeGui.doDeliverItems();
 //    		try {
 //			atCashier.acquire();
@@ -179,7 +178,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-        	// dependent on custome type
+        	// dependent on customer type
         	if (customer != null)
         		cashier.msgComputeBill(this, customer, order, collectedItems);
         	else

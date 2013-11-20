@@ -46,4 +46,10 @@ public class MockMarketManager extends MockRole implements MarketManager {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void msgItemLow() {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -13,6 +13,7 @@ public interface MarketManager extends RoleInterface {
 	public abstract void msgIWouldLikeToPlaceAnOrder(MarketCustomer c);
 	public abstract void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c);
 	public abstract void msgIAmAvailableToAssist(MarketEmployee e);
+	public abstract void msgItemLow();
 
 	// Scheduler
 	

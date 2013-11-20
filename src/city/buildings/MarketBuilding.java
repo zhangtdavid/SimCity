@@ -64,8 +64,6 @@ public class MarketBuilding extends Building {
 		cashier.msgRemoveDeliveryPerson(deliveryPerson);		
 	}
 	
-	
-	
 //  Getters and Setters
 //	=====================================================================	
 	// Manager

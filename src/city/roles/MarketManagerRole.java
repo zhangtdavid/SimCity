@@ -3,8 +3,6 @@ package city.roles;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
@@ -21,10 +19,6 @@ public class MarketManagerRole extends Role implements MarketManager {
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
-	
-	// TODO move to market class
-	public Map<String, Integer> marketInventory = new ConcurrentHashMap<String, Integer>();
-	public final Map<String, Double> marketPrices = new ConcurrentHashMap<String, Double>();
 	
 	boolean itemsLow;
 	
