@@ -18,6 +18,7 @@ public abstract class MockRole implements RoleInterface {
 	
 	private Person person;
 	private boolean active;
+	private boolean activity;
 	
 	public EventLog log = new EventLog();
 	
@@ -49,6 +50,11 @@ public abstract class MockRole implements RoleInterface {
 		return active;
 	}
 	
+    @Override
+    public boolean getActivity() {
+    	return activity;
+    }
+	
 	// Setters
 	
 	@Override
@@ -64,6 +70,16 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public void setInactive() {
 		this.active = false;
+	}
+	
+	@Override
+	public void setActivityBegun() {
+		this.activity = true;
+	}
+	
+	@Override
+	public void setActivityFinished() {
+		this.activity = false;
 	}
 	
 	// Utilities

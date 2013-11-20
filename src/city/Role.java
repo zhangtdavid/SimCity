@@ -14,16 +14,13 @@ public abstract class Role implements RoleInterface {
 	
 	private Person person;
 	private boolean active;
+	private boolean activity;
 	
 	// Constructor
 	
 	public Role() {
 		active = false;
-	}
-	
-	public Role(Person p) {
-		person = p;
-		active = false;
+		activity = false;
 	}
 	
 	// Messages
@@ -36,32 +33,54 @@ public abstract class Role implements RoleInterface {
 	
 	// Getters
 	
+	@Override
 	public Person getPerson() {
 		return person;
 	}
 	
+	@Override
 	public boolean getActive() {
 		return active;
 	}
 	
+    @Override
+    public boolean getActivity() {
+    	return activity;
+    }
+	
+	
 	// Setters
 	
+	@Override
 	public void setPerson(Person p) {
 		this.person = p;
 	}
 	
+	@Override
 	public void setActive() {
 		this.active = true;
 	}
 	
+	@Override
 	public void setInactive() {
 		this.active = false;
+	}
+	
+	@Override
+	public void setActivityBegun() {
+		this.activity = true;
+	}
+	
+	@Override
+	public void setActivityFinished() {
+		this.activity = false;
 	}
 	
 	// Utilities
 	
 	protected void stateChanged() {
 		person.stateChanged();
+		activity = true;
 	}
 	
     protected void print(String msg) {

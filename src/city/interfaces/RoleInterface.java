@@ -18,12 +18,15 @@ public interface RoleInterface {
 	
 	public Person getPerson();
 	public boolean getActive();
+	public boolean getActivity();
 	
 	// Setters
 	
 	public void setPerson(Person p);
 	public void setActive();
 	public void setInactive();
+	public void setActivityBegun();
+	public void setActivityFinished();
 	
 	// Utilities
 

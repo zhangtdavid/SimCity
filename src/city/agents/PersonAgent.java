@@ -29,10 +29,12 @@ public class PersonAgent extends Agent implements Person {
     /**
      * Create a Person.
      * 
-     * @param startDate the current simulation Date
+     * @param name the person's name
+     * @param startDate the current simulation date
      */
-	public PersonAgent(Date startDate) {
+	public PersonAgent(String name, Date startDate) {
 		super();
+		this.name = name;
 		this.date = startDate;
 	}
 	
@@ -51,9 +53,12 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Role Scheduler
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive()) {
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
-			r.runScheduler();
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
 			break;
 		}
 		
@@ -82,6 +87,8 @@ public class PersonAgent extends Agent implements Person {
 	public void setOccupation(Role r) {
 		occupation = r;
 		addRole(r);
+		r.setActive(); // TODO testing only - remove!!
+		r.setActivityBegun(); // TODO testing only - remove!!
 	}
 	
 	@Override
@@ -102,11 +109,11 @@ public class PersonAgent extends Agent implements Person {
 		r.setPerson(this);
 	}
 	
-	private boolean shouldGoToWork() {
-		boolean disposition = false;
-		// if (!occupation.getActive()) {}
-		return disposition;
-	}
+//	private boolean shouldGoToWork() {
+//		boolean disposition = false;
+//		// if (!occupation.getActive()) {}
+//		return disposition;
+//	}
 	
 	// Classes
 
