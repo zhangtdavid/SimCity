@@ -1,16 +1,13 @@
 package city.tests.mock;
 
-import utilities.EventLog;
-import city.Mock;
+import city.MockRole;
 import city.interfaces.BankCustomer;
 
-public class MockBankCustomer extends Mock implements BankCustomer {
+public class MockBankCustomer extends MockRole implements BankCustomer {
 	
-	public EventLog log = new EventLog();
-
-	public MockBankCustomer(String name) {
-		super(name);
-		// TODO Auto-generated constructor stub
+	public MockBankCustomer() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

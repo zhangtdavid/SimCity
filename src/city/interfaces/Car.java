@@ -1,12 +1,16 @@
 package city.interfaces;
 
-public interface Car extends AbstractAgent {
+import city.Building;
 
+public interface Car extends AgentInterface {
+	
 	// Data
 	
 	// Constructor
 	
 	// Messages
+	
+	abstract void msgIWantToDrive(CarPassenger carPassenger, Building destination);
 	
 	// Scheduler
 	

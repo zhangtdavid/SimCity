@@ -1,26 +1,26 @@
 package city.roles;
 
 import city.Role;
+import city.interfaces.Person;
 import city.interfaces.BusPassenger;
-import city.agents.BusAgent;
-import city.agents.PersonAgent;
+import city.interfaces.Bus;
 import city.buildings.BusStopBuilding;
 
 public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Data
-	PersonAgent myPerson;
+	Person myPerson;
 	enum BusPassengerState {NOTBUSSING, GOINGTOSTOP, WAITINGFORBUS, GETTINGONBUS, GETTINGOFFBUS, ONBUS};
 	BusPassengerState myState = BusPassengerState.NOTBUSSING;
 	enum BusPassengerEvent {NONE, WANTTOBUS, ATSTOP, BUSISHERE, ATDESTINATION};
 	BusPassengerEvent myEvent = BusPassengerEvent.NONE;
-	BusAgent myBus;
+	Bus myBus;
 	BusStopBuilding busStopToWaitAt;
 	BusStopBuilding destination;
 	// CarPassengerGui myGui;
 	
 	// Constructor
-	BusPassengerRole(PersonAgent p) {
+	BusPassengerRole(Person p) {
 		myPerson = p;
 	}
 	
@@ -36,7 +36,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		myEvent = BusPassengerEvent.ATSTOP;
 		stateChanged();
 	}
-	public void msgBusIsHere(BusAgent b) {
+	public void msgBusIsHere(Bus b) {
 		myBus = b;
 		myEvent = BusPassengerEvent.BUSISHERE;
 		stateChanged();
@@ -93,7 +93,9 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Setters
 	
 	// Utilities
-	
+	public void setActive() {
+		
+	}
 	// Classes
 
 }

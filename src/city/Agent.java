@@ -3,17 +3,23 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import utilities.StringUtil;
-import city.interfaces.AbstractAgent;
+import city.interfaces.AgentInterface;
 
 /**
  * The base class for all SimCity201 agents.
  */
-public abstract class Agent implements AbstractAgent {
+public abstract class Agent implements AgentInterface {
+	
+	// Data
 	
     private Semaphore stateChange = new Semaphore(1, true);
     private AgentThread agentThread;
     
-    protected Agent() { }
+    // Constructor
+    
+    // Messages
+    
+    // Scheduler
     
     /**
      * Agents must implement this scheduler to perform any actions appropriate for the
@@ -24,18 +30,28 @@ public abstract class Agent implements AbstractAgent {
      */
     protected abstract boolean runScheduler();
     
+    // Actions
+    
+    // Getters
+    
     /**
      * Return agent name for messages.  Default is to return Java instance name.
      * 
      * @return String the agent name or the Java instance name.
      */
+    @Override
     public String getName() {
         return StringUtil.shortName(this);
     }
     
+    // Setters
+    
+    // Utilities
+    
     /**
      * Agent code calls this method to activate the scheduler.
      */
+    @Override
     public void stateChanged() {
         stateChange.release();
     }
@@ -43,6 +59,7 @@ public abstract class Agent implements AbstractAgent {
     /**
      * Print message.
      */
+    @Override
     public void print(String msg) {
         print(msg, null);
     }
@@ -50,6 +67,7 @@ public abstract class Agent implements AbstractAgent {
     /**
      * Print message with exception stack trace.
      */
+    @Override
     public void print(String msg, Throwable e) {
         StringBuffer sb = new StringBuffer();
         sb.append(getName());
@@ -63,8 +81,9 @@ public abstract class Agent implements AbstractAgent {
     }
 
     /**
-     * Start agent scheduler thread.  Should be called once when agent is created.
+     * Start agent thread.  Should be called once when agent is created.
      */
+    @Override
     public synchronized void startThread() {
         if (agentThread == null) {
             agentThread = new AgentThread(getName());
@@ -75,8 +94,9 @@ public abstract class Agent implements AbstractAgent {
     }
 
     /**
-     * Stop agent scheduler thread.
+     * Stop agent thread.
      */
+    @Override
     public void stopThread() {
         if (agentThread != null) {
             agentThread.stopAgent();
@@ -85,15 +105,14 @@ public abstract class Agent implements AbstractAgent {
     }
     
     /**
-     * Pause and resume the scheduler thread.
+     * Pause and resume agent thread.
      */
-    public void pauseResume() {
+    public void pauseOrResumeThread() {
     	agentThread.pauseResume();
     }
+    
+    // Classes
 
-    /**
-     * Agent scheduler thread, calls respondToStateChange() whenever a state change has been signaled.
-     */
     private class AgentThread extends Thread {
         private volatile boolean goOn = false;
         private boolean doGoOn = true;
@@ -119,7 +138,7 @@ public abstract class Agent implements AbstractAgent {
             }
         }
         
-        public void pauseResume() {
+        private void pauseResume() {
         	doGoOn = !doGoOn;
         }
 

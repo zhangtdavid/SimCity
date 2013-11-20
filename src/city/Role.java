@@ -1,29 +1,34 @@
 package city;
 
-import city.agents.PersonAgent;
-import city.interfaces.AbstractRole;
+import city.interfaces.RoleInterface;
+import city.interfaces.Person;
 
 /**
  * The base class for all SimCity201 roles.
  * 
  * Roles are like unthreaded agents, having messages, actions, and a scheduler.
  */
-public abstract class Role implements AbstractRole {
+public abstract class Role implements RoleInterface {
 	
 	// Data
 	
-	private PersonAgent person;
+	private Person person;
 	private boolean active;
 	
 	// Constructor
 	
+	public Role() {
+		active = false;
+	}
+	
+	public Role(Person p) {
+		person = p;
+		active = false;
+	}
+	
 	// Messages
 	
 	// Scheduler
-	
-	public Role() {
-		active = false;
-    }
 	
 	public abstract boolean runScheduler();	
 	
@@ -31,7 +36,7 @@ public abstract class Role implements AbstractRole {
 	
 	// Getters
 	
-	public PersonAgent getPerson() {
+	public Person getPerson() {
 		return person;
 	}
 	
@@ -41,7 +46,7 @@ public abstract class Role implements AbstractRole {
 	
 	// Setters
 	
-	public void setPerson(PersonAgent p) {
+	public void setPerson(Person p) {
 		this.person = p;
 	}
 	

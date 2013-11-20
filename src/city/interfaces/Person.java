@@ -2,16 +2,16 @@ package city.interfaces;
 
 import java.util.Date;
 
-import city.Agent;
 import city.Role;
 
-public interface Person extends AbstractAgent {
+public interface Person extends AgentInterface {
 
 	// Data
 	
 	// Constructor
 	
 	// Messages
+	
 	public void guiAtDestination();
 	
 	// Scheduler
@@ -20,12 +20,14 @@ public interface Person extends AbstractAgent {
 	
 	// Getters
 	
+	public String getName();
+	
 	// Setters
 	
-	public void setAnimation(city.animations.interfaces.Person p);
+	public void setAnimation(city.animations.interfaces.AnimatedPerson p);
+	public void setCar(Car c);
 	public void setDate(Date d);
 	public void setOccupation(Role r);
-	public void setCar(Agent c); // TODO replace this with the appropriate object type
 	
 	// Utilities
 	
