@@ -8,16 +8,17 @@ import city.interfaces.CarPassenger;
 public class CarAgent extends Agent implements Car {
 
 	// Data
-	enum CarState {NOTDRIVING, DRIVING};
-	CarState myState = CarState.NOTDRIVING; // State of car
-	enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
-	CarEvent myEvent = CarEvent.NONE; // Event for car
-	CarPassenger carPassenger; // Current passenger
-	Building destination; // Destination to go to
+	public enum CarState {NOTDRIVING, DRIVING};
+	public CarState myState = CarState.NOTDRIVING; // State of car
+	public enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
+	public CarEvent myEvent = CarEvent.NONE; // Event for car
+	public CarPassenger carPassenger; // Current passenger
+	public Building destination; // Destination to go to
 	//CarGui myGui; // GUI for animations
 	
 	// Constructor
-	CarAgent() { // Sets all variables to null
+	public CarAgent() { // Sets all variables to null
+		super();
 		carPassenger = null;
 		destination = null;
 	}
@@ -31,7 +32,6 @@ public class CarAgent extends Agent implements Car {
 	}
 
 	void msgImAtCarDestination() { // From myGui, tells car it is at destination
-		carPassenger = null;
 		destination = null;
 		myEvent = CarEvent.ATDESTINATION;
 		stateChanged();
