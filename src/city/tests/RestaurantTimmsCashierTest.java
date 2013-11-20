@@ -23,7 +23,8 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		customer = new MockRestaurantTimmsCustomer();
 		
 		cashierPerson = new MockPerson("Cashier");
-		cashier = new RestaurantTimmsCashierRole(cashierPerson);
+		cashier = new RestaurantTimmsCashierRole();
+		cashier.setPerson(cashierPerson);
 		
 		// TODO
 		// this.market0 = new MockMarket("MockMarket0");

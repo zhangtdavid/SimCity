@@ -9,7 +9,6 @@ import java.util.concurrent.Semaphore;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
-import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
@@ -49,8 +48,8 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Constructor
 
-	public RestaurantTimmsCustomerRole(Person p, RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
-		super(p);
+	public RestaurantTimmsCustomerRole(RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
+		super();
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.hunger = 5;
