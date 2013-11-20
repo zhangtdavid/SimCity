@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import utilities.EventLog;
 import city.MockRole;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -10,8 +11,9 @@ public class MockMarketManager extends MockRole implements MarketManager {
 
 	public MockMarketManager() {
 		// TODO Auto-generated method stub
-		
 	}
+
+	public EventLog log = new EventLog();
 
 	@Override
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {

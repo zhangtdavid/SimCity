@@ -8,17 +8,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Building;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketEmployee;
+import city.interfaces.MarketManager;
 
 public class MarketBuilding extends Building {
-//	MarketManager manager;
-	// manager is set through the base class
+	MarketManager manager;
 	MarketCashier cashier;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public Map<String, Integer> inventory = new ConcurrentHashMap<String, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
 	public Map<String, Double> prices = new ConcurrentHashMap<String, Double>();
 	
-	MarketBuilding() {
-		super("Market1", null);
+	public MarketBuilding(String name) {
+		super(name, null);
 		inventory.put("Steak", 50);
 		inventory.put("Chicken", 50);
 		inventory.put("Salad", 50);
