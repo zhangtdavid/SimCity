@@ -1,7 +1,6 @@
 package city.animations;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
+import java.awt.*;
 
 import city.Animation;
 import city.animations.interfaces.RestaurantTimmsAnimatedTable;

@@ -53,6 +53,8 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 
 	@Override
 	public void draw(Graphics2D g) {
+        g.setColor(Color.lightGray); // shadow of Cook's name, marking where he goes to rest.
+        g.drawString(the_cook.getName(), restingCoordX, restingCoordY+20);
 		g.setColor(Color.PINK); // the Cook
 		g.fillRect(xPos, yPos, WIDTH, WIDTH);
 		g.setColor(Color.BLACK); // the label on the Cook
