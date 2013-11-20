@@ -30,6 +30,8 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		this.customerPerson = new MockPerson("Customer");
 		this.customer = new RestaurantTimmsCustomerRole(host, cashier);
 		this.animation = new MockRestaurantTimmsAnimatedCustomer(customer);
+		
+		customer.setPerson(customerPerson);
 		customer.setAnimation(animation);
 		customer.setPerson(customerPerson);
 		
