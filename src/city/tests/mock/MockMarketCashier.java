@@ -2,7 +2,9 @@ package city.tests.mock;
 
 import java.util.Map;
 
+import utilities.EventLog;
 import city.MockRole;
+import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -11,11 +13,26 @@ import city.interfaces.MarketEmployee;
 
 public class MockMarketCashier extends MockRole implements MarketCashier {
 
+	public EventLog log = new EventLog();
+	public MarketBuilding market;
+	
 	public MockMarketCashier() {
 		// TODO Auto-generated method stub
 		
 	}
 
+	@Override
+	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c,
 			Map<String, Integer> order, Map<String, Integer> collectedItems) {
@@ -49,9 +66,8 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public void msgFinishedDeliveringItems(MarketDeliveryPerson d) {
+	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, MarketCustomerDelivery cd) {
 		// TODO Auto-generated method stub
 		
 	}
-
 }

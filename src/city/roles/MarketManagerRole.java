@@ -6,6 +6,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -16,6 +18,8 @@ import city.Role;
 public class MarketManagerRole extends Role implements MarketManager {
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
 	
 	// TODO move to market class
@@ -59,18 +63,34 @@ public class MarketManagerRole extends Role implements MarketManager {
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketManagerRole(MarketBuilding market) {
+	public MarketManagerRole() {
 		super();
-		this.market = market;
 	}
 	
 //  Messages
 //	=====================================================================
+//	Market
+//	---------------------------------------------------------------
+	public void msgNewEmployee(MarketEmployee e) {
+		log.add(new LoggedEvent("Market Manager received msgNewEmployee from Market."));
+		System.out.println("Market Manager received msgNewEmployee from Market.");
+		employees.add(new MyMarketEmployee(e));
+		stateChanged();
+	}
+	
+	public void msgRemoveEmployee(MarketEmployee e) {
+		log.add(new LoggedEvent("Market Manager received msgRemoveEmployee from Market."));
+		System.out.println("Market Manager received msgRemoveEmployee from Market.");
+		MyMarketEmployee me = findEmployee(e);
+		employees.remove(me);
+		stateChanged();
+	}
+	
 //	Customer (In Person)
 //	---------------------------------------------------------------
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
-		System.out.println("Market manager received msgIWouldLikeToPlaceAnOrder");
-		
+		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
+		System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
 		customers.add(new MyMarketCustomer(c));
 		stateChanged();
 	}
@@ -78,8 +98,8 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	Customer (Delivery)
 //	---------------------------------------------------------------
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c) {
-		System.out.println("Market manager received msgIWouldLikeToPlaceADeliveryOrder");
-
+		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
+		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer In Person.");
 		customers.add(new MyMarketCustomer(c));
 		stateChanged();
 	}
@@ -87,17 +107,19 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	Employee
 //	---------------------------------------------------------------
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
-		System.out.println("Market manager received msgIAmAvailableToAssist");
-		
+		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
+		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
 		MyMarketEmployee tempEmployee = findEmployee(e);
-		if (tempEmployee == null)
-			employees.add(new MyMarketEmployee(e));
-		else
-			tempEmployee.s = MarketEmployeeState.Available;
+//		if (tempEmployee == null)
+//			employees.add(new MyMarketEmployee(e));
+//		else
+		tempEmployee.s = MarketEmployeeState.Available;
 		stateChanged();
 	}
 	
 	public void msgItemLow() {
+		log.add(new LoggedEvent("Market Manager received msgItemLow from Market Employee."));
+		System.out.println("Market Manager received msgItemLow from Market Employee.");
 		itemsLow = true;
 		stateChanged();
 	}
@@ -135,9 +157,18 @@ public class MarketManagerRole extends Role implements MarketManager {
 		customers.remove(c);
 			
 	}
-	// Getters
 	
-	// Setters
+	
+//  Getters and Setters
+//	=====================================================================
+	// Market
+	public MarketBuilding getMarket() {
+		return market;
+	}
+	
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
 	
 //	Utilities
 //=====================================================================
@@ -149,5 +180,4 @@ public class MarketManagerRole extends Role implements MarketManager {
 		}
 		return null;
 	}
-	// Classes
 }
