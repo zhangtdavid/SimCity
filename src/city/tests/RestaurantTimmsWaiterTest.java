@@ -32,9 +32,10 @@ public class RestaurantTimmsWaiterTest extends TestCase {
 		this.customer = new MockRestaurantTimmsCustomer();
 		this.host = new MockRestaurantTimmsHost();
 		this.waiterPerson = new MockPerson("Waiter");
-		this.waiter = new RestaurantTimmsWaiterRole(waiterPerson, cook, host, cashier, 0);
+		this.waiter = new RestaurantTimmsWaiterRole(cook, host, cashier, 0);
 		this.animation = new MockRestaurantTimmsAnimatedWaiter(waiter);
 		waiter.setAnimation(animation);
+		waiter.setPerson(waiterPerson);
 	
 		// TODO Required to set prices for menu items
 		// cookAgent = new CookAgent("Cook", cashier);

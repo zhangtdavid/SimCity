@@ -21,7 +21,7 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, acctClose, moneyWithdraw, loanRequest};
+	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
 	
     /**
@@ -56,13 +56,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		PersonAgent p1 = new PersonAgent(date);
-		BankTellerRole p1r1 = new BankTellerRole();
-		
-		p1.setOccupation(p1r1);
-		
-		people.add(p1);
-		p1.startThread();
+
 	}
 	
 	public static class CityMap {

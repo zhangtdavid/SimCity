@@ -1,21 +1,23 @@
 package city.tests;
 
 import city.buildings.MarketBuilding;
+import city.interfaces.MarketCashier;
 import city.roles.MarketEmployeeRole;
 import city.tests.mock.MockMarketCashier;
 import city.tests.mock.MockMarketCustomer;
 import city.tests.mock.MockMarketCustomerDelivery;
+import city.tests.mock.MockMarketEmployee;
 import city.tests.mock.MockMarketManager;
 import junit.framework.TestCase;
 
-public class MarketEmployeeTest extends TestCase {
+public class MarketCashierTest extends TestCase {
 	
 	MarketBuilding market;
-	MarketEmployeeRole employee;
+	MockMarketEmployee employee;
 	MockMarketManager manager;
 	MockMarketCustomer customer;
 	MockMarketCustomerDelivery customerDelivery;
-	MockMarketCashier cashier;
+	MarketCashier cashier;
 	
 	public void setUp() throws Exception {
 		super.setUp();
