@@ -31,7 +31,7 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, acctClose, moneyWithdraw, loanRequest};
+	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
 	
     /**
