@@ -17,8 +17,9 @@ public class CarPassengerRole extends Role implements CarPassenger {
 //	CarPassengerGui myGui; // GUI for animation
 	
 	// Constructor
-	public CarPassengerRole(Car c) { // Pass in the person and car this role is assigned to
+	public CarPassengerRole(Car c, Building dest_) { // Pass in the person and car this role is assigned to
 		myCar = c;
+		destination = dest_;
 	}
 	
 	// Messages
@@ -83,11 +84,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 //	}
 	
 	// Utilities
-	public void setActive(Building dest) {
-		destination = dest;
-		setActive();
-		msgImGoingToDrive();
-	}
 	
 	// Classes
 
