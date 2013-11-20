@@ -77,28 +77,29 @@ public class BankManagerRole extends Role implements BankManager{
 					return true;
 				}
 			}
-			for(BankTask bT : bankTasks){
-				if(bT.t == type.deposit){
-					Deposit(bT);
-					return true;
-				}
-				if(bT.t == type.withdrawal){
-					for(Account a : building.accounts){
-						if(a.acctNum == bT.acctNum)
-							if(a.balance >= bT.money){
+		}	
+		for(BankTask bT : bankTasks){
+			if(bT.t == type.deposit){
+				Deposit(bT);
+				return true;
+			}
+			if(bT.t == type.withdrawal){
+				for(Account a : building.accounts){
+					if(a.acctNum == bT.acctNum){
+						if(a.balance >= bT.money){
 								Withdraw(bT);
 								return true;
 							}
-							else{
-								WithdrawalFailed(bT);
-								return true;
-							}
+						else{
+							WithdrawalFailed(bT);
+							return true;
+						}
 					}
 				}
-				if(bT.t == type.acctCreate){
-					CreateAccount(bT);
-					return true;
-				}
+			}	
+			if(bT.t == type.acctCreate){
+				CreateAccount(bT);
+				return true;
 			}
 		}
 		// TODO Auto-generated method stub
@@ -123,8 +124,9 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	
 	private void AssignCustomer(BankCustomerRole bc, MyTeller myT){
-		myT.teller.msgAddressCustomer(bc);
+		myT.s = state.busy;
 		customers.remove(bc);
+		myT.teller.msgAddressCustomer(bc);
 	}
 	private void Deposit(BankTask bT){
 		for(Account a : building.accounts){
