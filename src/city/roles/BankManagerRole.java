@@ -172,7 +172,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Utilities
 	
 // Classes
-	class MyTeller {
+	public class MyTeller {
 		BankTellerRole teller;
 		double salary;
 		state s;
@@ -182,7 +182,7 @@ public class BankManagerRole extends Role implements BankManager{
 			s = state.available;
 		}
 	}
-	class BankTask {
+	public class BankTask {
 		int acctNum;
 		type t;
 		double money;
@@ -195,6 +195,6 @@ public class BankManagerRole extends Role implements BankManager{
 			teller = tell;
 		}
 	}
-	enum state {available, busy, gone};
-	enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
+	public enum state {available, busy, gone};
+	public enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
 }

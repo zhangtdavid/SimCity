@@ -9,7 +9,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Data
 	
 	enum service {createAcct, withdraw};
-	enum state {requestService, inProgress, exit};
+	public enum state {requestService, inProgress, exit};
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
 	double cash = 0;

@@ -139,10 +139,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	// Utilities
-	enum serviceState{needsService, pending, inProgress, confirmed, finished, failed};
-	enum serviceType{withdrawal, acctCreate};
+	public enum serviceState{needsService, pending, inProgress, confirmed, finished, failed};
+	public enum serviceType{withdrawal, acctCreate};
 	// Classes
-	class MyCustomer{
+	public class MyCustomer{
 		int acctNum;
 		BankCustomerRole bc;
 		double amount;
