@@ -56,13 +56,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		PersonAgent p1 = new PersonAgent(date);
-		BankTellerRole p1r1 = new BankTellerRole();
-		
-		p1.setOccupation(p1r1);
-		
-		people.add(p1);
-		p1.startThread();
+
 	}
 	
 	public static class CityMap {

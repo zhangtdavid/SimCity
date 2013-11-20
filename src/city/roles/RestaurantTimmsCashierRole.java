@@ -6,7 +6,6 @@ import java.util.List;
 
 import city.Role;
 import city.animations.RestaurantTimmsCashierAnimation;
-import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -32,13 +31,11 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	
 	// Constructor
 	
-	public RestaurantTimmsCashierRole(Person p){
-		super(p);
+	public RestaurantTimmsCashierRole(){
+		super();
 		this.moneyOnHand = CASH_MIN + (int)(Math.random() * ((CASH_MAX - CASH_MIN) + 1));
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
-		
-		print("Money on hand - " + this.moneyOnHand);
 	}
 	
 	// Messages
