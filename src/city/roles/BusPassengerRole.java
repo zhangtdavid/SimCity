@@ -18,7 +18,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// CarPassengerGui myGui;
 	
 	// Constructor
-	BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
+	public BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
 		destination = dest;
 		busStopToWaitAt = stopToWaitAt;
 	}
