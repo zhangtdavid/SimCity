@@ -1,7 +1,6 @@
 package city.roles;
 
 import city.Role;
-import city.interfaces.Person;
 import city.interfaces.BusPassenger;
 import city.interfaces.Bus;
 import city.buildings.BusStopBuilding;
@@ -9,7 +8,6 @@ import city.buildings.BusStopBuilding;
 public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Data
-	Person myPerson;
 	enum BusPassengerState {NOTBUSSING, GOINGTOSTOP, WAITINGFORBUS, GETTINGONBUS, GETTINGOFFBUS, ONBUS};
 	BusPassengerState myState = BusPassengerState.NOTBUSSING;
 	enum BusPassengerEvent {NONE, WANTTOBUS, ATSTOP, BUSISHERE, ATDESTINATION};
@@ -20,17 +18,12 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// CarPassengerGui myGui;
 	
 	// Constructor
-	BusPassengerRole(Person p) {
-		myPerson = p;
+	BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
+		destination = dest;
+		busStopToWaitAt = stopToWaitAt;
 	}
 	
 	// Messages
-	public void msgImGoingToBus(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
-		destination = dest;
-		busStopToWaitAt = stopToWaitAt;
-		myEvent = BusPassengerEvent.WANTTOBUS;
-		stateChanged();
-	}
 	public void msgAtWaitingStop() {
 		busStopToWaitAt.waitingList.add(this);
 		myEvent = BusPassengerEvent.ATSTOP;
@@ -50,11 +43,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	@Override
 	public boolean runScheduler() {
-		if(myState == BusPassengerState.NOTBUSSING && myEvent == BusPassengerEvent.WANTTOBUS) {
-			myState = BusPassengerState.GOINGTOSTOP;
-			goToStopToWaitAt();
-		}
-		if(myState == BusPassengerState.GOINGTOSTOP && myEvent == BusPassengerEvent.ATSTOP) {
+		if(myState == BusPassengerState.NOTBUSSING && myEvent == BusPassengerEvent.ATSTOP) {
 			myState = BusPassengerState.WAITINGFORBUS;
 		}
 		if(myState == BusPassengerState.WAITINGFORBUS && myEvent == BusPassengerEvent.BUSISHERE) {
@@ -69,10 +58,6 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	}
 	
 	// Actions
-	void goToStopToWaitAt() {
-//		myGui.doGoToStop(busStopToWaitAt); // This will call a msg to the GUI, which will animate and then call msgAtWaitingStop() on this passenger
-		msgAtWaitingStop();
-	}
 	
 	void getOnBus() {
 //		myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
@@ -93,9 +78,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Setters
 	
 	// Utilities
-	public void setActive() {
-		
-	}
+	
 	// Classes
 
 }
