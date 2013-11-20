@@ -8,6 +8,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
 import city.Role;
+import city.animations.RestaurantZhangCustomerAnimation;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
@@ -23,7 +24,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	private static final int EATINGTIME = 6000;
 	private static final int CHANCETOLEAVE = 2;
 	Timer timer = new Timer(); // Timer for waiting actions
-//	private CustomerGui customerGui;
+	private RestaurantZhangCustomerAnimation customerAnimation;
 	
 	private RestaurantZhangTable myTable;
 
@@ -54,7 +55,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 * Constructor for CustomerAgent class
 	 *
 	 * @param name name of the customer
+<<<<<<< Updated upstream
 	 * @param gui  reference to the customergui so the customer can send it messages
+=======
+	 * @param gui  reference to the customerAnimation so the customer can send it messages
+>>>>>>> Stashed changes
 	 */
 	public RestaurantZhangCustomerRole(String name){
 		super();
@@ -248,7 +253,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	
 	private void goToWaitingPosition() {
 		print("Going to waiting position");
-		//customerGui.setWaitingPosition(30, 30 + 31 * waitingPosition);
+		customerAnimation.setWaitingPosition(30, 30 + 31 * waitingPosition);
 		DoGoToRestaurant();
 	}
 	
@@ -283,13 +288,13 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 
 	private void sitDown() {
 		print("Being seated. Going to table");
-		//customerGui.DoGoToSeat(myTable);
+		customerAnimation.DoGoToSeat(myTable);
 		state = AgentState.Deciding;
 		decideOrder();
 	}
 	
 	private void decideOrder() {
-		//customerGui.setFoodLabel("", true);
+		customerAnimation.setFoodLabel("", true);
 		timer.schedule(new TimerTask() {
 			public void run() {
 				choice = customerMenu.randomChoice(money);
@@ -328,12 +333,12 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	private void giveOrderToWaiter() {
 		print("Giving order " + choice + " to waiter.");
 		myWaiter.msgHereIsMyChoice(this, choice);
-		//customerGui.setFoodLabel(choice, false);
+		customerAnimation.setFoodLabel(choice, false);
 	}
 	
 	private void eatFood() {
 		print("Eating Food : " + choice);
-		//customerGui.setFoodLabel(choice, true);
+		customerAnimation.setFoodLabel(choice, true);
 		timer.schedule(new TimerTask() {
 			public void run() {
 				print("Done eating " + choice);
@@ -358,7 +363,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	private void leaveRestaurant() {
 		print("Leaving restaurant.");
 		state = AgentState.Leaving;
-		//customerGui.DoExitRestaurant();
+		customerAnimation.DoExitRestaurant();
 		state = AgentState.DoingNothing;
 	}
 	
@@ -366,12 +371,12 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		print("Leaving restaurant.");
 		state = AgentState.Leaving;
 		myWaiter.msgLeavingTable(this);
-		//customerGui.DoExitRestaurant();
+		customerAnimation.DoExitRestaurant();
 		state = AgentState.DoingNothing;
 	}
 	
 	private void DoGoToRestaurant() {
-		//customerGui.DoGoToEntrance();
+		customerAnimation.DoGoToEntrance();
 	}
 
 	// Accessors, etc.
@@ -392,17 +397,17 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		return "customer " + getName();
 	}
 
-//	public void setGui(CustomerGui g) {
-//		customerGui = g;
-//	}
+	public void setAnimation(RestaurantZhangCustomerAnimation g) {
+		customerAnimation = g;
+	}
 	
 	public void setCashier(RestaurantZhangCashier c) {
 		myCashier = c;
 	}
 	
-//	public CustomerGui getGui() {
-//		return customerGui;
-//	}
+	public RestaurantZhangCustomerAnimation getGui() {
+		return customerAnimation;
+	}
 	
 	public int getPos() {
 		return waitingPosition;

@@ -1,8 +1,7 @@
 package city.interfaces;
 
 import utilities.RestaurantZhangTable;
-import city.interfaces.RestaurantZhangCustomer;
-import city.animations.interfaces.RestaurantZhangAnimatedCook;
+import city.animations.RestaurantZhangCookAnimation;
 
 public interface RestaurantZhangCook extends RoleInterface {
 	
@@ -16,4 +15,5 @@ public interface RestaurantZhangCook extends RoleInterface {
 
 	public abstract int getPosOfNewOrder();
 
+	public abstract void msgAtBase();
 }

@@ -7,7 +7,7 @@ public class RestaurantZhangOrder {
 	public enum OrderStatus {created, cooking, doneCooking, plated, removed};
 	public String choice;
 	public RestaurantZhangTable t;
-	int pos;
+	public int pos;
 	public OrderStatus status;
 	public RestaurantZhangOrder(RestaurantZhangWaiter w_, String choice_, RestaurantZhangTable t_, int p) {
 		w = w_;
@@ -19,7 +19,7 @@ public class RestaurantZhangOrder {
 	public RestaurantZhangOrder(RestaurantZhangOrder o) {
 		this(o.w, o.choice, o.t, o.pos);
 	}
-	boolean equals(RestaurantZhangOrder o) {
+	public boolean equals(RestaurantZhangOrder o) {
 		if(w.equals(o.w) && choice.equals(o.choice) && t.equals(o.t))
 			return true;
 		else

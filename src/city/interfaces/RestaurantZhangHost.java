@@ -2,7 +2,6 @@ package city.interfaces;
 
 import utilities.RestaurantZhangTable;
 import city.interfaces.RestaurantZhangCustomer;
-import city.animations.interfaces.RestaurantZhangAnimatedHost;
 
 public interface RestaurantZhangHost extends RoleInterface {
 	

@@ -7,6 +7,7 @@ import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangTable;
 import city.Role;
+import city.animations.RestaurantZhangCookAnimation;
 import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangWaiter;
 
@@ -33,7 +34,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 //	private List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
 //	private List<MarketAgent> marketList = new ArrayList<MarketAgent>();
 	
-//	private CookGui thisGui;
+	private RestaurantZhangCookAnimation thisGui;
 	
 	Timer timer = new Timer();
 	
@@ -160,12 +161,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	void cookOrder(RestaurantZhangOrder o) {
 		o.status = RestaurantZhangOrder.OrderStatus.cooking;
-//		thisGui.addToPlatingArea(o.choice + "?", o.pos);
+		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
 		if(cookInventory.get(o.choice).amount  <= 0) {
 			print("Out of " + cookInventory.get(o.choice).name);
 			mainMenu.remove(o.choice);
-//			thisGui.removeFromPlatingArea(o.pos);
+			thisGui.removeFromPlatingArea(o.pos);
 			ordersToCook.remove(o);
 			o.w.msgOutOfFood(o.t);
 //			for(CookInvoice ci : cookInvoiceList) {
@@ -182,14 +183,14 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 		// Cooking
 		print("Cooking order: " + o.choice);
-//		thisGui.goToPlating();
-//		waitForAnimation();
-//		thisGui.removeFromPlatingArea(o.pos);
-//		thisGui.goToGrill(o.pos);
-//		waitForAnimation();
-//		thisGui.addToGrill(o.choice, o.pos);
-//		thisGui.goToBase();
-//		waitForAnimation();
+		thisGui.goToPlating();
+		waitForAnimation();
+		thisGui.removeFromPlatingArea(o.pos);
+		thisGui.goToGrill(o.pos);
+		waitForAnimation();
+		thisGui.addToGrill(o.choice, o.pos);
+		thisGui.goToBase();
+		waitForAnimation();
 		final RestaurantZhangOrder tempOrder = new RestaurantZhangOrder(o);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -211,21 +212,21 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	}
 	
 	void plateFood(RestaurantZhangOrder o) {
-//		thisGui.goToGrill(o.pos);
-//		waitForAnimation();
-//		thisGui.removeFromGrill(o.pos);
-//		thisGui.goToPlating();
-//		waitForAnimation();
-//		thisGui.addToPlatingArea(o.choice, o.pos);
-//		thisGui.goToBase();
-//		waitForAnimation();
+		thisGui.goToGrill(o.pos);
+		waitForAnimation();
+		thisGui.removeFromGrill(o.pos);
+		thisGui.goToPlating();
+		waitForAnimation();
+		thisGui.addToPlatingArea(o.choice, o.pos);
+		thisGui.goToBase();
+		waitForAnimation();
 		print("Plated order " + o.choice + " for waiter " + o.w.getName());
 		o.status = RestaurantZhangOrder.OrderStatus.plated;
 		o.w.msgOrderIsReady(o.choice, o.t);
 	}
 	
 	void removeFromPlating(RestaurantZhangOrder o) {
-//		thisGui.removeFromPlatingArea(o.pos);
+		thisGui.removeFromPlatingArea(o.pos);
 		ordersToCook.remove(o);
 	}
 	
@@ -283,13 +284,13 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 	}
 	
-//	public void setGui(CookGui gui) {
-//		thisGui = gui;
-//	}
-//	
-//	public CookGui getGui() {
-//		return thisGui;
-//	}
+	public void setAnimation(RestaurantZhangCookAnimation gui) {
+		thisGui = gui;
+	}
+	
+	public RestaurantZhangCookAnimation getGui() {
+		return thisGui;
+	}
 	
 //	public void addMarket(MarketAgent ma) {
 //		marketList.add(ma);

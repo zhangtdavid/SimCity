@@ -3,8 +3,6 @@ package city.interfaces;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
-import city.Application;
-import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 
 public interface RestaurantZhangCustomer extends RoleInterface {
 	
@@ -24,4 +22,8 @@ public interface RestaurantZhangCustomer extends RoleInterface {
 	public abstract void msgOrderAgain();
 	public abstract void msgHereIsYourFood(String choice);
 	public abstract int getPos();
+	public abstract void msgAnimationFinishedEnterRestaurant();
+	public abstract void msgAnimationFinishedGoToSeat();
+	public abstract void msgAnimationFinishedLeaveRestaurant();
+	public abstract void gotHungry();
 }

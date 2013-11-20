@@ -6,6 +6,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
 import city.Role;
+import city.animations.RestaurantZhangWaiterAnimation;
 
 public abstract class RestaurantZhangWaiterBase extends Role implements RestaurantZhangWaiter {
 	// Customers
@@ -19,7 +20,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	//Menu
 	RestaurantZhangMenu waiterMenu;
 	// GUI
-//	WaiterGui thisGui;
+	protected RestaurantZhangWaiterAnimation thisGui;
 //	RevolvingStand myOrderStand;
 	
 	List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
@@ -207,20 +208,20 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	// Actions
 	void seatCustomer(MyCustomer mc) {
 		print("Going to entrance");
-//		DoGoToEntrance(mc.customer);
-//		WaitForAnimation();
+		DoGoToEntrance(mc.customer);
+		WaitForAnimation();
 		mc.customer.msgFollowMe(this, waiterMenu, mc.table);
 		print("Seating " + mc.customer + " at " + mc.table);
-//		DoGoToTable(mc.table);
+		DoGoToTable(mc.table);
 		mc.state = mcState.deciding;
-//		WaitForAnimation();
+		WaitForAnimation();
 		stateChanged();
 	}
 	
 	void takeOrderFromCustomer(MyCustomer mc) {
 		print("Going to customer " + mc.customer.getName() + " to take order");
-//		DoGoToTable(mc.table);
-//		WaitForAnimation();
+		DoGoToTable(mc.table);
+		WaitForAnimation();
 		mc.state = mcState.ordering;
 		mc.customer.msgWhatWouldYouLike();
 	}
@@ -234,23 +235,23 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	void tellCustomerDecideAgain(MyCustomer mc) {
 		print("Telling customer to reorder");
-//		DoGoToTable(mc.table);
-//		WaitForAnimation();
+		DoGoToTable(mc.table);
+		WaitForAnimation();
 		mc.state = mcState.deciding;
 		mc.customer.msgOrderAgain();
 	}
 	
 	void serveCustomer(MyCustomer mc) {
 		print("Going to cook to get food for customer " + mc.customer.getName());
-//		DoGoToCook();
-//		WaitForAnimation();
+		DoGoToCook();
+		WaitForAnimation();
 		myCook.msgGotCompletedOrder(mc.table);
 		print("Going to customer "+ mc.customer.getName() + " to serve");
-//		thisGui.setFoodLabel(mc.choice, true);
-//		DoGoToTable(mc.table);
-//		WaitForAnimation();
+		thisGui.setFoodLabel(mc.choice, true);
+		DoGoToTable(mc.table);
+		WaitForAnimation();
 		mc.customer.msgHereIsYourFood(mc.choice);
-//		thisGui.setFoodLabel("", true);
+		thisGui.setFoodLabel("", true);
 		mc.state = mcState.eating;
 	}
 	
@@ -273,16 +274,16 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	}
 	
 	void DoingNothing() {
-//		if(DoReturnToBase()) {
-//			WaitForAnimation();
-//		}
+		if(DoReturnToBase()) {
+			WaitForAnimation();
+		}
 	}
 	
 	void GoOnBreak() {
 		print("Going on break");
 		wBreakStatus = breakStatus.onBreak;
-//		thisGui.GoToDestination(BREAKX, BREAKY);
-//		WaitForAnimation();
+		thisGui.GoToDestination(BREAKX, BREAKY);
+		WaitForAnimation();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				print("Returned from break");
@@ -295,23 +296,23 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	}
 	
 	// The animation DoXYZ() routines
-//	void DoGoToEntrance(Customer c) {
-//		thisGui.GoToCustomer(c.getPos());
-//	}
-//	
-//	void DoGoToTable(Table table) {
-//		thisGui.GoToTable(table);
-//	}
-//	
-//	void DoGoToCook() {
-//		thisGui.GoToDestination(myCook.getX(), myCook.getY());
-//	}
-//	
-//	boolean DoReturnToBase() {
-//		return thisGui.ReturnToBase();
-//	}
+	void DoGoToEntrance(RestaurantZhangCustomer c) {
+		thisGui.GoToCustomer(c.getPos());
+	}
+	
+	void DoGoToTable(RestaurantZhangTable table) {
+		thisGui.GoToTable(table);
+	}
+	
+	public void DoGoToCook() {
+		thisGui.GoToDestination(myCook.getX(), myCook.getY());
+	}
+	
+	boolean DoReturnToBase() {
+		return thisGui.ReturnToBase();
+	}
 
-	void WaitForAnimation() {
+	public void WaitForAnimation() {
 		try {
 			atTable.acquire();
 		} catch (InterruptedException e) {
@@ -321,13 +322,13 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 
 	//utilities
 
-//	public void setGui(WaiterGui gui) {
-//		thisGui = gui;
-//	}
+	public void setAnimation(RestaurantZhangWaiterAnimation gui) {
+		thisGui = gui;
+	}
 
-//	public WaiterGui getGui() {
-//		return thisGui;
-//	}
+	public RestaurantZhangWaiterAnimation getAnimation() {
+		return thisGui;
+	}
 	
 	public void setCook(RestaurantZhangCook c) {
 		myCook = c;

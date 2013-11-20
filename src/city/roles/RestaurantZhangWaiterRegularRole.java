@@ -11,11 +11,11 @@ public class RestaurantZhangWaiterRegularRole extends RestaurantZhangWaiterBase 
 	
 	public void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {
 		print("Going to cook for customer " + mc.customer.getName());
-//		thisGui.setFoodLabel(choice, false); // Shows food ordered in animation
-//		DoGoToCook();
-//		WaitForAnimation();
+		thisGui.setFoodLabel(choice, false); // Shows food ordered in animation
+		DoGoToCook();
+		WaitForAnimation();
 		myCook.msgHereIsAnOrder(this, choice, t);
 		mc.state = mcState.orderCooking;
-//		thisGui.setFoodLabel("", true); // Removes food ordered in animation
+		thisGui.setFoodLabel("", true); // Removes food ordered in animation
 	}
 }

@@ -13,7 +13,7 @@ public class MainFrame extends JFrame {
     private static int WINDOWX = 1100;
     private static int WINDOWY = 700;
     
-    public RestaurantTimmsPanel restaurantTimmsPanel;
+    public RestaurantZhangPanel restaurantZhangPanel;
 	
     /**
      * Constructor method
@@ -29,13 +29,13 @@ public class MainFrame extends JFrame {
         this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         this.setLayout(new BoxLayout((Container) getContentPane(), BoxLayout.X_AXIS));
         
-        // TODO testing RestaurantTimmsPanel
+        // TODO testing RestaurantZhangPanel
         Dimension panelDimension = new Dimension(WINDOWX, WINDOWY);
-        restaurantTimmsPanel = new RestaurantTimmsPanel(panelDimension);
-        restaurantTimmsPanel.setPreferredSize(panelDimension);
-        restaurantTimmsPanel.setMinimumSize(panelDimension);
-        restaurantTimmsPanel.setMaximumSize(panelDimension);
-        this.add(restaurantTimmsPanel);
+        restaurantZhangPanel = new RestaurantZhangPanel(panelDimension);
+        restaurantZhangPanel.setPreferredSize(panelDimension);
+        restaurantZhangPanel.setMinimumSize(panelDimension);
+        restaurantZhangPanel.setMaximumSize(panelDimension);
+        this.add(restaurantZhangPanel);
     }
 	
 }

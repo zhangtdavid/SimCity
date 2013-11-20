@@ -3,7 +3,6 @@ package city.interfaces;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangTable;
 import city.interfaces.RestaurantZhangCustomer;
-import city.animations.interfaces.RestaurantZhangAnimatedCashier;
 
 public interface RestaurantZhangCashier extends RoleInterface {
 	// Sent from waiter to create check to be given to the customer by the waiter
