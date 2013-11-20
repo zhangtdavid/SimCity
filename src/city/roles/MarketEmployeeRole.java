@@ -3,6 +3,8 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
@@ -15,6 +17,8 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //  Data
 //	=====================================================================
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
 	
 	private int loc; // location at front counter
@@ -44,9 +48,8 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketEmployeeRole(MarketBuilding market) {
+	public MarketEmployeeRole() {
 		super();
-		this.market = market;
         for (String s: order.keySet()) {
         	collectedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
@@ -54,7 +57,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //  Messages
 //	=====================================================================
+//	Manager
+//	---------------------------------------------------------------
 	public void msgAssistCustomer(MarketCustomer c) {
+		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Market Manager."));
+		System.out.println("Market Employee received msgAssistCustomer from Market Manager.");
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = c;
 		customerDelivery = null;
@@ -62,13 +69,19 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 	
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c) {
+		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
+		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = null;
 		customerDelivery = c;
 		stateChanged();
 	}
 	
+//	Customer
+//	---------------------------------------------------------------
 	public void msgHereIsMyOrder(MarketCustomer c, Map<String, Integer> o) {
+		log.add(new LoggedEvent("Market Employee received msgHereIsMyOrder from Market Customer."));
+		System.out.println("Market Employee received msgHereIsMyOrder from Market Customer.");
 		if (customer == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
             for (String item: o.keySet()) {
@@ -79,6 +92,8 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 
 	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
+		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
+		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
 		if (customerDelivery == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
             for (String item: o.keySet()) {
@@ -87,6 +102,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
             stateChanged();
 		}
 	}
+
 //	Animation
 //	---------------------------------------------------------------
 //	public void msgAnimationAtCounter() {
@@ -144,18 +160,17 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 	private void collectItems() {
         for (String item: order.keySet()) {
-        	// TODO make market class with marketInventory
-//        	if (marketInventory.get(item) < order.get(item) && marketInventory.get(item) > 0) {
-//        		collectedItems.set(item, collectedItems.get(item) + marketInventory.get(item));
-//        		marketInventory.set(item, 0);
-//        	}
-//        	else if (marketInventory.get(item) >= order.get(item)) {
-//        		marketInventory.set(item, marketInventory.get(item) - order.get(item));
-//        		collectedItems.set(item, order.get(item));
-////        		marketEmployeeGui.doCollectItems(order);
-//        	}
-//        	if (marketInventory.get(item) < 10)
-//        		manager.msgItemLow();
+        	if (market.inventory.get(item) < order.get(item) && market.inventory.get(item) > 0) {
+        		collectedItems.put(item, collectedItems.get(item) + market.inventory.get(item));
+        		market.inventory.put(item, 0);
+        	}
+        	else if (market.inventory.get(item) >= order.get(item)) {
+        		market.inventory.put(item, market.inventory.get(item) - order.get(item));
+        		collectedItems.put(item, order.get(item));
+//        		marketEmployeeGui.doCollectItems(order);
+        	}
+        	if (market.inventory.get(item) < 10)
+        		manager.msgItemLow();
 //        	marketEmployeeGui.doDeliverItems();
 //    		try {
 //			atCashier.acquire();
@@ -163,7 +178,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-        	// dependent on custome type
+        	// dependent on customer type
         	if (customer != null)
         		cashier.msgComputeBill(this, customer, order, collectedItems);
         	else
@@ -184,26 +199,36 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 
 
+//  Getters and Setters
+//	=====================================================================
+	// Market
+	public MarketBuilding getMarket() {
+		return market;
+	}
 	
-//  Utilities
-//	=====================================================================	
-	// Getters
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
+	
+	// Manager
 	public MarketManager getManager() {
 		return manager;
 	}
 	
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	// Setters
 	public MarketManager setManager() {
 		return manager;
+	}
+	
+	// Cashier
+	public MarketCashier getCashier() {
+		return cashier;
 	}
 	
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
 	}
 	
-	// Classes
+//  Utilities
+//	=====================================================================	
+
 }

@@ -18,7 +18,7 @@ public abstract class MockRole implements RoleInterface {
 	
 	// Data
 	
-	private Person person;
+	public Person person;
 	private boolean active;
 	private boolean activity;
 	
