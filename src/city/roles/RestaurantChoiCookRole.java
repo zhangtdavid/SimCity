@@ -1,6 +1,7 @@
 package city.roles;
 
 import java.util.TimerTask;
+import java.util.concurrent.Semaphore;
 
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
@@ -10,6 +11,9 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 
 	//Data
 	RestaurantChoiAnimatedCook cookGui;
+	public int marketIndex=0;
+	Semaphore inProgress = new Semaphore(0, true);
+	String name = "LeChef";
 
 	//Constructor
 	public RestaurantChoiCookRole() {
@@ -42,7 +46,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 		stateChanged();
 	}
 
-	@Override
+	/*@Override
 	public void msgOutOfThisFood(Market m, int choice) {
 		synchronized(markets){
 			for(int i = 0; i < markets.size(); i++){
@@ -69,7 +73,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 				}
 			}
 		}
-	}
+	}TODO*/
 
 	@Override
 	public void msgAtRefrigerator() {
@@ -153,9 +157,9 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 						return false;
 					}
 				}
-				synchronized(markets){
+				/*TODO synchronized(markets){
 					markets.get(marketIndex%markets.size()).market.msgHeresAnOrder(tempFood.choiceID, tempFood.capacity-tempFood.threshold);
-				}
+				}*/
 				tempFood.amountOrdered = tempFood.capacity-tempFood.threshold;
 				System.out.println("Asked Market " + marketIndex%markets.size() + " for choice #" + tempFood.choiceID);
 			}
@@ -272,13 +276,13 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 		
 	}
 
-	@Override
+	/*@Override
 	public void addMarket(Market m) {
 		myMarket mm = new myMarket(m);
 		synchronized(markets){
 			markets.add(mm);            
 		}		
-	}	
+	}TODO */	
 	//Utilities
 	public void hackNoFood(){
 		foods.get(1).inventory = 0;

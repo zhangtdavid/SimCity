@@ -73,67 +73,6 @@ public class RestaurantChoiWaiterRole extends Role implements RestaurantChoiWait
 				stateChanged();
 	}
 
-	// Scheduler
-	@Override
-	public boolean runScheduler() {
-		// the scheduler is so clean now!!
-		try{
-			if (needToRetakeOrder())
-				return true;
-			if (needToDeliverFood())
-				return true;
-			if (needToGiveCheck())
-				return true;
-			if (needToNotifyHost())
-				return true;
-			if (needToTakeOrder())
-				return true;
-			if (needToGetCheck())
-				return true;
-			if (needToSeatCustomer())
-				return true;
-			if (needToSendOrderToCook())
-				return true;
-			if (needToGetOrderFromCook())
-				return true;
-		}catch(ConcurrentModificationException ce){ // as per instructions...
-			System.out.println("Caught concurrent modification exception by try catch and returning false");
-			return false;
-		}
-		return false;
-
-	}
-	// Actions
-
-	// Getters
-
-	// Setters
-
-	// Utilities
-
-	@Override
-	public String getName() {
-		return name;
-	}
-
-	@Override
-	public List<myCustomer> getMyCustomers() {
-		return myCustomers;
-	}
-
-	@Override
-	public List<RestaurantChoiTable> getTables() {
-		return tables;
-	}
-
-	public boolean askedForBreak() {
-		return breakRequested;
-	}
-
-	public boolean isOnBreak() {
-		return onBreak;
-	}
-
 	@Override
 	public void msgReadyToOrder(RestaurantChoiCustomer c) {
 		for (int i = 0; i < myCustomers.size(); i++) {
@@ -158,7 +97,7 @@ public class RestaurantChoiWaiterRole extends Role implements RestaurantChoiWait
 					}
 				}
 			} else {
-				if (c.state == RestaurantChoiCustomer.AgentState.ReadyToOrder) {
+				if (c.getState() == RestaurantChoiCustomer.AgentState.ReadyToOrder) {
 					// Order received, so mark that in myCustomers.
 					for (int i = 0; i < myCustomers.size(); i++) {
 						if (c.equals(myCustomers.get(i).getC())
@@ -233,6 +172,38 @@ public class RestaurantChoiWaiterRole extends Role implements RestaurantChoiWait
 
 	}
 
+	// Scheduler
+	@Override
+	public boolean runScheduler() {
+		// the scheduler is so clean now!!
+		try{
+			if (needToRetakeOrder())
+				return true;
+			if (needToDeliverFood())
+				return true;
+			if (needToGiveCheck())
+				return true;
+			if (needToNotifyHost())
+				return true;
+			if (needToTakeOrder())
+				return true;
+			if (needToGetCheck())
+				return true;
+			if (needToSeatCustomer())
+				return true;
+			if (needToSendOrderToCook())
+				return true;
+			if (needToGetOrderFromCook())
+				return true;
+		}catch(ConcurrentModificationException ce){ // as per instructions...
+			System.out.println("Caught concurrent modification exception by try catch and returning false");
+			return false;
+		}
+		return false;
+
+	}
+	
+	// Actions
 	@Override
 	public void offBreak() {
 		onBreak = false;
@@ -332,6 +303,54 @@ public class RestaurantChoiWaiterRole extends Role implements RestaurantChoiWait
 		stateChanged();
 
 	}
+
+	// Getters
+	@Override
+	public String getName() {
+		return name;
+	}
+
+	@Override
+	public List<myCustomer> getMyCustomers() {
+		return myCustomers;
+	}
+
+	@Override
+	public List<RestaurantChoiTable> getTables() {
+		return tables;
+	}
+
+	public boolean askedForBreak() {
+		return breakRequested;
+	}
+
+	public boolean isOnBreak() {
+		return onBreak;
+	}
+
+	// Setters
+	@Override
+	public void setHost(RestaurantChoiHost h) {
+		host = h;
+		
+	}
+
+	@Override
+	public void setCook(RestaurantChoiCook c) {
+		cook = c;
+		
+	}
+
+	@Override
+	public void setCashier(RestaurantChoiCashier ca) {
+		cashier = ca;
+	}
+	public void setGui(RestaurantChoiAnimatedWaiter w){
+		waiterGui = w;
+	}
+	// Utilities
+
+	
 
 	@Override
 	public boolean needToSeatCustomer() {
@@ -517,4 +536,6 @@ public class RestaurantChoiWaiterRole extends Role implements RestaurantChoiWait
 		}
 		return false;
 	}
+
+
 }

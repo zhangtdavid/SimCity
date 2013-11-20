@@ -1,11 +1,13 @@
 package city.roles;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
+import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
@@ -486,6 +488,10 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		return hungerLevel;
 	}
 
+	@Override
+	public AgentState getState() {
+		return state;
+	}
 	//Setters
 	@Override
 	public void setWaiter(RestaurantChoiWaiter w) {
@@ -541,6 +547,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void setGui(RestaurantChoiAnimatedCustomer anim) {
 		customerGui = anim;
 	}
+
 
 	//Utilities
 

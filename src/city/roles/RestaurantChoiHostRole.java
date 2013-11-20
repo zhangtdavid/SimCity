@@ -1,5 +1,6 @@
 package city.roles;
 
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -8,6 +9,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Role;
 import city.animations.RestaurantChoiHostAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
+import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
@@ -45,6 +47,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	public void msgImHungry(RestaurantChoiCustomer c) {
 		synchronized(waitingCustomers){
+												System.out.println("received msgimhungry;added to queue");
 			waitingCustomers.add(c);
 		}
 		stateChanged();
@@ -87,7 +90,8 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
+		System.out.println("scheduler running");
 		//see if waiter can be on break
 		synchronized(waiters){
 			for(int i = 0; i < waiters.size(); i++){
@@ -215,11 +219,5 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	public void minus1Workload(RestaurantChoiWaiter w){
 		waiterBalance.put(w, waiterBalance.get(w)-1); // replace old with new
-	}
-
-	@Override
-	public boolean runScheduler() {
-		// TODO Auto-generated method stub
-		return false;
 	}
 }

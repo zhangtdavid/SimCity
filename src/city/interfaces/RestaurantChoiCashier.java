@@ -12,13 +12,12 @@ public interface RestaurantChoiCashier extends RoleInterface{
 	HashMap <Integer, Double> foodCost = new HashMap<Integer,Double>();
     ArrayList<Check> checks = new ArrayList<Check>();
 
-	ConcurrentHashMap<Market, Double> marketBills = new ConcurrentHashMap<Market, Double>();
-	ArrayList<Market> markets = new ArrayList<Market>(); // TODO match with Market in simcity201
+	//ConcurrentHashMap<Market, Double> marketBills = new ConcurrentHashMap<Market, Double>(); TODO
+	//ArrayList<Market> markets = new ArrayList<Market>(); // TODO match with Market in simcity201 TODO
 	final static int NOT_IN_TRANSIT = 0;
 	final static int IN_TRANSIT = 1;
 	//Banker restaurantBanker; // TODO match with banker
-    public double money = 100;
-    public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
+
     
 	//Messages
 	public void msgComputeCheck(RestaurantChoiWaiter w, RestaurantChoiCustomer c, double money);

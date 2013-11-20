@@ -1,15 +1,16 @@
 package city.roles;
 
-import restaurant.interfaces.Cashier.Check;
 import city.Role;
+import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
-
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
-	//Data
+	//Data    
+	public double money = 100;
+    public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
 	//public EventLog log = new EventLog(); // TODO import junit3
 	RestaurantChoiAnimatedCashier cashierGui;
     
@@ -66,19 +67,20 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				}
 				stateChanged();
 	}
-	public void msgHeresYourMarketBill(Market m, int type, int amount){
+	/*
+ 	public void msgHeresYourMarketBill(Market m, int type, int amount){
 		double owed = foodCost.get(type)*amount;
 		synchronized(marketBills){
 			marketBills.put(m, owed);
 		}
 		stateChanged();
 	}
+	*/
 	@Override
 	public void msgHeresYourMoney(double withdrawal) {
 		money+=withdrawal;
 		moneyIncoming = NOT_IN_TRANSIT;
 		stateChanged();
-		
 	}
 
 	@Override
@@ -90,7 +92,6 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				}
 			}	
 		}
-		
 	}
 	
     //Scheduler
@@ -124,7 +125,9 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		
 	}
 
-	@Override
+	/*
+ @Override
+	
 	public void getMoney(Banker b) {
 		b.msgMoneyPls(1000); // ask for 1000 dollars at a time
 		moneyIncoming = IN_TRANSIT;
@@ -140,7 +143,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		}
 		
 	}
-
+*/
 
     //Getters
 	@Override
@@ -149,7 +152,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	}
     
     //Setters
-    public void setBanker(Banker b){
+ /*   public void setBanker(Banker b){
 		restaurantBanker = b; // only one banker (we can trust...) TODO fix so that this matches with bank in simcity201
     }
     
@@ -157,7 +160,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
      	markets.add(m); // TODO fix so that this matches with market in simcity201
 	 	marketBills.put(m,0.0);
 	}
-    
+   */ 
     public void setGui(RestaurantChoiAnimatedCashier r){
     	this.cashierGui = r;
     }

@@ -13,10 +13,11 @@ public class RestaurantChoiTable {
 	//private int xstart = 50; // RestaurantChoiFurnitureAnimation.TABLEX_INIT
 	//private int ystart = 250; // RestaurantChoiFurnitureAnimation.TABLEY;
 
-	RestaurantChoiTable(int tableNumber) {
+	public RestaurantChoiTable(int tableNumber) {
 		this.tableNumber = tableNumber;
-		xCoord = RestaurantChoiFurnitureAnimation.TABLEX_INIT - RestaurantChoiFurnitureAnimation.TABLEX_INIT*2*tableNumber;
+		xCoord = RestaurantChoiFurnitureAnimation.TABLEX_INIT - RestaurantChoiFurnitureAnimation.TABLEX_INCR*2*tableNumber;
 		yCoord = RestaurantChoiFurnitureAnimation.TABLEY;
+		System.out.println(xCoord + ", " + yCoord);
 	}
 
 	int getTableNumber(){

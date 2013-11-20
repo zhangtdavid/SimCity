@@ -19,9 +19,7 @@ public interface RestaurantChoiCook extends RoleInterface{
 	Timer timer = new Timer(); // for cooking!
 	public ConcurrentHashMap <Integer, Food> foods = new ConcurrentHashMap<Integer,Food>();
 	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>());
-	public int marketIndex=0;
-	Semaphore inProgress = new Semaphore(0, true);
-	String name = "LeChef";
+
 	
 	//Constructor
 	
@@ -59,11 +57,11 @@ public interface RestaurantChoiCook extends RoleInterface{
 	public void hackNoFood();
 	
 	class myMarket{
-		Market market;
+		//Market market; TODO
 		public boolean[] outOf; // 4 foods, so 4 booleans
 
-		myMarket(Market m){
-			market = m;
+		myMarket(/*Market m TODO*/){
+			//market = m; TODO
 			outOf = new boolean[4];
 		}
 	}

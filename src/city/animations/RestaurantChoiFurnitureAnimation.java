@@ -52,30 +52,30 @@ public class RestaurantChoiFurnitureAnimation extends Animation implements Resta
 	
 	
 	// Getters
-	public static int getTableX(int position) {
+	public int getTableX(int position) {
 		return TABLEX_INIT-2*TABLEX_INCR*(position+1);
     }
 	
-	public static int getTableY(int position) {
+	public int getTableY(int position) {
 		return TABLEY;
     }
 	
-	public static int getRefrigeratorX(){
+	public int getRefrigeratorX(){
 		return CRX;
 	}
-	public static int getRefrigeratorY(){
+	public int getRefrigeratorY(){
 		return CRY;
 	}
-	public static int getPlatingX(){
+	public int getPlatingX(){
 		return CPX;
 	}
-	public static int getPlatingY(){
+	public int getPlatingY(){
 		return CPY;
 	}
-	public static int getGrillX(){
+	public int getGrillX(){
 		return CGX;
 	}
-	public static int getGrillY(){
+	public int getGrillY(){
 		return CGY;
 	}
 	// Setters

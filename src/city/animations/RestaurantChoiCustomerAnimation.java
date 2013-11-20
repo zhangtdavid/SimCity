@@ -96,6 +96,7 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 		command = Command.GoToDishes;
 	}
 	public void DoGoToWaiting(int offset){
+		System.out.println("Received DoGoToWaiting");
 		xDestination = waitCoordX;
 		waitY = waitCoordY+offset*10;
 		yDestination = waitY;

@@ -44,6 +44,10 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 	public abstract boolean needToRetakeOrder();
 	public abstract boolean needToGetCheck();
 	public abstract boolean needToGiveCheck();
+	//setters
+	public abstract void setHost(RestaurantChoiHost h);
+	public abstract void setCook(RestaurantChoiCook c);
+	public abstract void setCashier(RestaurantChoiCashier ca);
 	
 	
 	public class myCustomer {
