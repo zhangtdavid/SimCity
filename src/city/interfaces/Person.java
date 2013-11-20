@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.Date;
 
+import city.Building;
 import city.Role;
 
 public interface Person extends AgentInterface {
@@ -28,6 +29,7 @@ public interface Person extends AgentInterface {
 	public void setCar(Car c);
 	public void setDate(Date d);
 	public void setOccupation(Role r);
+	public void setWorkplace(Building b);
 	
 	// Utilities
 	
