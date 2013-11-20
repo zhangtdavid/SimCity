@@ -14,6 +14,7 @@ import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
+import city.buildings.BusStopBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
 import city.roles.RestaurantTimmsCashierRole;
@@ -34,6 +35,7 @@ public class Application {
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum BUILDING {bank, busStop, house, market};
 	
     /**
      * Main routine to start the program.
@@ -132,11 +134,29 @@ public class Application {
 	}
 	
 	public static class CityMap {
-		private static HashMap<String, List<Building>> map = new HashMap<String, List<Building>>();
+		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		
-		public void addBuilding(String type, Building b) {
+		public void addBuilding(BUILDING type, Building b) {
 			if(map.containsKey(type))
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		}
+		
+		/**
+		 * Return the building of type closest to the person's location
+		 */
+		public static Building findClosestBuilding(BUILDING type, Person p) { // TODO
+			Building b = new BusStopBuilding("placeholder");
+			return b;
+		}
+		
+		/**
+		 * Return the building of type closest to the destination building
+		 * 
+		 * @param b the destination you wish to reach
+		 */
+		public static Building findClosestBuilding(BUILDING type, Building b) { // TODO
+			Building d = new BusStopBuilding("placeholder");
+			return d;
 		}
 		
 	}

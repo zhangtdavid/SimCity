@@ -8,10 +8,15 @@ import java.util.concurrent.Semaphore;
 
 import city.Agent;
 import city.Application;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Building;
 import city.Role;
+import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.MarketBuilding;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -111,6 +116,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		if (state == State.goingToBank) {
 			processTransporationArrival(bankCustomerRole, State.atBank);
+			// TODO load the BankCustomerRole and switch over to it
 		}
 		
 		// TODO much more here
@@ -145,38 +151,51 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToWork() throws InterruptedException {
-		if (car != null) {
-			carPassengerRole = new CarPassengerRole(car, workplace);
-			carPassengerRole.setActive();
-			carPassengerRole.setPerson(this);
-			roles.add(carPassengerRole);
-		} else {
-			BusStopBuilding b = findClosestBusStop();
-			BusStopBuilding d = findClosestBusStop(workplace);
-			animation.goToBusStop(b);
-			atDestination.acquire();
-			busPassengerRole = new BusPassengerRole(d, b);
-			busPassengerRole.setActive();
-			busPassengerRole.setPerson(this);
-			roles.add(busPassengerRole);
-		}
+		processTransportationDeparture(workplace);
 		state = State.goingToWork;
 	}
 	
-	private void actGoToBank() { // TODO
-		
+	/**
+	 * Sends the person by car or bus to the bank closest to them.
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void actGoToBank() throws InterruptedException {
+		BankBuilding b = (BankBuilding) CityMap.findClosestBuilding(BUILDING.bank, this);
+		processTransportationDeparture(b);
+		state = State.goingToBank;
 	}
 	
-	private void actGoToMarket() { // TODO
-		
+	/**
+	 * Sends the person by car or bus to the market closest to them.
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void actGoToMarket() throws InterruptedException {
+		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
+		processTransportationDeparture(b);
+		state = State.goingToMarket;
 	}
 	
-	private void actGoToRestaurant() { // TODO
-		
+	/**
+	 * Chooses a restaurant (based on some criteria) and sends the person to it by car or bus
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void actGoToRestaurant() throws InterruptedException { 
+		Building b = new RestaurantTimmsBuilding("placeholder"); // TODO make it choose a restaurant on some criteria
+		processTransportationDeparture(b);
+		state = State.goingToRestaurant;
 	}
 	
-	private void actGoHome() { // TODO
-		
+	/**
+	 * Sends the person by car or bus to their house.
+	 * 
+	 * @throws InterruptedException 
+	 */
+	private void actGoHome() throws InterruptedException {
+		processTransportationDeparture(home);
+		state = State.goingHome;
 	}
 	
 	//=========//
@@ -239,6 +258,28 @@ public class PersonAgent extends Agent implements Person {
 	public void addRole(Role r) {
 		roles.add(r);
 		r.setPerson(this);
+	}
+	
+	/**
+	 * 
+	 * @throws InterruptedException 
+	 */
+	private void processTransportationDeparture(Building destination) throws InterruptedException {
+		if (car != null) {
+			carPassengerRole = new CarPassengerRole(car, destination);
+			carPassengerRole.setActive();
+			carPassengerRole.setPerson(this);
+			roles.add(carPassengerRole);
+		} else {
+			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
+			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+			animation.goToBusStop(b);
+			atDestination.acquire();
+			busPassengerRole = new BusPassengerRole(d, b);
+			busPassengerRole.setActive();
+			busPassengerRole.setPerson(this);
+			roles.add(busPassengerRole);
+		}
 	}
 	
 	/**
@@ -402,24 +443,6 @@ public class PersonAgent extends Agent implements Person {
 			disposition = true;
 		}
 		return disposition;
-	}
-	
-	/**
-	 * Return the BusStopBuilding closest to the PersonAgent's location
-	 */
-	private BusStopBuilding findClosestBusStop() { // TODO
-		BusStopBuilding b = new BusStopBuilding("Placeholder");
-		return b;
-	}
-
-	/**
-	 * Return the BusStopBuilding closest to the destination Building
-	 * 
-	 * @param b the destination you wish to reach
-	 */
-	private BusStopBuilding findClosestBusStop(Building b) { // TODO
-		BusStopBuilding s = new BusStopBuilding("Placeholder");
-		return s;
 	}
 
 }
