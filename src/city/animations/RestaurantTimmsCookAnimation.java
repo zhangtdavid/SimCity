@@ -14,7 +14,6 @@ public class RestaurantTimmsCookAnimation extends Animation implements Restauran
 	public static final int INITIAL_Y = 400;
 	public static final int WIDTH = 20;
 	public static final int HEIGHT = 20;
-	public static final Color COLOR = Color.RED;
 	
     // Constructor
 	
@@ -36,7 +35,6 @@ public class RestaurantTimmsCookAnimation extends Animation implements Restauran
     }
 
 	public void draw(Graphics2D g) {
-		g.setColor(COLOR);
 		g.fillRect(xPos, yPos, WIDTH, HEIGHT);
 	}
 
