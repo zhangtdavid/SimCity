@@ -17,12 +17,15 @@ public interface RoleInterface {
 	// Getters
 	
 	public Person getPerson();
+	public int getShiftStart();
+	public int getShiftEnd();
 	public boolean getActive();
 	public boolean getActivity();
 	
 	// Setters
 	
 	public void setPerson(Person p);
+	public void setShift(int shiftStart, int shiftEnd);
 	public void setActive();
 	public void setInactive();
 	public void setActivityBegun();

@@ -1,8 +1,10 @@
 package city;
 
+import java.util.Date;
+
+import utilities.EventLog;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
-import utilities.EventLog;
 
 /**
  * The base class for all SimCity201 role mocks.
@@ -54,6 +56,18 @@ public abstract class MockRole implements RoleInterface {
     public boolean getActivity() {
     	return activity;
     }
+    
+	@Override
+	public int getShiftStart() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getShiftEnd() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	// Setters
 	
@@ -80,6 +94,12 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public void setActivityFinished() {
 		this.activity = false;
+	}
+
+	@Override
+	public void setShift(int shiftStart, int shiftEnd) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 	// Utilities
