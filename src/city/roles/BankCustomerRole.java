@@ -2,14 +2,15 @@ package city.roles;
 
 import city.Application;
 import city.Role;
+import city.buildings.BankBuilding;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
-	
+	BankBuilding building;
 	enum service {createAcct, withdraw};
-	public enum state {requestService, inProgress, exit};
+	public enum state {entering, requestService, inProgress, exit};
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
 	double cash = 0;
@@ -18,11 +19,14 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	double amount;
 	BankTellerRole t;
 	int acctNum;
+	int boothNumber;
 	
 	// Constructor
 	
-	public BankCustomerRole(Application.BANK_SERVICES s) {
+	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b) {
+		building = b;
 		this.service = s;
+		st = state.entering;
 	}
 	
 	// Messages
@@ -32,8 +36,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	    stateChanged();
 	}
 	
-	public void msgWhatDoYouWant(int boothnumber, BankTellerRole tell) {
+	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
 		t = tell;
+		boothNumber = booth;
 		st = state.requestService;
 		stateChanged();
 	}
@@ -66,6 +71,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public boolean runScheduler() {
+		if (st == state.entering){
+			AskForService();
+			return true;
+		}
 		if(st == state.requestService){
 			if(service == service.accountCreate){
 				RequestAccount();
@@ -84,7 +93,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Actions
-	
+	public void AskForService(){
+		st = state.inProgress;
+		building.manager.msgNeedService(this);
+	}
 	public void RequestAccount(){
 		st = state.inProgress;
 		cash -= amount;
@@ -97,6 +109,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public void ExitBank(){
+		st = state.inProgress;
 		t.msgDoneAndLeaving();
 	}
 	
