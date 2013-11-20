@@ -3,9 +3,11 @@ package city.agents;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import city.Agent;
 import city.Role;
+import city.interfaces.Car;
 import city.interfaces.Person;
 
 public class PersonAgent extends Agent implements Person {
@@ -13,17 +15,35 @@ public class PersonAgent extends Agent implements Person {
 	// Data
 	
 	private Date date;
-	
-	public List<Role> roles = new ArrayList<Role>();
+	private Role occupation;
+	private Car car;
+	private String name;
+	private List<Role> roles = new ArrayList<Role>();
+	private Semaphore atDestination = new Semaphore(0, true);
+	private city.animations.interfaces.AnimatedPerson animation;
+	private enum State {none, goingToOccupation, goingToBank, goingToRestaurant, goingToMarket, goingHome, atOccupation, atBank, atRestaurant, atMarket, atHome, leavingOccupation };
+	private State state; 
 	
 	// Constructor
 	
-	public PersonAgent(Date d) {
+    /**
+     * Create a Person.
+     * 
+     * @param name the person's name
+     * @param startDate the current simulation date
+     */
+	public PersonAgent(String name, Date startDate) {
 		super();
-		date = d;
+		this.name = name;
+		this.date = startDate;
 	}
 	
 	// Messages
+	
+	@Override
+	public void guiAtDestination() {
+		atDestination.release();
+	}
 	
 	// Scheduler
 	
@@ -32,10 +52,13 @@ public class PersonAgent extends Agent implements Person {
 		// Central Scheduler
 		
 		// Role Scheduler
-		Boolean blocking = false;
-		for (Role r : roles) if (r.active) {
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
-			r.runScheduler();
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
 			break;
 		}
 		
@@ -47,6 +70,11 @@ public class PersonAgent extends Agent implements Person {
 	
 	// Getters
 	
+	@Override
+	public String getName() {
+		return this.name;
+	}
+	
 	// Setters
 	
 	@Override
@@ -55,12 +83,37 @@ public class PersonAgent extends Agent implements Person {
 		stateChanged();
 	}
 	
+	@Override
+	public void setOccupation(Role r) {
+		occupation = r;
+		addRole(r);
+		r.setActive(); // TODO testing only - remove!!
+		r.setActivityBegun(); // TODO testing only - remove!!
+	}
+	
+	@Override
+	public void setAnimation(city.animations.interfaces.AnimatedPerson p) {
+		animation = p;
+	}
+
+	@Override
+	public void setCar(Car c) {
+		car = c;
+	}
+	
 	// Utilities
 	
+	@Override
 	public void addRole(Role r) {
 		roles.add(r);
 		r.setPerson(this);
 	}
+	
+//	private boolean shouldGoToWork() {
+//		boolean disposition = false;
+//		// if (!occupation.getActive()) {}
+//		return disposition;
+//	}
 	
 	// Classes
 

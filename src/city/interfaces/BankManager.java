@@ -1,6 +1,6 @@
 package city.interfaces;
 
-public interface BankManager {
+public interface BankManager extends RoleInterface {
 
 	// Data
 	
@@ -18,6 +18,6 @@ public interface BankManager {
 	
 	// Utilities
 	
-	// Classes
+	// Classes	
 	
 }

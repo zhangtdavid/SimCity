@@ -1,8 +1,9 @@
 package city.agents;
 
 import city.Agent;
+import city.Building;
 import city.interfaces.Car;
-import city.roles.CarPassengerRole;
+import city.interfaces.CarPassenger;
 
 public class CarAgent extends Agent implements Car {
 
@@ -11,20 +12,19 @@ public class CarAgent extends Agent implements Car {
 	CarState myState = CarState.NOTDRIVING; // State of car
 	enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
 	CarEvent myEvent = CarEvent.NONE; // Event for car
-	CarPassengerRole carPassenger; // Current passenger
+	CarPassenger carPassenger; // Current passenger
 	Building destination; // Destination to go to
-	CarGui myGui; // GUI for animations
+	//CarGui myGui; // GUI for animations
 	
 	// Constructor
 	CarAgent() { // Sets all variables to null
 		carPassenger = null;
 		destination = null;
-		myGui = null;
 	}
 	
 	// Messages
-	void msgIWantToDrive(CarPassengerRole cpr, Building dest) { // From CarPassengerRole, tells car to go somewhere
-		carPassenger = cpr;
+	public void msgIWantToDrive(CarPassenger cp, Building dest) { // From CarPassengerRole, tells car to go somewhere
+		carPassenger = cp;
 		destination = dest;
 		myEvent = CarEvent.PASSENGERENTERED;
 		stateChanged();
@@ -56,7 +56,8 @@ public class CarAgent extends Agent implements Car {
 	
 	// Actions
 	void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
-		myGui.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
+//		myGui.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
+		msgImAtCarDestination();
 	}
 
 	void stopDriving() { // Call to passenger at destination, set this car inactive
@@ -68,9 +69,9 @@ public class CarAgent extends Agent implements Car {
 	
 	
 	// Setters
-	void setGui(CarGui gui) {
-		myGui = gui;
-	}
+//	void setGui(CarGui gui) {
+//		myGui = gui;
+//	}
 	
 	// Utilities
 	

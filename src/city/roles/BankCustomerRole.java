@@ -1,12 +1,16 @@
 package city.roles;
 
+import city.Application;
 import city.Role;
 import city.interfaces.BankCustomer;
-import city.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
-// Data
-	service s;
+	
+	// Data
+	
+	enum service {createAcct, withdraw};
+	enum state {requestService, inProgress, exit};
+	Application.BANK_SERVICES service;
 	BankManagerRole b;
 	double cash = 0;
 	state st;
@@ -14,47 +18,60 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	double amount;
 	BankTellerRole t;
 	int acctNum;
+	
 	// Constructor
 	
-// Messages
-	public void msgDepositCompleted(){
+	public BankCustomerRole(Application.BANK_SERVICES s) {
+		this.service = s;
+	}
+	
+	// Messages
+	
+	public void msgDepositCompleted() {
 		st = state.exit;
 	    stateChanged();
 	}
-	public void msgWhatDoYouWant(int boothnumber, BankTellerRole tell){
+	
+	public void msgWhatDoYouWant(int boothnumber, BankTellerRole tell) {
 		t = tell;
 		st = state.requestService;
 		stateChanged();
 	}
-	public void msgAccountCreated(int acct){
+	
+	public void msgAccountCreated(int acct) {
 		acctNum = acct;
 		stateChanged();
 	}
-	public void msgHereIsWithdrawal(double money){
+	
+	public void msgHereIsWithdrawal(double money) {
 		cash += money;
 		stateChanged();
 	}
+	
 	public void msgLoanGranted(double loanMoney){
 		cash += loanMoney;
 		stateChanged();
 	}
+	
 	public void msgTransactionCompleted(){
 		st = state.exit;
 		stateChanged();
 	}
+	
 	public void msgTransactionDenied(){
 		
 	}
-// Scheduler
+	
+	// Scheduler
 	
 	@Override
 	public boolean runScheduler() {
 		if(st == state.requestService){
-			if(s == service.createAcct){
+			if(service == service.accountCreate){
 				RequestAccount();
 				return true;
 			}
-			if(s == service.withdraw){
+			if(service == service.moneyWithdraw){
 				RequestWithdrawal();
 				return true;
 			}
@@ -63,29 +80,32 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			ExitBank();
 			return true;
 		}
-		// TODO Auto-generated method stub
 		return false;
 	}
 	
-// Actions
+	// Actions
+	
 	public void RequestAccount(){
 		st = state.inProgress;
 		cash -= amount;
 		t.msgCreateAccount(amount);
 	}
+	
 	public void RequestWithdrawal(){
 		st = state.inProgress;
 		t.msgWithdraw(acctNum, amount, salary);
 	}
+	
 	public void ExitBank(){
 		t.msgDoneAndLeaving();
 	}
+	
 	// Getters
 	
 	// Setters
 	
-// Utilities
-	enum service {createAcct, withdraw};
-	enum state {requestService, inProgress, exit};
-	// Classes
-}
+	// Utilities
+	
+	// Classes 
+	
+} 

@@ -5,7 +5,6 @@ import java.util.List;
 
 import city.Role;
 import city.interfaces.BankManager;
-import city.interfaces.BankTeller;
 
 public class BankManagerRole extends Role implements BankManager{
 // Data
