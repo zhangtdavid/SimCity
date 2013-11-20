@@ -15,7 +15,20 @@ import utilities.EventLog;
 public abstract class MockRole implements RoleInterface {
 	
 	// Data
+	private String name;
 	
+	public void Mock(String name) {
+		this.name = name;
+	}
+
+	public String getName() {
+		return name;
+	}
+
+	public String toString() {
+		return this.getClass().getName() + ": " + name;
+	}
+
 	private Person person;
 	private boolean active;
 	private boolean activity;
