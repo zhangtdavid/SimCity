@@ -10,15 +10,7 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 
 	//Data
 	private int xPos, yPos, xDestination, yDestination;
-	private static final int CPX = 250; // plating (cook3)
-	private static final int CPY = 0;
-	private static final int CRX = 150; // refrig (cook1)
-	private static final int CRY = 0;
-	private static final int CGX = 200; // grills (cook2)
-	private static final int CGY = 0;
-	public static final int WIDTH = 20;
-	private static final int restingCoordX = 200;//default cook position
-	private static final int restingCoordY = 50;
+
 	private boolean currentlyAcquired;
 	boolean init;
 	private String orderIcon = new String();

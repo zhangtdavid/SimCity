@@ -28,10 +28,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 	private String orderIcon = new String();
 	private int waitY; // so no stacking of customers (TODO need to fix collisions in general)
 
-
-	private enum Command {
-		noCommand, GoToSeat, LeaveRestaurant, GoToDishes, GoToCashier, GoToWaiting
-	};
 	private Command command = Command.noCommand;
 
 	//Constructor

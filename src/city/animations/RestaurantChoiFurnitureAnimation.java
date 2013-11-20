@@ -8,19 +8,7 @@ import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
 public class RestaurantChoiFurnitureAnimation extends Animation implements RestaurantChoiAnimatedFurniture  {
 
 	//Data
-	private static final int TABLEX_INIT = 400;
-	private static final int TABLEX_INCR = 50;
-    private static final int TABLEY = 250;
-    private static final int CPX = 250; // plating (cook3)
-    private static final int CPY = -20;
-    private static final int CRX = 150; // refrig (cook1)
-    private static final int CRY = -20;
-    private static final int CGX = 200; // grills (cook2)
-    private static final int CGY = -20;
-    private static final int DISHES_X = 550; // grills (cook2)
-    private static final int DISHES_Y = 250;
-    private static final int WIDTH = 30;
-    private static final int TABLE_COUNT = 4;
+	
     
 	//constructor
     /**

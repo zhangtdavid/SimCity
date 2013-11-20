@@ -67,9 +67,10 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 		g.setColor(Color.BLACK);
 		g.drawString(agent.getName(), xPos, yPos+10);
 	}
+	
 	// Movement
 
-	public void DoBringToTable(RestaurantChoiAnimatedCustomer customer, int xTableCoord, int yTableCoord) {
+	public void DoBringToTable(RestaurantChoiCustomer customer, int xTableCoord, int yTableCoord) {
 		xTable = xTableCoord;
 		yTable = yTableCoord;
 		xDestination = xTable + WIDTH;
@@ -157,6 +158,8 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 		//gui.setWaiterNotDisabled(agent.getName());
 	}
     // Utilities
+
+	
 
 
 /*// something to consider

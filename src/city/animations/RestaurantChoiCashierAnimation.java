@@ -8,8 +8,6 @@ import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 public class RestaurantChoiCashierAnimation extends Animation implements RestaurantChoiAnimatedCashier {
 
 	//Data
-    static final int CASHIER_X = 580;
-    static final int CASHIER_Y = -10;
     static final int WIDTH = 30;
 	static final int HEIGHT = 20;
 	static final Color CASHIER_COLOR = Color.BLACK;
