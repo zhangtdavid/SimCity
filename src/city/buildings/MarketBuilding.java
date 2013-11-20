@@ -41,16 +41,28 @@ public class MarketBuilding extends Building {
 	
 // Utilities
 //	=====================================================================	
+	// Employee
 	public void addEmployee(MarketEmployee employee) {
 		employees.add(employee);
+		manager.msgNewEmployee(employee);
 		
 	}
 	
-	public void addDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
-		deliveryPeople.add(deliveryPerson);
+	public void removeEmployee(MarketEmployee employee) {
+		employees.remove(employee);
+		manager.msgRemoveEmployee(employee);		
 	}
 	
+	// Delivery Person
+	public void addDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
+		deliveryPeople.add(deliveryPerson);
+		cashier.msgNewDeliveryPerson(deliveryPerson);
+	}
 	
+	public void removeDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
+		deliveryPeople.remove(deliveryPerson);
+		cashier.msgRemoveDeliveryPerson(deliveryPerson);		
+	}
 	
 //  Getters and Setters
 //	=====================================================================	

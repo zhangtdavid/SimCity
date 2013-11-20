@@ -3,6 +3,9 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
+import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
@@ -13,12 +16,15 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 //  Data
 //	=====================================================================	
-    private Map<String, Integer> order = new HashMap<String, Integer>();
-    private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
+	public EventLog log = new EventLog();
 
+	private MarketBuilding market;
 	private MarketManager manager;
 	private MarketCashier cashier;
 	private MarketEmployee employee;
+	
+	private Map<String, Integer> order = new HashMap<String, Integer>();
+    private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
 		
 	double money;
 	double bill;
@@ -43,26 +49,30 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //  Messages
 //	=====================================================================	
 	public void msgWhatWouldYouLike(MarketEmployee e) {
-		System.out.println("Market customerDelivery received msgWhatWouldYouLike");
+		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
+		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
 		event = MarketCustomerEvent.AskedForOrder;
 		employee = e;
 		stateChanged();
 	}
 	
 	public void msgHereIsBill(double bill) {
-		System.out.println("Market customerDelivery received msgHereIsOrderandBill");
+		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Cashier."));
+		System.out.println("Market customerDelivery received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
         this.bill = bill;
 		stateChanged();
 	}
 		
 	public void msgPaymentReceived() {
-		System.out.println("Market customerDelivery received msgPaymentReceived");
+		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
+		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
 		state = MarketCustomerState.WaitingForDelivery;
 	}
 	
 	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
-		System.out.println("Market customerDelivery received msgHereIsOrder");
+		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
+		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
 		state = MarketCustomerState.None;
         for (String item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
@@ -109,26 +119,40 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //		double payment = checkBill(); TODO
 //		cashier.msgHereIsPayment(this, payment);			
 	}
+
+//  Getters and Setters
+//	=====================================================================
+	// Market
+	public MarketBuilding getMarket() {
+		return market;
+	}
 	
-//  Utilities
-//	=====================================================================	
-	// Getters
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
+	
+	// Manager
 	public MarketManager getManager() {
 		return manager;
 	}
 	
+	public void setManager(MarketManager manager) {
+		this.manager = manager;
+	}
+	
+	// Cashier
 	public MarketCashier getCashier() {
 		return cashier;
 	}
 	
-	// Setters
-	public MarketManager setManager() {
-		return manager;
-	}
-	
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
-	}
+	}	
+	
+//  Utilities
+//	=====================================================================
+	
+
 	
 	// Classes
 }

@@ -10,7 +10,7 @@ import city.roles.BankTellerRole;
 
 public class BankBuilding extends Building {
 
-	BankManager manager;
+	public BankManager manager;
 	public List<Account> accounts = new ArrayList<Account>();
 	public List<Loan> loans = new ArrayList<Loan>();	
 	public List<BankTellerRole> employees = new ArrayList<BankTellerRole>();
