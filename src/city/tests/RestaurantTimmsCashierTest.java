@@ -1,4 +1,4 @@
-package city.tests;
+/*package city.tests;
 
 import junit.framework.TestCase;
 import city.roles.RestaurantTimmsCashierRole;
@@ -218,3 +218,4 @@ public class RestaurantTimmsCashierTest extends TestCase {
 //	}
 	
 }
+*/

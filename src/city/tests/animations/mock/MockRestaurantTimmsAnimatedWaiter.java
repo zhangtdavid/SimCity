@@ -1,8 +1,10 @@
-package city.tests.animations.mock;
+/*package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
 import city.MockAnimation;
+import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
@@ -76,4 +78,24 @@ public class MockRestaurantTimmsAnimatedWaiter extends MockAnimation implements 
 		return 0;
 	}
 
+	@Override
+	public void DoBringToTable(RestaurantChoiAnimatedCustomer customer,
+			int xTableCoord, int yTableCoord) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToCustomer(RestaurantChoiAnimatedCustomer customer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToKitchen(RestaurantChoiAnimatedCook cook) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
+*/

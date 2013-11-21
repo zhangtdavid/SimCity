@@ -17,10 +17,10 @@ public class RestaurantChoiCashierTest extends TestCase{
 	MockRestaurantChoiWaiter waiter;
 	MockRestaurantChoiCustomer customer;
 	MockRestaurantChoiCustomer customer1;
-	/*MockMarket market;
-	MockMarket market1;
-	MockMarket market2;
-	MockBanker banker;*/
+	//MockMarket market;
+	//MockMarket market1;
+	//MockMarket market2;
+	//MockBanker banker;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -38,7 +38,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		banker = new MockBanker("mockbanker");
 		cashier.setBanker(banker);
 		banker.setCashier(cashier);*/
-	}	/*
+	}}	/*
 	public void testOneMarket(){
 		System.out.println("------------TESTING ONE MARKET ACCEPTABLE PAYMENT SCENARIO");
 		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.checks.size(), 0);
@@ -160,7 +160,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		System.out.println("money after payment " +  cashier.money);
 		//done with customer interactions
 	}*/
-	
+	/* TODO this can be tested!
 	public void testTwoNormalCustomersScenario()
 	{	//setUp() runs first before this test!			
 		cashier.money = 100;
@@ -246,7 +246,8 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertEquals("should have no checks after customer done with dishes", cashier.checks.size(), 0);
 		assertTrue("Cashier should have no money more than before", cashier.money==0);
 		System.out.println("Cashier # of checks " + cashier.checks.size());
-	}
+	}*/
+	
 /*
 	public void testMarketCashierBankerInteraction()
 	{

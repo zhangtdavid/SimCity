@@ -1,4 +1,4 @@
-package city.roles;
+/*package city.roles;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,11 +14,11 @@ import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
-
+*/
 /**
  * Restaurant customer agent.
  */
-public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimmsCustomer {
+/*public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimmsCustomer {
 	// Data
 	
 	public enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
@@ -299,3 +299,4 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 }
 
+*/

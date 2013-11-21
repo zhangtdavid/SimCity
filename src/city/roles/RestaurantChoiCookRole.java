@@ -77,14 +77,17 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 
 	@Override
 	public void msgAtRefrigerator() {
+		stateChanged();
 	}
 
 	@Override
 	public void msgAtGrills() {
+		stateChanged();
 	}
 
 	@Override
 	public void msgAtPlatingArea() {
+		stateChanged();
 	} // these 3 functions didn't do anything in v2.2 anyways
 
 	//Scheduler
@@ -98,6 +101,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 					DoGoToPlates();
 					MoveFoodToPlating(orders.get(i));
 					cookGui.setOrderIcon(-1);
+					return true;
 				}
 			}
 		}
@@ -108,6 +112,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 					DoGoToGrills();
 					CookOrder(orders.get(i));
 					cookGui.setOrderIcon(-1);
+					return true;
 				}
 			}
 		}
@@ -116,6 +121,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 				if(orders.get(i).getState() == RestaurantChoiOrder.RECOGNIZED){
 					DoGoToRefrig();
 					AnalyzeCookOrder(orders.get(i));
+					return true;
 				}
 			}
 		}
@@ -178,6 +184,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 
 	@Override
 	public boolean CookOrder(RestaurantChoiOrder o) {
+		System.out.println("sldfkj");
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.COOKING);
 		}

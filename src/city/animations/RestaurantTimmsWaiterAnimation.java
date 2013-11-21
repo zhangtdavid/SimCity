@@ -151,5 +151,24 @@ public class RestaurantTimmsWaiterAnimation extends Animation implements Restaur
 			answer = AT_KITCHEN_MARGIN;
 		return answer;
 	}
+
+	@Override
+	public void DoBringToTable(RestaurantChoiAnimatedCustomer customer,
+			int xTableCoord, int yTableCoord) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToCustomer(RestaurantChoiAnimatedCustomer customer) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void goToKitchen(RestaurantChoiAnimatedCook cook) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

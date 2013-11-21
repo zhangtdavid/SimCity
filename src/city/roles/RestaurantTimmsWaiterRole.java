@@ -1,4 +1,4 @@
-package city.roles;
+/*package city.roles;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -16,11 +16,11 @@ import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
-
+*/
 /**
  * Restaurant waiter agent.
  */
-public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWaiter {
+/*public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWaiter {
 	// Data
 	
 	private Boolean wantsBreak;
@@ -393,3 +393,4 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		}
 	}
 }
+*/

@@ -1,4 +1,4 @@
-package city.tests;
+/*package city.tests;
 
 import junit.framework.TestCase;
 import city.Application;
@@ -86,3 +86,4 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 	}
 	
 }
+*/

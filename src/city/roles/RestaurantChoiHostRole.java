@@ -91,7 +91,6 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	 * Scheduler. Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
-		System.out.println("scheduler running");
 		//see if waiter can be on break
 		synchronized(waiters){
 			for(int i = 0; i < waiters.size(); i++){

@@ -12,7 +12,11 @@ import city.roles.RestaurantChoiOrder;
 import city.roles.RestaurantChoiTable;
 
 public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoiWaiter  {
+	String name;
 
+	public MockRestaurantChoiWaiter(String name){
+	this.name = name;	
+	}
 	@Override
 	public void msgSeatCustomer(RestaurantChoiCustomer restaurantChoiCustomer,
 			RestaurantChoiTable restaurantChoiTable) {

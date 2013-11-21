@@ -1,4 +1,4 @@
-package city.roles;
+/*package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -10,13 +10,13 @@ import city.interfaces.Person;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
-
+*/
 /**
  * Restaurant cashier agent.
  * 
  * @author John Timms
  */
-public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
+/*public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
 	// Data
 	
 	public int moneyOnHand;
@@ -51,6 +51,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c a Customer interface
 	 * @param money the amount billed by the market
 	 */
+/*
 	public void msgComputeCheck(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int money) {
 		Check check = findCheck(c);
 		if (check == null) {
@@ -67,7 +68,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		moneyOwed = (moneyOwed + money);
 		stateChanged();
 	}
-	
+	*/
 	/**
 	 * Notifies the Cashier that a Customer is ready to pay. The Customer includes how much money
 	 * they have, in order to determine their change.
@@ -75,6 +76,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c a Customer interface
 	 * @param money the amount of money the Customer has
 	 */
+/*
 	public void msgMakePayment(RestaurantTimmsCustomer c, int money) {
 		Check check = findCheck(c);
 		check.amountOffered = money;
@@ -82,7 +84,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		check.state = Check.State.paying;
 		stateChanged();
 	}
-	
+	*/
 // TODO
 //	/**
 //	 * Receives a request from a Market to pay for StockItems ordered by the Cook.
@@ -112,12 +114,13 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * 
 	 * @param c the queued Check object
 	 */
+/*
 	private void actComputeCheck(Check c) {
 		c.state = Check.State.unpaid;
 		print("actComputeCheck - $" + c.amount + " owed.");
 		c.waiter.msgCheckReady();	
 	}
-	
+	*/
 	/**
 	 * Processes a Customer's payment for a Check. 
 	 * 
@@ -127,6 +130,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * 
 	 * @param c the unpaid Check object
 	 */
+/*
 	private void actAcceptPayment(Check c) {
 		int change = (c.amountOffered - c.amount);
 		if (change >= 0) {
@@ -145,7 +149,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 			c.amountOffered = 0;
 		}
 	}
-
+*/
 // TODO	
 //	/**
 //	 * Pays a Bill from a Market.
@@ -166,7 +170,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 //	}
 	
 	// Scheduler
-	
+	/*
 	public boolean runScheduler() {
 		synchronized(checks) {
 			for (Check check : checks) {
@@ -295,3 +299,4 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		}
 	}
 }
+*/
