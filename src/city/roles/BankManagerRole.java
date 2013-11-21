@@ -77,28 +77,29 @@ public class BankManagerRole extends Role implements BankManager{
 					return true;
 				}
 			}
-			for(BankTask bT : bankTasks){
-				if(bT.t == type.deposit){
-					Deposit(bT);
-					return true;
-				}
-				if(bT.t == type.withdrawal){
-					for(Account a : building.accounts){
-						if(a.acctNum == bT.acctNum)
-							if(a.balance >= bT.money){
+		}	
+		for(BankTask bT : bankTasks){
+			if(bT.t == type.deposit){
+				Deposit(bT);
+				return true;
+			}
+			if(bT.t == type.withdrawal){
+				for(Account a : building.accounts){
+					if(a.acctNum == bT.acctNum){
+						if(a.balance >= bT.money){
 								Withdraw(bT);
 								return true;
 							}
-							else{
-								WithdrawalFailed(bT);
-								return true;
-							}
+						else{
+							WithdrawalFailed(bT);
+							return true;
+						}
 					}
 				}
-				if(bT.t == type.acctCreate){
-					CreateAccount(bT);
-					return true;
-				}
+			}	
+			if(bT.t == type.acctCreate){
+				CreateAccount(bT);
+				return true;
 			}
 		}
 		// TODO Auto-generated method stub
@@ -123,8 +124,9 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	
 	private void AssignCustomer(BankCustomerRole bc, MyTeller myT){
-		myT.teller.msgAddressCustomer(bc);
+		myT.s = state.busy;
 		customers.remove(bc);
+		myT.teller.msgAddressCustomer(bc);
 	}
 	private void Deposit(BankTask bT){
 		for(Account a : building.accounts){
@@ -172,7 +174,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Utilities
 	
 // Classes
-	class MyTeller {
+	public class MyTeller {
 		BankTellerRole teller;
 		double salary;
 		state s;
@@ -182,7 +184,7 @@ public class BankManagerRole extends Role implements BankManager{
 			s = state.available;
 		}
 	}
-	class BankTask {
+	public class BankTask {
 		int acctNum;
 		type t;
 		double money;
@@ -195,6 +197,6 @@ public class BankManagerRole extends Role implements BankManager{
 			teller = tell;
 		}
 	}
-	enum state {available, busy, gone};
-	enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
+	public enum state {available, busy, gone};
+	public enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
 }

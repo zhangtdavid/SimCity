@@ -16,6 +16,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	//From BankManager
 	public void msgAddressCustomer(BankCustomerRole bc){
 		currentCustomer = new MyCustomer(bc);
+		currentCustomer.s = serviceState.needsService;
 		stateChanged();
 	}
 	public void msgHereIsAccount(int acctNum){
@@ -36,7 +37,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	public void msgTransactionSuccessful(){
-		currentCustomer.s = serviceState.finished;
+		currentCustomer.s = serviceState.finished;		//confirmed
 		stateChanged();
 	}
 	//From BankCustomer
@@ -53,7 +54,8 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.amount = money;
 	}
 	public void msgDoneAndLeaving() {
-		currentCustomer = null;
+		currentCustomer.s = serviceState.done;
+		stateChanged();
 	}
 // Scheduler
 	@Override
@@ -88,9 +90,12 @@ public class BankTellerRole extends Role implements BankTeller {
 					return true;
 				}
 			}
-			if(currentCustomer.s == serviceState.finished){
-				AskIfDone();
+			if(currentCustomer.s == serviceState.finished){	//confirmed?
+				FinishInteraction();
 				return true;
+			}
+			if(currentCustomer.s == serviceState.done){
+				GetNewCustomer();
 			}
 		}
 		return false;
@@ -99,7 +104,7 @@ public class BankTellerRole extends Role implements BankTeller {
 // Actions
 	public void ServiceCustomer(){
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
-		currentCustomer.s = serviceState.pending;
+		currentCustomer.s = serviceState.inProgress;
 	}
 	public void CreateAccount(){
 		currentCustomer.s = serviceState.inProgress;
@@ -129,8 +134,12 @@ public class BankTellerRole extends Role implements BankTeller {
 			currentCustomer.s = serviceState.finished;
 		}
 	}
-	public void AskIfDone(){
+	public void FinishInteraction(){
+		currentCustomer.s = serviceState.inProgress;
 		currentCustomer.bc.msgTransactionCompleted();
+	}
+	
+	public void GetNewCustomer(){
 		currentCustomer = null;
 		b.msgAvailable(this);
 	}
@@ -139,10 +148,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	// Utilities
-	enum serviceState{needsService, pending, inProgress, confirmed, finished, failed};
-	enum serviceType{withdrawal, acctCreate};
+	public enum serviceState{needsService, pending, inProgress, confirmed, finished, done, failed};
+	public enum serviceType{withdrawal, acctCreate};
 	// Classes
-	class MyCustomer{
+	public class MyCustomer{
 		int acctNum;
 		BankCustomerRole bc;
 		double amount;

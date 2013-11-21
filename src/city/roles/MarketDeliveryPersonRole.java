@@ -1,23 +1,26 @@
 package city.roles;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.agents.CarAgent;
+import city.buildings.MarketBuilding;
 import city.interfaces.CarPassenger;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
-import city.interfaces.MarketManager;
 import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
 
 //  Data
 //	=====================================================================	
-//	Market market; TODO
+	public EventLog log = new EventLog();
+
+	private MarketBuilding market;
 	
 	private MarketCashier cashier;
 	private List<Role> roles = new ArrayList<Role>();
@@ -39,7 +42,6 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	public MarketDeliveryPersonRole() {
 		super(); // TODO
 //		car = new CarAgent();
-		carPassenger = new CarPassengerRole(car);
     }
 	
 //  Messages
@@ -47,7 +49,8 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	Cashier
 //	---------------------------------------------------------------
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<String, Integer> i) {
-		System.out.println("Market customer received msgDeliverOrder");
+		log.add(new LoggedEvent("Market Customer received msgDeliverOrder from Market Cashier."));
+		System.out.println("Market deliveryPerson received msgDeliverOrder from Market Cashier.");
 		customerDelivery = c;
         for (String s: i.keySet()) {
         	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
@@ -80,6 +83,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
+		carPassenger = new CarPassengerRole(car, market); // TODO Update this to restaurant
 		cashier.msgDeliveringItems(this);
 
 //		for (Delivery d: deliveries) {
@@ -89,21 +93,33 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		// switch into CarPassenger;
 		
 		customerDelivery.msgHereIsOrder(collectedItems);
-		cashier.msgFinishedDeliveringItems(this);
+		cashier.msgFinishedDeliveringItems(this, customerDelivery);
 		customerDelivery = null;
 	}
 	
-//  Utilities
-//	=====================================================================	
-	// Getters
+//  Getters and Setters
+//	=====================================================================
+	// Market
+	public MarketBuilding getMarket() {
+		return market;
+	}
+	
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
+	
+	// Cashier
 	public MarketCashier getCashier() {
 		return cashier;
 	}
 	
-	// Setters	
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
 	}
+	
+//  Utilities
+//	=====================================================================	
+
 	
 	//	private Transaction findTransaction(MarketCustomerRole c) {
 //		for(Transaction t : transactions ){

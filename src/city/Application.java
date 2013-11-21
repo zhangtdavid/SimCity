@@ -7,10 +7,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.agents.PersonAgent;
 import city.gui.MainFrame;
 import city.interfaces.Person;
-import city.roles.BankTellerRole;
 
 public class Application {
 
