@@ -22,6 +22,7 @@ import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
+import city.roles.ResidentRole;
 
 public class PersonAgent extends Agent implements Person {
 	
@@ -36,6 +37,7 @@ public class PersonAgent extends Agent implements Person {
 	private CarPassengerRole carPassengerRole;
 	private BusPassengerRole busPassengerRole;
 	private BankCustomerRole bankCustomerRole;
+	private ResidentRole residentRole;
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -55,6 +57,9 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.date = startDate;
+		
+		// TODO construct ResidentRole
+		// TODO construct BankCustomerRole
 	}
 	
 	//==========//
@@ -78,7 +83,11 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Go to work
 		if (state == State.goingToWork) {
-			processTransporationArrival(occupation, State.atWork);
+			if (processTransporationArrival()) {
+				occupation.setActive();
+				state = State.atWork;
+				return true;
+			}
 		} else if (shouldGoToWork()) {
 			actGoToWork();
 			return true;
@@ -88,25 +97,11 @@ public class PersonAgent extends Agent implements Person {
 		if (state == State.leavingWork) {
 			if (!occupation.getActive()) {
 				state = pickDailyTask();
-				switch(state) {
-					case goingToBank:
-						actGoToBank();
-						break;
-					case goingToMarket:
-						actGoToMarket();
-						break;
-					case goingToRestaurant:
-						actGoToRestaurant();
-						break;
-					case goingHome:
-						actGoHome();
-						break;
-					default:
-						break;
-				}
+				performDailyTaskAction();
 				return true;
 			}
 		} else if (shouldLeaveWork()) {
+			// Must go to intermediary leavingWork state to give setInactive() time to finish working
 			state = State.leavingWork;
 			occupation.setInactive();
 			return true;
@@ -115,11 +110,36 @@ public class PersonAgent extends Agent implements Person {
 		// All the daily tasks are beneath here
 		
 		if (state == State.goingToBank) {
-			processTransporationArrival(bankCustomerRole, State.atBank);
-			// TODO load the BankCustomerRole and switch over to it
+			if (processTransporationArrival()) {
+				// TODO tell role how much to deposit/borrow/loan
+				bankCustomerRole.setActive();
+				state = State.atBank;
+				return true;
+			}
 		}
-		
-		// TODO much more here
+		if (state == State.atBank) {
+			if (!bankCustomerRole.getActive()) {
+				// The role persists, it's already inactive, so don't change or remove it
+				state = pickDailyTask();
+				performDailyTaskAction();
+				return true;
+			}
+		}
+		if (state == State.goingToPayRent) {
+			if (processTransporationArrival()) {
+				residentRole.setActive();
+				state = State.atRentPayment;
+				return true;
+			}
+		}
+		if (state == State.atRentPayment) {
+			if (!residentRole.getActive()) {
+				// The role persists, it's already inactive, so don't change or remove it
+				state = pickDailyTask();
+				performDailyTaskAction();
+				return true;
+			}
+		}
 		
 		// Otherwise sleep
 		
@@ -164,6 +184,17 @@ public class PersonAgent extends Agent implements Person {
 		BankBuilding b = (BankBuilding) CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = State.goingToBank;
+	}
+	
+	/**
+	 * Sends the person home where they'll pay their rent.
+	 * 
+	 * @throws InterruptedException 
+	 */
+	private void actGoToPayRent() throws InterruptedException {
+		// TODO work with Ryan to ensure that the rent last paid date is updated, etc.
+		processTransportationDeparture(home);
+		state = State.goingToPayRent;
 	}
 	
 	/**
@@ -261,8 +292,10 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
+	 * Sends the person by car or bus to the selected destination
 	 * 
 	 * @throws InterruptedException 
+	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(Building destination) throws InterruptedException {
 		if (car != null) {
@@ -285,26 +318,23 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Checks whether a car or bus is finished transporting for the scheduler.
 	 * 
-	 * Determines whether a person has arrived by car or bus, then sets the
-	 * role of wherever they were going to be active.
+	 * Determines whether a person has arrived by car or bus. If they have,
+	 * returns true so that the scheduler can activate the new role and state.
 	 * 
-	 * @param r
-	 * @param s
+	 * @param r the role to make active on arrival
+	 * @param s the state to select on arrival
 	 */
-	private void processTransporationArrival(Role r, State s) {
+	private boolean processTransporationArrival() {
 		if (car != null && !carPassengerRole.getActive()) {
-			state = s;
 			roles.remove(carPassengerRole);
 			carPassengerRole = null;
-			r.setActive();
-			return;
+			return true;
 		} else if (!busPassengerRole.getActive()) {
-			state = s;
 			roles.remove(busPassengerRole);
 			busPassengerRole = null;
-			r.setActive();
-			return;
+			return true;
 		}
+		return false;
 	}
 	
 	/**
@@ -327,6 +357,33 @@ public class PersonAgent extends Agent implements Person {
 			disposition = State.goingToMarket; // TODO Does the person need to go home first to check the fridge?
 		}
 		return disposition;
+	}
+	
+	/**
+	 * Takes the current state and performs an action based on that state.
+	 * 
+	 * @throws InterruptedException 
+	 */
+	private void performDailyTaskAction() throws InterruptedException {
+		switch(state) {
+			case goingToBank:
+				actGoToBank();
+				break;
+			case goingToPayRent:
+				actGoToPayRent();
+				break;
+			case goingToRestaurant:
+				actGoToRestaurant();
+				break;
+			case goingToMarket:
+				actGoToMarket();
+				break;
+			case goingHome:
+				actGoHome();
+				break;
+			default:
+				break;
+		}
 	}
 	
 	/**

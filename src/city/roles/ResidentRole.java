@@ -1,27 +1,29 @@
 package city.roles;
 
 import city.Role;
-import city.agents.PersonAgent;
 import city.interfaces.Landlord;
-import city.interfaces.Person;
 import city.interfaces.Resident;
 
-public class ResidentRole extends Role implements Resident{
+public class ResidentRole extends Role implements Resident {
+	
 	// Data
+	
 	ResidentState rstate = ResidentState.none;
-	Person this_person;
 	Landlord landlord;
 	
 	// Constructor
-	public ResidentRole(Person p){
-		this_person = p;
+	
+	public ResidentRole(){
+		super();
 	}
 	
 	// Messages
+	
 	@Override
 	public void msgPayForMaintenance(double d) {
 		
 	}
+	
 	// Scheduler
 	@Override
 	public boolean runScheduler() {
@@ -39,13 +41,15 @@ public class ResidentRole extends Role implements Resident{
 	}
 
 	// Actions
-	public void payMaintenance(){
+	
+	public void payMaintenance() {
 		
 	}
 	
-	public void payRent(){
+	public void payRent() {
 		
 	}
+	
 	// Getters
 	
 	// Setters

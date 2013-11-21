@@ -1,10 +1,9 @@
 package city.roles;
 
-import java.util.*;
+import java.util.Collections;
+import java.util.List;
 
-import city.agents.PersonAgent;
 import city.interfaces.Landlord;
-import city.interfaces.Person;
 import city.interfaces.Resident;
 
 public class LandlordRole extends ResidentRole implements Landlord{
@@ -15,12 +14,10 @@ public class LandlordRole extends ResidentRole implements Landlord{
 	final int murphyInterval = 100; // # of clock ticks per checking if house needs maintenance
 	
 	List<Resident> residents = Collections.synchronizedList(null);
-	Person this_person;	
 	
 	// Constructor
-	public LandlordRole(Person p){
-		super(p);
-		this_person = p; // Q: who does this role report to? A: p.
+	public LandlordRole(){
+		super();
 	}
 	
 	// Messages
