@@ -7,10 +7,11 @@ package city;
  */
 public abstract class Building {
 	private String name;
-	int cash;
+	public int cash;
 
 	public Building(String name) {
 		this.name = name;
+		cash = 0;
 	}
 
 	public String getName() {
