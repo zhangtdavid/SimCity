@@ -18,7 +18,6 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 															//DATA	
 	private RestaurantJPCookAnimation gui;
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	private List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
 	public List<MyMarket> Markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	boolean ordering = false;
 	private Semaphore atDestination = new Semaphore(0,true);
@@ -63,12 +62,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		RestaurantJPWaiter w;
 		String choice;
 		RestaurantJPTableClass table;
-		int position;
-		public Order(RestaurantJPWaiter wait, String c, RestaurantJPTableClass table, int pos){
+		public Order(RestaurantJPWaiter wait, String c, RestaurantJPTableClass table){
 			s = state.pending;
 			w = wait;
 			choice = c;
-			position = pos;
 		}
 	};
 	public enum state{pending, cooking, done, finished, taken};
@@ -116,7 +113,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	public void msgHereIsAnOrder(RestaurantJPWaiter wait, String c, RestaurantJPTableClass t) {
 		//Do("HereIsOrder message received from " + w.getName());
 		synchronized(orders){
-		//orders.add(o);
+		orders.add(new Order(wait, c, t));
 		}
 		stateChanged();
 	}
@@ -219,8 +216,28 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 				return true;
 			}
 		}
+		
+		if(!waitingToCheckStand) {
+			print("Waiting 5 seconds to check the stand");
+			waitingToCheckStand = true;
+			timer.schedule(new TimerTask() {
+				public void run() {
+					waitingToCheckStand = false;
+					Order newOrder = revolvingStand.remove();
+					if(newOrder != null) {
+						print("Found an item on the stand");
+						orders.add(newOrder);
+					}
+					stateChanged();
+				}
+			},
+			5000);
+		}
+		
 		return false;
 		}
+		
+		
 	}
 
 // ACTIONS----------------------------------------------------------------------------------------
@@ -296,7 +313,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	}
 	
 	public int getPosOfNewOrder() {
-		return ordersToCook.size();
+		return orders.size();
 	}
 }
 

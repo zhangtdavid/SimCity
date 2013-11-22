@@ -18,6 +18,6 @@ public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 			e.printStackTrace();
 		}
 		myC.s = state.waitingForFood;
-		revolvingStand.addOrder(building.cook.new Order(this, myC.choice, myC.table, building.cook.getPosOfNewOrder()));
+		revolvingStand.addOrder(building.cook.new Order(this, myC.choice, myC.table));
 	}
 }
