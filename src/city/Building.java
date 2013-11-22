@@ -9,8 +9,8 @@ public abstract class Building {
 	
 	// Data
 	
-	private String name;
-	private int cash;
+	private String name; // Name of the building (e.g. "Market" or "RestaurantJP" or "House 1")
+	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
 
 	// Constructor
 
