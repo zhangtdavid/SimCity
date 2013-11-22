@@ -30,25 +30,19 @@ public class MockBankTeller extends MockRole implements BankTeller {
 	}
 
 	@Override
-	public void msgTransactionFailed() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgTransactionSuccessful() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgWithdraw(int acctNum, double money, double salary) {
+	public void msgWithdraw(int acctNum, int money, int salary) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgCreateAccount(double money) {
+	public void msgCreateAccount(int money) {
 		// TODO Auto-generated method stub
 		
 	}

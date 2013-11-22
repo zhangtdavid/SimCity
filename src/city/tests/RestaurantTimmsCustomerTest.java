@@ -33,6 +33,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		
 		customer.setPerson(customerPerson);
 		customer.setAnimation(animation);
+		customer.setPerson(customerPerson);
 		
 		// TODO Required to set prices for menu items
 		// cookAgent = new CookAgent("Cook", cashier);

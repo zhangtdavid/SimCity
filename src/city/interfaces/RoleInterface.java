@@ -17,6 +17,7 @@ public interface RoleInterface {
 	// Getters
 	
 	public Person getPerson();
+	public int getSalary();
 	public int getShiftStart();
 	public int getShiftEnd();
 	public boolean getActive();
@@ -25,6 +26,7 @@ public interface RoleInterface {
 	// Setters
 	
 	public void setPerson(Person p);
+	public void setSalary(int s);
 	public void setShift(int shiftStart, int shiftEnd);
 	public void setActive();
 	public void setInactive();

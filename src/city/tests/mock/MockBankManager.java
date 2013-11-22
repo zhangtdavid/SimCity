@@ -20,7 +20,7 @@ public class MockBankManager extends MockRole implements BankManager {
 	}
 
 	@Override
-	public void msgDirectDeposit(int acctNum, double money, Role r) {
+	public void msgDirectDeposit(int acctNum, int money, Role r) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -32,19 +32,19 @@ public class MockBankManager extends MockRole implements BankManager {
 	}
 
 	@Override
-	public void msgWithdraw(int acctNum, double money, BankTellerRole t) {
+	public void msgWithdraw(int acctNum, int money, BankTellerRole t) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgCreateAccount(double money, BankTellerRole t) {
+	public void msgCreateAccount(int money, BankTellerRole t) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgCreateLoan(double amt, double monthly, int acct) {
+	public void msgCreateLoan(int amt, int monthly, int acct) {
 		// TODO Auto-generated method stub
 		
 	}

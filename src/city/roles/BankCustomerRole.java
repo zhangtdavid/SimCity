@@ -9,62 +9,68 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	BankBuilding building;
-	enum service {createAcct, withdraw};
-	public enum state {entering, requestService, inProgress, exit};
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
-	double cash = 0;
+	int netTransaction = 0;
 	state st;
-	double salary;
-	double amount;
+	int salary;
+	int amount;
 	BankTellerRole t;
 	int acctNum;
 	int boothNumber;
 	
-	// Constructor
-	
-	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b) {
-		building = b;
+	public void setActive(Application.BANK_SERVICES s, int money){
+		print("Customer has been set active");
 		this.service = s;
 		st = state.entering;
+		amount = money;
+		stateChanged();
+	}
+	// Constructor
+	
+	public BankCustomerRole(BankBuilding b) {
+		building = b;
 	}
 	
 	// Messages
-	
-	public void msgDepositCompleted() {
-		st = state.exit;
-	    stateChanged();
-	}
-	
 	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
+		print("WhatDoYouWant message received");
 		t = tell;
 		boothNumber = booth;
 		st = state.requestService;
 		stateChanged();
 	}
 	
+	public void msgDepositCompleted() {
+		print("DepositCompleted message received");
+		st = state.exit;
+	    stateChanged();
+	}
+	
 	public void msgAccountCreated(int acct) {
+		print("AccountCreated message received");
 		acctNum = acct;
-		stateChanged();
-	}
-	
-	public void msgHereIsWithdrawal(double money) {
-		cash += money;
-		stateChanged();
-	}
-	
-	public void msgLoanGranted(double loanMoney){
-		cash += loanMoney;
-		stateChanged();
-	}
-	
-	public void msgTransactionCompleted(){
 		st = state.exit;
 		stateChanged();
 	}
 	
+	public void msgHereIsWithdrawal(int money) {
+		print("HereIsWithdrawal message received");
+		netTransaction += money;
+		st = state.exit;
+		stateChanged();
+	}
+	
+	public void msgLoanGranted(int loanMoney){
+		print("LoanGranted message received");
+		netTransaction += loanMoney;
+		stateChanged();
+	}
+	
 	public void msgTransactionDenied(){
-		
+		print("TransactionDenied message received");
+		stateChanged();
+		//more to come...
 	}
 	
 	// Scheduler
@@ -99,7 +105,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	public void RequestAccount(){
 		st = state.inProgress;
-		cash -= amount;
+		netTransaction -= amount;
 		t.msgCreateAccount(amount);
 	}
 	
@@ -111,6 +117,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void ExitBank(){
 		st = state.inProgress;
 		t.msgDoneAndLeaving();
+		this.getPerson().setCash(netTransaction);
+		netTransaction = 0;
 	}
 	
 	// Getters
