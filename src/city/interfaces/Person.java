@@ -30,6 +30,7 @@ public interface Person extends AgentInterface {
 	public String getName();
 	public Date getDate();
 	public int getSalary();
+	public int getCash();
 	
 	// Setters
 	

@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import city.Building;
+
 public interface RoleInterface {
 	
 	// Data

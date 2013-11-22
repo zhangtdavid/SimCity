@@ -252,6 +252,10 @@ public class PersonAgent extends Agent implements Person {
 		return occupation.getSalary();
 	}
 	
+	public int getCash(){
+		return cash;
+	}
+	
 	//=========//
 	// Setters //
 	//=========//
@@ -510,5 +514,4 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return disposition;
 	}
-
 }

@@ -27,7 +27,8 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
+	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
+	public static enum DEPOSIT_TYPE {personal, business};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market};
 	
@@ -78,7 +79,7 @@ public class Application {
         p2.startThread();
 
         PersonAgent p3 = new PersonAgent("BankCustomer 1", date);
-        BankCustomerRole p3r1 = new BankCustomerRole(b);
+        BankCustomerRole p3r1 = new BankCustomerRole(b, null);
         p3.setOccupation(p3r1);
         people.add(p3);
         p3.startThread();
@@ -91,12 +92,12 @@ public class Application {
 // Send in a customer
         
 // TODO these shouldn't be necessary, figure out why they're needed
-        p3r1.setActive(BANK_SERVICES.accountCreate, 50);
+        p3r1.setActive(BANK_SERVICES.accountCreate, 50, DEPOSIT_TYPE.personal);
         p3.stateChanged();
         try {
         	Thread.sleep(9000);
         } catch (InterruptedException e) {}
-        p3r1.setActive(BANK_SERVICES.moneyWithdraw, 50);
+        p3r1.setActive(BANK_SERVICES.moneyWithdraw, 50, DEPOSIT_TYPE.personal);
         p3.stateChanged();
 	}
 	

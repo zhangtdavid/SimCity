@@ -1,6 +1,7 @@
 package city.roles;
 
 import city.Application;
+import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.BankCustomer;
@@ -9,27 +10,31 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	BankBuilding building;
+	Building business;
+	Application.DEPOSIT_TYPE depositType;
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
 	int netTransaction = 0;
 	state st;
-	int salary;
 	int amount;
 	BankTellerRole t;
 	int acctNum;
 	int boothNumber;
 	
-	public void setActive(Application.BANK_SERVICES s, int money){
+	public void setActive(Application.BANK_SERVICES s, int money, Application.DEPOSIT_TYPE t){
 		print("Customer has been set active");
 		this.service = s;
-		st = state.entering;
+		this.depositType = t;
 		amount = money;
+		if(s != Application.BANK_SERVICES.directDeposit)
+			st = state.entering;
 		stateChanged();
 	}
 	// Constructor
 	
-	public BankCustomerRole(BankBuilding b) {
+	public BankCustomerRole(BankBuilding b, Building bus) {
 		building = b;
+		business = bus;
 	}
 	
 	// Messages
@@ -77,6 +82,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public boolean runScheduler() {
+		if(service == service.accountCreate){
+			DirectDeposit();
+			return true;
+		}
 		if (st == state.entering){
 			AskForService();
 			return true;
@@ -99,6 +108,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Actions
+	public void DirectDeposit(){
+		st = state.inProgress;
+		netTransaction -= amount;
+		building.getManager().msgDirectDeposit(acctNum, amount, this);
+	}
 	public void AskForService(){
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
@@ -111,13 +125,17 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void RequestWithdrawal(){
 		st = state.inProgress;
-		t.msgWithdraw(acctNum, amount, salary);
+		t.msgWithdraw(acctNum, amount, this.getPerson().getSalary());
 	}
 	
 	public void ExitBank(){
 		st = state.inProgress;
-		t.msgDoneAndLeaving();
-		this.getPerson().setCash(netTransaction);
+		if(service != Application.BANK_SERVICES.directDeposit)
+			t.msgDoneAndLeaving();
+		if(depositType == Application.DEPOSIT_TYPE.business)
+			business.setCash(building.getCash() + netTransaction);
+		else
+			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
 	}
 	
