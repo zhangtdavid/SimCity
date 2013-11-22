@@ -3,7 +3,6 @@ package city.roles;
 import java.util.Calendar;
 import java.util.Date;
 
-import city.Application;
 import city.Role;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
@@ -18,8 +17,9 @@ public class ResidentRole extends Role implements Resident {
 	
 	// Constructor
 	
-	public ResidentRole(){
+	public ResidentRole(Date rentLastPaid){
 		super();
+		this.rentLastPaid = rentLastPaid;
 	}
 	
 	// Messages
