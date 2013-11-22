@@ -4,6 +4,7 @@ import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
+import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Role;
 import city.animations.RestaurantZhangWaiterAnimation;
@@ -19,9 +20,10 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	RestaurantZhangCashier myCashier;
 	//Menu
 	RestaurantZhangMenu waiterMenu;
+	// Revolving stand
+	public RestaurantZhangRevolvingStand myOrderStand;
 	// GUI
 	protected RestaurantZhangWaiterAnimation thisGui;
-//	RevolvingStand myOrderStand;
 	
 	List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
 	
@@ -362,9 +364,9 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		}
 	}
 	
-//	public void setRevolvingStand(RevolvingStand rs) {
-//		myOrderStand = rs;
-//	}
+	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
+		myOrderStand = rs;
+	}
 
 	public enum mcState {waiting, seating, deciding, readyToOrder, ordering, ordered, 
 			reOrder, orderCooking, orderReady, eating, doneEating, waitingForCheck, leaving};

@@ -5,6 +5,7 @@ import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
+import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Role;
 import city.animations.RestaurantZhangCookAnimation;
@@ -24,7 +25,10 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
     private final int FOODTHRESHOLD = 3;
 	
 	private List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
-//	RevolvingStand myOrderStand;
+	
+	// REVOLVING STAND STUFF
+	RestaurantZhangRevolvingStand myOrderStand;
+	boolean waitingToCheckStand = false;
 	
 	private String name;
 	
@@ -148,9 +152,23 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 //					return true;
 //				}
 //			}
-//			RestaurantZhangOrder newOrder = myOrderStand.remove();
-//			ordersToCook.add(newOrder);
-//			return true;
+//			// Timer to check the stand
+			if(!waitingToCheckStand) {
+				print("Waiting 5 seconds to check the stand");
+				waitingToCheckStand = true;
+				timer.schedule(new TimerTask() {
+					public void run() {
+						waitingToCheckStand = false;
+						RestaurantZhangOrder newOrder = myOrderStand.remove();
+						if(newOrder != null) {
+							print("Found an item on the stand");
+							ordersToCook.add(newOrder);
+						}
+						stateChanged();
+					}
+				},
+				5000);
+			}
 			return false;
 		} catch (ConcurrentModificationException cmeCook) {
 			return false;
@@ -300,9 +318,9 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		return ordersToCook.size();
 	}
 	
-//	public void setRevolvingStand(RevolvingStand rs) {
-//		myOrderStand = rs;
-//	}
+	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
+		myOrderStand = rs;
+	}
 	
 	private class Food {
 		String name;

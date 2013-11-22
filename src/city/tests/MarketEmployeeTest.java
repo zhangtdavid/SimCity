@@ -19,12 +19,12 @@ public class MarketEmployeeTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		market = new MarketBuilding("Market1");
-		employee = new MarketEmployeeRole(market);
-		manager = new MockMarketManager(market);
-		customer = new MockMarketCustomer(market);
-		customerDelivery = new MockMarketCustomerDelivery(market);
-		cashier = new MockMarketCashier(market);
+//		market = new MarketBuilding("Market1");
+//		employee = new MarketEmployeeRole(market);
+//		manager = new MockMarketManager(market);
+//		customer = new MockMarketCustomer(market);
+//		customerDelivery = new MockMarketCustomerDelivery(market);
+//		cashier = new MockMarketCashier(market);
 	}
 	
 }

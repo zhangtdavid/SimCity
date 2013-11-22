@@ -43,6 +43,12 @@ public class MockPerson extends MockAgent implements Person {
     public Date getDate() { // TODO
     	return new Date(0);
     }
+    
+	@Override
+	public int getSalary() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 	
 	// Setters
 	
@@ -88,6 +94,12 @@ public class MockPerson extends MockAgent implements Person {
 	public void addRole(Role r) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public int getCash() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

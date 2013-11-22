@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import utilities.RestaurantZhangMenu;
+import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.agents.PersonAgent;
 import city.animations.RestaurantZhangCookAnimation;
@@ -20,6 +21,8 @@ import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangCustomerRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
+import city.roles.RestaurantZhangWaiterSharedDataRole;
+import city.buildings.BusStopBuilding;
 
 public class Application {
 
@@ -31,8 +34,10 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
+	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
+	public static enum DEPOSIT_TYPE {personal, business};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum BUILDING {bank, busStop, house, market};
 	
     /**
      * Main routine to start the program.
@@ -83,6 +88,7 @@ public class Application {
     				TABLEW, TABLEH));
     	}
     	RestaurantZhangMenu menu = new RestaurantZhangMenu();
+    	RestaurantZhangRevolvingStand stand = new RestaurantZhangRevolvingStand();
 		
 		// Set up the staff
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
@@ -95,6 +101,7 @@ public class Application {
 		PersonAgent p2 = new PersonAgent("Cook 1", date);
 		RestaurantZhangCookRole p2r1Cook = new RestaurantZhangCookRole("Cook 1");
 		p2r1Cook.setMenuTimes(menu);
+		p2r1Cook.setRevolvingStand(stand);
 		RestaurantZhangCookAnimation p2a1Cook = new RestaurantZhangCookAnimation(p2r1Cook);
 		p2a1Cook.isVisible = true;
 		p2r1Cook.setAnimation(p2a1Cook);
@@ -111,11 +118,12 @@ public class Application {
 		p3.startThread();
 		
 		PersonAgent p4 = new PersonAgent("Waiter 1", date);
-		RestaurantZhangWaiterRegularRole p4r1Waiter = new RestaurantZhangWaiterRegularRole("Waiter 1");
+		RestaurantZhangWaiterSharedDataRole p4r1Waiter = new RestaurantZhangWaiterSharedDataRole("Waiter 1");
 		p4r1Waiter.setCashier(p1r1Cashier);
 		p4r1Waiter.setCook(p2r1Cook);
 		p4r1Waiter.setHost(p3r1Host);
 		p4r1Waiter.setMenu(menu);
+		p4r1Waiter.setRevolvingStand(stand);
 		RestaurantZhangWaiterAnimation p4a1Waiter = new RestaurantZhangWaiterAnimation(p4r1Waiter, 200, 200);
 		p4a1Waiter.isVisible = true;
 		p4r1Waiter.setAnimation(p4a1Waiter);
@@ -152,11 +160,29 @@ public class Application {
 	}
 	
 	public static class CityMap {
-		private static HashMap<String, List<Building>> map = new HashMap<String, List<Building>>();
+		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		
-		public void addBuilding(String type, Building b) {
+		public void addBuilding(BUILDING type, Building b) {
 			if(map.containsKey(type))
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		}
+		
+		/**
+		 * Return the building of type closest to the person's location
+		 */
+		public static Building findClosestBuilding(BUILDING type, Person p) { // TODO
+			Building b = new BusStopBuilding("placeholder");
+			return b;
+		}
+		
+		/**
+		 * Return the building of type closest to the destination building
+		 * 
+		 * @param b the destination you wish to reach
+		 */
+		public static Building findClosestBuilding(BUILDING type, Building b) { // TODO
+			Building d = new BusStopBuilding("placeholder");
+			return d;
 		}
 		
 	}

@@ -11,7 +11,7 @@ public abstract class Animation implements AnimationInterface {
 	
 	// Data
 	
-	protected boolean isVisible = false;
+	public boolean isVisible = false;
 	protected int xPos, yPos;
 	
 	// Constructor
