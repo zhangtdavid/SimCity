@@ -76,7 +76,7 @@ public class ResidentRole extends Role implements Resident {
 	// Utilities
 	
 	/**
-	 * Returns true if today is the day that rent is due
+	 * Returns true if today is the day that rent is due or rent is overdue 
 	 * 
 	 * @return
 	 */
@@ -87,7 +87,7 @@ public class ResidentRole extends Role implements Resident {
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(getRentDueDate());
 		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);
+		return (day >= due);
 	}
 
 	// Classes
