@@ -7,24 +7,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.agents.PersonAgent;
-import city.animations.RestaurantChoiCashierAnimation;
-import city.animations.RestaurantChoiCookAnimation;
-import city.animations.RestaurantChoiCustomerAnimation;
-import city.animations.RestaurantChoiFurnitureAnimation;
-import city.animations.RestaurantChoiHostAnimation;
-import city.animations.RestaurantChoiWaiterAnimation;
 import city.buildings.BusStopBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
-import city.roles.RestaurantChoiCashierRole;
-import city.roles.RestaurantChoiCookRole;
-import city.roles.RestaurantChoiCustomerRole;
-import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiRevolvingStand;
-import city.roles.RestaurantChoiTable;
-import city.roles.RestaurantChoiWaiterRole;
 
 public class Application {
 
@@ -73,6 +59,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
+		
 	}
 	
 	public static class CityMap {
