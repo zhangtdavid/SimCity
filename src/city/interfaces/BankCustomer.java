@@ -21,8 +21,6 @@ public interface BankCustomer extends RoleInterface {
 	
 	public void msgLoanGranted(int loanMoney);
 	
-	public void msgTransactionCompleted();
-	
 	public void msgTransactionDenied();
 	// Scheduler
 	

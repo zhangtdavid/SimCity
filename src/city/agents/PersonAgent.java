@@ -81,6 +81,10 @@ public class PersonAgent extends Agent implements Person {
 		//-------------------/
 		
 		// Go to work
+
+		if (state == State.goingToWork) {
+			processTransporationArrival();
+		}		
 		if (state == State.goingToWork) {
 			if (processTransporationArrival()) {
 				occupation.setActive();
@@ -145,7 +149,7 @@ public class PersonAgent extends Agent implements Person {
 		//----------------/
 		// Role Scheduler /
 		//----------------/
-		
+
 		boolean blocking = false;
 		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
@@ -245,6 +249,10 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public int getSalary() {
 		return occupation.getSalary();
+	}
+	
+	public int getCash(){
+		return cash;
 	}
 	
 	//=========//
@@ -475,5 +483,4 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return disposition;
 	}
-
 }

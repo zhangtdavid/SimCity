@@ -18,7 +18,7 @@ public interface BankManager extends RoleInterface {
 	// Messages
 	public void msgNeedService(BankCustomerRole bc);
 	
-	public void msgDirectDeposit(int acctNum, int money, Role r);
+	public void msgDirectDeposit(int acctNum, int money, BankCustomerRole r);
 
 	public void msgAvailable(BankTellerRole t);
 	
