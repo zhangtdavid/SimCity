@@ -13,7 +13,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public enum state {entering, requestService, inProgress, exit};
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
-	double cash = 0;
+	double netTransaction = 0;
 	state st;
 	double salary;
 	double amount;
@@ -21,12 +21,18 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int acctNum;
 	int boothNumber;
 	
+	public void setActive(Application.BANK_SERVICES s, double money){
+		this.service = s;
+		st = state.entering;
+		amount = money;
+	}
 	// Constructor
 	
-	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b) {
+	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b, double money) {
 		building = b;
 		this.service = s;
 		st = state.entering;
+		amount = money;
 	}
 	
 	// Messages
@@ -49,12 +55,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public void msgHereIsWithdrawal(double money) {
-		cash += money;
+		netTransaction += money;
 		stateChanged();
 	}
 	
 	public void msgLoanGranted(double loanMoney){
-		cash += loanMoney;
+		netTransaction += loanMoney;
 		stateChanged();
 	}
 	
@@ -99,7 +105,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	public void RequestAccount(){
 		st = state.inProgress;
-		cash -= amount;
+		netTransaction -= amount;
 		t.msgCreateAccount(amount);
 	}
 	
@@ -111,6 +117,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void ExitBank(){
 		st = state.inProgress;
 		t.msgDoneAndLeaving();
+		this.getPerson().setCash(netTransaction);
+		netTransaction = 0;
 	}
 	
 	// Getters

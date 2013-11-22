@@ -11,7 +11,7 @@ public class CarPassengerTest extends TestCase {
 	CarAgent car = new CarAgent();
 	BusStopBuilding destination = new BusStopBuilding("BusStop1"); 
 	CarPassengerRole passenger = new CarPassengerRole(car, destination);
-
+	
 	public void setUp() throws Exception {
 		super.setUp();
 		passenger.setPerson(person);
@@ -30,6 +30,7 @@ public class CarPassengerTest extends TestCase {
 		assertEquals("CarAgent's event should be NONE. Instead it's; " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
 		// Step 1: Make the passenger's role active
 		passenger.setActive();
+		passenger.msgImGoingToDrive();
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.myCar, car);
 		assertEquals("CarPassenger's destination should be a bus stop. It isn't", passenger.destination, destination);
 		assertEquals("CarPassenger's state should be NOTDRIVING. Instead it's: " + passenger.myState.name(), passenger.myState, CarPassengerRole.CarPassengerState.NOTDRIVING);
@@ -84,14 +85,11 @@ public class CarPassengerTest extends TestCase {
 		assertEquals("CarPassenger's destination should be null. It isn't", passenger.destination, null);
 		assertEquals("CarPassenger's state should be NOTDRIVING. Instead it's: " + passenger.myState.name(), passenger.myState, CarPassengerRole.CarPassengerState.NOTDRIVING);
 		assertEquals("CarPassenger's event should be NONE. Instead it's: " + passenger.myEvent.name(), passenger.myEvent, CarPassengerRole.CarPassengerEvent.NONE);
-<<<<<<< HEAD
 		assertEquals("CarAgent's passenger should be null. It isn't", car.carPassenger, null);
 		assertEquals("CarAgent's destination should be null. It isn't", car.destination, null);
 		assertEquals("CarAgent's state should be NOTDRIVING. Instead it's " + car.myState.name(), car.myState, CarAgent.CarState.NOTDRIVING);
 		assertEquals("CarAgent's event should be NONE. Instead it's " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
-=======
 		passenger.setActive();
->>>>>>> market
 	}
 
 }
