@@ -65,6 +65,10 @@ public class Application {
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
 		}
 		
+		public List<Building> getBuildings(String type){
+			return map.get(type);
+		}
+		
 	}
 
 }
