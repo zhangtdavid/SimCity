@@ -1,12 +1,11 @@
 package city.roles;
 
-import agent.Agent;
-
 import java.util.*;
 
 import city.Role;
+import city.interfaces.RestaurantChungCashier;
+import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungMarket;
-import restaurant.interfaces.Market;
 
 /**
  * Restaurant Cook Agent
@@ -16,7 +15,7 @@ import restaurant.interfaces.Market;
 public class RestaurantChungMarketRole extends Role implements RestaurantChungMarket {	
 	Timer timer = new Timer();
 	Timer timer2 = new Timer();
-	RestaurantChungCashierRole cashier;
+	RestaurantChungCashier cashier;
 	Double money;
 	
 //	Fixed Numbers
@@ -28,13 +27,13 @@ public class RestaurantChungMarketRole extends Role implements RestaurantChungMa
 //	=====================================================================	
 	public List<Order> ordersList = Collections.synchronizedList(new ArrayList<Order>()); // Holds orders, their states, and recipients
 	public class Order {
-		RestaurantChungCookRole c;
+		RestaurantChungCook c;
 		int ID;
 		private Map<String, Integer> orderItems = new HashMap<String, Integer>();
 		boolean rush;
 		OrderState s;
 		
-		public Order(RestaurantChungCookRole cook, int id, Map<String, Integer> marketInventory, boolean rush, OrderState state) {
+		public Order(RestaurantChungCook cook, int id, Map<String, Integer> marketInventory, boolean rush, OrderState state) {
 			c = cook;
 			ID = id;
 			orderItems = marketInventory;
@@ -75,7 +74,7 @@ public class RestaurantChungMarketRole extends Role implements RestaurantChungMa
 
 //  Messages
 //	=====================================================================
-	public void msgHereIsAnOrder(RestaurantChungCookRole c, int id, boolean rush, Map<String, Integer> cookOrder) {
+	public void msgHereIsAnOrder(RestaurantChungCook c, int id, boolean rush, Map<String, Integer> cookOrder) {
 		print("Market received msgHereIsAnOrder");
 		// Create a copy of the cook's order map
 		Map<String, Integer> tempItems = new HashMap<String, Integer>();
@@ -110,7 +109,7 @@ public class RestaurantChungMarketRole extends Role implements RestaurantChungMa
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 		if (ordersList.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
 		
 		synchronized(ordersList) {
@@ -292,7 +291,7 @@ public class RestaurantChungMarketRole extends Role implements RestaurantChungMa
 
 //	Utilities
 //	=====================================================================	
-	public void setCashier(RestaurantChungCashierRole c) {
+	public void setCashier(RestaurantChungCashier c) {
 		this.cashier = c;
 	}
 	

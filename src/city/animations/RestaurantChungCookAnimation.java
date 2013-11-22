@@ -4,11 +4,11 @@ import java.awt.*;
 
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCashier;
+import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.interfaces.RestaurantChungCook;
 
 public class RestaurantChungCookAnimation extends Animation implements RestaurantChungAnimatedCook {
 	private RestaurantChungCook agent = null;
-	private RestaurantGui gui;
 	
 	private boolean cooking = false;
 	private String cookingItem;
@@ -32,9 +32,8 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	private Command command = Command.noCommand;
 	
 	
-	public RestaurantChungCookAnimation(RestaurantChungCook c, RestaurantGui gui) {
+	public RestaurantChungCookAnimation(RestaurantChungCook c) {
 		agent = c;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {

@@ -7,6 +7,7 @@ import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungMarket;
+import city.interfaces.RestaurantChungWaiterBase;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 /**
@@ -25,14 +26,14 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	=====================================================================	
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	public class Transaction {
-		RestaurantChungWaiterRoleBase w;
+		RestaurantChungWaiterBase w;
 		RestaurantChungCustomer c;
 		String choice;
 		public double price;
 		public double payment;
 		public TransactionState s;
 		
-		public Transaction(RestaurantChungWaiterRoleBase w2, RestaurantChungCustomer customer, String order, TransactionState state) {
+		public Transaction(RestaurantChungWaiterBase w2, RestaurantChungCustomer customer, String order, TransactionState state) {
 			w = w2;
 			c = customer;
 			choice = order;
@@ -76,7 +77,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 //  Messages
 //	=====================================================================
-	public void msgComputeBill(RestaurantChungWaiterRoleBase w, RestaurantChungCustomer c, String order) {
+	public void msgComputeBill(RestaurantChungWaiterBase w, RestaurantChungCustomer c, String order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
 		transactions.add(new Transaction(w, c, order, TransactionState.Pending));
@@ -105,7 +106,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	public boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 //		if (transactions.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
 
 		synchronized(transactions) {

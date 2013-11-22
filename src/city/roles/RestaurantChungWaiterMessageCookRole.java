@@ -5,13 +5,12 @@ import java.util.concurrent.Semaphore;
 
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterMessageCook;
 
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
-public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterRoleBase implements RestaurantChungWaiterMessageCook {
+public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterBaseRole {
 
 //	public enum WaiterState
 //	{Working, WantBreak, AskedForBreak, ApprovedForBreak, RejectedForBreak, OnBreak, ReturningToWork};
@@ -50,14 +49,14 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 //	private enum OrderStatus
 //	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 		
-	public RestaurantChungWaiterRoleMessageCook(String name, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
+	public RestaurantChungWaiterMessageCookRole(String name, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
 		super();
 		
 		this.name = name;
 		this.host = host;
 		this.cook = cook;
 		this.cashier = cashier;
-		host.msgWaiterAvailable(this);
+//		host.msgWaiterAvailable(this);
 	}
 	
 //  Messages
@@ -197,7 +196,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
@@ -307,12 +306,12 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 	private void askForBreak() {
 		print("Waiter asking for break");
 		state = WaiterState.AskedForBreak;
-		host.msgIWantToGoOnBreak(this);
+//		host.msgIWantToGoOnBreak(this);
 	}	
 
 	private void rejectForBreak() {
 		waiterGui.setOffBreak();
-		host.msgIAmReturningToWork(this);
+//		host.msgIAmReturningToWork(this);
 		state = WaiterState.Working;
 	}
 	
@@ -325,7 +324,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 	private void returnToWork() {
 		print("Waiter returning to work");
 		state = WaiterState.Working;
-		host.msgIAmReturningToWork(this);
+//		host.msgIAmReturningToWork(this);
 		waiterGui.DoReturnToWaiterHome();		
 	}
 	
@@ -345,7 +344,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 
 		host.msgTakingCustomerToTable(customer.c);
 		waiterGui.DoBringToTable(customer.c, customer.table-1);
-		customer.c.msgFollowMeToTable(this, menu);
+//		customer.c.msgFollowMeToTable(this, menu);
 		
 		try {
 			atTable.acquire();
@@ -408,7 +407,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 		}
 
 		print("telling cook order " + choice + " for " + customer.c);
-		cook.msgHereIsAnOrder(this, choice, table);
+//		cook.msgHereIsAnOrder(this, choice, table);
 		customer.o.os = OrderStatus.Cooking;
 		
 		waiterGui.DoReturnToWaiterHome();
@@ -456,7 +455,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 		}
 		
 		customer.cs = CheckState.AskedForBill;
-		cashier.msgComputeBill(this, customer.c, customer.o.choice);
+//		cashier.msgComputeBill(this, customer.c, customer.o.choice);
 	}
 	
 	private void giveCheck(WCustomer customer) {
@@ -476,7 +475,7 @@ public class RestaurantChungWaiterRoleMessageCook extends RestaurantChungWaiterR
 	}
 
 	private void removeCustomer(WCustomer customer) {
-		host.msgTableIsFree(this, customer.table, customer.c);
+//		host.msgTableIsFree(this, customer.table, customer.c);
 		removeCustomerFromList(customer);
 	}
 }

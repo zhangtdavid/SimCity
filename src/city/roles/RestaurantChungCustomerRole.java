@@ -5,9 +5,11 @@ import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantChungMenu;
 import city.Role;
+import city.animations.RestaurantChungCustomerAnimation;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
+import city.interfaces.RestaurantChungWaiterBase;
 
 /**
  * Restaurant Customer agent.
@@ -18,7 +20,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	private RestaurantChungCustomerAnimation customerGui;
 	private RestaurantChungHost host;
 	private RestaurantChungCashier cashier;
-	private RestaurantChungWaiterRoleBase waiter;
+	private RestaurantChungWaiterBase waiter;
 	int positionInLine;
 	Timer timer = new Timer();
 	private Semaphore atSeat = new Semaphore(0, true);
@@ -77,7 +79,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
-	public void msgFollowMeToTable(RestaurantChungWaiterRoleBase waiter, RestaurantChungMenu menu) {
+	public void msgFollowMeToTable(RestaurantChungWaiterBase waiter, RestaurantChungMenu menu) {
 		print("Customer received msgFollowMeToTable");
 		this.waiter = waiter;
 		this.menu = new RestaurantChungMenu(menu);
@@ -162,7 +164,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 		//	CustomerAgent is a finite state machineE
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
 			goToRestaurant();
@@ -260,21 +262,21 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //  Actions
 //	=====================================================================
 	private void goToRestaurant() {
-		Do("Going to restaurant");
+		print("Going to restaurant");
 		state = AgentState.GoingToRestaurant;
 		host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
 	
 	private void getInLine() {
-		Do("Getting in position " + positionInLine + " of the line at restaurant");
+		print("Getting in position " + positionInLine + " of the line at restaurant");
 		state = AgentState.WaitingInRestaurant;
 		customerGui.DoGoToWaitingArea(positionInLine);
 		event = AgentEvent.standInLine;
 	}
 	
 	private void sitDown() {
-		Do("Sitting down");
+		print("Sitting down");
 		state = AgentState.BeingSeated;
 		try {
 			atSeat.acquire();
@@ -285,7 +287,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 	
 	private void decideFood() {
-		Do("Deciding food");
+		print("Deciding food");
 		state = AgentState.Deciding;
 		order = null; // erases any old orders
 		// Randomly select food from the menu
@@ -308,13 +310,13 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 					for(int i = 0; i < menu.items.size(); i++)  {
 						if (menu.items.get(i).item.equals("Salad")) {
 							order = "Salad";
-							Do("Finished deciding food, customer wants " + order);
+							print("Finished deciding food, customer wants " + order);
 							msgSelfReadyToOrder();
 							return;
 						}
 					}
 					order = "Pizza";
-					Do("Finished deciding food, customer wants " + order);
+					print("Finished deciding food, customer wants " + order);
 					msgSelfReadyToOrder();
 					return;	
 				}
@@ -336,7 +338,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 							}
 							else {
 								order = "Steak";
-								Do("Finished deciding food, customer wants " + order);
+								print("Finished deciding food, customer wants " + order);
 								msgSelfReadyToOrder();
 								return;
 							}
@@ -354,7 +356,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 							}
 							else {
 								order = "Chicken";
-								Do("Finished deciding food, customer wants " + order);
+								print("Finished deciding food, customer wants " + order);
 								msgSelfReadyToOrder();
 								return;
 							}
@@ -372,7 +374,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 							}
 							else {
 								order = "Salad";
-								Do("Finished deciding food, customer wants " + order);
+								print("Finished deciding food, customer wants " + order);
 								msgSelfReadyToOrder();
 								return;
 							}
@@ -390,7 +392,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 							}
 							else {
 								order = "Pizza";
-								Do("Finished deciding food, customer wants " + order);
+								print("Finished deciding food, customer wants " + order);
 								msgSelfReadyToOrder();
 								return;
 							}
@@ -405,7 +407,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 						// Deliberately orders something too expensive
 						if (menu.items.get(i).price > money) {
 							order = menu.items.get(i).item;
-							Do("Finished deciding food, customer wants " + order);
+							print("Finished deciding food, customer wants " + order);
 							msgSelfReadyToOrder();
 							return;
 						}
@@ -428,7 +430,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 						}
 						else {
 							order = menu.items.get(randInt).item;
-							Do("Finished deciding food, customer wants " + order);
+							print("Finished deciding food, customer wants " + order);
 							msgSelfReadyToOrder();	
 						}
 					}
@@ -439,19 +441,19 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 	
 	private void callWaiter() {
-		Do("Call Waiter");
+		print("Call Waiter");
 		state = AgentState.CallingWaiter;
 		waiter.msgReadyToOrder(this);
 	}
 	
 	private void giveOrder() {
-		Do("Ordering " + order);
+		print("Ordering " + order);
 		state = AgentState.WaitingForFood;
 		waiter.msgHereIsMyOrder(this, order);
 	}
 
 	private void eatFood() {
-		Do("Eating Food");
+		print("Eating Food");
 		state = AgentState.Eating;
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
@@ -472,19 +474,19 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 
 	private void askForCheck() {
-		Do("Asking for check");
+		print("Asking for check");
 		state = AgentState.WaitingForCheck;
 		waiter.msgGetCheck(this);
 	}
 	
 	private void goToCashier() {
-		Do("Going to cashier");
+		print("Going to cashier");
 		state = AgentState.GoingToCashier;
 		customerGui.DoGoToCashier();		
 	}
 	
 	private void payForFood() {
-		Do("Paying for food");
+		print("Paying for food");
 		state = AgentState.Paying;
 		
 		if (bill > money) {
@@ -498,7 +500,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 	
 	private void leaveRestaurant() {
-		Do("Leaving");
+		print("Leaving");
 		state = AgentState.Leaving;
 		host.msgLeaving(this);
 		customerGui.DoExitRestaurant();
@@ -517,18 +519,18 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 // END HACK------------------------------------------------------------------
 
 		if (leaving == 0) {
-			Do("Decided to leave");
+			print("Decided to leave");
 			msgSelfDecidedToLeave();
 		}
 		else if(leaving == 1) {
-			Do("Decided to stay");
+			print("Decided to stay");
 			state = AgentState.DecidedToStay;
 			host.msgDecidedToStay(this);
 		}
 	}
 	
 	private void leaveTable() {
-		Do("Leaving");
+		print("Leaving");
 		state = AgentState.Leaving;
 		waiter.msgLeaving(this);
 		customerGui.DoExitRestaurant();
@@ -558,7 +560,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		this.host = host;
 	}
 	
-	public void setCashier(RestaurantChungCashierRole cashier) {
+	public void setCashier(RestaurantChungCashier cashier) {
 		this.cashier = cashier;		
 	}
 	

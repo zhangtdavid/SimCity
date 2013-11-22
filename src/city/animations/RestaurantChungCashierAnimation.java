@@ -9,7 +9,6 @@ import city.interfaces.RestaurantChungCashier;
 
 public class RestaurantChungCashierAnimation extends Animation implements RestaurantChungAnimatedCashier {
 	private RestaurantChungCashier agent = null;
-	private RestaurantGui gui;
 
 //	Fixed Numbers
 //	=====================================================================
@@ -20,9 +19,8 @@ public class RestaurantChungCashierAnimation extends Animation implements Restau
 	private int xPos = 50, yPos = 40;
 	private int xDestination = xPos, yDestination = yPos;
 
-	public RestaurantChungCashierAnimation(RestaurantChungCashier c, RestaurantGui gui) {
+	public RestaurantChungCashierAnimation(RestaurantChungCashier c) {
 		agent = c;
-		this.gui = gui;
 	}
 
 	public void updatePosition() {

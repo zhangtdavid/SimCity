@@ -5,19 +5,15 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Vector;
 
+import utilities.StringUtil;
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
+import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiterBase;
-import restaurant.CustomerAgent;
-import restaurant.WaiterAgentBase;
-import restaurant.WaiterAgentMessageCook;
-import restaurant.interfaces.Customer;
-import agent.StringUtil;
 
 public class RestaurantChungWaiterAnimation extends Animation implements RestaurantChungAnimatedWaiter {
     private RestaurantChungWaiterBase agent = null;
-	private RestaurantGui gui;
 	
 	public enum WaiterState
 	{Working, AskedForBreak, OnBreak};
@@ -59,9 +55,8 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     private int tableNumX = 0;
     private int tableNumY = 0;
 
-    public RestaurantChungWaiterAnimation(RestaurantChungWaiter wa, RestaurantGui gui) {
+    public RestaurantChungWaiterAnimation(RestaurantChungWaiterBase wa) {
         agent = wa;
-		this.gui = gui;
     }
 
     public void updatePosition() {
@@ -88,7 +83,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 			else if (command == Command.GoToCashier) agent.msgAnimationAtCashier();
 			else if (command == Command.GoOffBreak) {
 				state = WaiterState.Working;
-				gui.setWaiterWorking(agent);
+//				gui.setWaiterWorking(agent);
 			}
 			command=Command.noCommand;
         }
@@ -127,10 +122,10 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 		command = Command.GoToTable;
 	}
     
-    public void DoBringToTable(Customer customer, int table) {
+    public void DoBringToTable(RestaurantChungCustomer customer, int table) {
     	DoGoToTable(table);
     	System.out.println("Waiter Gui bringing " + customer + " to table " + (table+1));
-        ((CustomerAgent) customer).getGui().DoGoToSeat(findTableX(table), findTableY(table));
+    	customer.getGui().DoGoToSeat(findTableX(table), findTableY(table));
     }
 
     public void DoDeliverFood(int table, String choice) {
@@ -209,19 +204,19 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 	public void setAskedForBreak() {
 		state = WaiterState.AskedForBreak;
 		agent.msgAnimationAskedForBreak();
-		gui.setWaiterWaiting(agent);
+//		gui.setWaiterWaiting(agent);
 	}
     
 	public void setOnBreak() {
 		state = WaiterState.OnBreak;
-		gui.setWaiterOnBreak(agent);
+//		gui.setWaiterOnBreak(agent);
 	}
 	
 	public void setOffBreak() {
 		state = WaiterState.Working;
 		DoGoOffBreak();
 		agent.msgAnimationBreakOver();
-		gui.setWaiterWorking(agent);
+//		gui.setWaiterWorking(agent);
 	}
 	
 	public String isOnBreak() {

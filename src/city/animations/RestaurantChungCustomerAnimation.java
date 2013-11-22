@@ -8,7 +8,7 @@ import city.interfaces.RestaurantChungCustomer;
 
 public class RestaurantChungCustomerAnimation extends Animation implements RestaurantChungAnimatedCustomer {
 	private RestaurantChungCustomer agent = null;
-	private RestaurantGui gui;
+//	private RestaurantGui gui;
 
 	private boolean isPresent = false;
 	private boolean isHungry = false;
@@ -37,13 +37,13 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 
 //	Constructor
 //	=====================================================================
-	public RestaurantChungCustomerAnimation(RestaurantChungCustomer c, RestaurantGui gui) {
+	public RestaurantChungCustomerAnimation(RestaurantChungCustomer c) {//, RestaurantGui gui) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = -40;
 		yDestination = -40;
-		this.gui = gui;
+//		this.gui = gui;
 	}
 
 //	Gui Updater
@@ -67,7 +67,7 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 			else if (command == Command.LeaveRestaurant) {
 				agent.msgAnimationFinishedLeaveRestaurant();
 				isHungry = false;
-				gui.setCustomerEnabled(agent);
+//				gui.setCustomerEnabled(agent);
 			}
 			command=Command.noCommand;
 		}

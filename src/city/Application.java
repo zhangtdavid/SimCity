@@ -8,14 +8,20 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import city.agents.PersonAgent;
+import city.animations.RestaurantChungCashierAnimation;
+import city.animations.RestaurantChungCookAnimation;
+import city.animations.RestaurantChungCustomerAnimation;
 import city.buildings.BankBuilding;
-
 import city.buildings.BusStopBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungCustomerRole;
+import city.roles.RestaurantChungHostRole;
 
 public class Application {
 
@@ -63,41 +69,68 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		BankBuilding b = new BankBuilding("Bank");
-        PersonAgent p1 = new PersonAgent("Manager 1", date);
-        BankManagerRole p1r1 = new BankManagerRole(b);
-        b.setManager(p1r1);
-        p1.setOccupation(p1r1);
-        people.add(p1);
-        p1.startThread();
-
-        PersonAgent p2 = new PersonAgent("Teller 1", date);
-        BankTellerRole p2r1 = new BankTellerRole(b);
-        p2.setOccupation(p2r1);
-        people.add(p2);
-        p2.startThread();
-
-        PersonAgent p3 = new PersonAgent("BankCustomer 1", date);
-        BankCustomerRole p3r1 = new BankCustomerRole(b);
-        p3.setOccupation(p3r1);
-        people.add(p3);
-        p3.startThread();
-
-// Set up the table
-        p1r1.msgAvailable(p2r1);
-// Wait for things to get in position
-       
-
-// Send in a customer
-        
-// TODO these shouldn't be necessary, figure out why they're needed
-        p3r1.setActive(BANK_SERVICES.accountCreate, 50);
-        p3.stateChanged();
-        try {
-        	Thread.sleep(9000);
-        } catch (InterruptedException e) {}
-        p3r1.setActive(BANK_SERVICES.moneyWithdraw, 50);
-        p3.stateChanged();
+        // Set up the staff
+//        PersonAgent p1 = new PersonAgent("Cashier 1", date);
+//        RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole();
+//        RestaurantChungCashierAnimation p1a1 = new RestaurantChungCashierAnimation();
+//        p1r1.setAnimation(p1a1);
+//        mainFrame.restaurantChungPanel.addVisualizationElement(p1a1);
+//        p1.setOccupation(p1r1);
+//        people.add(p1);
+//        p1.startThread();
+//        
+//        PersonAgent p2 = new PersonAgent("Cook 1", date);
+//        RestaurantChungCookRole p2r1 = new RestaurantChungCookRole(p1r1);
+//        RestaurantChungCookAnimation p2a1 = new RestaurantChungCookAnimation();
+//        p2r1.setAnimation(p2a1);
+//        mainFrame.restaurantChungPanel.addVisualizationElement(p2a1);
+//        p2.setOccupation(p2r1);
+//        people.add(p2);
+//        p2.startThread();
+//        
+//        PersonAgent p3 = new PersonAgent("Host 1", date);
+//        RestaurantChungHostRole p3r1 = new RestaurantChungHostRole();
+////        RestaurantChungHostAnimation p3a1 = new RestaurantChungHostAnimation();
+////        p3r1.setAnimation(p3a1);
+////        mainFrame.restaurantChungPanel.addVisualizationElement(p3a1);
+//        p3.setOccupation(p3r1);
+//        people.add(p3);
+//        p3.startThread();
+//        
+//        PersonAgent p4 = new PersonAgent("Waiter 1", date);
+//        RestaurantChungWaiterRole p4r1 = new RestaurantChungWaiterRole(p2r1, p3r1, p1r1, 0);
+//        RestaurantChungWaiterAnimation p4a1 = new RestaurantChungWaiterAnimation(p4r1);
+//        p4r1.setAnimation(p4a1);
+//        p3r1.addWaiter(p4r1);
+//        mainFrame.restaurantChungPanel.addVisualizationElement(p4a1);
+//        p4.setOccupation(p4r1);
+//        people.add(p4);
+//        p4.startThread();
+//        
+//        // Set up the table
+//        RestaurantChungTableAnimation t1 = new RestaurantChungTableAnimation(0);
+//        mainFrame.restaurantChungPanel.addVisualizationElement(t1);
+//        p3r1.addTable(0);
+//        
+//        // Wait for things to get in position
+//        try {
+//                Thread.sleep(4000);
+//        } catch (InterruptedException e) {}
+//        
+//        // Send in a customer
+//        PersonAgent p5 = new PersonAgent("Customer 1", date);
+//        RestaurantChungCustomerRole p5r1 = new RestaurantChungCustomerRole(p3r1, p1r1);
+//        RestaurantChungCustomerAnimation p5a1 = new RestaurantChungCustomerAnimation(p5r1);
+//        p5r1.setAnimation(p5a1);
+//        mainFrame.restaurantChungPanel.addVisualizationElement(p5a1);
+//        p5.addRole(p5r1);
+//        people.add(p5);
+//        p5.startThread();
+//        p5r1.msgGoToRestaurant();
+//        
+//        // TODO these shouldn't be necessary, figure out why they're needed
+//        p5r1.setActive();
+//        p5.stateChanged();
 	}
 	
 	public static class CityMap {

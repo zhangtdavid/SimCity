@@ -4,8 +4,10 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.Role;
+import city.animations.RestaurantChungCookAnimation;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungMarket;
+import city.interfaces.RestaurantChungWaiterBase;
 
 /**
  * Restaurant Cook Agent
@@ -28,12 +30,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  =====================================================================        
     public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>()); // Holds orders, their states, and recipients
     private class Order {
-    	RestaurantChungWaiterRoleBase w;
+    	RestaurantChungWaiterBase w;
         String choice;
         int table;
         OrderState s;
         
-        public Order(RestaurantChungWaiterRoleBase w2, String selection, int tableNum, OrderState state) {
+        public Order(RestaurantChungWaiterBase w2, String selection, int tableNum, OrderState state) {
                 w = w2;
                 choice = selection;
                 table = tableNum;
@@ -121,7 +123,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         
 //  Waiter
 //  ---------------------------------------------------------------
-    public void msgHereIsAnOrder(RestaurantChungWaiterRoleBase w, String choice, int table) {
+    public void msgHereIsAnOrder(RestaurantChungWaiterBase w, String choice, int table) {
         print("Cook received msgHereIsAnOrder");
         orders.add(new Order(w, choice, table, OrderState.Pending));
         stateChanged();
@@ -204,7 +206,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     /**
      * Scheduler.  Determine what action is called for, and do it.
      */
-    protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 //                print("in scheduler");
     	if (!cooking && !plating) {
             for (Food f: foods.values()) {
@@ -425,7 +427,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         timer2.schedule(new TimerTask() {
             public void run() {
 //            	print("in plating timer");
-                RestaurantChungWaiterRoleBase waiter = findWaiter(o); // Determines the waiter associated with the order
+            	RestaurantChungWaiterBase waiter = findWaiter(o); // Determines the waiter associated with the order
                 waiter.msgOrderIsReady(o.choice, o.table);
                 plating = false;
                 msgSelfDonePlating(o);
@@ -448,7 +450,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
 
     private void informWaiterOfCancellation(Order o) {
-        RestaurantChungWaiterRoleBase w = findWaiter(o);
+        RestaurantChungWaiterBase w = findWaiter(o);
         w.msgOutOfItem(o.choice, o.table);
     }
 
@@ -473,7 +475,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         markets.add(m);
     }
     
-    public RestaurantChungWaiterRoleBase findWaiter(Order order) {
+    public RestaurantChungWaiterBase findWaiter(Order order) {
         for(Order o : orders){
             if(o == order) {
                 return o.w;                

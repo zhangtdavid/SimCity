@@ -5,6 +5,7 @@ import java.util.*;
 import city.Role;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
+import city.interfaces.RestaurantChungWaiterBase;
 
 /**
  * Restaurant Host Agent
@@ -20,11 +21,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //	=====================================================================	
 	private List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	private class MyWaiter {
-		RestaurantChungWaiterRoleBase w;
+		RestaurantChungWaiterBase w;
 		WaiterState s;
 		int numCustomers;
 		
-		public MyWaiter(RestaurantChungWaiterRoleBase w2) {
+		public MyWaiter(RestaurantChungWaiterBase w2) {
 			w = w2;
 			s = WaiterState.Working;
 			numCustomers = 0;
@@ -135,27 +136,27 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
-	public void msgWaiterAvailable(RestaurantChungWaiterRoleBase w) {
+	public void msgWaiterAvailable(RestaurantChungWaiterBase w) {
 		print("Host received msgWaiterAvailable");
 		waiters.add(new MyWaiter(w));
 		stateChanged();
 	}
 	
-	public void msgIWantToGoOnBreak(RestaurantChungWaiterRoleBase w) {
+	public void msgIWantToGoOnBreak(RestaurantChungWaiterBase w) {
 		print("Host received msgIWantToGoOnBreak");
 		MyWaiter wa = findWaiter(w);
 		wa.s = WaiterState.WantBreak;
 		stateChanged();		
 	}
 	
-	public void msgIAmReturningToWork(RestaurantChungWaiterRoleBase w) {
+	public void msgIAmReturningToWork(RestaurantChungWaiterBase w) {
 		print("Host received msgIAmReturningToWork");
 		MyWaiter wa = findWaiter(w);
 		wa.s = WaiterState.Working;
 		stateChanged();
 	}
 	
-	public void msgTableIsFree(RestaurantChungWaiterRoleBase waiter, int t, RestaurantChungCustomer c) {
+	public void msgTableIsFree(RestaurantChungWaiterBase waiter, int t, RestaurantChungCustomer c) {
 		print("Host received msgTableIsFree");
 		HCustomer hc = findCustomer(c);
 		hc.s = CustomerState.Done;
@@ -179,7 +180,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
@@ -331,7 +332,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		c.positionInLine = -1; // Makes the position in line variable invalid
 	}
 	
-	private void seatCustomer(HCustomer customer, Table table, RestaurantChungWaiterRoleBase w) {
+	private void seatCustomer(HCustomer customer, Table table, RestaurantChungWaiterBase w) {
 		print("Host telling Waiter to seat customer");
 		w.msgSitAtTable(customer.c, table.tableNumber);
 		customer.s = CustomerState.WaitingToBeSeated;
@@ -398,7 +399,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //		}
 //	}
 	
-	public MyWaiter findWaiter(RestaurantChungWaiterRoleBase w) {
+	public MyWaiter findWaiter(RestaurantChungWaiterBase w) {
 		for(MyWaiter waiter : waiters ){
 			if(waiter.w == w) {
 				return waiter;		

@@ -7,9 +7,9 @@ public class RestaurantChungMenu {
 	public List<Item> items = new ArrayList<Item>();
 	
 	public class Item {
-		String item;
-		double price;
-		boolean available;
+		public String item;
+		public double price;
+		public boolean available;
 		
 		public Item(String item, double price) {
 			this.item = item;

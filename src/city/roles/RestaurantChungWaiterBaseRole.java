@@ -6,18 +6,22 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import city.Role;
+import city.animations.RestaurantChungWaiterAnimation;
+import city.interfaces.RestaurantChungCashier;
+import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
+import city.interfaces.RestaurantChungWaiterBase;
 
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
-public class RestaurantChungWaiterRoleBase extends Role {
+public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChungWaiterBase {
 	protected String name;
 	protected RestaurantChungHost host;
-	protected RestaurantChungCookRole cook;
-	protected RestaurantChungCashierRole cashier;
+	protected RestaurantChungCook cook;
+	protected RestaurantChungCashier cashier;
 	protected RestaurantChungWaiterAnimation waiterGui = null;
 	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 	protected Semaphore atEntrance = new Semaphore(0, true);
@@ -64,7 +68,7 @@ public class RestaurantChungWaiterRoleBase extends Role {
 	protected enum OrderStatus
 	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 		
-	public RestaurantChungWaiterRoleBase() {
+	public RestaurantChungWaiterBaseRole() {
 		super();
 	}
 	
@@ -205,7 +209,7 @@ public class RestaurantChungWaiterRoleBase extends Role {
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	protected boolean pickAndExecuteAnAction() {
+	public boolean runScheduler() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
