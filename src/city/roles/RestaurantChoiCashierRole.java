@@ -1,5 +1,6 @@
 package city.roles;
 
+import utilities.EventLog;
 import city.Role;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
@@ -11,7 +12,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	//Data    
 	public double money = 100;
     public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
-	//public EventLog log = new EventLog(); // TODO import junit3
+	public EventLog log = new EventLog(); // TODO import junit3
 	RestaurantChoiAnimatedCashier cashierGui;
     
     //Constructor
@@ -24,20 +25,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     }
     
     //Messages
-    @Override
-    /**
-     * Computes check for waiter
-     */
-	public void msgComputeCheck(RestaurantChoiWaiter w,
-			RestaurantChoiCustomer c, double money) {
-		// TODO Auto-generated method stub
-		
-	}
-    @Override
-    public void msgMakePayment(RestaurantChoiCustomer c, double money) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	/**
 	 * Computes check for waiter
@@ -97,8 +85,47 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     //Scheduler
 	@Override
 	public boolean runScheduler() {
-		// TODO Auto-generated method stub
-		return false;
+		//market interactions
+				/*synchronized(marketBills){
+					for(int i = 0; i < markets.size(); i++){
+						if(marketBills.get(markets.get(i)) > 0){  // double rounding problems? we'll see
+							System.out.println(marketBills.get(markets.get(i)));
+							//if we don't have enough money, get money from the bank
+							//assume the restaurant is successful and has unlimited money for the quarter
+							if(money < marketBills.get(markets.get(i)) && moneyIncoming == NOT_IN_TRANSIT){
+								getMoney(restaurantBanker);
+								moneyIncoming = IN_TRANSIT;
+								return true;
+							}else if(money > marketBills.get(markets.get(i))){ // if has to pay and can pay
+								payMarketBill(markets.get(i), marketBills.get(markets.get(i)));
+								System.out.println("paying bill");
+								return true;
+							}
+						}
+					}
+				}*/
+
+				//customer interactions
+				for(int i = 0; i < checks.size(); i++){
+					if(checks.get(i).getState() == Check.NOT_FULFILLED){
+						sendToDishes(checks.get(i));
+						return true;
+					}
+				}
+				for(int i = 0; i < checks.size(); i++){
+					//if there are any bills that haven't been calculated, calculate and notify waiter.
+					if(checks.get(i).getState() == Check.RECEIVED){
+						returnCheck(checks.get(i));
+						return true;
+					}
+				}
+				for(int i = 0; i < checks.size(); i++){
+					if(checks.get(i).getState() == Check.GET_PAID){
+						returnChange(checks.get(i));
+						return true;
+					}
+				}
+				return false;
 	}
     //Actions
 

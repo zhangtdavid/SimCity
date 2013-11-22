@@ -13,11 +13,11 @@ import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiOrder;
 import city.roles.RestaurantChoiTable;
 
-public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoiWaiter  {
+public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantChoiWaiter  {
 	String name;
 	public EventLog log = new EventLog();
 	
-	public MockRestaurantChoiWaiter(String name){
+	public MockRestaurantChoiWaiter2(String name){
 	this.name = name;	
 	}
 	@Override
@@ -42,7 +42,7 @@ public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoi
  		log.add(new LoggedEvent("Received msgOrderComplete from cook."));
  		System.out.println("Order details:\n Table #:" + o.getTableNumber() + " ");
  		System.out.println("State:" + o.getState() + " ");
- 		System.out.println("Choice:" + o.getChoice() + " ");
+ 		System.out.println("Choice:" + o.getChoice() + " ");		
 	}
 
 	@Override
