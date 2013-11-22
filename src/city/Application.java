@@ -7,12 +7,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-<<<<<<< HEAD
 import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
-=======
+
 import city.buildings.BusStopBuilding;
->>>>>>> master
 import city.gui.MainFrame;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -65,7 +63,6 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-<<<<<<< HEAD
 		BankBuilding b = new BankBuilding("Bank");
         PersonAgent p1 = new PersonAgent("Manager 1", date);
         BankManagerRole p1r1 = new BankManagerRole(b);
@@ -101,9 +98,6 @@ public class Application {
         } catch (InterruptedException e) {}
         p3r1.setActive(BANK_SERVICES.moneyWithdraw, 50);
         p3.stateChanged();
-=======
-		
->>>>>>> master
 	}
 	
 	public static class CityMap {
