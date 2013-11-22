@@ -83,67 +83,67 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Go to work
 
-		if (state == State.goingToWork) {
-			processTransporationArrival();
-		}		
-		if (state == State.goingToWork) {
-			if (processTransporationArrival()) {
-				occupation.setActive();
-				state = State.atWork;
-				return true;
-			}
-		} else if (shouldGoToWork()) {
-			actGoToWork();
-			return true;
-		}
-		
-		// Leave work and go to daily tasks
-		if (state == State.leavingWork) {
-			if (!occupation.getActive()) {
-				state = pickDailyTask();
-				performDailyTaskAction();
-				return true;
-			}
-		} else if (shouldLeaveWork()) {
-			// Must go to intermediary leavingWork state to give setInactive() time to finish working
-			state = State.leavingWork;
-			occupation.setInactive();
-			return true;
-		}
-		
-		// All the daily tasks are beneath here
-		
-		if (state == State.goingToBank) {
-			if (processTransporationArrival()) {
-				// TODO tell role how much to deposit/borrow/loan
-				bankCustomerRole.setActive();
-				state = State.atBank;
-				return true;
-			}
-		}
-		if (state == State.atBank) {
-			if (!bankCustomerRole.getActive()) {
-				// The role persists, it's already inactive, so don't change or remove it
-				state = pickDailyTask();
-				performDailyTaskAction();
-				return true;
-			}
-		}
-		if (state == State.goingToPayRent) {
-			if (processTransporationArrival()) {
-				residentRole.setActive();
-				state = State.atRentPayment;
-				return true;
-			}
-		}
-		if (state == State.atRentPayment) {
-			if (!residentRole.getActive()) {
-				// The role persists, it's already inactive, so don't change or remove it
-				state = pickDailyTask();
-				performDailyTaskAction();
-				return true;
-			}
-		}
+//		if (state == State.goingToWork) {
+//			processTransporationArrival();
+//		}		
+//		if (state == State.goingToWork) {
+//			if (processTransporationArrival()) {
+//				occupation.setActive();
+//				state = State.atWork;
+//				return true;
+//			}
+//		} else if (shouldGoToWork()) {
+//			actGoToWork();
+//			return true;
+//		}
+//		
+//		// Leave work and go to daily tasks
+//		if (state == State.leavingWork) {
+//			if (!occupation.getActive()) {
+//				state = pickDailyTask();
+//				performDailyTaskAction();
+//				return true;
+//			}
+//		} else if (shouldLeaveWork()) {
+//			// Must go to intermediary leavingWork state to give setInactive() time to finish working
+//			state = State.leavingWork;
+//			occupation.setInactive();
+//			return true;
+//		}
+//		
+//		// All the daily tasks are beneath here
+//		
+//		if (state == State.goingToBank) {
+//			if (processTransporationArrival()) {
+//				// TODO tell role how much to deposit/borrow/loan
+//				bankCustomerRole.setActive();
+//				state = State.atBank;
+//				return true;
+//			}
+//		}
+//		if (state == State.atBank) {
+//			if (!bankCustomerRole.getActive()) {
+//				// The role persists, it's already inactive, so don't change or remove it
+//				state = pickDailyTask();
+//				performDailyTaskAction();
+//				return true;
+//			}
+//		}
+//		if (state == State.goingToPayRent) {
+//			if (processTransporationArrival()) {
+//				residentRole.setActive();
+//				state = State.atRentPayment;
+//				return true;
+//			}
+//		}
+//		if (state == State.atRentPayment) {
+//			if (!residentRole.getActive()) {
+//				// The role persists, it's already inactive, so don't change or remove it
+//				state = pickDailyTask();
+//				performDailyTaskAction();
+//				return true;
+//			}
+//		}
 		
 		// Otherwise sleep
 		

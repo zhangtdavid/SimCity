@@ -12,7 +12,6 @@ import city.interfaces.RestaurantChungWaiterBase;
  */
 //A Host is the manager of a restaurant who sees that all is proceeded as he wishes.
 public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
-	private String name;
 	private int nTables = 4;
 	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
 	
@@ -83,9 +82,8 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //	Constructor
 //	====================================================================
-	public RestaurantChungHostRole(String name) {
+	public RestaurantChungHostRole() {
 		super();
-		this.name = name;
 
 		// make some tables
 		tables = new Vector<Table>(nTables);
@@ -349,9 +347,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //  Utilities
 //	=====================================================================
-	public String getName() {
-		return name;
-	}
+//	public String getName() {
+//		return name;
+//	}
 
 	public List<HCustomer> getCustomers() {
 		return customers;

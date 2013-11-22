@@ -49,10 +49,9 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 //	private enum OrderStatus
 //	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 		
-	public RestaurantChungWaiterMessageCookRole(String name, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
+	public RestaurantChungWaiterMessageCookRole(RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
 		super();
 		
-		this.name = name;
 		this.host = host;
 		this.cook = cook;
 		this.cashier = cashier;
