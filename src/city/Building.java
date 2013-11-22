@@ -10,6 +10,7 @@ public abstract class Building {
 	// Data
 	
 	private String name; // Name of the building (e.g. "Market" or "RestaurantJP" or "House 1")
+	private String customerRole; // The class name of the role that interacts with this building as a customer
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
 
 	// Constructor
@@ -34,10 +35,18 @@ public abstract class Building {
 		return cash;
 	}
 	
+	public String getCustomerRole() {
+		return customerRole;
+	}
+	
 	// Setters
 	
 	public void setCash(int c){
 		this.cash = c;
+	}
+	
+	public void setCustomerRole(String c) {
+		this.customerRole = c;
 	}
 	
 	// Utilities 
