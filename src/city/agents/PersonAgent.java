@@ -29,7 +29,6 @@ public class PersonAgent extends Agent implements Person {
 	// Data
 	
 	private Date date;
-	private Date rentLastPaid;
 	private Role occupation;
 	private Building workplace;
 	private HouseBuilding home;
@@ -415,8 +414,8 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToBank() {
 		boolean disposition = false;
 		if (cash >= BANK_DEPOSIT_THRESHOLD) { disposition = true; }
-		if (rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
-		if (rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
+		if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
+		if (residentRole.rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
 		return disposition;
 	}
 	
@@ -424,7 +423,7 @@ public class PersonAgent extends Agent implements Person {
 	 * Returns true if the person should pay the landlord their rent/maintenance.
 	 */
 	private boolean shouldPayLandlord() {
-		return rentIsDue();
+		return residentRole.rentIsDue();
 	}
 	
 	/**
@@ -442,36 +441,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean shouldGoToMarket() { // TODO
 		return false;
-	}
-	
-	/**
-	 * Returns true if today is the day that rent is due
-	 * 
-	 * @return
-	 */
-	private boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int day = c.get(Calendar.DAY_OF_YEAR);
-		c.setTime(rentDueDate());
-		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);
-	}
-	
-	// TODO move elsewhere
-	/**
-	 * Takes the Date of the last rent payment and adds the set interval for
-	 * the next payment to it, returning a Date of the exact time rent is due.
-	 * 
-	 * The interval (336) should be gotten from somewhere else.
-	 * 
-	 * @return
-	 */
-	private Date rentDueDate() {
-		long interval = (Application.INTERVAL * 336);
-		Date dueDate = new Date(0);
-		dueDate.setTime(rentLastPaid.getTime() + interval);
-		return dueDate;
 	}
 	
 	/**
