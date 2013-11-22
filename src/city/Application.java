@@ -9,7 +9,6 @@ import java.util.TimerTask;
 
 import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
-
 import city.buildings.BusStopBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
