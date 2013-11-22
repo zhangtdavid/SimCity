@@ -1,5 +1,6 @@
 package city.roles;
 
+import utilities.EventLog;
 import city.Role;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
@@ -11,7 +12,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	//Data    
 	public double money = 100;
     public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
-	//public EventLog log = new EventLog(); // TODO import junit3
+	public EventLog log = new EventLog(); // TODO import junit3
 	RestaurantChoiAnimatedCashier cashierGui;
     
     //Constructor
@@ -24,20 +25,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     }
     
     //Messages
-    @Override
-    /**
-     * Computes check for waiter
-     */
-	public void msgComputeCheck(RestaurantChoiWaiter w,
-			RestaurantChoiCustomer c, double money) {
-		// TODO Auto-generated method stub
-		
-	}
-    @Override
-    public void msgMakePayment(RestaurantChoiCustomer c, double money) {
-		// TODO Auto-generated method stub
-		
-	}
+
 	@Override
 	/**
 	 * Computes check for waiter
