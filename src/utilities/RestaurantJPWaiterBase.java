@@ -13,20 +13,21 @@ import city.interfaces.RestaurantJPWaiter;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCustomerRole;
 
-public class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
-	private RestaurantJPBuilding building;
+public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
+	public RestaurantJPBuilding building;
 	private List<MyCustomer> myCustomers = new ArrayList<MyCustomer>();
 	RestaurantJPMenuClass menu = new RestaurantJPMenuClass();
 	public String name;
 	private boolean onBreak = false;
 	private boolean hasRequestedBreak = false;
 	private boolean comingBackFromBreak = false;
+	public RestaurantJPRevolvingStand revolvingStand;
 	public class MyCustomer
 	{
 		RestaurantJPCustomerRole customer;
-		String choice;
-		state s;
-		RestaurantJPTableClass table;
+		public String choice;
+		public state s;
+		public RestaurantJPTableClass table;
 		Float check;
 		
 		RestaurantJPCustomerRole getCustomer(){
@@ -43,7 +44,7 @@ public class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
 	}
 	public enum state{waiting, seated, readyToOrder, decidingOrder, ordered, reOrder, waitingForFood, foodReady, served, checkReady, checkReceived, done};
 
-	private Semaphore atDestination = new Semaphore(0,true);
+	protected Semaphore atDestination = new Semaphore(0,true);
 	public RestaurantJPWaiterAnimation waiterGui;
 	
 	public void setGui(RestaurantJPWaiterAnimation gui) {
@@ -280,17 +281,8 @@ public class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
 		myC.s = state.decidingOrder;
 		myC.customer.msgWhatWouldYouLike();
 	}
-	private void GiveOrderToCook(MyCustomer myC){
-		waiterGui.DoGoToCook();
-		try {
-			atDestination.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		myC.s = state.waitingForFood;
-		building.cook.msgHereIsAnOrder(this, myC.choice, myC.table);
-	}
+	
+	public abstract void GiveOrderToCook (MyCustomer myC);
 	
 	private void RetakeOrder(MyCustomer myC){
 		waiterGui.DoGoToTable(myC.table.tableNumber);
@@ -370,5 +362,9 @@ public class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
 
 	public void setAnimation(RestaurantJPWaiterAnimation gui) {
 		waiterGui = gui;
+	}
+	
+	public void setRevolvingStand(RestaurantJPRevolvingStand rs) {
+		revolvingStand = rs;
 	}
 }
