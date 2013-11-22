@@ -8,7 +8,7 @@ public interface RestaurantJPCook extends RoleInterface {
 	 *
 	 * Sent by the waiter prompting the customer to give cashier check after the customer is done eating.
 	 */
-	public void msgHereIsAnOrder(RestaurantJPWaiter w, String choice, RestaurantJPTableClass table);
+	public void msgHereIsAnOrder(RestaurantJPWaiter wait, String c, RestaurantJPTableClass t);
 	
 	public void msgOrderCannotBeFulfilled(String food, MarketManager m);
 	
