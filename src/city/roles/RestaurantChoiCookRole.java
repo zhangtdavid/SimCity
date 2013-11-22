@@ -14,6 +14,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 	public int marketIndex=0;
 	Semaphore inProgress = new Semaphore(0, true);
 	String name = "LeChef";
+	RestaurantChoiRevolvingStand orderqueue;
 
 	//Constructor
 	public RestaurantChoiCookRole() {
@@ -38,6 +39,10 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 			or.setState(RestaurantChoiOrder.RECOGNIZED);
 		}
 		stateChanged();
+	}
+	@Override
+	public void msgOrderInQueue(){
+		stateChanged(); // so that the cook wakes up. Then, will check the queue.
 	}
 
 	@Override
@@ -77,14 +82,17 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 
 	@Override
 	public void msgAtRefrigerator() {
+		stateChanged();
 	}
 
 	@Override
 	public void msgAtGrills() {
+		stateChanged();
 	}
 
 	@Override
 	public void msgAtPlatingArea() {
+		stateChanged();
 	} // these 3 functions didn't do anything in v2.2 anyways
 
 	//Scheduler
@@ -98,6 +106,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 					DoGoToPlates();
 					MoveFoodToPlating(orders.get(i));
 					cookGui.setOrderIcon(-1);
+					return true;
 				}
 			}
 		}
@@ -108,6 +117,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 					DoGoToGrills();
 					CookOrder(orders.get(i));
 					cookGui.setOrderIcon(-1);
+					return true;
 				}
 			}
 		}
@@ -116,14 +126,29 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 				if(orders.get(i).getState() == RestaurantChoiOrder.RECOGNIZED){
 					DoGoToRefrig();
 					AnalyzeCookOrder(orders.get(i));
+					return true;
 				}
 			}
+		}//if you have no orders in the queue, we check for orders in queue.
+		if(orderqueue != null){
+			//synchronized(orderqueue){
+				if(orderqueue.peek() != null){
+					DoGoToPlates(); // go to stand/plating
+					DoGoToRefrig();
+					RestaurantChoiOrder temp = orderqueue.poll(); // take&remove 1st in queue
+					AnalyzeCookOrder(temp); // analyze 1st in queue
+					synchronized(orders){
+						orders.add(temp); // add 1st in queue to INTERNAL orders list
+					}
+					return true;
+				}
+			//}
 		}
 		cookGui.DoLeave();
 		return false;
 	}
 
-	
+
 	//Actions
 	@Override
 	public void MoveFoodToPlating(RestaurantChoiOrder o) {
@@ -132,7 +157,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 		}
 		o.getWaiter().msgOrderComplete(o); //send this to waiter!
 		System.out.println("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
-		
+
 	}
 
 	@Override
@@ -257,24 +282,31 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 		}
 		stateChanged();
 	}
-	
+
 	//Getters	
 	@Override
 	public String getName() {
 		return name;
 	}
-
 	@Override
 	public RestaurantChoiAnimatedCook getGui() {
 		return cookGui;
 	}
-	
+	//@Override
+	public RestaurantChoiRevolvingStand getRevolvingStand() {
+		return orderqueue;
+	}
+
 	//Setters
 	@Override
 	public void setGui(RestaurantChoiAnimatedCook gui) {
-		cookGui = gui;
-		
+		cookGui = gui;	
 	}
+	//@Override
+	public void setRevolvingStand(RestaurantChoiRevolvingStand in){
+		orderqueue = in;
+	}
+
 
 	/*@Override
 	public void addMarket(Market m) {

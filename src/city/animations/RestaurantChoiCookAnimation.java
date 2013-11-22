@@ -37,7 +37,7 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 		else if (yPos > yDestination)
 			yPos-=2;
 		if (xPos == xDestination && yPos == yDestination && currentlyAcquired) {
-			//the_cook.msgRelease(); TODO deal with semaphore usage with Cook role, etc.
+			the_cook.msgRelease();
 			currentlyAcquired = false;
 		}
 	}

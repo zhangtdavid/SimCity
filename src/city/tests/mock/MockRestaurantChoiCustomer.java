@@ -15,8 +15,11 @@ import city.roles.RestaurantChoiMenu;
 
 public class MockRestaurantChoiCustomer extends MockRole implements RestaurantChoiCustomer  {
 
+	public int choice;
+	public String name;
+	
 	public MockRestaurantChoiCustomer(String name){
-		//this.name = name;
+		this.name = name;
 	}
 	@Override
 	public void msgNotifyFull(int i) {
@@ -225,7 +228,7 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	@Override
 	public String getName() {
 		// TODO Auto-generated method stub
-		return null;
+		return name;
 	}
 
 	@Override
@@ -260,8 +263,7 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 
 	@Override
 	public void setName(String n) {
-		// TODO Auto-generated method stub
-		
+		name = n;		
 	}
 
 	@Override
