@@ -1,7 +1,5 @@
 package city;
 
-import java.util.Date;
-
 import utilities.EventLog;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
@@ -19,6 +17,7 @@ public abstract class MockRole implements RoleInterface {
 	// Data
 	
 	public Person person;
+	private int salary;
 	private boolean active;
 	private boolean activity;
 	
@@ -48,6 +47,11 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
+	public int getSalary() {
+		return salary;
+	}
+	
+	@Override
 	public boolean getActive() {
 		return active;
 	}
@@ -74,6 +78,11 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
+	}
+	
+	@Override
+	public void setSalary(int s) {
+		this.salary = s;
 	}
 	
 	@Override

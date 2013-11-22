@@ -243,6 +243,11 @@ public class PersonAgent extends Agent implements Person {
 		return this.date;
 	}
 	
+	@Override
+	public int getSalary() {
+		return occupation.getSalary();
+	}
+	
 	//=========//
 	// Setters //
 	//=========//
