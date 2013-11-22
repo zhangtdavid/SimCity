@@ -20,6 +20,9 @@ import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 
+import city.gui.MainFrame;
+import city.interfaces.Person;
+
 public class Application {
 
 	public static MainFrame mainFrame;
@@ -125,6 +128,10 @@ public class Application {
 		public void addBuilding(String type, Building b) {
 			if(map.containsKey(type))
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		}
+		
+		public List<Building> getBuildings(String type){
+			return map.get(type);
 		}
 		
 	}
