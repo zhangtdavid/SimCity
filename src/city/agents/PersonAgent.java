@@ -82,7 +82,7 @@ public class PersonAgent extends Agent implements Person {
 		//-------------------/
 		
 		// Go to work
-
+/*
 		if (state == State.goingToWork) {
 			processTransporationArrival();
 		}		
@@ -144,6 +144,8 @@ public class PersonAgent extends Agent implements Person {
 				return true;
 			}
 		}
+		
+		*/
 		
 		// Otherwise sleep
 		

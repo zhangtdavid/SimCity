@@ -15,7 +15,6 @@ public class RestaurantChoiRevolvingStand {
 	synchronized public void add(RestaurantChoiOrder in){
 		ordersInQueue.add(in);
 		in.setState(RestaurantChoiOrder.IN_QUEUE);
-		cook.msgOrderInQueue();
 	}
 	
 	synchronized public RestaurantChoiOrder poll(){
