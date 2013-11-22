@@ -15,7 +15,6 @@ public interface BankTeller extends RoleInterface {
 	public void msgAddressCustomer(BankCustomerRole bc);
 	public void msgHereIsAccount(int acctNum);
 	public void msgWithdrawalFailed();
-	public void msgTransactionFailed();
 	public void msgTransactionSuccessful();
 	//From BankCustomer
 	public void msgWithdraw(int acctNum, double money, double salary);

@@ -27,16 +27,19 @@ public class BankManagerRole extends Role implements BankManager{
 // Messages
 	//from customer
 	public void msgNeedService(BankCustomerRole bc){
+		print("Need service message received");
 		customers.add(bc);
 		stateChanged();
 	}
 	public void msgDirectDeposit(int acctNum, double money, Role r){
+		print("Direct Deposit message received");
 		bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
 		directDepositer = r;
 		stateChanged();
 	}
 	//from teller
 	public void msgAvailable(BankTellerRole t){
+		print("Available message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t)
 				myT.s = state.available;
@@ -46,14 +49,17 @@ public class BankManagerRole extends Role implements BankManager{
 		stateChanged();
 	}
 	public void msgWithdraw(int acctNum, double money, BankTellerRole t){
+		print("Withdraw message received from Teller");
 		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t));
 		stateChanged();
 	}
 	public void msgCreateAccount(double money, BankTellerRole t){
+		print("Create account message received from teller");
 		bankTasks.add(new BankTask(0, type.acctCreate, money, t));
 		stateChanged();
 	}
 	public void msgCreateLoan(double amt, double monthly, int acct){
+		print("Create Loan message received from Teller");
 		building.loans.add(new Loan(amt, monthly, acct));
 		stateChanged();
 	}
