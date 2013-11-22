@@ -120,13 +120,12 @@ public class BankManagerRole extends Role implements BankManager{
 	
 // Actions
 	private boolean LoanPaymentDue() {
-		return false;
-		/*Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance();
 		c.setTime(this.getPerson().getDate());
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(LoanPayDate());
 		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);*/	
+		return (day == due);	
 	}
 	
 	private Date LoanPayDate() {
