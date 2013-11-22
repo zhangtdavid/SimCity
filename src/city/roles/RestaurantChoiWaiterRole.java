@@ -22,7 +22,7 @@ public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 
 	@Override
 	public void sendOrderToCook(int i, RestaurantChoiOrder o) {
-		DoGoToCook(); // acquire is in method; this goes to cook resting position, NOT plating
+		DoGoToCook(); // acquire is in method; this goes to cook plating
 		myCustomers.get(i).getOr().setTableNumber(myCustomers.get(i).getT()
 				.getTableNumber());
 		//synchronized(orderqueue){ // shared queue
