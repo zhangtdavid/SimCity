@@ -28,12 +28,7 @@ public class MainFrame extends JFrame {
 		this.setBounds(50, 50, WINDOWX, WINDOWY);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		this.setLayout(new BoxLayout((Container) getContentPane(), BoxLayout.X_AXIS));
-		Dimension panelDimension = new Dimension(WINDOWX,WINDOWY);
-		restaurantChoiPanel = new RestaurantChoiPanel(panelDimension);
-		restaurantChoiPanel.setPreferredSize(panelDimension);
-		restaurantChoiPanel.setMinimumSize(panelDimension);
-		restaurantChoiPanel.setMaximumSize(panelDimension);
-		this.add(restaurantChoiPanel);
+		
 	}
 
 }
