@@ -9,26 +9,24 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	BankBuilding building;
-	enum service {createAcct, withdraw};
-	public enum state {entering, requestService, inProgress, exit};
 	Application.BANK_SERVICES service;
 	BankManagerRole b;
-	double netTransaction = 0;
+	int netTransaction = 0;
 	state st;
-	double salary;
-	double amount;
+	int salary;
+	int amount;
 	BankTellerRole t;
 	int acctNum;
 	int boothNumber;
 	
-	public void setActive(Application.BANK_SERVICES s, double money){
+	public void setActive(Application.BANK_SERVICES s, int money){
 		this.service = s;
 		st = state.entering;
 		amount = money;
 	}
 	// Constructor
 	
-	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b, double money) {
+	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b, int money) {
 		building = b;
 		this.service = s;
 		st = state.entering;
@@ -36,41 +34,48 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Messages
-	
-	public void msgDepositCompleted() {
-		st = state.exit;
-	    stateChanged();
-	}
-	
 	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
+		print("WhatDoYouWant message received");
 		t = tell;
 		boothNumber = booth;
 		st = state.requestService;
 		stateChanged();
 	}
 	
+	public void msgDepositCompleted() {
+		print("DepositCompleted message received");
+		st = state.exit;
+	    stateChanged();
+	}
+	
 	public void msgAccountCreated(int acct) {
+		print("AccountCreated message received");
 		acctNum = acct;
 		stateChanged();
 	}
 	
-	public void msgHereIsWithdrawal(double money) {
+	public void msgHereIsWithdrawal(int money) {
+		print("HereIsWithdrawal message received");
 		netTransaction += money;
 		stateChanged();
 	}
 	
-	public void msgLoanGranted(double loanMoney){
+	public void msgLoanGranted(int loanMoney){
+		print("LoanGranted message received");
 		netTransaction += loanMoney;
 		stateChanged();
 	}
 	
 	public void msgTransactionCompleted(){
+		print("TransactionCompleted message received");
 		st = state.exit;
 		stateChanged();
 	}
 	
 	public void msgTransactionDenied(){
-		
+		print("TransactionDenied message received");
+		stateChanged();
+		//more to come...
 	}
 	
 	// Scheduler

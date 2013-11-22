@@ -41,7 +41,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	//From BankCustomer
-	public void msgWithdraw(int acctNum, double money, double salary){
+	public void msgWithdraw(int acctNum, int money, int salary){
 		print("Withdraw message received from Customer");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.withdrawal;
@@ -49,7 +49,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.amount = money;
 		currentCustomer.salary = salary;
 	}
-	public void msgCreateAccount(double money){
+	public void msgCreateAccount(int money){
 		print("Create account message received");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.acctCreate;
@@ -151,14 +151,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	// Utilities
-	public enum serviceState{needsService, pending, inProgress, confirmed, finished, done, failed};
-	public enum serviceType{withdrawal, acctCreate};
+
 	// Classes
 	public class MyCustomer{
 		int acctNum;
 		BankCustomerRole bc;
-		double amount;
-		double salary;
+		int amount;
+		int salary;
 		serviceState s;
 		serviceType t;
 		public MyCustomer(BankCustomerRole r){
