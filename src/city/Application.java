@@ -23,7 +23,9 @@ import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiCustomerRole;
 import city.roles.RestaurantChoiHostRole;
+import city.roles.RestaurantChoiRevolvingStand;
 import city.roles.RestaurantChoiTable;
+import city.roles.RestaurantChoiWaiter2Role;
 import city.roles.RestaurantChoiWaiterRole;
 
 public class Application {
@@ -93,7 +95,7 @@ public class Application {
 		p2.setOccupation(p2r1);
 		people.add(p2);
 		p2.startThread();
-
+		
 		PersonAgent p3 = new PersonAgent("Host 1", date);
 		RestaurantChoiHostRole p3r1 = new RestaurantChoiHostRole();
 		RestaurantChoiHostAnimation p3a1 = new RestaurantChoiHostAnimation();
@@ -106,6 +108,7 @@ public class Application {
 
 		PersonAgent p4 = new PersonAgent("Waiter 1", date);
 		RestaurantChoiWaiterRole p4r1 = new RestaurantChoiWaiterRole("Waiter 1");
+		//alternatively, test RestaurantChoiWaiter2Role
 		p4r1.setCashier(p1r1);
 		p4r1.setHost(p3r1);
 		p4r1.setCook(p2r1);
@@ -118,6 +121,10 @@ public class Application {
 		p4.setOccupation(p4r1);
 		people.add(p4);
 		p4.startThread();
+		
+		RestaurantChoiRevolvingStand rs = new RestaurantChoiRevolvingStand(p2r1);
+		p4r1.setRevolvingStand(rs);
+		p2r1.setRevolvingStand(rs);
 
 		// Set up the tables, furniture
 		RestaurantChoiFurnitureAnimation t1 = new RestaurantChoiFurnitureAnimation(0);
