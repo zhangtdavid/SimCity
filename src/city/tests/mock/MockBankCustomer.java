@@ -30,13 +30,13 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 	}
 
 	@Override
-	public void msgHereIsWithdrawal(double money) {
+	public void msgHereIsWithdrawal(int money) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgLoanGranted(double loanMoney) {
+	public void msgLoanGranted(int loanMoney) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -27,16 +27,19 @@ public class BankManagerRole extends Role implements BankManager{
 // Messages
 	//from customer
 	public void msgNeedService(BankCustomerRole bc){
+		print("Need service message received");
 		customers.add(bc);
 		stateChanged();
 	}
-	public void msgDirectDeposit(int acctNum, double money, Role r){
+	public void msgDirectDeposit(int acctNum, int money, Role r){
+		print("Direct Deposit message received");
 		bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
 		directDepositer = r;
 		stateChanged();
 	}
 	//from teller
 	public void msgAvailable(BankTellerRole t){
+		print("Available message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t)
 				myT.s = state.available;
@@ -45,15 +48,18 @@ public class BankManagerRole extends Role implements BankManager{
 		}
 		stateChanged();
 	}
-	public void msgWithdraw(int acctNum, double money, BankTellerRole t){
+	public void msgWithdraw(int acctNum, int money, BankTellerRole t){
+		print("Withdraw message received from Teller");
 		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t));
 		stateChanged();
 	}
-	public void msgCreateAccount(double money, BankTellerRole t){
+	public void msgCreateAccount(int money, BankTellerRole t){
+		print("Create account message received from teller");
 		bankTasks.add(new BankTask(0, type.acctCreate, money, t));
 		stateChanged();
 	}
-	public void msgCreateLoan(double amt, double monthly, int acct){
+	public void msgCreateLoan(int amt, int monthly, int acct){
+		print("Create Loan message received from Teller");
 		building.loans.add(new Loan(amt, monthly, acct));
 		stateChanged();
 	}
@@ -176,7 +182,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Classes
 	public class MyTeller {
 		BankTellerRole teller;
-		double salary;
+		int salary;
 		state s;
 		public MyTeller(BankTellerRole t){
 			teller = t;
@@ -187,16 +193,14 @@ public class BankManagerRole extends Role implements BankManager{
 	public class BankTask {
 		int acctNum;
 		type t;
-		double money;
+		int money;
 		BankTellerRole teller;
 		BankCustomerRole bc;
-		public BankTask(int acct, type typ, double m, BankTellerRole tell){
+		public BankTask(int acct, type typ, int m, BankTellerRole tell){
 			acctNum = acct;
 			t = typ;
 			money = m;
 			teller = tell;
 		}
 	}
-	public enum state {available, busy, gone};
-	public enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
 }

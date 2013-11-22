@@ -15,11 +15,13 @@ public class BankTellerRole extends Role implements BankTeller {
 // Messages
 	//From BankManager
 	public void msgAddressCustomer(BankCustomerRole bc){
+		print("Address Customer msg received");
 		currentCustomer = new MyCustomer(bc);
 		currentCustomer.s = serviceState.needsService;
 		stateChanged();
 	}
 	public void msgHereIsAccount(int acctNum){
+		print("Here is Account msg received");
 		if(currentCustomer.t == serviceType.acctCreate){
 			currentCustomer.acctNum = acctNum;
 			currentCustomer.s = serviceState.confirmed;
@@ -27,33 +29,34 @@ public class BankTellerRole extends Role implements BankTeller {
 		}
 	}
 	public void msgWithdrawalFailed(){
+		print("Withdrawal failed msg received");
 		if(currentCustomer.t == serviceType.withdrawal){
 			currentCustomer.s = serviceState.failed;
 			stateChanged();
 		}
 	}
-	public void msgTransactionFailed(){
-		currentCustomer.s = serviceState.confirmed;
-		stateChanged();
-	}
 	public void msgTransactionSuccessful(){
+		print("Transaction successful msg received");
 		currentCustomer.s = serviceState.finished;		//confirmed
 		stateChanged();
 	}
 	//From BankCustomer
-	public void msgWithdraw(int acctNum, double money, double salary){
+	public void msgWithdraw(int acctNum, int money, int salary){
+		print("Withdraw message received from Customer");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.withdrawal;
 		currentCustomer.acctNum = acctNum;
 		currentCustomer.amount = money;
 		currentCustomer.salary = salary;
 	}
-	public void msgCreateAccount(double money){
+	public void msgCreateAccount(int money){
+		print("Create account message received");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.acctCreate;
 		currentCustomer.amount = money;
 	}
 	public void msgDoneAndLeaving() {
+		print("Done and Leaving message received");
 		currentCustomer.s = serviceState.done;
 		stateChanged();
 	}
@@ -148,14 +151,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	// Utilities
-	public enum serviceState{needsService, pending, inProgress, confirmed, finished, done, failed};
-	public enum serviceType{withdrawal, acctCreate};
+
 	// Classes
 	public class MyCustomer{
 		int acctNum;
 		BankCustomerRole bc;
-		double amount;
-		double salary;
+		int amount;
+		int salary;
 		serviceState s;
 		serviceType t;
 		public MyCustomer(BankCustomerRole r){
