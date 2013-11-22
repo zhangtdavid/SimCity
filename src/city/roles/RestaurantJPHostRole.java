@@ -1,6 +1,7 @@
 package city.roles;
 
 import utilities.RestaurantJPTableClass;
+import utilities.RestaurantJPWaiterBase;
 
 import java.util.*;
 
@@ -71,11 +72,11 @@ public class RestaurantJPHostRole extends Role {
 		stateChanged();
 	}
 
-	public void msgWantToGoOnBreak(RestaurantJPWaiterRole waiter){
+	public void msgWantToGoOnBreak(RestaurantJPWaiterBase restaurantJPWaiterBase){
 		print("Received break request");
 		synchronized(waiters){
 		for(MyWaiter w : waiters){
-			if(w.w == waiter)
+			if(w.w == restaurantJPWaiterBase)
 				w.s = state.wantsBreak;
 		}
 		}
@@ -91,11 +92,11 @@ public class RestaurantJPHostRole extends Role {
 		stateChanged();
 	}
 	
-	public void msgOffBreak(RestaurantJPWaiterRole waiter){
+	public void msgOffBreak(RestaurantJPWaiterBase restaurantJPWaiterBase){
 		print("Off break meassage received");
 		synchronized(waiters){
 		for(MyWaiter w : waiters){
-			if(w.w == waiter)
+			if(w.w == restaurantJPWaiterBase)
 				w.s = state.available;
 		}
 		}

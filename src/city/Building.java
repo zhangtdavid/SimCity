@@ -17,6 +17,7 @@ public abstract class Building {
 
 	public Building(String name) {
 		this.name = name;
+		cash = 0;
 	}
     
     // Messages
