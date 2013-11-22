@@ -13,6 +13,7 @@ import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import city.Animation;
+import city.roles.RestaurantChungHostRole;
 
 public class RestaurantChungPanel extends JPanel implements ActionListener {
 
@@ -67,7 +68,7 @@ public class RestaurantChungPanel extends JPanel implements ActionListener {
         
         g2.setColor(Color.GRAY);
         g2.fillRect(GRILLX, GRILLY, GRILLW, GRILLL);
-        for (int i = 0; i < 3; i++) {
+        for (int i = 0; i < 4; i++) {
             //Here is the table
             g2.setColor(Color.ORANGE);
             g2.fillRect(TABLEX+((i%5)*TABLEGAP), TABLEY+((i/5)*TABLEGAP), TABLEW, TABLEH);        	
@@ -75,22 +76,21 @@ public class RestaurantChungPanel extends JPanel implements ActionListener {
 		
 		// Update the position of each visible element
 		for(Animation animation : animations) {
-			if (animation.getVisible()) {
+//			if (animation.getVisible()) {
 				animation.updatePosition();
-			}
+//			}
 		}
 
 		// Draw each visible element after updating their positions
 		// TODO generates concurrent modification exception
 		for(Animation animation : animations) {
-			if (animation.getVisible()) {
+//			if (animation.getVisible()) {
 				animation.draw(g2);
-			}
+//			}
 		}
 	}
 
 	public void addVisualizationElement(Animation ve) {
 		animations.add(ve);
-		System.out.println(animations.size());
 	}
 }

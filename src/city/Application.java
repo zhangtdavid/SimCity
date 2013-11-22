@@ -82,54 +82,61 @@ public class Application {
         RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole();
         RestaurantChungCashierAnimation p1a1 = new RestaurantChungCashierAnimation(p1r1);
         mainFrame.restaurantChungPanel.addVisualizationElement(p1a1);
-        System.out.println("here");
         p1.setOccupation(p1r1);
         people.add(p1);
         p1.startThread();
         
-//        PersonAgent p2 = new PersonAgent("Cook 1", date);
-//        RestaurantChungCookRole p2r1 = new RestaurantChungCookRole();
-//        RestaurantChungCookAnimation p2a1 = new RestaurantChungCookAnimation(p2r1);
-//        mainFrame.restaurantChungPanel.addVisualizationElement(p2a1);
-//        p2.setOccupation(p2r1);
-//        people.add(p2);
-//        p2.startThread();
-//        
-//        PersonAgent p3 = new PersonAgent("Host 1", date);
-//        RestaurantChungHostRole p3r1 = new RestaurantChungHostRole();
-//        p3.setOccupation(p3r1);
-//        people.add(p3);
-//        p3.startThread();
-//        
-//        PersonAgent p4 = new PersonAgent("Waiter 1", date);
-//        RestaurantChungWaiterBaseRole p4r1 = new RestaurantChungWaiterMessageCookRole(p3r1, p2r1, p1r1);
-//        RestaurantChungWaiterAnimation p4a1 = new RestaurantChungWaiterAnimation(p4r1);
-//        p3r1.msgWaiterAvailable(p4r1);
-//        mainFrame.restaurantChungPanel.addVisualizationElement(p4a1);
-//        p4.setOccupation(p4r1);
-//        people.add(p4);
-//        p4.startThread();
-//        
-//        // Wait for things to get in position
-//        try {
-//                Thread.sleep(4000);
-//        } catch (InterruptedException e) {}
-//        
-//        // Send in a customer
-//        PersonAgent p5 = new PersonAgent("Customer 1", date);
-//        RestaurantChungCustomerRole p5r1 = new RestaurantChungCustomerRole("c1");
-//        p5r1.setHost(p3r1);
-//        p5r1.setCashier(p1r1);
-//        RestaurantChungCustomerAnimation p5a1 = new RestaurantChungCustomerAnimation(p5r1);
-//        mainFrame.restaurantChungPanel.addVisualizationElement(p5a1);
-//        p5.addRole(p5r1);
-//        people.add(p5);
-//        p5.startThread();
-//        p5r1.gotHungry();
-//        
-//        // TODO these shouldn't be necessary, figure out why they're needed
-//        p5r1.setActive();
-//        p5.stateChanged();
+        PersonAgent p2 = new PersonAgent("Cook 1", date);
+        RestaurantChungCookRole p2r1 = new RestaurantChungCookRole();
+        RestaurantChungCookAnimation p2a1 = new RestaurantChungCookAnimation(p2r1);
+        mainFrame.restaurantChungPanel.addVisualizationElement(p2a1);
+        p2.setOccupation(p2r1);
+        people.add(p2);
+        p2.startThread();
+        
+        PersonAgent p3 = new PersonAgent("Host 1", date);
+        RestaurantChungHostRole p3r1 = new RestaurantChungHostRole();
+        p3.setOccupation(p3r1);
+        people.add(p3);
+        p3.startThread();
+        
+        System.out.println(p3r1.getNumTables());
+        
+        PersonAgent p4 = new PersonAgent("Waiter 1", date);
+        RestaurantChungWaiterBaseRole p4r1 = new RestaurantChungWaiterMessageCookRole(p3r1, p2r1, p1r1);
+        RestaurantChungWaiterAnimation p4a1 = new RestaurantChungWaiterAnimation(p4r1);
+        p4r1.setGui(p4a1);
+        p3r1.msgWaiterAvailable(p4r1);
+        mainFrame.restaurantChungPanel.addVisualizationElement(p4a1);
+        p4.setOccupation(p4r1);
+        people.add(p4);
+        p4.startThread();
+        
+    	for (int i = 0; i < p3r1.getNumTables(); i++) {
+    		p4a1.addTable(125+((i%5)*80), 200+((i/5)*80));
+    	}
+        
+        // Wait for things to get in position
+        try {
+                Thread.sleep(4000);
+        } catch (InterruptedException e) {}
+        
+        // Send in a customer
+        PersonAgent p5 = new PersonAgent("Customer 1", date);
+        RestaurantChungCustomerRole p5r1 = new RestaurantChungCustomerRole("c1");
+        p5r1.setHost(p3r1);
+        p5r1.setCashier(p1r1);
+        RestaurantChungCustomerAnimation p5a1 = new RestaurantChungCustomerAnimation(p5r1);
+        p5r1.setGui(p5a1);
+        mainFrame.restaurantChungPanel.addVisualizationElement(p5a1);
+        p5.addRole(p5r1);
+        people.add(p5);
+        p5.startThread();
+        p5r1.gotHungry();
+        
+        // TODO these shouldn't be necessary, figure out why they're needed
+        p5r1.setActive();
+        p5.stateChanged();
 	}
 	
 	public static class CityMap {

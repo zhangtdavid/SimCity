@@ -342,6 +342,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		}
 
 		host.msgTakingCustomerToTable(customer.c);
+		System.out.println(waiterGui);
 		waiterGui.DoBringToTable(customer.c, customer.table-1);
 //		customer.c.msgFollowMeToTable(this, menu);
 		
