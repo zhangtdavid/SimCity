@@ -18,6 +18,7 @@ public abstract class Role implements RoleInterface {
 	private int shiftEnd;
 	private boolean active;
 	private boolean activity;
+	private Building business;
 	
 	// Constructor
 	
@@ -66,7 +67,6 @@ public abstract class Role implements RoleInterface {
     	return activity;
     }
 	
-	
 	// Setters
 	
 	@Override
@@ -104,6 +104,7 @@ public abstract class Role implements RoleInterface {
 	public void setActivityFinished() {
 		this.activity = false;
 	}
+	
 	
 	// Utilities
 	

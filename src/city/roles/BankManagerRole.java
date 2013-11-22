@@ -18,7 +18,7 @@ public class BankManagerRole extends Role implements BankManager{
 	List<MyTeller> myTellers = new ArrayList<MyTeller>();
 	List<BankCustomerRole> customers = new ArrayList<BankCustomerRole>();
 	List<BankTask> bankTasks = new ArrayList<BankTask>();
-	Role directDepositer = null;
+	BankCustomerRole directDepositer = null;
 	private static final int loanInterval = 50;
 // Constructor
 	public BankManagerRole (BankBuilding b){
@@ -31,7 +31,7 @@ public class BankManagerRole extends Role implements BankManager{
 		customers.add(bc);
 		stateChanged();
 	}
-	public void msgDirectDeposit(int acctNum, int money, Role r){
+	public void msgDirectDeposit(int acctNum, int money, BankCustomerRole r){
 		print("Direct Deposit message received");
 		bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
 		directDepositer = r;
@@ -145,7 +145,7 @@ public class BankManagerRole extends Role implements BankManager{
 			if(a.acctNum == bT.acctNum){
 				a.balance += bT.money;
 				bankTasks.remove(bT);
-				//directDepositer.msgDepositSuccessful();
+				directDepositer.msgDepositCompleted();
 				directDepositer = null;
 			}
 		}

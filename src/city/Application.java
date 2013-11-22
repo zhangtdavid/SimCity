@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+<<<<<<< HEAD
 import city.agents.PersonAgent;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
@@ -22,6 +23,11 @@ import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungCustomerRole;
 import city.roles.RestaurantChungHostRole;
+=======
+import city.buildings.BusStopBuilding;
+import city.gui.MainFrame;
+import city.interfaces.Person;
+>>>>>>> f1122690946150d73e2bf597b33086d8e25bece2
 
 public class Application {
 
@@ -33,7 +39,8 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
+	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
+	public static enum DEPOSIT_TYPE {personal, business};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market};
 	

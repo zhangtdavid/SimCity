@@ -20,8 +20,6 @@ public interface RestaurantChoiCashier extends RoleInterface{
 
     
 	//Messages
-	public void msgComputeCheck(RestaurantChoiWaiter w, RestaurantChoiCustomer c, double money);
-	public void msgMakePayment(RestaurantChoiCustomer c, double money);
 	// public abstract void msgPayMarket(Market m, double money); // TODO
 	public void msgCompute(int choice, RestaurantChoiCustomer c,
 			RestaurantChoiWaiter restaurantChoiWaiter);
