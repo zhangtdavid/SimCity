@@ -1,26 +1,27 @@
 package city.tests;
 
 import junit.framework.TestCase;
+import city.agents.PersonAgent;
 import city.interfaces.RestaurantChoiCashier;
+import city.interfaces.RestaurantChoiCashier.Check;
+import city.interfaces.RestaurantChoiCustomer;
+import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiCashierRole;
-import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChoiCustomer;
 import city.tests.mock.MockRestaurantChoiWaiter;
-
-import java.util.concurrent.ConcurrentHashMap;
-
 import junit.framework.*;
 
 public class RestaurantChoiCashierTest extends TestCase{
 	//these are instantiated for each test separately via the setUp() method.
-	RestaurantChoiCashier cashier;
+	RestaurantChoiCashierRole cashier;
+	PersonAgent p;
 	MockRestaurantChoiWaiter waiter;
 	MockRestaurantChoiCustomer customer;
 	MockRestaurantChoiCustomer customer1;
-	/*MockMarket market;
-	MockMarket market1;
-	MockMarket market2;
-	MockBanker banker;*/
+	//MockMarket market;
+	//MockMarket market1;
+	//MockMarket market2;
+	//MockBanker banker;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -28,10 +29,13 @@ public class RestaurantChoiCashierTest extends TestCase{
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+		p = new PersonAgent("person-cashier", null);
 		cashier = new RestaurantChoiCashierRole(); // cashier has no name		
 		customer = new MockRestaurantChoiCustomer("mockcustomer");
 		customer1 = new MockRestaurantChoiCustomer("mockcustomer1");
 		waiter = new MockRestaurantChoiWaiter("mockwaiter");
+		p.addRole(cashier);
+		cashier.setPerson(p);
 		/*market = new MockMarket("mockmarket");
 		market1 = new MockMarket("mockmarket1");
 		market2 = new MockMarket("mockmarket2");
@@ -53,8 +57,8 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertTrue("Cashier should have 1000 money", cashier.money == 1000);		
 		assertTrue("Cashier should have something in marketBills.", cashier.marketBills.size() > 0);
 		assertTrue("Cashier should have something in marketBills with key market > $1.", cashier.marketBills.get(market) > 1);
-		assertTrue("Cashier should just take an action...", cashier.pickAndExecuteAnAction());
-		assertTrue("Cashier should take just one action", !cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should just take an action...", cashier.runScheduler());
+		assertTrue("Cashier should take just one action", !cashier.runScheduler());
 		assertTrue("banker should NOT have a withdrawal request", banker.withdrawalRequests.size() == 0);
 		assertTrue("Cashier should have moneyIncoming set to 0", cashier.moneyIncoming == 0);
 		assertTrue("Market should have money>0 now (since we set market money to 0)", market.money > 0);
@@ -89,8 +93,8 @@ public class RestaurantChoiCashierTest extends TestCase{
 		cashier.msgHeresMarketBill(market2, 3, 1);
 		assertTrue("Cashier should have something in marketBills with key market1 > $1.", cashier.marketBills.get(market1) > 1);
 		assertTrue("Cashier should have something in marketBills with key market2 > $1.", cashier.marketBills.get(market2) > 1);
-		assertTrue(cashier.pickAndExecuteAnAction());
-		assertTrue(cashier.pickAndExecuteAnAction());
+		assertTrue(cashier.runScheduler());
+		assertTrue(cashier.runScheduler());
 		assertTrue("Market1 should have some money now", market1.money>0);
 		assertTrue("Market2 should have some money now", market2.money>0);
 		assertTrue("banker should NOT have a withdrawal request", banker.withdrawalRequests.size() == 0);
@@ -124,7 +128,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertTrue("Cashier should have 1000 money", cashier.money == 1000);		
 		assertTrue("Cashier should have something in marketBills.", cashier.marketBills.size() > 0);
 		assertTrue("Cashier should have something in marketBills with key market > $1.", cashier.marketBills.get(market) > 1);
-		assertTrue("Cashier should just take an action...", cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should just take an action...", cashier.runScheduler());
 		assertTrue("banker should NOT have a withdrawal request", banker.withdrawalRequests.size() == 0);
 		assertTrue("Cashier should have moneyIncoming set to 0", cashier.moneyIncoming == 0);
 		assertTrue("Market should have money>0 now (since we set market money to 0)", market.money > 0);
@@ -139,20 +143,20 @@ public class RestaurantChoiCashierTest extends TestCase{
 				"MockCustomer should have an empty event log before the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
 						+ customer.log.toString(), 0, customer.log.size());
 		assertTrue("Cashier has one check request", cashier.checks.size() == 1);
-		assertTrue("Cashier should go through scheduler once", cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should go through scheduler once", cashier.runScheduler());
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
 				waiter.log.containsString("HeresCheck"));
 		assertTrue("Check should be marked as sent to waiter" , cashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
 		assertTrue("Check's bill shouldn't be 0 dollars" , cashier.checks.get(0).bill > 0);
 		assertTrue("Cashier needs exactly 1 check", cashier.checks.size() == 1);
-		assertFalse(cashier.pickAndExecuteAnAction());
+		assertFalse(cashier.runScheduler());
 		customer.choice = 2;
 		//skip irrelevant waiter-customer interactions
 		//test msgHeresMyPayment normal scenario
 		cashier.money = 100; //let's normalize money so we can compare (don't want to calculate decimal subtractions...)
 		cashier.msgHeresMyPayment(customer, 500); //loadsamone! (assume debit card used, this is balance)
 		assertEquals("state of the check should be GET_PAID but isn't", cashier.checks.get(0).getState(),Check.GET_PAID);
-		cashier.pickAndExecuteAnAction();
+		cashier.runScheduler();
 		assertTrue("MockCustomer's log should have HeresYourChange in it. But it has this instead: ",
 				customer.log.toString().contains("HeresYourChange"));
 		assertEquals("Should have no checks after payment is complete", cashier.checks.size(), 0);
@@ -166,7 +170,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		cashier.money = 100;
 		System.out.println("------------TESTING TWO CUSTOMER NORMAL SCENARIO");
 		//check preconditions
-		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.checks.size(), 0);		
+		assertEquals("Cashier should have 0 bills in it. It doesn't.",RestaurantChoiCashier.checks.size(), 0);
 		assertEquals("CashierAgent should have an empty event log before the Cashier's HereIsBill is called. Instead, the Cashier's event log reads: "
 				+ cashier.log.toString(), 0, cashier.log.size());
 		//test msgCompute
@@ -179,22 +183,22 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertEquals(
 				"MockCustomer should have an empty event log before the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
 						+ customer.log.toString(), 0, customer.log.size());
-		assertTrue("Cashier has one check request", cashier.checks.size() == 2);
-		assertTrue("Cashier should go through scheduler twice", cashier.pickAndExecuteAnAction());
-		assertTrue("Check should be marked as sent to waiter" , cashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
+		assertTrue("Cashier has one check request", RestaurantChoiCashier.checks.size() == 2);
+		assertTrue("Cashier should go through scheduler twice", cashier.runScheduler());
+		assertTrue("Check should be marked as sent to waiter" , RestaurantChoiCashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
 		assertTrue("Check's bill shouldn't be 0 dollars" , cashier.checks.get(0).bill > 0);
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
 				waiter.log.containsString("HeresCheck"));
-		assertTrue("Cashier should go through scheduler twice", cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should go through scheduler twice", cashier.runScheduler());
 		assertTrue("Check should be marked as sent to waiter" , cashier.checks.get(1).getState() == Check.GIVEN_TO_WAITER);
 		assertTrue("Check's bill shouldn't be 0 dollars" , cashier.checks.get(1).bill > 0);
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
 				waiter.log.containsString("HeresCheck"));
-		assertTrue("Cashier should go through scheduler twice", !cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should go through scheduler twice", !cashier.runScheduler());
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
 				waiter.log.containsString("HeresCheck"));
 		assertTrue("Cashier needs to have exactly 2 check", cashier.checks.size() == 2);
-		assertFalse(cashier.pickAndExecuteAnAction());
+		assertFalse(cashier.runScheduler());
 		customer.choice = 2;
 		//skip irrelevant waiter-customer interactions
 		//test msgHeresMyPayment normal scenario
@@ -203,14 +207,14 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertEquals("state of the check should be GET_PAID but isn't", cashier.checks.get(0).getState(),Check.GET_PAID);
 		
 		assertTrue("Cashier should = 100 dollars! (what he started with)", cashier.money==100);
-		assertTrue("should go through scheduler twice", cashier.pickAndExecuteAnAction());
+		assertTrue("should go through scheduler twice", cashier.runScheduler());
 		assertTrue("MockCustomer's log should have HeresYourChange in it. But it has this instead: ",
 				customer.log.toString().contains("HeresYourChange"));		
 		assertEquals("Should have one checks after payment is complete", cashier.checks.size(), 1);
 		assertTrue("Cashier should > 100 dollars! (what he started with)", cashier.money>100);
 		double temp = cashier.money;
 		System.out.println("Cashier money post payment1: " + cashier.money);
-		assertTrue("should go through scheduler twice", cashier.pickAndExecuteAnAction());
+		assertTrue("should go through scheduler twice", cashier.runScheduler());
 		assertTrue("MockCustomer's log should have HeresYourChange in it. But it has this instead: ",
 				customer1.log.toString().contains("HeresYourChange"));
 		System.out.println("Cashier money post payment2: " + cashier.money);
@@ -227,26 +231,28 @@ public class RestaurantChoiCashierTest extends TestCase{
 		customer.choice = 2;
 		customer.setName("evil");
 		assertTrue("should have no checks", cashier.checks.size() ==0);
-		cashier.msgCompute(2, (Customer)customer, (Waiter)waiter);
-		System.out.println("Cashier # of checks " + cashier.checks.size());
-		assertTrue(cashier.pickAndExecuteAnAction());
+		cashier.msgCompute(2, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
+		System.out.println("Cashier # of checks after receiving check: " + cashier.checks.size());
+		assertTrue(cashier.runScheduler());
 		assertTrue("customer should have choice 2", customer.choice==2);
 		assertTrue("customer name is evil", customer.getName().equals("evil"));
 		//test msgHeresMyPayment; didn't pay enough
 		cashier.msgHeresMyPayment(customer,0);
 		assertEquals("should have one check", cashier.checks.size(), 1);
 		assertEquals("state of the check should be NOT_FULFILLED but isn't", cashier.checks.get(0).getState(), Check.NOT_FULFILLED);
-		assertTrue("Cashier should do an action after receiving msgHeresMyPayment", cashier.pickAndExecuteAnAction());
-		assertTrue("MockCustomer's log should have DoYourDishes in it. But it has this instead: ",
-				customer.log.toString().contains("DoYourDishes"));
+		assertTrue("Cashier should do an action after receiving msgHeresMyPayment", cashier.runScheduler());
+		assertTrue("MockCustomer's log should have msgDoTheDishes in it. But it has this instead: ",
+				customer.log.toString().contains("msgDoTheDishes"));
+		System.out.println("Customer sent to dishes");
 		assertEquals("state of the check should be FULFILL_BY_DISHES but isn't", cashier.checks.get(0).getState(), Check.FULFILL_BY_DISHES);
 		assertTrue("Cashier should have no money more than before", cashier.money==0);
 		assertEquals("should have one check still; customer still doing dishes", cashier.checks.size(), 1);
 		cashier.msgDoneWithDishes(customer);
 		assertEquals("should have no checks after customer done with dishes", cashier.checks.size(), 0);
 		assertTrue("Cashier should have no money more than before", cashier.money==0);
-		System.out.println("Cashier # of checks " + cashier.checks.size());
+		System.out.println("Cashier # of checks after transaction: " + cashier.checks.size());
 	}
+}
 /*
 	public void testMarketCashierBankerInteraction()
 	{
@@ -260,13 +266,13 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertTrue("Market should have money=0 before cashier pays but doesn't",market.money == 0);
 		assertTrue("Cashier should have something in marketBills.", cashier.marketBills.size() > 0);
 		assertTrue("Cashier should have something in marketBills with key market > $1.", cashier.marketBills.get(market) > 1);
-		assertTrue("Cashier should do an action", cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should do an action", cashier.runScheduler());
 		assertTrue("banker should have a withdrawal request", banker.withdrawalRequests.size() == 1);
 		assertTrue("Cashier should have moneyIncoming set to 1", cashier.moneyIncoming == 1);
 		assertTrue("Market should have money=0 but doesn't", market.money == 0);
-		assertTrue("Banker should execute an action", banker.pickAndExecuteAnAction());
+		assertTrue("Banker should execute an action", banker.runScheduler());
 		assertTrue("Cashier asked for $1000, should have 1000, since we set money to 0", cashier.money == 1000);
-		assertTrue("Cashier should take action", cashier.pickAndExecuteAnAction());
+		assertTrue("Cashier should take action", cashier.runScheduler());
 		assertTrue("Market should have money>0 now (since we set market money to 0", market.money > 0);
 		System.out.println("Market $ " +  market.money);
 		System.out.println("Cashier $ " +  cashier.money);

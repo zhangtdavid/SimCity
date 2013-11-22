@@ -6,12 +6,11 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.concurrent.Semaphore;
 
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.roles.RestaurantChoiOrder;
+import city.roles.RestaurantChoiRevolvingStand;
 public interface RestaurantChoiCook extends RoleInterface{
 
 	//Data
@@ -19,12 +18,13 @@ public interface RestaurantChoiCook extends RoleInterface{
 	Timer timer = new Timer(); // for cooking!
 	public ConcurrentHashMap <Integer, Food> foods = new ConcurrentHashMap<Integer,Food>();
 	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>());
-
+	//RestaurantChoiRevolvingStand orderqueue = null; // this needs to be in the role specifically
 	
 	//Constructor
 	
 	//Messages
 	public void msgRelease();
+	public void msgOrderInQueue();
 	public void msgHeresAnOrder(RestaurantChoiOrder or);
 	public void msgFoodsDone(RestaurantChoiOrder o);
 	//public void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
@@ -45,7 +45,10 @@ public interface RestaurantChoiCook extends RoleInterface{
 	
 	//Setters
 	public void setGui(RestaurantChoiAnimatedCook gui);
+	//public void setRevolvingStand(RestaurantChoiRevolvingStand r);
+	//public RestaurantChoiRevolvingStand getRevolvingStand();
 	//public void addMarket(Market m);
+	
 	public void MoveFoodToPlating(RestaurantChoiOrder o);
 	public boolean AnalyzeCookOrder(RestaurantChoiOrder o);
 	public boolean CookOrder(RestaurantChoiOrder o);
@@ -83,4 +86,5 @@ public interface RestaurantChoiCook extends RoleInterface{
 			amountOrdered = 0;
 		}
 	}
+
 }

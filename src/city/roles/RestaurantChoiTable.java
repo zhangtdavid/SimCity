@@ -20,7 +20,7 @@ public class RestaurantChoiTable {
 		System.out.println(xCoord + ", " + yCoord);
 	}
 
-	int getTableNumber(){
+	public int getTableNumber(){
 		return tableNumber;
 	}
 
@@ -53,7 +53,7 @@ public class RestaurantChoiTable {
 		return occupiedBy;
 	}
 
-	boolean isOccupied() {
+	public boolean isOccupied() {
 		return occupiedBy != null;
 	}
 
