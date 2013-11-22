@@ -8,6 +8,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import city.buildings.BusStopBuilding;
+import city.buildings.RestaurantTimmsBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
 
@@ -24,7 +25,7 @@ public class Application {
 	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
 	public static enum DEPOSIT_TYPE {personal, business};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
-	public static enum BUILDING {bank, busStop, house, market};
+	public static enum BUILDING {bank, busStop, house, market, restaurant};
 	
     /**
      * Main routine to start the program.
@@ -67,6 +68,14 @@ public class Application {
 		public void addBuilding(BUILDING type, Building b) {
 			if(map.containsKey(type))
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		}
+		
+		/**
+		 * Returns a random building of type
+		 */
+		public static Building findRandomBuilding(BUILDING type) { // TODO
+			Building b = new RestaurantTimmsBuilding("placeholder");
+			return b;
 		}
 		
 		/**

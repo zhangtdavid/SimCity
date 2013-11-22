@@ -6,7 +6,7 @@ import java.util.List;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
-public class LandlordRole extends ResidentRole implements Landlord{
+public class LandlordRole extends ResidentRole implements Landlord {
 
 	// Data
 	// Murphy's Law: Anything that can go wrong will go wrong.

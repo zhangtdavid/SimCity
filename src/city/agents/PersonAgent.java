@@ -1,5 +1,7 @@
 package city.agents;
 
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
@@ -7,7 +9,6 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import city.Agent;
-import city.Application;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Building;
@@ -16,7 +17,6 @@ import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -29,7 +29,6 @@ public class PersonAgent extends Agent implements Person {
 	// Data
 	
 	private Date date;
-	private Date rentLastPaid;
 	private Role occupation;
 	private Building workplace;
 	private HouseBuilding home;
@@ -38,6 +37,8 @@ public class PersonAgent extends Agent implements Person {
 	private BusPassengerRole busPassengerRole;
 	private BankCustomerRole bankCustomerRole;
 	private ResidentRole residentRole;
+	private Role restaurantCustomerRole; // The customer role of whatever restaurant the person is in.
+	private Date lastAteAtRestaurant;
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -57,6 +58,7 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.date = startDate;
+		this.lastAteAtRestaurant = startDate;
 		
 		// TODO construct ResidentRole
 		// TODO construct BankCustomerRole
@@ -144,6 +146,22 @@ public class PersonAgent extends Agent implements Person {
 				return true;
 			}
 		}
+		if (state == State.goingToRestaurant) {
+			if (processTransporationArrival()) {
+				restaurantCustomerRole.setActive();
+				state = State.atRestaurant;
+				return true;
+			}
+		}
+		if (state == State.atRestaurant) {
+			if (!restaurantCustomerRole.getActive()) {
+				roles.remove(restaurantCustomerRole);
+				restaurantCustomerRole = null;
+				state = pickDailyTask();
+				performDailyTaskAction();
+				return true;
+			}
+		}
 		
 		// Otherwise sleep
 		
@@ -196,7 +214,6 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToPayRent() throws InterruptedException {
-		// TODO work with Ryan to ensure that the rent last paid date is updated, etc.
 		processTransportationDeparture(home);
 		state = State.goingToPayRent;
 	}
@@ -213,12 +230,22 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
-	 * Chooses a restaurant (based on some criteria) and sends the person to it by car or bus
+	 * Chooses a random restaurant and sends the person to it by car or bus
 	 * 
 	 * @throws InterruptedException
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
-		Building b = new RestaurantTimmsBuilding("placeholder"); // TODO make it choose a restaurant on some criteria
+		Building b = CityMap.findRandomBuilding(BUILDING.restaurant);
+		
+		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
+		try {
+			Class<?> c = Class.forName(b.getCustomerRole());
+			Constructor<?> r = c.getConstructor();
+			restaurantCustomerRole = (Role) r.newInstance();
+		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+			e.printStackTrace();
+		}
+		
 		processTransportationDeparture(b);
 		state = State.goingToRestaurant;
 	}
@@ -423,8 +450,8 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToBank() {
 		boolean disposition = false;
 		if (cash >= BANK_DEPOSIT_THRESHOLD) { disposition = true; }
-		if (rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
-		if (rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
+		if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
+		if (residentRole.rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
 		return disposition;
 	}
 	
@@ -432,7 +459,7 @@ public class PersonAgent extends Agent implements Person {
 	 * Returns true if the person should pay the landlord their rent/maintenance.
 	 */
 	private boolean shouldPayLandlord() {
-		return rentIsDue();
+		return residentRole.rentIsDue();
 	}
 	
 	/**
@@ -441,45 +468,29 @@ public class PersonAgent extends Agent implements Person {
 	 * The decision is made based on the cash the person has on hand and/or
 	 * the time since the person last ate at a restaurant.
 	 */
-	private boolean shouldGoToRestaurant() { // TODO
-		return false;
+	private boolean shouldGoToRestaurant() {
+		// Calculations
+		Date thresholdDate = new Date(0);
+		thresholdDate.setTime(lastAteAtRestaurant.getTime() + RESTAURANT_DINING_INTERVAL);
+		Calendar c = Calendar.getInstance();
+		c.setTime(date);
+		int today = c.get(Calendar.DAY_OF_YEAR);
+		c.setTime(thresholdDate);
+		int threshold = c.get(Calendar.DAY_OF_YEAR);
+		
+		// Decision
+		boolean disposition = false;
+		if (cash >= RESTAURANT_DINING_THRESHOLD) { disposition = true; }
+		if (today >= threshold) { disposition = true; }
+		
+		return disposition;
 	}
 	
 	/**
-	 * 
+	 * Returns true if the person needs to visit the market to buy food for cooking at home.
 	 */
 	private boolean shouldGoToMarket() { // TODO
 		return false;
-	}
-	
-	/**
-	 * Returns true if today is the day that rent is due
-	 * 
-	 * @return
-	 */
-	private boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
-		c.setTime(date);
-		int day = c.get(Calendar.DAY_OF_YEAR);
-		c.setTime(rentDueDate());
-		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);
-	}
-	
-	// TODO move elsewhere
-	/**
-	 * Takes the Date of the last rent payment and adds the set interval for
-	 * the next payment to it, returning a Date of the exact time rent is due.
-	 * 
-	 * The interval (336) should be gotten from somewhere else.
-	 * 
-	 * @return
-	 */
-	private Date rentDueDate() {
-		long interval = (Application.INTERVAL * 336);
-		Date dueDate = new Date(0);
-		dueDate.setTime(rentLastPaid.getTime() + interval);
-		return dueDate;
 	}
 	
 	/**
