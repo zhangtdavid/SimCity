@@ -42,12 +42,6 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 	}
 
 	@Override
-	public void msgTransactionCompleted() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgTransactionDenied() {
 		// TODO Auto-generated method stub
 		

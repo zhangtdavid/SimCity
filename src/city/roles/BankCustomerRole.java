@@ -20,17 +20,16 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int boothNumber;
 	
 	public void setActive(Application.BANK_SERVICES s, int money){
+		print("Customer has been set active");
 		this.service = s;
 		st = state.entering;
 		amount = money;
+		stateChanged();
 	}
 	// Constructor
 	
-	public BankCustomerRole(Application.BANK_SERVICES s, BankBuilding b, int money) {
+	public BankCustomerRole(BankBuilding b) {
 		building = b;
-		this.service = s;
-		st = state.entering;
-		amount = money;
 	}
 	
 	// Messages
@@ -51,24 +50,20 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgAccountCreated(int acct) {
 		print("AccountCreated message received");
 		acctNum = acct;
+		st = state.exit;
 		stateChanged();
 	}
 	
 	public void msgHereIsWithdrawal(int money) {
 		print("HereIsWithdrawal message received");
 		netTransaction += money;
+		st = state.exit;
 		stateChanged();
 	}
 	
 	public void msgLoanGranted(int loanMoney){
 		print("LoanGranted message received");
 		netTransaction += loanMoney;
-		stateChanged();
-	}
-	
-	public void msgTransactionCompleted(){
-		print("TransactionCompleted message received");
-		st = state.exit;
 		stateChanged();
 	}
 	

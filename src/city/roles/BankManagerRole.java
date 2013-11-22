@@ -41,11 +41,12 @@ public class BankManagerRole extends Role implements BankManager{
 	public void msgAvailable(BankTellerRole t){
 		print("Available message received");
 		for(MyTeller myT : myTellers){
-			if(myT.teller == t)
+			if(myT.teller == t){
 				myT.s = state.available;
-			else
-				myTellers.add(new MyTeller(t));
+				stateChanged();
+			}
 		}
+		myTellers.add(new MyTeller(t));
 		stateChanged();
 	}
 	public void msgWithdraw(int acctNum, int money, BankTellerRole t){
@@ -70,12 +71,15 @@ public class BankManagerRole extends Role implements BankManager{
 			for(Loan l : building.loans){
 				if(l.remaining > 0){
 					PayLoan(l);
+					return true;
 				}
 				else{
 					building.loans.remove(l);
+					return true;
 				}
 			}
 		}
+		else {
 		for(BankCustomerRole bc : customers){
 			for(MyTeller myT : myTellers){
 				if(myT.s == state.available){
@@ -102,6 +106,7 @@ public class BankManagerRole extends Role implements BankManager{
 						}
 					}
 				}
+				print("account not found");
 			}	
 			if(bT.t == type.acctCreate){
 				CreateAccount(bT);
@@ -109,17 +114,19 @@ public class BankManagerRole extends Role implements BankManager{
 			}
 		}
 		// TODO Auto-generated method stub
+		}
 		return false;
 	}
 	
 // Actions
 	private boolean LoanPaymentDue() {
-		Calendar c = Calendar.getInstance();
+		return false;
+		/*Calendar c = Calendar.getInstance();
 		c.setTime(this.getPerson().getDate());
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(LoanPayDate());
 		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);
+		return (day == due);*/	
 	}
 	
 	private Date LoanPayDate() {
@@ -161,7 +168,7 @@ public class BankManagerRole extends Role implements BankManager{
 	private void CreateAccount(BankTask bT){
 		building.accounts.add(new Account(building.accounts.size() + 1, bT.money));
 		bankTasks.remove(bT);
-		bT.teller.msgTransactionSuccessful();
+		bT.teller.msgHereIsAccount(building.accounts.size());
 	}
 	private void PayLoan(Loan l){
 		List<Account> temp = building.getAccounts();

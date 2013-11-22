@@ -1,17 +1,20 @@
 package city.roles;
 
 import city.Role;
+import city.buildings.BankBuilding;
 import city.interfaces.BankTeller;
 
 public class BankTellerRole extends Role implements BankTeller {
 	
 // Data
 	//TellerGui gui;
-	BankManagerRole b;
+	BankBuilding building;
 	int boothNumber;
 	MyCustomer currentCustomer;
-	// Constructor
-	
+// Constructor
+	public BankTellerRole (BankBuilding b){
+		building = b;
+	}
 // Messages
 	//From BankManager
 	public void msgAddressCustomer(BankCustomerRole bc){
@@ -37,7 +40,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void msgTransactionSuccessful(){
 		print("Transaction successful msg received");
-		currentCustomer.s = serviceState.finished;		//confirmed
+		currentCustomer.s = serviceState.confirmed;		//confirmed
 		stateChanged();
 	}
 	//From BankCustomer
@@ -48,12 +51,14 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.acctNum = acctNum;
 		currentCustomer.amount = money;
 		currentCustomer.salary = salary;
+		stateChanged();
 	}
 	public void msgCreateAccount(int money){
 		print("Create account message received");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.acctCreate;
 		currentCustomer.amount = money;
+		stateChanged();
 	}
 	public void msgDoneAndLeaving() {
 		print("Done and Leaving message received");
@@ -93,10 +98,7 @@ public class BankTellerRole extends Role implements BankTeller {
 					return true;
 				}
 			}
-			if(currentCustomer.s == serviceState.finished){	//confirmed?
-				FinishInteraction();
-				return true;
-			}
+
 			if(currentCustomer.s == serviceState.done){
 				GetNewCustomer();
 			}
@@ -111,14 +113,14 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void CreateAccount(){
 		currentCustomer.s = serviceState.inProgress;
-		b.msgCreateAccount(currentCustomer.amount, this);
+		building.getManager().msgCreateAccount(currentCustomer.amount, this);
 	}
 	public void GiveAccountNumber(){
 		currentCustomer.bc.msgAccountCreated(currentCustomer.acctNum);
 		currentCustomer.s = serviceState.finished;
 	}
 	public void TryWithdraw(){
-		b.msgWithdraw(currentCustomer.acctNum, currentCustomer.amount, this);
+		building.getManager().msgWithdraw(currentCustomer.acctNum, currentCustomer.amount, this);
 		currentCustomer.s = serviceState.inProgress;
 	}
 	public void TransferWithdrawal(){
@@ -132,19 +134,15 @@ public class BankTellerRole extends Role implements BankTeller {
 			//Non- norm and will hang for now
 		}
 		else if(currentCustomer.salary*2 > currentCustomer.amount){
-			b.msgCreateLoan(currentCustomer.amount, currentCustomer.amount/4, currentCustomer.acctNum);
+			building.getManager().msgCreateLoan(currentCustomer.amount, currentCustomer.amount/4, currentCustomer.acctNum);
 			currentCustomer.bc.msgLoanGranted(currentCustomer.amount);
 			currentCustomer.s = serviceState.finished;
 		}
 	}
-	public void FinishInteraction(){
-		currentCustomer.s = serviceState.inProgress;
-		currentCustomer.bc.msgTransactionCompleted();
-	}
 	
 	public void GetNewCustomer(){
 		currentCustomer = null;
-		b.msgAvailable(this);
+		building.getManager().msgAvailable(this);
 	}
 	// Getters
 	
