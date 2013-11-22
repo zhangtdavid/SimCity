@@ -12,7 +12,6 @@ import city.interfaces.RoleInterface;
  * This class implements most things required by RoleInterface so that
  * mocks themselves may focus only on their particular behaviors.
  * 
- * This class also implements the event log used by all mocks.
  */
 public abstract class MockRole implements RoleInterface {
 	
