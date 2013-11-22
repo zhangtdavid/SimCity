@@ -1,7 +1,5 @@
 package city;
 
-import java.util.Date;
-
 import utilities.EventLog;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
@@ -12,13 +10,13 @@ import city.interfaces.RoleInterface;
  * This class implements most things required by RoleInterface so that
  * mocks themselves may focus only on their particular behaviors.
  * 
- * This class also implements the event log used by all mocks.
  */
 public abstract class MockRole implements RoleInterface {
 	
 	// Data
-	
+
 	public Person person;
+	private int salary;
 	private boolean active;
 	private boolean activity;
 	
@@ -48,6 +46,11 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
+	public int getSalary() {
+		return salary;
+	}
+	
+	@Override
 	public boolean getActive() {
 		return active;
 	}
@@ -74,6 +77,11 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
+	}
+	
+	@Override
+	public void setSalary(int s) {
+		this.salary = s;
 	}
 	
 	@Override

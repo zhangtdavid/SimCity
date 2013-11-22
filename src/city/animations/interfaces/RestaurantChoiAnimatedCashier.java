@@ -1,19 +1,17 @@
 package city.animations.interfaces;
 
-import city.buildings.BusStopBuilding;
 import city.interfaces.AnimationInterface;
 
-public interface AnimatedPerson extends AnimationInterface {
-	
+public interface RestaurantChoiAnimatedCashier extends AnimationInterface{
+
 	// Data
-	
+	static final int CASHIER_X = 580;
+    static final int CASHIER_Y = -10;
 	// Constructor
 	
 	// Abstract
 	
 	// Movement
-	
-	public void goToBusStop(BusStopBuilding b);
     
     // Getters
     

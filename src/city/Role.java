@@ -13,6 +13,7 @@ public abstract class Role implements RoleInterface {
 	// Data
 	
 	private Person person;
+	private int salary;
 	private int shiftStart;
 	private int shiftEnd;
 	private boolean active;
@@ -41,6 +42,11 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
+	public int getSalary() {
+		return salary;
+	}
+	
+	@Override
 	public int getShiftStart() {
 		return shiftStart;
 	}
@@ -66,6 +72,11 @@ public abstract class Role implements RoleInterface {
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
+	}
+	
+	@Override
+	public void setSalary(int s) {
+		this.salary = s;
 	}
 	
 	@Override

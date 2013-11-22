@@ -7,8 +7,12 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+<<<<<<< HEAD
 import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
+=======
+import city.buildings.BusStopBuilding;
+>>>>>>> master
 import city.gui.MainFrame;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -17,6 +21,7 @@ import city.roles.BankTellerRole;
 
 public class Application {
 
+	private static MainFrame mainFrame;
 	private static List<Person> people = new ArrayList<Person>();
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
@@ -26,6 +31,7 @@ public class Application {
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
 	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum BUILDING {bank, busStop, house, market};
 	
     /**
      * Main routine to start the program.
@@ -36,6 +42,9 @@ public class Application {
      * @param args no input required
      */
 	public static void main(String[] args) {
+		// Open the animation GUI
+		mainFrame = new MainFrame();
+		
 		// Load a scenario
 		parseConfig();
 		
@@ -49,9 +58,6 @@ public class Application {
 			}
 		};
 		timer.scheduleAtFixedRate(tt, 0, INTERVAL);
-		
-		// Open the animation GUI
-		new MainFrame();
 	}
 	
 	/**
@@ -59,6 +65,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
+<<<<<<< HEAD
 		BankBuilding b = new BankBuilding("Bank");
         PersonAgent p1 = new PersonAgent("Manager 1", date);
         BankManagerRole p1r1 = new BankManagerRole(b);
@@ -94,18 +101,35 @@ public class Application {
         } catch (InterruptedException e) {}
         p3r1.setActive(BANK_SERVICES.moneyWithdraw, 50);
         p3.stateChanged();
+=======
+		
+>>>>>>> master
 	}
 	
 	public static class CityMap {
-		private static HashMap<String, List<Building>> map = new HashMap<String, List<Building>>();
+		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		
-		public void addBuilding(String type, Building b) {
+		public void addBuilding(BUILDING type, Building b) {
 			if(map.containsKey(type))
 				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
 		}
 		
-		public List<Building> getBuildings(String type){
-			return map.get(type);
+		/**
+		 * Return the building of type closest to the person's location
+		 */
+		public static Building findClosestBuilding(BUILDING type, Person p) { // TODO
+			Building b = new BusStopBuilding("placeholder");
+			return b;
+		}
+		
+		/**
+		 * Return the building of type closest to the destination building
+		 * 
+		 * @param b the destination you wish to reach
+		 */
+		public static Building findClosestBuilding(BUILDING type, Building b) { // TODO
+			Building d = new BusStopBuilding("placeholder");
+			return d;
 		}
 		
 	}
