@@ -8,11 +8,11 @@ import city.Application.FOOD_ITEMS;
 public class MarketOrder {
 	public static int currentID = 0;
 	
-	Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
-	Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
-	int id;
-	int bill;
-	int payment;
+	public Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
+	public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	public int id;
+	public int bill;
+	public int payment;
 	
 	public MarketOrder(HashMap<FOOD_ITEMS, Integer> o) {
         for (FOOD_ITEMS f: o.keySet()) {
@@ -24,5 +24,18 @@ public class MarketOrder {
         id = currentID++;
 		bill = 0;
 		payment = 0;
+	}
+	
+	// copy constructor
+	public MarketOrder(MarketOrder o) {
+        for (FOOD_ITEMS f: o.orderItems.keySet()) {
+        	orderItems.put(f, o.orderItems.get(f));
+        }
+        for (FOOD_ITEMS f: o.orderItems.keySet()) {
+        	collectedItems.put(f, o.collectedItems.get(f));
+        }
+        id = o.id;
+		bill = o.bill;
+		payment = o.payment;
 	}
 }
