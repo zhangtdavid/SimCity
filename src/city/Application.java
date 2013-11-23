@@ -65,9 +65,24 @@ public class Application {
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		
-		public void addBuilding(BUILDING type, Building b) {
-			if(map.containsKey(type))
-				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		/**
+		 * Adds a new building to the HashMap
+		 * 
+		 * If the map already has a key for the type of building, it adds the new building to that key's
+		 * list. If the key for that type does not exist, it creates the key and gives it a list of
+		 * length one that contains the new building.
+		 * 
+		 * @param type the type of building from the BUILDING enumeration
+		 * @param b the building to add
+		 */
+		public static void addBuilding(BUILDING type, Building b) {
+			if(map.containsKey(type)) {
+				map.get(type).add(b);
+			} else {
+				List<Building> list = new ArrayList<Building>();
+				list.add(b);
+				map.put(type, list);
+			}
 		}
 		
 		/**
