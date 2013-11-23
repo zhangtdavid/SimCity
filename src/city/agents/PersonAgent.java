@@ -366,8 +366,6 @@ public class PersonAgent extends Agent implements Person {
 	public void setOccupation(Role r) {
 		occupation = r;
 		addRole(r);
-		r.setActive();
-		r.setActivityBegun();
 	}
 	
 	@Override
