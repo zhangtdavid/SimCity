@@ -58,10 +58,12 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	public TracePanel() {
 		super();
 		this.setBorder(new BevelBorder(EtchedBorder.LOWERED));
-		this.size = new Dimension(1100, 500);
+		this.size = new Dimension(1200, 200);
 		traceTextPane = new JTextPane();
 		traceTextPane.setEditable(false);
 		traceTextPane.setPreferredSize(size);
+		traceTextPane.setMinimumSize(size);
+		traceTextPane.setMaximumSize(size);
 		// this.add(traceTextPane);
 		this.setViewportView(traceTextPane);
 
@@ -270,6 +272,15 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	@Override
 	public void alertOccurred(Alert alert) {
 		addNewAlert(alert);
+	}
+	
+	public void setDimension(Dimension d) {
+		traceTextPane.setPreferredSize(d);
+		traceTextPane.setMinimumSize(d);
+		traceTextPane.setMaximumSize(d);
+		this.setPreferredSize(d);
+		this.setMaximumSize(d);
+		this.setMinimumSize(d);
 	}
 
 }
