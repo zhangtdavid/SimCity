@@ -1,7 +1,6 @@
 package city.interfaces;
 
 import city.roles.BankCustomerRole;
-import city.roles.BankTellerRole.MyCustomer;
 
 public interface BankTeller extends RoleInterface {
 

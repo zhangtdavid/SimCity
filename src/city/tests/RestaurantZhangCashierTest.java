@@ -1,13 +1,12 @@
 package city.tests;
 
+import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
-import city.agents.PersonAgent;
 import city.roles.RestaurantZhangCashierRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangCustomer;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
-import junit.framework.*;
 
 /**
  * Restaurant Cashier Agent

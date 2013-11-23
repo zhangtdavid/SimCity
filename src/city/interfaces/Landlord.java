@@ -1,7 +1,6 @@
 package city.interfaces;
 
 import city.Application;
-import city.agents.PersonAgent;
 
 public interface Landlord {
 

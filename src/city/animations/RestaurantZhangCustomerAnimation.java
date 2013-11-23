@@ -1,9 +1,9 @@
 package city.animations;
 
+import java.awt.Color;
+import java.awt.Graphics2D;
+
 import utilities.RestaurantZhangTable;
-
-import java.awt.*;
-
 import city.Animation;
 import city.interfaces.RestaurantZhangCustomer;
 import city.roles.RestaurantZhangCustomerRole;

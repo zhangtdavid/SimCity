@@ -7,7 +7,6 @@ import city.interfaces.Person;
 import city.interfaces.RestaurantJPCook;
 import city.interfaces.RestaurantJPWaiter;
 import city.roles.RestaurantJPCashierRole;
-import city.roles.RestaurantJPCookRole.Order;
 
 public class MockRestaurantJPCook extends MockRole implements RestaurantJPCook {
 

@@ -48,6 +48,11 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
+	public Building getBusiness() {
+		return business;
+	}
+	
+	@Override
 	public int getShiftStart() {
 		return shiftStart;
 	}
@@ -77,6 +82,11 @@ public abstract class Role implements RoleInterface {
 	@Override
 	public void setSalary(int s) {
 		this.salary = s;
+	}
+	
+	@Override
+	public void setBusiness(Building b) {
+		this.business = b;
 	}
 	
 	@Override

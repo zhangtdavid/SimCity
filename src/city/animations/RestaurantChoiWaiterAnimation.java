@@ -1,11 +1,9 @@
 package city.animations;
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import city.Animation;
-import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.animations.interfaces.RestaurantChoiAnimatedWaiter;
-import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
 

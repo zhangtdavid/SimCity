@@ -2,7 +2,6 @@ package city.interfaces;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.concurrent.ConcurrentHashMap;
 
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 

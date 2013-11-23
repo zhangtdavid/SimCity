@@ -1,7 +1,6 @@
 package city.tests.mock;
 
 import city.MockRole;
-import city.Role;
 import city.interfaces.BankManager;
 import city.roles.BankCustomerRole;
 import city.roles.BankTellerRole;

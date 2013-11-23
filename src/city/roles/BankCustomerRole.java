@@ -1,6 +1,7 @@
 package city.roles;
 
 import city.Application;
+import city.Application.BANK_SERVICE;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -82,7 +83,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public boolean runScheduler() {
-		if(service == service.accountCreate){
+		if(service == BANK_SERVICE.accountCreate){
 			DirectDeposit();
 			return true;
 		}
@@ -91,11 +92,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 		if(st == state.requestService){
-			if(service == service.accountCreate){
+			if(service == BANK_SERVICE.accountCreate){
 				RequestAccount();
 				return true;
 			}
-			if(service == service.moneyWithdraw){
+			if(service == BANK_SERVICE.moneyWithdraw){
 				RequestWithdrawal();
 				return true;
 			}

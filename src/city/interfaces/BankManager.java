@@ -1,11 +1,7 @@
 package city.interfaces;
 
-import city.Role;
-import city.buildings.BankBuilding.Loan;
 import city.roles.BankCustomerRole;
 import city.roles.BankTellerRole;
-import city.roles.BankManagerRole.BankTask;
-import city.roles.BankManagerRole.MyTeller;
 
 public interface BankManager extends RoleInterface {
 

@@ -1,10 +1,6 @@
 package city.roles;
 
-import city.Role;
-import city.interfaces.RestaurantChoiCook;
 import city.interfaces.RestaurantChoiWaiterAbs;
-import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
 
 public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 

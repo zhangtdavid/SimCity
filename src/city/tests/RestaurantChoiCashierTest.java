@@ -9,7 +9,6 @@ import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiCashierRole;
 import city.tests.mock.MockRestaurantChoiCustomer;
 import city.tests.mock.MockRestaurantChoiWaiter;
-import junit.framework.*;
 
 public class RestaurantChoiCashierTest extends TestCase{
 	//these are instantiated for each test separately via the setUp() method.

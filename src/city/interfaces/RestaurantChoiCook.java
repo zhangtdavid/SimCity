@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import city.Application;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiRevolvingStand;
 public interface RestaurantChoiCook extends RoleInterface{
 
 	//Data

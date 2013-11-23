@@ -1,12 +1,16 @@
 package city.roles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ConcurrentModificationException;
+import java.util.List;
 
-import city.Role;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangWaiter;
 import utilities.RestaurantZhangTable;
+import city.Role;
+import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
+import city.interfaces.RestaurantZhangWaiter;
 
 /**
  * Restaurant Host Agent

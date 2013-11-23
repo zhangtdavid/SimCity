@@ -1,6 +1,7 @@
 package city.roles;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
+
 import city.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiRevolvingStand {

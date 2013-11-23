@@ -2,7 +2,6 @@ package city.roles;
 
 import utilities.EventLog;
 import city.Role;
-import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
