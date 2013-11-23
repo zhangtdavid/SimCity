@@ -33,7 +33,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	MarketCustomerState state;
 	
 	private enum MarketCustomerEvent
-	{NeedOrderFromMarket, OrderReady, PaymentReceived};
+	{NeedOrderFromMarket, OrderReady};
 	MarketCustomerEvent event;
 	
 //	Constructor
@@ -58,11 +58,11 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
-		state = MarketCustomerState.None;
+        event = MarketCustomerEvent.OrderReady;
         for (String item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
-        event = MarketCustomerEvent.PaymentReceived;
+		state = MarketCustomerState.None;
 	}
 	
 //  Scheduler
@@ -87,7 +87,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	private void callMarket() {
 		state = MarketCustomerState.WaitingForOrder;
-		manager.msgIWouldLikeToPlaceADeliveryOrder(this, order);			
+//		manager.msgIWouldLikeToPlaceADeliveryOrder(this, order);			
 	}
 	
 //	private void giveOrder() {

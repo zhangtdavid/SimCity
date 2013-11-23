@@ -55,10 +55,12 @@ public class MarketManagerRole extends Role implements MarketManager {
 		public MyMarketCustomer(MarketCustomer customer) {
 			this.customer = customer;
 			customerDelivery = null;
+			customerDeliveryPayment = null;
 		}
-		public MyMarketCustomer(MarketCustomerDelivery customer, Map<String, Integer> o) {
+		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
 			this.customer = null;
-			this.customerDelivery = customer;
+			customerDelivery = c;
+			customerDeliveryPayment = cPay;
 			
             for (String item: o.keySet()) {
                 order.put(item, o.get(item)); // Create a deep copy of the order map
@@ -106,7 +108,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
 		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
 		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
-		customers.add(new MyMarketCustomer(c, o));
+		customers.add(new MyMarketCustomer(c, cPay, o));
 		stateChanged();
 	}
 	
@@ -185,6 +187,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		MyMarketCustomer cd = findCustomerDelivery(e.customerDelivery);
 		e.employee.msgHereIsCustomerDeliveryOrder(cd.order);
 		e.s = MarketEmployeeState.CollectingItems;
+		customers.remove(cd);
 	}
 	
 	

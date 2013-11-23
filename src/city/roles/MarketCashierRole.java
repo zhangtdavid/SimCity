@@ -8,6 +8,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -29,6 +30,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public class Transaction {
 		MarketEmployee employee;
 		MarketCustomer customer;
+//		MarketOrder order;
 		MarketCustomerDelivery customerDelivery;
 		MarketCustomerDeliveryPayment customerDeliveryPayment;
 		Map<String, Integer> order = new HashMap<String,Integer>();
@@ -216,8 +218,8 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		if(t.customer != null) {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill);			
 		}
-		else
-			t.customerDeliveryPayment.msgHereIsBill(this, t.bill);
+//		else
+//			t.customerDeliveryPayment.msgHereIsBill(this, t.bill); TODO
 			
 	}
 	

@@ -20,7 +20,7 @@ public class Application {
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICES {accountCreate, moneyWithdraw};
-	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum FOOD_ITEMS {chicken, pizza, salad, steak};
 	
     /**
      * Main routine to start the program.
