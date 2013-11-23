@@ -12,8 +12,8 @@ import city.Agent;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
-import city.Application.TRANSACTION_TYPE;
 import city.Application.MARKET_ITEM;
+import city.Application.TRANSACTION_TYPE;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -89,7 +89,7 @@ public class PersonAgent extends Agent implements Person {
 		//-------------------/
 		
 		// Go to work	
-		/*if (state == State.goingToWork) {
+		if (state == State.goingToWork) {
 			if (processTransportationArrival()) {
 				occupation.setActive();
 				state = State.atWork;
@@ -205,10 +205,11 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
+		
 		//----------------/
 		// Role Scheduler /
 		//----------------/
-		*/
+		
 		boolean blocking = false;
 		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
