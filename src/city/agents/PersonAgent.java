@@ -89,7 +89,7 @@ public class PersonAgent extends Agent implements Person {
 		//-------------------/
 		
 		// Go to work	
-		if (state == State.goingToWork) {
+		/*if (state == State.goingToWork) {
 			if (processTransportationArrival()) {
 				occupation.setActive();
 				state = State.atWork;
@@ -205,11 +205,10 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
-		
 		//----------------/
 		// Role Scheduler /
 		//----------------/
-
+		*/
 		boolean blocking = false;
 		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
@@ -366,6 +365,8 @@ public class PersonAgent extends Agent implements Person {
 	public void setOccupation(Role r) {
 		occupation = r;
 		addRole(r);
+		r.setActive();
+		r.setActivityBegun();
 	}
 	
 	@Override

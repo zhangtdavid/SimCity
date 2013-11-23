@@ -2,6 +2,7 @@ package city.roles;
 
 import city.Role;
 import city.buildings.BankBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 
 public class BankTellerRole extends Role implements BankTeller {
@@ -10,14 +11,14 @@ public class BankTellerRole extends Role implements BankTeller {
 	//TellerGui gui;
 	BankBuilding building;
 	int boothNumber;
-	MyCustomer currentCustomer;
+	public MyCustomer currentCustomer;
 // Constructor
 	public BankTellerRole (BankBuilding b){
 		building = b;
 	}
 // Messages
 	//From BankManager
-	public void msgAddressCustomer(BankCustomerRole bc){
+	public void msgAddressCustomer(BankCustomer bc){
 		print("Address Customer msg received");
 		currentCustomer = new MyCustomer(bc);
 		currentCustomer.s = serviceState.needsService;
@@ -57,7 +58,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		stateChanged();
 	}
 	public void msgDeposit(int money, int acctNum){
-		print("Create account message received");
+		print("Deposit message received");
 		currentCustomer.s = serviceState.pending;
 		currentCustomer.t = serviceType.deposit;
 		currentCustomer.amount = money;
@@ -157,13 +158,13 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Classes
 	public class MyCustomer{
 		int acctNum;
-		BankCustomerRole bc;
+		BankCustomer bc;
 		int amount;
 		int salary;
 		serviceState s;
 		serviceType t;
-		public MyCustomer(BankCustomerRole r){
-			bc = r;
+		public MyCustomer(BankCustomer bc2){
+			bc = bc2;
 		}
 	}
 }
