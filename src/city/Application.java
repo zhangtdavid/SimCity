@@ -144,7 +144,7 @@ public class Application {
 		}
 	
 		public static BankBuilding findBank(){
-			return (BankBuilding) map.get(BUILDING.bank);
+			return (BankBuilding) map.get(BUILDING.bank).get(0);
 		}
 		/**
 		 * Return the building of type closest to the destination building
