@@ -5,8 +5,8 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
-import city.trace.AlertLog;
-import city.trace.AlertTag;
+import trace.AlertLog;
+import trace.AlertTag;
 
 public class CityViewPanel extends CityPanel implements MouseMotionListener {
 

@@ -1,4 +1,4 @@
-package city.trace;
+package trace;
 
 /**
  * Alert levels to be used with AlertLog. Read comments below for more
