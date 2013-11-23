@@ -56,7 +56,7 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public void msgHereIsPayment(MarketCustomerDelivery c, int money) {
+	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
 		// TODO Auto-generated method stub
 		
 	}

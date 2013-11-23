@@ -29,11 +29,11 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	int bill;
 	
 	private enum MarketCustomerState
-	{None, WaitingForService, WaitingForOrder, Paying, WaitingForDelivery};
+	{None, WaitingForOrder, Paying, WaitingForDelivery};
 	MarketCustomerState state;
 	
 	private enum MarketCustomerEvent
-	{NeedOrderFromMarket, AskedForOrder, OrderReady, PaymentReceived};
+	{NeedOrderFromMarket, OrderReady, PaymentReceived};
 	MarketCustomerEvent event;
 	
 //	Constructor
@@ -47,13 +47,13 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Messages
 //	=====================================================================	
-	public void msgWhatWouldYouLike(MarketEmployee e) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
-		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
-		event = MarketCustomerEvent.AskedForOrder;
-		employee = e;
-		stateChanged();
-	}
+//	public void msgWhatWouldYouLike(MarketEmployee e) {
+//		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
+//		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
+//		event = MarketCustomerEvent.AskedForOrder;
+//		employee = e;
+//		stateChanged();
+//	}
 	
 	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
@@ -74,10 +74,10 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 			callMarket();
 			return true;
 		}
-		if (state == MarketCustomerState.WaitingForService && event == MarketCustomerEvent.AskedForOrder) {
-			giveOrder();
-			return true;
-		}
+//		if (state == MarketCustomerState.WaitingForService && event == MarketCustomerEvent.AskedForOrder) {
+//			giveOrder();
+//			return true;
+//		}
 		return false;
 	}
 
@@ -86,14 +86,14 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //  Actions
 //	=====================================================================	
 	private void callMarket() {
-		state = MarketCustomerState.WaitingForService;
-		manager.msgIWouldLikeToPlaceADeliveryOrder(this);			
+		state = MarketCustomerState.WaitingForOrder;
+		manager.msgIWouldLikeToPlaceADeliveryOrder(this, order);			
 	}
 	
-	private void giveOrder() {
-		state = MarketCustomerState.WaitingForOrder;
-		employee.msgHereIsMyDeliveryOrder(this, order);	
-	}
+//	private void giveOrder() {
+//		state = MarketCustomerState.WaitingForOrder;
+//		employee.msgHereIsMyDeliveryOrder(this, order);	
+//	}
 
 //  Getters and Setters
 //	=====================================================================

@@ -217,7 +217,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill);			
 		}
 		else
-			t.customerDeliveryPayment.msgHereIsBill(t.bill);
+			t.customerDeliveryPayment.msgHereIsBill(this, t.bill);
 			
 	}
 	

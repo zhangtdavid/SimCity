@@ -30,11 +30,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	int bill;
 	
 	private enum MarketCustomerState
-	{None, WaitingForService, WaitingForOrder, Paying, WaitingForDelivery};
+	{None, Paying};
 	MarketCustomerState state;
 	
 	private enum MarketCustomerEvent
-	{NeedOrderFromMarket, AskedForOrder, OrderReady, PaymentReceived};
+	{OrderReady, PaymentReceived};
 	MarketCustomerEvent event;
 	
 //	Constructor
@@ -59,7 +59,6 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public void msgPaymentReceived() {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
-		state = MarketCustomerState.WaitingForDelivery;
 	}
 	
 //  Scheduler
@@ -67,7 +66,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 
 	@Override
 	public boolean runScheduler() {
-		if (state == MarketCustomerState.WaitingForOrder && event == MarketCustomerEvent.OrderReady) {
+		if (state == MarketCustomerState.None && event == MarketCustomerEvent.OrderReady) {
 			pay();
 			return true;
 		}

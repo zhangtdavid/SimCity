@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.util.Map;
+
 import utilities.EventLog;
 import city.MockRole;
 import city.buildings.MarketBuilding;
@@ -36,7 +38,13 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	}
 
 	@Override
-	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c) {
+	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee marketEmployee) {
 		// TODO Auto-generated method stub
 		
 	}

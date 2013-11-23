@@ -21,14 +21,14 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	
 	@Override
 	public void msgWhatWouldYouLike(MarketEmployee e) {
-		log.add(new LoggedEvent("Customer received msgHereIsOrder from employee."));		
-		System.out.println("Customer received msgHereIsOrder from employee.");		
+		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrder from employee."));		
+		System.out.println("CustomerDelivery received msgHereIsOrder from employee.");		
 	}
 
 	@Override
 	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
-		log.add(new LoggedEvent("Customer received msgHereIsOrder from deliveryPerson."));		
-		System.out.println("Customer received msgHereIsOrder from deliveryPerson.");		
+		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrder from deliveryPerson."));		
+		System.out.println("CustomerDelivery received msgHereIsOrder from deliveryPerson.");		
 	}
 
 }

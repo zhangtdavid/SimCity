@@ -81,6 +81,16 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		stateChanged();
 	}
 	
+	public void msgHereIsCustomerDeliveryOrder(Map<String, Integer> o) {
+		log.add(new LoggedEvent("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager."));
+		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager.");
+		event = MarketEmployeeEvent.OrderReceived;
+        for (String item: o.keySet()) {
+            order.put(item, o.get(item)); // Create a deep copy of the order map
+        }
+        stateChanged();
+	}
+	
 //	Customer
 //	---------------------------------------------------------------
 	public void msgHereIsMyOrder(MarketCustomer c, Map<String, Integer> o) {
@@ -95,17 +105,17 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		}
 	}
 
-	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
-		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
-		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
-		if (customerDelivery == c) { // Makes sure it is the same customer
-			event = MarketEmployeeEvent.OrderReceived;
-            for (String item: o.keySet()) {
-                order.put(item, o.get(item)); // Create a deep copy of the order map
-            }
-            stateChanged();
-		}
-	}
+//	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
+//		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
+//		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
+//		if (customerDelivery == c) { // Makes sure it is the same customer
+//			event = MarketEmployeeEvent.OrderReceived;
+//            for (String item: o.keySet()) {
+//                order.put(item, o.get(item)); // Create a deep copy of the order map
+//            }
+//            stateChanged();
+//		}
+//	}
 
 //	Animation
 //	---------------------------------------------------------------
@@ -159,7 +169,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			customerDelivery.msgWhatWouldYouLike(this);
+			manager.msgWhatWouldCustomerDeliveryLike(this);
 		}
 	
 	private void collectItems() {
