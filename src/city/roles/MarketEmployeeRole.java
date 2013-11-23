@@ -10,6 +10,7 @@ import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 
@@ -27,6 +28,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	private MarketCashier cashier;
 	private MarketCustomer customer;
 	private MarketCustomerDelivery customerDelivery;
+	private MarketCustomerDeliveryPayment customerDeliveryPayment;
 	
 	private enum MarketEmployeeState
 	{None, AskedForOrder};
@@ -65,15 +67,17 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = c;
 		customerDelivery = null;
+		customerDeliveryPayment = null;
 		stateChanged();
 	}
 	
-	public void msgAssistCustomerDelivery(MarketCustomerDelivery c) {
+	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = null;
 		customerDelivery = c;
+		customerDeliveryPayment = cPay;
 		stateChanged();
 	}
 	
@@ -182,7 +186,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	if (customer != null)
         		cashier.msgComputeBill(this, customer, order, collectedItems);
         	else
-        		cashier.msgComputeBill(this, customerDelivery, order, collectedItems);
+        		cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems);
 //        	marketEmployeeGui.doGoToCounter();
 //    		try {
 //			atCounter.acquire();

@@ -28,8 +28,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	int loc;
 	
-	double money;
-	double bill;
+	int money;
+	int bill;
 	
 	private enum MarketCustomerState
 	{None, WaitingForService, WaitingForOrder, Paying};
@@ -73,7 +73,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();
 	}
 	
-	public void msgHereIsOrderandBill(Map<String, Integer> collectedItems, double bill) {
+	public void msgHereIsOrderandBill(Map<String, Integer> collectedItems, int bill) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
 		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
@@ -160,8 +160,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//		double payment = checkBill(); TODO
-//		cashier.msgHereIsPayment(this, payment);			
+		int payment = checkBill();
+		cashier.msgHereIsPayment(this, payment);			
 	}
 	
 	private void leaveMarket() {
@@ -202,6 +202,17 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //  Utilities
 //	=====================================================================	
+	public int checkBill() {
+		int tempBill = 0;
+        for (String item: order.keySet()) {
+        	tempBill += order.get(item)*market.prices.get(item);
+        }
 
+        if (tempBill == bill)
+        	return bill;
+        
+		return -1;
+	}
+	
 	// Classes
 }

@@ -12,7 +12,7 @@ public interface MarketCustomer extends RoleInterface {
 	
 	public abstract void msgAnimationArrivedAtMarket();
 	public abstract void msgWhatWouldYouLike(MarketEmployee e, int loc);
-	public abstract void msgHereIsOrderandBill(Map<String, Integer> collectedItems, double bill);
+	public abstract void msgHereIsOrderandBill(Map<String, Integer> collectedItems, int bill);
 	public abstract void msgPaymentReceived();
 
 	// Scheduler

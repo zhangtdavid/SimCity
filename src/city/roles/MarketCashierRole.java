@@ -12,6 +12,7 @@ import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.Role;
@@ -29,16 +30,18 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		MarketEmployee employee;
 		MarketCustomer customer;
 		MarketCustomerDelivery customerDelivery;
+		MarketCustomerDeliveryPayment customerDeliveryPayment;
 		Map<String, Integer> order = new HashMap<String,Integer>();
 		Map<String, Integer> collectedItems = new HashMap<String,Integer>();
-		public double bill;
-		public double payment;
+		public int bill;
+		public int payment;
 		public TransactionState s;
 		
 		public Transaction(MarketEmployee e, MarketCustomer c, Map<String, Integer> o, Map<String, Integer> i) {
 			employee = e;
 			customer = c;
 			customerDelivery = null;
+			customerDeliveryPayment = null;
 	        for (String s: o.keySet()) {
 	        	order.put(s, o.get(s)); // copies all values in customer's order
 	        }
@@ -50,10 +53,11 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        s = TransactionState.Pending;
 	    }
 		
-		public Transaction(MarketEmployee e, MarketCustomerDelivery c, Map<String, Integer> o, Map<String, Integer> i) {
+		public Transaction(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o, Map<String, Integer> i) {
 			employee = e;
 			customer = null;
 			customerDelivery = c;
+			customerDeliveryPayment = cPay;
 	        for (String s: o.keySet()) {
 	        	order.put(s, o.get(s)); // copies all values in customer's order
 	        }
@@ -117,7 +121,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		stateChanged();
 	}
 	
-	public void msgHereIsPayment(MarketCustomer c, double money) {
+	public void msgHereIsPayment(MarketCustomer c, int money) {
 		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer In Person for " + money));
 		System.out.println("Market Cashier received msgHereIsPayment from Customer In Person for " + money);
 		Transaction t = findTransaction(c);
@@ -128,16 +132,16 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
-	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, Map<String, Integer> order, Map<String, Integer> collectedItems) {
+	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> order, Map<String, Integer> collectedItems) {
 		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Customer Delivery."));
 		System.out.println("Market Cashier received msgComputeBill from Customer Delivery");
-		transactions.add(new Transaction(e, c, order, collectedItems));		
+		transactions.add(new Transaction(e, c, cPay, order, collectedItems));		
 		stateChanged();
 	}
 	
-	public void msgHereIsPayment(MarketCustomerDelivery c, double money) {
-		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Delivery for " + money));
-		System.out.println("Market Cashier received msgHereIsPayment from Customer Delivery for " + money);
+	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
+		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money));
+		System.out.println("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money);
 		Transaction t = findTransaction(c);
 		t.payment = money;
 		t.s = TransactionState.ReceivedPayment;		
@@ -213,7 +217,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill);			
 		}
 		else
-			t.customerDelivery.msgHereIsBill(t.bill);
+			t.customerDeliveryPayment.msgHereIsBill(t.bill);
 			
 	}
 	
@@ -228,7 +232,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.remove(t);
 		}
 		else {
-			t.customerDelivery.msgPaymentReceived();
+			t.customerDeliveryPayment.msgPaymentReceived();
 			market.money += t.payment;
 			for(MyDeliveryPerson dt : deliveryPeople ){
 				if(dt.available == true) {
@@ -268,6 +272,15 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	private Transaction findTransaction(MarketCustomerDelivery c) {
 		for(Transaction t : transactions){
 			if(t.customerDelivery == c) {
+				return t;		
+			}
+		}
+		return null;
+	}
+	
+	private Transaction findTransaction(MarketCustomerDeliveryPayment c) {
+		for(Transaction t : transactions){
+			if(t.customerDeliveryPayment == c) {
 				return t;		
 			}
 		}

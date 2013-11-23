@@ -26,18 +26,6 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	}
 
 	@Override
-	public void msgHereIsBill(double bill) {
-		log.add(new LoggedEvent("Customer received msgHereIsBill from cashier. The bill is for " + bill));		
-		System.out.println("Customer received msgHereIsBill from cashier. The bill is for " + bill);		
-	}
-
-	@Override
-	public void msgPaymentReceived() {
-		log.add(new LoggedEvent("Customer received msgPaymentReceived from cashier."));		
-		System.out.println("Customer received msgPaymentReceived from cashier.");		
-	}
-
-	@Override
 	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
 		log.add(new LoggedEvent("Customer received msgHereIsOrder from deliveryPerson."));		
 		System.out.println("Customer received msgHereIsOrder from deliveryPerson.");		

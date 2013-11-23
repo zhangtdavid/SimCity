@@ -8,11 +8,12 @@ import utilities.LoggedEvent;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.Role;
 
-public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
+public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
 
 //  Data
 //	=====================================================================	
@@ -20,12 +21,12 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 	private MarketBuilding market;
 	private MarketManager manager;
-	private MarketEmployee employee;
+	private MarketCashier cashier;
 	
 	private Map<String, Integer> order = new HashMap<String, Integer>();
     private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
 		
-	int money;
+	double money;
 	int bill;
 	
 	private enum MarketCustomerState
@@ -38,7 +39,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole() {
+	public MarketCustomerDeliveryPaymentRole() {
 		super(); // TODO
         for (String s: order.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
@@ -47,22 +48,18 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Messages
 //	=====================================================================	
-	public void msgWhatWouldYouLike(MarketEmployee e) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
-		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
-		event = MarketCustomerEvent.AskedForOrder;
-		employee = e;
+	public void msgHereIsBill(int bill) {
+		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Cashier."));
+		System.out.println("Market customerDelivery received msgHereIsOrderandBill from Market Cashier.");
+		event = MarketCustomerEvent.OrderReady;
+        this.bill = bill;
 		stateChanged();
 	}
-	
-	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
-		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
-		state = MarketCustomerState.None;
-        for (String item: collectedItems.keySet()) {
-            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
-        }
-        event = MarketCustomerEvent.PaymentReceived;
+		
+	public void msgPaymentReceived() {
+		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
+		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
+		state = MarketCustomerState.WaitingForDelivery;
 	}
 	
 //  Scheduler
@@ -70,12 +67,8 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 	@Override
 	public boolean runScheduler() {
-		if (state == MarketCustomerState.None && event == MarketCustomerEvent.NeedOrderFromMarket) {
-			callMarket();
-			return true;
-		}
-		if (state == MarketCustomerState.WaitingForService && event == MarketCustomerEvent.AskedForOrder) {
-			giveOrder();
+		if (state == MarketCustomerState.WaitingForOrder && event == MarketCustomerEvent.OrderReady) {
+			pay();
 			return true;
 		}
 		return false;
@@ -84,15 +77,11 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 	
 //  Actions
-//	=====================================================================	
-	private void callMarket() {
-		state = MarketCustomerState.WaitingForService;
-		manager.msgIWouldLikeToPlaceADeliveryOrder(this);			
-	}
-	
-	private void giveOrder() {
-		state = MarketCustomerState.WaitingForOrder;
-		employee.msgHereIsMyDeliveryOrder(this, order);	
+//	=====================================================================
+	private void pay() {
+		state = MarketCustomerState.Paying;
+		int payment = checkBill();
+		cashier.msgHereIsPayment(this, payment);			
 	}
 
 //  Getters and Setters
@@ -115,9 +104,28 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 		this.manager = manager;
 	}
 	
+	// Cashier
+	public MarketCashier getCashier() {
+		return cashier;
+	}
+	
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}	
+	
 //  Utilities
 //	=====================================================================
-	
+	public int checkBill() {
+		int tempBill = 0;
+        for (String item: order.keySet()) {
+        	tempBill += order.get(item)*market.prices.get(item);
+        }
+
+        if (tempBill == bill)
+        	return bill;
+        
+		return -1;
+	}	
 
 	
 	// Classes

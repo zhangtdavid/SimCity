@@ -9,6 +9,7 @@ import utilities.LoggedEvent;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.Role;
@@ -43,6 +44,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	private class MyMarketCustomer {
 		MarketCustomer customer;
 		MarketCustomerDelivery customerDelivery;
+		MarketCustomerDeliveryPayment customerDeliveryPayment;
 		
 		public MyMarketCustomer(MarketCustomer customer) {
 			this.customer = customer;
@@ -146,7 +148,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		if (c.customer != null)
 			e.employee.msgAssistCustomer(c.customer);
 		else
-			e.employee.msgAssistCustomerDelivery(c.customerDelivery);
+			e.employee.msgAssistCustomerDelivery(c.customerDelivery, c.customerDeliveryPayment);
 		e.s = MarketEmployeeState.CollectingItems;
 		customers.remove(c);
 			
