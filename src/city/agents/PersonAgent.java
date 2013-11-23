@@ -12,7 +12,7 @@ import city.Agent;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
-import city.Application.DEPOSIT_TYPE;
+import city.Application.TRANSACTION_TYPE;
 import city.Application.MARKET_ITEM;
 import city.Building;
 import city.Role;
@@ -122,7 +122,7 @@ public class PersonAgent extends Agent implements Person {
 				BANK_SERVICE choice = BANK_SERVICE.none;
 				int money = 0;
 				if (cash >= BANK_DEPOSIT_THRESHOLD) { 
-					choice = BANK_SERVICE.directDeposit; 
+					choice = BANK_SERVICE.atmDeposit; 
 					money = BANK_DEPOSIT_SUM;
 				} else if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { 
 					choice = BANK_SERVICE.moneyWithdraw; 
@@ -130,7 +130,7 @@ public class PersonAgent extends Agent implements Person {
 				}
 				
 				// Start the role
-				bankCustomerRole.setActive(choice, money, DEPOSIT_TYPE.personal);
+				bankCustomerRole.setActive(choice, money, TRANSACTION_TYPE.personal);
 				state = State.atBank;
 				return true;
 			}
