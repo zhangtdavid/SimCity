@@ -9,9 +9,9 @@ import java.awt.event.ActionListener;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
-import city.trace.AlertLevel;
-import city.trace.AlertLog;
-import city.trace.AlertTag;
+import trace.AlertLevel;
+import trace.AlertLog;
+import trace.AlertTag;
 
 public class CityControlPanel extends JPanel implements ActionListener{
 
