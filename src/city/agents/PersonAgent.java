@@ -66,7 +66,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		
 		residentRole = new ResidentRole(startDate);
-		bankCustomerRole = new BankCustomerRole(); // TODO fix when JP updates
+		bankCustomerRole = new BankCustomerRole();
 	}
 	
 	//==========//
@@ -145,7 +145,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (state == State.goingToPayRent) {
 			if (processTransportationArrival()) {
-				residentRole.setActive(); // TODO work with Ryan to make sure this works
+				residentRole.setActive();
 				state = State.atRentPayment;
 				return true;
 			}

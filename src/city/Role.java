@@ -119,8 +119,8 @@ public abstract class Role implements RoleInterface {
 	// Utilities
 	
 	protected void stateChanged() {
-		person.stateChanged();
 		activity = true;
+		person.stateChanged();
 	}
 	
     protected void print(String msg) {
