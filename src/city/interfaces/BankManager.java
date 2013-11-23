@@ -7,7 +7,7 @@ public interface BankManager extends RoleInterface {
 
 	// Data
 	public enum state {available, busy, gone};
-	public enum type {deposit, directDeposit, withdrawal, loanPayment, acctCreate};
+	public enum type {deposit, atmDeposit, withdrawal, loanPayment, acctCreate};
 	static final int LoanInterval = 50;
 	// Constructor
 	
@@ -20,7 +20,7 @@ public interface BankManager extends RoleInterface {
 	
 	public void msgWithdraw(int acctNum, int money, BankTellerRole t);
 
-	public void msgCreateAccount(int money, BankTellerRole t);
+	public void msgTryDeposit(int money, int acctNum, BankTellerRole t);
 
 	public void msgCreateLoan(int amt, int monthly, int acct);
 	

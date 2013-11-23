@@ -12,30 +12,35 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Data
 	BankBuilding building;
 	Building business;
-	Application.DEPOSIT_TYPE depositType;
+	Application.TRANSACTION_TYPE depositType;
 	Application.BANK_SERVICE service;
 	BankManagerRole b;
 	int netTransaction = 0;
 	state st;
 	int amount;
 	BankTellerRole t;
-	int acctNum;
+	int acctNum = -1;
 	int boothNumber;
 	
-	public void setActive(Application.BANK_SERVICE s, int money, Application.DEPOSIT_TYPE t){
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
 		print("Customer has been set active");
 		this.service = s;
 		this.depositType = t;
 		amount = money;
-		if(s != Application.BANK_SERVICE.directDeposit)
+		if(s != Application.BANK_SERVICE.atmDeposit)
 			st = state.entering;
 		stateChanged();
 	}
 	// Constructor
 	
-	public BankCustomerRole(BankBuilding b, Building bus) {
-		building = b;
+	public BankCustomerRole(Building bus) { //could change back to building = b, don't like cast
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(Application.BUILDING.bank);
 		business = bus;
+	}
+	
+	public BankCustomerRole(){		//could change back to building = b
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(Application.BUILDING.bank);
+		st = state.entering;
 	}
 	
 	// Messages
@@ -83,7 +88,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public boolean runScheduler() {
-		if(service == BANK_SERVICE.accountCreate){
+		if(service == BANK_SERVICE.atmDeposit){
 			DirectDeposit();
 			return true;
 		}
@@ -92,8 +97,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 		if(st == state.requestService){
-			if(service == BANK_SERVICE.accountCreate){
-				RequestAccount();
+			if(service == BANK_SERVICE.deposit){
+				Deposit();
 				return true;
 			}
 			if(service == BANK_SERVICE.moneyWithdraw){
@@ -118,10 +123,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
-	public void RequestAccount(){
+	public void Deposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
-		t.msgCreateAccount(amount);
+		t.msgDeposit(amount, acctNum);
 	}
 	
 	public void RequestWithdrawal(){
@@ -131,11 +136,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void ExitBank(){
 		st = state.inProgress;
-		if(service != Application.BANK_SERVICE.directDeposit)
+		if(service != Application.BANK_SERVICE.atmDeposit)
 			t.msgDoneAndLeaving();
-		if(depositType == Application.DEPOSIT_TYPE.business)
+		if(depositType == Application.TRANSACTION_TYPE.business)
 			business.setCash(building.getCash() + netTransaction);
-		else if (depositType == Application.DEPOSIT_TYPE.personal)
+		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
 	}

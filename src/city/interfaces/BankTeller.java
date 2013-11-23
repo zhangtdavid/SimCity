@@ -5,8 +5,8 @@ import city.roles.BankCustomerRole;
 public interface BankTeller extends RoleInterface {
 
 	// Data
-	public enum serviceState{needsService, pending, inProgress, confirmed, finished, done, failed};
-	public enum serviceType{withdrawal, acctCreate};
+	public enum serviceState{needsService, pending, inProgress, confirmed, newAccount, finished, done, failed};
+	public enum serviceType{withdrawal, deposit};
 	// Constructor
 	
 	// Messages
@@ -16,7 +16,7 @@ public interface BankTeller extends RoleInterface {
 	public void msgTransactionSuccessful();
 	//From BankCustomer
 	public void msgWithdraw(int acctNum, int money, int salary);
-	public void msgCreateAccount(int money);
+	public void msgDeposit(int money, int acctNum);
 	public void msgDoneAndLeaving();
 	// Scheduler
 	

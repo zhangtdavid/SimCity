@@ -25,9 +25,9 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void msgHereIsAccount(int acctNum){
 		print("Here is Account msg received");
-		if(currentCustomer.t == serviceType.acctCreate){
+		if(currentCustomer.t == serviceType.deposit){
 			currentCustomer.acctNum = acctNum;
-			currentCustomer.s = serviceState.confirmed;
+			currentCustomer.s = serviceState.newAccount;
 			stateChanged();
 		}
 	}
@@ -40,7 +40,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void msgTransactionSuccessful(){
 		print("Transaction successful msg received");
-		currentCustomer.s = serviceState.confirmed;		//confirmed
+		if(currentCustomer.t == serviceType.deposit)
+			currentCustomer.s = serviceState.finished;
+		else if(currentCustomer.t == serviceType.withdrawal)
+			currentCustomer.s = serviceState.confirmed;
 		stateChanged();
 	}
 	//From BankCustomer
@@ -53,11 +56,12 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.salary = salary;
 		stateChanged();
 	}
-	public void msgCreateAccount(int money){
+	public void msgDeposit(int money, int acctNum){
 		print("Create account message received");
 		currentCustomer.s = serviceState.pending;
-		currentCustomer.t = serviceType.acctCreate;
+		currentCustomer.t = serviceType.deposit;
 		currentCustomer.amount = money;
+		currentCustomer.acctNum = acctNum;
 		stateChanged();
 	}
 	public void msgDoneAndLeaving() {
@@ -74,12 +78,12 @@ public class BankTellerRole extends Role implements BankTeller {
 				ServiceCustomer();
 				return true;
 			}
-			if(currentCustomer.t == serviceType.acctCreate){
+			if(currentCustomer.t == serviceType.deposit){
 				if(currentCustomer.s == serviceState.pending){
-					CreateAccount();
+					TryDeposit();
 					return true;
 				}
-				if(currentCustomer.s == serviceState.confirmed){
+				if(currentCustomer.s == serviceState.newAccount){
 					GiveAccountNumber();
 					return true;
 				}
@@ -111,9 +115,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
 		currentCustomer.s = serviceState.inProgress;
 	}
-	public void CreateAccount(){
+	public void TryDeposit(){
 		currentCustomer.s = serviceState.inProgress;
-		building.getManager().msgCreateAccount(currentCustomer.amount, this);
+		building.getManager().msgTryDeposit(currentCustomer.amount, currentCustomer.acctNum, this);
 	}
 	public void GiveAccountNumber(){
 		currentCustomer.bc.msgAccountCreated(currentCustomer.acctNum);
