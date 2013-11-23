@@ -66,7 +66,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		
 		residentRole = new ResidentRole(startDate);
-		bankCustomerRole = new BankCustomerRole(null, null); // TODO fix when JP updates
+		bankCustomerRole = new BankCustomerRole(); // TODO fix when JP updates
 	}
 	
 	//==========//
