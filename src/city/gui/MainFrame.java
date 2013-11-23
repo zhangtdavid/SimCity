@@ -4,10 +4,11 @@ import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
-import java.awt.HeadlessException;
 
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
+
+import city.trace.TracePanel;
 
 public class MainFrame extends JFrame {
 	
@@ -18,8 +19,8 @@ public class MainFrame extends JFrame {
     
     CityViewPanel cityView;
 	BuildingView buildingView;
-//	TracePanel tracePanel;
-//	CityControlPanel CP;
+	TracePanel tracePanel;
+	CityControlPanel CP;
 	GridBagConstraints c = new GridBagConstraints();
 	
     /**
@@ -29,12 +30,12 @@ public class MainFrame extends JFrame {
      */
     public MainFrame() {
     	// Set up the city control panel
-//    	CP = new CityControlPanel(this);
+    	CP = new CityControlPanel(this);
 		// Set up the trace panel
-//		tracePanel = new TracePanel();
-//		tracePanel.setPreferredSize(new Dimension(CP.getPreferredSize().width, (int)(1.4*CP.getPreferredSize().height)));
-//		tracePanel.showAlertsForAllLevels();
-//		tracePanel.showAlertsForAllTags();
+		tracePanel = new TracePanel();
+		tracePanel.setPreferredSize(new Dimension(1100, 100));//new Dimension(CP.getPreferredSize().width, (int)(1.4*CP.getPreferredSize().height)));
+		tracePanel.showAlertsForAllLevels();
+		tracePanel.showAlertsForAllTags();
     	// Set up the city panel
 		cityView = new CityViewPanel(this);
 		// Set up the building panel
@@ -46,25 +47,25 @@ public class MainFrame extends JFrame {
 		this.setLayout(new GridBagLayout());
 		
 		c.gridx = 0; c.gridy = 0;
-		c.gridwidth = 6; c.gridheight = 6;
+		c.gridwidth = 5; c.gridheight = 5;
 		this.add(cityView, c);
 		
 //		c.gridx = 6; c.gridy = 0;
 //		c.gridwidth = 5; c.gridheight = 1;
 //		this.add(info, c);
 
-		c.gridx = 6; c.gridy = 1;
+		c.gridx = 5; c.gridy = 0;
 		c.gridwidth = 5; c.gridheight = 5;
 		this.add(buildingView, c);
 
-//		c.gridx = 0; c.gridy = 6;
-//		c.gridwidth = 11; c.gridheight = 1;
-//		this.add(CP, c);
-		
-//		c.gridx = 0; c.gridy = 7;
-//		c.gridwidth = 11; c.gridheight = 3;
+		c.gridx = 0; c.gridy = 6;
+		c.gridwidth = 5; c.gridheight = 2;
+		this.add(CP, c);
+//		
+		c.gridx = 5; c.gridy = 6;
+		c.gridwidth = 5; c.gridheight = 2;
 //		c.fill = GridBagConstraints.BOTH;
-//		this.add(tracePanel, c);
+		this.add(tracePanel, c);
 		
     	// Set up the window
         this.setTitle("SimCity201");

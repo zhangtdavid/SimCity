@@ -17,12 +17,14 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 	
 	HashMap<String, BuildingCard> cards;
 	MainFrame mainframe;
-	public static final int VIEW_WIDTH = 500, VIEW_HEIGHT = 600;
+	public static final int VIEW_WIDTH = 500, VIEW_HEIGHT = 500;
 	CardLayout layout;
 	
 	public BuildingView(MainFrame mf) {
 		
 		this.setPreferredSize(new Dimension(VIEW_WIDTH, VIEW_HEIGHT));
+		this.setMaximumSize(new Dimension(VIEW_WIDTH, VIEW_HEIGHT));
+		this.setMinimumSize(new Dimension(VIEW_WIDTH, VIEW_HEIGHT));
 		this.setVisible(true);
 		addMouseListener(this);
 		this.mainframe = mf;

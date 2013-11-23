@@ -5,11 +5,14 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import city.trace.AlertLog;
+import city.trace.AlertTag;
+
 public class CityViewPanel extends CityPanel implements MouseMotionListener {
 
 	private static final long serialVersionUID = 3622803906501755529L;
 	
-	public static final int CITY_WIDTH = 600, CITY_HEIGHT = 600;
+	public static final int CITY_WIDTH = 500, CITY_HEIGHT = 500;
 	boolean addingObject = false;
 	CityViewBuilding temp;
 	
@@ -19,6 +22,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		super(mf);
 		this.setPreferredSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
 		this.setMinimumSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
+		this.setMaximumSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
 		this.setVisible(true);
 		background = new Color(128, 64, 0);
 		this.addStatic(new CityViewRestaurant(30, 30));
@@ -44,21 +48,20 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			for (CityViewBuilding c: statics) {
 				if (c.equals(temp))
 					continue;
-//				if (c.rectangle.intersects(temp.rectangle)) {
-//					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
-//					return;
-//				}
+				if (c.rectangle.intersects(temp.rectangle)) {
+					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
+					return;
+				}
 			}
-//			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
+			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-//			city.view.addView(new CityCard(city, Color.pink), temp.ID);
+			mainframe.buildingView.addView(new BuildingCard(mainframe, Color.pink), temp.ID);
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
 			if (c.contains(arg0.getX(), arg0.getY())) {
-				//city.info.setText(c.ID);
-//				city.view.setView(c.ID);
-//				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.ID);
+				mainframe.buildingView.setView(c.ID);
+				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.ID);
 			}
 		}
 	}
@@ -67,11 +70,11 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		
 	}
 	
-	public void addObject(CityViewBuilding c) {
+	public void addObject(CityViewBuilding.BuildingType type) {
 		if (addingObject)
 			return;
 		addingObject = true;
-		switch (c.type) {
+		switch (type) {
 		case RESTAURANT: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()-19)); break;
 //		case ROAD: temp = new CityRoad(-100, RoadDirection.HORIZONTAL); break; //NOTE: DON'T MAKE NEW ROADS
 		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()-19)); break;
