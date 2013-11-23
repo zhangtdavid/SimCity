@@ -55,7 +55,7 @@ public class BankManagerRole extends Role implements BankManager{
 		stateChanged();
 	}
 	public void msgTryDeposit(int money, int acctNum, BankTellerRole t){
-		print("Create account message received from teller");
+		print("Try deposit message received from teller");
 		if(acctNum == -1)
 			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t));
 		else

@@ -29,17 +29,16 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		if(s != Application.BANK_SERVICE.atmDeposit)
 			st = state.entering;
-		stateChanged();
 	}
 	// Constructor
 	
 	public BankCustomerRole(Building bus) { //could change back to building = b, don't like cast
-		building = (BankBuilding) Application.CityMap.findRandomBuilding(Application.BUILDING.bank);
+		building = (BankBuilding) Application.CityMap.findBank();
 		business = bus;
 	}
 	
 	public BankCustomerRole(){		//could change back to building = b
-		building = (BankBuilding) Application.CityMap.findRandomBuilding(Application.BUILDING.bank);
+		building = (BankBuilding) Application.CityMap.findBank();
 		st = state.entering;
 	}
 	
@@ -120,6 +119,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
 	public void AskForService(){
+		if(building == null)
+			print("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
