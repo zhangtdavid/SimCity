@@ -5,11 +5,13 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
@@ -22,8 +24,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	private MarketManager manager;
 	private MarketEmployee employee;
 	
-	private Map<String, Integer> order = new HashMap<String, Integer>();
-    private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
+	private MarketOrder order;
 		
 	int money;
 	int bill;
@@ -40,27 +41,16 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	---------------------------------------------------------------
 	public MarketCustomerDeliveryRole() {
 		super(); // TODO
-        for (String s: order.keySet()) {
-        	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
-        }
     }	
 	
 //  Messages
-//	=====================================================================	
-//	public void msgWhatWouldYouLike(MarketEmployee e) {
-//		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
-//		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
-//		event = MarketCustomerEvent.AskedForOrder;
-//		employee = e;
-//		stateChanged();
-//	}
-	
-	public void msgHereIsOrder(Map<String, Integer> collectedItems) {
+//	=====================================================================
+	public void msgHereIsOrder(MarketOrder o) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
         event = MarketCustomerEvent.OrderReady;
-        for (String item: collectedItems.keySet()) {
-            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
+        for (FOOD_ITEMS item: order.collectedItems.keySet()) {
+            order.receivedItems.put(item, order.collectedItems.get(item));
         }
 		state = MarketCustomerState.None;
 	}
