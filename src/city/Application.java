@@ -7,10 +7,15 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import city.agents.PersonAgent;
+import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
+import city.roles.BankCustomerRole;
+import city.roles.BankManagerRole;
+import city.roles.BankTellerRole;
 
 public class Application {
 
@@ -59,15 +64,67 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		
+		BankBuilding b = new BankBuilding("Bank");
+		CityMap.addBuilding(BUILDING.bank, b);
+        PersonAgent p1 = new PersonAgent("Manager 1", date);
+        BankManagerRole p1r1 = new BankManagerRole(b);
+        b.setManager(p1r1);
+        p1.setOccupation(p1r1);
+        people.add(p1);
+        p1.startThread();
+
+        PersonAgent p2 = new PersonAgent("Teller 1", date);
+        BankTellerRole p2r1 = new BankTellerRole(b);
+        p2.setOccupation(p2r1);
+        people.add(p2);
+        p2.startThread();
+
+        PersonAgent p3 = new PersonAgent("BankCustomer 1", date);
+        BankCustomerRole p3r1 = new BankCustomerRole();
+        p3.setOccupation(p3r1);
+        people.add(p3);
+        p3.startThread();
+
+// Set up the table
+        p1r1.msgAvailable(p2r1);
+// Wait for things to get in position
+       
+
+// Send in a customer
+        
+// TODO these shouldn't be necessary, figure out why they're needed
+        p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
+        p3.stateChanged();
+        try {
+                Thread.sleep(9000);
+        } catch (InterruptedException e) {}
+        p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
+        p3.stateChanged();
+
+//TODO these shouldn't be necessary, figure out why they're needed
 	}
 	
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		
-		public void addBuilding(BUILDING type, Building b) {
-			if(map.containsKey(type))
-				map.get(type).add(b); // Get the value from the type key, and add the building to the value (which is a list)
+		/**
+		 * Adds a new building to the HashMap
+		 * 
+		 * If the map already has a key for the type of building, it adds the new building to that key's
+		 * list. If the key for that type does not exist, it creates the key and gives it a list of
+		 * length one that contains the new building.
+		 * 
+		 * @param type the type of building from the BUILDING enumeration
+		 * @param b the building to add
+		 */
+		public static void addBuilding(BUILDING type, Building b) {
+			if(map.containsKey(type)) {
+				map.get(type).add(b);
+			} else {
+				List<Building> list = new ArrayList<Building>();
+				list.add(b);
+				map.put(type, list);
+			}
 		}
 		
 		/**
@@ -85,7 +142,10 @@ public class Application {
 			Building b = new BusStopBuilding("placeholder");
 			return b;
 		}
-		
+	
+		public static BankBuilding findBank(){
+			return (BankBuilding) map.get(BUILDING.bank);
+		}
 		/**
 		 * Return the building of type closest to the destination building
 		 * 

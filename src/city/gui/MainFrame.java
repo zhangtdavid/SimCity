@@ -9,7 +9,7 @@ import java.awt.GridBagLayout;
 import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
-import city.trace.TracePanel;
+import trace.TracePanel;
 
 public class MainFrame extends JFrame {
 

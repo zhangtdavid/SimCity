@@ -1,4 +1,4 @@
-package city.trace;
+package trace;
 
 import java.awt.Color;
 import java.awt.Dimension;
