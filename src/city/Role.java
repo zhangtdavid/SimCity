@@ -1,7 +1,7 @@
 package city;
 
-import city.interfaces.RoleInterface;
 import city.interfaces.Person;
+import city.interfaces.RoleInterface;
 
 /**
  * The base class for all SimCity201 roles.
@@ -12,9 +12,13 @@ public abstract class Role implements RoleInterface {
 	
 	// Data
 	
-	public Person person;
+	private Person person;
+	private int salary;
+	private int shiftStart;
+	private int shiftEnd;
 	private boolean active;
 	private boolean activity;
+	private Building business;
 	
 	// Constructor
 	
@@ -39,6 +43,26 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
+	public int getSalary() {
+		return salary;
+	}
+	
+	@Override
+	public Building getBusiness() {
+		return business;
+	}
+	
+	@Override
+	public int getShiftStart() {
+		return shiftStart;
+	}
+	
+	@Override
+	public int getShiftEnd() {
+		return shiftEnd;
+	}
+	
+	@Override
 	public boolean getActive() {
 		return active;
 	}
@@ -48,12 +72,27 @@ public abstract class Role implements RoleInterface {
     	return activity;
     }
 	
-	
 	// Setters
 	
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
+	}
+	
+	@Override
+	public void setSalary(int s) {
+		this.salary = s;
+	}
+	
+	@Override
+	public void setBusiness(Building b) {
+		this.business = b;
+	}
+	
+	@Override
+	public void setShift(int shiftStart, int shiftEnd) {
+		this.shiftStart = shiftStart;
+		this.shiftEnd = shiftEnd;
 	}
 	
 	@Override
@@ -75,6 +114,7 @@ public abstract class Role implements RoleInterface {
 	public void setActivityFinished() {
 		this.activity = false;
 	}
+	
 	
 	// Utilities
 	

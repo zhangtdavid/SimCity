@@ -81,7 +81,7 @@ public class MarketCashierTest extends TestCase {
 		
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MarketCashierRole();
-		cashier.person = cashierPerson;
+		cashier.setPerson(cashierPerson);
 		cashier.market = market;
 		
 		order = new HashMap<String, Integer>();

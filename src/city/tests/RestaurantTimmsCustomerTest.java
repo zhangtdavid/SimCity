@@ -33,6 +33,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		
 		customer.setPerson(customerPerson);
 		customer.setAnimation(animation);
+		customer.setPerson(customerPerson);
 		
 		// TODO Required to set prices for menu items
 		// cookAgent = new CookAgent("Cook", cashier);
@@ -75,7 +76,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		assertEquals("Customer's state should be hasOrdered.", "hasOrdered", customer.getState());
 		
 		// Send a message from a Waiter to deliver the customer's food. This is also expected to cause the customer to leave the restaurant.
-		customer.msgWaiterDeliveredFood(Application.MARKET_ITEMS.steak); // The food that was ordered is random, the test delivers steak regardless of the order.
+		customer.msgWaiterDeliveredFood(Application.FOOD_ITEMS.steak); // The food that was ordered is random, the test delivers steak regardless of the order.
 		
 		assertEquals("Customer's state should be waiterDeliveredFood.", "waiterDeliveredFood", customer.getState());
 		assertFalse("Customer's scheduler should return false.", customer.runScheduler());

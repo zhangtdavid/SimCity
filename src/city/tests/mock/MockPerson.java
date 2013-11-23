@@ -2,8 +2,10 @@ package city.tests.mock;
 
 import java.util.Date;
 
+import city.Building;
 import city.MockAgent;
 import city.Role;
+import city.buildings.HouseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 
@@ -38,6 +40,29 @@ public class MockPerson extends MockAgent implements Person {
 		return name;
 	}
 	
+    @Override
+    public Date getDate() { // TODO
+    	return new Date(0);
+    }
+    
+	@Override
+	public int getSalary() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+	
+	@Override
+	public int getCash() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public HouseBuilding getHome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	// Setters
 	
 	@Override
@@ -60,6 +85,24 @@ public class MockPerson extends MockAgent implements Person {
 	
 	@Override
 	public void setOccupation(Role r) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void setWorkplace(Building b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCash(int c) {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	@Override
+	public void setHome(HouseBuilding h) {
 		// TODO Auto-generated method stub
 		
 	}

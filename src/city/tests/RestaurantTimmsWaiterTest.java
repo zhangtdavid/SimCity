@@ -72,10 +72,10 @@ public class RestaurantTimmsWaiterTest extends TestCase {
 		assertTrue("Customer should be asked for order.", customer.log.containsString("Received msgOrderFromWaiter."));
 		
 		// Send a message from the customer to order Steak
-		waiter.msgOrderFood(customer, Application.MARKET_ITEMS.steak);
+		waiter.msgOrderFood(customer, Application.FOOD_ITEMS.steak);
 		
 		assertTrue("Waiter's scheduler should return true.", waiter.runScheduler());
-		assertEquals("InternalCustomer's choice should be Steak.", Application.MARKET_ITEMS.steak, waiter.customers.get(0).getStockItem());
+		assertEquals("InternalCustomer's choice should be Steak.", Application.FOOD_ITEMS.steak, waiter.customers.get(0).getStockItem());
 		assertEquals("Cook's log length should be 1.", 1, cook.log.size());
 		assertTrue("Cook should receive request to make Steak.", cook.log.containsString("Received msgCookOrder from Waiter. Item: steak"));
 		
