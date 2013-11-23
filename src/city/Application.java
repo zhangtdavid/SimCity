@@ -22,9 +22,9 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
+	public static enum BANK_SERVICE {none, accountCreate, moneyWithdraw, directDeposit};
 	public static enum DEPOSIT_TYPE {personal, business};
-	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum MARKET_ITEM {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 	
     /**
@@ -74,7 +74,7 @@ public class Application {
 		 * Returns a random building of type
 		 */
 		public static Building findRandomBuilding(BUILDING type) { // TODO
-			Building b = new RestaurantTimmsBuilding("placeholder");
+			Building b = new RestaurantTimmsBuilding("placeholder", "RestaurantTimmsCustomerRole");
 			return b;
 		}
 		

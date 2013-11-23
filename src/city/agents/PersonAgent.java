@@ -9,8 +9,11 @@ import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import city.Agent;
+import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
+import city.Application.DEPOSIT_TYPE;
+import city.Application.MARKET_ITEM;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -22,6 +25,7 @@ import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
+import city.roles.MarketCustomerRole;
 import city.roles.ResidentRole;
 
 public class PersonAgent extends Agent implements Person {
@@ -33,11 +37,12 @@ public class PersonAgent extends Agent implements Person {
 	private Building workplace;
 	private HouseBuilding home;
 	private Car car;
-	private CarPassengerRole carPassengerRole;
-	private BusPassengerRole busPassengerRole;
-	private BankCustomerRole bankCustomerRole;
-	private ResidentRole residentRole;
-	private Role restaurantCustomerRole; // The customer role of whatever restaurant the person is in.
+	private CarPassengerRole carPassengerRole; // not retained
+	private BusPassengerRole busPassengerRole; // not retained
+	private BankCustomerRole bankCustomerRole; // retained
+	private ResidentRole residentRole; // retained
+	private Role restaurantCustomerRole; // not retained
+	private MarketCustomerRole marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
@@ -60,8 +65,8 @@ public class PersonAgent extends Agent implements Person {
 		this.date = startDate;
 		this.lastAteAtRestaurant = startDate;
 		
-		// TODO construct ResidentRole
-		// TODO construct BankCustomerRole
+		residentRole = new ResidentRole(startDate);
+		bankCustomerRole = new BankCustomerRole(null, null); // TODO fix when JP updates
 	}
 	
 	//==========//
@@ -83,13 +88,9 @@ public class PersonAgent extends Agent implements Person {
 		// Central Scheduler /
 		//-------------------/
 		
-		// Go to work
-
+		// Go to work	
 		if (state == State.goingToWork) {
-			processTransporationArrival();
-		}		
-		if (state == State.goingToWork) {
-			if (processTransporationArrival()) {
+			if (processTransportationArrival()) {
 				occupation.setActive();
 				state = State.atWork;
 				return true;
@@ -116,9 +117,20 @@ public class PersonAgent extends Agent implements Person {
 		// All the daily tasks are beneath here
 		
 		if (state == State.goingToBank) {
-			if (processTransporationArrival()) {
-				// TODO tell role how much to deposit/borrow/loan
-				bankCustomerRole.setActive();
+			if (processTransportationArrival()) {
+				// Calculate which service to use
+				BANK_SERVICE choice = BANK_SERVICE.none;
+				int money = 0;
+				if (cash >= BANK_DEPOSIT_THRESHOLD) { 
+					choice = BANK_SERVICE.directDeposit; 
+					money = BANK_DEPOSIT_SUM;
+				} else if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { 
+					choice = BANK_SERVICE.moneyWithdraw; 
+					money = RENT_MIN_THRESHOLD;
+				}
+				
+				// Start the role
+				bankCustomerRole.setActive(choice, money, DEPOSIT_TYPE.personal);
 				state = State.atBank;
 				return true;
 			}
@@ -132,8 +144,8 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == State.goingToPayRent) {
-			if (processTransporationArrival()) {
-				residentRole.setActive();
+			if (processTransportationArrival()) {
+				residentRole.setActive(); // TODO work with Ryan to make sure this works
 				state = State.atRentPayment;
 				return true;
 			}
@@ -147,7 +159,7 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == State.goingToRestaurant) {
-			if (processTransporationArrival()) {
+			if (processTransportationArrival()) {
 				restaurantCustomerRole.setActive();
 				state = State.atRestaurant;
 				return true;
@@ -162,8 +174,37 @@ public class PersonAgent extends Agent implements Person {
 				return true;
 			}
 		}
-		
-		// Otherwise sleep
+		if (state == State.goingToMarket) {
+			if (processTransportationArrival()) {
+				marketCustomerRole.setActive();
+				state = State.atMarket;
+				return true;
+			}
+		}
+		if (state == State.atMarket) {
+			if (!marketCustomerRole.getActive()) {
+				roles.remove(marketCustomerRole);
+				marketCustomerRole = null;
+				state = pickDailyTask();
+				performDailyTaskAction();
+				return true;
+			}
+		}
+		if (state == State.goingToCook) {
+			if (processTransportationArrival()) {
+				// actCookAndEatFood() will run the daily task scheduler
+				state = State.atCooking;
+				actCookAndEatFood();
+				return true;
+			}
+		}
+		if (state == State.goingToSleep) {
+			if (processTransportationArrival()) {
+				animation.goToSleep();
+				state = State.atSleep;
+				return false;
+			}
+		}
 		
 		//----------------/
 		// Role Scheduler /
@@ -219,17 +260,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
-	 * Sends the person by car or bus to the market closest to them.
-	 * 
-	 * @throws InterruptedException
-	 */
-	private void actGoToMarket() throws InterruptedException {
-		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
-		processTransportationDeparture(b);
-		state = State.goingToMarket;
-	}
-	
-	/**
 	 * Chooses a random restaurant and sends the person to it by car or bus
 	 * 
 	 * @throws InterruptedException
@@ -251,13 +281,46 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
-	 * Sends the person by car or bus to their house.
+	 * Sends the person by car or bus to the market closest to them.
+	 * 
+	 * @throws InterruptedException
+	 */
+	private void actGoToMarket() throws InterruptedException {
+		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
+		processTransportationDeparture(b);
+		state = State.goingToMarket;
+		marketCustomerRole = new MarketCustomerRole(); // TODO work with Shirley to make sure this works
+	}
+	
+	/**
+	 * Takes the person home so that they can cook and eat a meal.
+	 */
+	private void actGoToCook() throws InterruptedException {
+		processTransportationDeparture(home);
+		state = State.goingToCook;
+	}
+	
+	/**
+	 * Has the person cook and eat a meal at home.
 	 * 
 	 * @throws InterruptedException 
 	 */
-	private void actGoHome() throws InterruptedException {
+	private void actCookAndEatFood() throws InterruptedException {
+		animation.cookAndEatFood();
+		atDestination.acquire();
+		state = pickDailyTask();
+		performDailyTaskAction();
+		// Expected to go to sleep next
+	}
+	
+	/**
+	 * Takes the person home and allows them to "sleep" until awakened for work.
+	 * 
+	 * @throws InterruptedException 
+	 */
+	private void actGoToSleep() throws InterruptedException {
 		processTransportationDeparture(home);
-		state = State.goingHome;
+		state = State.goingToSleep;
 	}
 	
 	//=========//
@@ -279,8 +342,14 @@ public class PersonAgent extends Agent implements Person {
 		return occupation.getSalary();
 	}
 	
+	@Override
 	public int getCash(){
 		return cash;
+	}
+	
+	@Override
+	public HouseBuilding getHome() {
+		return home;
 	}
 	
 	//=========//
@@ -297,8 +366,6 @@ public class PersonAgent extends Agent implements Person {
 	public void setOccupation(Role r) {
 		occupation = r;
 		addRole(r);
-		r.setActive(); // TODO testing only - remove!!
-		r.setActivityBegun(); // TODO testing only - remove!!
 	}
 	
 	@Override
@@ -319,6 +386,11 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setCash(int c) {
 		cash = c;
+	}
+	
+	@Override
+	public void setHome(HouseBuilding h) {
+		home = h;
 	}
 	
 	//===========//
@@ -364,7 +436,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @param r the role to make active on arrival
 	 * @param s the state to select on arrival
 	 */
-	private boolean processTransporationArrival() {
+	private boolean processTransportationArrival() {
 		if (car != null && !carPassengerRole.getActive()) {
 			roles.remove(carPassengerRole);
 			carPassengerRole = null;
@@ -394,7 +466,11 @@ public class PersonAgent extends Agent implements Person {
 		} else if (shouldGoToRestaurant()) {
 			disposition = State.goingToRestaurant;
 		} else if (shouldGoToMarket()) {
-			disposition = State.goingToMarket; // TODO Does the person need to go home first to check the fridge?
+			disposition = State.goingToMarket;
+		} else if (shouldGoToCook()) {
+			disposition = State.goingToCook;
+		} else {
+			disposition = State.goingToSleep;
 		}
 		return disposition;
 	}
@@ -418,8 +494,11 @@ public class PersonAgent extends Agent implements Person {
 			case goingToMarket:
 				actGoToMarket();
 				break;
-			case goingHome:
-				actGoHome();
+			case goingToCook:
+				actGoToCook();
+				break;
+			case goingToSleep:
+				actGoToSleep();
 				break;
 			default:
 				break;
@@ -435,6 +514,20 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToWork() {
 		boolean disposition = false;
 		if (!occupation.getActive() && inShiftRange()) {
+			disposition = true;
+		}
+		return disposition;
+	}
+	
+	/**
+	 * If the person is at work and the current time is outside their
+	 * working hours, then the person should leave work.
+	 * 
+	 * @return true if 
+	 */
+	private boolean shouldLeaveWork() {
+		boolean disposition = false;
+		if (occupation.getActive() && !inShiftRange()) {
 			disposition = true;
 		}
 		return disposition;
@@ -488,22 +581,28 @@ public class PersonAgent extends Agent implements Person {
 	
 	/**
 	 * Returns true if the person needs to visit the market to buy food for cooking at home.
+	 * 
+	 * The person will visit the market if they have 3 or fewer items in their home. 
 	 */
-	private boolean shouldGoToMarket() { // TODO
-		return false;
+	private boolean shouldGoToMarket() {
+		boolean disposition = false;
+		int items = 0;
+		for (MARKET_ITEM i : home.foodItems.keySet()) {
+			items = items + home.foodItems.get(i);
+		}
+		if (items <= 3) { disposition = true; }
+		return disposition;
 	}
 	
 	/**
-	 * If the person is at work and the current time is outside their
-	 * working hours, then the person should leave work.
+	 * Returns true if the person should go home to cook their food.
 	 * 
-	 * @return true if 
+	 * Should be called only after visiting a market, and will only go to cook
+	 * if a market has just been visited.
 	 */
-	private boolean shouldLeaveWork() {
+	private boolean shouldGoToCook() {
 		boolean disposition = false;
-		if (occupation.getActive() && !inShiftRange()) {
-			disposition = true;
-		}
+		if (state == State.atMarket) { disposition = true; }
 		return disposition;
 	}
 	

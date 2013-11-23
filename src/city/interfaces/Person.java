@@ -5,13 +5,15 @@ import java.util.Date;
 import city.Application;
 import city.Building;
 import city.Role;
+import city.buildings.HouseBuilding;
 
 public interface Person extends AgentInterface {
 
 	// Data
 	
-	enum State {none, goingToWork, goingToBank, goingToPayRent, goingToRestaurant, goingToMarket, goingHome, atWork, atBank, atRentPayment, atRestaurant, atMarket, atHome, leavingWork };
+	enum State {none, goingToWork, goingToBank, goingToPayRent, goingToRestaurant, goingToMarket, goingToCook, goingToSleep, atWork, atBank, atRentPayment, atRestaurant, atMarket, atCooking, atSleep, leavingWork };
 	static final int BANK_DEPOSIT_THRESHOLD = 100;
+	static final int BANK_DEPOSIT_SUM = 50;
 	static final int RESTAURANT_DINING_THRESHOLD = 80;
 	static long RESTAURANT_DINING_INTERVAL = (Application.INTERVAL * 144); // 3 days
 	static final int RENT_MIN_THRESHOLD = 200;
@@ -33,6 +35,7 @@ public interface Person extends AgentInterface {
 	public Date getDate();
 	public int getSalary();
 	public int getCash();
+	public HouseBuilding getHome();
 	
 	// Setters
 	
@@ -42,6 +45,7 @@ public interface Person extends AgentInterface {
 	public void setOccupation(Role r);
 	public void setWorkplace(Building b);
 	public void setCash(int c);
+	public void setHome(HouseBuilding h);
 	
 	// Utilities
 	

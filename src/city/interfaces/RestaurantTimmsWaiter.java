@@ -8,7 +8,7 @@ public interface RestaurantTimmsWaiter extends RoleInterface {
 	public abstract void msgAllowBreak(Boolean r);
 	public abstract void msgSeatCustomer(RestaurantTimmsCustomer c, int n);
 	public abstract void msgWantFood(RestaurantTimmsCustomer c);
-	public abstract void msgOrderFood(RestaurantTimmsCustomer c, Application.MARKET_ITEMS s);
+	public abstract void msgOrderFood(RestaurantTimmsCustomer c, Application.MARKET_ITEM s);
 	public abstract void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock);
 	public abstract void msgFoodReady(RestaurantTimmsCustomer c);
 	public abstract void msgCheckReady();

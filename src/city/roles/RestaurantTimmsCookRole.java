@@ -57,7 +57,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Messages
 
-	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.MARKET_ITEMS s) {
+	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.MARKET_ITEM s) {
 		print("msgCookOrder");
 		orders.add(new Order(w, c, s));
 		stateChanged();
@@ -75,7 +75,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		orders.remove(order);
 	}
 
-	public void msgMarketOrderPlaced(Application.MARKET_ITEMS s, Boolean inStock) {
+	public void msgMarketOrderPlaced(Application.MARKET_ITEM s, Boolean inStock) {
 		print("msgMarketOrderPlaced");
 		MenuItem menuItem = findMenuItem(s);
 		if (inStock) {
@@ -84,7 +84,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		marketResponse.release();
 	}
 	
-	public void msgMarketOrderDelivered(Application.MARKET_ITEMS s, int quantity) {
+	public void msgMarketOrderDelivered(Application.MARKET_ITEM s, int quantity) {
 		print("msgMarketOrderDelivered");
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.incrementQuantityOnHand(quantity);
@@ -183,7 +183,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return this.animation;
 	}
 	
-	public int getMenuItemPrice(Application.MARKET_ITEMS s) {
+	public int getMenuItemPrice(Application.MARKET_ITEM s) {
 		MenuItem menuItem = findMenuItem(s);
 		return menuItem.getPrice();
 	}
@@ -201,7 +201,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Utilities 
 	
-	private static MenuItem findMenuItem(Application.MARKET_ITEMS s) {
+	private static MenuItem findMenuItem(Application.MARKET_ITEM s) {
 		MenuItem item = null;
 		for (MenuItem menuItem : menuItems) {
 			if (menuItem.getStockItem() == s) {
@@ -212,7 +212,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return item;
 	}
 	
-	private Boolean checkStore(Application.MARKET_ITEMS s) {
+	private Boolean checkStore(Application.MARKET_ITEM s) {
 		MenuItem menuItem = findMenuItem(s);
 		if (menuItem.getQuantityOnHand() > 0) {
 			return true;
@@ -220,7 +220,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return false;
 	}
 	
-	private void decrementMenuItem(Application.MARKET_ITEMS s, Integer i) {
+	private void decrementMenuItem(Application.MARKET_ITEM s, Integer i) {
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.decrementQuantityOnHand(i);
 	}
@@ -230,12 +230,12 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	private static class Order {
 		private RestaurantTimmsWaiter waiter;
 		private RestaurantTimmsCustomer customer;
-		private Application.MARKET_ITEMS stockItem;
+		private Application.MARKET_ITEM stockItem;
 		
 		public enum State { pending, queue, cooking, ready };
 		private State state;
 
-		Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.MARKET_ITEMS s) {
+		Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.MARKET_ITEM s) {
 			this.waiter = w;
 			this.customer = c;
 			this.stockItem = s;
@@ -250,7 +250,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 			return this.customer;
 		}
 		
-		private Application.MARKET_ITEMS getStockItem() {
+		private Application.MARKET_ITEM getStockItem() {
 			return this.stockItem;
 		}
 		
@@ -266,21 +266,21 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	// MenuItem Class
 	
 	public static class MenuItem {
-		private Application.MARKET_ITEMS stockItem;
+		private Application.MARKET_ITEM stockItem;
 		private Integer quantityOnHand;
 		private Integer price;
 		
 		private static enum State { inStock, ordering, onOrder, offMenu };
 		private State state;
 		
-		public MenuItem(Application.MARKET_ITEMS s, Integer quantityOnHand, Integer price) {
+		public MenuItem(Application.MARKET_ITEM s, Integer quantityOnHand, Integer price) {
 			this.stockItem = s;
 			this.quantityOnHand = quantityOnHand;
 			this.price = price;
 			this.state = State.inStock;
 		}
 		
-		public Application.MARKET_ITEMS getStockItem() {
+		public Application.MARKET_ITEM getStockItem() {
 			return stockItem;
 		}
 		
