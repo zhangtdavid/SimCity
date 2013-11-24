@@ -12,6 +12,7 @@ import java.util.concurrent.Semaphore;
 import utilities.MarketOrder;
 import city.Agent;
 import city.Animation;
+import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
@@ -285,13 +286,17 @@ public class PersonAgent extends Agent implements Person {
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		// Use reflection to get a Restaurant<name>CustomerAnimation to use when dining at the restaurant
 		try {
-			Class<?> c = Class.forName(b.getCustomerRole());
-			Constructor<?> r0 = c.getConstructor();
+			Class<?> c0 = Class.forName(b.getCustomerRole());
+			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (Role) r0.newInstance();
 			
-			Class<?> a = Class.forName(b.getCustomerAnimation());
-			Constructor<?> r1 = a.getConstructor(c);
-			restaurantCustomerRole.setAnimation((Animation) r1.newInstance());
+			Class<?> c1 = Class.forName(b.getCustomerAnimation());
+			Constructor<?> r1 = c1.getConstructor(c0);
+			Animation a0 = (Animation) r1.newInstance();
+			restaurantCustomerRole.setAnimation(a0);
+			
+			// TODO for testing
+			Application.restaurantTimmsPanel.addVisualizationElement(a0);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
@@ -548,7 +553,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean shouldLeaveWork() {
 		boolean disposition = false;
-		if (occupation.getActive() && !inShiftRange()) {
+		if (occupation != null && occupation.getActive() && !inShiftRange()) {
 			disposition = true;
 		}
 		return disposition;
