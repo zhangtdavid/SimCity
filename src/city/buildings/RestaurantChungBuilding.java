@@ -21,6 +21,8 @@ public class RestaurantChungBuilding extends Building {
 	public RestaurantChungCook cook;
 	public List<RestaurantChungWaiterBase> employees = new ArrayList<RestaurantChungWaiterBase>();
 	
+	private static final int WORKER_SALARY = 500;
+	
 	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
     public class Food {
         public String item;
@@ -52,6 +54,10 @@ public class RestaurantChungBuilding extends Building {
         foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 10, 5, 10, 10));
         
         setCash(500);
+	}
+
+	public static int getWorkerSalary() {
+		return WORKER_SALARY;
 	}
 
 }

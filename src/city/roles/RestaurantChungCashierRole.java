@@ -92,7 +92,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		workingState = WorkingState.GoingOffShift;
 	}
 	
-	
 //  Messages
 //	=====================================================================
 //	Waiter

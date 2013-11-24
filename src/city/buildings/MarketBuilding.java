@@ -17,6 +17,10 @@ public class MarketBuilding extends Building {
 	public MarketCashier cashier;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
+	
+	private static final int WORKER_SALARY = 500;
+
+	
 	public Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
 	public Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	
@@ -82,6 +86,11 @@ public class MarketBuilding extends Building {
 	
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
+	}
+
+
+	public static int getWorkerSalary() {
+		return WORKER_SALARY;
 	}
 	
 	// Employees
