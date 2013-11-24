@@ -1,6 +1,7 @@
 package city;
 
 import utilities.EventLog;
+import city.interfaces.AnimationInterface;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 
@@ -48,7 +49,7 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
-	public  <T extends Animation> T getAnimation(Class<T> type) {
+	public  <T extends AnimationInterface> T getAnimation(Class<T> type) {
 		return type.cast(animation);
 	}
 	

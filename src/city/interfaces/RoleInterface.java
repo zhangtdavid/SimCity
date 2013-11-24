@@ -20,7 +20,7 @@ public interface RoleInterface {
 	// Getters
 	
 	public Person getPerson();
-	public <T extends Animation> T getAnimation(Class<T> type);
+	public <T extends AnimationInterface> T getAnimation(Class<T> type);
 	public int getSalary();
 	public <T extends Building> T getWorkplace(Class<T> type);
 	public int getShiftStart();
