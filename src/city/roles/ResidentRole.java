@@ -3,10 +3,7 @@ package city.roles;
 import java.util.Calendar;
 import java.util.Date;
 
-import city.Application;
 import city.Role;
-import city.agents.PersonAgent;
-import city.buildings.AptBuilding;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
@@ -24,10 +21,11 @@ public class ResidentRole extends Role implements Resident {
 
 	// Constructor
 
-	public ResidentRole(){
+	public ResidentRole(Date rentLastPaid){
 		super();
-		maintenance = 0;
-		upcomingRent = 5; // low number for normative situations; i wish my rent was ($)
+		this.maintenance = 0;
+		this.upcomingRent = 5; // low number for normative situations; i wish my rent was ($)
+		this.rentLastPaid = rentLastPaid;
 	}
 
 	// Messages
@@ -106,9 +104,6 @@ public class ResidentRole extends Role implements Resident {
 	public void setLandlord(Landlord l) {
 		landlord = l;
 		
-	}
-	public void setActive(){
-		rentLastPaid = this.getPerson().getDate();
 	}
 
 	// Classes
