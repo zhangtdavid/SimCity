@@ -178,7 +178,7 @@ public class MarketCashierTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment log should have 1 entry.", customerDeliveryPayment.log.size(), 1);
 		assertTrue("CustomerDeliveryPayment log should have \"CustomerDeliveryPayment received msgHereIsBill\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), customerDeliveryPayment.log.containsString("CustomerDeliveryPayment received msgHereIsBill"));
 
-		cashier.msgHereIsPayment(customerDeliveryPayment, 110);
+		cashier.msgHereIsPayment(order.orderId, 110);
 		assertEquals("Cashier log should have 3 entries.", cashier.log.size(), 3);
 		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
 		assertEquals("Cashier payment variable should be 110. It's " + cashier.transactions.get(0).payment + "instead", cashier.transactions.get(0).payment, 110);
@@ -198,7 +198,7 @@ public class MarketCashierTest extends TestCase {
 		assertTrue("Cashier log should have \"Cashier received msgDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgDeliveringItems"));
 		assertTrue("Cashier deliveryPeople should contain a Delivery Person with available == false.", !cashier.deliveryPeople.get(0).available);
 		
-		cashier.msgFinishedDeliveringItems(deliveryPerson, customerDelivery);
+		cashier.msgFinishedDeliveringItems(deliveryPerson, order.orderId);
 		assertEquals("Cashier log should have 5 entries.", cashier.log.size(), 5);
 		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);

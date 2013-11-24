@@ -50,9 +50,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		stateChanged();
 	}
 
-	public void msgPaymentReceived() {
+	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
+		MarketTransaction mt = findMarketTransaction(id);
+		removeMarketTransactionFromList(mt);
 	}
 	
 //  Scheduler
@@ -73,9 +75,9 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private void pay(MarketTransaction mt) {
 		int payment = checkBill(mt);
 		if (payment != -1) {
-			cashier.msgHereIsPayment(this, payment);
-			restaurant.setCash(restaurant.getCash()-payment);	
-			removeMarketTransactionFromList(mt);
+			cashier.msgHereIsPayment(mt.order.orderId, payment);
+			restaurant.setCash(restaurant.getCash()-payment);
+	    	mt.s = MarketTransactionState.WaitingForConfirmation;
 		}
 		// handle if bill is wrong
 	}

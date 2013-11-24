@@ -70,7 +70,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		}
 	}
 	public enum MarketTransactionState
-	{Pending, Processing};
+	{Pending, Processing, WaitingForConfirmation};
 	
 	private Map<FOOD_ITEMS, Integer> prices = new HashMap<FOOD_ITEMS, Integer>();
 	

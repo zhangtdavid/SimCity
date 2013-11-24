@@ -44,7 +44,7 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public void msgHereIsPayment(MarketCustomer c, int money) {
+	public void msgHereIsPayment(int id, int money) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -57,19 +57,13 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, MarketCustomerDelivery cd) {
+	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
 		// TODO Auto-generated method stub
 		
 	}

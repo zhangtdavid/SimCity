@@ -48,9 +48,11 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
-        for (FOOD_ITEMS item: collectedItems.keySet()) {
-            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
-        }
+		if (order.orderId == id) {
+	        for (FOOD_ITEMS item: collectedItems.keySet()) {
+	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
+	        }
+		}
         active = false; // set role inactive after receiving order
 	}
 	

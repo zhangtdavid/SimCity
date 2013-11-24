@@ -1,7 +1,6 @@
 package city.roles;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import utilities.EventLog;
@@ -24,13 +23,12 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	private MarketBuilding market;
 	
 	private MarketCashier cashier;
-	private List<Role> roles = new ArrayList<Role>();
 
 	private CarAgent car;
 	private CarPassenger carPassenger;
 
 	private MarketCustomerDelivery customerDelivery;
-	private Map<FOOD_ITEMS, Integer> collectedItems;
+	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	int orderId;
 	
 //	CityMap
@@ -97,7 +95,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		// switch into CarPassenger;
 		
 		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
-		cashier.msgFinishedDeliveringItems(this, customerDelivery);
+		cashier.msgFinishedDeliveringItems(this, orderId);
 		customerDelivery = null;
 	}
 	
@@ -122,9 +120,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	}
 	
 //  Utilities
-//	=====================================================================	
-
-	
+//	=====================================================================		
 	//	private Transaction findTransaction(MarketCustomerRole c) {
 //		for(Transaction t : transactions ){
 //			if(t.customer == c) {
