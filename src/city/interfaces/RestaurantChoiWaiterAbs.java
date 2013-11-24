@@ -42,8 +42,17 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	private RestaurantChoiBuilding building;
 	
 	//Constructor
-	public RestaurantChoiWaiterAbs(String name, RestaurantChoiBuilding b) {
+	/**
+	 * Initializes both types of waiters for RestaurantChoi
+	 * @param b : for RestaurantChoiBuilding
+	 * @param t1 : Start of shift
+	 * @param t2 : End of shift
+	 */
+	public RestaurantChoiWaiterAbs(String name, RestaurantChoiBuilding b, int t1, int t2) {
 		super();
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building = b;
 		this.name = name;
 		// make some tables

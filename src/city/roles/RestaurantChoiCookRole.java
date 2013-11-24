@@ -23,7 +23,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	boolean wantsToLeave;
 
 	//Constructor
-	public RestaurantChoiCookRole(RestaurantChoiBuilding b) {
+	/**
+	 * Initializes Cook for RestaurantChoi
+	 * @param b : for RestaurantChoiBuilding
+	 * @param t1 : Start of shift
+	 * @param t2 : End of shift
+	 */
+	public RestaurantChoiCookRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		building = b;
 		foods.put(1, new Food(1));
@@ -31,6 +37,9 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		foods.put(3, new Food(3));
 		foods.put(4, new Food(4));
 		//ordering on initialization if needed
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 	//Messages
 	@Override

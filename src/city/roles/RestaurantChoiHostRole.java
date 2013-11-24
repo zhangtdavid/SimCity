@@ -34,7 +34,13 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	RestaurantChoiBuilding building;
 	private boolean wantsToLeave;
 
-	public RestaurantChoiHostRole(RestaurantChoiBuilding b) {
+	/**
+	 * Initializes Host for RestaurantChoi
+	 * @param b : for RestaurantChoiBuilding
+	 * @param t1 : Start of shift
+	 * @param t2 : End of shift
+	 */
+	public RestaurantChoiHostRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		building = b;
 		// make some tables
@@ -42,6 +48,9 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
 		}
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 
 	/**

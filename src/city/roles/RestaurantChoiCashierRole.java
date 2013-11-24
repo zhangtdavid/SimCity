@@ -20,13 +20,22 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	private RestaurantChoiBuilding building;
 	
     //Constructor
-    public RestaurantChoiCashierRole(RestaurantChoiBuilding b){
+	/**
+	 * Initializes Cashier for RestaurantChoi
+	 * @param b : for RestaurantChoiBuilding
+	 * @param t1 : Start of shift
+	 * @param t2 : End of shift
+	 */
+    public RestaurantChoiCashierRole(RestaurantChoiBuilding b, int t1, int t2){
 		super();
 		building = b;
 		foodCost.put(1, 16);
 		foodCost.put(2, 10);
 		foodCost.put(3, 6);
 		foodCost.put(4, 8);
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
     }
     
     //Messages
