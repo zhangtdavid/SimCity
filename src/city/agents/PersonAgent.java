@@ -69,6 +69,8 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		this.date = startDate;
 		this.lastAteAtRestaurant = startDate;
+		this.lastWentToSleep = startDate;
+		this.state = State.none;
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -213,7 +215,7 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
-		if (state == State.atSleep) {
+		if (state == State.atSleep || state == State.none) { // TODO needs testing. 
 			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
@@ -560,7 +562,6 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the person should go to work
 	 */
 	private boolean shouldGoToWork() {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (occupation != null && !occupation.getActive() && inShiftRange()) {
 			disposition = true;
@@ -578,6 +579,10 @@ public class PersonAgent extends Agent implements Person {
 		boolean disposition = false;
 		if (occupation != null && occupation.getActive() && !inShiftRange()) {
 			disposition = true;
+		}
+		// TODO testing
+		if (this.name != "Landlord") {
+			disposition = false;
 		}
 		return disposition;
 	}
@@ -682,7 +687,6 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the current time is at or within their working hours
 	 */
 	private boolean inShiftRange() {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Calendar c = Calendar.getInstance();
 		c.setTime(date);
 		int time = c.get(Calendar.HOUR_OF_DAY);
