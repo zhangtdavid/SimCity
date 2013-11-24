@@ -28,7 +28,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
 	
-	private MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole();
+//	private MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole();
 	private RestaurantChungCashier restaurantChungCashier;
 
 //  Orders
