@@ -103,8 +103,11 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public void msgComputeBill(RestaurantChungWaiterBase w, RestaurantChungCustomer c, String order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
-		transactions.add(new Transaction(w, c, order, TransactionState.Pending));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			transactions.add(new Transaction(w, c, order, TransactionState.Pending));
+			stateChanged();
+		}
+		// TODO inform sender of inactivity
 	}
 
 //	Restaurant Customer
@@ -150,9 +153,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (transactions.size() == 0 && marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();
-		
 		if (restaurant.getCash() > 1000)
 			depositMoney();
 		
@@ -191,6 +191,9 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				}
 			}
 		}
+		
+		if (marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
 
 		return blocking;
 		//we have tried all our rules and found

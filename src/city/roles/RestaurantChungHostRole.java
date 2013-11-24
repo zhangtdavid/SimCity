@@ -7,16 +7,20 @@ import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiterBase;
-
+import city.roles.RestaurantChungCashierRole.WorkingState;
 /**
  * Restaurant Host Agent
  */
 //A Host is the manager of a restaurant who sees that all is proceeded as he wishes.
 public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
 	RestaurantChungBuilding restaurant;
+	
 	private int nTables = 4;
 	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
 	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
 //	Waiters
 //	=====================================================================	
@@ -99,23 +103,30 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		this.setActivityBegun();
 	}
 	
+	public void setInActive(){
+		workingState = WorkingState.GoingOffShift;
+	}
+	
 //  Messages
 //	=====================================================================
 //	Customer
 //	---------------------------------------------------------------
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
-		
-		for (HCustomer customer : customers) {
-			if (customer.c == c) {
-				customer.s = CustomerState.InRestaurant;
-				customer.positionInLine = numWaitingCustomers++;
-				stateChanged();
-				return;
+		if (workingState != WorkingState.NotWorking) {
+			for (HCustomer customer : customers) {
+				if (customer.c == c) {
+					customer.s = CustomerState.InRestaurant;
+					customer.positionInLine = numWaitingCustomers++;
+					stateChanged();
+					return;
+				}
 			}
+			
+			customers.add(new HCustomer(c, CustomerState.InRestaurant, numWaitingCustomers++));
+			stateChanged();
 		}
-		customers.add(new HCustomer(c, CustomerState.InRestaurant, numWaitingCustomers++));
-		stateChanged();
+		// TODO inform sender of inactivity
 	}
 	
 	public void msgDecidedToStay(RestaurantChungCustomer c) {
@@ -186,6 +197,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (restaurant.host != this)
+				workingState = WorkingState.NotWorking;
+		}
+		
 		/* Think of this next rule as:
             Does there exist a table and customer,
             so that table is unoccupied and customer is waiting.
@@ -216,8 +232,10 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 				if (customer.s == CustomerState.InRestaurant) {
 					standCustomerInLine(customer);
 					return true;
-				}		
+				}	
 			}
+			if (workingState == WorkingState.NotWorking)
+				setInactive();
 		}
 		
 		synchronized(waiters) {

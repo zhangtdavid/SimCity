@@ -16,6 +16,7 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungWaiterBase;
+import city.roles.RestaurantChungCashierRole.WorkingState;
 
 /**
  * Restaurant Cook Agent
@@ -24,6 +25,10 @@ import city.interfaces.RestaurantChungWaiterBase;
 // and maintains the restaurant's food inventory
 public class RestaurantChungCookRole extends Role implements RestaurantChungCook {        
 	RestaurantChungBuilding restaurant;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
@@ -92,6 +97,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
 	public void setActive(){
 		this.setActivityBegun();
+	}
+	
+	public void setInActive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
@@ -193,6 +202,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     			}
     		}
     		
+    		if (workingState == WorkingState.GoingOffShift) {
+    			if (restaurant.cashier != this)
+    				workingState = WorkingState.NotWorking;
+    		}
+    		
             synchronized(marketOrders) {
                 for (MyMarketOrder o: marketOrders) {
                     if (o.s == MarketOrderState.Pending) {
@@ -241,6 +255,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                     }
                 }
             }
+            
+    		if (workingState == WorkingState.NotWorking)
+    			super.setInactive();
             
 //            synchronized(marketOrders) {
 //                for (MyMarketOrder o: marketOrders) {

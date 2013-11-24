@@ -164,10 +164,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.employees.size() > 1)
 				workingState = WorkingState.NotWorking;
-		}
-		
-		if (customers.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();			
+		}		
 		
 		synchronized(employees) {
 			for (MyMarketEmployee employee : employees) {
@@ -189,6 +186,9 @@ public class MarketManagerRole extends Role implements MarketManager {
 				}
 			}
 		}
+		
+		if (workingState == WorkingState.NotWorking)
+			super.setInactive();
 
 		return false;
 	}

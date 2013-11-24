@@ -142,6 +142,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
 			stateChanged();			
 		}
+		// TODO inform sender of inactivity
 	}
 	
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
@@ -151,6 +152,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
 			stateChanged();			
 		}
+		// TODO inform sender of inactivity
 	}
 
 //	Customer
@@ -192,9 +194,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (transactions.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();
-		
 		if (market.getCash() > 1000)
 			// msg bank
 		
@@ -226,6 +225,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 				}
 			}
 		}
+		
+		if (workingState == WorkingState.NotWorking)
+			super.setInactive();
 		
 		return false;
 	}
