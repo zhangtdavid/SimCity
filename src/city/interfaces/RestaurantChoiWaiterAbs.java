@@ -62,6 +62,14 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 	}	
 
+	public RestaurantChoiWaiterAbs(String name2) { // secondary constructor for mechanics testing
+		name = name2;
+		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
+		for (int ix = 1; ix <= NTABLES; ix++) {
+			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
+		}
+	}
+
 	//Messages
 	public void msgRelease() {
 		inProgress.release();// = true;
