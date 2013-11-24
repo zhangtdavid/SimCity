@@ -3,11 +3,11 @@ package city.animations;
 import java.awt.*;
 
 import city.Animation;
-import city.animations.interfaces.MarketAnimatedCashier;
-import city.interfaces.MarketCashier;
+import city.animations.interfaces.MarketAnimatedEmployee;
+import city.interfaces.MarketEmployee;
 
-public class MarketCashierAnimation extends Animation implements MarketAnimatedCashier {
-	private MarketCashier cashier = null;
+public class MarketEmployeeAnimation extends Animation implements MarketAnimatedEmployee {
+	private MarketEmployee employee = null;
 
 //	Fixed Numbers
 //	=====================================================================
@@ -15,11 +15,11 @@ public class MarketCashierAnimation extends Animation implements MarketAnimatedC
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 465, yPos = 320;
+	private int xPos = 20, yPos = 20;
 	private int xDestination = xPos, yDestination = yPos;
 
-	public MarketCashierAnimation(MarketCashier c) {
-		cashier = c;
+	public MarketEmployeeAnimation(MarketEmployee e) {
+		employee = e;
 	}
 
 	public void updatePosition() {
