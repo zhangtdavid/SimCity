@@ -1,5 +1,6 @@
 package city.gui;
 
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -8,12 +9,11 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import city.Animation;
 
-public class RestaurantTimmsPanel extends JPanel implements ActionListener {
+public class RestaurantTimmsPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
 	
@@ -22,7 +22,8 @@ public class RestaurantTimmsPanel extends JPanel implements ActionListener {
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-    public RestaurantTimmsPanel(Dimension panelDimension) {
+    public RestaurantTimmsPanel(MainFrame mf, Color color, Dimension panelDimension) {
+    	super(mf, color);
     	panelX = panelDimension.width;
     	panelY = panelDimension.height;
     	
@@ -45,7 +46,7 @@ public class RestaurantTimmsPanel extends JPanel implements ActionListener {
 
         // Update the position of each visible element
         for(Animation animation : animations) {
-            if (animation.getVisible()) {
+        	if (animation.getVisible()) {
                 animation.updatePosition();
             }
         }

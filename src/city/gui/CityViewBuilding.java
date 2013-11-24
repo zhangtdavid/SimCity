@@ -12,8 +12,9 @@ public abstract class CityViewBuilding {
 	int x, y;
 	Color color;
 	String ID;
+	BuildingCard building;
 	boolean isActive;
-	enum BuildingType {NONE, RESTAURANT, BANK, ROAD, HOUSE};
+	enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, BANK, ROAD, HOUSE};
 	BuildingType type = BuildingType.NONE;
 	
 	public CityViewBuilding() {
@@ -45,6 +46,15 @@ public abstract class CityViewBuilding {
 		this.y = y;
 		color = c;
 		ID = I;
+		isActive = true;
+	}
+	
+	public CityViewBuilding(int x, int y, Color c, String I, BuildingCard b) {
+		this.x = x;
+		this.y = y;
+		color = c;
+		ID = I;
+		building = b;
 		isActive = true;
 	}
 	
