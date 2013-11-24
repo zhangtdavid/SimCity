@@ -14,6 +14,7 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.MarketDeliveryPersonRole.WorkingState;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 
@@ -22,6 +23,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
 	private int loc; // location at front counter
 	
@@ -61,6 +66,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		this.setActivityBegun();
 	}
 	
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
+	
 //  Messages
 //	=====================================================================
 //	Manager
@@ -68,21 +77,25 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	public void msgAssistCustomer(MarketCustomer c) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomer from Market Manager.");
-		event = MarketEmployeeEvent.AskedToAssistCustomer;
-		customer = c;
-		customerDelivery = null;
-		customerDeliveryPayment = null;
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			event = MarketEmployeeEvent.AskedToAssistCustomer;
+			customer = c;
+			customerDelivery = null;
+			customerDeliveryPayment = null;
+			stateChanged();
+		}
 	}
 	
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
-		event = MarketEmployeeEvent.AskedToAssistCustomer;
-		customer = null;
-		customerDelivery = c;
-		customerDeliveryPayment = cPay;
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			event = MarketEmployeeEvent.AskedToAssistCustomer;
+			customer = null;
+			customerDelivery = c;
+			customerDeliveryPayment = cPay;
+			stateChanged();
+		}
 	}
 	
 	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
@@ -135,6 +148,14 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	=====================================================================
 	@Override
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (market.employees.size() > 1)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (customer == null && customerDelivery == null && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		if (state == MarketEmployeeState.None && event == MarketEmployeeEvent.AskedToAssistCustomer) {
 			assistCustomer();
 			return true;
@@ -201,6 +222,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	manager.msgIAmAvailableToAssist(this);
         	customer = null;
         	customerDelivery = null;
+        	customerDeliveryPayment = null;
     		state = MarketEmployeeState.None;
         }
         	

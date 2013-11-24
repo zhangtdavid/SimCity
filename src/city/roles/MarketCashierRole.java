@@ -190,6 +190,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 				workingState = WorkingState.NotWorking;
 		}
 		
+		if (transactions.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.PendingDelivery) {

@@ -11,6 +11,7 @@ import city.interfaces.CarPassenger;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
+import city.roles.MarketCashierRole.WorkingState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -21,6 +22,10 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
 	private MarketCashier cashier;
 
@@ -48,6 +53,10 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		this.setActivityBegun();
 	}
 	
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
+	
 //  Messages
 //	=====================================================================	
 //	Cashier
@@ -55,12 +64,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 		log.add(new LoggedEvent("Market Customer received msgDeliverOrder from Market Cashier."));
 		System.out.println("Market deliveryPerson received msgDeliverOrder from Market Cashier.");
-		customerDelivery = c;
-        for (FOOD_ITEMS s: i.keySet()) {
-        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-        }
-        orderId = id;
-        stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			customerDelivery = c;
+	        for (FOOD_ITEMS s: i.keySet()) {
+	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
+	        }
+	        orderId = id;
+	        stateChanged();
+		}
 	}
 	
 //  Scheduler
@@ -68,6 +79,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 	@Override
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (market.deliveryPeople.size() > 1)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (customerDelivery == null && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		if (customerDelivery != null) {
 			deliverItems();
 		}

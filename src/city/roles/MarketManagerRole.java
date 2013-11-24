@@ -15,6 +15,7 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.MarketEmployeeRole.WorkingState;
 import city.Role;
 
 public class MarketManagerRole extends Role implements MarketManager {
@@ -23,6 +24,10 @@ public class MarketManagerRole extends Role implements MarketManager {
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
 	boolean itemsLow;
 	
@@ -82,7 +87,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	}
 	
 	public void setInActive(){
-
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
@@ -107,19 +112,23 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	Customer (In Person)
 //	---------------------------------------------------------------
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
-		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
-		System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
-		customers.add(new MyMarketCustomer(c));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
+			System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
+			customers.add(new MyMarketCustomer(c));
+			stateChanged();
+		}
 	}
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
-		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
-		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
-		customers.add(new MyMarketCustomer(c, cPay, o, id));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
+			System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
+			customers.add(new MyMarketCustomer(c, cPay, o, id));
+			stateChanged();
+		}
 	}
 	
 //	Employee
@@ -149,6 +158,14 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	=====================================================================
 	@Override
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (market.employees.size() > 1)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (customers.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		synchronized(employees) {
 			for (MyMarketEmployee employee : employees) {
 				if (employee.s == MarketEmployeeState.GettingOrder) {
