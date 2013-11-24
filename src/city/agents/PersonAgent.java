@@ -13,7 +13,7 @@ import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.TRANSACTION_TYPE;
-import city.Application.MARKET_ITEM;
+import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -588,7 +588,7 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToMarket() {
 		boolean disposition = false;
 		int items = 0;
-		for (MARKET_ITEM i : home.foodItems.keySet()) {
+		for (FOOD_ITEMS i : home.foodItems.keySet()) {
 			items = items + home.foodItems.get(i);
 		}
 		if (items <= 3) { disposition = true; }

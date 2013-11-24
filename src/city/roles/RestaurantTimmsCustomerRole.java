@@ -26,8 +26,8 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	public int pickiness;
 	public int hunger;
 	private int tableNumber;
-	private Application.MARKET_ITEM eatingItem;
-	public Application.MARKET_ITEM orderItem;
+	private Application.FOOD_ITEMS eatingItem;
+	public Application.FOOD_ITEMS orderItem;
 	public int money;
 	private RestaurantTimmsCashier cashier;
 	private RestaurantTimmsHost host;
@@ -35,7 +35,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private RestaurantTimmsAnimatedCustomer animation;
 	private Timer timer = new Timer();
 	
-	private List<Application.MARKET_ITEM> failedItems = new ArrayList<Application.MARKET_ITEM>();
+	private List<Application.FOOD_ITEMS> failedItems = new ArrayList<Application.FOOD_ITEMS>();
 	
 	private Semaphore atRestaurant = new Semaphore(0, true);
 	private Semaphore atTable = new Semaphore(0, true);
@@ -98,7 +98,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
-	public void msgWaiterDeliveredFood(Application.MARKET_ITEM stockItem) {
+	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) {
 		print("msgWaiterDeliveredFood");
 		this.eatingItem = stockItem;
 		state = State.waiterDeliveredFood;
@@ -178,7 +178,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 //		}
 		
 		// TODO temporary replacement for market
-		orderItem = Application.MARKET_ITEM.steak;
+		orderItem = Application.FOOD_ITEMS.steak;
 
 		// Otherwise, he will leave
 		if (orderItem == null) {

@@ -2,7 +2,7 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.Application;
-import city.Application.MARKET_ITEM;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
@@ -18,7 +18,7 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.MARKET_ITEM s) {
+	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		log.add(new LoggedEvent("Received msgCookOrder from Waiter. Item: " + s.toString()));
 		
 	}
@@ -30,13 +30,13 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public void msgMarketOrderPlaced(Application.MARKET_ITEM s, Boolean inStock) {
+	public void msgMarketOrderPlaced(Application.FOOD_ITEMS s, Boolean inStock) {
 		log.add(new LoggedEvent("Received msgMarketOrderPlaced from Market. Item: " + s.toString() + " In Stock: " + inStock.toString()));
 
 	}
 
 	@Override
-	public void msgMarketOrderDelivered(Application.MARKET_ITEM s, int quantity) {
+	public void msgMarketOrderDelivered(Application.FOOD_ITEMS s, int quantity) {
 		log.add(new LoggedEvent("Received msgMarketOrderDelivered from Market. Item: " + s.toString() + " Quantity: " + quantity));
 
 	}
@@ -47,7 +47,7 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public int getMenuItemPrice(MARKET_ITEM stockItem) {
+	public int getMenuItemPrice(FOOD_ITEMS stockItem) {
 		// TODO Auto-generated method stub
 		return 0;
 	}

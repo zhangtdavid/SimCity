@@ -3,7 +3,7 @@ package city.buildings;
 import java.util.HashMap;
 import java.util.Map;
 
-import city.Application.MARKET_ITEM;
+import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
 
@@ -11,7 +11,7 @@ public class HouseBuilding extends Building {
 	
 	// Data
 	
-	public Map<MARKET_ITEM, Integer> foodItems = new HashMap<MARKET_ITEM, Integer>();
+	public Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
 	
 	// Constructor
 	
