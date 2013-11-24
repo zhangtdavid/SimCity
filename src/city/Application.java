@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import city.agents.CarAgent;
 import city.agents.PersonAgent;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
@@ -112,6 +113,18 @@ public class Application {
 		p3.setHome(h3);
 		p4.setHome(h4);
 		
+		// Give people cars
+		CarAgent c0 = new CarAgent();
+		CarAgent c1 = new CarAgent();
+		CarAgent c2 = new CarAgent();
+		CarAgent c3 = new CarAgent();
+		CarAgent c4 = new CarAgent();
+		p0.setCar(c0);
+		p1.setCar(c1);
+		p2.setCar(c2);
+		p3.setCar(c3);
+		p4.setCar(c4);
+		
 		// Create cashier
 		RestaurantTimmsCashierRole p1r1 = new RestaurantTimmsCashierRole(restaurantTimms, 0, 12);
 		RestaurantTimmsCashierAnimation p1a1 = new RestaurantTimmsCashierAnimation();
@@ -163,6 +176,11 @@ public class Application {
 		}
 		
 		// Start threads
+		c0.startThread();
+		c1.startThread();
+		c2.startThread();
+		c3.startThread();
+		c4.startThread();
 		p0.startThread();
 		p1.startThread();
 		p2.startThread();
