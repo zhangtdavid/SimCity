@@ -3,11 +3,14 @@ package city.tests.mock;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.MarketOrder;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 
@@ -35,26 +38,26 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c,
-			Map<String, Integer> order, Map<String, Integer> collectedItems) {
+			Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgHereIsPayment(MarketCustomer c, double money) {
+	public void msgHereIsPayment(MarketCustomer c, int money) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c,
-			Map<String, Integer> order, Map<String, Integer> collectedItems) {
+			MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgHereIsPayment(MarketCustomerDelivery c, double money) {
+	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
 		// TODO Auto-generated method stub
 		
 	}

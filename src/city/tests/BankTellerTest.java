@@ -49,15 +49,15 @@ public class BankTellerTest extends TestCase {
 		teller.msgDeposit(-1, 50);
 		
 		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
-		assertEquals("Customer's log length should be 2.", 2, customer.log.size());
+		assertEquals("Manager's log length should be 1.", 1, manager.log.size());
 		assertTrue("Manager should be asked to try deposit.", manager.log.containsString("Received msgTryDeposit"));
 		
 		// Send a message from the customer to order Steak
-		/*waiter.msgOrderFood(customer, Application.MARKET_ITEM.steak);
+		teller.msgHereIsAccount(1);
 		
-		assertTrue("Waiter's scheduler should return true.", waiter.runScheduler());
-		assertEquals("InternalCustomer's choice should be Steak.", Application.MARKET_ITEM.steak, waiter.customers.get(0).getStockItem());
-		assertEquals("Cook's log length should be 1.", 1, cook.log.size());
+		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
+		assertEquals("InternalCustomer's account number should be 1.", 1, teller.currentCustomer.acctNum);
+		/*assertEquals("Cook's log length should be 1.", 1, cook.log.size());
 		assertTrue("Cook should receive request to make Steak.", cook.log.containsString("Received msgCookOrder from Waiter. Item: steak"));
 		
 		// Send a message from the Cook acknowledging that the order has been received 

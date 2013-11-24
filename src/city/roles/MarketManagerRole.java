@@ -2,13 +2,17 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.Role;
@@ -27,15 +31,17 @@ public class MarketManagerRole extends Role implements MarketManager {
 	private List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
 	private class MyMarketEmployee {
 		MarketEmployee employee;
+		MarketCustomerDelivery customerDelivery;
 		MarketEmployeeState s;
 		
 		public MyMarketEmployee(MarketEmployee employee) {
 			this.employee = employee;
+			customerDelivery = null;
 			s = MarketEmployeeState.Available;
 		}
 	}
 	private enum MarketEmployeeState
-	{Available, CollectingItems};
+	{Available, GoingToPhone, GettingOrder, CollectingItems};
 
 //	Customers
 //	---------------------------------------------------------------
@@ -43,14 +49,25 @@ public class MarketManagerRole extends Role implements MarketManager {
 	private class MyMarketCustomer {
 		MarketCustomer customer;
 		MarketCustomerDelivery customerDelivery;
+		MarketCustomerDeliveryPayment customerDeliveryPayment;
+		
+	    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+	    int orderId;
 		
 		public MyMarketCustomer(MarketCustomer customer) {
 			this.customer = customer;
 			customerDelivery = null;
+			customerDeliveryPayment = null;
 		}
-		public MyMarketCustomer(MarketCustomerDelivery customer) {
-			customer = null;
-			this.customerDelivery = customer;
+		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
+			this.customer = null;
+			customerDelivery = c;
+			customerDeliveryPayment = cPay;
+			
+            for (FOOD_ITEMS item: o.keySet()) {
+                order.put(item, o.get(item)); // Create a deep copy of the order map
+            }
+            orderId = id;
 		}
 	}
 
@@ -91,15 +108,21 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
-	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c) {
+	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
-		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer In Person.");
-		customers.add(new MyMarketCustomer(c));
+		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
+		customers.add(new MyMarketCustomer(c, cPay, o, id));
 		stateChanged();
 	}
 	
 //	Employee
 //	---------------------------------------------------------------
+	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee e) {
+		MyMarketEmployee tempEmployee = findEmployee(e);
+		tempEmployee.s = MarketEmployeeState.GettingOrder;
+		stateChanged();
+	}
+	
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
 		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
@@ -122,6 +145,14 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	=====================================================================
 	@Override
 	public boolean runScheduler() {
+		synchronized(employees) {
+			for (MyMarketEmployee employee : employees) {
+				if (employee.s == MarketEmployeeState.GettingOrder) {
+					giveCustomerDeliveryOrder(employee);
+					return true;
+				}
+			}
+		}
 		synchronized(customers) {
 			if (customers.size() > 0 && employees.size() > 0) {
 				synchronized(employees) {
@@ -143,13 +174,23 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	Employee
 //---------------------------------------------------------------
 	private void assistCustomer(MyMarketCustomer c, MyMarketEmployee e) {
-		if (c.customer != null)
+		if (c.customer != null) {
 			e.employee.msgAssistCustomer(c.customer);
-		else
-			e.employee.msgAssistCustomerDelivery(c.customerDelivery);
+			customers.remove(c);
+			e.s = MarketEmployeeState.CollectingItems;			
+		}
+		else{
+			e.customerDelivery = c.customerDelivery;
+			e.employee.msgAssistCustomerDelivery(c.customerDelivery, c.customerDeliveryPayment);
+			e.s = MarketEmployeeState.GoingToPhone;
+		}
+	}
+	
+	private void giveCustomerDeliveryOrder(MyMarketEmployee e) {
+		MyMarketCustomer cd = findCustomerDelivery(e.customerDelivery);
+		e.employee.msgHereIsCustomerDeliveryOrder(cd.order, cd.orderId);
 		e.s = MarketEmployeeState.CollectingItems;
-		customers.remove(c);
-			
+		customers.remove(cd);
 	}
 	
 	
@@ -169,7 +210,16 @@ public class MarketManagerRole extends Role implements MarketManager {
 	private MyMarketEmployee findEmployee(MarketEmployee me) {
 		for(MyMarketEmployee e : employees ){
 			if(e.employee == me) {
-				return e;		
+				return e;
+			}
+		}
+		return null;
+	}
+	
+	private MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
+		for(MyMarketCustomer c : customers ){
+			if(c.customerDelivery == cd) {
+				return c;		
 			}
 		}
 		return null;

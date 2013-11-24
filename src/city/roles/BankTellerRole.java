@@ -157,7 +157,7 @@ public class BankTellerRole extends Role implements BankTeller {
 
 	// Classes
 	public class MyCustomer{
-		int acctNum;
+		public int acctNum;
 		BankCustomer bc;
 		int amount;
 		int salary;

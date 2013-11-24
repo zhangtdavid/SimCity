@@ -29,7 +29,7 @@ public class Application {
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
-	public static enum MARKET_ITEM {steak, chicken, salad, pizza};
+	public static enum FOOD_ITEMS {steak, chicken, salad, pizza}
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 	
     /**
@@ -144,7 +144,7 @@ public class Application {
 		}
 	
 		public static BankBuilding findBank(){
-			return (BankBuilding) map.get(BUILDING.bank);
+			return (BankBuilding) map.get(BUILDING.bank).get(0);
 		}
 		/**
 		 * Return the building of type closest to the destination building

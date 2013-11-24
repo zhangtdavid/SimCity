@@ -4,6 +4,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDelivery;
@@ -20,9 +21,9 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 	}
 
 	@Override
-	public void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<String, Integer> i) {
-		log.add(new LoggedEvent("Delivery Person received msgHereIsOrder from Cashier."));		
-		System.out.println("Delivery Person received msgHereIsOrder from Cashier.");		
+	public void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<FOOD_ITEMS, Integer> i, int id) {
+		log.add(new LoggedEvent("Delivery Person received msgDeliverOrder from Cashier."));		
+		System.out.println("Delivery Person received msgDeliverOrder from Cashier.");		
 	}
 
 }

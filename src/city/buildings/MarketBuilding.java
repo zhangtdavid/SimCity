@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
@@ -16,26 +17,26 @@ public class MarketBuilding extends Building {
 	MarketCashier cashier;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
-	public Map<String, Integer> inventory = new ConcurrentHashMap<String, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
-	public Map<String, Double> prices = new ConcurrentHashMap<String, Double>();
-	public double money;
+	public Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
+	public Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
+	public int money;
 	
 	public MarketBuilding(String name) {
 		super(name);
 		
 		// initializes all items in the inventory to 50
-		inventory.put("Steak", 50);
-		inventory.put("Chicken", 50);
-		inventory.put("Salad", 50);
-		inventory.put("Pizza", 50);
+		inventory.put(FOOD_ITEMS.chicken, 50);
+		inventory.put(FOOD_ITEMS.pizza, 50);
+		inventory.put(FOOD_ITEMS.salad, 50);
+		inventory.put(FOOD_ITEMS.steak, 50);
 		
 		// initializes prices
-		prices.put("Steak", (16.00)/2);
-		prices.put("Chicken", (12.00)/2);
-		prices.put("Salad", (6.00)/2);
-		prices.put("Pizza", (10.00)/2);
+		prices.put(FOOD_ITEMS.chicken, (12)/2);
+		prices.put(FOOD_ITEMS.pizza, (10)/2);
+		prices.put(FOOD_ITEMS.salad, (6)/2);
+		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		money = 1000.0;
+		money = 1000;
 	}
 	
 	

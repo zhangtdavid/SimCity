@@ -5,14 +5,17 @@ import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import utilities.MarketOrder;
 import city.Agent;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
-import city.Application.MARKET_ITEM;
+import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.Building;
 import city.Role;
@@ -289,7 +292,11 @@ public class PersonAgent extends Agent implements Person {
 		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
 		processTransportationDeparture(b);
 		state = State.goingToMarket;
-		marketCustomerRole = new MarketCustomerRole(); // TODO work with Shirley to make sure this works
+		
+		// TODO construct an actual order
+		HashMap<FOOD_ITEMS, Integer> items = null;
+		MarketOrder order = new MarketOrder(items);
+		marketCustomerRole = new MarketCustomerRole(order);
 	}
 	
 	/**
@@ -587,7 +594,7 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToMarket() {
 		boolean disposition = false;
 		int items = 0;
-		for (MARKET_ITEM i : home.foodItems.keySet()) {
+		for (FOOD_ITEMS i : home.foodItems.keySet()) {
 			items = items + home.foodItems.get(i);
 		}
 		if (items <= 3) { disposition = true; }

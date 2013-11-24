@@ -16,7 +16,7 @@ import trace.AlertTag;
 public class CityControlPanel extends JPanel implements ActionListener{
 
 	MainFrame mainframe;
-	public static final int CP_WIDTH = 500, CP_HEIGHT = 200;
+	public static final int CP_WIDTH = 200, CP_HEIGHT = 700;
 	JButton addRestaurant, addBank;
 
 	//For managing traces

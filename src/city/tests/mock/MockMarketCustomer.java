@@ -8,6 +8,7 @@ import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
+import city.Application.FOOD_ITEMS;
 
 public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	
@@ -32,7 +33,7 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public void msgHereIsOrderandBill(Map<String, Integer> collectedItems, double bill) {
+	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Customer received msgHereIsOrderandBill from cashier. The bill is for " + bill));		
 		System.out.println("Customer received msgHereIsOrderandBill from cashier. The bill is for " + bill);			
 	}

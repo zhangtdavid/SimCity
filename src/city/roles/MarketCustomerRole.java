@@ -5,11 +5,13 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
@@ -23,13 +25,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketCashier cashier;
 	private MarketEmployee employee;
 	
-	private Map<String, Integer> order = new HashMap<String, Integer>();
-    private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
+	private MarketOrder order;
+    private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
 	int loc;
 	
-	double money;
-	double bill;
+	int money;
+	int bill;
 	
 	private enum MarketCustomerState
 	{None, WaitingForService, WaitingForOrder, Paying};
@@ -49,9 +51,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerRole() {
+	public MarketCustomerRole(MarketOrder o) {
 		super(); // TODO
-        for (String s: order.keySet()) {
+        for (FOOD_ITEMS s: order.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
     }	
@@ -73,11 +75,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();
 	}
 	
-	public void msgHereIsOrderandBill(Map<String, Integer> collectedItems, double bill) {
+	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
 		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
-        for (String item: collectedItems.keySet()) {
+        for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
         this.bill = bill;
@@ -141,7 +143,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		employee.msgHereIsMyOrder(this, order);
+		employee.msgHereIsMyOrder(this, order.orderItems, order.orderId);
 //		marketCustomerGui.DoStandInWaitingForOrderLine();
 //		try {
 //		atOrderLine.acquire();
@@ -160,8 +162,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-//		double payment = checkBill(); TODO
-//		cashier.msgHereIsPayment(this, payment);			
+		int payment = checkBill();
+		cashier.msgHereIsPayment(this, payment);			
 	}
 	
 	private void leaveMarket() {
@@ -202,6 +204,17 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //  Utilities
 //	=====================================================================	
+	public int checkBill() {
+		int tempBill = 0;
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        	tempBill += order.orderItems.get(item)*market.prices.get(item);
+        }
 
+        if (tempBill == bill)
+        	return bill;
+        
+		return -1;
+	}
+	
 	// Classes
 }

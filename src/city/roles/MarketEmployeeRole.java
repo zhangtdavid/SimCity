@@ -5,11 +5,13 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 
@@ -27,6 +29,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	private MarketCashier cashier;
 	private MarketCustomer customer;
 	private MarketCustomerDelivery customerDelivery;
+	private MarketCustomerDeliveryPayment customerDeliveryPayment;
 	
 	private enum MarketEmployeeState
 	{None, AskedForOrder};
@@ -36,8 +39,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	{AskedToAssistCustomer, OrderReceived};
 	private MarketEmployeeEvent event;
 	
-    private Map<String, Integer> order = new HashMap<String, Integer>();
-    private Map<String, Integer> collectedItems = new HashMap<String, Integer>();
+    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+    private int orderId;
+    
+    private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
 //	Gui
 //	---------------------------------------------------------------
@@ -50,9 +55,9 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	---------------------------------------------------------------
 	public MarketEmployeeRole() {
 		super();
-        for (String s: order.keySet()) {
-        	collectedItems.put(s, 0); // initialize all values in collectedItems to 0
-        }
+//        for (FOOD_ITEMS s: order.keySet()) {
+//        	collectedItems.put(s, 0); // initialize all values in collectedItems to 0
+//        }
     }
 
 //  Messages
@@ -65,43 +70,57 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = c;
 		customerDelivery = null;
+		customerDeliveryPayment = null;
 		stateChanged();
 	}
 	
-	public void msgAssistCustomerDelivery(MarketCustomerDelivery c) {
+	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
 		event = MarketEmployeeEvent.AskedToAssistCustomer;
 		customer = null;
 		customerDelivery = c;
+		customerDeliveryPayment = cPay;
 		stateChanged();
+	}
+	
+	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
+		log.add(new LoggedEvent("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager."));
+		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager.");
+		event = MarketEmployeeEvent.OrderReceived;
+        for (FOOD_ITEMS item: o.keySet()) {
+            order.put(item, o.get(item)); // Create a deep copy of the order map
+        }
+        orderId = id;
+        stateChanged();
 	}
 	
 //	Customer
 //	---------------------------------------------------------------
-	public void msgHereIsMyOrder(MarketCustomer c, Map<String, Integer> o) {
+	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Employee received msgHereIsMyOrder from Market Customer."));
 		System.out.println("Market Employee received msgHereIsMyOrder from Market Customer.");
 		if (customer == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
-            for (String item: o.keySet()) {
+            for (FOOD_ITEMS item: o.keySet()) {
                 order.put(item, o.get(item)); // Create a deep copy of the order map
             }
             stateChanged();
 		}
+        orderId = id;
 	}
 
-	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
-		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
-		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
-		if (customerDelivery == c) { // Makes sure it is the same customer
-			event = MarketEmployeeEvent.OrderReceived;
-            for (String item: o.keySet()) {
-                order.put(item, o.get(item)); // Create a deep copy of the order map
-            }
-            stateChanged();
-		}
-	}
+//	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
+//		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
+//		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
+//		if (customerDelivery == c) { // Makes sure it is the same customer
+//			event = MarketEmployeeEvent.OrderReceived;
+//            for (String item: o.keySet()) {
+//                order.put(item, o.get(item)); // Create a deep copy of the order map
+//            }
+//            stateChanged();
+//		}
+//	}
 
 //	Animation
 //	---------------------------------------------------------------
@@ -155,11 +174,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			customerDelivery.msgWhatWouldYouLike(this);
+			manager.msgWhatWouldCustomerDeliveryLike(this);
 		}
 	
 	private void collectItems() {
-        for (String item: order.keySet()) {
+        for (FOOD_ITEMS item: order.keySet()) {
         	if (market.inventory.get(item) < order.get(item) && market.inventory.get(item) > 0) {
         		collectedItems.put(item, collectedItems.get(item) + market.inventory.get(item));
         		market.inventory.put(item, 0);
@@ -180,9 +199,9 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //			}
         	// dependent on customer type
         	if (customer != null)
-        		cashier.msgComputeBill(this, customer, order, collectedItems);
+        		cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
         	else
-        		cashier.msgComputeBill(this, customerDelivery, order, collectedItems);
+        		cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
 //        	marketEmployeeGui.doGoToCounter();
 //    		try {
 //			atCounter.acquire();
