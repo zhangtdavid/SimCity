@@ -3,6 +3,7 @@ package city.roles;
 import java.util.*;
 
 import city.Role;
+import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -12,6 +13,7 @@ import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiterBase;
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 /**
  * Restaurant Cook Agent
  */
@@ -49,20 +51,24 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	}
 		
 	public enum TransactionState
-	{Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
+	{None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	public class MarketTransaction {
-		MarketBuilding m;
-		int ID;
+		MarketBuilding market;
+		public Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
+		public int orderId;
 		public int bill;
 		public TransactionState s;
 		
-		public MarketTransaction (MarketBuilding market, int id, int bill, TransactionState state) {
-			m = market;
-			ID = id;
-			this.bill = bill;
-			s = state;
+		public MarketTransaction (MarketBuilding m, MarketOrder o) {
+			market = m;
+	        for (FOOD_ITEMS f: o.orderItems.keySet()) {
+	        	orderItems.put(f, o.orderItems.get(f));
+	        }
+	        orderId = o.orderId;
+	        bill = 0;
+			s = TransactionState.None;
 		}
 	}
 	
@@ -82,13 +88,17 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 //  Messages
 //	=====================================================================
+//	Waiter
+//	---------------------------------------------------------------
 	public void msgComputeBill(RestaurantChungWaiterBase w, RestaurantChungCustomer c, String order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
 		transactions.add(new Transaction(w, c, order, TransactionState.Pending));
 		stateChanged();
 	}
-	
+
+//	Restaurant Customer
+//	---------------------------------------------------------------
 	public void msgHereIsPayment(RestaurantChungCustomer c, int money) {
 		print("Cashier received msgHereIsPayment");
 		log.add(new LoggedEvent("Cashier received msgHereIsPayment. For amount of " + money));
@@ -98,12 +108,22 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
+
+//	Cook
+//	---------------------------------------------------------------
+	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
+		marketTransactions.add(new MarketTransaction(m, o));	
+	}
 	
+//	Market Cashier
+//	---------------------------------------------------------------	
 	public void msgMarketOrderBill(MarketCashier c, int id, int bill) {
-		print("Cashier received msgMarketOrderBill");
-		log.add(new LoggedEvent("Cashier received msgMarketOrderBill. For amount of " + bill));
-//		marketTransactions.add(new MarketTransaction(m, id, bill, TransactionState.Pending)); TODO
-		stateChanged();
+//		print("Cashier received msgMarketOrderBill");
+//		log.add(new LoggedEvent("Cashier received msgMarketOrderBill. For amount of " + bill));
+//		MarketTransaction mt = findMarketTransaction(id);
+//		mt.bill = bill;
+//		mt.s = TransactionState.Pending;
+//		stateChanged();
 	}
 	
 //  Scheduler
@@ -210,12 +230,15 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	private void payMarket(MarketTransaction mt) {
 		if (money >= mt.bill) {
-			print("Paying market " + mt.bill);
-//			mt.m.cashier.msgHereIsPayment(mt.ID, mt.bill); // TODO need to change this to accept a CustomerDeliveryPayment type, need to eliminate ids TODO
-			money -= mt.bill;
-			removeMarketTransactionFromList(mt);
+			int payment = checkBill(mt);
+			if(payment != -1) {
+				print("Paying market " + mt.bill);
+				marketCustomerDeliveryPayment.setActive();
+//				mt.market.cashier.msgHereIsPayment(marketCustomerDeliveryPayment, mt.bill); TODO this should be through the MarketCustomerDeliveryPaymentRole
+				money -= mt.bill;
+				removeMarketTransactionFromList(mt);
+			}
 		}
-		// else, what happens when cashier does not have enough money?
 //		else {
 //			print("Not enough money to pay market " + mt.bill);
 //		}
@@ -230,6 +253,15 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public Transaction findTransaction(RestaurantChungCustomer c) {
 		for(Transaction t: transactions) {
 			if(t.c == c) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	public MarketTransaction findMarketTransaction(int id) {
+		for(MarketTransaction t: marketTransactions) {
+			if(t.orderId == id) {
 				return t;
 			}
 		}
@@ -256,5 +288,17 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		return marketCustomerDeliveryPayment;
+	}
+	
+	public int checkBill(MarketTransaction t) {
+		int tempBill = 0;
+        for (FOOD_ITEMS item: t.orderItems.keySet()) {
+        	tempBill += t.orderItems.get(item)*t.market.prices.get(item);
+        }
+
+        if (tempBill == t.bill)
+        	return t.bill;
+        
+		return -1;
 	}
 }

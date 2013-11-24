@@ -27,7 +27,6 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	
 	private MarketOrder order;
 	
-	double money;
 	int bill;
 	
 	private enum MarketCustomerState
@@ -45,7 +44,13 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
     }	
 	
 //  Messages
-//	=====================================================================	
+//	=====================================================================
+//	Restaurant Cook
+//	---------------------------------------------------------------
+	
+	
+//	Market Cashier
+//	---------------------------------------------------------------
 	public void msgHereIsBill(MarketCashier c, int bill, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Cashier."));
 		System.out.println("Market customerDelivery received msgHereIsOrderandBill from Market Cashier.");
@@ -81,7 +86,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private void pay() {
 		state = MarketCustomerState.Paying;
 		int payment = checkBill();
-		cashier.msgHereIsPayment(this, payment);			
+		cashier.msgHereIsPayment(this, payment);
+		// subtractMoney(payment);
 	}
 
 //  Getters and Setters

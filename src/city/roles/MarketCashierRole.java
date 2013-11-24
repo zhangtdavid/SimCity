@@ -215,7 +215,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		for (FOOD_ITEMS s: t.collectedItems.keySet()) {
         	t.bill += t.collectedItems.get(s)*market.prices.get(s);
         }
-        // notify customer if there is a difference between order and collected items
+        // TODO notify customer if there is a difference between order and collected items
 
 		if(t.customer != null) {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill, t.orderId);			
