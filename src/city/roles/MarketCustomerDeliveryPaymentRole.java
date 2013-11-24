@@ -34,7 +34,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		super(); // TODO
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
-    }	
+    }
+	
+// How to deal with nexted inactivity?
+//	public void setInactive(){
+//	}
 	
 //  Messages
 //	=====================================================================	

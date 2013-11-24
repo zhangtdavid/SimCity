@@ -72,6 +72,10 @@ public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChu
 		super();
 	}
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================
 //	Break

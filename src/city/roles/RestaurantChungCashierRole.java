@@ -6,7 +6,6 @@ import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
@@ -26,7 +25,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	Timer timer = new Timer();
 	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
-	public int money;
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions);
@@ -46,7 +44,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			w = w2;
 			c = customer;
 			choice = order;
-			price = prices.get(choice);
+			price = restaurant.foods.get(choice).price;
 			payment = 0;
 			s = state;
 		}
@@ -71,21 +69,17 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	}
 	public enum MarketTransactionState
 	{Pending, Processing, WaitingForConfirmation};
-	
-	private Map<FOOD_ITEMS, Integer> prices = new HashMap<FOOD_ITEMS, Integer>();
-	
+		
 //	Constructor
 //	=====================================================================		
 	public RestaurantChungCashierRole() {
 		super();
-		money = 500;
-		// Add items and their prices to a map
-		prices.put(FOOD_ITEMS.steak, 16);
-		prices.put(FOOD_ITEMS.chicken, 12);
-		prices.put(FOOD_ITEMS.salad, 6);
-		prices.put(FOOD_ITEMS.pizza, 10);
 	}
-
+	
+	public void setActive(){
+		this.setActivityBegun();
+	}	
+	
 //  Messages
 //	=====================================================================
 //	Waiter
@@ -104,7 +98,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		log.add(new LoggedEvent("Cashier received msgHereIsPayment. For amount of " + money));
 		Transaction t = findTransaction(c);
 		t.payment = money;
-		this.money += money;
+		restaurant.setCash(restaurant.getCash() + money);
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
@@ -191,7 +185,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		}
 		
 		t.s = TransactionState.Done;
-		if (money >= (t.payment-t.price)) t.c.msgHereIsChange(t.payment-t.price);
+		if (restaurant.getCash() >= (t.payment-t.price)) t.c.msgHereIsChange(t.payment-t.price);
 //		t.c.msgHereIsChange(t.payment-t.price);
 		// else, what happens when cashier does not have enough money?
 	}
@@ -244,15 +238,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			}
 		}
 	}
-	
-//	public void removeMarketTransactionFromList(MarketTransaction transaction) {
-//		for(MarketTransaction mt: marketTransactions) {
-//			if(mt == transaction) {
-//				marketTransactions.remove(mt);
-//				return;
-//			}
-//		}
-//	}
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		return marketCustomerDeliveryPayment;

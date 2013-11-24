@@ -2,16 +2,18 @@ package city.animations.interfaces;
 
 import city.interfaces.AnimationInterface;
 
-public interface RestaurantChungAnimatedCook extends AnimationInterface {
+public interface MarketAnimatedCustomer extends AnimationInterface{
 
-	void DoGoToGrill(String choice);
+	void DoStandInWaitingForServiceLine();
 
-	void DoReturnToCookHome();
+	void DoGoToCounter(int loc);
 
-	void DoGoToPlating(String choice);
-	
+	void DoGoToCashier();
+
+	void DoExitMarket();
+
 	// Data
-	
+
 	// Constructor
 	
 	// Abstract

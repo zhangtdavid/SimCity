@@ -2,10 +2,12 @@ package city.roles;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import city.animations.interfaces.MarketAnimatedCustomer;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -15,7 +17,6 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
-
 //  Data
 //	=====================================================================	
 	public EventLog log = new EventLog();
@@ -43,11 +44,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 
 //	Gui
 //	---------------------------------------------------------------
-//	private MarketCustomerGui marketCustomerGui;
-//	private Semaphore atServiceLine = new Semaphore(0, true);
-//	private Semaphore atCounter = new Semaphore(0, true);
-//	private Semaphore atOrderLine = new Semaphore(0, true);
-//	private Semaphore atCashier = new Semaphore(0, true);
+	private MarketAnimatedCustomer marketCustomerGui;
+	private Semaphore atServiceLine = new Semaphore(0, true);
+	private Semaphore atCounter = new Semaphore(0, true);
+	private Semaphore atOrderLine = new Semaphore(0, true);
+	private Semaphore atCashier = new Semaphore(0, true);
 	
 //	Constructor
 //	---------------------------------------------------------------
@@ -58,14 +59,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         }
     }	
 	
-//  Messages
-//	=====================================================================	
-	public void msgAnimationArrivedAtMarket() {
-		System.out.println("Market customer received msgAnimationArrivedAtMarket");
-		event = MarketCustomerEvent.ArrivedAtMarket;
-		stateChanged();
+	public void setActive(){
+		this.setActivityBegun();
 	}
 	
+//  Messages
+//	=====================================================================
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
 		log.add(new LoggedEvent("Market Customer received msgWhatWouldYouLike from Market Employee."));
 		System.out.println("Market Customer received msgWhatWouldYouLike from Market Employee.");
@@ -91,6 +90,31 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		System.out.println("Market Customer received msgPaymentReceived from Market Cashier.");
 		event = MarketCustomerEvent.PaymentReceived;
 		stateChanged();
+	}
+	
+//	Gui
+//	---------------------------------------------------------------
+	public void msgAnimationArrivedAtMarket() {
+		System.out.println("Market customer received msgAnimationArrivedAtMarket");
+		event = MarketCustomerEvent.ArrivedAtMarket;
+		stateChanged();
+	}
+	
+	public void msgAnimationAtEntrance() {
+		System.out.println("Market customer received msgAnimationArrivedAtMarket");
+		event = MarketCustomerEvent.ArrivedAtMarket;
+		stateChanged();		
+	}
+
+	public void msgAnimationAtCashier() {
+		System.out.println("Market customer received msgAnimationAtCashier");
+		//from animation
+		atCashier.release();// = true;
+		stateChanged();		
+	}
+
+	public void msgAnimationFinishedLeaveMarket() {
+		super.setActive();
 	}
 	
 //  Scheduler
@@ -124,7 +148,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
 		manager.msgIWouldLikeToPlaceAnOrder(this);
-//		marketCustomerGui.DoStandInWaitingForServiceLine();
+		marketCustomerGui.DoStandInWaitingForServiceLine();
 //		try {
 //		atServiceLine.acquire();
 //		} catch (InterruptedException e) {
@@ -136,7 +160,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void giveOrder() {
 		state = MarketCustomerState.WaitingForOrder;
-//		marketCustomerGui.DoGoToCounter(loc);
+		marketCustomerGui.DoGoToCounter(loc);
 //		try {
 //		atCounter.acquire();
 //		} catch (InterruptedException e) {
@@ -144,7 +168,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //			e.printStackTrace();
 //		}
 		employee.msgHereIsMyOrder(this, order.orderItems, order.orderId);
-//		marketCustomerGui.DoStandInWaitingForOrderLine();
+		marketCustomerGui.DoStandInWaitingForServiceLine();
 //		try {
 //		atOrderLine.acquire();
 //		} catch (InterruptedException e) {
@@ -155,7 +179,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void pickUpOrderAndPay() {
 		state = MarketCustomerState.Paying;
-//		marketCustomerGui.DoGoToCashier();
+		marketCustomerGui.DoGoToCashier();
 //		try {
 //		atCashier.acquire();
 //		} catch (InterruptedException e) {
@@ -169,9 +193,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void leaveMarket() {
 		state = MarketCustomerState.None;
-//		marketCustomerGui.DoLeaveMarket();
-//		return back to normal person role
-
+		marketCustomerGui.DoExitMarket();
+		super.setInactive();
 	}
 	
 //  Getters and Setters
@@ -216,6 +239,4 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         
 		return -1;
 	}
-	
-	// Classes
 }

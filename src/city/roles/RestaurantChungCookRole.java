@@ -7,7 +7,11 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChungBuilding;
+import city.buildings.RestaurantChungBuilding.Food;
+import city.buildings.RestaurantChungBuilding.FoodOrderState;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
@@ -19,9 +23,11 @@ import city.interfaces.RestaurantChungWaiterBase;
 // A Cook fulfills the customers' food orders as communicated by the waiters
 // and maintains the restaurant's food inventory
 public class RestaurantChungCookRole extends Role implements RestaurantChungCook {        
-    Timer timer = new Timer();
+	RestaurantChungBuilding restaurant;
+	
+	Timer timer = new Timer();
     Timer timer2 = new Timer();
-    private RestaurantChungCookAnimation cookGui = null;
+    private RestaurantChungAnimatedCook cookGui = null;
     
     private boolean cooking = false;
     private boolean plating = false;
@@ -52,29 +58,6 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private enum OrderState
     {Pending, Cooking, Cancelled, DoneCooking, Plating, DonePlating};
-    
-//  Food
-//  =====================================================================
-    private Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
-    private class Food {
-        String item;
-        int cookingTime;
-        int amount;
-        int low;
-        int capacity;
-        FoodOrderState s;
-        
-        public Food(String item, int cookingTime, int amount, int low, int capacity) {
-            this.item = item;
-            this.cookingTime = cookingTime;
-            this.amount = amount;
-            this.low = low;
-            this.capacity = capacity;
-            s = FoodOrderState.None;
-        }
-    }
-    private enum FoodOrderState
-    {None, Pending, Ordered};
         
 //  Markets
 //  =====================================================================
@@ -99,15 +82,17 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 //  Constructor
 //  =====================================================================                
-    public RestaurantChungCookRole() {
+    public RestaurantChungCookRole(RestaurantChungBuilding restaurant) {
         super();
-        // Add items and their cooking times to a map
-        foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10));
-        foods.put(FOOD_ITEMS.pizza, new Food("pizza", 15, 10, 5, 10));
-        foods.put(FOOD_ITEMS.salad, new Food("salad", 5, 10, 5, 10));
-        foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 10, 5, 10));
+        this.restaurant = restaurant;
     }
-        
+    
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
+//  Messages
+//	=====================================================================
 //  Waiter
 //  ---------------------------------------------------------------
     public void msgHereIsAnOrder(RestaurantChungWaiterBase w, String choice, int table) {
@@ -279,10 +264,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         Map<FOOD_ITEMS, Integer> normal = new HashMap<FOOD_ITEMS, Integer>();                
         int numLow = 0;
         
-        for (FOOD_ITEMS i: foods.keySet()) {
-            if (foods.get(i).s == FoodOrderState.None && (foods.get(i).amount <= foods.get(i).low)) {
-                normal.put(i, foods.get(i).capacity - foods.get(i).amount);
-                foods.get(i).s = FoodOrderState.Pending;
+        for (FOOD_ITEMS i: restaurant.foods.keySet()) {
+            if (restaurant.foods.get(i).s == FoodOrderState.None && (restaurant.foods.get(i).amount <= restaurant.foods.get(i).low)) {
+                normal.put(i, restaurant.foods.get(i).capacity - restaurant.foods.get(i).amount);
+                restaurant.foods.get(i).s = FoodOrderState.Pending;
                 numLow++;
             }
             else normal.put(i, 0);
@@ -309,8 +294,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
         }
 
-        for (FOOD_ITEMS i: foods.keySet()) {
-            print("Current Inventory: " + i + " " + foods.get(i).amount);
+        for (FOOD_ITEMS i: restaurant.foods.keySet()) {
+            print("Current Inventory: " + i + " " + restaurant.foods.get(i).amount);
         }
 
         
@@ -320,7 +305,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                 
         MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
         marketCustomerDelivery = new MarketCustomerDeliveryRole(o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
-//        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPaymentRole(), o, o.ID); // need to change this to a call to the manager, asking market manager for service
+        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPayment(), o.order.orderItems, o.order.orderId); // need to change this to a call to the manager, asking market manager for service
         return;
     }
     
@@ -332,7 +317,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  Cooking
 //  ---------------------------------------------------------------
     private void tryToCookIt(Order o) {
-        Food f = foods.get(o.choice);
+        Food f = restaurant.foods.get(o.choice);
         // If out of food
         identifyFoodThatIsLow();
 
@@ -351,8 +336,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void cookIt(final Order o) {
         o.s = OrderState.Cooking;
-//        cookGui.DoGoToGrill(o.choice);
-//        print(Integer.toString(atGrill.availablePermits()));
+        cookGui.DoGoToGrill(o.choice);
 //		try {
 //			atGrill.acquire();
 //		} catch (InterruptedException e) {
@@ -363,12 +347,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         cooking = true;
         timer.schedule(new TimerTask() {
             public void run() {
-                Food f = foods.get(o.choice);
+                Food f = restaurant.foods.get(o.choice);
                 f.amount--;
 //              print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
                 msgSelfDoneCooking(o);
-//                cookGui.DoReturnToCookHome();
+                cookGui.DoReturnToCookHome();
 //        		try {
 //        			atCookHome.acquire();
 //        		} catch (InterruptedException e) {
@@ -377,12 +361,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //        		}
             }
         },
-        foods.get(o.choice).cookingTime*100);
+        restaurant.foods.get(o.choice).cookingTime*100);
     }
     
     private void plateIt(final Order o) {
         o.s = OrderState.Plating;
-//        cookGui.DoGoToPlating(o.choice);
+        cookGui.DoGoToPlating(o.choice);
 //		try {
 //			atPlating.acquire();
 //		} catch (InterruptedException e) {
@@ -393,12 +377,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         plating = true;
         timer2.schedule(new TimerTask() {
             public void run() {
-//            	print("in plating timer");
             	RestaurantChungWaiterBase waiter = findWaiter(o); // Determines the waiter associated with the order
                 waiter.msgOrderIsReady(o.choice, o.table);
                 plating = false;
                 msgSelfDonePlating(o);
-//                cookGui.DoReturnToCookHome();
+                cookGui.DoReturnToCookHome();
 //        		try {
 //        			atCookHome.acquire();
 //        		} catch (InterruptedException e) {
@@ -408,7 +391,6 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
         },
         500);
-//        print("after plating timer");
     }
     
     private void removeOrder(Order o) {
@@ -452,7 +434,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
     
     public Food findFood(String choice) {
-        for(Food f: foods.values()){
+        for(Food f: restaurant.foods.values()){
             if(f.item.equals(choice)) {
                 return f;
             }

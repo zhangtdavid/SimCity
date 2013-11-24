@@ -43,6 +43,10 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
         super.setInactive();
     }
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================	
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
