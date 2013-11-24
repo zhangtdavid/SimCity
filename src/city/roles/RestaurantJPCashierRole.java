@@ -51,7 +51,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	}
 	public void setInactive(){
 		if(Bills.size() == 0 && building.seatedCustomers == 0){
-			active = false;
+			super.setInactive();
 		}
 		else
 			wantsInactive = true;
@@ -117,7 +117,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	public boolean runScheduler() {
 		//ready, makingOrder, orderReady
 		if(wantsInactive && Bills.size() == 0 && building.seatedCustomers == 0){
-			active = false;
+			super.setInactive();
 			wantsInactive = false;
 		}
 		synchronized(Bills){

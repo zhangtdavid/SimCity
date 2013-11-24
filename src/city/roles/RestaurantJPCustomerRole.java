@@ -267,7 +267,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private void LeaveTable() {
 		waiter.msgDoneEatingAndLeaving(this);
 		customerGui.DoExitRestaurant();
-		active = false;
+		super.setInactive();
 	}
 	
 	private void DecideToLeave(){
@@ -277,7 +277,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 			customerGui.DoExitRestaurant();
 			state = AgentState.DoingNothing;
 			event = AgentEvent.none;
-			active = false;
+			super.setInactive();
 		}
 		else{
 			state = AgentState.WaitingInRestaurant;

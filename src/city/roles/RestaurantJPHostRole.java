@@ -40,7 +40,7 @@ public class RestaurantJPHostRole extends Role {
 	
 	public void setInactive(){
 		if(building.host != this && waitingCustomers.size() == 0){
-			active = false;
+			super.setInactive();
 		}
 		else
 			wantsInactive = true;
@@ -146,7 +146,7 @@ public class RestaurantJPHostRole extends Role {
             If so seat him at the table.
 		 */
 		if(wantsInactive && building.host != this && waitingCustomers.size() == 0){
-			this.active = false;
+			super.setInactive();
 			wantsInactive = false;
 		}
 		

@@ -48,7 +48,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	}
 	public void setInactive(){
 		if(orders.size() == 0 && building.seatedCustomers == 0)
-			active = false;
+			super.setInactive();
 		else
 			wantsInactive = true;
 	}
@@ -126,7 +126,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	
 	public boolean runScheduler() {
 		if(wantsInactive && orders.size() == 0 && building.seatedCustomers == 0){
-			active = false;
+			super.setInactive();
 			wantsInactive = false;
 		}
 		if(!ordering){
