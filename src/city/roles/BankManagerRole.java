@@ -26,7 +26,7 @@ public class BankManagerRole extends Role implements BankManager{
 		building = b;
 	}
 	public void setInactive(){
-		if(building.manager != this){
+		if(building.manager != this && customers.size() == 0){
 			active = false;
 		}
 		else
@@ -89,7 +89,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Scheduler
 	@Override
 	public boolean runScheduler() {
-		if(wantsInactive && building.manager != this){
+		if(wantsInactive && building.manager != this && customers.size() == 0){
 			this.active = false;
 			wantsInactive = false;
 		}
