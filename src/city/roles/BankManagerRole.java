@@ -54,9 +54,12 @@ public class BankManagerRole extends Role implements BankManager{
 		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t));
 		stateChanged();
 	}
-	public void msgCreateAccount(int money, BankTellerRole t){
-		print("Create account message received from teller");
-		bankTasks.add(new BankTask(0, type.acctCreate, money, t));
+	public void msgTryDeposit(int money, int acctNum, BankTellerRole t){
+		print("Try deposit message received from teller");
+		if(acctNum == -1)
+			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t));
+		else
+			bankTasks.add(new BankTask(acctNum, type.deposit, money, t));
 		stateChanged();
 	}
 	public void msgCreateLoan(int amt, int monthly, int acct){
@@ -89,6 +92,10 @@ public class BankManagerRole extends Role implements BankManager{
 			}
 		}	
 		for(BankTask bT : bankTasks){
+			if(bT.t == type.atmDeposit){
+				atmDeposit(bT);
+				return true;
+			}
 			if(bT.t == type.deposit){
 				Deposit(bT);
 				return true;
@@ -120,12 +127,13 @@ public class BankManagerRole extends Role implements BankManager{
 	
 // Actions
 	private boolean LoanPaymentDue() {
-		Calendar c = Calendar.getInstance();
+		return false;
+		/*Calendar c = Calendar.getInstance();
 		c.setTime(this.getPerson().getDate());
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(LoanPayDate());
 		int due = c.get(Calendar.DAY_OF_YEAR);
-		return (day == due);	
+		return (day == due);*/	
 	}
 	
 	private Date LoanPayDate() {
@@ -140,7 +148,7 @@ public class BankManagerRole extends Role implements BankManager{
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
 	}
-	private void Deposit(BankTask bT){
+	private void atmDeposit(BankTask bT){
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
 				a.balance += bT.money;
@@ -150,9 +158,17 @@ public class BankManagerRole extends Role implements BankManager{
 			}
 		}
 	}
+	private void Deposit(BankTask bT){
+		for(Account a : building.getAccounts()){
+			if(a.acctNum == bT.acctNum){
+				a.balance += bT.money;
+				bankTasks.remove(bT);
+				bT.teller.msgTransactionSuccessful();
+			}
+		}
+	}
 	private void Withdraw(BankTask bT){
-		List<Account> temp = building.getAccounts();
-		for(Account a : temp){
+		for(Account a : building.getAccounts()){
 			if(a.acctNum == bT.acctNum){
 				a.balance -= bT.money;
 				bankTasks.remove(bT);

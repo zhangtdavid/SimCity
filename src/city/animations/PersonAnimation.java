@@ -26,4 +26,16 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 		
 	}
 
+	@Override
+	public void goToSleep() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cookAndEatFood() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -2,6 +2,7 @@ package city.roles;
 
 import city.Role;
 import city.buildings.BankBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 
 public class BankTellerRole extends Role implements BankTeller {
@@ -10,14 +11,14 @@ public class BankTellerRole extends Role implements BankTeller {
 	//TellerGui gui;
 	BankBuilding building;
 	int boothNumber;
-	MyCustomer currentCustomer;
+	public MyCustomer currentCustomer;
 // Constructor
 	public BankTellerRole (BankBuilding b){
 		building = b;
 	}
 // Messages
 	//From BankManager
-	public void msgAddressCustomer(BankCustomerRole bc){
+	public void msgAddressCustomer(BankCustomer bc){
 		print("Address Customer msg received");
 		currentCustomer = new MyCustomer(bc);
 		currentCustomer.s = serviceState.needsService;
@@ -25,9 +26,9 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void msgHereIsAccount(int acctNum){
 		print("Here is Account msg received");
-		if(currentCustomer.t == serviceType.acctCreate){
+		if(currentCustomer.t == serviceType.deposit){
 			currentCustomer.acctNum = acctNum;
-			currentCustomer.s = serviceState.confirmed;
+			currentCustomer.s = serviceState.newAccount;
 			stateChanged();
 		}
 	}
@@ -40,7 +41,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void msgTransactionSuccessful(){
 		print("Transaction successful msg received");
-		currentCustomer.s = serviceState.confirmed;		//confirmed
+		if(currentCustomer.t == serviceType.deposit)
+			currentCustomer.s = serviceState.confirmed;
+		else if(currentCustomer.t == serviceType.withdrawal)
+			currentCustomer.s = serviceState.confirmed;
 		stateChanged();
 	}
 	//From BankCustomer
@@ -53,11 +57,12 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.salary = salary;
 		stateChanged();
 	}
-	public void msgCreateAccount(int money){
-		print("Create account message received");
+	public void msgDeposit(int money, int acctNum){
+		print("Deposit message received");
 		currentCustomer.s = serviceState.pending;
-		currentCustomer.t = serviceType.acctCreate;
+		currentCustomer.t = serviceType.deposit;
 		currentCustomer.amount = money;
+		currentCustomer.acctNum = acctNum;
 		stateChanged();
 	}
 	public void msgDoneAndLeaving() {
@@ -74,13 +79,17 @@ public class BankTellerRole extends Role implements BankTeller {
 				ServiceCustomer();
 				return true;
 			}
-			if(currentCustomer.t == serviceType.acctCreate){
+			if(currentCustomer.t == serviceType.deposit){
 				if(currentCustomer.s == serviceState.pending){
-					CreateAccount();
+					TryDeposit();
+					return true;
+				}
+				if(currentCustomer.s == serviceState.newAccount){
+					GiveAccountNumber();
 					return true;
 				}
 				if(currentCustomer.s == serviceState.confirmed){
-					GiveAccountNumber();
+					DepositSuccessful();
 					return true;
 				}
 			}
@@ -111,9 +120,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
 		currentCustomer.s = serviceState.inProgress;
 	}
-	public void CreateAccount(){
+	public void TryDeposit(){
 		currentCustomer.s = serviceState.inProgress;
-		building.getManager().msgCreateAccount(currentCustomer.amount, this);
+		building.getManager().msgTryDeposit(currentCustomer.amount, currentCustomer.acctNum, this);
 	}
 	public void GiveAccountNumber(){
 		currentCustomer.bc.msgAccountCreated(currentCustomer.acctNum);
@@ -125,6 +134,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void TransferWithdrawal(){
 		currentCustomer.bc.msgHereIsWithdrawal(currentCustomer.amount);
+		currentCustomer.s = serviceState.finished;
+	}
+	public void DepositSuccessful(){
+		currentCustomer.bc.msgDepositCompleted();
 		currentCustomer.s = serviceState.finished;
 	}
 	public void CheckLoanEligible(){
@@ -152,14 +165,14 @@ public class BankTellerRole extends Role implements BankTeller {
 
 	// Classes
 	public class MyCustomer{
-		int acctNum;
-		BankCustomerRole bc;
+		public int acctNum;
+		BankCustomer bc;
 		int amount;
 		int salary;
 		serviceState s;
 		serviceType t;
-		public MyCustomer(BankCustomerRole r){
-			bc = r;
+		public MyCustomer(BankCustomer bc2){
+			bc = bc2;
 		}
 	}
 }

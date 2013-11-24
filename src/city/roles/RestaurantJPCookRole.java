@@ -1,10 +1,16 @@
 package city.roles;
 
-import utilities.RestaurantJPTableClass;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import utilities.RestaurantJPRevolvingStand;
+import utilities.RestaurantJPTableClass;
 import city.Role;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPHostAnimation;
@@ -19,6 +25,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	public List<MyMarket> Markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	boolean ordering = false;
 	private Semaphore atDestination = new Semaphore(0,true);
+	
+	RestaurantJPRevolvingStand revolvingStand;
+	boolean waitingToCheckStand = false;
+	
 	class MyMarket{
 		MarketManagerRole m;
 		boolean Steak = true;
@@ -51,11 +61,16 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		}
 	}
 	String name;
-	class Order{
+	public class Order{
 		state s;
 		RestaurantJPWaiter w;
 		String choice;
 		RestaurantJPTableClass table;
+		public Order(RestaurantJPWaiter wait, String c, RestaurantJPTableClass table){
+			s = state.pending;
+			w = wait;
+			choice = c;
+		}
 	};
 	public enum state{pending, cooking, done, finished, taken};
 	
@@ -99,15 +114,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	}
 //MSGS-----------------------------------------------------------------------------------------------------------
 	
-	public void msgHereIsAnOrder(RestaurantJPWaiter w, String choice, RestaurantJPTableClass table) {
+	public void msgHereIsAnOrder(RestaurantJPWaiter wait, String c, RestaurantJPTableClass t) {
 		//Do("HereIsOrder message received from " + w.getName());
-		Order o1 = new Order();
-		o1.w = w;
-		o1.s = state.pending;
-		o1.choice = choice;
-		o1.table = table;
 		synchronized(orders){
-		orders.add(o1);
+		orders.add(new Order(wait, c, t));
 		}
 		stateChanged();
 	}
@@ -210,8 +220,28 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 				return true;
 			}
 		}
+		
+		if(!waitingToCheckStand) {
+			print("Waiting 5 seconds to check the stand");
+			waitingToCheckStand = true;
+			timer.schedule(new TimerTask() {
+				public void run() {
+					waitingToCheckStand = false;
+					Order newOrder = revolvingStand.remove();
+					if(newOrder != null) {
+						print("Found an item on the stand");
+						orders.add(newOrder);
+					}
+					stateChanged();
+				}
+			},
+			5000);
+		}
+		
 		return false;
 		}
+		
+		
 	}
 
 // ACTIONS----------------------------------------------------------------------------------------
@@ -281,9 +311,13 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		gui.DoOrderRemoved(o.choice);
 		orders.remove(o);
 	}
-	public void setAnimation(RestaurantJPCookAnimation p2a1) {
-		gui = p2a1;
+	public void setAnimation(RestaurantJPCookAnimation g) {
+		gui = g;
 		
+	}
+	
+	public int getPosOfNewOrder() {
+		return orders.size();
 	}
 }
 

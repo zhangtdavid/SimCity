@@ -1,7 +1,7 @@
 package city.tests.mock;
 
 import utilities.LoggedEvent;
-import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.MockRole;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
@@ -36,7 +36,7 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	}
 	
 	@Override
-	public void msgWaiterDeliveredFood(FOOD_ITEMS stockItem) { 
+	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) { 
 		log.add(new LoggedEvent("Received msgWaiterDeliveredFood. Item: " + stockItem.toString())); 
 	}
 

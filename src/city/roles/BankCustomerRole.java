@@ -1,6 +1,7 @@
 package city.roles;
 
 import city.Application;
+import city.Application.BANK_SERVICE;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -18,7 +19,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	state st;
 	int amount;
 	BankTellerRole t;
-	int acctNum;
+	int acctNum = -1;
 	int boothNumber;
 	
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
@@ -26,15 +27,19 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.service = s;
 		this.depositType = t;
 		amount = money;
-		if(s != Application.BANK_SERVICE.directDeposit)
+		if(s != Application.BANK_SERVICE.atmDeposit)
 			st = state.entering;
-		stateChanged();
+		this.setActivityBegun();
 	}
 	// Constructor
 	
-	public BankCustomerRole(BankBuilding b, Building bus) {
-		building = b;
+	public BankCustomerRole(Building bus) { //could change back to building = b, don't like cast
+		building = (BankBuilding) Application.CityMap.findBank();
 		business = bus;
+	}
+	
+	public BankCustomerRole(){		//could change back to building = b
+		building = (BankBuilding) Application.CityMap.findBank();
 	}
 	
 	// Messages
@@ -82,7 +87,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public boolean runScheduler() {
-		if(service == service.accountCreate){
+		if(service == BANK_SERVICE.atmDeposit){
 			DirectDeposit();
 			return true;
 		}
@@ -91,11 +96,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			return true;
 		}
 		if(st == state.requestService){
-			if(service == service.accountCreate){
-				RequestAccount();
+			if(service == BANK_SERVICE.deposit){
+				Deposit();
 				return true;
 			}
-			if(service == service.moneyWithdraw){
+			if(service == BANK_SERVICE.moneyWithdraw){
 				RequestWithdrawal();
 				return true;
 			}
@@ -114,13 +119,15 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
 	public void AskForService(){
+		if(building == null)
+			print("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
-	public void RequestAccount(){
+	public void Deposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
-		t.msgCreateAccount(amount);
+		t.msgDeposit(amount, acctNum);
 	}
 	
 	public void RequestWithdrawal(){
@@ -130,11 +137,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void ExitBank(){
 		st = state.inProgress;
-		if(service != Application.BANK_SERVICE.directDeposit)
+		if(service != Application.BANK_SERVICE.atmDeposit)
 			t.msgDoneAndLeaving();
 		if(depositType == Application.TRANSACTION_TYPE.business)
 			business.setCash(building.getCash() + netTransaction);
-		else
+		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
 	}

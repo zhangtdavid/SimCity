@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.interfaces.RestaurantTimmsCashier;
@@ -57,7 +57,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Messages
 
-	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, FOOD_ITEMS s) {
+	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		print("msgCookOrder");
 		orders.add(new Order(w, c, s));
 		stateChanged();
@@ -75,7 +75,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		orders.remove(order);
 	}
 
-	public void msgMarketOrderPlaced(FOOD_ITEMS s, Boolean inStock) {
+	public void msgMarketOrderPlaced(Application.FOOD_ITEMS s, Boolean inStock) {
 		print("msgMarketOrderPlaced");
 		MenuItem menuItem = findMenuItem(s);
 		if (inStock) {
@@ -84,7 +84,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		marketResponse.release();
 	}
 	
-	public void msgMarketOrderDelivered(FOOD_ITEMS s, int quantity) {
+	public void msgMarketOrderDelivered(Application.FOOD_ITEMS s, int quantity) {
 		print("msgMarketOrderDelivered");
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.incrementQuantityOnHand(quantity);
@@ -183,7 +183,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return this.animation;
 	}
 	
-	public int getMenuItemPrice(FOOD_ITEMS s) {
+	public int getMenuItemPrice(Application.FOOD_ITEMS s) {
 		MenuItem menuItem = findMenuItem(s);
 		return menuItem.getPrice();
 	}
@@ -201,7 +201,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Utilities 
 	
-	private static MenuItem findMenuItem(FOOD_ITEMS s) {
+	private static MenuItem findMenuItem(Application.FOOD_ITEMS s) {
 		MenuItem item = null;
 		for (MenuItem menuItem : menuItems) {
 			if (menuItem.getStockItem() == s) {
@@ -212,7 +212,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return item;
 	}
 	
-	private Boolean checkStore(FOOD_ITEMS s) {
+	private Boolean checkStore(Application.FOOD_ITEMS s) {
 		MenuItem menuItem = findMenuItem(s);
 		if (menuItem.getQuantityOnHand() > 0) {
 			return true;
@@ -220,7 +220,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return false;
 	}
 	
-	private void decrementMenuItem(FOOD_ITEMS s, Integer i) {
+	private void decrementMenuItem(Application.FOOD_ITEMS s, Integer i) {
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.decrementQuantityOnHand(i);
 	}
@@ -230,12 +230,12 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	private static class Order {
 		private RestaurantTimmsWaiter waiter;
 		private RestaurantTimmsCustomer customer;
-		private FOOD_ITEMS stockItem;
+		private Application.FOOD_ITEMS stockItem;
 		
 		public enum State { pending, queue, cooking, ready };
 		private State state;
 
-		Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, FOOD_ITEMS s) {
+		Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 			this.waiter = w;
 			this.customer = c;
 			this.stockItem = s;
@@ -250,7 +250,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 			return this.customer;
 		}
 		
-		private FOOD_ITEMS getStockItem() {
+		private Application.FOOD_ITEMS getStockItem() {
 			return this.stockItem;
 		}
 		
@@ -266,21 +266,21 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	// MenuItem Class
 	
 	public static class MenuItem {
-		private FOOD_ITEMS stockItem;
+		private Application.FOOD_ITEMS stockItem;
 		private Integer quantityOnHand;
 		private Integer price;
 		
 		private static enum State { inStock, ordering, onOrder, offMenu };
 		private State state;
 		
-		public MenuItem(FOOD_ITEMS s, Integer quantityOnHand, Integer price) {
+		public MenuItem(Application.FOOD_ITEMS s, Integer quantityOnHand, Integer price) {
 			this.stockItem = s;
 			this.quantityOnHand = quantityOnHand;
 			this.price = price;
 			this.state = State.inStock;
 		}
 		
-		public FOOD_ITEMS getStockItem() {
+		public Application.FOOD_ITEMS getStockItem() {
 			return stockItem;
 		}
 		

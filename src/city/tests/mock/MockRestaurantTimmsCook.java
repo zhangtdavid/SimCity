@@ -1,6 +1,7 @@
 package city.tests.mock;
 
 import utilities.LoggedEvent;
+import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.animations.RestaurantTimmsCookAnimation;
@@ -17,7 +18,7 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, FOOD_ITEMS s) {
+	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		log.add(new LoggedEvent("Received msgCookOrder from Waiter. Item: " + s.toString()));
 		
 	}
@@ -29,13 +30,13 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public void msgMarketOrderPlaced(FOOD_ITEMS s, Boolean inStock) {
+	public void msgMarketOrderPlaced(Application.FOOD_ITEMS s, Boolean inStock) {
 		log.add(new LoggedEvent("Received msgMarketOrderPlaced from Market. Item: " + s.toString() + " In Stock: " + inStock.toString()));
 
 	}
 
 	@Override
-	public void msgMarketOrderDelivered(FOOD_ITEMS s, int quantity) {
+	public void msgMarketOrderDelivered(Application.FOOD_ITEMS s, int quantity) {
 		log.add(new LoggedEvent("Received msgMarketOrderDelivered from Market. Item: " + s.toString() + " Quantity: " + quantity));
 
 	}

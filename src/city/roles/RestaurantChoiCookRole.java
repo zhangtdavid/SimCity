@@ -7,7 +7,7 @@ import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiCook;
 
-public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook {
+public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
 	//Data
 	RestaurantChoiAnimatedCook cookGui;
@@ -15,6 +15,7 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 	Semaphore inProgress = new Semaphore(0, true);
 	String name = "LeChef";
 	RestaurantChoiRevolvingStand orderqueue;
+	boolean checkback;
 
 	//Constructor
 	public RestaurantChoiCookRole() {
@@ -39,10 +40,6 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 			or.setState(RestaurantChoiOrder.RECOGNIZED);
 		}
 		stateChanged();
-	}
-	@Override
-	public void msgOrderInQueue(){
-		stateChanged(); // so that the cook wakes up. Then, will check the queue.
 	}
 
 	@Override
@@ -131,24 +128,26 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 			}
 		}//if you have no orders in the queue, we check for orders in queue.
 		if(orderqueue != null){
-			//synchronized(orderqueue){
+			synchronized(orderqueue){ // TODO do i need this? will it present problems?
 				if(orderqueue.peek() != null){
 					DoGoToPlates(); // go to stand/plating
-					DoGoToRefrig();
+					DoGoToRefrig(); // graphically prepare yourself for AnalyzeCookOrder.
 					RestaurantChoiOrder temp = orderqueue.poll(); // take&remove 1st in queue
-					AnalyzeCookOrder(temp); // analyze 1st in queue
 					synchronized(orders){
 						orders.add(temp); // add 1st in queue to INTERNAL orders list
 					}
+					AnalyzeCookOrder(temp); // analyze 1st in queue
 					return true;
 				}
-			//}
+			}
 		}
 		cookGui.DoLeave();
+		if(!checkback){
+			CheckBack();
+			checkback = true;
+		}
 		return false;
 	}
-
-
 	//Actions
 	@Override
 	public void MoveFoodToPlating(RestaurantChoiOrder o) {
@@ -161,6 +160,25 @@ public class RestaurantChoiCookRole  extends Role implements RestaurantChoiCook 
 	}
 
 	@Override
+	public void CheckBack() { // check every 2000 seconds
+		System.out.println("checkback");
+		timer.schedule(new TimerTask() {
+			public void run() {
+				synchronized(orderqueue){
+					if(!orderqueue.isEmpty()){
+						RestaurantChoiOrder o = orderqueue.poll();
+						orders.add(o);
+						DoGoToRefrig();
+						AnalyzeCookOrder(o);
+					}
+				}
+				//CheckBack();
+				checkback = false;
+				stateChanged();
+			}
+		}, 5000);
+	}
+
 	public boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.CHECKING);

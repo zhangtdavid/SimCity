@@ -1,7 +1,6 @@
 package city.interfaces;
 
 import city.Application;
-import city.Application.FOOD_ITEMS;
 
 public interface RestaurantTimmsWaiter extends RoleInterface {
 	
@@ -9,7 +8,7 @@ public interface RestaurantTimmsWaiter extends RoleInterface {
 	public abstract void msgAllowBreak(Boolean r);
 	public abstract void msgSeatCustomer(RestaurantTimmsCustomer c, int n);
 	public abstract void msgWantFood(RestaurantTimmsCustomer c);
-	public abstract void msgOrderFood(RestaurantTimmsCustomer c, FOOD_ITEMS s);
+	public abstract void msgOrderFood(RestaurantTimmsCustomer c, Application.FOOD_ITEMS s);
 	public abstract void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock);
 	public abstract void msgFoodReady(RestaurantTimmsCustomer c);
 	public abstract void msgCheckReady();

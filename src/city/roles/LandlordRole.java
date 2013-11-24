@@ -1,23 +1,25 @@
 package city.roles;
 
 import java.util.Collections;
+import java.util.Date;
 import java.util.List;
 
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
-public class LandlordRole extends ResidentRole implements Landlord{
+public class LandlordRole extends ResidentRole implements Landlord {
 
 	// Data
 	// Murphy's Law: Anything that can go wrong will go wrong.
 	final double murphyProbability = 0.01; // odds of a house needing maintenance per murphyInterval
-	final int murphyInterval = 100; // # of clock ticks per checking if house needs maintenance
-	
+	private Date rentLastPaid;
+
 	List<Resident> residents = Collections.synchronizedList(null);
 	
 	// Constructor
-	public LandlordRole(){
-		super();
+	public LandlordRole(Date rlp){
+		super(rlp);
+		rentLastPaid = rlp;
 	}
 	
 	// Messages

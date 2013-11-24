@@ -1,11 +1,5 @@
 package city.roles;
 
-import java.util.ArrayList;
-import java.util.ConcurrentModificationException;
-import java.util.List;
-import java.util.concurrent.Semaphore;
-
-import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiWaiterAbs;
 

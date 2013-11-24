@@ -20,7 +20,7 @@ public class MockRestaurantJPCook extends MockRole implements RestaurantJPCook {
 
 	}
 
-	public void msgHereIsOrder(RestaurantJPWaiter w, String choice, RestaurantJPTableClass table) {
+	public void msgHereIsOrder(RestaurantJPWaiter w, String c, RestaurantJPTableClass t) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -93,18 +93,19 @@ public class MockRestaurantJPCook extends MockRole implements RestaurantJPCook {
 		
 	}
 	@Override
-	public void msgHereIsAnOrder(RestaurantJPWaiter w, String choice,
-			RestaurantJPTableClass table) {
-		// TODO Auto-generated method stub
-		
-	}
-	@Override
 	public void msgOrderCannotBeFulfilled(String food, MarketManager m) {
 		// TODO Auto-generated method stub
 		
 	}
 	@Override
 	public void msgMarketDry(MarketManager m) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgHereIsAnOrder(RestaurantJPWaiter wait, String c,
+			RestaurantJPTableClass t) {
 		// TODO Auto-generated method stub
 		
 	}

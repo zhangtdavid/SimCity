@@ -1,10 +1,13 @@
 package city.interfaces;
 
-import city.agents.PersonAgent;
+import city.Application;
 
 public interface Landlord {
 
 	// Data
+	//calculate random interval every time you load up a program~
+	public static long MURPHY_INTERVAL = 
+			(long)(Math.floor(1+Math.random()*5))*(Application.INTERVAL * 336); // 7~42 days
 	
 	// Constructor
 	

@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import city.Application;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -10,7 +8,6 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiRevolvingStand;
 public interface RestaurantChoiCook extends RoleInterface{
 
 	//Data
@@ -24,7 +21,6 @@ public interface RestaurantChoiCook extends RoleInterface{
 	
 	//Messages
 	public void msgRelease();
-	public void msgOrderInQueue();
 	public void msgHeresAnOrder(RestaurantChoiOrder or);
 	public void msgFoodsDone(RestaurantChoiOrder o);
 	//public void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
@@ -37,7 +33,13 @@ public interface RestaurantChoiCook extends RoleInterface{
 	//Scheduler
 	
 	//Actions
-	
+	public void CheckBack();
+	public void MoveFoodToPlating(RestaurantChoiOrder o);
+	public boolean AnalyzeCookOrder(RestaurantChoiOrder o);
+	public boolean CookOrder(RestaurantChoiOrder o);
+	public void DoGoToRefrig();
+	public void DoGoToGrills();
+	public void DoGoToPlates();
 	
 	//Getters
 	public String getName();
@@ -49,12 +51,7 @@ public interface RestaurantChoiCook extends RoleInterface{
 	//public RestaurantChoiRevolvingStand getRevolvingStand();
 	//public void addMarket(Market m);
 	
-	public void MoveFoodToPlating(RestaurantChoiOrder o);
-	public boolean AnalyzeCookOrder(RestaurantChoiOrder o);
-	public boolean CookOrder(RestaurantChoiOrder o);
-	public void DoGoToRefrig();
-	public void DoGoToGrills();
-	public void DoGoToPlates();
+
 	
 	//Utilities
 	public void hackNoFood();
@@ -86,5 +83,4 @@ public interface RestaurantChoiCook extends RoleInterface{
 			amountOrdered = 0;
 		}
 	}
-
 }

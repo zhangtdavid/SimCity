@@ -19,6 +19,7 @@ public abstract class MockRole implements RoleInterface {
 	private int salary;
 	private boolean active;
 	private boolean activity;
+	private Building business;
 	
 	public EventLog log = new EventLog();
 	
@@ -48,6 +49,11 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public int getSalary() {
 		return salary;
+	}
+	
+	@Override
+	public Building getBusiness() {
+		return business;
 	}
 	
 	@Override
@@ -82,6 +88,11 @@ public abstract class MockRole implements RoleInterface {
 	@Override
 	public void setSalary(int s) {
 		this.salary = s;
+	}
+	
+	@Override
+	public void setBusiness(Building b) {
+		this.business = b;
 	}
 	
 	@Override

@@ -5,6 +5,7 @@ import java.util.Date;
 import city.Building;
 import city.MockAgent;
 import city.Role;
+import city.buildings.HouseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 
@@ -50,6 +51,18 @@ public class MockPerson extends MockAgent implements Person {
 		return 0;
 	}
 	
+	@Override
+	public int getCash() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public HouseBuilding getHome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
 	// Setters
 	
 	@Override
@@ -88,18 +101,18 @@ public class MockPerson extends MockAgent implements Person {
 		
 	}
 	
+	@Override
+	public void setHome(HouseBuilding h) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	// Utilities
 
 	@Override
 	public void addRole(Role r) {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public int getCash() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 }

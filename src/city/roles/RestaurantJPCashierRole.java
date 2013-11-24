@@ -2,19 +2,16 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-
-import city.Role;
-import city.interfaces.Person;
-import city.interfaces.RestaurantJPWaiter;
-import city.interfaces.RestaurantJPCashier;
-import city.interfaces.RestaurantJPCustomer;
-import city.interfaces.RestaurantJPWaiter;
-
-import java.util.*;
+import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Role;
+import city.interfaces.RestaurantJPCashier;
+import city.interfaces.RestaurantJPCustomer;
+import city.interfaces.RestaurantJPWaiter;
 
 public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier {
 															//DATA	

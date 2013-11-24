@@ -1,15 +1,12 @@
 package city.roles;
 
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
 import city.Role;
-import city.animations.RestaurantChoiHostAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
-import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;

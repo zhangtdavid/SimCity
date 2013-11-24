@@ -17,7 +17,6 @@ public class RestaurantChoiTable {
 		this.tableNumber = tableNumber;
 		xCoord = RestaurantChoiFurnitureAnimation.TABLEX_INIT - RestaurantChoiFurnitureAnimation.TABLEX_INCR*2*tableNumber;
 		yCoord = RestaurantChoiFurnitureAnimation.TABLEY;
-		System.out.println(xCoord + ", " + yCoord);
 	}
 
 	public int getTableNumber(){

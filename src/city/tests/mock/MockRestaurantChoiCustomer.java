@@ -3,9 +3,7 @@ package city.tests.mock;
 import java.util.ArrayList;
 
 import utilities.LoggedEvent;
-import city.Application;
 import city.MockRole;
-import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;

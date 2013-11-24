@@ -2,7 +2,6 @@ package city.interfaces;
 
 import java.util.ArrayList;
 
-import city.Application;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.roles.RestaurantChoiMenu;
 

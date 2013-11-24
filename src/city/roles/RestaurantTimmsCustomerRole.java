@@ -6,7 +6,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.interfaces.RestaurantTimmsCashier;
@@ -26,8 +26,8 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	public int pickiness;
 	public int hunger;
 	private int tableNumber;
-	private FOOD_ITEMS eatingItem;
-	public FOOD_ITEMS orderItem;
+	private Application.FOOD_ITEMS eatingItem;
+	public Application.FOOD_ITEMS orderItem;
 	public int money;
 	private RestaurantTimmsCashier cashier;
 	private RestaurantTimmsHost host;
@@ -35,7 +35,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private RestaurantTimmsAnimatedCustomer animation;
 	private Timer timer = new Timer();
 	
-	private List<FOOD_ITEMS> failedItems = new ArrayList<FOOD_ITEMS>();
+	private List<Application.FOOD_ITEMS> failedItems = new ArrayList<Application.FOOD_ITEMS>();
 	
 	private Semaphore atRestaurant = new Semaphore(0, true);
 	private Semaphore atTable = new Semaphore(0, true);
@@ -98,7 +98,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
-	public void msgWaiterDeliveredFood(FOOD_ITEMS stockItem) {
+	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) {
 		print("msgWaiterDeliveredFood");
 		this.eatingItem = stockItem;
 		state = State.waiterDeliveredFood;
@@ -178,7 +178,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 //		}
 		
 		// TODO temporary replacement for market
-		orderItem = FOOD_ITEMS.steak;
+		orderItem = Application.FOOD_ITEMS.steak;
 
 		// Otherwise, he will leave
 		if (orderItem == null) {
