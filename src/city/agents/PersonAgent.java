@@ -21,8 +21,8 @@ import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
-import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -38,7 +38,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date date;
 	private Role occupation;
 	private Building workplace;
-	private HouseBuilding home;
+	private ResidenceBaseBuilding home; // EDITED; now we have two types of houseBuildings, so this overviews both
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
@@ -68,7 +68,7 @@ public class PersonAgent extends Agent implements Person {
 		this.date = startDate;
 		this.lastAteAtRestaurant = startDate;
 		
-		residentRole = new ResidentRole(startDate);
+		residentRole = new ResidentRole();
 		bankCustomerRole = new BankCustomerRole();
 	}
 	
@@ -355,7 +355,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public HouseBuilding getHome() {
+	public ResidenceBaseBuilding getHome() {
 		return home;
 	}
 	
@@ -396,7 +396,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setHome(HouseBuilding h) {
+	public void setHome(ResidenceBaseBuilding h) {
 		home = h;
 	}
 	

@@ -1,12 +1,16 @@
 package city.tests.mock;
 
 import utilities.LoggedEvent;
+import city.Application;
 import city.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 
 public class MockBankTeller extends MockRole implements BankTeller {
 
+	public static enum STATE {needToPayRent, none}; 
+	public static long RENT_DUE_INTERVAL = (Application.INTERVAL * 336); // 7 days
+	
 	public MockBankTeller() {
 		// TODO Auto-generated method stub
 		

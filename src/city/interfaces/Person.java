@@ -6,6 +6,7 @@ import city.Application;
 import city.Building;
 import city.Role;
 import city.buildings.HouseBuilding;
+import city.buildings.ResidenceBaseBuilding;
 
 public interface Person extends AgentInterface {
 
@@ -35,7 +36,7 @@ public interface Person extends AgentInterface {
 	public Date getDate();
 	public int getSalary();
 	public int getCash();
-	public HouseBuilding getHome();
+	public ResidenceBaseBuilding getHome();
 	
 	// Setters
 	
@@ -45,7 +46,7 @@ public interface Person extends AgentInterface {
 	public void setOccupation(Role r);
 	public void setWorkplace(Building b);
 	public void setCash(int c);
-	public void setHome(HouseBuilding h);
+	public void setHome(ResidenceBaseBuilding h);
 	
 	// Utilities
 	

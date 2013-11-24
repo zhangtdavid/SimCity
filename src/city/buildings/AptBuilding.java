@@ -1,26 +1,19 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import city.Application.FOOD_ITEMS;
 import java.util.*;
-
+import city.Building;
+import city.Role;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
-public class HouseBuilding extends ResidenceBaseBuilding {
-	
-	// Data
-	
-	// Constructor
-	
-	public HouseBuilding(String name, Landlord landlord) { // why not Landlord landlord?
 
-		super(name);
-		this.landlord = landlord; // that'd eliminate the need for this cast
+public class AptBuilding extends ResidenceBaseBuilding{
+	
+	public AptBuilding(String name, Landlord landlord) { 
+		super(name); // set building name
+		this.landlord = landlord;
 		this.landlord.setResidence(this);
 	}
-
+	
 	public Landlord getLandlord() {
 		return landlord;
 	}
@@ -51,5 +44,4 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 	public void setResidents(List<Resident> residents) {
 		this.residents = residents;
 	}
-
 }
