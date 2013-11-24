@@ -15,11 +15,12 @@ public abstract class MockRole implements RoleInterface {
 	
 	// Data
 
-	public Person person;
+	private Person person;
+	private Animation animation;
 	private int salary;
 	private boolean active;
 	private boolean activity;
-	private Building business;
+	private Building workplace;
 	
 	public EventLog log = new EventLog();
 	
@@ -47,13 +48,18 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
+	public  <T extends Animation> T getAnimation(Class<T> type) {
+		return type.cast(animation);
+	}
+	
+	@Override
 	public int getSalary() {
 		return salary;
 	}
 	
 	@Override
-	public Building getBusiness() {
-		return business;
+	public <T extends Building> T getWorkplace(Class<T> type) {
+		return type.cast(workplace);
 	}
 	
 	@Override
@@ -86,13 +92,18 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
+	public void setAnimation(Animation a) {
+		this.animation = a;
+	}
+	
+	@Override
 	public void setSalary(int s) {
 		this.salary = s;
 	}
 	
 	@Override
-	public void setBusiness(Building b) {
-		this.business = b;
+	public void setWorkplace(Building b) {
+		this.workplace = b;
 	}
 	
 	@Override
