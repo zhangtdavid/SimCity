@@ -53,6 +53,10 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		money = 20; // TODO change
 	}
 
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================
 	public void gotHungry() {//from animation

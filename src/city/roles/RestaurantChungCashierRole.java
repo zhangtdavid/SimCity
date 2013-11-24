@@ -75,7 +75,11 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public RestaurantChungCashierRole() {
 		super();
 	}
-
+	
+	public void setActive(){
+		this.setActivityBegun();
+	}	
+	
 //  Messages
 //	=====================================================================
 //	Waiter

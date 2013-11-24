@@ -7,6 +7,7 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantChungBuilding.Food;
@@ -26,7 +27,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
-    private RestaurantChungCookAnimation cookGui = null;
+    private RestaurantChungAnimatedCook cookGui = null;
     
     private boolean cooking = false;
     private boolean plating = false;
@@ -85,7 +86,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         super();
         this.restaurant = restaurant;
     }
-        
+    
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
+//  Messages
+//	=====================================================================
 //  Waiter
 //  ---------------------------------------------------------------
     public void msgHereIsAnOrder(RestaurantChungWaiterBase w, String choice, int table) {
@@ -329,8 +336,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void cookIt(final Order o) {
         o.s = OrderState.Cooking;
-//        cookGui.DoGoToGrill(o.choice);
-//        print(Integer.toString(atGrill.availablePermits()));
+        cookGui.DoGoToGrill(o.choice);
 //		try {
 //			atGrill.acquire();
 //		} catch (InterruptedException e) {
@@ -346,7 +352,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //              print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
                 msgSelfDoneCooking(o);
-//                cookGui.DoReturnToCookHome();
+                cookGui.DoReturnToCookHome();
 //        		try {
 //        			atCookHome.acquire();
 //        		} catch (InterruptedException e) {
@@ -360,7 +366,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void plateIt(final Order o) {
         o.s = OrderState.Plating;
-//        cookGui.DoGoToPlating(o.choice);
+        cookGui.DoGoToPlating(o.choice);
 //		try {
 //			atPlating.acquire();
 //		} catch (InterruptedException e) {
@@ -371,12 +377,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         plating = true;
         timer2.schedule(new TimerTask() {
             public void run() {
-//            	print("in plating timer");
             	RestaurantChungWaiterBase waiter = findWaiter(o); // Determines the waiter associated with the order
                 waiter.msgOrderIsReady(o.choice, o.table);
                 plating = false;
                 msgSelfDonePlating(o);
-//                cookGui.DoReturnToCookHome();
+                cookGui.DoReturnToCookHome();
 //        		try {
 //        			atCookHome.acquire();
 //        		} catch (InterruptedException e) {
