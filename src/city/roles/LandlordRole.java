@@ -1,9 +1,12 @@
 package city.roles;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
+import city.buildings.AptBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -11,39 +14,26 @@ public class LandlordRole extends ResidentRole implements Landlord {
 
 	// Data
 	// Murphy's Law: Anything that can go wrong will go wrong.
-	final double murphyProbability = 0.01; // odds of a house needing maintenance per murphyInterval
-	private Date rentLastPaid;
+	Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
+	ResidenceBaseBuilding residence; // the landlord is the landlord of this building
 
-	List<Resident> residents = Collections.synchronizedList(null);
+	List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	
 	// Constructor
-	public LandlordRole(Date rlp){
-		super(rlp);
-		rentLastPaid = rlp;
+	public LandlordRole(){
+		super();
 	}
 	
 	// Messages
 	@Override
-	public void msgHeresRent(double d) {
-		//this_person.addMoney(d);
+	public void msgHeresRent(int d) {
+		this.getPerson().setCash(this.getPerson().getCash()+d);
 	}
-
-	@Override
-	public void msgHeresMaintenanceFee(double d) {
-		//this_person.addMoney(d);
-	}
-
-	@Override
-	public void msgFoundProblem() {
-		//maintenanceFee= 15+Math.rand()*100;
-	}
-	
 	
 	// Scheduler
 
 	@Override
-	public boolean runScheduler() {
-		// TODO Auto-generated method stub
+	public boolean runScheduler() { // landlord just collects money. 
 		return false;
 	}
 
@@ -53,8 +43,14 @@ public class LandlordRole extends ResidentRole implements Landlord {
 	// Getters
 
 	// Setters
-
-	// Utilities
+	@Override
+	public void setActive(){
+		if(residence.total_current_maintenance != 0){
+			
+		}
+		super.setInactive();
+	}
+	
 	@Override
 	public void addResident(Resident r) {
 		synchronized(residents){
@@ -68,5 +64,25 @@ public class LandlordRole extends ResidentRole implements Landlord {
 			residents.remove(r);
 		}
 	}
+	
+	@Override
+	public void changeLandlord(Resident r) {
+		landlordRes = r;
+	}
+
+	@Override
+	public void setRent(int d) {
+		residence.setRent(d);		
+	}
+
+	@Override
+	public void setResidence(ResidenceBaseBuilding b) {
+		residence = b; // landlord knows where he lives
+		b.landlord = this; // building knows who the landlord is
+	}
+
+	// Utilities
+
 	// Classes
+
 }

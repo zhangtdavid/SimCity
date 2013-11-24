@@ -15,8 +15,8 @@ import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
-import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -31,7 +31,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date date;
 	private Role occupation;
 	private Building workplace;
-	private HouseBuilding home;
+	private ResidenceBaseBuilding home; // EDITED; now we have two types of houseBuildings, so this overviews both
 	private Car car;
 	private CarPassengerRole carPassengerRole;
 	private BusPassengerRole busPassengerRole;

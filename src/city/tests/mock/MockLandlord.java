@@ -6,7 +6,8 @@ import java.util.Date;
 import java.util.List;
 
 import city.MockRole;
-import city.buildings.HouseBuilding;
+import city.buildings.AptBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -14,8 +15,9 @@ public class MockLandlord extends MockRole implements Landlord{
 	
 
 	Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
-	HouseBuilding house; // the landlord is the landlord of this building
+	ResidenceBaseBuilding house; // the landlord is the landlord of this building
 	List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
+	public int mockcash;
 	
 	public MockLandlord(){
 		super();
@@ -23,7 +25,7 @@ public class MockLandlord extends MockRole implements Landlord{
 	
 	@Override
 	public void msgHeresRent(int d) {		
-		this.getPerson().setCash(this.getPerson().getCash()+d);	
+		mockcash += d;	
 		}
 
 	@Override
@@ -45,7 +47,7 @@ public class MockLandlord extends MockRole implements Landlord{
 	}
 
 	@Override
-	public void setHouse(HouseBuilding b) {
+	public void setResidence(ResidenceBaseBuilding b) {
 		// TODO Auto-generated method stub
 		
 	}

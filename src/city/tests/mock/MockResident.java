@@ -6,7 +6,8 @@ import java.util.Date;
 import utilities.LoggedEvent;
 import city.Application;
 import city.MockRole;
-import city.buildings.HouseBuilding;
+import city.buildings.AptBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Person;
 import city.interfaces.Resident;
@@ -17,7 +18,7 @@ public class MockResident extends MockRole implements Resident{
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
-	private HouseBuilding house;
+	private ResidenceBaseBuilding residence;
 	
 	public MockResident(){
 		super();
@@ -36,12 +37,12 @@ public class MockResident extends MockRole implements Resident{
 	public void payRent() {
 		rentLastPaid = this.getPerson().getDate();
 		log.add(new LoggedEvent("Rent Last Paid is: " + rentLastPaid));
-		landlord.msgHeresRent(house.rent); // pay rent
+		landlord.msgHeresRent(residence.rent); // pay rent
 		log.add(new LoggedEvent("Before paying rent, money is " + this.getPerson().getCash()));
-		 this.getPerson().setCash( this.getPerson().getCash()-house.rent); // lose $ for rent
+		 this.getPerson().setCash( this.getPerson().getCash()-residence.rent); // lose $ for rent
 		log.add(new LoggedEvent("After paying rent, money is " + this.getPerson().getCash()));
-		if(house.total_current_maintenance != 0) // pay maintenance if needed
-			this.getPerson().setCash( this.getPerson().getCash()-house.total_current_maintenance/house.residents.size()); 
+		if(residence.total_current_maintenance != 0) // pay maintenance if needed
+			this.getPerson().setCash( this.getPerson().getCash()-residence.total_current_maintenance/residence.residents.size()); 
 		// lose $ for maintenance;
 		
 		this.setInactive();		
@@ -58,10 +59,6 @@ public class MockResident extends MockRole implements Resident{
 		return (landlord != null);
 	}
 	@Override
-	public void setHouse(HouseBuilding b) {
-		house = b;
-	}
-	@Override
 	public boolean rentIsDue() {
 		Calendar c = Calendar.getInstance();
 		c.setTime(this.getPerson().getDate());
@@ -74,5 +71,9 @@ public class MockResident extends MockRole implements Resident{
 	public void setLandlord(Landlord l) {
 		landlord = l;
 		
+	}
+	@Override
+	public void setResidence(ResidenceBaseBuilding b) {
+		residence = b;		
 	}
 }
