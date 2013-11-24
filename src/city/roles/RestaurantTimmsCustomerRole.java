@@ -10,6 +10,7 @@ import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
@@ -49,14 +50,14 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Constructor
 
-	public RestaurantTimmsCustomerRole(RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
+	public RestaurantTimmsCustomerRole(RestaurantTimmsBuilding b){
 		super();
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.hunger = 5;
 		this.pickiness = 3;
-		this.host = host;
-		this.cashier = cashier;
+		this.host = b.host;
+		this.cashier = b.cashier;
 		this.money = 0;
 		this.state = State.none;
 	}

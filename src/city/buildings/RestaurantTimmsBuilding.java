@@ -33,8 +33,8 @@ public class RestaurantTimmsBuilding extends Building {
 	public RestaurantTimmsBuilding(String name) {
 		super(name);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
-		this.setCustomerRole("RestaurantTimmsCustomerRole");
-		this.setCustomerAnimation("RestaurantTimmsCustomerAnimation");
+		this.setCustomerRole("city.roles.RestaurantTimmsCustomerRole");
+		this.setCustomerAnimation("city.animations.RestaurantTimmsCustomerAnimation");
 		
 		int i = 0;
 		while (i < 9) {
