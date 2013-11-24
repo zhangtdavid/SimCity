@@ -15,7 +15,6 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
-import city.roles.MarketEmployeeRole.WorkingState;
 import city.Role;
 
 public class MarketManagerRole extends Role implements MarketManager {
@@ -78,8 +77,12 @@ public class MarketManagerRole extends Role implements MarketManager {
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketManagerRole() {
+	public MarketManagerRole(MarketBuilding b, int t1, int t2) {
 		super();
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
 	}
 	
 	public void setActive(){

@@ -11,7 +11,6 @@ import city.interfaces.CarPassenger;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
-import city.roles.MarketCashierRole.WorkingState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -44,8 +43,12 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketDeliveryPersonRole() {
-		super(); // TODO
+	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
+		super();
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
 //		car = new CarAgent();
     }
 	

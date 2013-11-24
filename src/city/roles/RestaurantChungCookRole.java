@@ -82,10 +82,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 //  Constructor
 //  =====================================================================                
-    public RestaurantChungCookRole(RestaurantChungBuilding restaurant) {
+    public RestaurantChungCookRole(RestaurantChungBuilding b, int t1, int t2) {
         super();
-        this.restaurant = restaurant;
-    }
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+	}
     
 	public void setActive(){
 		this.setActivityBegun();

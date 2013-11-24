@@ -7,6 +7,7 @@ import java.util.concurrent.Semaphore;
 
 import city.Role;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
@@ -18,7 +19,7 @@ import city.interfaces.RestaurantChungWaiterBase;
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChungWaiterBase {
-	protected String name;
+	RestaurantChungBuilding restaurant;
 	protected RestaurantChungHost host;
 	protected RestaurantChungCook cook;
 	protected RestaurantChungCashier cashier;
@@ -497,11 +498,7 @@ public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChu
 	}
 	
 //  Utilities
-//	=====================================================================
-	public String getName() {
-		return name;
-	}
-	
+//	=====================================================================	
 	public void setGui(RestaurantChungWaiterAnimation gui) {
 		waiterGui = gui;
 	}

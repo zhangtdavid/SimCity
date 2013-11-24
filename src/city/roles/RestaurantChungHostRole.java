@@ -3,6 +3,7 @@ package city.roles;
 import java.util.*;
 
 import city.Role;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiterBase;
@@ -12,6 +13,7 @@ import city.interfaces.RestaurantChungWaiterBase;
  */
 //A Host is the manager of a restaurant who sees that all is proceeded as he wishes.
 public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
+	RestaurantChungBuilding restaurant;
 	private int nTables = 4;
 	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
 	
@@ -79,9 +81,13 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //	Constructor
 //	====================================================================
-	public RestaurantChungHostRole() {
+	public RestaurantChungHostRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
-
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		
 		// make some tables
 		tables = new Vector<Table>(nTables);
 		for (int i = 1; i < nTables+1; i++) {

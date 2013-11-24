@@ -98,11 +98,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCashierRole(MarketBuilding market) {
+	public MarketCashierRole(MarketBuilding b, int t1, int t2) {
 		super();
-		this.market = market;
-//		super.setWorkplace(market);
-    }
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
+	}
 	
 	public void setActive(){
 		this.setActivityBegun();

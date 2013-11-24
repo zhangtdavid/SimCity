@@ -3,6 +3,7 @@ package city.roles;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 
@@ -54,10 +55,12 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		this.setActivityBegun();
 	}
 	
-	public RestaurantChungWaiterRevolvingStandRole(String name, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
+	public RestaurantChungWaiterRevolvingStandRole(RestaurantChungBuilding b, int t1, int t2, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
 		super();
-		
-		this.name = name;
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());		
 		this.host = host;
 		this.cook = cook;
 		this.cashier = cashier;
