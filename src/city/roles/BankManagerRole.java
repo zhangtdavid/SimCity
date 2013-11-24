@@ -20,9 +20,17 @@ public class BankManagerRole extends Role implements BankManager{
 	List<BankTask> bankTasks = new ArrayList<BankTask>();
 	BankCustomerRole directDepositer = null;
 	private static final int loanInterval = 50;
+	private boolean wantsInactive = false;
 // Constructor
 	public BankManagerRole (BankBuilding b){
 		building = b;
+	}
+	public void setInactive(){
+		if(building.manager != this){
+			active = false;
+		}
+		else
+			wantsInactive = true;
 	}
 // Messages
 	//from customer
@@ -43,6 +51,17 @@ public class BankManagerRole extends Role implements BankManager{
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
 				myT.s = state.available;
+				stateChanged();
+			}
+		}
+		myTellers.add(new MyTeller(t));
+		stateChanged();
+	}
+	public void msgUnavailable(BankTellerRole t){
+		print("Unavailable message received");
+		for(MyTeller myT : myTellers){
+			if(myT.teller == t){
+				myT.s = state.gone;
 				stateChanged();
 			}
 		}
@@ -70,6 +89,10 @@ public class BankManagerRole extends Role implements BankManager{
 // Scheduler
 	@Override
 	public boolean runScheduler() {
+		if(wantsInactive && building.manager != this){
+			this.active = false;
+			wantsInactive = false;
+		}
 		if(LoanPaymentDue()){
 			for(Loan l : building.loans){
 				if(l.remaining > 0){

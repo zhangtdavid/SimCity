@@ -1,9 +1,11 @@
 package city.roles;
 
+import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
+import city.interfaces.BankCustomer.state;
 
 public class BankTellerRole extends Role implements BankTeller {
 	
@@ -11,10 +13,24 @@ public class BankTellerRole extends Role implements BankTeller {
 	//TellerGui gui;
 	BankBuilding building;
 	int boothNumber;
+	private boolean wantsInactive = false;
 	public MyCustomer currentCustomer;
 // Constructor
 	public BankTellerRole (BankBuilding b){
 		building = b;
+	}
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
+		print("Customer has been set active");
+		building.manager.msgAvailable(this);
+		this.setActivityBegun();
+	}
+	public void setInactive(){
+		if(currentCustomer == null)
+			this.active = false;
+		else{
+			building.manager.msgUnavailable(this);
+			wantsInactive = true;
+		}
 	}
 // Messages
 	//From BankManager
@@ -74,6 +90,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	@Override
 	public boolean runScheduler() {
 		// TODO Auto-generated method stub
+		if(wantsInactive && currentCustomer == null){
+			this.active = false;
+			wantsInactive = false;
+		}
 		if(currentCustomer != null){
 			if(currentCustomer.s == serviceState.needsService){
 				ServiceCustomer();
