@@ -37,6 +37,13 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
     }
+    public RestaurantChoiCashierRole(){ // for testing mechanics
+		super();
+		foodCost.put(1, 16);
+		foodCost.put(2, 10);
+		foodCost.put(3, 6);
+		foodCost.put(4, 8);
+    }
     
     //Messages
 

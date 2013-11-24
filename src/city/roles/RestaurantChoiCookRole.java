@@ -41,6 +41,14 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
+	
+	public RestaurantChoiCookRole(){ // to just test mechanics
+		super();
+		foods.put(1, new Food(1));
+		foods.put(2, new Food(2));
+		foods.put(3, new Food(3));
+		foods.put(4, new Food(4));
+	}
 	//Messages
 	@Override
 	public void msgRelease() {
