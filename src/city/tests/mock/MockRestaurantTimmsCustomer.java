@@ -36,7 +36,7 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	}
 	
 	@Override
-	public void msgWaiterDeliveredFood(Application.MARKET_ITEMS stockItem) { 
+	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) { 
 		log.add(new LoggedEvent("Received msgWaiterDeliveredFood. Item: " + stockItem.toString())); 
 	}
 

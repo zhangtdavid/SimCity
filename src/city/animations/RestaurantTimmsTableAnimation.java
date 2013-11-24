@@ -30,6 +30,7 @@ public class RestaurantTimmsTableAnimation extends Animation implements Restaura
 	public RestaurantTimmsTableAnimation(int position) {
 		this.xPos = getXPos(position);
 		this.yPos = getYPos(position);
+		isVisible = true; // TODO solve how this should become visible
 	}
     
 	// Abstract

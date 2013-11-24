@@ -26,9 +26,10 @@ public abstract class Agent implements AgentInterface {
      * current state.  Will be called whenever a state change has occurred,
      * and will be called repeated as long as it returns true.
      *
+     * @throws InterruptedException 
      * @return true iff some action was executed that might have changed the state.
      */
-    protected abstract boolean runScheduler();
+    protected abstract boolean runScheduler() throws InterruptedException;
     
     // Actions
     
