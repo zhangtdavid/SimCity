@@ -1,9 +1,11 @@
 package city.tests.mock;
 
+import java.util.Map;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import utilities.MarketOrder;
 import city.MockRole;
+import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDelivery;
 
@@ -17,7 +19,7 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	}
 
 	@Override
-	public void msgHereIsOrder(MarketOrder o) {
+	public void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrder from deliveryPerson."));		
 		System.out.println("CustomerDelivery received msgHereIsOrder from deliveryPerson.");		
 	}

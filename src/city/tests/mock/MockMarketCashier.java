@@ -1,7 +1,10 @@
 package city.tests.mock;
 
+import java.util.Map;
+
 import utilities.EventLog;
 import utilities.MarketOrder;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
@@ -35,7 +38,7 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c,
-			MarketOrder o) {
+			Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -48,7 +51,7 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c,
-			MarketCustomerDeliveryPayment cPay, MarketOrder o) {
+			MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 		// TODO Auto-generated method stub
 		
 	}

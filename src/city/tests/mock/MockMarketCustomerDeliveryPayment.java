@@ -4,6 +4,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MockMarketCustomerDeliveryPayment extends MockRole implements MarketCustomerDeliveryPayment {
@@ -17,7 +18,7 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	}
 
 	@Override
-	public void msgHereIsBill(int bill) {
+	public void msgHereIsBill(MarketCashier c, int bill, int id) {
 		log.add(new LoggedEvent("CustomerDeliveryPayment received msgHereIsBill from cashier. The bill is for " + bill));		
 		System.out.println("CustomerDeliveryPayment received msgHereIsBill from cashier. The bill is for " + bill);		
 	}

@@ -12,6 +12,7 @@ import city.interfaces.CarPassenger;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
@@ -29,7 +30,8 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	private CarPassenger carPassenger;
 
 	private MarketCustomerDelivery customerDelivery;
-	private Map<String, Integer> collectedItems;
+	private Map<FOOD_ITEMS, Integer> collectedItems;
+	int orderId;
 	
 //	CityMap
 	
@@ -48,13 +50,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================	
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgDeliverOrder(MarketCustomerDelivery c, Map<String, Integer> i) {
+	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 		log.add(new LoggedEvent("Market Customer received msgDeliverOrder from Market Cashier."));
 		System.out.println("Market deliveryPerson received msgDeliverOrder from Market Cashier.");
 		customerDelivery = c;
-        for (String s: i.keySet()) {
+        for (FOOD_ITEMS s: i.keySet()) {
         	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
         }
+        orderId = id;
         stateChanged();
 	}
 	
@@ -92,7 +95,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
         // notify customer if there is a difference between order and collected items
 		// switch into CarPassenger;
 		
-		customerDelivery.msgHereIsOrder(collectedItems);
+		customerDelivery.msgHereIsOrder(collectedItems, orderId);
 		cashier.msgFinishedDeliveringItems(this, customerDelivery);
 		customerDelivery = null;
 	}

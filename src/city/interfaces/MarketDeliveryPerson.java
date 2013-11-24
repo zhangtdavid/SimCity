@@ -2,6 +2,8 @@ package city.interfaces;
 
 import java.util.Map;
 
+import city.Application.FOOD_ITEMS;
+
 public interface MarketDeliveryPerson extends RoleInterface {
 
 	// Data
@@ -10,7 +12,7 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<String, Integer> i);
+	public abstract void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<FOOD_ITEMS, Integer> i, int id);
 	
 	// Scheduler
 	

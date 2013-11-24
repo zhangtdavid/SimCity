@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import java.util.Map;
-
 public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Data
@@ -10,7 +8,7 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsBill(int bill);
+	public abstract void msgHereIsBill(MarketCashier c, int bill, int id);
 	public abstract void msgPaymentReceived();
 	
 	// Scheduler

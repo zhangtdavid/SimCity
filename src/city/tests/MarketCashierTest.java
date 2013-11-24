@@ -118,7 +118,7 @@ public class MarketCashierTest extends TestCase {
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);
 		assertEquals("Market money should be 1000. It's " + market.money + "instead", market.money, 1000);
 		
-		cashier.msgComputeBill(employee, customer, order, collectedItemsAll);
+//		cashier.msgComputeBill(employee, customer, order, collectedItemsAll);
 		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction.", cashier.transactions.size(), 1);
@@ -160,7 +160,7 @@ public class MarketCashierTest extends TestCase {
 		assertTrue("Cashier deliveryPeople should contain a Delivery Person with available == true.", cashier.deliveryPeople.get(0).available);
 		cashier.runScheduler();
 		
-		cashier.msgComputeBill(employee, customerDelivery, customerDeliveryPayment, order, collectedItemsAll);
+//		cashier.msgComputeBill(employee, customerDelivery, customerDeliveryPayment, order, collectedItemsAll);
 		assertEquals("Cashier log should have 2 entries.", cashier.log.size(), 2);
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction.", cashier.transactions.size(), 1);
@@ -222,7 +222,7 @@ public class MarketCashierTest extends TestCase {
 		assertTrue("Cashier deliveryPeople should contain a Delivery Person with available == false.", !cashier.deliveryPeople.get(0).available);
 		cashier.runScheduler();
 		
-		cashier.msgComputeBill(employee, customerDelivery, customerDeliveryPayment, order, collectedItemsAll);
+//		cashier.msgComputeBill(employee, customerDelivery, customerDeliveryPayment, order, collectedItemsAll);
 		assertEquals("Cashier log should have 2 entries.", cashier.log.size(), 2);
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction.", cashier.transactions.size(), 1);

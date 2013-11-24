@@ -4,6 +4,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import city.MockRole;
+import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -32,13 +33,13 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 		
 	}
 
-	public void msgHereIsMyOrder(MarketCustomer c, Map<String, Integer> o) {
+	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgHereIsCustomerDeliveryOrder(Map<String, Integer> o) {
+	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
 		// TODO Auto-generated method stub
 		
 	}

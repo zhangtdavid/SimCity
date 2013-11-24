@@ -5,12 +5,14 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
@@ -23,9 +25,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private MarketManager manager;
 	private MarketCashier cashier;
 	
-	private Map<String, Integer> order = new HashMap<String, Integer>();
-    private Map<String, Integer> receivedItems = new HashMap<String, Integer>();
-		
+	private MarketOrder order;
+	
 	double money;
 	int bill;
 	
@@ -41,18 +42,18 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	---------------------------------------------------------------
 	public MarketCustomerDeliveryPaymentRole() {
 		super(); // TODO
-        for (String s: order.keySet()) {
-        	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
-        }
     }	
 	
 //  Messages
 //	=====================================================================	
-	public void msgHereIsBill(int bill) {
+	public void msgHereIsBill(MarketCashier c, int bill, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Cashier."));
 		System.out.println("Market customerDelivery received msgHereIsOrderandBill from Market Cashier.");
-		event = MarketCustomerEvent.OrderReady;
-        this.bill = bill;
+        if (order.orderId == id) { // TODO double check this
+    		event = MarketCustomerEvent.OrderReady;
+    		cashier = c;
+            this.bill = bill;
+        }
 		stateChanged();
 	}
 		
@@ -116,8 +117,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================
 	public int checkBill() {
 		int tempBill = 0;
-        for (String item: order.keySet()) {
-        	tempBill += order.get(item)*market.prices.get(item);
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        	tempBill += order.orderItems.get(item)*market.prices.get(item);
         }
 
         if (tempBill == bill)

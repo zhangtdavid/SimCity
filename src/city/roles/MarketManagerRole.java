@@ -8,6 +8,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -50,21 +51,23 @@ public class MarketManagerRole extends Role implements MarketManager {
 		MarketCustomerDelivery customerDelivery;
 		MarketCustomerDeliveryPayment customerDeliveryPayment;
 		
-	    private Map<String, Integer> order = new HashMap<String, Integer>();
+	    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+	    int orderId;
 		
 		public MyMarketCustomer(MarketCustomer customer) {
 			this.customer = customer;
 			customerDelivery = null;
 			customerDeliveryPayment = null;
 		}
-		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
+		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 			this.customer = null;
 			customerDelivery = c;
 			customerDeliveryPayment = cPay;
 			
-            for (String item: o.keySet()) {
+            for (FOOD_ITEMS item: o.keySet()) {
                 order.put(item, o.get(item)); // Create a deep copy of the order map
             }
+            orderId = id;
 		}
 	}
 
@@ -105,10 +108,10 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
-	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
+	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
 		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
-		customers.add(new MyMarketCustomer(c, cPay, o));
+		customers.add(new MyMarketCustomer(c, cPay, o, id));
 		stateChanged();
 	}
 	
@@ -185,7 +188,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 	private void giveCustomerDeliveryOrder(MyMarketEmployee e) {
 		MyMarketCustomer cd = findCustomerDelivery(e.customerDelivery);
-		e.employee.msgHereIsCustomerDeliveryOrder(cd.order);
+		e.employee.msgHereIsCustomerDeliveryOrder(cd.order, cd.orderId);
 		e.s = MarketEmployeeState.CollectingItems;
 		customers.remove(cd);
 	}

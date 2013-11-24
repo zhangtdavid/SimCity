@@ -10,6 +10,7 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.Application.FOOD_ITEMS;
 
 public class MockMarketManager extends MockRole implements MarketManager {
 	
@@ -39,7 +40,7 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	}
 
 	@Override
-	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<String, Integer> o) {
+	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		// TODO Auto-generated method stub
 		
 	}

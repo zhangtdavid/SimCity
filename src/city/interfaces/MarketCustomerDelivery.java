@@ -1,6 +1,8 @@
 package city.interfaces;
 
-import utilities.MarketOrder;
+import java.util.Map;
+
+import city.Application.FOOD_ITEMS;
 
 public interface MarketCustomerDelivery extends RoleInterface {
 	
@@ -10,7 +12,7 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsOrder(MarketOrder o);
+	public abstract void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id);
 	
 	// Scheduler
 	
