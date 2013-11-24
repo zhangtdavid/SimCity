@@ -12,8 +12,8 @@ import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 
 public class MarketBuilding extends Building {
-	MarketManager manager;
-	MarketCashier cashier;
+	public MarketManager manager;
+	public MarketCashier cashier;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
 	public Map<String, Integer> inventory = new ConcurrentHashMap<String, Integer>(); // TODO does concurrent hash map make it safer as a public variable?

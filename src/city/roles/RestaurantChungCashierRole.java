@@ -3,10 +3,12 @@ package city.roles;
 import java.util.*;
 
 import city.Role;
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCashier;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungMarket;
 import city.interfaces.RestaurantChungWaiterBase;
 import utilities.EventLog;
 import utilities.LoggedEvent;
@@ -20,7 +22,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 	Timer timer = new Timer();
 	private RestaurantChungHost host;
-	public Double money;
+	public int money;
+	
+//	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole();
+
 	
 //	Transactions
 //	=====================================================================	
@@ -29,8 +34,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		RestaurantChungWaiterBase w;
 		RestaurantChungCustomer c;
 		String choice;
-		public double price;
-		public double payment;
+		public int price;
+		public int payment;
 		public TransactionState s;
 		
 		public Transaction(RestaurantChungWaiterBase w2, RestaurantChungCustomer customer, String order, TransactionState state) {
@@ -48,12 +53,12 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	public class MarketTransaction {
-		RestaurantChungMarket m;
+		MarketBuilding m;
 		int ID;
-		public Double bill;
+		public int bill;
 		public TransactionState s;
 		
-		public MarketTransaction (RestaurantChungMarket market, int id, Double bill, TransactionState state) {
+		public MarketTransaction (MarketBuilding market, int id, int bill, TransactionState state) {
 			m = market;
 			ID = id;
 			this.bill = bill;
@@ -61,18 +66,18 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		}
 	}
 	
-	private Map<String, Double> prices = new HashMap<String, Double>();
+	private Map<String, Integer> prices = new HashMap<String, Integer>();
 	
 //	Constructor
 //	=====================================================================		
 	public RestaurantChungCashierRole() {
 		super();
-		money = 500.0;
+		money = 500;
 		// Add items and their prices to a map
-		prices.put("Steak", 15.99);
-		prices.put("Chicken", 10.99);
-		prices.put("Salad", 5.99);
-		prices.put("Pizza", 8.99);
+		prices.put("Steak", 16);
+		prices.put("Chicken", 12);
+		prices.put("Salad", 6);
+		prices.put("Pizza", 10);
 	}
 
 //  Messages
@@ -84,7 +89,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		stateChanged();
 	}
 	
-	public void msgHereIsPayment(RestaurantChungCustomer c, double money) {
+	public void msgHereIsPayment(RestaurantChungCustomer c, int money) {
 		print("Cashier received msgHereIsPayment");
 		log.add(new LoggedEvent("Cashier received msgHereIsPayment. For amount of " + money));
 		Transaction t = findTransaction(c);
@@ -94,10 +99,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		stateChanged();
 	}
 	
-	public void msgMarketOrderBill (RestaurantChungMarket m, int id, double bill) {
+	public void msgMarketOrderBill(MarketCashier c, int id, int bill) {
 		print("Cashier received msgMarketOrderBill");
 		log.add(new LoggedEvent("Cashier received msgMarketOrderBill. For amount of " + bill));
-		marketTransactions.add(new MarketTransaction(m, id, bill, TransactionState.Pending));
+//		marketTransactions.add(new MarketTransaction(m, id, bill, TransactionState.Pending)); TODO
 		stateChanged();
 	}
 	
@@ -171,7 +176,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		print("Processing payment");
 		if (t.payment < t.price) {
 			t.s = TransactionState.InsufficientPayment;
-			t.c.msgHereIsChange(0.0);
+			t.c.msgHereIsChange(0);
 			return;
 		}
 		
@@ -196,7 +201,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	private void payMarket(MarketTransaction mt) {
 		if (money >= mt.bill) {
 			print("Paying market " + mt.bill);
-			mt.m.msgHereIsPayment(mt.ID, mt.bill);
+//			mt.m.cashier.msgHereIsPayment(mt.ID, mt.bill); // TODO need to change this to accept a CustomerDeliveryPayment type, need to eliminate ids TODO
 			money -= mt.bill;
 			removeMarketTransactionFromList(mt);
 		}

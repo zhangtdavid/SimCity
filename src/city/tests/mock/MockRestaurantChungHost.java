@@ -77,7 +77,7 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 	}
 
 	@Override
-	public void msgFlakeAlert(RestaurantChungCustomer c, double d) {
+	public void msgFlakeAlert(RestaurantChungCustomer c, int d) {
 		log.add(new LoggedEvent("Host received msgFlakeAlert from Cashier. Debt of " + d));
 		System.out.println("Host received msgFlakeAlert from Cashier. Debt of " + d);				
 	}

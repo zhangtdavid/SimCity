@@ -25,8 +25,8 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	Timer timer = new Timer();
 	private Semaphore atSeat = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
-	double money;
-	double bill;
+	int money;
+	int bill;
 	RestaurantChungMenu menu;
 	private String order;
 
@@ -50,7 +50,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public RestaurantChungCustomerRole(String name){
 		super();
 		this.name = name;
-		money = 20.00; // TODO change
+		money = 20; // TODO change
 	}
 
 //  Messages
@@ -124,7 +124,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(double price) {
+	public void msgHereIsCheck(int price) {
 		event = AgentEvent.receivedCheck;
 		bill = price;
 		stateChanged();
@@ -138,7 +138,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();	
 	}
 	
-	public void msgHereIsChange(double change) {
+	public void msgHereIsChange(int change) {
 		money += change;
 		event = AgentEvent.receivedChange;
 		stateChanged();		
@@ -150,7 +150,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
-	public void msgKickingYouOutAfterPaying(double debt) {
+	public void msgKickingYouOutAfterPaying(int debt) {
 		print("Customer received msgKickingYouOutAfterPaying");
 		money += 20;
 		bill = debt;
@@ -165,6 +165,9 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
+		print("IN SCHEDULER");
+		print(state.toString());
+		print(event.toString());
 		//	CustomerAgent is a finite state machineE
 		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
 			goToRestaurant();
@@ -294,130 +297,130 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		timer.schedule(new TimerTask() {
 			public void run() {
 				// HACK------------------------------------------------------------------
-				
-				double nameDouble = -1;
-				
-				try {
-					nameDouble = Double.parseDouble(name);
-				} catch (NumberFormatException nfe){
-				
-					
-				}
-				
-				if (nameDouble == 8.99) {
-					money = nameDouble;
-					
-					for(int i = 0; i < menu.items.size(); i++)  {
-						if (menu.items.get(i).item.equals("Salad")) {
-							order = "Salad";
-							print("Finished deciding food, customer wants " + order);
-							msgSelfReadyToOrder();
-							return;
-						}
-					}
-					order = "Pizza";
-					print("Finished deciding food, customer wants " + order);
-					msgSelfReadyToOrder();
-					return;	
-				}
-				
-				if (nameDouble == 5.99) {
-					money = nameDouble;
-				}
-				
-				if (nameDouble == 5) {
-					money = nameDouble;
-				}
-				
-				if (name.equals("Steak")) {
-					for(int i = 0; i < menu.items.size(); i++)  {
-						if (menu.items.get(i).item.equals("Steak"))
-							if (menu.items.get(i).price > money) {
-								msgSelfDecidedToLeave();
-								return;
-							}
-							else {
-								order = "Steak";
-								print("Finished deciding food, customer wants " + order);
-								msgSelfReadyToOrder();
-								return;
-							}
-					}
-					msgSelfDecidedToLeave();
-					return;
-				}
-				
-				else if (name.equals("Chicken")) {
-					for(int i = 0; i < menu.items.size(); i++)  {
-						if (menu.items.get(i).item.equals("Chicken"))
-							if (menu.items.get(i).price > money) {
-								msgSelfDecidedToLeave();
-								return;
-							}
-							else {
-								order = "Chicken";
-								print("Finished deciding food, customer wants " + order);
-								msgSelfReadyToOrder();
-								return;
-							}
-					}
-					msgSelfDecidedToLeave();
-					return;
-				}
-				
-				else if (name.equals("Salad")) {
-					for(int i = 0; i < menu.items.size(); i++)  {
-						if (menu.items.get(i).item.equals("Salad"))
-							if (menu.items.get(i).price > money) {
-								msgSelfDecidedToLeave();
-								return;
-							}
-							else {
-								order = "Salad";
-								print("Finished deciding food, customer wants " + order);
-								msgSelfReadyToOrder();
-								return;
-							}
-					}
-					msgSelfDecidedToLeave();
-					return;
-				}
-				
-				else if (name.equals("Pizza")) {
-					for(int i = 0; i < menu.items.size(); i++)  {
-						if (menu.items.get(i).item.equals("Pizza"))
-							if (menu.items.get(i).price > money) {
-								msgSelfDecidedToLeave();
-								return;
-							}
-							else {
-								order = "Pizza";
-								print("Finished deciding food, customer wants " + order);
-								msgSelfReadyToOrder();
-								return;
-							}
-					}
-					msgSelfDecidedToLeave();
-					return;
-				}
-				
-				else if (name.equals("Flake")) {
-					money = 5.00;
-					for(int i = 0; i < menu.items.size(); i++)  {
-						// Deliberately orders something too expensive
-						if (menu.items.get(i).price > money) {
-							order = menu.items.get(i).item;
-							print("Finished deciding food, customer wants " + order);
-							msgSelfReadyToOrder();
-							return;
-						}
-					}
-					msgSelfDecidedToLeave();
-					return;
-				}
+//				
+//				double nameDouble = -1;
+//				
+//				try {
+//					nameDouble = Double.parseDouble(name);
+//				} catch (NumberFormatException nfe){
+//				
+//					
+//				}
+//				
+//				if (nameDouble == 8.99) {
+//					money = nameDouble; // TODO Remove hacks
+//					
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						if (menu.items.get(i).item.equals("Salad")) {
+//							order = "Salad";
+//							print("Finished deciding food, customer wants " + order);
+//							msgSelfReadyToOrder();
+//							return;
+//						}
+//					}
+//					order = "Pizza";
+//					print("Finished deciding food, customer wants " + order);
+//					msgSelfReadyToOrder();
+//					return;	
+//				}
+//				
+//				if (nameDouble == 5.99) {
+//					money = nameDouble;
+//				}
+//				
+//				if (nameDouble == 5) {
+//					money = nameDouble;
+//				}
+//				
+//				if (name.equals("Steak")) {
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						if (menu.items.get(i).item.equals("Steak"))
+//							if (menu.items.get(i).price > money) {
+//								msgSelfDecidedToLeave();
+//								return;
+//							}
+//							else {
+//								order = "Steak";
+//								print("Finished deciding food, customer wants " + order);
+//								msgSelfReadyToOrder();
+//								return;
+//							}
+//					}
+//					msgSelfDecidedToLeave();
+//					return;
+//				}
+//				
+//				else if (name.equals("Chicken")) {
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						if (menu.items.get(i).item.equals("Chicken"))
+//							if (menu.items.get(i).price > money) {
+//								msgSelfDecidedToLeave();
+//								return;
+//							}
+//							else {
+//								order = "Chicken";
+//								print("Finished deciding food, customer wants " + order);
+//								msgSelfReadyToOrder();
+//								return;
+//							}
+//					}
+//					msgSelfDecidedToLeave();
+//					return;
+//				}
+//				
+//				else if (name.equals("Salad")) {
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						if (menu.items.get(i).item.equals("Salad"))
+//							if (menu.items.get(i).price > money) {
+//								msgSelfDecidedToLeave();
+//								return;
+//							}
+//							else {
+//								order = "Salad";
+//								print("Finished deciding food, customer wants " + order);
+//								msgSelfReadyToOrder();
+//								return;
+//							}
+//					}
+//					msgSelfDecidedToLeave();
+//					return;
+//				}
+//				
+//				else if (name.equals("Pizza")) {
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						if (menu.items.get(i).item.equals("Pizza"))
+//							if (menu.items.get(i).price > money) {
+//								msgSelfDecidedToLeave();
+//								return;
+//							}
+//							else {
+//								order = "Pizza";
+//								print("Finished deciding food, customer wants " + order);
+//								msgSelfReadyToOrder();
+//								return;
+//							}
+//					}
+//					msgSelfDecidedToLeave();
+//					return;
+//				}
+//				
+//				else if (name.equals("Flake")) {
+//					money = 5.00;
+//					for(int i = 0; i < menu.items.size(); i++)  {
+//						// Deliberately orders something too expensive
+//						if (menu.items.get(i).price > money) {
+//							order = menu.items.get(i).item;
+//							print("Finished deciding food, customer wants " + order);
+//							msgSelfReadyToOrder();
+//							return;
+//						}
+//					}
+//					msgSelfDecidedToLeave();
+//					return;
+//				}
 				// END HACK------------------------------------------------------------------
 				
-				else {
+//				else {
 					Random rand = new Random();
 					while (order == null) {
 						if (menu.items.size() == 0) {
@@ -435,7 +438,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 						}
 					}
 				}
-			}
+//			}
 		},
 		1000);
 	}

@@ -40,7 +40,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		RestaurantChungCustomer c;
 		CustomerState s;
 		int positionInLine;
-		double debt;
+		int debt;
 		
 		public HCustomer(RestaurantChungCustomer customer, CustomerState state, int pos) {
 			c = customer;
@@ -166,7 +166,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgFlakeAlert(RestaurantChungCustomer c, double d) {
+	public void msgFlakeAlert(RestaurantChungCustomer c, int d) {
 		print("Host received msgFlakeAlert");
 		HCustomer hc = findCustomer(c);
 		hc.debt = d;
@@ -400,7 +400,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	public MyWaiter findWaiter(RestaurantChungWaiterBase w) {
 		for(MyWaiter waiter : waiters ){
 			if(waiter.w == w) {
-				return waiter;		
+				return waiter;
 			}
 		}
 		return null;

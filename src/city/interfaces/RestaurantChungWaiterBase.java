@@ -22,7 +22,7 @@ public interface RestaurantChungWaiterBase extends RoleInterface {
 	public abstract void msgOrderIsReady(String choice, int table);
 	public abstract void msgGetCheck(RestaurantChungCustomer c);
 	public abstract void msgLeaving(RestaurantChungCustomer c);
-	public abstract void msgHereIsBill(RestaurantChungCustomer c, double price);
+	public abstract void msgHereIsBill(RestaurantChungCustomer c, int price);
 	public abstract void msgAnimationAtEntrance();
 	public abstract void msgAnimationAtTable();
 	public abstract void msgAnimationAtCook();

@@ -49,7 +49,7 @@ public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChu
 			String choice;
 			OrderStatus os;
 		}
-		double bill;
+		int bill;
 		
 		public WCustomer(RestaurantChungCustomer customer, int table, CustomerState state) {
 			c = customer;
@@ -158,7 +158,7 @@ public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChu
 
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgHereIsBill(RestaurantChungCustomer c, double price) {
+	public void msgHereIsBill(RestaurantChungCustomer c, int price) {
 		print("Waiter received msgHereIsBill");
 		WCustomer wc = findCustomer(c);
 		wc.bill = price;

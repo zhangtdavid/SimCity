@@ -95,7 +95,7 @@ public class MockRestaurantChungWaiterMessageCook extends MockRole implements Re
 	}
 
 	@Override
-	public void msgHereIsBill(RestaurantChungCustomer c, double price) {
+	public void msgHereIsBill(RestaurantChungCustomer c, int price) {
 		log.add(new LoggedEvent("Waiter received msgHereIsBill from cashier. The bill is for " + price));
 		System.out.println("Waiter received msgHereIsBill from cashier. The bill is for " + price);			
 	}

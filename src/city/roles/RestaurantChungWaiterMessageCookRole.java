@@ -30,7 +30,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 //			String choice;
 //			OrderStatus os;
 //		}
-//		double bill;
+//		int bill;
 //		
 //		public WCustomer(Customer customer, int table, CustomerState state) {
 //			c = customer;
@@ -144,7 +144,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 
 //	Cashier
 //	---------------------------------------------------------------
-	public void msgHereIsBill(RestaurantChungCustomer c, double price) {
+	public void msgHereIsBill(RestaurantChungCustomer c, int price) {
 		print("Waiter received msgHereIsBill");
 		WCustomer wc = findCustomer(c);
 		wc.bill = price;

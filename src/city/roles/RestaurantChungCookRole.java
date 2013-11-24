@@ -5,8 +5,10 @@ import java.util.concurrent.Semaphore;
 
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
-import city.interfaces.RestaurantChungMarket;
 import city.interfaces.RestaurantChungWaiterBase;
 
 /**
@@ -25,6 +27,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atCookHome = new Semaphore(0, true);
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
+	
+	private MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole();
+	private RestaurantChungCashier restaurantChungCashier;
 
 //  Orders
 //  =====================================================================        
@@ -55,7 +60,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         int amount;
         int low;
         int capacity;
-        boolean open;
+        boolean open; // TODO no longer need this
         FoodOrderState s;
         
         public Food(String item, int cookingTime, int amount, int low, int capacity) {
@@ -73,23 +78,24 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         
 //  Markets
 //  =====================================================================
-    private List<RestaurantChungMarket> markets = Collections.synchronizedList(new ArrayList<RestaurantChungMarket>());
+    private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
     int currentMarket = 0; // Index of market in the list to order from
         
 //  Market Orders
 //  =====================================================================        
     public List<MarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MarketOrder>()); // Holds orders, their states, and recipients
-    int orderID = 0; // Begins at 0, is incremented with each new order
+    int orderID = 1000; // Begins at 0, is incremented with each new order
     
     private class MarketOrder{
         int ID; // Used to quickly identify a fulfilled order from a market
-        boolean rush;
+//        boolean rush;
         Map<String, Integer> orderItems = new HashMap<String, Integer>(); // Map of the type and quantity of items ordered, always includes all items, but can have a quantity of 0
         MarketOrderState s;
         
-        public MarketOrder(int id, boolean rush, Map<String, Integer> items, MarketOrderState status) {
+//        public MarketOrder(int id, boolean rush, Map<String, Integer> items, MarketOrderState status) {
+        public MarketOrder(int id, Map<String, Integer> items, MarketOrderState status) {
             ID = id;
-            this.rush = rush;
+//            this.rush = rush;
             for (String s: items.keySet()) {
                 orderItems.put(s, items.get(s)); // Create a deep copy of the map
             }
@@ -177,7 +183,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //                        mo.orderItems.put(i,mo.orderItems.get(i)-unavailableItems.get(i)); // Update original order to reflect changes
         }
         
-        marketOrders.add(new MarketOrder(orderID++, false, tempItems, MarketOrderState.Pending)); // Create a new order for the unavailable items
+        marketOrders.add(new MarketOrder(orderID++, tempItems, MarketOrderState.Pending)); // Create a new order for the unavailable items
         stateChanged();
     }
 
@@ -290,9 +296,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     private void identifyFoodThatIsLow() {
         print("Identifying food that is low");                
         Map<String, Integer> normal = new HashMap<String, Integer>();                
-        Map<String, Integer> rush = new HashMap<String, Integer>();
+//        Map<String, Integer> rush = new HashMap<String, Integer>();
         int numLow = 0;
-        int numRush = 0;
+//        int numRush = 0;
         
         for (String i: foods.keySet()) {
             if (foods.get(i).open == false) {
@@ -307,10 +313,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
             
             else {
-                rush.put(i, foods.get(i).capacity - foods.get(i).amount);
+//                rush.put(i, foods.get(i).capacity - foods.get(i).amount);
                 foods.get(i).s = FoodOrderState.Pending;
                 foods.get(i).open = false;
-                numRush++;
+//                numRush++;
             }
         }
             
@@ -322,8 +328,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //                }
 
             
-        if (numLow > 0) marketOrders.add(new MarketOrder(orderID++, false, normal, MarketOrderState.Pending));
-        if (numRush > 0) marketOrders.add(new MarketOrder(orderID++, true, rush, MarketOrderState.Pending));
+        if (numLow > 0) marketOrders.add(new MarketOrder(orderID++, normal, MarketOrderState.Pending));
+//        if (numRush > 0) marketOrders.add(new MarketOrder(orderID++, true, rush, MarketOrderState.Pending));
         
         msgSelfLowFoodsIdentified();
             
@@ -352,8 +358,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             print("Order: " + i + " " + o.orderItems.get(i));
         }
                 
-        RestaurantChungMarket selectedMarket = markets.get((currentMarket++)%(markets.size())); // Cycles through the available markets
-        selectedMarket.msgHereIsAnOrder(this, o.ID, o.rush, o.orderItems);
+        MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
+//        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPaymentRole(), o, o.ID); // need to change this to a call to the manager, asking market manager for service
         return;
     }
     
@@ -471,14 +477,14 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         cookGui = gui;
     }
     
-    public void addMarket(RestaurantChungMarket m) {
+    public void addMarket(MarketBuilding m) {
         markets.add(m);
     }
     
     public RestaurantChungWaiterBase findWaiter(Order order) {
         for(Order o : orders){
             if(o == order) {
-                return o.w;                
+                return o.w;
             }
         }
         return null;
@@ -516,6 +522,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                 marketOrders.remove(order);
             }
         }
+    }
+    
+    public void setRestaurantCashier(RestaurantChungCashier c) {
+    	restaurantChungCashier = c;
     }
     
     // HACK------------------------------------------------------------------
