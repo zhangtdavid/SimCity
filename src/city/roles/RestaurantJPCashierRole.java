@@ -9,6 +9,7 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Role;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -18,6 +19,8 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	public List<MyBill> Bills = Collections.synchronizedList(new ArrayList<MyBill>());
 	String name;
 	public Float funds = (float) 100;
+	private boolean wantsInactive = false;
+	private RestaurantJPBuilding building;
 	public class MyBill{
 		public state s;
 		RestaurantJPWaiter w = null;
@@ -37,15 +40,23 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	
 	Map<String, Float> Prices = new HashMap<String, Float>();
 	public EventLog log  = new EventLog();
-	public RestaurantJPCashierRole(){
+	public RestaurantJPCashierRole(RestaurantJPBuilding b){
 		super();
+		building = b;
 		name = "Squidward";
 		Prices.put("Steak", (float) 12.99);
 		Prices.put("Chicken", (float) 10.99);
 		Prices.put("Salad", (float) 5.99);
 		Prices.put("Pizza", (float) 7.99);
 	}
-
+	public void setInactive(){
+		if(Bills.size() == 0 && building.seatedCustomers == 0){
+			active = false;
+		}
+		else
+			wantsInactive = true;
+	}
+	
 	public String getName() {
 		return name;
 	}
@@ -105,6 +116,10 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	
 	public boolean runScheduler() {
 		//ready, makingOrder, orderReady
+		if(wantsInactive && Bills.size() == 0 && building.seatedCustomers == 0){
+			active = false;
+			wantsInactive = false;
+		}
 		synchronized(Bills){
 			for(MyBill b : Bills){
 			if(b.s == state.pending)

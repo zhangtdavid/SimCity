@@ -14,6 +14,7 @@ import utilities.RestaurantJPTableClass;
 import city.Role;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPHostAnimation;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketManager;
 import city.interfaces.RestaurantJPCook;
 import city.interfaces.RestaurantJPWaiter;
@@ -21,86 +22,35 @@ import city.interfaces.RestaurantJPWaiter;
 public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 															//DATA	
 	private RestaurantJPCookAnimation gui;
+	private RestaurantJPBuilding building;
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	public List<MyMarket> Markets = Collections.synchronizedList(new ArrayList<MyMarket>());
 	boolean ordering = false;
 	private Semaphore atDestination = new Semaphore(0,true);
-	
+	boolean wantsInactive = false;
 	RestaurantJPRevolvingStand revolvingStand;
 	boolean waitingToCheckStand = false;
-	
-	class MyMarket{
-		MarketManagerRole m;
-		boolean Steak = true;
-		boolean Chicken = true;
-		boolean Pizza = true;
-		boolean Salad = true;
-		public MyMarket(MarketManagerRole mark){
-			m = mark;
-		}
-		public boolean isStocked(String f){
-			if(f.equals("Pizza"))
-				return Pizza;
-			if(f.equals("Steak"))
-				return Steak;
-			if(f.equals("Chicken"))
-				return Chicken;
-			if(f.equals("Salad"))
-				return Salad;
-			return false;
-		}
-		public void setUnstocked(String f){
-			if(f.equals("Pizza"))
-				Pizza = false;
-			if(f.equals("Steak"))
-				Steak = false;
-			if(f.equals("Chicken"))
-				Chicken = false;
-			if(f.equals("Salad"))
-				Salad = false;
-		}
-	}
 	String name;
-	public class Order{
-		state s;
-		RestaurantJPWaiter w;
-		String choice;
-		RestaurantJPTableClass table;
-		public Order(RestaurantJPWaiter wait, String c, RestaurantJPTableClass table){
-			s = state.pending;
-			w = wait;
-			choice = c;
-		}
-	};
 	public enum state{pending, cooking, done, finished, taken};
-	
-	public RestaurantJPHostAnimation hostGui = null;
 	Timer timer = new Timer();
 	Map<String, Food> Foods = new HashMap<String, Food>();
-	
-	public class Food {
-		int cookingTime;
-		int inventory;
-		String type;
-		public Food(int cTime, int count, String t){
-			cookingTime = cTime;
-			inventory = count;
-			type = t;
-		}
-		public Food(){
-		}
-	}
-	
 	int low = 2;
 	int marketCount = 0;
 
-	public RestaurantJPCookRole(RestaurantJPCashierRole c) {
+	public RestaurantJPCookRole(RestaurantJPBuilding b) {
 		super();
-		name = "squidward";
+		building = b;
+		name = "spongebob";
 		Foods.put("Steak", new Food(5000, 5, "Steak"));
 		Foods.put("Chicken", new Food(4000, 5, "Chicken"));
 		Foods.put("Salad", new Food(3000, 5, "Salad"));
 		Foods.put("Pizza", new Food(2000, 5, "Pizza"));					//HACKHACKHACK
+	}
+	public void setInactive(){
+		if(orders.size() == 0 && building.seatedCustomers == 0)
+			active = false;
+		else
+			wantsInactive = true;
 	}
 	public String getName() {
 		return name;
@@ -175,6 +125,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 //SCHEDULER------------------------------------------------------------------------
 	
 	public boolean runScheduler() {
+		if(wantsInactive && orders.size() == 0 && building.seatedCustomers == 0){
+			active = false;
+			wantsInactive = false;
+		}
 		if(!ordering){
 			for (Map.Entry<String, Food> entry : Foods.entrySet())
 			{
@@ -316,8 +270,60 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		
 	}
 	
-	public int getPosOfNewOrder() {
-		return orders.size();
+	public class Order{
+		state s;
+		RestaurantJPWaiter w;
+		String choice;
+		RestaurantJPTableClass table;
+		public Order(RestaurantJPWaiter wait, String c, RestaurantJPTableClass table){
+			s = state.pending;
+			w = wait;
+			choice = c;
+		}
+	};
+	
+	class MyMarket{
+		MarketManagerRole m;
+		boolean Steak = true;
+		boolean Chicken = true;
+		boolean Pizza = true;
+		boolean Salad = true;
+		public MyMarket(MarketManagerRole mark){
+			m = mark;
+		}
+		public boolean isStocked(String f){
+			if(f.equals("Pizza"))
+				return Pizza;
+			if(f.equals("Steak"))
+				return Steak;
+			if(f.equals("Chicken"))
+				return Chicken;
+			if(f.equals("Salad"))
+				return Salad;
+			return false;
+		}
+		public void setUnstocked(String f){
+			if(f.equals("Pizza"))
+				Pizza = false;
+			if(f.equals("Steak"))
+				Steak = false;
+			if(f.equals("Chicken"))
+				Chicken = false;
+			if(f.equals("Salad"))
+				Salad = false;
+		}
+	}
+	public class Food {
+		int cookingTime;
+		int inventory;
+		String type;
+		public Food(int cTime, int count, String t){
+			cookingTime = cTime;
+			inventory = count;
+			type = t;
+		}
+		public Food(){
+		}
 	}
 }
 

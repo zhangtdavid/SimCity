@@ -6,13 +6,16 @@ import utilities.RestaurantJPWaiterBase;
 import java.util.*;
 
 import city.Role;
+import city.buildings.RestaurantJPBuilding;
 
 public class RestaurantJPHostRole extends Role {
 	static final int NTABLES = 3;
+	RestaurantJPBuilding building;
 	public List<RestaurantJPCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantJPCustomerRole>());
 	public Collection<RestaurantJPTableClass> tables;
 	int WAITERCOUNT = 0;
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
+	private boolean wantsInactive = false;
 	class MyWaiter{
 		RestaurantJPWaiterRole w;
 		state s;
@@ -21,18 +24,26 @@ public class RestaurantJPHostRole extends Role {
 			return s == state.available;
 		}	
 	}
-	public enum state{available, wantsBreak, onBreak};
+	public enum state{available, wantsBreak, onBreak, unavailable};
 	private String name;
 //	public HostGui hostGui = null;
 
-	public RestaurantJPHostRole(String name) {
+	public RestaurantJPHostRole(RestaurantJPBuilding b) {
 		super();
-		this.name = name;
+		building = b;
 		// make some tables
 		tables = new ArrayList<RestaurantJPTableClass>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantJPTableClass(ix));//how you add to a collections
 		}
+	}
+	
+	public void setInactive(){
+		if(building.host != this && waitingCustomers.size() == 0){
+			active = false;
+		}
+		else
+			wantsInactive = true;
 	}
 
 	public void addWaiter(RestaurantJPWaiterRole w, String name)
@@ -64,6 +75,12 @@ public class RestaurantJPHostRole extends Role {
 	}*/
 	// ----------------------------------------------------------Messages
 
+	public void msgSetUnavailable(RestaurantJPWaiterBase waiter){
+		for(MyWaiter myW : waiters){
+			if(myW.w == waiter)
+				myW.s = state.unavailable;
+		}
+	}
 	public void msgIWantToEat(RestaurantJPCustomerRole cust) {
 		print("IWantFood message received");
 		synchronized(waitingCustomers){
@@ -105,7 +122,7 @@ public class RestaurantJPHostRole extends Role {
 	
 	public void msgLeaving(RestaurantJPCustomerRole customer){
 		print("Leaving restaurant message recieved");
-		synchronized(waitingCustomers){
+		/*synchronized(waitingCustomers){
 		for(RestaurantJPCustomerRole c : waitingCustomers){
 			if(c == customer){
 				synchronized(waitingCustomers){
@@ -114,7 +131,8 @@ public class RestaurantJPHostRole extends Role {
 				break;
 			}
 		}
-		}
+		}*/			//Don't know why this was ever necessary
+		building.seatedCustomers -= 1;
 		stateChanged();
 	}
 
@@ -127,12 +145,18 @@ public class RestaurantJPHostRole extends Role {
             so that table is unoccupied and customer is waiting.
             If so seat him at the table.
 		 */
+		if(wantsInactive && building.host != this && waitingCustomers.size() == 0){
+			this.active = false;
+			wantsInactive = false;
+		}
+		
 		for (RestaurantJPTableClass table : tables) {
 			if (!table.isOccupied() && waiters.size() > 0) {
 					if(waiters.get(WAITERCOUNT).isAvailable() || waiters.get(WAITERCOUNT).s == state.wantsBreak)
 					{					
 						if (!waitingCustomers.isEmpty()) {//the action
 							AddressCustomer(waitingCustomers.get(0), waiters.get(WAITERCOUNT), table);
+							building.seatedCustomers += 1;
 							if(WAITERCOUNT == waiters.size()-1)
 								WAITERCOUNT = 0;
 							else

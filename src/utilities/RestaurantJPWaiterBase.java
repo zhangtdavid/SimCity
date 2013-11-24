@@ -22,37 +22,24 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	private boolean hasRequestedBreak = false;
 	private boolean comingBackFromBreak = false;
 	public RestaurantJPRevolvingStand revolvingStand; 
-	
 	public enum state{waiting, seated, readyToOrder, decidingOrder, ordered, reOrder, waitingForFood, foodReady, served, checkReady, checkReceived, done};
-
 	protected Semaphore atDestination = new Semaphore(0,true);
 	public RestaurantJPWaiterAnimation waiterGui;
-	
-	public void setGui(RestaurantJPWaiterAnimation gui) {
-		waiterGui = gui;
-	}
-	
-	public RestaurantJPWaiterBase(String n) {
-		super();
-		name = n;					
-	}
+	private boolean wantsInactive = false;
 	
 	public RestaurantJPWaiterBase(RestaurantJPBuilding b) {
+		super();
 		building = b;
 			// TODO Auto-generated constructor stub
 	}
 	
-
-	public String getName() {
-		return name;
-	}
-	
-	public List<MyCustomer> getCustomers(){
-		return myCustomers;
-	}
-	
-	public void removeAllCustomers(){
-		myCustomers.clear();
+	public void setInactive(){
+		if(myCustomers.size() == 0){
+			active = false;
+			building.host.msgSetUnavailable(this);
+		}
+		else
+			wantsInactive = true;
 	}
 
 //MSGS---------------------------------------------------------------------------------
@@ -161,7 +148,12 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 																	//SCHEDULER
 	public boolean runScheduler() {//MIGHT HAVE A PROBLEM WITH IF THINGS
 		//ready, seating, takingOrder, processingOrder, gettingFood, serving, leaving
-	  try{	
+		if(wantsInactive && myCustomers.size() == 0){
+			active = false;
+			building.host.msgSetUnavailable(this);
+			wantsInactive = false;
+		}
+	try{	
 		for(MyCustomer myC : myCustomers)
 		{
 			if(myC.s == state.waiting && onBreak==false){
@@ -368,5 +360,21 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 			choice = new String();
 			table = new RestaurantJPTableClass(0);
 		}
+	}
+	
+	public String getName() {
+		return name;
+	}
+	
+	public List<MyCustomer> getCustomers(){
+		return myCustomers;
+	}
+	
+	public void removeAllCustomers(){
+		myCustomers.clear();
+	}
+	
+	public void setGui(RestaurantJPWaiterAnimation gui) {
+		waiterGui = gui;
 	}
 }
