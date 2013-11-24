@@ -12,13 +12,14 @@ public abstract class Role implements RoleInterface {
 	
 	// Data
 	
-	private Person person;
-	private int salary;
-	private int shiftStart;
-	private int shiftEnd;
-	public boolean active;
+	private Person person; // The person who owns the role
+	private int salary; // FOR OCCUPATIONS - how much the role is paid by its job
+	private int shiftStart; // FOR OCCUPATIONS - when the role starts work
+	private int shiftEnd; // FOR OCCUPATIONS - when the role can leave work
+	private boolean active;
 	private boolean activity;
-	private Building business;
+	private Building workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
+	private Animation animation;
 	
 	// Constructor
 	
@@ -43,13 +44,18 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
+	public  <T extends Animation> T getAnimation(Class<T> type) {
+		return type.cast(animation);
+	}
+	
+	@Override
 	public int getSalary() {
 		return salary;
 	}
 	
 	@Override
-	public Building getBusiness() {
-		return business;
+	public  <T extends Building> T getWorkplace(Class<T> type) {
+		return type.cast(workplace);
 	}
 	
 	@Override
@@ -80,13 +86,18 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
+	public void setAnimation(Animation a) {
+		this.animation = a;
+	}
+	
+	@Override
 	public void setSalary(int s) {
 		this.salary = s;
 	}
 	
 	@Override
-	public void setBusiness(Building b) {
-		this.business = b;
+	public void setWorkplace(Building b) {
+		this.workplace = b;
 	}
 	
 	@Override
