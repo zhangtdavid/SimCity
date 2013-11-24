@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import city.Application.BANK_SERVICE;
+import city.Application.TRANSACTION_TYPE;
 import city.roles.BankTellerRole;
 
 public interface BankCustomer extends RoleInterface {
@@ -23,6 +25,9 @@ public interface BankCustomer extends RoleInterface {
 	
 	public void msgTransactionDenied();
 	// Scheduler
+
+	public void setActive(BANK_SERVICE atmdeposit, int i,
+			TRANSACTION_TYPE business); // Added by Shirley
 	
 	// Actions
 	
