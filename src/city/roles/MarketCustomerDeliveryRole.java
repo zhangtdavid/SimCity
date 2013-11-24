@@ -96,8 +96,5 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Utilities
 //	=====================================================================
-	
 
-	
-	// Classes
 }

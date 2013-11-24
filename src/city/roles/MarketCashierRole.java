@@ -116,15 +116,24 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		stateChanged();
 	}
 	
-//	Customer (In Person)
+//	Employee
 //	---------------------------------------------------------------
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Customer In Person."));
-		System.out.println("Market Cashier received msgComputeBill from Customer In Person.");
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
+		System.out.println("Market Cashier received msgComputeBill from Employee.");
 		transactions.add(new Transaction(e, c, order, collectedItems, id));
 		stateChanged();
 	}
 	
+	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
+		System.out.println("Market Cashier received msgComputeBill from Employee");
+		transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
+		stateChanged();
+	}
+	
+//	Customer (In Person)
+//	---------------------------------------------------------------	
 	public void msgHereIsPayment(MarketCustomer c, int money) {
 		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer In Person for " + money));
 		System.out.println("Market Cashier received msgHereIsPayment from Customer In Person for " + money);
@@ -133,16 +142,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
-	
+
 //	Customer (Delivery)
-//	---------------------------------------------------------------
-	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Customer Delivery."));
-		System.out.println("Market Cashier received msgComputeBill from Customer Delivery");
-		transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
-		stateChanged();
-	}
-	
+//	---------------------------------------------------------------	
 	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
 		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money));
 		System.out.println("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money);

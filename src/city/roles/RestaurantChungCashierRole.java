@@ -5,6 +5,7 @@ import java.util.*;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
@@ -23,12 +24,13 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public EventLog log = new EventLog();
 
 	Timer timer = new Timer();
+	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
 	public int money;
 	
-	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole();
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions);
 
-	
 //	Transactions
 //	=====================================================================	
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
@@ -53,26 +55,24 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public enum TransactionState
 	{None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	
-	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	// list market transactions
 	public class MarketTransaction {
 		MarketBuilding market;
-		public Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
-		public int orderId;
+		MarketOrder order;
 		public int bill;
-		public TransactionState s;
+		public MarketTransactionState s;
 		
 		public MarketTransaction (MarketBuilding m, MarketOrder o) {
 			market = m;
-	        for (FOOD_ITEMS f: o.orderItems.keySet()) {
-	        	orderItems.put(f, o.orderItems.get(f));
-	        }
-	        orderId = o.orderId;
+			order = new MarketOrder(o);
 	        bill = 0;
-			s = TransactionState.None;
+			s = MarketTransactionState.Pending;
 		}
 	}
+	public enum MarketTransactionState
+	{Pending, Processing};
 	
-	private Map<String, Integer> prices = new HashMap<String, Integer>();
+	private Map<FOOD_ITEMS, Integer> prices = new HashMap<FOOD_ITEMS, Integer>();
 	
 //	Constructor
 //	=====================================================================		
@@ -80,10 +80,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		super();
 		money = 500;
 		// Add items and their prices to a map
-		prices.put("Steak", 16);
-		prices.put("Chicken", 12);
-		prices.put("Salad", 6);
-		prices.put("Pizza", 10);
+		prices.put(FOOD_ITEMS.steak, 16);
+		prices.put(FOOD_ITEMS.chicken, 12);
+		prices.put(FOOD_ITEMS.salad, 6);
+		prices.put(FOOD_ITEMS.pizza, 10);
 	}
 
 //  Messages
@@ -113,17 +113,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	---------------------------------------------------------------
 	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
 		marketTransactions.add(new MarketTransaction(m, o));	
-	}
-	
-//	Market Cashier
-//	---------------------------------------------------------------	
-	public void msgMarketOrderBill(MarketCashier c, int id, int bill) {
-//		print("Cashier received msgMarketOrderBill");
-//		log.add(new LoggedEvent("Cashier received msgMarketOrderBill. For amount of " + bill));
-//		MarketTransaction mt = findMarketTransaction(id);
-//		mt.bill = bill;
-//		mt.s = TransactionState.Pending;
-//		stateChanged();
 	}
 	
 //  Scheduler
@@ -159,15 +148,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 					return true;
 				}
 			}	
-		}
-		
-		synchronized(marketTransactions) {
-			for (MarketTransaction mt : marketTransactions) {
-				if (mt.s == TransactionState.Pending) {
-					payMarket(mt);
-					return true;
-				}
-			}
 		}
 		
 		synchronized(transactions) {
@@ -227,25 +207,13 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		host.msgFlakeAlert(t.c, t.price-t.payment);
 		
 	}
-	
-	private void payMarket(MarketTransaction mt) {
-		if (money >= mt.bill) {
-			int payment = checkBill(mt);
-			if(payment != -1) {
-				print("Paying market " + mt.bill);
-				marketCustomerDeliveryPayment.setActive();
-//				mt.market.cashier.msgHereIsPayment(marketCustomerDeliveryPayment, mt.bill); TODO this should be through the MarketCustomerDeliveryPaymentRole
-				money -= mt.bill;
-				removeMarketTransactionFromList(mt);
-			}
-		}
-//		else {
-//			print("Not enough money to pay market " + mt.bill);
-//		}
-	}
 
 //	Utilities
 //	=====================================================================	
+	public void setRestaurant(RestaurantChungBuilding restaurant) {
+		this.restaurant = restaurant;
+	}
+	
 	public void setHost(RestaurantChungHost host) {
 		this.host = host;
 	}
@@ -261,7 +229,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction t: marketTransactions) {
-			if(t.orderId == id) {
+			if(t.order.orderId == id) {
 				return t;
 			}
 		}
@@ -277,14 +245,14 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		}
 	}
 	
-	public void removeMarketTransactionFromList(MarketTransaction transaction) {
-		for(MarketTransaction mt: marketTransactions) {
-			if(mt == transaction) {
-				marketTransactions.remove(mt);
-				return;
-			}
-		}
-	}
+//	public void removeMarketTransactionFromList(MarketTransaction transaction) {
+//		for(MarketTransaction mt: marketTransactions) {
+//			if(mt == transaction) {
+//				marketTransactions.remove(mt);
+//				return;
+//			}
+//		}
+//	}
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		return marketCustomerDeliveryPayment;
@@ -292,8 +260,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: t.orderItems.keySet()) {
-        	tempBill += t.orderItems.get(item)*t.market.prices.get(item);
+        for (FOOD_ITEMS item: t.order.orderItems.keySet()) {
+        	tempBill += t.order.orderItems.get(item)*t.market.prices.get(item);
         }
 
         if (tempBill == t.bill)

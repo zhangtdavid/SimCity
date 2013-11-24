@@ -55,9 +55,6 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	---------------------------------------------------------------
 	public MarketEmployeeRole() {
 		super();
-//        for (FOOD_ITEMS s: order.keySet()) {
-//        	collectedItems.put(s, 0); // initialize all values in collectedItems to 0
-//        }
     }
 
 //  Messages
@@ -105,22 +102,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
             for (FOOD_ITEMS item: o.keySet()) {
                 order.put(item, o.get(item)); // Create a deep copy of the order map
             }
-            stateChanged();
 		}
         orderId = id;
+        stateChanged();
 	}
-
-//	public void msgHereIsMyDeliveryOrder(MarketCustomerDelivery c, Map<String, Integer> o) {
-//		log.add(new LoggedEvent("Market Employee received msgHereIsMyDeliveryOrder from Market Customer."));
-//		System.out.println("Market Employee received msgHereIsMyDeliveryOrder from Market Customer.");
-//		if (customerDelivery == c) { // Makes sure it is the same customer
-//			event = MarketEmployeeEvent.OrderReceived;
-//            for (String item: o.keySet()) {
-//                order.put(item, o.get(item)); // Create a deep copy of the order map
-//            }
-//            stateChanged();
-//		}
-//	}
 
 //	Animation
 //	---------------------------------------------------------------

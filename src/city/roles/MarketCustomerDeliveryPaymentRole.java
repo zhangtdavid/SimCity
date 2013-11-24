@@ -1,17 +1,16 @@
 package city.roles;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import utilities.MarketOrder;
+import city.Building;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
-import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.RestaurantChungCashierRole.MarketTransaction;
+import city.roles.RestaurantChungCashierRole.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -21,47 +20,36 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
+	private Building restaurant;
+	
 	private MarketBuilding market;
 	private MarketManager manager;
 	private MarketCashier cashier;
 	
-	private MarketOrder order;
-	
-	int bill;
-	
-	private enum MarketCustomerState
-	{None, Paying};
-	MarketCustomerState state;
-	
-	private enum MarketCustomerEvent
-	{OrderReady, PaymentReceived};
-	MarketCustomerEvent event;
+	public List<MarketTransaction> marketTransactions; // list shared with the restaurant cashier
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryPaymentRole() {
+	public MarketCustomerDeliveryPaymentRole(Building r, List<MarketTransaction> marketTransactions) {
 		super(); // TODO
+		restaurant = r;
+		this.marketTransactions = marketTransactions;
     }	
 	
 //  Messages
-//	=====================================================================
-//	Restaurant Cook
-//	---------------------------------------------------------------
-	
-	
+//	=====================================================================	
 //	Market Cashier
 //	---------------------------------------------------------------
 	public void msgHereIsBill(MarketCashier c, int bill, int id) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Cashier."));
-		System.out.println("Market customerDelivery received msgHereIsOrderandBill from Market Cashier.");
-        if (order.orderId == id) { // TODO double check this
-    		event = MarketCustomerEvent.OrderReady;
-    		cashier = c;
-            this.bill = bill;
-        }
+		log.add(new LoggedEvent("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
+		System.out.println("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
+		MarketTransaction mt = findMarketTransaction(id);
+    	mt.s = MarketTransactionState.Processing;
+		cashier = c;
+		mt.bill = bill;
 		stateChanged();
 	}
-		
+
 	public void msgPaymentReceived() {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
@@ -69,25 +57,27 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	
 //  Scheduler
 //	=====================================================================	
-
 	@Override
 	public boolean runScheduler() {
-		if (state == MarketCustomerState.None && event == MarketCustomerEvent.OrderReady) {
-			pay();
-			return true;
+		for (MarketTransaction mt : marketTransactions) {
+			if (mt.s == MarketTransactionState.Processing) {
+				pay(mt);
+				return true;
+			}
 		}
 		return false;
 	}
-
-
 	
 //  Actions
 //	=====================================================================
-	private void pay() {
-		state = MarketCustomerState.Paying;
-		int payment = checkBill();
-		cashier.msgHereIsPayment(this, payment);
-		// subtractMoney(payment);
+	private void pay(MarketTransaction mt) {
+		int payment = checkBill(mt);
+		if (payment != -1) {
+			cashier.msgHereIsPayment(this, payment);
+			restaurant.setCash(restaurant.getCash()-payment);	
+			removeMarketTransactionFromList(mt);
+		}
+		// handle if bill is wrong
 	}
 
 //  Getters and Setters
@@ -121,18 +111,33 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	
 //  Utilities
 //	=====================================================================
-	public int checkBill() {
+	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-        	tempBill += order.orderItems.get(item)*market.prices.get(item);
+        for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
+        	tempBill += mt.order.orderItems.get(item)*market.prices.get(item);
         }
 
-        if (tempBill == bill)
-        	return bill;
+        if (tempBill == mt.bill)
+        	return mt.bill;
         
 		return -1;
 	}	
 
+	private MarketTransaction findMarketTransaction(int id) {
+		for(MarketTransaction mt : marketTransactions){
+			if(mt.order.orderId == id) {
+				return mt;		
+			}
+		}
+		return null;
+	}
 	
-	// Classes
+	public void removeMarketTransactionFromList(MarketTransaction transaction) {
+		for(MarketTransaction mt: marketTransactions) {
+			if(mt == transaction) {
+				marketTransactions.remove(mt);
+				return;
+			}
+		}
+	}
 }
