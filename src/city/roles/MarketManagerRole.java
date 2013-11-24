@@ -71,7 +71,6 @@ public class MarketManagerRole extends Role implements MarketManager {
 		}
 	}
 
-
 //	Constructor
 //	---------------------------------------------------------------
 	public MarketManagerRole() {
@@ -127,9 +126,6 @@ public class MarketManagerRole extends Role implements MarketManager {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
 		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
 		MyMarketEmployee tempEmployee = findEmployee(e);
-//		if (tempEmployee == null)
-//			employees.add(new MyMarketEmployee(e));
-//		else
 		tempEmployee.s = MarketEmployeeState.Available;
 		stateChanged();
 	}
@@ -179,7 +175,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 			customers.remove(c);
 			e.s = MarketEmployeeState.CollectingItems;			
 		}
-		else{
+		else {
 			e.customerDelivery = c.customerDelivery;
 			e.employee.msgAssistCustomerDelivery(c.customerDelivery, c.customerDeliveryPayment);
 			e.s = MarketEmployeeState.GoingToPhone;

@@ -3,7 +3,6 @@ package city.tests.mock;
 
 import city.MockRole;
 import city.animations.RestaurantChungCustomerAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;

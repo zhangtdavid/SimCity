@@ -116,37 +116,28 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		stateChanged();
 	}
 	
-//	Customer (In Person)
+//	Employee
 //	---------------------------------------------------------------
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Customer In Person."));
-		System.out.println("Market Cashier received msgComputeBill from Customer In Person.");
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
+		System.out.println("Market Cashier received msgComputeBill from Employee.");
 		transactions.add(new Transaction(e, c, order, collectedItems, id));
 		stateChanged();
 	}
 	
-	public void msgHereIsPayment(MarketCustomer c, int money) {
-		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer In Person for " + money));
-		System.out.println("Market Cashier received msgHereIsPayment from Customer In Person for " + money);
-		Transaction t = findTransaction(c);
-		t.payment = money;
-		t.s = TransactionState.ReceivedPayment;
-		stateChanged();
-	}
-	
-//	Customer (Delivery)
-//	---------------------------------------------------------------
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Customer Delivery."));
-		System.out.println("Market Cashier received msgComputeBill from Customer Delivery");
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
+		System.out.println("Market Cashier received msgComputeBill from Employee");
 		transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
 		stateChanged();
 	}
-	
-	public void msgHereIsPayment(MarketCustomerDeliveryPayment c, int money) {
-		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money));
-		System.out.println("Market Cashier received msgHereIsPayment from Customer Delivery Payment for " + money);
-		Transaction t = findTransaction(c);
+
+//	Customer
+//	---------------------------------------------------------------	
+	public void msgHereIsPayment(int id, int money) {
+		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Payment for " + money));
+		System.out.println("Market Cashier received msgHereIsPayment from Customer Payment for " + money);
+		Transaction t = findTransaction(id);
 		t.payment = money;
 		t.s = TransactionState.ReceivedPayment;		
 		stateChanged();
@@ -161,10 +152,10 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		dp.available = false;
 	}
 	
-	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, MarketCustomerDelivery cd) {
+	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Delivery Person."));
 		System.out.println("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
-		Transaction t = findTransaction(cd);
+		Transaction t = findTransaction(id);
 		transactions.remove(t);
 		MyDeliveryPerson dp = findDeliveryPerson(d);
 		dp.available = true;
@@ -215,7 +206,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		for (FOOD_ITEMS s: t.collectedItems.keySet()) {
         	t.bill += t.collectedItems.get(s)*market.prices.get(s);
         }
-        // notify customer if there is a difference between order and collected items
+        // TODO notify customer if there is a difference between order and collected items
 
 		if(t.customer != null) {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill, t.orderId);			
@@ -236,13 +227,16 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.remove(t);
 		}
 		else {
-			t.customerDeliveryPayment.msgPaymentReceived();
-			market.money += t.payment;
-			for(MyDeliveryPerson dt : deliveryPeople ){
-				if(dt.available == true) {
-					assignDelivery(t, dt);
+			if(t.bill == t.payment) {
+				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
+				market.money += t.payment;
+				for(MyDeliveryPerson dt : deliveryPeople ) {
+					if(dt.available == true) {
+						assignDelivery(t, dt);
+					}
 				}
 			}
+
 		}
 	}
 	
@@ -264,6 +258,15 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		
 //  Utilities
 //	=====================================================================
+	private Transaction findTransaction(int id) {
+		for(Transaction t : transactions){
+			if(t.orderId == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
 	private Transaction findTransaction(MarketCustomer c) {
 		for(Transaction t : transactions){
 			if(t.customer == c) {

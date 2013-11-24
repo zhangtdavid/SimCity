@@ -163,7 +163,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //			e.printStackTrace();
 //		}
 		int payment = checkBill();
-		cashier.msgHereIsPayment(this, payment);			
+		if (payment != -1) 
+			cashier.msgHereIsPayment(order.orderId, payment);			
 	}
 	
 	private void leaveMarket() {

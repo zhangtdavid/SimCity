@@ -7,9 +7,8 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketEmployee;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
 import city.Role;
@@ -22,83 +21,60 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 	private MarketBuilding market;
 	private MarketManager manager;
-	private MarketEmployee employee;
 	
-	private MarketCustomerDeliveryPaymentRole restaurantCashier;
+	private MarketCustomerDeliveryPayment restaurantCashier;
 	
 	private MarketOrder order;
 	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
-		
-	int money;
-	int bill;
 	
 	private enum MarketCustomerState
-	{None, WaitingForOrder, Paying, WaitingForDelivery};
+	{None, Ordering};
 	MarketCustomerState state;
-	
-	private enum MarketCustomerEvent
-	{NeedOrderFromMarket, OrderReady, PaymentReceived};
-	MarketCustomerEvent event;
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole(MarketOrder o, MarketCustomerDeliveryPaymentRole c) {
+	public MarketCustomerDeliveryRole(MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
         for (FOOD_ITEMS s: order.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in receivedItems to 0
         }
-        restaurantCashier = c;
-    }	
+        restaurantCashier = marketCustomerDeliveryPayment;
+        state = MarketCustomerState.Ordering;
+        active = true;
+    }
 	
 //  Messages
 //	=====================================================================	
-//	public void msgWhatWouldYouLike(MarketEmployee e) {
-//		log.add(new LoggedEvent("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee."));
-//		System.out.println("Market CustomerDelivery received msgWhatWouldYouLike from Market Employee.");
-//		event = MarketCustomerEvent.AskedForOrder;
-//		employee = e;
-//		stateChanged();
-//	}
-	
-	public void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
-		state = MarketCustomerState.None;
-        for (FOOD_ITEMS item: collectedItems.keySet()) {
-            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
-        }
-        event = MarketCustomerEvent.PaymentReceived;
+		if (order.orderId == id) {
+	        for (FOOD_ITEMS item: collectedItems.keySet()) {
+	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
+	        }
+		}
+        active = false; // set role inactive after receiving order
 	}
 	
 //  Scheduler
-//	=====================================================================	
-
+//	=====================================================================
 	@Override
 	public boolean runScheduler() {
-		if (state == MarketCustomerState.None && event == MarketCustomerEvent.NeedOrderFromMarket) {
+		if (state == MarketCustomerState.Ordering) {
 			callMarket();
 			return true;
 		}
-//		if (state == MarketCustomerState.WaitingForService && event == MarketCustomerEvent.AskedForOrder) {
-//			giveOrder();
-//			return true;
-//		}
+		
 		return false;
 	}
-
-
 	
 //  Actions
 //	=====================================================================	
 	private void callMarket() {
-		state = MarketCustomerState.WaitingForOrder;
-		manager.msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);			
+		state = MarketCustomerState.None;
+		manager.msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);
+		active = false; // set role inactive after placing order
 	}
-	
-//	private void giveOrder() {
-//		state = MarketCustomerState.WaitingForOrder;
-//		employee.msgHereIsMyDeliveryOrder(this, order);	
-//	}
 
 //  Getters and Setters
 //	=====================================================================
@@ -122,8 +98,5 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Utilities
 //	=====================================================================
-	
 
-	
-	// Classes
 }
