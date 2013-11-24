@@ -3,9 +3,12 @@ package city.roles;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiCook;
+import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
@@ -16,10 +19,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	String name = "LeChef";
 	RestaurantChoiRevolvingStand orderqueue;
 	boolean checkback;
+	RestaurantChoiBuilding building;
+	boolean wantsToLeave;
 
 	//Constructor
-	public RestaurantChoiCookRole() {
+	public RestaurantChoiCookRole(RestaurantChoiBuilding b) {
 		super();
+		building = b;
 		foods.put(1, new Food(1));
 		foods.put(2, new Food(2));
 		foods.put(3, new Food(3));
@@ -95,6 +101,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	//Scheduler
 	@Override
 	public boolean runScheduler() {
+		if(wantsToLeave && building.seatedCustomers == 0){
+			wantsToLeave = false;
+			active = false;
+		}
 		synchronized(orders){ // take from grill to plates
 			for(int i = 0; i < orders.size(); i ++){
 				if(orders.get(i).getState() == RestaurantChoiOrder.COOKED){
@@ -320,9 +330,15 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public void setGui(RestaurantChoiAnimatedCook gui) {
 		cookGui = gui;	
 	}
-	//@Override
+	
 	public void setRevolvingStand(RestaurantChoiRevolvingStand in){
 		orderqueue = in;
+	}
+	@Override
+	public void setInactive(){
+		if(orders.isEmpty() && building.seatedCustomers == 0)
+			active = false;
+		else wantsToLeave = true;
 	}
 
 

@@ -2,8 +2,8 @@ package city.interfaces;
 
 import java.util.List;
 
-import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiTable;
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiTable;
 
 public interface RestaurantChoiWaiter extends RoleInterface{
 
@@ -16,7 +16,7 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 	public abstract void msgImDone(RestaurantChoiCustomer c);
 	public abstract void msgOutOfThisFood(RestaurantChoiOrder o);
     public abstract void msgCheckPlz(RestaurantChoiCustomer c, int choice);
-	public abstract void msgHeresCheck(double total, RestaurantChoiCustomer ca);
+	public abstract void msgHeresCheck(int total, RestaurantChoiCustomer ca);
 	//more logistics-related methods
 	public abstract void msgRelease();
 	public abstract String getName();
@@ -48,14 +48,14 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 	public abstract void setHost(RestaurantChoiHost h);
 	public abstract void setCook(RestaurantChoiCook c);
 	public abstract void setCashier(RestaurantChoiCashier ca);
-	
+	public abstract void setInactive();
 	
 	public class myCustomer {
 		private RestaurantChoiCustomer c;
 		private RestaurantChoiTable t;
 		private RestaurantChoiOrder or;
 		private boolean inWaitingZone;
-		private double checkValue;
+		private int checkValue;
 		private int customerState;
 		private int Y;
 		public static final int WAITING = 0;
@@ -115,11 +115,11 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 			this.t = t;
 		}
 
-		public double getCheckValue() {
+		public int getCheckValue() {
 			return checkValue;
 		}
 
-		public void setCheckValue(double checkValue) {
+		public void setCheckValue(int checkValue) {
 			this.checkValue = checkValue;
 		}
 	}

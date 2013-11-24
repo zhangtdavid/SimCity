@@ -4,14 +4,14 @@ import java.util.List;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiTable;
 import city.MockRole;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
-import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiTable;
 
 public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantChoiWaiter  {
 	String name;
@@ -64,7 +64,7 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 	}
 
 	@Override
-	public void msgHeresCheck(double total, RestaurantChoiCustomer ca) {
+	public void msgHeresCheck(int total, RestaurantChoiCustomer ca) {
  		log.add(new LoggedEvent("Received HeresCheck from waiter. Amount, Customer = "+ total + ", " + ca.getName()));
 		
 	}

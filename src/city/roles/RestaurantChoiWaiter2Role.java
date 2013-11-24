@@ -1,5 +1,6 @@
 package city.roles;
 
+import utilities.RestaurantChoiOrder;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiWaiterAbs;
 

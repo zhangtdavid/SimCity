@@ -1,11 +1,14 @@
 package city.roles;
 
+import java.util.ArrayList;
+
 import utilities.EventLog;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
+import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
 	//Data    
@@ -13,14 +16,17 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
 	public EventLog log = new EventLog(); // TODO import junit3
 	RestaurantChoiAnimatedCashier cashierGui;
-    
+	private boolean wantsToLeave;
+	private RestaurantChoiBuilding building;
+	
     //Constructor
-    public RestaurantChoiCashierRole(){
+    public RestaurantChoiCashierRole(RestaurantChoiBuilding b){
 		super();
-		foodCost.put(1, 15.99);
-		foodCost.put(2, 10.99);
-		foodCost.put(3, 5.99);
-		foodCost.put(4, 8.99);
+		building = b;
+		foodCost.put(1, 16);
+		foodCost.put(2, 10);
+		foodCost.put(3, 6);
+		foodCost.put(4, 8);
     }
     
     //Messages
@@ -35,7 +41,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		stateChanged();
 		
 	}
-	public void msgHeresMyPayment(RestaurantChoiCustomer c, double allHisCash){
+	public void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash){
 		//find the customer's check as you get a payment
 				synchronized(checks){
 					for(int i = 0; i < checks.size(); i++){
@@ -64,7 +70,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	}
 	*/
 	@Override
-	public void msgHeresYourMoney(double withdrawal) {
+	public void msgHeresYourMoney(int withdrawal) {
 		money+=withdrawal;
 		moneyIncoming = NOT_IN_TRANSIT;
 		stateChanged();
@@ -84,6 +90,10 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     //Scheduler
 	@Override
 	public boolean runScheduler() {
+		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0){
+			wantsToLeave = false;
+			active = false;
+		}
 		//market interactions
 				/*synchronized(marketBills){
 					for(int i = 0; i < markets.size(); i++){
@@ -144,7 +154,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	@Override
 	public void returnChange(Check ch) {
 		System.out.println("Received customer payment of " + ch.getPayment());
-		double change = ch.getPayment()-ch.getBill();
+		int change = ch.getPayment()-ch.getBill();
 		money+=ch.getBill();
 		ch.getca().msgHeresYourChange(change);
 		checks.remove(ch);
@@ -189,6 +199,13 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
    */ 
     public void setGui(RestaurantChoiAnimatedCashier r){
     	this.cashierGui = r;
+    }
+    public void setInactive(){
+    	if(checks.isEmpty() && this.building.seatedCustomers == 0){ // if no checks and no seated customers
+    		active = false; // end role and leave restaurant
+    	}
+    	else
+    		wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do
     }
     //Utilities
 }

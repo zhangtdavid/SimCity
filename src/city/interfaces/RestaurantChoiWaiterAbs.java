@@ -5,24 +5,25 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import utilities.RestaurantChoiMenu;
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
+import utilities.RestaurantChoiTable;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
 import city.animations.interfaces.RestaurantChoiAnimatedWaiter;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
-import city.roles.RestaurantChoiMenu;
-import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiRevolvingStand;
-import city.roles.RestaurantChoiTable;
 
 public abstract class RestaurantChoiWaiterAbs extends Role implements RestaurantChoiWaiter{
 
 	//Data
-	static final int NTABLES = 4;// a global for the number of tables.
+	static final int NTABLES = 4; // a global for the number of tables.
 	static int xstart = 50;
 	static int ystart = 50;
 	protected List<myCustomer> myCustomers = new ArrayList<myCustomer>();
@@ -37,10 +38,13 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	private boolean breakRequested;
 	private boolean onBreak;
 	protected RestaurantChoiRevolvingStand orderqueue;
-
+	private boolean wantsToLeave;
+	private RestaurantChoiBuilding building;
+	
 	//Constructor
-	public RestaurantChoiWaiterAbs(String name) {
+	public RestaurantChoiWaiterAbs(String name, RestaurantChoiBuilding b) {
 		super();
+		building = b;
 		this.name = name;
 		// make some tables
 		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
@@ -165,7 +169,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	@Override
-	public void msgHeresCheck(double amt, RestaurantChoiCustomer c) {
+	public void msgHeresCheck(int amt, RestaurantChoiCustomer c) {
 		System.out.println("Received check from cashier");
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getC().equals(c)) {
@@ -182,6 +186,10 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	public boolean runScheduler() {
 		// the scheduler is so clean now!!
 		try{
+			if(wantsToLeave && myCustomers.size() == 0){
+				active = false;
+				wantsToLeave = false;
+			}
 			if (needToRetakeOrder())
 				return true;
 			if (needToDeliverFood())
@@ -352,12 +360,22 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	public void setCashier(RestaurantChoiCashier ca) {
 		cashier = ca;
 	}
+	
 	public void setGui(RestaurantChoiAnimatedWaiter w){
 		waiterGui = w;
 	}
+
+	public void setInactive(){ 
+		if(myCustomers.size() == 0){
+			active = false;
+			building.host.msgSetUnavailable(this);
+		}
+		else{
+			wantsToLeave = true;
+			building.host.msgSetUnavailable(this); // tell boss i'm done
+		}
+	}
 	// Utilities
-
-
 
 	@Override
 	public boolean needToSeatCustomer() {

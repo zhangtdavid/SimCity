@@ -3,13 +3,13 @@ package city.tests.mock;
 import java.util.ArrayList;
 
 import utilities.LoggedEvent;
+import utilities.RestaurantChoiMenu;
 import city.MockRole;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
-import city.roles.RestaurantChoiMenu;
 
 public class MockRestaurantChoiCustomer extends MockRole implements RestaurantChoiCustomer  {
 
@@ -57,13 +57,13 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void msgHeresYourCheck(double checkValue) {
+	public void msgHeresYourCheck(int checkValue) {
 		// TODO Auto-generated method stub
 		log.add(new LoggedEvent("Received msgHeresYourCheck, which says: " + checkValue));
 	}
 
 	@Override
-	public void msgHeresYourChange(double amt) {
+	public void msgHeresYourChange(int amt) {
 		// TODO Auto-generated method stub
 		log.add(new LoggedEvent("Received msgHeresYourChange from cashier."));
 	}
@@ -133,7 +133,7 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public int pickRandom(double cash, ArrayList<Integer> mem,
+	public int pickRandom(int cash, ArrayList<Integer> mem,
 			boolean hasHitZero) {
 		// TODO Auto-generated method stub
 		return 0;
