@@ -13,7 +13,7 @@ import javax.swing.Timer;
 
 import city.Animation;
 
-public class RestaurantJPPanel extends BuildingCard implements ActionListener {
+public class BankPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
 	
@@ -22,7 +22,7 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-    public RestaurantJPPanel(MainFrame mf, Color color, Dimension panelDimension) {
+    public BankPanel(MainFrame mf, Color color, Dimension panelDimension) {
     	super(mf, color);
     	panelX = panelDimension.width;
     	panelY = panelDimension.height;

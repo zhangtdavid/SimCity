@@ -67,7 +67,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			}
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-			mainframe.buildingView.addView(new BuildingCard(mainframe, Color.pink), temp.ID);
+			mainframe.buildingView.addView(temp.building, temp.ID);
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
@@ -87,8 +87,12 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			return;
 		addingObject = true;
 		switch (type) {
-		case RESTAURANT: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size())); break;
-		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size())); break;
+		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(mainframe, Color.magenta, new Dimension(50, 50))); break;
+		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(mainframe, Color.cyan, new Dimension(50, 50))); break;
+		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(mainframe, Color.orange, new Dimension(50, 50))); break;
+		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(mainframe, Color.yellow, new Dimension(50, 50))); break;
+//		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(mainframe, Color.magenta, new Dimension(50, 50))); break;
+		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(50, 50))); break;
 		default: return;
 		}
 		addStatic(temp);
