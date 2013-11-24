@@ -207,6 +207,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		BankCustomer bankCustomer = new BankCustomerRole();
 		roles.add((Role) bankCustomer); // TODO clean up
 		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		// TODO how does this work with different bank customer instances when the account number is tied to the role?
 	}
 	
 	private void computeBill(Transaction t) {

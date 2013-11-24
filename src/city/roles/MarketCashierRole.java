@@ -10,6 +10,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.buildings.MarketBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -17,6 +18,7 @@ import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 
 public class MarketCashierRole extends Role implements MarketCashier {
@@ -26,6 +28,8 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
+	
+	BankCustomer bankCustomer;
 	
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
@@ -195,7 +199,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		}
 		
 		if (market.getCash() > 1000)
-			// msg bank
+			depositMoney();
 		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
@@ -234,6 +238,12 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 //  Actions
 //	=====================================================================	
+	private void depositMoney() {
+		bankCustomer = new BankCustomerRole();
+		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		// TODO how does this work with different bank customer instances when the account number is tied to the role?
+	}
+	
 	private void computeBill(Transaction t) {
 		t.s = TransactionState.Calculating;
 
