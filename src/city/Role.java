@@ -16,7 +16,7 @@ public abstract class Role implements RoleInterface {
 	private int salary;
 	private int shiftStart;
 	private int shiftEnd;
-	private boolean active;
+	public boolean active;
 	private boolean activity;
 	private Building business;
 	
@@ -119,8 +119,8 @@ public abstract class Role implements RoleInterface {
 	// Utilities
 	
 	protected void stateChanged() {
-		person.stateChanged();
 		activity = true;
+		person.stateChanged();
 	}
 	
     protected void print(String msg) {

@@ -2,6 +2,7 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
@@ -25,7 +26,18 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		this.setMaximumSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
 		this.setVisible(true);
 		background = new Color(128, 64, 0);
-		this.addStatic(new CityViewRestaurant(30, 30));
+		for(int i = 0; i < Math.min(CITY_WIDTH, CITY_HEIGHT); i += (Math.min(CITY_WIDTH, CITY_HEIGHT) * 3/ 10)) {
+			for(int j = CITY_WIDTH / 10; j < CITY_WIDTH; j+= CITY_WIDTH * 3 / 10) {
+				CityRoad road = new CityRoad(j, i, CITY_WIDTH / 5, CITY_WIDTH / 10, 1, 0, true, Color.black, Color.gray);
+				statics.add(road);
+				road.setPosition(new Point(j, i));
+			}
+			for(int j = CITY_WIDTH / 10; j < CITY_HEIGHT; j+= CITY_HEIGHT * 3 / 10) {
+				CityRoad road = new CityRoad(i, j, CITY_HEIGHT/ 10, CITY_HEIGHT / 5, 0, 1, false, Color.black, Color.gray);
+				statics.add(road);
+				road.setPosition(new Point(i, j));
+			}
+		}
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}
@@ -55,7 +67,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			}
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-			mainframe.buildingView.addView(new BuildingCard(mainframe, Color.pink), temp.ID);
+			mainframe.buildingView.addView(temp.building, temp.ID);
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
@@ -75,9 +87,12 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			return;
 		addingObject = true;
 		switch (type) {
-		case RESTAURANT: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()-19)); break;
-//		case ROAD: temp = new CityRoad(-100, RoadDirection.HORIZONTAL); break; //NOTE: DON'T MAKE NEW ROADS
-		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()-19)); break;
+		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(mainframe, Color.magenta, new Dimension(50, 50))); break;
+		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(mainframe, Color.cyan, new Dimension(50, 50))); break;
+		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(mainframe, Color.orange, new Dimension(50, 50))); break;
+		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(mainframe, Color.yellow, new Dimension(50, 50))); break;
+//		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(mainframe, Color.magenta, new Dimension(50, 50))); break;
+		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(50, 50))); break;
 		default: return;
 		}
 		addStatic(temp);

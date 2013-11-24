@@ -12,5 +12,5 @@ public interface RestaurantTimmsCook extends RoleInterface {
 	
 	public RestaurantTimmsAnimatedCook getAnimation();
 	public int getMenuItemPrice(Application.FOOD_ITEMS stockItem);
-
+	
 }

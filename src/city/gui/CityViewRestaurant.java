@@ -11,8 +11,8 @@ public class CityViewRestaurant extends CityViewBuilding {
 		rectangle = new Rectangle(x, y, 20, 20);
 	}
 	
-	public CityViewRestaurant(int x, int y, String ID) {
-		super(x, y, Color.red, ID);
+	public CityViewRestaurant(int x, int y, String ID, Color color, BuildingCard b) {
+		super(x, y, color, ID, b);
 		rectangle = new Rectangle(x, y, 20, 20);
 	}
 	

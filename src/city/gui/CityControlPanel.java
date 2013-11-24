@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 
 import trace.AlertLevel;
 import trace.AlertLog;
@@ -15,18 +16,17 @@ import trace.AlertTag;
 
 public class CityControlPanel extends JPanel implements ActionListener{
 
+	private static final long serialVersionUID = 9166425422374406573L;
+
 	MainFrame mainframe;
 	public static final int CP_WIDTH = 200, CP_HEIGHT = 700;
-	JButton addRestaurant, addBank;
+	JButton addRestaurantZhang, addRestaurantChoi, addRestaurantJP, addRestaurantTimms, addBank;
 
 	//For managing traces
-	JButton enableInfoButton;		//You could (and probably should) substitute a JToggleButton to replace both
-	JButton disableInfoButton;		//of these, but I split it into enable and disable for clarity in the demo.
-	JButton enableRestaurantTagButton;		
-	JButton disableRestaurantTagButton;		
-	JButton enableBankTagButton;
-	JButton disableBankTagButton;
-	
+	JRadioButton toggleInfo;
+	JRadioButton toggleRestaurantTag;		
+	JRadioButton toggleBankTag;
+
 	String name = "Control Panel";
 
 	public CityControlPanel(MainFrame mf) {
@@ -39,70 +39,84 @@ public class CityControlPanel extends JPanel implements ActionListener{
 		this.setLayout(new GridBagLayout());
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
-		
-		addRestaurant = new JButton("Add Restaurant");
-		addRestaurant.addActionListener(this);
-		c.gridx = 0; c.gridy = 0;
-		add(addRestaurant, c);
+
+		int gridBagYPos = 0;
+
+		addRestaurantZhang = new JButton("Add RestaurantZhang");
+		addRestaurantZhang.addActionListener(this);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		add(addRestaurantZhang, c);
+
+		addRestaurantChoi = new JButton("Add RestaurantChoi");
+		addRestaurantChoi.addActionListener(this);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		add(addRestaurantChoi, c);
+
+		addRestaurantJP = new JButton("Add RestaurantJP");
+		addRestaurantJP .addActionListener(this);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		add(addRestaurantJP, c);
+
+		addRestaurantTimms = new JButton("Add RestaurantTimms");
+		addRestaurantTimms.addActionListener(this);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		add(addRestaurantTimms, c);
+
 		addBank = new JButton("Add Bank");
 		addBank.addActionListener(this);
-		c.gridx = 0; c.gridy = 1;
+		c.gridx = 0; c.gridy = gridBagYPos++;
 		add(addBank, c);
 
 		//Trace panel buttons
-		enableInfoButton = new JButton("Show Level: INFO");
-		enableInfoButton.addActionListener(this);
-		disableInfoButton = new JButton("Hide Level: INFO");
-		disableInfoButton.addActionListener(this);
-		enableRestaurantTagButton = new JButton("Show Tag: RESTAURANT");
-		enableRestaurantTagButton.addActionListener(this);
-		disableRestaurantTagButton = new JButton("Hide Tag: RESTAURANT");
-		disableRestaurantTagButton.addActionListener(this);
-		enableBankTagButton = new JButton("Show Tag: BANK");
-		enableBankTagButton.addActionListener(this);
-		disableBankTagButton = new JButton("Hide Tag: BANK");
-		disableBankTagButton.addActionListener(this);
-		
-		c.gridx = 1; c.gridy = 0;
-		this.add(enableInfoButton, c);
-		c.gridx = 1; c.gridy = 1;
-		this.add(disableInfoButton, c);
-		c.gridx = 2; c.gridy = 0;
-		this.add(enableRestaurantTagButton, c);
-		c.gridx = 2; c.gridy = 1;
-		this.add(disableRestaurantTagButton, c);
-		c.gridx = 3; c.gridy = 0;
-		this.add(enableBankTagButton, c);
-		c.gridx = 3; c.gridy = 1;
-		this.add(disableBankTagButton, c);
+		toggleInfo = new JRadioButton("Show Level: INFO", true);
+		toggleInfo.addActionListener(this);
+		toggleRestaurantTag = new JRadioButton("Show Tag: RESTAURANT", true);
+		toggleRestaurantTag.addActionListener(this);
+		toggleBankTag = new JRadioButton("Show Tag: BANK", true);
+		toggleBankTag.addActionListener(this);
+
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		this.add(toggleInfo, c);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		this.add(toggleRestaurantTag, c);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		this.add(toggleBankTag, c);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(addRestaurant)) {
-			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANT);
-			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New Restaurant");
-		}
-		else if (e.getSource().equals(addBank)) {
+		if (e.getSource().equals(addRestaurantZhang)) {
+			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTZHANG);
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
+		} else if (e.getSource().equals(addRestaurantChoi)) {
+			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHOI);
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
+		} else if (e.getSource().equals(addRestaurantJP)) {
+			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTJP);
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantJP");
+		} else if (e.getSource().equals(addRestaurantTimms)) {
+			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTTIMMS);
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New Restaurant Zhang");
+		}else if (e.getSource().equals(addBank)) {
 			AlertLog.getInstance().logInfo(AlertTag.BANK, this.name, "Adding New Bank");
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.BANK);
 		}
-		else if(e.getSource().equals(enableInfoButton)) {
-			mainframe.tracePanel.showAlertsWithLevel(AlertLevel.INFO);
+		else if(e.getSource().equals(toggleInfo)) {
+			if(toggleInfo.isSelected())
+				mainframe.tracePanel.showAlertsWithLevel(AlertLevel.INFO);
+			else
+				mainframe.tracePanel.hideAlertsWithLevel(AlertLevel.INFO);
 		}
-		else if(e.getSource().equals(disableInfoButton)) {
-			mainframe.tracePanel.hideAlertsWithLevel(AlertLevel.INFO);
+		else if(e.getSource().equals(toggleRestaurantTag)) {
+			if(toggleRestaurantTag.isSelected())
+				mainframe.tracePanel.showAlertsWithTag(AlertTag.RESTAURANT);
+			else
+				mainframe.tracePanel.hideAlertsWithTag(AlertTag.RESTAURANT);
 		}
-		else if(e.getSource().equals(enableRestaurantTagButton)) {
-			mainframe.tracePanel.showAlertsWithTag(AlertTag.RESTAURANT);
-		}
-		else if(e.getSource().equals(disableRestaurantTagButton)) {
-			mainframe.tracePanel.hideAlertsWithTag(AlertTag.RESTAURANT);
-		}
-		else if(e.getSource().equals(enableBankTagButton)) {
-			mainframe.tracePanel.showAlertsWithTag(AlertTag.BANK);
-		}
-		else if(e.getSource().equals(disableBankTagButton)) {
-			mainframe.tracePanel.hideAlertsWithTag(AlertTag.BANK);
+		else if(e.getSource().equals(toggleBankTag)) {
+			if(toggleBankTag.isSelected())
+				mainframe.tracePanel.showAlertsWithTag(AlertTag.BANK);
+			else
+				mainframe.tracePanel.hideAlertsWithTag(AlertTag.BANK);
 		}
 	}
 }

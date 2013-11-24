@@ -21,27 +21,8 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	private boolean onBreak = false;
 	private boolean hasRequestedBreak = false;
 	private boolean comingBackFromBreak = false;
-	public RestaurantJPRevolvingStand revolvingStand;
-	public class MyCustomer
-	{
-		RestaurantJPCustomerRole customer;
-		public String choice;
-		public state s;
-		public RestaurantJPTableClass table;
-		Float check;
-		
-		RestaurantJPCustomerRole getCustomer(){
-			return customer;
-		}
-		RestaurantJPTableClass getTable(){
-			return table;
-		}
-		public void myCustomer(){
-			customer = new RestaurantJPCustomerRole("NULL");
-			choice = new String();
-			table = new RestaurantJPTableClass(0);
-		}
-	}
+	public RestaurantJPRevolvingStand revolvingStand; 
+	
 	public enum state{waiting, seated, readyToOrder, decidingOrder, ordered, reOrder, waitingForFood, foodReady, served, checkReady, checkReceived, done};
 
 	protected Semaphore atDestination = new Semaphore(0,true);
@@ -366,5 +347,26 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	
 	public void setRevolvingStand(RestaurantJPRevolvingStand rs) {
 		revolvingStand = rs;
+	}
+	
+	public class MyCustomer
+	{
+		RestaurantJPCustomerRole customer;
+		public String choice;
+		public state s;
+		public RestaurantJPTableClass table;
+		Float check;
+		
+		RestaurantJPCustomerRole getCustomer(){
+			return customer;
+		}
+		RestaurantJPTableClass getTable(){
+			return table;
+		}
+		public void myCustomer(){
+			customer = new RestaurantJPCustomerRole("NULL");
+			choice = new String();
+			table = new RestaurantJPTableClass(0);
+		}
 	}
 }

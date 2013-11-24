@@ -31,9 +31,6 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 		
 		cards = new HashMap<String, BuildingCard>();
 		cards.put("null", new BuildingCard(mf, Color.DARK_GRAY));
-		cards.put("Road", new BuildingCard(mf));
-		cards.put("Restaurant 1", new BuildingCard(mf, Color.blue));
-		cards.put("Restaurant 2", new BuildingCard(mf, Color.red));
 
 		layout = new CardLayout();
 		this.setLayout(layout);
@@ -56,7 +53,6 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 	public void setView(String key) {
 		if (cards.containsKey(key)) {
 			layout.show(this, key);
-//			city.info.setText(key);
 		}
 	}
 

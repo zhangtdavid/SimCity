@@ -56,4 +56,10 @@ public class MockBankManager extends MockRole implements BankManager {
 		
 	}
 
+	@Override
+	public void msgUnavailable(BankTellerRole bankTellerRole) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
