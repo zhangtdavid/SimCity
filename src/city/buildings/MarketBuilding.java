@@ -19,7 +19,6 @@ public class MarketBuilding extends Building {
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
 	public Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
 	public Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
-	public int money;
 	
 	public MarketBuilding(String name) {
 		super(name);
@@ -36,7 +35,7 @@ public class MarketBuilding extends Building {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		money = 1000;
+		super.setCash(1000);
 	}
 	
 	

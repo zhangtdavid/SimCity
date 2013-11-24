@@ -193,6 +193,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		if (transactions.size() == 0 && workingState == WorkingState.NotWorking)
 			super.setInactive();
 		
+		if (market.getCash() > 1000)
+			// msg bank
+		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.PendingDelivery) {
@@ -250,13 +253,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		
 		if (t.customer != null){
 			t.customer.msgPaymentReceived();
-			market.money += t.payment;
+			market.setCash(market.getCash() + t.payment);
 			transactions.remove(t);
 		}
 		else {
 			if(t.bill == t.payment) {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
-				market.money += t.payment;
+				market.setCash(market.getCash() + t.payment);
 				for(MyDeliveryPerson dt : deliveryPeople ) {
 					if(dt.available == true) {
 						assignDelivery(t, dt);

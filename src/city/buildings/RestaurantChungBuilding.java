@@ -1,16 +1,27 @@
 package city.buildings;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.interfaces.RestaurantChungCashier;
+import city.interfaces.RestaurantChungCook;
+import city.interfaces.RestaurantChungHost;
+import city.interfaces.RestaurantChungWaiterBase;
 
 public class RestaurantChungBuilding extends Building {
 
 //  Food
 //  =====================================================================
-    public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	public RestaurantChungHost host;
+	public RestaurantChungCashier cashier;
+	public RestaurantChungCook cook;
+	public List<RestaurantChungWaiterBase> employees = new ArrayList<RestaurantChungWaiterBase>();
+	
+	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
     public class Food {
         public String item;
         public int cookingTime;

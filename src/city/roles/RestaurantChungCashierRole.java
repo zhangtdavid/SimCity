@@ -2,10 +2,12 @@ package city.roles;
 
 import java.util.*;
 
+import city.Application;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
@@ -25,9 +27,14 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	Timer timer = new Timer();
 	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
+
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 	
+	private List<Role> roles = new ArrayList<Role>();
+
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
-	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions);
 
 //	Transactions
 //	=====================================================================	
@@ -74,11 +81,17 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	=====================================================================		
 	public RestaurantChungCashierRole() {
 		super();
+		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
 	}
 	
 	public void setActive(){
 		this.setActivityBegun();
-	}	
+	}
+	
+	public void setInActive(){
+		workingState = WorkingState.GoingOffShift;
+	}
+	
 	
 //  Messages
 //	=====================================================================
@@ -116,15 +129,29 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	 */
 	public boolean runScheduler() {
 //		if (transactions.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
-
+		
 		boolean blocking = false;
-		if (marketCustomerDeliveryPayment.getActive() && marketCustomerDeliveryPayment.getActivity()) {
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
-			boolean activity = marketCustomerDeliveryPayment.runScheduler();
+			boolean activity = r.runScheduler();
 			if (!activity) {
-				marketCustomerDeliveryPayment.setActivityFinished();
+				r.setActivityFinished();
 			}
+			break;
 		}
+		
+		// TODO handle nested actions
+		
+		if (workingState == WorkingState.GoingOffShift) {
+			if (restaurant.cashier != this)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (transactions.size() == 0 && marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
+		if (restaurant.getCash() > 1000)
+			depositMoney();
 		
 		// Scheduler disposition		
 		synchronized(transactions) {
@@ -170,6 +197,12 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 	//  Actions
 //	=====================================================================	
+	private void depositMoney() {
+		BankCustomer bankCustomer = new BankCustomerRole();
+		roles.add((Role) bankCustomer); // TODO clean up
+		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+	}
+	
 	private void computeBill(Transaction t) {
 		print("Calculating bill");
 		t.s = TransactionState.Calculating;
@@ -240,7 +273,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	}
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
-		return marketCustomerDeliveryPayment;
+		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
 	}
 	
 	public int checkBill(MarketTransaction t) {

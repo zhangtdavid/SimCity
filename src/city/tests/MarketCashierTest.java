@@ -5,6 +5,7 @@ import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
+import city.Building;
 import city.buildings.MarketBuilding;
 import city.roles.MarketCashierRole;
 import city.roles.MarketCashierRole.TransactionState;
@@ -157,7 +158,7 @@ public class MarketCashierTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("Cashier should have an empty log.", cashier.log.size(), 0);
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);
-		assertEquals("Market money should be 1000. It's " + market.money + "instead", market.money, 1000);
+		assertEquals("Market money should be 1000. It's " + market.getCash() + "instead", market.getCash(), 1000);
 		
 		cashier.msgNewDeliveryPerson(deliveryPerson);
 		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
@@ -188,7 +189,7 @@ public class MarketCashierTest extends TestCase {
 //		assertTrue("Cashier transactions should contain a transaction with state == PendingDelivery.", cashier.transactions.get(0).s == TransactionState.PendingDelivery); // following instructions execute too quickly
 		assertEquals("CustomerDeliveryPayment log should have 2 entries.", customerDeliveryPayment.log.size(), 2);
 		assertTrue("CustomerDeliveryPayment log should have \"CustomerDeliveryPayment received msgPaymentReceived from cashier\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), customerDeliveryPayment.log.containsString("CustomerDeliveryPayment received msgPaymentReceived from cashier"));
-		assertEquals("Market money should be 1110. It's " + market.money + "instead", market.money, 1110);
+		assertEquals("Market money should be 1110. It's " + market.getCash() + "instead", market.getCash(), 1110);
 		assertTrue("Cashier transactions should contain a transaction with state == Delivering.", cashier.transactions.get(0).s == TransactionState.Delivering);
 		assertEquals("Delivery Person log should have 1 entry.", deliveryPerson.log.size(), 1);
 		assertTrue("Delivery Person log should have \"Delivery Person received msgDeliverOrder\". The last event logged is " + deliveryPerson.log.getLastLoggedEvent().toString(), deliveryPerson.log.containsString("Delivery Person received msgDeliverOrder"));

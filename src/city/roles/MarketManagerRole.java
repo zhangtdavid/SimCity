@@ -164,7 +164,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		}
 		
 		if (customers.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();
+			super.setInactive();			
 		
 		synchronized(employees) {
 			for (MyMarketEmployee employee : employees) {
