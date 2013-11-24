@@ -23,8 +23,8 @@ public class MainFrame extends JFrame {
 	private static int BUILDINGVIEWY = 500;
 	private static int CONTROLPANELX = 200;
 	private static int CONTROLPANELY = 700;
-	private static int TRACEPANELX = 1200;
-	private static int TRACEPANELY = 200;
+	private static int TRACEPANELX = 1000;
+	private static int TRACEPANELY = 190;
 
 	CityViewPanel cityView;
 	BuildingView buildingView;

@@ -42,7 +42,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	public void msgTransactionSuccessful(){
 		print("Transaction successful msg received");
 		if(currentCustomer.t == serviceType.deposit)
-			currentCustomer.s = serviceState.finished;
+			currentCustomer.s = serviceState.confirmed;
 		else if(currentCustomer.t == serviceType.withdrawal)
 			currentCustomer.s = serviceState.confirmed;
 		stateChanged();
@@ -88,6 +88,10 @@ public class BankTellerRole extends Role implements BankTeller {
 					GiveAccountNumber();
 					return true;
 				}
+				if(currentCustomer.s == serviceState.confirmed){
+					DepositSuccessful();
+					return true;
+				}
 			}
 			if(currentCustomer.t == serviceType.withdrawal){
 				if(currentCustomer.s == serviceState.pending){
@@ -130,6 +134,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void TransferWithdrawal(){
 		currentCustomer.bc.msgHereIsWithdrawal(currentCustomer.amount);
+		currentCustomer.s = serviceState.finished;
+	}
+	public void DepositSuccessful(){
+		currentCustomer.bc.msgDepositCompleted();
 		currentCustomer.s = serviceState.finished;
 	}
 	public void CheckLoanEligible(){

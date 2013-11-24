@@ -29,6 +29,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		if(s != Application.BANK_SERVICE.atmDeposit)
 			st = state.entering;
+		this.setActivityBegun();
 	}
 	// Constructor
 	
@@ -39,7 +40,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public BankCustomerRole(){		//could change back to building = b
 		building = (BankBuilding) Application.CityMap.findBank();
-		st = state.entering;
 	}
 	
 	// Messages

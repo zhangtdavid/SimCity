@@ -13,7 +13,7 @@ public abstract class CityViewBuilding {
 	Color color;
 	String ID;
 	boolean isActive;
-	enum BuildingType {NONE, RESTAURANT, BANK, HOUSE};
+	enum BuildingType {NONE, RESTAURANT, BANK, ROAD, HOUSE};
 	BuildingType type = BuildingType.NONE;
 	
 	public CityViewBuilding() {
