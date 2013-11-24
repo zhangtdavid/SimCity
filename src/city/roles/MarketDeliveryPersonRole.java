@@ -72,10 +72,11 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		
 		// Role Scheduler
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive()) {
-			if (carPassenger.getActive()) {
-				blocking  = true;
-				carPassenger.runScheduler();
+		if (carPassenger.getActive() && carPassenger.getActivity()) {
+			blocking  = true;
+			boolean activity = carPassenger.runScheduler();
+			if (!activity) {
+				carPassenger.setActivityFinished();
 			}
 		}
 		

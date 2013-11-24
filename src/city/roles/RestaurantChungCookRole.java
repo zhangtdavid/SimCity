@@ -194,7 +194,17 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
      * Scheduler.  Determine what action is called for, and do it.
      */
 	public boolean runScheduler() {
-    	if (!cooking && !plating) {            
+		boolean blocking = false;
+		if (!cooking && !plating) {
+    		// Role Scheduler
+    		if (marketCustomerDelivery != null && marketCustomerDelivery.getActive() && marketCustomerDelivery.getActivity()) {
+    			blocking  = true;
+    			boolean activity = marketCustomerDelivery.runScheduler();
+    			if (!activity) {
+    				marketCustomerDelivery.setActivityFinished();
+    			}
+    		}
+    		
             synchronized(marketOrders) {
                 for (MyMarketOrder o: marketOrders) {
                     if (o.s == MarketOrderState.Pending) {
@@ -257,7 +267,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             //nothing to do. So return false to main loop of abstract agent
             //and wait.
     	}
-        return false;
+        return blocking;
     }
 
 //  Actions

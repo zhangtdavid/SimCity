@@ -114,6 +114,16 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public boolean runScheduler() {
 //		if (transactions.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
 
+		boolean blocking = false;
+		if (marketCustomerDeliveryPayment.getActive() && marketCustomerDeliveryPayment.getActivity()) {
+			blocking  = true;
+			boolean activity = marketCustomerDeliveryPayment.runScheduler();
+			if (!activity) {
+				marketCustomerDeliveryPayment.setActivityFinished();
+			}
+		}
+		
+		// Scheduler disposition		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.Pending) {
@@ -158,7 +168,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			}
 		}
 
-		return false;
+		return blocking;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
 		//and wait.
