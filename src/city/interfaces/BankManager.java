@@ -23,6 +23,8 @@ public interface BankManager extends RoleInterface {
 	public void msgTryDeposit(int money, int acctNum, BankTellerRole t);
 
 	public void msgCreateLoan(int amt, int monthly, int acct);
+
+	public void msgUnavailable(BankTellerRole bankTellerRole);
 	
 	// Scheduler
 	

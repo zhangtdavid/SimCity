@@ -26,7 +26,7 @@ public class BankTellerTest extends TestCase {
 		teller.setPerson(tellerPerson);
 	}
 	
-	public void testNormalScenario() {
+	public void testAccountCreationScenario() {
 		int steakPrice = 0 ; // TODO CookAgent.getMenuItemPrice(MarketAgent.StockItem.Steak);
 		
 		// Preconditions
@@ -57,11 +57,11 @@ public class BankTellerTest extends TestCase {
 		
 		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
 		assertEquals("InternalCustomer's account number should be 1.", 1, teller.currentCustomer.acctNum);
-		/*assertEquals("Cook's log length should be 1.", 1, cook.log.size());
-		assertTrue("Cook should receive request to make Steak.", cook.log.containsString("Received msgCookOrder from Waiter. Item: steak"));
+		assertEquals("Customer's log length should be 2.", 2, customer.log.size());
+		assertTrue("Customer should receive account number.", customer.log.containsString("Received msgAccountCreated 1"));
 		
-		// Send a message from the Cook acknowledging that the order has been received 
-		waiter.msgOrderPlaced(customer, true);
+		
+		/*waiter.msgOrderPlaced(customer, true);
 		
 		assertFalse("Waiter's scheduler should return false.", waiter.runScheduler());
 		assertEquals("InternalCustomer's state should be makingFood.", InternalCustomer.State.makingFood, waiter.customers.get(0).getState());
