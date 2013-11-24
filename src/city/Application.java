@@ -12,23 +12,15 @@ import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
-import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.gui.MainFrame;
 import city.interfaces.Person;
-import city.interfaces.RestaurantChungWaiterBase;
-import city.roles.BankCustomerRole;
-import city.roles.BankManagerRole;
-import city.roles.BankTellerRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungCustomerRole;
 import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterBaseRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
-import city.buildings.BusStopBuilding;
-import city.gui.MainFrame;
-import city.interfaces.Person;
 
 public class Application {
 
@@ -40,9 +32,9 @@ public class Application {
 	public static final int INTERVAL = 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
-	public static enum BANK_SERVICES {accountCreate, moneyWithdraw, directDeposit};
-	public static enum DEPOSIT_TYPE {personal, business};
-	public static enum MARKET_ITEMS {steak, chicken, salad, pizza};
+	public static enum BANK_SERVICE {accountCreate, moneyWithdraw, directDeposit};
+	public static enum TRANSACTION_TYPE {personal, business};
+	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market};
 	
     /**

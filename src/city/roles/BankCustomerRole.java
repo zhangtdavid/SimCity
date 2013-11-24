@@ -11,8 +11,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Data
 	BankBuilding building;
 	Building business;
-	Application.DEPOSIT_TYPE depositType;
-	Application.BANK_SERVICES service;
+	Application.TRANSACTION_TYPE depositType;
+	Application.BANK_SERVICE service;
 	BankManagerRole b;
 	int netTransaction = 0;
 	state st;
@@ -21,12 +21,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int acctNum;
 	int boothNumber;
 	
-	public void setActive(Application.BANK_SERVICES s, int money, Application.DEPOSIT_TYPE t){
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
 		print("Customer has been set active");
 		this.service = s;
 		this.depositType = t;
 		amount = money;
-		if(s != Application.BANK_SERVICES.directDeposit)
+		if(s != Application.BANK_SERVICE.directDeposit)
 			st = state.entering;
 		stateChanged();
 	}
@@ -130,9 +130,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void ExitBank(){
 		st = state.inProgress;
-		if(service != Application.BANK_SERVICES.directDeposit)
+		if(service != Application.BANK_SERVICE.directDeposit)
 			t.msgDoneAndLeaving();
-		if(depositType == Application.DEPOSIT_TYPE.business)
+		if(depositType == Application.TRANSACTION_TYPE.business)
 			business.setCash(building.getCash() + netTransaction);
 		else
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);

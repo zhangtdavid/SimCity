@@ -7,7 +7,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import city.Application;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
 import city.interfaces.RestaurantTimmsCashier;
@@ -88,7 +88,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		stateChanged();
 	}
 	
-	public void msgOrderFood(RestaurantTimmsCustomer c, Application.MARKET_ITEMS s) {
+	public void msgOrderFood(RestaurantTimmsCustomer c, FOOD_ITEMS s) {
 		print("msgOrderFood");
 		this.lastMessage = "msgOrderFood";
 		InternalCustomer customer = findCustomer(c);
@@ -354,7 +354,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		private RestaurantTimmsCustomer customer;
 		private State state;
 		private int tableNumber;
-		private Application.MARKET_ITEMS stockItem;
+		private FOOD_ITEMS stockItem;
 		
 		InternalCustomer(RestaurantTimmsCustomer c, int tableNumber, State state) {
 			this.customer = c;
@@ -377,7 +377,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 			return tableNumber;
 		}
 		
-		public Application.MARKET_ITEMS getStockItem() {
+		public FOOD_ITEMS getStockItem() {
 			return stockItem;
 		}
 		
@@ -387,7 +387,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 			this.state = s;
 		}
 		
-		public void setStockItem(Application.MARKET_ITEMS s) {
+		public void setStockItem(FOOD_ITEMS s) {
 			this.stockItem = s;
 		}
 	}
