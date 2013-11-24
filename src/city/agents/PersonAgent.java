@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
@@ -47,6 +46,7 @@ public class PersonAgent extends Agent implements Person {
 	private Role restaurantCustomerRole; // not retained
 	private MarketCustomerRole marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
+	private Date lastWentToSleep;
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -207,6 +207,18 @@ public class PersonAgent extends Agent implements Person {
 				state = State.atSleep;
 				return false;
 			}
+		}
+		if (state == State.atSleep) {
+			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
+			// This will also ensure that no roles can run while the person is sleeping.
+			if (occupation == null) {
+				if (shouldWakeUp()) {
+					state = pickDailyTask();
+					performDailyTaskAction();
+					return true;
+				}
+			}
+			return false;
 		}
 		
 		//----------------/
@@ -516,11 +528,13 @@ public class PersonAgent extends Agent implements Person {
 	 * If the person is not at work and the current time is at or within
 	 * their working hours, then the person should go to work.
 	 * 
+	 * Supports people not having jobs, in which case
+	 * 
 	 * @return true if the person should go to work
 	 */
 	private boolean shouldGoToWork() {
 		boolean disposition = false;
-		if (!occupation.getActive() && inShiftRange()) {
+		if (occupation != null && !occupation.getActive() && inShiftRange()) {
 			disposition = true;
 		}
 		return disposition;
@@ -610,6 +624,20 @@ public class PersonAgent extends Agent implements Person {
 	private boolean shouldGoToCook() {
 		boolean disposition = false;
 		if (state == State.atMarket) { disposition = true; }
+		return disposition;
+	}
+	
+	/**
+	 * Returns true if the person should wake up. Only called for persons who don't have jobs.
+	 */
+	private boolean shouldWakeUp() {
+		// Calculations
+		Date thresholdDate = new Date(0);
+		thresholdDate.setTime(lastWentToSleep.getTime() + WAKE_UP_THRESHOLD);
+		
+		// Decision
+		boolean disposition = false;
+		if (thresholdDate.getTime() >= date.getTime()) { disposition = true; }
 		return disposition;
 	}
 	
