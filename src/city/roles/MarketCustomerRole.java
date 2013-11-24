@@ -59,6 +59,10 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         }
     }	
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
@@ -190,6 +194,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private void leaveMarket() {
 		state = MarketCustomerState.None;
 		marketCustomerGui.DoExitMarket();
+		super.setInactive();
 	}
 	
 //  Getters and Setters

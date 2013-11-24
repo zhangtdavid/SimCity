@@ -77,6 +77,14 @@ public class MarketManagerRole extends Role implements MarketManager {
 		super();
 	}
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
+	public void setInActive(){
+
+	}
+	
 //  Messages
 //	=====================================================================
 //	Market

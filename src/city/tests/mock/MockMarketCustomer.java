@@ -44,4 +44,22 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 		System.out.println("Customer received msgPaymentReceived from cashier.");					
 	}
 
+	@Override
+	public void msgAnimationAtEntrance() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationFinishedLeaveMarket() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

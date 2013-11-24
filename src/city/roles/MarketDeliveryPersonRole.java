@@ -44,6 +44,10 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //		car = new CarAgent();
     }
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================	
 //	Cashier

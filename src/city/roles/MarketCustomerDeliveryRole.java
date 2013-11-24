@@ -43,6 +43,10 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
         active = true;
     }
 	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================	
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
@@ -53,7 +57,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
 		}
-        active = false; // set role inactive after receiving order
+        super.setInactive(); // set role inactive after receiving order
 	}
 	
 //  Scheduler

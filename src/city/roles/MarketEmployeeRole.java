@@ -56,7 +56,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	public MarketEmployeeRole() {
 		super();
     }
-
+	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================
 //	Manager

@@ -84,7 +84,7 @@ public class MarketCashierTest extends TestCase {
 		manager.market = market;
 		
 		cashierPerson = new MockPerson("Cashier"); 
-		cashier = new MarketCashierRole();
+		cashier = new MarketCashierRole(market);
 		cashier.setPerson(cashierPerson);
 		cashier.market = market;
 		
