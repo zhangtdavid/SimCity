@@ -49,6 +49,10 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 //	private enum OrderStatus
 //	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 		
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 	public RestaurantChungWaiterMessageCookRole(RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
 		super();
 		

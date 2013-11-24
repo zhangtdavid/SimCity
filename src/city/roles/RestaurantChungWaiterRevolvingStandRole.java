@@ -48,7 +48,12 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 //	{None, AskedForBill, ReceivedBill, DeliveredBill};
 //	private enum OrderStatus
 //	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
-		
+
+	public void setActive(){
+		print("Customer has been set active");
+		this.setActivityBegun();
+	}
+	
 	public RestaurantChungWaiterRevolvingStandRole(String name, RestaurantChungHost host, RestaurantChungCookRole cook, RestaurantChungCashierRole cashier) {
 		super();
 		

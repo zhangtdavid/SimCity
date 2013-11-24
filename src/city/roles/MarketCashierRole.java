@@ -8,6 +8,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.animations.interfaces.MarketAnimatedCashier;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -25,6 +26,10 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
 		
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	public class Transaction {
@@ -89,13 +94,23 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 //	Gui
 //	---------------------------------------------------------------
-//	private MarketCashierGui marketCashierGui;
+	private MarketAnimatedCashier marketCashierGui;
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCashierRole() {
+	public MarketCashierRole(MarketBuilding market) {
 		super();
+		this.market = market;
+//		super.setWorkplace(market);
     }
+	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
 	
 //  Messages
 //	=====================================================================	
@@ -121,15 +136,19 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
 		System.out.println("Market Cashier received msgComputeBill from Employee.");
-		transactions.add(new Transaction(e, c, order, collectedItems, id));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			transactions.add(new Transaction(e, c, order, collectedItems, id));		
+			stateChanged();			
+		}
 	}
 	
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
 		System.out.println("Market Cashier received msgComputeBill from Employee");
-		transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
+			stateChanged();			
+		}
 	}
 
 //	Customer
@@ -166,6 +185,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 	@Override
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (market.cashier != this)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (transactions.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.PendingDelivery) {

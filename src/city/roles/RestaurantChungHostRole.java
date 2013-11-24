@@ -72,9 +72,6 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		public void setUnoccupied() {
 			c = null;
 		}
-//		boolean isOccupied() {
-//			return c != null;
-//		}
 		public String toString() {
 			return "table " + tableNumber;
 		}
@@ -88,10 +85,14 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		// make some tables
 		tables = new Vector<Table>(nTables);
 		for (int i = 1; i < nTables+1; i++) {
-			tables.add(new Table(i)); //how you add to a collections
+			tables.add(new Table(i));
 		}
 	}
 
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
 //  Messages
 //	=====================================================================
 //	Customer
