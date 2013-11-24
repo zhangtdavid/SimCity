@@ -86,7 +86,7 @@ public class CityControlPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(addRestaurantZhang)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTZHANG);
-			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantZhang");
 		} else if (e.getSource().equals(addRestaurantChoi)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHOI);
 			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
@@ -95,7 +95,7 @@ public class CityControlPanel extends JPanel implements ActionListener{
 			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantJP");
 		} else if (e.getSource().equals(addRestaurantTimms)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTTIMMS);
-			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New Restaurant Zhang");
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantTimms");
 		}else if (e.getSource().equals(addBank)) {
 			AlertLog.getInstance().logInfo(AlertTag.BANK, this.name, "Adding New Bank");
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.BANK);

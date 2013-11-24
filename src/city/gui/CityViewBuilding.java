@@ -12,9 +12,9 @@ public abstract class CityViewBuilding {
 	int x, y;
 	Color color;
 	String ID;
-	BuildingCard building;
+	public BuildingCard building;
 	boolean isActive;
-	enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, BANK, ROAD, HOUSE};
+	public enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, BANK, ROAD, HOUSE};
 	BuildingType type = BuildingType.NONE;
 	
 	public CityViewBuilding() {
