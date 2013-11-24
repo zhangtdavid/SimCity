@@ -22,8 +22,8 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-    public RestaurantChoiPanel(MainFrame mf, Color color, Dimension panelDimension) {
-    	super(mf, color);
+    public RestaurantChoiPanel(Color color, Dimension panelDimension) {
+    	super(color);
     	panelX = panelDimension.width;
     	panelY = panelDimension.height;
     	
@@ -37,11 +37,11 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
 		repaint();
 	}
 
-    public void paintComponent(Graphics graphics) {
+	@Override
+    public void paint(Graphics graphics) {
         Graphics2D graphics2D = (Graphics2D)graphics;
-
         // Clear the screen by painting a rectangle the size of the frame
-        graphics2D.setColor(getBackground());
+        graphics2D.setColor(background);
         graphics2D.fillRect(0, 0, panelX, panelY);
 
         // Update the position of each visible element

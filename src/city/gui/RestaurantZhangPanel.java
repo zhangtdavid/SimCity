@@ -16,51 +16,51 @@ import city.Animation;
 public class RestaurantZhangPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
-	
+
 	private int panelX;
-    private int panelY;
-    private final int delayMS = 5;
+	private int panelY;
+	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-    public RestaurantZhangPanel(MainFrame mf, Color color, Dimension panelDimension) {
-    	super(mf, color);
-    	panelX = panelDimension.width;
-    	panelY = panelDimension.height;
-    	
-        setVisible(true);
- 
-    	Timer timer = new Timer(delayMS, this);
-    	timer.start();
-    }
+	public RestaurantZhangPanel(Color color, Dimension panelDimension) {
+		super(color);
+		panelX = panelDimension.width;
+		panelY = panelDimension.height;
+
+		setVisible(true);
+
+		Timer timer = new Timer(delayMS, this);
+		timer.start();
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 	}
+	
+	@Override
+	public void paint(Graphics graphics) {
+		Graphics2D graphics2D = (Graphics2D)graphics;
+		// Clear the screen by painting a rectangle the size of the frame
+		graphics2D.setColor(background);
+		graphics2D.fillRect(0, 0, panelX, panelY);
 
-    public void paintComponent(Graphics graphics) {
-        Graphics2D graphics2D = (Graphics2D)graphics;
+		// Update the position of each visible element
+		for(Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.updatePosition();
+			}
+		}
 
-        // Clear the screen by painting a rectangle the size of the frame
-        graphics2D.setColor(getBackground());
-        graphics2D.fillRect(0, 0, panelX, panelY);
+		// Draw each visible element after updating their positions
+		// TODO generates concurrent modification exception
+		for(Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.draw(graphics2D);
+			}
+		}
+	}
 
-        // Update the position of each visible element
-        for(Animation animation : animations) {
-        	if (animation.getVisible()) {
-                animation.updatePosition();
-            }
-        }
-
-        // Draw each visible element after updating their positions
-        // TODO generates concurrent modification exception
-        for(Animation animation : animations) {
-            if (animation.getVisible()) {
-                animation.draw(graphics2D);
-            }
-        }
-    }
-    
-    public void addVisualizationElement(Animation ve) {
-    	animations.add(ve);
-    }
+	public void addVisualizationElement(Animation ve) {
+		animations.add(ve);
+	}
 }

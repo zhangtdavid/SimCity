@@ -23,7 +23,7 @@ public class BankPanel extends BuildingCard implements ActionListener {
 	private List<Animation> animations = new ArrayList<Animation>();
 
     public BankPanel(MainFrame mf, Color color, Dimension panelDimension) {
-    	super(mf, color);
+    	super(color);
     	panelX = panelDimension.width;
     	panelY = panelDimension.height;
     	
