@@ -5,7 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Role;
-import city.animations.RestaurantTimmsCashierAnimation;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -18,24 +18,30 @@ import city.interfaces.RestaurantTimmsWaiter;
 public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
 	// Data
 	
-	public int moneyOnHand;
 	public int moneyCollected;
 	public int moneyOwed;
-	private RestaurantTimmsCashierAnimation animation;
+	private RestaurantTimmsBuilding rtb; 
 	
 	public List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
 	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	
-	private Integer CASH_MIN = 100;
-	private Integer CASH_MAX = 500;
-	
 	// Constructor
 	
-	public RestaurantTimmsCashierRole(){
+	/**
+	 * Construct a RestaurantTimmsCashierRole.
+	 * 
+	 * @param b the RestaurantTimmsBuilding that this cashier will work at
+	 * @param shiftStart the hour (0-23) that the role's shift begins
+	 * @param shiftEnd the hour (0-23) that the role's shift ends
+	 */
+	public RestaurantTimmsCashierRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
 		super();
-		this.moneyOnHand = CASH_MIN + (int)(Math.random() * ((CASH_MAX - CASH_MIN) + 1));
+		this.setWorkplace(b);
+		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
+		this.rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
 	}
 	
 	// Messages
@@ -48,6 +54,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c a Customer interface
 	 * @param money the amount billed by the market
 	 */
+	@Override
 	public void msgComputeCheck(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int money) {
 		Check check = findCheck(c);
 		if (check == null) {
@@ -72,6 +79,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c a Customer interface
 	 * @param money the amount of money the Customer has
 	 */
+	@Override
 	public void msgMakePayment(RestaurantTimmsCustomer c, int money) {
 		Check check = findCheck(c);
 		check.amountOffered = money;
@@ -128,7 +136,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		int change = (c.amountOffered - c.amount);
 		if (change >= 0) {
 			print("actAcceptPayment - paid - " + c.amount);
-			moneyOnHand = (moneyOnHand + c.amount);
+			rtb.setCash(rtb.getCash() + c.amount);
 			moneyCollected = (moneyCollected + c.amount);
 			moneyOwed = (moneyOwed - c.amount);
 			c.state = Check.State.paid;
@@ -164,6 +172,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	
 	// Scheduler
 	
+	@Override
 	public boolean runScheduler() {
 		synchronized(checks) {
 			for (Check check : checks) {
@@ -190,15 +199,15 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	}
 	
 	// Get
-
-	public RestaurantTimmsCashierAnimation getAnimation() {
-		return this.animation;
-	}
 	
 	// Set
 	
-	public void setAnimation(RestaurantTimmsCashierAnimation animation) {
-		this.animation = animation;
+	@Override
+	public void setActive() {
+		rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
+		rtb.cashier = this;
+		super.setActive();
+		// TODO
 	}
 	
 	// Utilities 
