@@ -2,6 +2,7 @@ package city.roles;
 
 import city.Application;
 import city.Application.BANK_SERVICE;
+import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -33,13 +34,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	// Constructor
 	
-	public BankCustomerRole(Building bus) { //could change back to building = b, don't like cast
-		building = (BankBuilding) Application.CityMap.findBank();
-		business = bus;
+	public BankCustomerRole(Building b) {
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
+		business = b;
 	}
 	
-	public BankCustomerRole(){		//could change back to building = b
-		building = (BankBuilding) Application.CityMap.findBank();
+	public BankCustomerRole() {
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
 	}
 	
 	// Messages
