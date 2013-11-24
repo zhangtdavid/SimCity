@@ -112,7 +112,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public boolean runScheduler() {
 		if(wantsToLeave && building.host != this && waitingCustomers.isEmpty()){
 			wantsToLeave = false;
-			this.active = false;
+			super.setInactive();
 		}
 		//see if waiter can be on break
 		synchronized(waiters){
@@ -236,7 +236,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	}
 	public void setInactive(){
 		if(building.host != this && waitingCustomers.isEmpty()){
-			active = false;
+			super.setInactive();
 		}else{
 			wantsToLeave = true;
 		}

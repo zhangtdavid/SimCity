@@ -204,7 +204,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		// the scheduler is so clean now!!
 		try{
 			if(wantsToLeave && myCustomers.size() == 0){
-				active = false;
+				super.setInactive();
 				wantsToLeave = false;
 			}
 			if (needToRetakeOrder())
@@ -384,7 +384,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 
 	public void setInactive(){ 
 		if(myCustomers.size() == 0){
-			active = false;
+			super.setInactive();
 			building.host.msgSetUnavailable(this);
 		}
 		else{

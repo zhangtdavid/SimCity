@@ -120,7 +120,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public boolean runScheduler() {
 		if(wantsToLeave && building.seatedCustomers == 0){
 			wantsToLeave = false;
-			active = false;
+			super.setInactive();
 		}
 		synchronized(orders){ // take from grill to plates
 			for(int i = 0; i < orders.size(); i ++){
@@ -354,7 +354,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	@Override
 	public void setInactive(){
 		if(orders.isEmpty() && building.seatedCustomers == 0)
-			active = false;
+			super.setInactive();
 		else wantsToLeave = true;
 	}
 

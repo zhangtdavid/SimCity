@@ -40,7 +40,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
         }
         restaurantCashier = marketCustomerDeliveryPayment;
         state = MarketCustomerState.Ordering;
-        active = true;
+        super.setInactive();
     }
 	
 //  Messages
@@ -53,7 +53,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
 		}
-        active = false; // set role inactive after receiving order
+		super.setInactive(); // set role inactive after receiving order
 	}
 	
 //  Scheduler
@@ -73,7 +73,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	private void callMarket() {
 		state = MarketCustomerState.None;
 		manager.msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);
-		active = false; // set role inactive after placing order
+		super.setInactive(); // set role inactive after placing order
 	}
 
 //  Getters and Setters

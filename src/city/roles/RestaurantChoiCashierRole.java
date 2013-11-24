@@ -108,7 +108,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	public boolean runScheduler() {
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0){
 			wantsToLeave = false;
-			active = false;
+			super.setInactive();
 		}
 		//market interactions
 				/*synchronized(marketBills){
@@ -218,7 +218,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     }
     public void setInactive(){
     	if(checks.isEmpty() && this.building.seatedCustomers == 0){ // if no checks and no seated customers
-    		active = false; // end role and leave restaurant
+    		super.setInactive(); // end role and leave restaurant
     	}
     	else
     		wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do

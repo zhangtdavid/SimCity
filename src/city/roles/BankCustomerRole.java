@@ -144,7 +144,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
-		this.active = false;
+		super.setInactive();
 	}
 	
 	// Getters

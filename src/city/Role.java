@@ -16,7 +16,7 @@ public abstract class Role implements RoleInterface {
 	private int salary; // FOR OCCUPATIONS - how much the role is paid by its job
 	private int shiftStart; // FOR OCCUPATIONS - when the role starts work
 	private int shiftEnd; // FOR OCCUPATIONS - when the role can leave work
-	public boolean active;
+	private boolean active;
 	private boolean activity;
 	private Building workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
 	private Animation animation;

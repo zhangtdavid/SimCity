@@ -26,7 +26,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	public void setInactive(){
 		if(currentCustomer == null)
-			this.active = false;
+			super.setInactive();
 		else{
 			building.manager.msgUnavailable(this);
 			wantsInactive = true;
@@ -91,7 +91,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	public boolean runScheduler() {
 		// TODO Auto-generated method stub
 		if(wantsInactive && currentCustomer == null){
-			this.active = false;
+			super.setInactive();
 			wantsInactive = false;
 		}
 		if(currentCustomer != null){
