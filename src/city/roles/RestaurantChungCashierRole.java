@@ -5,7 +5,7 @@ import java.util.*;
 import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
-import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
@@ -24,7 +24,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	private RestaurantChungHost host;
 	public int money;
 	
-//	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole();
+	private MarketCustomerDeliveryPayment marketCustomerDeliveryPayment = new MarketCustomerDeliveryPaymentRole();
 
 	
 //	Transactions
@@ -242,5 +242,9 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				return;
 			}
 		}
+	}
+	
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+		return marketCustomerDeliveryPayment;
 	}
 }

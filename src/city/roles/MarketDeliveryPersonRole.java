@@ -95,7 +95,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
         // notify customer if there is a difference between order and collected items
 		// switch into CarPassenger;
 		
-		customerDelivery.msgHereIsOrder(collectedItems, orderId);
+		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
 		cashier.msgFinishedDeliveringItems(this, customerDelivery);
 		customerDelivery = null;
 	}

@@ -19,7 +19,7 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	}
 
 	@Override
-	public void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrder from deliveryPerson."));		
 		System.out.println("CustomerDelivery received msgHereIsOrder from deliveryPerson.");		
 	}

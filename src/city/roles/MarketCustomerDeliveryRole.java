@@ -9,6 +9,7 @@ import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
@@ -24,7 +25,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	private MarketManager manager;
 	private MarketEmployee employee;
 	
-	private MarketCustomerDeliveryPaymentRole restaurantCashier;
+	private MarketCustomerDeliveryPayment restaurantCashier;
 	
 	private MarketOrder order;
 	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
@@ -42,12 +43,12 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole(MarketOrder o, MarketCustomerDeliveryPaymentRole c) {
+	public MarketCustomerDeliveryRole(MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
         for (FOOD_ITEMS s: order.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in receivedItems to 0
         }
-        restaurantCashier = c;
+        restaurantCashier = marketCustomerDeliveryPayment;
     }	
 	
 //  Messages
@@ -60,7 +61,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //		stateChanged();
 //	}
 	
-	public void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
 		state = MarketCustomerState.None;

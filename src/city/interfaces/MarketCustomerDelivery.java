@@ -12,7 +12,7 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id);
+	public abstract void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int orderId);
 	
 	// Scheduler
 	
