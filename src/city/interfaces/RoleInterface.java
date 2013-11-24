@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.Animation;
 import city.Building;
 
 public interface RoleInterface {
@@ -19,8 +20,9 @@ public interface RoleInterface {
 	// Getters
 	
 	public Person getPerson();
+	public <T extends Animation> T getAnimation(Class<T> type);
 	public int getSalary();
-	public Building getBusiness();
+	public <T extends Building> T getWorkplace(Class<T> type);
 	public int getShiftStart();
 	public int getShiftEnd();
 	public boolean getActive();
@@ -29,8 +31,9 @@ public interface RoleInterface {
 	// Setters
 	
 	public void setPerson(Person p);
+	public void setAnimation(Animation a);
 	public void setSalary(int s);
-	public void setBusiness(Building b);
+	public void setWorkplace(Building b);
 	public void setShift(int shiftStart, int shiftEnd);
 	public void setActive();
 	public void setInactive();
