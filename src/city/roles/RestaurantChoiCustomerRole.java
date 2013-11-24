@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import utilities.RestaurantChoiMenu;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
@@ -15,8 +16,8 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 
 	//Data
 	String name;
-	double cash;
-	double amt;  
+	int cash;
+	int amt;  
 	int punishment;
 	private int hungerLevel = 5;        // determines length of meal
 	Timer timer = new Timer();
@@ -46,7 +47,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		super();
 		this.name = name;
 		//TODO consider removing this feature because it doesn't make sense in the context of simcity201
-		cash = 17*Math.random()+3; // the default customer starts with 3~20 dollars.
+		cash = (int)(17*Math.random())+3; // the default customer starts with 3~20 dollars.
 		if(name.contains("evil")){ // evil person starts with -50 dollars. 
 			cash = -10;
 		}
@@ -102,14 +103,14 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	}
 
 	@Override
-	public void msgHeresYourCheck(double checkValue) {
+	public void msgHeresYourCheck(int checkValue) {
 		event = AgentEvent.gotCheck;
 		stateChanged();
 
 	}
 
 	@Override
-	public void msgHeresYourChange(double amt) {
+	public void msgHeresYourChange(int amt) {
 		print("Received change");
 		cash = amt; // no state to change - just do it on the way out
 		event = AgentEvent.gotChange;
@@ -319,7 +320,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	}
 
 	@Override
-	public int pickRandom(double cash, ArrayList<Integer> mem,
+	public int pickRandom(int cash, ArrayList<Integer> mem,
 			boolean hasHitZero) {
 		//GOTTA BE AN OPTION THAT HE CAN AFFORD. If he can't afford anything, he has to leave.
 		if(mem.isEmpty() && !hasHitZero){ // only do this if mem is empty; i.e. if this is the first time. 

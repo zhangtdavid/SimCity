@@ -1,10 +1,10 @@
 package city.tests;
 
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import city.agents.PersonAgent;
 import city.interfaces.RestaurantChoiCook;
 import city.roles.RestaurantChoiCookRole;
-import city.roles.RestaurantChoiOrder;
-import city.roles.RestaurantChoiRevolvingStand;
 import city.tests.mock.MockRestaurantChoiWaiter;
 import city.tests.mock.MockRestaurantChoiWaiter2;
 import junit.framework.TestCase;

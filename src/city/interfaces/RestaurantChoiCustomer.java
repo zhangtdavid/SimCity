@@ -2,8 +2,8 @@ package city.interfaces;
 
 import java.util.ArrayList;
 
+import utilities.RestaurantChoiMenu;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
-import city.roles.RestaurantChoiMenu;
 
 public interface RestaurantChoiCustomer extends RoleInterface{
 
@@ -25,8 +25,8 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	public abstract void msgWhatWouldYouLike();
 	public abstract void msgHeresYourNewMenu(RestaurantChoiMenu m);
 	public abstract void msgOrderArrived();
-	public abstract void msgHeresYourCheck(double checkValue);
-	public void msgHeresYourChange(double amt);
+	public abstract void msgHeresYourCheck(int checkValue);
+	public void msgHeresYourChange(int amt);
 	public void msgDoTheDishes(int length);
 	//animation msging
 	public void msgAnimationFinishedGoToSeat();
@@ -39,7 +39,7 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	void goToDishes();
 	void LookAtMenu();
 	void giveOrder();
-	int pickRandom(double cash, ArrayList<Integer> mem, boolean hasHitZero);
+	int pickRandom(int cash, ArrayList<Integer> mem, boolean hasHitZero);
 	void EatFood();
 	void Checkplz();
 	void ImLeaving();
@@ -66,6 +66,7 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	public void setHungryNow();
 	public void setFullNow();
 	public void setHungerLevel(int hungerLevel);
+	public void setInactive();
 	void setGui(RestaurantChoiAnimatedCustomer anim);
 
 }

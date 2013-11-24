@@ -55,32 +55,32 @@ public class MarketCashierTest extends TestCase {
 		customerPerson = new MockPerson("Customer"); 
 		customer = new MockMarketCustomer();
 //		customerPerson.setOccupation(customer); // TODO Why does this not work? Issues with role, mock role inheritance stuff
-		customer.person = customerPerson;
+		customer.setPerson(customerPerson);
 		customer.market = market;
 
 		customerDeliveryPerson = new MockPerson("CustomerDelivery"); 
 		customerDelivery = new MockMarketCustomerDelivery();
-		customerDelivery.person = customerDeliveryPerson;
+		customerDelivery.setPerson(customerDeliveryPerson);
 		customerDelivery.market = market;
 		
 		customerDeliveryPaymentPerson = new MockPerson("CustomerDeliveryPayment"); 
 		customerDeliveryPayment = new MockMarketCustomerDeliveryPayment();
-		customerDeliveryPayment.person = customerDeliveryPaymentPerson;
+		customerDeliveryPayment.setPerson(customerDeliveryPaymentPerson);
 		customerDeliveryPayment.market = market;
 		
 		deliveryPersonPerson = new MockPerson("DeliveryPerson"); 
 		deliveryPerson = new MockMarketDeliveryPerson();
-		deliveryPerson.person = deliveryPersonPerson;
+		deliveryPerson.setPerson(deliveryPersonPerson);
 		deliveryPerson.market = market;
 		
 		employeePerson = new MockPerson("Employee"); 
 		employee = new MockMarketEmployee();
-		employee.person = employeePerson;
+		employee.setPerson(employeePerson);
 		employee.market = market;
 		
 		managerPerson = new MockPerson("Manager"); 
 		manager = new MockMarketManager();
-		manager.person = managerPerson;
+		manager.setPerson(managerPerson);
 		manager.market = market;
 		
 		cashierPerson = new MockPerson("Cashier"); 

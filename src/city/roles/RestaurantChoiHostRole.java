@@ -5,11 +5,14 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import utilities.RestaurantChoiTable;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
+import city.interfaces.RestaurantChoiWaiterAbs;
 
 public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
@@ -21,21 +24,33 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	static int ystart = 50;
 	public List<RestaurantChoiTable> tables;
 	List<RestaurantChoiCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
-	public List<RestaurantChoiWaiter> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiter>());
-	public ConcurrentHashMap<RestaurantChoiWaiter, Integer> waiterBalance = new ConcurrentHashMap<RestaurantChoiWaiter, Integer>();
+	public List<RestaurantChoiWaiterAbs> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterAbs>());
+	public ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer> waiterBalance = new ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer>();
 	int waitersOnBreak;
-	private RestaurantChoiWaiter leastActiveWaiter;
+	private RestaurantChoiWaiterAbs leastActiveWaiter;
 	private int leastActiveWaiterIndex;
 	//public WaiterGUI hostGui = null;
 	RestaurantChoiAnimatedHost animation;
+	RestaurantChoiBuilding building;
+	private boolean wantsToLeave;
 
-	public RestaurantChoiHostRole() {
+	/**
+	 * Initializes Host for RestaurantChoi
+	 * @param b : for RestaurantChoiBuilding
+	 * @param t1 : Start of shift
+	 * @param t2 : End of shift
+	 */
+	public RestaurantChoiHostRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
+		building = b;
 		// make some tables
 		tables = Collections.synchronizedList(new ArrayList<RestaurantChoiTable>(NTABLES));
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
 		}
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 
 	/**
@@ -44,13 +59,13 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	public void msgImHungry(RestaurantChoiCustomer c) {
 		synchronized(waitingCustomers){
-												System.out.println("received msgimhungry;added to queue");
+			System.out.println("received msgimhungry;added to queue");
 			waitingCustomers.add(c);
 		}
 		stateChanged();
 	}
 	
-	public void msgImBack(RestaurantChoiWaiter w){
+	public void msgImBack(RestaurantChoiWaiterAbs w){
 		synchronized(waiters){
 			waitersOnBreak--;
 			addWaiter(w);
@@ -59,7 +74,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		stateChanged();
 	}
 	
-	public void msgIWantABreak(RestaurantChoiWaiter w){
+	public void msgIWantABreak(RestaurantChoiWaiterAbs w){
 		stateChanged();
 	}
 
@@ -69,25 +84,36 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		}
 	}
 
-	public void msgTablesClear(RestaurantChoiWaiter w, RestaurantChoiTable table) {
+	public void msgTablesClear(RestaurantChoiWaiterAbs w, RestaurantChoiTable table) {
 		//set the table to null.
 		synchronized(tables){
 			table.setOccupant(null);
+			System.out.println("Cleared table " + table.getTableNumber());
 		}
-		System.out.println("Cleared table " + table.getTableNumber());
 		//find the waiter and de-increment his customer count.
 		synchronized(waiters){
 			for(int i = 0; i < waiters.size(); i++){
 				if(w.equals(waiters.get(i))) minus1Workload(w);
 			}
 		}
+		building.seatedCustomers--;
 		stateChanged(); // look for waiting customers now
 	}
+	public void msgSetUnavailable(RestaurantChoiWaiterAbs waiter){
+		     for(RestaurantChoiWaiterAbs w : waiters){
+		       if(w == waiter)
+		    	   waiters.remove(w); // waiter wants to leave? remove him from queue just like you do for waiters on break.
+		     }
+		   }
 
 	/**
 	 * Scheduler. Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
+		if(wantsToLeave && building.host != this && waitingCustomers.isEmpty()){
+			wantsToLeave = false;
+			super.setInactive();
+		}
 		//see if waiter can be on break
 		synchronized(waiters){
 			for(int i = 0; i < waiters.size(); i++){
@@ -156,7 +182,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		}
 	}
 
-	public void addWaiter(RestaurantChoiWaiter w) {
+	public void addWaiter(RestaurantChoiWaiterAbs w) {
 		synchronized(waiters){
 			waiters.add(w); 
 		}
@@ -191,6 +217,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 					tables.get(i));
 			plus1Workload(leastActiveWaiter);
 			updateTable(tables.get(i),waitingCustomers.get(0));
+			building.seatedCustomers++;
 		}
 		// remove customer
 		synchronized(waitingCustomers){
@@ -207,13 +234,20 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public void setAnimation(RestaurantChoiAnimatedHost in){
 		animation = in;
 	}
-
+	public void setInactive(){
+		if(building.host != this && waitingCustomers.isEmpty()){
+			super.setInactive();
+		}else{
+			wantsToLeave = true;
+		}
+	}
+	
 	//Utility
-	public void plus1Workload(RestaurantChoiWaiter w){
+	public void plus1Workload(RestaurantChoiWaiterAbs w){
 		waiterBalance.put(w, waiterBalance.get(w)+1); // replace old with new
 	}
 
-	public void minus1Workload(RestaurantChoiWaiter w){
+	public void minus1Workload(RestaurantChoiWaiterAbs w){
 		waiterBalance.put(w, waiterBalance.get(w)-1); // replace old with new
 	}
 }
