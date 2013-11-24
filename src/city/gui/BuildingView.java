@@ -56,7 +56,6 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 	public void setView(String key) {
 		if (cards.containsKey(key)) {
 			layout.show(this, key);
-//			city.info.setText(key);
 		}
 	}
 
