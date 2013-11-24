@@ -11,6 +11,7 @@ import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
 import city.Agent;
+import city.Animation;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
@@ -36,8 +37,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Date date;
 	private Role occupation;
-	private Building workplace;
-	private ResidenceBaseBuilding home; // EDITED; now we have two types of houseBuildings, so this overviews both
+	private ResidenceBaseBuilding home;
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
@@ -249,7 +249,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToWork() throws InterruptedException {
-		processTransportationDeparture(workplace);
+		processTransportationDeparture(occupation.getWorkplace(Building.class));
 		state = State.goingToWork;
 	}
 	
@@ -283,10 +283,15 @@ public class PersonAgent extends Agent implements Person {
 		Building b = CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
+		// Use reflection to get a Restaurant<name>CustomerAnimation to use when dining at the restaurant
 		try {
 			Class<?> c = Class.forName(b.getCustomerRole());
-			Constructor<?> r = c.getConstructor();
-			restaurantCustomerRole = (Role) r.newInstance();
+			Constructor<?> r0 = c.getConstructor();
+			restaurantCustomerRole = (Role) r0.newInstance();
+			
+			Class<?> a = Class.forName(b.getCustomerAnimation());
+			Constructor<?> r1 = a.getConstructor(c);
+			restaurantCustomerRole.setAnimation((Animation) r1.newInstance());
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
@@ -357,11 +362,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public int getSalary() {
-		return occupation.getSalary();
-	}
-	
-	@Override
 	public int getCash(){
 		return cash;
 	}
@@ -369,6 +369,11 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public ResidenceBaseBuilding getHome() {
 		return home;
+	}
+	
+	@Override
+	public Role getOccupation() {
+		return occupation;
 	}
 	
 	//=========//
@@ -395,11 +400,6 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setCar(Car c) {
 		car = c;
-	}
-	
-	@Override
-	public void setWorkplace(Building b) {
-		workplace = b;
 	}
 	
 	@Override
