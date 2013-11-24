@@ -9,7 +9,7 @@ public class RestaurantJPBuilding extends Building{
 	public RestaurantJPCookRole cook;
 	public RestaurantJPCashierRole cashier;
 	public RestaurantJPHostRole host;
-	
+	public int seatedCustomers = 0;
 	public RestaurantJPBuilding(String name){
 		super(name);
 	}
