@@ -72,6 +72,7 @@ public class RestaurantZhangBuilding extends Building {
 	}
 
 	public Role addRole(Role r) {
+		r.setWorkplace(this);
 		if(r instanceof RestaurantZhangCustomerRole) {
 			RestaurantZhangCustomerRole c = (RestaurantZhangCustomerRole)r;
 			c.setCashier(cashier);
