@@ -15,6 +15,7 @@ import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import utilities.MarketTransaction;
 /**
  * Restaurant Cook Agent
  */
@@ -33,7 +34,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	private List<Role> roles = new ArrayList<Role>();
 
-	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 
 //	Transactions
 //	=====================================================================	
@@ -59,22 +59,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public enum TransactionState
 	{None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	
 	// list market transactions
-	public class MarketTransaction {
-		MarketBuilding market;
-		MarketOrder order;
-		public int bill;
-		public MarketTransactionState s;
-		
-		public MarketTransaction (MarketBuilding m, MarketOrder o) {
-			market = m;
-			order = new MarketOrder(o);
-	        bill = 0;
-			s = MarketTransactionState.Pending;
-		}
-	}
-	public enum MarketTransactionState
-	{Pending, Processing, WaitingForConfirmation};
+
 		
 //	Constructor
 //	=====================================================================		

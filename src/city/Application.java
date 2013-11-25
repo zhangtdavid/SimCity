@@ -21,11 +21,13 @@ import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.BuildingCard;
 import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
+import city.gui.RestaurantChungPanel;
 import city.gui.RestaurantZhangPanel;
 import city.gui.CityViewBuilding;
 import city.gui.CityViewRestaurant;
@@ -34,6 +36,10 @@ import city.gui.RestaurantTimmsPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungHostRole;
+import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangCustomerRole;
@@ -59,7 +65,8 @@ public class Application {
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 	
-	public static RestaurantZhangBuilding rzb1;
+//	public static RestaurantZhangBuilding rzb1;
+	public static RestaurantChungBuilding rcb1;
     /**
      * Main routine to start the program.
      * 
@@ -91,20 +98,34 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+//		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+//		// FIRST add a panel
+//		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+//		// SECOND create a city view restaurant, the above panel is the last argument
+//		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+//		// THIRD add it to the list of statics in the cityView
+//		mainFrame.cityView.addStatic(restaurantZhang1);
+//		// FOURTH create a new building, last argument is the panel in step ONE
+//		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
+//		// FIFTH add the new building to the buildingView
+//		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+//		// SIXTH add the new building to the map
+//		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+//		// SEVENTH create all your roles after
+
+		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		CityViewRestaurant restaurantChung1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rcp1); 
 		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantZhang1);
+		mainFrame.cityView.addStatic(restaurantChung1);
 		// FOURTH create a new building, last argument is the panel in step ONE
-		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
-		rzp1.setTables(rzb1.tables);
+		rcb1 = new RestaurantChungBuilding("RestaurantChung1", rcp1);
 		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		mainFrame.buildingView.addView(rcp1, restaurantChung1.ID);
 		// SIXTH add the new building to the map
-		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		CityMap.addBuilding(BUILDING.restaurant, rcb1);
 		// SEVENTH create all your roles after
 
 		// Create buildings
@@ -151,24 +172,45 @@ public class Application {
 		p3.setCar(c3);
 		p4.setCar(c4);
 		
+
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role");
-		rzb1.addRole(p1r1);
+//		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role");
+//		rzb1.addRole(p1r1);
+//		p1.setOccupation(p1r1);
+//		
+//		// Create cook
+//		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role");
+//		rzb1.addRole(p2r1);
+//		p2.setOccupation(p2r1);
+//		
+//		// Create host
+//		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role");
+//		rzb1.addRole(p3r1);
+//		p3.setOccupation(p3r1);
+//		
+//		// Create waiter
+//		RestaurantZhangWaiterRegularRole p4r1 = new RestaurantZhangWaiterRegularRole("Waiter 1 Role");
+//		rzb1.addRole(p4r1);
+//		p4.setOccupation(p4r1);
+		
+		// Create cashier
+		RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole(rcb1, 0, 12);
+		rcb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 		
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role");
-		rzb1.addRole(p2r1);
+		RestaurantChungCookRole p2r1 = new RestaurantChungCookRole(rcb1, 0, 12);
+		rcb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 		
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role");
-		rzb1.addRole(p3r1);
+		RestaurantChungHostRole p3r1 = new RestaurantChungHostRole(rcb1, 0, 12);
+		rcb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 		
 		// Create waiter
-		RestaurantZhangWaiterRegularRole p4r1 = new RestaurantZhangWaiterRegularRole("Waiter 1 Role");
-		rzb1.addRole(p4r1);
+		RestaurantChungWaiterMessageCookRole p4r1 = new RestaurantChungWaiterMessageCookRole();
+		rcb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
 		
 		// Start threads

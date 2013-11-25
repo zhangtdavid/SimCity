@@ -28,6 +28,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
+//	public BankCustomer bankCustomer = new BankCustomerRole();
 		
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
@@ -193,13 +194,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public boolean runScheduler() {
 		// Role Scheduler
 		boolean blocking = false;
-		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
-			blocking  = true;
-			boolean activity = market.bankCustomer.runScheduler();
-			if (!activity) {
-				market.bankCustomer.setActivityFinished();
-			}
-		}
+//		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
+//			blocking  = true;
+//			boolean activity = market.bankCustomer.runScheduler();
+//			if (!activity) {
+//				market.bankCustomer.setActivityFinished();
+//			}
+//		}
 		
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.cashier != this)

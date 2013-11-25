@@ -4,13 +4,13 @@ import java.util.List;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketTransaction;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.Building;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketManager;
-import city.roles.RestaurantChungCashierRole.MarketTransaction;
-import city.roles.RestaurantChungCashierRole.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -36,7 +36,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		this.marketTransactions = marketTransactions;
     }
 	
-// How to deal with nexted inactivity?
+// How to deal with nested inactivity?
 //	public void setInactive(){
 //	}
 	
