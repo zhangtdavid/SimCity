@@ -26,10 +26,10 @@ public class MainFrame extends JFrame {
 	private static int TRACEPANELX = 1000;
 	private static int TRACEPANELY = 190;
 
-	CityViewPanel cityView;
-	BuildingView buildingView;
-	TracePanel tracePanel;
-	CityControlPanel CP;
+	public CityViewPanel cityView;
+	public BuildingView buildingView;
+	public TracePanel tracePanel;
+	public CityControlPanel CP;
 	GridBagConstraints c = new GridBagConstraints();
 
 	/**

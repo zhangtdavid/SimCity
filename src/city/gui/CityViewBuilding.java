@@ -11,8 +11,8 @@ public abstract class CityViewBuilding {
 	Rectangle rectangle;
 	int x, y;
 	Color color;
-	String ID;
-	BuildingCard building;
+	public String ID;
+	public BuildingCard building;
 	boolean isActive;
 	enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, RESTAURANTCHUNG, BANK, ROAD, HOUSE};
 	BuildingType type = BuildingType.NONE;

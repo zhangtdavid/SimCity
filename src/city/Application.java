@@ -1,5 +1,8 @@
 package city;
 
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
@@ -12,13 +15,22 @@ import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.AptBuilding;
 import city.buildings.RestaurantTimmsBuilding;
+import city.buildings.RestaurantZhangBuilding;
+import city.gui.BuildingCard;
+import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
+import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
+import city.roles.RestaurantZhangCashierRole;
+import city.roles.RestaurantZhangCookRole;
+import city.roles.RestaurantZhangCustomerRole;
+import city.roles.RestaurantZhangHostRole;
+import city.roles.RestaurantZhangWaiterRegularRole;
 
 public class Application {
 
@@ -49,7 +61,6 @@ public class Application {
 
 		// Load a scenario
 		parseConfig();
-
 		// Start the simulation
 		TimerTask tt = new TimerTask() {
 			public void run() {
@@ -69,48 +80,95 @@ public class Application {
 	private static void parseConfig() {
 		BankBuilding b = new BankBuilding("Bank");
 		CityMap.addBuilding(BUILDING.bank, b);
-        PersonAgent p1 = new PersonAgent("Manager 1", date);
-        BankManagerRole p1r1 = new BankManagerRole(b);
-        b.setManager(p1r1);
-        p1.setOccupation(p1r1);
-        people.add(p1);
-        p1.startThread();
+		PersonAgent p1 = new PersonAgent("Manager 1", date);
+		BankManagerRole p1r1 = new BankManagerRole(b);
+		b.setManager(p1r1);
+		p1.setOccupation(p1r1);
+		people.add(p1);
+		p1.startThread();
 
-        PersonAgent p2 = new PersonAgent("Teller 1", date);
-        BankTellerRole p2r1 = new BankTellerRole(b);
-        p2.setOccupation(p2r1);
-        people.add(p2);
-        p2.startThread();
+		PersonAgent p2 = new PersonAgent("Teller 1", date);
+		BankTellerRole p2r1 = new BankTellerRole(b);
+		p2.setOccupation(p2r1);
+		people.add(p2);
+		p2.startThread();
 
-        PersonAgent p3 = new PersonAgent("BankCustomer 1", date);
-        BankCustomerRole p3r1 = new BankCustomerRole();
-        p3.setOccupation(p3r1);
-        people.add(p3);
-        p3.startThread();
+		PersonAgent p3 = new PersonAgent("BankCustomer 1", date);
+		BankCustomerRole p3r1 = new BankCustomerRole();
+		p3.setOccupation(p3r1);
+		people.add(p3);
+		p3.startThread();
 
-// Set up the table
-        p1r1.msgAvailable(p2r1);
-// Wait for things to get in position
-       
+		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+		// FIRST add a panel
+		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantZhang1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		RestaurantZhangBuilding rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", "RestaurantZhangCustomerRole", rzp1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		// SEVENTH create all your roles after
+		PersonAgent p4 = new PersonAgent("Host 1", date);
+		RestaurantZhangHostRole p4r1 = new RestaurantZhangHostRole("Host 1 Role");
+		rzb1.addRole(p4r1);
+		p4.setOccupation(p4r1);
+		people.add(p4);
+		PersonAgent p5 = new PersonAgent("Cook 1", date);
+		RestaurantZhangCookRole p5r1 = new RestaurantZhangCookRole("Cashier 1 Role");
+		rzb1.addRole(p5r1);
+		p5.setOccupation(p5r1);
+		people.add(p5);
+		PersonAgent p6 = new PersonAgent("Cashier 1", date);
+		RestaurantZhangCashierRole p6r1 = new RestaurantZhangCashierRole("Cashier 1 Role");
+		rzb1.addRole(p6r1);
+		p6.setOccupation(p6r1);
+		people.add(p6);
+		PersonAgent p7 = new PersonAgent("Waiter 1", date);
+		RestaurantZhangWaiterRegularRole p7r1 = new RestaurantZhangWaiterRegularRole("Waiter 1 Role");
+		rzb1.addRole(p7r1);
+		p7.setOccupation(p7r1);
+		people.add(p7);
+		p4.startThread();
+		p5.startThread();
+		p6.startThread();
+		p7.startThread();
+		PersonAgent p8 = new PersonAgent("Customer 1", date);
+		RestaurantZhangCustomerRole p8r1 = new RestaurantZhangCustomerRole("Customer 1");
+		rzb1.addRole(p8r1);
+		p8.setOccupation(p8r1);
+		people.add(p8);
+		p8.startThread();
+		p8r1.gotHungry();
 
-// Send in a customer
-        
-// TODO these shouldn't be necessary, figure out why they're needed
-        p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
-        p3.stateChanged();
-        try {
-                Thread.sleep(9000);
-        } catch (InterruptedException e) {}
-        p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
-        p3.stateChanged();
+		// Set up the table
+		p1r1.msgAvailable(p2r1);
+		// Wait for things to get in position
 
-//TODO these shouldn't be necessary, figure out why they're needed
+
+		// Send in a customer
+
+		// TODO these shouldn't be necessary, figure out why they're needed
+		p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
+		p3.stateChanged();
+		try {
+			Thread.sleep(9000);
+		} catch (InterruptedException e) {}
+		p3r1.setActive(BANK_SERVICE.deposit, 50, TRANSACTION_TYPE.personal);
+		p3.stateChanged();
+
+
+		//TODO these shouldn't be necessary, figure out why they're needed
 	}
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 
-		
+
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -145,7 +203,7 @@ public class Application {
 			Building b = new BusStopBuilding("placeholder");
 			return b;
 		}
-	
+
 		public static BankBuilding findBank(){
 			return (BankBuilding) map.get(BUILDING.bank).get(0);
 		}
