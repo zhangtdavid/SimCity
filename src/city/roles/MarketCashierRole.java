@@ -28,7 +28,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
-//	public BankCustomer bankCustomer = new BankCustomerRole();
+	public BankCustomer bankCustomer;
 		
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
@@ -107,6 +107,8 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
+//		bankCustomer = new BankCustomerRole(); TODO Get a null point exception here
+
 	}
 	
 	public void setActive(){

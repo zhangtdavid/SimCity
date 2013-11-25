@@ -21,17 +21,16 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
+	private MarketCashier cashier;
+	private MarketCustomerDelivery customerDelivery;
 	
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
 	
-	private MarketCashier cashier;
-
 	private CarAgent car;
 	private CarPassenger carPassenger;
-
-	private MarketCustomerDelivery customerDelivery;
+	
 	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	int orderId;
 	
@@ -146,15 +145,5 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	}
 	
 //  Utilities
-//	=====================================================================		
-	//	private Transaction findTransaction(MarketCustomerRole c) {
-//		for(Transaction t : transactions ){
-//			if(t.customer == c) {
-//				return t;		
-//			}
-//		}
-//		return null;
-//	}
-
-	// Classes
+//	=====================================================================
 }

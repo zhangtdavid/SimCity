@@ -31,15 +31,17 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	Constructor
 //	---------------------------------------------------------------
 	public MarketCustomerDeliveryPaymentRole(Building r, List<MarketTransaction> marketTransactions) {
-		super(); // TODO
+		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
     }
-	
-// How to deal with nested inactivity?
-//	public void setInactive(){
-//	}
-	
+
+//  Activity Management
+//	=====================================================================	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+
 //  Messages
 //	=====================================================================	
 //	Market Cashier
@@ -57,8 +59,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
-		MarketTransaction mt = findMarketTransaction(id);
-		removeMarketTransactionFromList(mt);
+//		MarketTransaction mt = findMarketTransaction(id);
+//		removeMarketTransactionFromList(mt); TODO this might have cause when cashier is adding to the list
 	}
 	
 //  Scheduler
@@ -84,6 +86,9 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	    	mt.s = MarketTransactionState.WaitingForConfirmation;
 		}
 		// handle if bill is wrong
+//		else {
+//			
+//		}
 	}
 
 //  Getters and Setters

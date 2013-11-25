@@ -11,6 +11,7 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
+import city.RestaurantBuilding;
 import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
@@ -19,6 +20,8 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
+	private RestaurantBuilding restaurant;
+	
 	private MarketBuilding market;
 	private MarketManager manager;
 	
@@ -33,16 +36,18 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole(MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
+	public MarketCustomerDeliveryRole(RestaurantBuilding r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
+		restaurant = r;
         for (FOOD_ITEMS s: order.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in receivedItems to 0
         }
         restaurantCashier = marketCustomerDeliveryPayment;
         state = MarketCustomerState.Ordering;
-        super.setInactive();
     }
-	
+
+//  Activity Management
+//	=====================================================================
 	public void setActive(){
 		this.setActivityBegun();
 	}
@@ -56,6 +61,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	        for (FOOD_ITEMS item: collectedItems.keySet()) {
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
+	        restaurant.addFood(receivedItems);
 		}
 		super.setInactive(); // set role inactive after receiving order
 	}

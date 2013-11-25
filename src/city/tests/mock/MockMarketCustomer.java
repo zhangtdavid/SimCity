@@ -19,12 +19,6 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	public void msgAnimationArrivedAtMarket() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
@@ -42,18 +36,6 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	public void msgPaymentReceived() {
 		log.add(new LoggedEvent("Customer received msgPaymentReceived from cashier."));		
 		System.out.println("Customer received msgPaymentReceived from cashier.");					
-	}
-
-	@Override
-	public void msgAnimationAtEntrance() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgAnimationAtCashier() {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

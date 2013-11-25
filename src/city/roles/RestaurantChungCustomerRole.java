@@ -151,7 +151,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public void msgAnimationFinishedLeaveRestaurant() {
 		print("Customer received msgAnimationFinishedLeaveRestaurant");
 		event = AgentEvent.doneLeaving;
-		stateChanged();
+		super.setInactive();
 	}
 	
 	public void msgKickingYouOutAfterPaying(int debt) {

@@ -6,16 +6,15 @@ import java.util.concurrent.Semaphore;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungRevolvingStand;
-import utilities.RestaurantZhangOrder;
 import utilities.RestaurantChungOrder.OrderState;
 import city.Application.FOOD_ITEMS;
+import city.RestaurantBuilding.Food;
+import city.RestaurantBuilding.FoodOrderState;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.buildings.RestaurantChungBuilding.Food;
-import city.buildings.RestaurantChungBuilding.FoodOrderState;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
@@ -331,9 +330,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
-        marketCustomerDelivery = new MarketCustomerDeliveryRole(o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
         marketCustomerDelivery.setActive();
-//        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPaymentRole(), o, o.ID); // need to change this to a call to the manager, asking market manager for service
         return;
     }
     

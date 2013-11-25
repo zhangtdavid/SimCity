@@ -7,6 +7,7 @@ import java.util.Map;
 
 import city.Animation;
 import city.Building;
+import city.RestaurantBuilding;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungCustomerAnimation;
@@ -27,7 +28,7 @@ import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-public class RestaurantChungBuilding extends Building {
+public class RestaurantChungBuilding extends RestaurantBuilding {
 
 //  Food
 //  =====================================================================
@@ -42,28 +43,6 @@ public class RestaurantChungBuilding extends Building {
 	public List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();
 	
 	private static final int WORKER_SALARY = 500;
-	
-	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
-    public class Food {
-        public String item;
-        public int cookingTime;
-        public int amount;
-        public int low;
-        public int capacity;
-        public int price;
-        public FoodOrderState s;
-        
-        public Food(String item, int cookingTime, int amount, int low, int capacity, int price) {
-            this.item = item;
-            this.cookingTime = cookingTime;
-            this.amount = amount;
-            this.low = low;
-            this.capacity = capacity;
-            s = FoodOrderState.None;
-        }
-    }
-    public enum FoodOrderState
-    {None, Pending, Ordered};
 	
 	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
 		super(name);
