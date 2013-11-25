@@ -487,14 +487,12 @@ public class PersonAgent extends Agent implements Person {
 		if (car != null && !carPassengerRole.getActive()) {
 			roles.remove(carPassengerRole);
 			carPassengerRole = null;
-			print("hjosaidfoisdf");
 			return true;
 		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
 			roles.remove(busPassengerRole);
 			busPassengerRole = null;
 			return true;
 		}
-		print("Here");
 		return false;
 	}
 	

@@ -45,7 +45,7 @@ public class RestaurantZhangBuilding extends Building {
 
 	public Collection<RestaurantZhangTable> tables;
 	public RestaurantZhangMenu menu = new RestaurantZhangMenu();
-	public RestaurantZhangRevolvingStand orderStand;
+	public RestaurantZhangRevolvingStand orderStand = new RestaurantZhangRevolvingStand();
 
 	public RestaurantZhangHost host;
 	private RestaurantZhangCook cook;
@@ -92,6 +92,7 @@ public class RestaurantZhangBuilding extends Building {
 			w.setCook(cook);
 			w.setHost(host);
 			w.setMenu(menu);
+			host.addWaiter(w);
 			if(!allRoles.containsKey(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 50, 200); 
 				w.setAnimation(anim);
@@ -129,6 +130,8 @@ public class RestaurantZhangBuilding extends Building {
 		}
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
+			c.setRevolvingStand(orderStand);
+			c.setMenuTimes(menu);
 			if(!allRoles.containsKey(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
@@ -141,6 +144,7 @@ public class RestaurantZhangBuilding extends Building {
 		}
 		if(r instanceof RestaurantZhangCashierRole) {
 			RestaurantZhangCashierRole c = (RestaurantZhangCashierRole)r;
+			c.setMenu(menu);
 			if(!allRoles.containsKey(c)) { 
 				cashier = c;
 				allRoles.put(c, null);
