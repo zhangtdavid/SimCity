@@ -3,7 +3,6 @@ package city.interfaces;
 import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
-import utilities.MarketOrder;
 
 public interface MarketCashier extends RoleInterface {
 

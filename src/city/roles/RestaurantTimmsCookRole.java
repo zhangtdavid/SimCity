@@ -9,8 +9,7 @@ import java.util.concurrent.Semaphore;
 
 import city.Application;
 import city.Role;
-import city.animations.RestaurantTimmsCookAnimation;
-import city.interfaces.RestaurantTimmsCashier;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -27,9 +26,6 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	private Integer speed;
 	private Timer timer = new Timer();
-
-	private RestaurantTimmsCookAnimation animation;
-	private RestaurantTimmsCashier cashier;
 	
 	private Integer KITCHEN_STORE_MIN = 2;
 	private Integer KITCHEN_STORE_MAX = 2;
@@ -40,10 +36,19 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Constructor
 	
-	public RestaurantTimmsCookRole(RestaurantTimmsCashier c){
+	/**
+	 * Construct a RestaurantTimmsCookRole.
+	 * 
+	 * @param b the RestaurantTimmsBuilding that this cook will work at
+	 * @param shiftStart the hour (0-23) that the role's shift begins
+	 * @param shiftEnd the hour (0-23) that the role's shift ends
+	 */
+	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
 		super();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		this.speed = 3;
-		this.cashier = c;
 		
 // TODO		
 //		// Create the menu. This does not order from the Market.
@@ -57,12 +62,14 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Messages
 
+	@Override
 	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		print("msgCookOrder");
 		orders.add(new Order(w, c, s));
 		stateChanged();
 	}
 	
+	@Override
 	public void msgPickUpOrder(RestaurantTimmsCustomer c) {
 		print("msgPickUpOrder");
 		Order order = null;
@@ -84,6 +91,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		marketResponse.release();
 	}
 	
+	@Override
 	public void msgMarketOrderDelivered(Application.FOOD_ITEMS s, int quantity) {
 		print("msgMarketOrderDelivered");
 		MenuItem menuItem = findMenuItem(s);
@@ -141,6 +149,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Scheduler
 	
+	@Override
 	public boolean runScheduler() {
 		synchronized(orders) {
 			// High priority - respond to waiters placing orders
@@ -179,25 +188,19 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Get
 	
-	public RestaurantTimmsCookAnimation getAnimation() {
-		return this.animation;
-	}
-	
+	@Override
 	public int getMenuItemPrice(Application.FOOD_ITEMS s) {
 		MenuItem menuItem = findMenuItem(s);
 		return menuItem.getPrice();
 	}
 	
 	// Set
-	
-	public void setAnimation(RestaurantTimmsCookAnimation animation) {
-		this.animation = animation;
+
+	@Override
+	public void setActive() {
+		// TODO
+		super.setActive();
 	}
-	
-// TODO	
-//	public void addMarket(MarketAgent m) {
-//		this.markets.add(m);
-//	}
 	
 	// Utilities 
 	

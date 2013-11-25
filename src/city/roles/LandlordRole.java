@@ -2,15 +2,14 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
-import city.buildings.AptBuilding;
+import city.Role;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
-public class LandlordRole extends ResidentRole implements Landlord {
+public class LandlordRole extends Role implements Landlord {
 
 	// Data
 	// Murphy's Law: Anything that can go wrong will go wrong.

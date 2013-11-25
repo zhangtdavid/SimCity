@@ -54,15 +54,6 @@ public class RestaurantZhangCookAnimation extends Animation {
     }
 
     public void draw(Graphics2D g) {
-    	g.setColor(Color.GRAY);
-    	for(int i = 0; i < 3; i++) {
-    		g.fillRect(100 + 70 * i, 10, 60, 20);
-    		g.drawString("Grill " + i, 100 + 70 * i, 10);
-    	}
-    	g.setColor(Color.LIGHT_GRAY);
-    	g.fillRect(100, 100, 200, 20);
-    	g.drawString("Plating", 100, 100);
-    	g.setColor(Color.ORANGE);
     	for(int i = 0; i < platingAreaStrings.length; i++) {
     		g.drawString(platingAreaStrings[i], 100 + 70 * i, 100 + TEXTHEIGHT);
         }

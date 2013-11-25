@@ -3,7 +3,6 @@ package city.interfaces;
 import java.util.Date;
 
 import city.Application;
-import city.Building;
 import city.Role;
 import city.buildings.HouseBuilding;
 import city.buildings.ResidenceBaseBuilding;
@@ -35,9 +34,9 @@ public interface Person extends AgentInterface {
 	
 	public String getName();
 	public Date getDate();
-	public int getSalary();
 	public int getCash();
 	public ResidenceBaseBuilding getHome();
+	public Role getOccupation();
 	
 	// Setters
 	
@@ -45,7 +44,6 @@ public interface Person extends AgentInterface {
 	public void setCar(Car c);
 	public void setDate(Date d);
 	public void setOccupation(Role r);
-	public void setWorkplace(Building b);
 	public void setCash(int c);
 	public void setHome(ResidenceBaseBuilding h);
 	

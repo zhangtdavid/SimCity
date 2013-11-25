@@ -7,7 +7,6 @@ public interface CarPassenger extends RoleInterface {
 	// Constructor
 	
 	// Messages
-	abstract void msgImGoingToDrive();
 	abstract void msgImAtCar();
 	abstract void msgImAtDestination();
 
