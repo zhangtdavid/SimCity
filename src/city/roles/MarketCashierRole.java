@@ -28,9 +28,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
-	
-	BankCustomer bankCustomer;
-	
+		
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
@@ -193,6 +191,16 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 	@Override
 	public boolean runScheduler() {
+		// Role Scheduler
+		boolean blocking = false;
+		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
+			blocking  = true;
+			boolean activity = market.bankCustomer.runScheduler();
+			if (!activity) {
+				market.bankCustomer.setActivityFinished();
+			}
+		}
+		
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.cashier != this)
 				workingState = WorkingState.NotWorking;
@@ -233,15 +241,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		if (workingState == WorkingState.NotWorking)
 			super.setInactive();
 		
-		return false;
+		return blocking;
 	}
 	
 //  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		bankCustomer = new BankCustomerRole();
-		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
-		// TODO how does this work with different bank customer instances when the account number is tied to the role?
+		market.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
 	}
 	
 	private void computeBill(Transaction t) {

@@ -7,6 +7,7 @@ import java.util.Map;
 
 import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.interfaces.BankCustomer;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungHost;
@@ -18,6 +19,7 @@ public class RestaurantChungBuilding extends Building {
 //  =====================================================================
 	public RestaurantChungHost host;
 	public RestaurantChungCashier cashier;
+	public BankCustomer bankCustomer;
 	public RestaurantChungCook cook;
 	public List<RestaurantChungWaiterBase> employees = new ArrayList<RestaurantChungWaiterBase>();
 	

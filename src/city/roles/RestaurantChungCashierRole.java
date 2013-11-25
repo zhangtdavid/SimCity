@@ -7,7 +7,6 @@ import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.BankCustomer;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
@@ -86,6 +85,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
 	public void setActive(){
@@ -204,9 +204,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	//  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		BankCustomer bankCustomer = new BankCustomerRole();
-		roles.add((Role) bankCustomer); // TODO clean up
-		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		restaurant.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
 		// TODO how does this work with different bank customer instances when the account number is tied to the role?
 	}
 	
