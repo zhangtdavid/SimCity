@@ -130,6 +130,7 @@ public class BankTellerRole extends Role implements BankTeller {
 
 			if(currentCustomer.s == serviceState.done){
 				GetNewCustomer();
+				return true;
 			}
 		}
 		return false;

@@ -14,7 +14,7 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 
 	@Override
 	public void msgDepositCompleted() {
-		log.add(new LoggedEvent("Received msgDeposit completed"));
+		log.add(new LoggedEvent("Received msgDepositCompleted"));
 		// TODO Auto-generated method stub
 		
 	}
