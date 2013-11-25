@@ -8,10 +8,12 @@ import city.interfaces.Resident;
 
 public class AptBuilding extends ResidenceBaseBuilding{
 	
+	public final static int NUMBER_OF_BEDS = 5;
+	
 	public AptBuilding(String name, Landlord landlord) { 
 		super(name); // set building name
 		this.landlord = landlord;
-		this.landlord.setResidence(this);
+		//this.landlord.setResidence(this); // landlord != any of the residents
 	}
 	
 	public Landlord getLandlord() {
@@ -41,7 +43,7 @@ public class AptBuilding extends ResidenceBaseBuilding{
 		this.rent = rent;
 	}
 	
-	public void setResidents(List<Resident> residents) {
-		this.residents = residents;
+	public void addResident(Resident res) {
+		if(residents.size() < AptBuilding.NUMBER_OF_BEDS) residents.add(res);
 	}
 }

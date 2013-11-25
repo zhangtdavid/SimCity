@@ -30,6 +30,6 @@ public abstract class ResidenceBaseBuilding extends Building{
 	//setters abstract
 	public abstract void setRent(int i);
 	public abstract void setLandlord(Landlord landlord);
-	public abstract void setResidents(List<Resident> residents);
+	public abstract void addResident(Resident resident);
 	public abstract void setTotal_current_maintenance(int i);
 }

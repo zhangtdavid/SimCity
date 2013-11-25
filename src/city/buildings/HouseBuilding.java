@@ -1,24 +1,24 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import city.Application.FOOD_ITEMS;
 import java.util.*;
-
+import city.gui.HousePanel;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
+
 public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
-	
+	HousePanel panel;
+	public final static int NUMBER_OF_BEDS = 1;
 	// Constructor
 	
-	public HouseBuilding(String name, Landlord landlord) { // why not Landlord landlord?
-
+	public HouseBuilding(String name, Landlord landlord, HousePanel p) {
 		super(name);
-		this.landlord = landlord; // that'd eliminate the need for this cast
-		this.landlord.setResidence(this);
+		this.panel = p;
+		this.landlord = landlord; // THIS IS WHO YOU PAY RENT TO. HE MIGHT NOT LIVE HERE.
+		//this.landlord.setResidence(this); // relevant if landlord != resident 
+		//this.setResident("city.roles.ResidentRole"); // inferred by extrapolation... lol
+		//this.setResidentAnimation("city.animations.ResidentAnimation");
 	}
 
 	public Landlord getLandlord() {
@@ -48,8 +48,9 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		this.rent = rent;
 	}
 	
-	public void setResidents(List<Resident> residents) {
-		this.residents = residents;
+	public void addResident(Resident resident) {
+		if(residents.isEmpty()) //ONLY ONE PERSON PER HOUSE
+			this.residents.add(resident); 
 	}
 
 }

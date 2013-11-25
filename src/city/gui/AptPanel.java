@@ -12,6 +12,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.Animation;
+import city.buildings.AptBuilding;
 
 /**
  * A House contains:
@@ -22,7 +23,7 @@ import city.Animation;
  * One person lives in a house.
  * Some people own their own houses. (One person one house?)
  */
-public class HousePanel extends BuildingCard implements ActionListener{
+public class AptPanel extends BuildingCard implements ActionListener{
 	
 	/**
 	 * what does this do?
@@ -35,21 +36,21 @@ public class HousePanel extends BuildingCard implements ActionListener{
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-	static final int HRX = -10; // house refrigerator
-	static final int HRY = 100;
-	static final int HSX = -10; // house stove
-	static final int HSY = 250;
-	static final int HTX = -10; // house table
-	static final int HTY = 400;
-	static final int HBXi = 490; // initial house bed
-	static final int HBYi = 50;
-	static final int HBYint = 100; // y-Interval for house beds
-	// every house has 1 bed regardless of how many people there are; already furnished!
-	static final int NUMBER_OF_BEDS = 1;
+	static final int ARX = -10; // apt refrigerator
+	static final int ARY = 100;
+	static final int ASX = -10; // apt stove
+	static final int ASY = 250;
+	static final int ATX = -10; // apt table
+	static final int ATY = 400;
+	static final int ABXi = 490; // initial apt bed
+	static final int ABYi = 50;
+	static final int ABYint = 100; // y-Interval for apt beds
+	// every apt has 5 beds regardless of how many people there are; already furnished!
+	static final int NUMBER_OF_BEDS = 5; // could also refer to AptBuilding.NUMBER_OF_BEDS if desired
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
 	
 	//Constructor
-	public HousePanel(Color color, Dimension panelDimension){
+	public AptPanel(Color color, Dimension panelDimension){
 	  	super(color);
     	panelX = panelDimension.width;
     	panelY = panelDimension.height;
@@ -68,14 +69,17 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	        graphics2D.fillRect(0, 0, panelX, panelY);
 	        
 	        // Draw static elements (furniture)
-	        graphics.setColor(Color.CYAN); // Refrig 
-	        graphics.fillRect(HRX,HRY,WIDTH,WIDTH);
+	        // are we going to share to utilities or not? decision drawn here. (we share for now... waiting should be straightforward)
+	        graphics.setColor(Color.CYAN); // Refrig  
+	        graphics.fillRect(ARX,ARY,WIDTH,WIDTH);
 	        graphics.setColor(Color.RED); // Stove
-	        graphics.fillRect(HSX,HSY,WIDTH,WIDTH);
+	        graphics.fillRect(ASX,ASY,WIDTH,WIDTH);
 	        graphics.setColor(Color.DARK_GRAY); // Table
-	        graphics.fillRect(HTX,HTY,WIDTH,WIDTH);
-	        graphics.setColor(Color.BLACK); // Bed (1 for houses)
-	        graphics.fillRect(HBXi,HBYi,WIDTH,WIDTH);
+	        graphics.fillRect(ATX,ATY,WIDTH,WIDTH);
+	        graphics.setColor(Color.BLACK); 
+	        for(int i = 0; i < AptBuilding.NUMBER_OF_BEDS; i++){
+		        graphics.fillRect(ABXi,ABYi+ABYint,WIDTH,WIDTH);
+	        }// Bed (5 for apts)
 	        
 	        // Update the position of each visible element
 	        for(Animation animation : animations) {

@@ -21,11 +21,15 @@ import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.RestaurantChoiBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.BuildingCard;
+import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
+import city.gui.HousePanel;
 import city.gui.MainFrame;
+import city.gui.RestaurantChoiPanel;
 import city.gui.RestaurantZhangPanel;
 import city.gui.CityViewBuilding;
 import city.gui.CityViewRestaurant;
@@ -34,6 +38,10 @@ import city.gui.RestaurantTimmsPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
+import city.roles.RestaurantChoiCashierRole;
+import city.roles.RestaurantChoiCookRole;
+import city.roles.RestaurantChoiHostRole;
+import city.roles.RestaurantChoiWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangCustomerRole;
@@ -60,6 +68,8 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 	
 	public static RestaurantZhangBuilding rzb1;
+	public static RestaurantChoiBuilding rcb1;
+	public static HouseBuilding hb1;
     /**
      * Main routine to start the program.
      * 
@@ -92,19 +102,34 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+		
 		// FIRST add a panel
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		//RestaurantChoiPanel rcp1 = new RestaurantChoiPanel(Color.GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		//CityViewRestaurant restaurantChoi1 = new CityViewRestaurant(200, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, rcp1);
+		
 		// THIRD add it to the list of statics in the cityView
 		mainFrame.cityView.addStatic(restaurantZhang1);
+		//mainFrame.cityView.addStatic(restaurantChoi1);
+		//mainFrame.cityView.addStatic(house1);
+		
 		// FOURTH create a new building, last argument is the panel in step ONE
 		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
 		rzp1.setTables(rzb1.tables);
+		//rcb1 = new RestaurantChoiBuilding("RestaurantChoi1", rcp1);
+		//hb1 = new HouseBuilding("House1", rhp1);
+		
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		//mainFrame.buildingView.addView(rcp1, restaurantChoi1.ID);
+		
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		//CityMap.addBuilding(BUILDING.restaurant, rcb1);
 		// SEVENTH create all your roles after
 
 		// Create buildings
@@ -114,30 +139,47 @@ public class Application {
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
-		HouseBuilding h0 = new HouseBuilding("House 0", p0r1);
+		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
+		p0r1.setResidence(h0); // this is a fix corresponding to changes made in Landlord and Resident
 		p0r1.setActive();
 		people.add(p0);
 		
 		// Create houses
-		HouseBuilding h1 = new HouseBuilding("House 1", p0r1);
-		HouseBuilding h2 = new HouseBuilding("House 2", p0r1);
-		HouseBuilding h3 = new HouseBuilding("House 3", p0r1);
-		HouseBuilding h4 = new HouseBuilding("House 4", p0r1);
+		HouseBuilding h1 = new HouseBuilding("House 1", p0r1, rhp1);
+		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp1);
+		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp1);
+		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp1);
+		/*HouseBuilding h5 = new HouseBuilding("House 5", p0r1);
+		HouseBuilding h6 = new HouseBuilding("House 6", p0r1);
+		HouseBuilding h7 = new HouseBuilding("House 7", p0r1);
+		HouseBuilding h8 = new HouseBuilding("House 8", p0r1);*/
 		
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
 		PersonAgent p2 = new PersonAgent("Cook 1", date);
 		PersonAgent p3 = new PersonAgent("Host 1", date);
 		PersonAgent p4 = new PersonAgent("Waiter 1", date);
+		PersonAgent p5 = new PersonAgent("Cashier 2", date);
+		PersonAgent p6 = new PersonAgent("Cook 2", date);
+		PersonAgent p7 = new PersonAgent("Host 2", date);
+		PersonAgent p8 = new PersonAgent("Waiter 2", date); 
 		people.add(p1);
 		people.add(p2);
 		people.add(p3);
 		people.add(p4);
+		/*people.add(p5);
+		people.add(p6);
+		people.add(p7);
+		people.add(p8);*/
 		p1.setHome(h1);
 		p2.setHome(h2);
 		p3.setHome(h3);
 		p4.setHome(h4);
+		/*p5.setHome(h5);
+		p6.setHome(h6);
+		p7.setHome(h7);
+		p8.setHome(h8);*/
 		
 		// Give people cars
 		CarAgent c0 = new CarAgent();
@@ -145,12 +187,20 @@ public class Application {
 		CarAgent c2 = new CarAgent();
 		CarAgent c3 = new CarAgent();
 		CarAgent c4 = new CarAgent();
+		/*CarAgent c5 = new CarAgent();
+		CarAgent c6 = new CarAgent();
+		CarAgent c7 = new CarAgent();
+		CarAgent c8 = new CarAgent();*/
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
 		p3.setCar(c3);
 		p4.setCar(c4);
-		
+		/*p5.setCar(c5);
+		p6.setCar(c6);
+		p7.setCar(c7);
+		p8.setCar(c8);*/
+	
 		// Create cashier
 		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role");
 		rzb1.addRole(p1r1);
@@ -170,18 +220,42 @@ public class Application {
 		RestaurantZhangWaiterRegularRole p4r1 = new RestaurantZhangWaiterRegularRole("Waiter 1 Role");
 		rzb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
-		
+/*
+		//Same for RestaurantChoi
+		RestaurantChoiCashierRole p1r2 = new RestaurantChoiCashierRole(rcb1, 0, 12);
+		rcb1.addRole(p1r2);
+		p5.setOccupation(p1r2);
+		RestaurantChoiCookRole p2r2 = new RestaurantChoiCookRole(rcb1, 0, 12);
+		rcb1.addRole(p2r2);
+		p6.setOccupation(p2r2);
+		RestaurantChoiHostRole p3r2 = new RestaurantChoiHostRole(rcb1, 0, 12);
+		rcb1.addRole(p3r2);
+		p7.setOccupation(p3r2);
+		RestaurantChoiWaiterRole p4r2 = new RestaurantChoiWaiterRole("Waiter 2 Role");
+		rcb1.addRole(p4r2);
+		p8.setOccupation(p4r2);
+	*/	
 		// Start threads
+		
 		c0.startThread();
 		c1.startThread();
 		c2.startThread();
 		c3.startThread();
 		c4.startThread();
+		/*c5.startThread();
+		c6.startThread();
+		c7.startThread();
+		c8.startThread();*/
 		p0.startThread();
 		p1.startThread();
 		p2.startThread();
 		p3.startThread();
 		p4.startThread();
+		/*p5.startThread();
+		p6.startThread();
+		p7.startThread();
+		p8.startThread();*/
+		
 	}
 	
 	public static class CityMap {
