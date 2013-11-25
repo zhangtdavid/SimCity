@@ -11,7 +11,7 @@ import city.interfaces.RestaurantZhangWaiter;
 public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZhangCustomer {
 	
 	public MockRestaurantZhangCustomer() {
-		
+		super();
 	}
 	
 	public void msgHereIsCustCheck(RestaurantZhangCheck c) {

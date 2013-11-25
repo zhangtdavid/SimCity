@@ -90,7 +90,7 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	}
 
 	@Override
-	public void msgAtTable() {
+	public void msgAtDestination() {
 		// TODO Auto-generated method stub
 		
 	}

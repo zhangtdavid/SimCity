@@ -122,7 +122,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		//		stateChanged();
 	}
 
-	public void msgAtBase() { //from animation
+	public void msgAtDestination() { //from animation
 		atBase.release();
 		stateChanged();
 	}

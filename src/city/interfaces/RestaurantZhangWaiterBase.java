@@ -132,7 +132,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 
-	public void msgAtTable() { //from animation
+	public void msgAtDestination() { //from animation
 		atTable.release();
 		stateChanged();
 	}

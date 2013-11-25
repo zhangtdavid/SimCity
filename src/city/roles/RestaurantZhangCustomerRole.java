@@ -9,6 +9,7 @@ import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
 import city.Role;
 import city.animations.RestaurantZhangCustomerAnimation;
+import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
@@ -24,32 +25,32 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	private static final int EATINGTIME = 6000;
 	private static final int CHANCETOLEAVE = 2;
 	Timer timer = new Timer(); // Timer for waiting actions
-	private RestaurantZhangCustomerAnimation customerAnimation;
+	private RestaurantZhangAnimatedCustomer customerAnimation;
 	
-	private RestaurantZhangTable myTable;
+	public RestaurantZhangTable myTable;
 
 	// Agent correspondents
-	private RestaurantZhangHost host;
-	private RestaurantZhangWaiter myWaiter;
+	public RestaurantZhangHost host;
+	public RestaurantZhangWaiter myWaiter;
 	
 	public int waitingPosition;
 	
 	// Menu and choices
-	RestaurantZhangMenu customerMenu;
-	String choice;
+	public RestaurantZhangMenu customerMenu;
+	public String choice;
 	
-	RestaurantZhangCashier myCashier;
-	RestaurantZhangCheck myCheck;
-	double money;
-	double myTab = 0.00;
+	public RestaurantZhangCashier myCashier;
+	public RestaurantZhangCheck myCheck;
+	public double money;
+	public double myTab = 0.00;
 	
 	public enum AgentState
 	{DoingNothing, AtEntrance, GoingToWaitingPosition, WaitingInRestaurant, ChoosingToLeave, DecidedToWait, BeingSeated, Deciding, Ordering, Ordered, Eating, WaitingForCheck, PayingForCheck, Leaving};
-	private AgentState state = AgentState.DoingNothing;
+	public AgentState state = AgentState.DoingNothing;
 
 	public enum AgentEvent 
 	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
-	AgentEvent event = AgentEvent.none;
+	public AgentEvent event = AgentEvent.none;
 
 	/**
 	 * Constructor for CustomerAgent class
@@ -393,7 +394,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		return "customer " + getName();
 	}
 
-	public void setAnimation(RestaurantZhangCustomerAnimation g) {
+	public void setAnimation(RestaurantZhangAnimatedCustomer g) {
 		customerAnimation = g;
 	}
 	
@@ -401,7 +402,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		myCashier = c;
 	}
 	
-	public RestaurantZhangCustomerAnimation getGui() {
+	public RestaurantZhangAnimatedCustomer getGui() {
 		return customerAnimation;
 	}
 	
