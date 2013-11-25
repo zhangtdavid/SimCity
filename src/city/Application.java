@@ -93,13 +93,14 @@ public class Application {
 	private static void parseConfig() {
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
 		// THIRD add it to the list of statics in the cityView
 		mainFrame.cityView.addStatic(restaurantZhang1);
 		// FOURTH create a new building, last argument is the panel in step ONE
 		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
+		rzp1.setTables(rzb1.tables);
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
 		// SIXTH add the new building to the map

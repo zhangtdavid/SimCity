@@ -94,7 +94,7 @@ public class RestaurantZhangBuilding extends Building {
 			w.setMenu(menu);
 			host.addWaiter(w);
 			if(!allRoles.containsKey(w)) {
-				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 50, 200); 
+				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
@@ -110,7 +110,7 @@ public class RestaurantZhangBuilding extends Building {
 			w.setHost(host);
 			w.setMenu(menu);
 			if(!allRoles.containsKey(w)) {
-				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 50, 200); 
+				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
