@@ -7,7 +7,6 @@ import java.util.Map;
 
 import city.Animation;
 import city.Building;
-import city.RestaurantBuilding;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungCustomerAnimation;
@@ -28,7 +27,7 @@ import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-public class RestaurantChungBuilding extends RestaurantBuilding {
+public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 
 //  Food
 //  =====================================================================

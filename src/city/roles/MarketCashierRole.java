@@ -196,13 +196,13 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public boolean runScheduler() {
 		// Role Scheduler
 		boolean blocking = false;
-//		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
-//			blocking  = true;
-//			boolean activity = market.bankCustomer.runScheduler();
-//			if (!activity) {
-//				market.bankCustomer.setActivityFinished();
-//			}
-//		}
+		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
+			blocking  = true;
+			boolean activity = market.bankCustomer.runScheduler();
+			if (!activity) {
+				market.bankCustomer.setActivityFinished();
+			}
+		}
 		
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.cashier != this)
@@ -265,7 +265,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill, t.orderId);			
 		}
 		else
-			t.customerDeliveryPayment.msgHereIsBill(this, t.bill, t.orderId);
+			t.customerDeliveryPayment.msgHereIsBill(t.bill, t.orderId);
 			
 	}
 	
@@ -315,33 +315,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		for(Transaction t : transactions){
 			if(t.orderId == id) {
 				return t;
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomer c) {
-		for(Transaction t : transactions){
-			if(t.customer == c) {
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomerDelivery c) {
-		for(Transaction t : transactions){
-			if(t.customerDelivery == c) {
-				return t;		
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomerDeliveryPayment c) {
-		for(Transaction t : transactions){
-			if(t.customerDeliveryPayment == c) {
-				return t;		
 			}
 		}
 		return null;

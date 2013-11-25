@@ -32,4 +32,10 @@ public abstract class ResidenceBaseBuilding extends Building{
 	public abstract void setLandlord(Landlord landlord);
 	public abstract void setResidents(List<Resident> residents);
 	public abstract void setTotal_current_maintenance(int i);
+
+	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
+        for (FOOD_ITEMS s: receivedItems.keySet()) {
+        	foodItems.put(s, foodItems.get(s)+receivedItems.get(s)); // Add delivered food items to restaurant inventory
+        }		
+	}
 }

@@ -7,11 +7,11 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
+import city.buildings.RestaurantBaseBuilding;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
-import city.RestaurantBuilding;
 import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
@@ -20,7 +20,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	private RestaurantBuilding restaurant;
+	private RestaurantBaseBuilding restaurant;
 	
 	private MarketBuilding market;
 	private MarketManager manager;
@@ -36,7 +36,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole(RestaurantBuilding r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
+	public MarketCustomerDeliveryRole(RestaurantBaseBuilding r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
 		restaurant = r;
         for (FOOD_ITEMS s: order.orderItems.keySet()) {
@@ -88,6 +88,15 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 //  Getters and Setters
 //	=====================================================================
+	// Restaurant
+	public RestaurantBaseBuilding getRestaurant() {
+		return restaurant;
+	}
+	
+	public void setRestaurant(RestaurantBaseBuilding restaurant) {
+		this.restaurant = restaurant;
+	}
+	
 	// Market
 	public MarketBuilding getMarket() {
 		return market;
@@ -104,7 +113,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 	public void setManager(MarketManager manager) {
 		this.manager = manager;
-	}
+	}	
 	
 //  Utilities
 //	=====================================================================

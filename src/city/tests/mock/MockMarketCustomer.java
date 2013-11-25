@@ -44,4 +44,16 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 		
 	}
 
+	@Override
+	public void msgAnimationAtCounter() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

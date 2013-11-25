@@ -23,8 +23,6 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private Building restaurant;
 	
 	private MarketBuilding market;
-	private MarketManager manager;
-	private MarketCashier cashier;
 	
 	public List<MarketTransaction> marketTransactions; // list shared with the restaurant cashier
 	
@@ -46,12 +44,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================	
 //	Market Cashier
 //	---------------------------------------------------------------
-	public void msgHereIsBill(MarketCashier c, int bill, int id) {
+	public void msgHereIsBill(int bill, int id) {
 		log.add(new LoggedEvent("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
 		System.out.println("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.s = MarketTransactionState.Processing;
-		cashier = c;
 		mt.bill = bill;
 		stateChanged();
 	}
@@ -81,7 +78,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private void pay(MarketTransaction mt) {
 		int payment = checkBill(mt);
 		if (payment != -1) {
-			cashier.msgHereIsPayment(mt.order.orderId, payment);
+			market.cashier.msgHereIsPayment(mt.order.orderId, payment);
 			restaurant.setCash(restaurant.getCash()-payment);
 	    	mt.s = MarketTransactionState.WaitingForConfirmation;
 		}
@@ -101,24 +98,6 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
-	
-	// Manager
-	public MarketManager getManager() {
-		return manager;
-	}
-	
-	public void setManager(MarketManager manager) {
-		this.manager = manager;
-	}
-	
-	// Cashier
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	public void setCashier(MarketCashier cashier) {
-		this.cashier = cashier;
-	}	
 	
 //  Utilities
 //	=====================================================================

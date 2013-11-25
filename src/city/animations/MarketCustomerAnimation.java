@@ -51,6 +51,8 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
+			if (command == Command.GoToCounter) customer.msgAnimationAtCounter();
+			if (command == Command.GoToCashier) customer.msgAnimationAtCashier();
 			if (command == Command.LeaveMarket) customer.msgAnimationFinishedLeaveMarket();
 			command=Command.noCommand;
 		}
@@ -80,6 +82,7 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 	public void DoGoToCounter(int loc) {
 		xDestination = xCounter+(50*loc);
 		yDestination = yCounter;		
+		command = Command.GoToCounter;
 	}
 	
 	public void DoGoToWaitingArea() {

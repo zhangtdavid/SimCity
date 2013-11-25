@@ -1,15 +1,17 @@
-package city;
+package city.buildings;
 
 import java.util.HashMap;
 import java.util.Map;
 
+import city.Application;
+import city.Building;
 import city.Application.FOOD_ITEMS;
 
 /**
  * The base restaurant class for all SimCity201 Restaurants.
  * 
  */
-public abstract class RestaurantBuilding extends Building {
+public abstract class RestaurantBaseBuilding extends Building {
 	
 	// Data
 	
@@ -37,7 +39,7 @@ public abstract class RestaurantBuilding extends Building {
 	
 	// Constructor
 
-	public RestaurantBuilding(String name) {
+	public RestaurantBaseBuilding(String name) {
 		super(name);
 	}
     

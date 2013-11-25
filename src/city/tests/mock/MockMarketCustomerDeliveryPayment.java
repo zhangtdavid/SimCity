@@ -18,7 +18,7 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	}
 
 	@Override
-	public void msgHereIsBill(MarketCashier c, int bill, int id) {
+	public void msgHereIsBill(int bill, int id) {
 		log.add(new LoggedEvent("CustomerDeliveryPayment received msgHereIsBill from cashier. The bill is for " + bill));		
 		System.out.println("CustomerDeliveryPayment received msgHereIsBill from cashier. The bill is for " + bill);		
 	}
@@ -28,5 +28,4 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 		log.add(new LoggedEvent("CustomerDeliveryPayment received msgPaymentReceived from cashier."));		
 		System.out.println("CustomerDeliveryPayment received msgPaymentReceived from cashier.");		
 	}
-
 }

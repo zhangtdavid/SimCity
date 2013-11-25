@@ -16,6 +16,8 @@ public interface MarketCustomer extends RoleInterface {
 	public abstract void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id);
 	public abstract void msgPaymentReceived();
 	public abstract void msgAnimationFinishedLeaveMarket();
+	public abstract void msgAnimationAtCounter();
+	public abstract void msgAnimationAtCashier();
 
 	// Scheduler
 	
