@@ -9,7 +9,7 @@ import city.animations.RestaurantChungCustomerAnimation;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 
 /**
  * Restaurant Customer agent.
@@ -20,7 +20,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	private RestaurantChungCustomerAnimation customerGui;
 	private RestaurantChungHost host;
 	private RestaurantChungCashier cashier;
-	private RestaurantChungWaiterBase waiter;
+	private RestaurantChungWaiter waiter;
 	int positionInLine;
 	Timer timer = new Timer();
 	private Semaphore atSeat = new Semaphore(0, true);
@@ -83,7 +83,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
-	public void msgFollowMeToTable(RestaurantChungWaiterBase waiter, RestaurantChungMenu menu) {
+	public void msgFollowMeToTable(RestaurantChungWaiter waiter, RestaurantChungMenu menu) {
 		print("Customer received msgFollowMeToTable");
 		this.waiter = waiter;
 		this.menu = new RestaurantChungMenu(menu);
@@ -151,7 +151,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public void msgAnimationFinishedLeaveRestaurant() {
 		print("Customer received msgAnimationFinishedLeaveRestaurant");
 		event = AgentEvent.doneLeaving;
-		stateChanged();
+		super.setInactive();
 	}
 	
 	public void msgKickingYouOutAfterPaying(int debt) {

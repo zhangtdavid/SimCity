@@ -19,12 +19,6 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 		// TODO Auto-generated method stub
 		
 	}
-	
-	@Override
-	public void msgAnimationArrivedAtMarket() {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
@@ -45,19 +39,19 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public void msgAnimationAtEntrance() {
+	public void msgAnimationFinishedLeaveMarket() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCounter() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void msgAnimationAtCashier() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgAnimationFinishedLeaveMarket() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -7,15 +7,15 @@ import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.BankCustomer;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import utilities.MarketTransaction;
 /**
  * Restaurant Cook Agent
  */
@@ -34,20 +34,19 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	private List<Role> roles = new ArrayList<Role>();
 
-	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 
 //	Transactions
 //	=====================================================================	
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	public class Transaction {
-		RestaurantChungWaiterBase w;
+		RestaurantChungWaiter w;
 		RestaurantChungCustomer c;
 		String choice;
 		public int price;
 		public int payment;
 		public TransactionState s;
 		
-		public Transaction(RestaurantChungWaiterBase w2, RestaurantChungCustomer customer, String order, TransactionState state) {
+		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, String order, TransactionState state) {
 			w = w2;
 			c = customer;
 			choice = order;
@@ -60,28 +59,21 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public enum TransactionState
 	{None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	
 	// list market transactions
-	public class MarketTransaction {
-		MarketBuilding market;
-		MarketOrder order;
-		public int bill;
-		public MarketTransactionState s;
-		
-		public MarketTransaction (MarketBuilding m, MarketOrder o) {
-			market = m;
-			order = new MarketOrder(o);
-	        bill = 0;
-			s = MarketTransactionState.Pending;
-		}
-	}
-	public enum MarketTransactionState
-	{Pending, Processing, WaitingForConfirmation};
+
 		
 //	Constructor
 //	=====================================================================		
-	public RestaurantChungCashierRole() {
+	public RestaurantChungCashierRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
 	public void setActive(){
@@ -96,11 +88,14 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	=====================================================================
 //	Waiter
 //	---------------------------------------------------------------
-	public void msgComputeBill(RestaurantChungWaiterBase w, RestaurantChungCustomer c, String order) {
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
-		transactions.add(new Transaction(w, c, order, TransactionState.Pending));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			transactions.add(new Transaction(w, c, order, TransactionState.Pending));
+			stateChanged();
+		}
+		// TODO inform sender of inactivity
 	}
 
 //	Restaurant Customer
@@ -146,9 +141,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (transactions.size() == 0 && marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();
-		
 		if (restaurant.getCash() > 1000)
 			depositMoney();
 		
@@ -187,6 +179,9 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				}
 			}
 		}
+		
+		if (marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
+			super.setInactive();
 
 		return blocking;
 		//we have tried all our rules and found
@@ -197,9 +192,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	//  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		BankCustomer bankCustomer = new BankCustomerRole();
-		roles.add((Role) bankCustomer); // TODO clean up
-		bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		restaurant.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		// TODO how does this work with different bank customer instances when the account number is tied to the role?
 	}
 	
 	private void computeBill(Transaction t) {

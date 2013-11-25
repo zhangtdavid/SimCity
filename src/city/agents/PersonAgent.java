@@ -300,7 +300,7 @@ public class PersonAgent extends Agent implements Person {
 			Constructor<?> r0 = c0.getConstructor(String.class);
 			restaurantCustomerRole = (Role) r0.newInstance(name);
 			Application.rzb1.addRole(restaurantCustomerRole);
-			//Application.rcb1.addRole(restaurantCustomerRole);
+			Application.rcb1.addRole(restaurantCustomerRole);
 			addRole(restaurantCustomerRole);
 			
 //			Class<?> c1 = Class.forName(b.getCustomerAnimation());

@@ -9,10 +9,8 @@ import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.animations.interfaces.MarketAnimatedCustomer;
 import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
-import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -22,14 +20,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
-	private MarketManager manager;
-	private MarketCashier cashier;
 	private MarketEmployee employee;
 	
 	private MarketOrder order;
     private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	int loc;
+	int loc; // stall number of employee
 	
 	int money;
 	int bill;
@@ -39,17 +35,15 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	MarketCustomerState state;
 	
 	private enum MarketCustomerEvent
-	{ArrivedAtMarket, AskedForOrder, OrderReady, PaymentReceived};
+	{ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
 	MarketCustomerEvent event;
 
 //	Gui
 //	---------------------------------------------------------------
 	private MarketAnimatedCustomer marketCustomerGui;
-	private Semaphore atServiceLine = new Semaphore(0, true);
-	private Semaphore atCounter = new Semaphore(0, true);
-	private Semaphore atOrderLine = new Semaphore(0, true);
+	private Semaphore atCounter = new Semaphore(0, true);	
 	private Semaphore atCashier = new Semaphore(0, true);
-	
+
 //	Constructor
 //	---------------------------------------------------------------
 	public MarketCustomerRole(MarketOrder o) {
@@ -57,9 +51,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         for (FOOD_ITEMS s: order.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
-    }	
+		state = MarketCustomerState.None;
+  }	
 	
 	public void setActive(){
+		event = MarketCustomerEvent.ArrivedAtMarket;
 		this.setActivityBegun();
 	}
 	
@@ -81,6 +77,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
+        this.getPerson().getHome().addFood(receivedItems);
         this.bill = bill;
 		stateChanged();
 	}
@@ -94,26 +91,20 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //	Gui
 //	---------------------------------------------------------------
-	public void msgAnimationArrivedAtMarket() {
-		System.out.println("Market customer received msgAnimationArrivedAtMarket");
-		event = MarketCustomerEvent.ArrivedAtMarket;
+	public void msgAnimationAtCounter() {
+		print("Market Customer received msgAnimationAtCounter");
+		atCounter.release();
 		stateChanged();
 	}
 	
-	public void msgAnimationAtEntrance() {
-		System.out.println("Market customer received msgAnimationArrivedAtMarket");
-		event = MarketCustomerEvent.ArrivedAtMarket;
-		stateChanged();		
-	}
-
 	public void msgAnimationAtCashier() {
-		System.out.println("Market customer received msgAnimationAtCashier");
-		//from animation
-		atCashier.release();// = true;
-		stateChanged();		
+		print("Market Customer received msgAnimationAtCounter");
+		atCashier.release();
+		stateChanged();
 	}
-
+	
 	public void msgAnimationFinishedLeaveMarket() {
+		print("Market Customer received msgAnimationFinishedLeaveMarket");
 		super.setActive();
 	}
 	
@@ -147,34 +138,21 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	=====================================================================	
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
-		manager.msgIWouldLikeToPlaceAnOrder(this);
-		marketCustomerGui.DoStandInWaitingForServiceLine();
-//		try {
-//		atServiceLine.acquire();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-			
+		market.manager.msgIWouldLikeToPlaceAnOrder(this);
+		marketCustomerGui.DoStandInWaitingForServiceLine();			
 	}
 	
 	private void giveOrder() {
 		state = MarketCustomerState.WaitingForOrder;
 		marketCustomerGui.DoGoToCounter(loc);
 //		try {
-//		atCounter.acquire();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//			atCounter.acquire();
+	//	} catch (InterruptedException e) {
+	//		// TODO Auto-generated catch block
+	//		e.printStackTrace();
+	//	}
 		employee.msgHereIsMyOrder(this, order.orderItems, order.orderId);
-		marketCustomerGui.DoStandInWaitingForServiceLine();
-//		try {
-//		atOrderLine.acquire();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}			
+		marketCustomerGui.DoStandInWaitingForServiceLine();		
 	}
 	
 	private void pickUpOrderAndPay() {
@@ -182,19 +160,18 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		marketCustomerGui.DoGoToCashier();
 //		try {
 //		atCashier.acquire();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+//	} catch (InterruptedException e) {
+//		// TODO Auto-generated catch block
+//		e.printStackTrace();
+//	}
 		int payment = checkBill();
 		if (payment != -1) 
-			cashier.msgHereIsPayment(order.orderId, payment);			
+			market.cashier.msgHereIsPayment(order.orderId, payment);			
 	}
 	
 	private void leaveMarket() {
 		state = MarketCustomerState.None;
 		marketCustomerGui.DoExitMarket();
-		super.setInactive();
 	}
 	
 //  Getters and Setters
@@ -206,24 +183,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
-	}
-	
-	// Manager
-	public MarketManager getManager() {
-		return manager;
-	}
-	
-	public void setManager(MarketManager manager) {
-		this.manager = manager;
-	}
-	
-	// Cashier
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	public void setCashier(MarketCashier cashier) {
-		this.cashier = cashier;
 	}
 	
 //  Utilities

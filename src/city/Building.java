@@ -1,5 +1,9 @@
 package city;
 
+import java.util.Map;
+
+import city.Application.FOOD_ITEMS;
+
 /**
  * The base class for all SimCity201 Buildings.
  * 
