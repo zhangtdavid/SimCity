@@ -36,6 +36,7 @@ public interface Resident extends RoleInterface {
 	
 	public abstract boolean rentIsDue();
 
+
 	
 	// Classes
 

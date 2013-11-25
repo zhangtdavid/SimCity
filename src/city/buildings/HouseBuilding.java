@@ -1,15 +1,31 @@
 package city.buildings;
 
 import java.util.*;
+
+import city.Animation;
+import city.Application.FOOD_ITEMS;
+import city.Role;
+import city.animations.ResidentAnimation;
+import city.animations.RestaurantZhangCookAnimation;
+import city.animations.RestaurantZhangCustomerAnimation;
+import city.animations.RestaurantZhangWaiterAnimation;
 import city.gui.HousePanel;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
+import city.roles.ResidentRole;
+import city.roles.RestaurantZhangCashierRole;
+import city.roles.RestaurantZhangCookRole;
+import city.roles.RestaurantZhangCustomerRole;
+import city.roles.RestaurantZhangHostRole;
+import city.roles.RestaurantZhangWaiterRegularRole;
+import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
 	HousePanel panel;
 	public final static int NUMBER_OF_BEDS = 1;
+	Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
 	// Constructor
 	
 	public HouseBuilding(String name, Landlord landlord, HousePanel p) {
@@ -17,8 +33,8 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		this.panel = p;
 		this.landlord = landlord; // THIS IS WHO YOU PAY RENT TO. HE MIGHT NOT LIVE HERE.
 		//this.landlord.setResidence(this); // relevant if landlord != resident 
-		//this.setResident("city.roles.ResidentRole"); // inferred by extrapolation... lol
-		//this.setResidentAnimation("city.animations.ResidentAnimation");
+		this.setResidentRole("city.roles.ResidentRole"); // inferred by extrapolation... lol
+		this.setResidentAnimation("city.animations.ResidentAnimation");
 	}
 
 	public Landlord getLandlord() {
@@ -52,5 +68,25 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		if(residents.isEmpty()) //ONLY ONE PERSON PER HOUSE
 			this.residents.add(resident); 
 	}
+	public Role addRole(Role r) {
+		if(r instanceof ResidentRole) {
+			ResidentRole c = (ResidentRole)r;
+			if(!allRoles.containsKey(c)) {
+				ResidentAnimation anim = new ResidentAnimation(c); 
+				c.setAnimation(anim);
+				anim.isVisible = true;
+				panel.addVisualizationElement(anim);
+				residents.add(c);
+				allRoles.put(c, anim);
+			}
+			return c;
+		}
+		return null;
+	}
 
+	@Override
+	public void addFood(FOOD_ITEMS f, int toadd) {
+		foodItems.put(f, foodItems.get(f)+toadd);
+	}
+	
 }

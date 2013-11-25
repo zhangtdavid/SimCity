@@ -32,4 +32,5 @@ public abstract class ResidenceBaseBuilding extends Building{
 	public abstract void setLandlord(Landlord landlord);
 	public abstract void addResident(Resident resident);
 	public abstract void setTotal_current_maintenance(int i);
+	public abstract void addFood(FOOD_ITEMS f, int toadd);
 }

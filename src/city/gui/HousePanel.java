@@ -96,9 +96,7 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	    public void addVisualizationElement(Animation ve) {
 	    	animations.add(ve);
 	    }
-	
-	
-	
+
 	@Override
 	public void actionPerformed(ActionEvent arg0) {repaint();}
 }

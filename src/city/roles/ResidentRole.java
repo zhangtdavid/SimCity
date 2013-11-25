@@ -29,7 +29,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	// Messages
-
+	
 	// Scheduler
 	@Override
 	public boolean runScheduler() {
@@ -50,7 +50,7 @@ public class ResidentRole extends Role implements Resident {
 			this.getPerson().setCash((int)(this.getPerson().getCash()-house.total_current_maintenance/house.residents.size())); // lose $ for maintenance;
 		System.out.println(rentLastPaid.getTime());
 		rentLastPaid = this.getPerson().getDate();
-		this.setInactive();
+		this.setInactive(); // step out of resident role
 	}
 
 	// Getters

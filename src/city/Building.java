@@ -12,6 +12,8 @@ public abstract class Building {
 	private String name; // Name of the building (e.g. "Market" or "RestaurantJP" or "House 1")
 	private String customerRole; // The class name of the role that interacts with this building as a customer
 	private String customerAnimation; // The class name of the animation that interacts with this building as a customer
+	private String residentRole;
+	private String residentAnimation;
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
 
 	// Constructor
@@ -57,6 +59,12 @@ public abstract class Building {
 	
 	public void setCustomerAnimation(String c) {
 		this.customerAnimation = c;
+	}
+	public void setResidentRole(String r){
+		this.residentRole = r;
+	}
+	public void setResidentAnimation(String r){
+		this.residentAnimation = r;
 	}
 	
 	// Utilities 
