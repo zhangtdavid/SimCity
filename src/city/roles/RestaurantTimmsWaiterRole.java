@@ -9,11 +9,11 @@ import java.util.concurrent.Semaphore;
 
 import city.Application;
 import city.Role;
+import city.animations.interfaces.RestaurantTimmsAnimatedCook;
+import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
-import city.interfaces.RestaurantTimmsCashier;
-import city.interfaces.RestaurantTimmsCook;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
 /**
@@ -27,12 +27,10 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	private String menuItem;
 	public String lastMessage;
 	private String lastAction;
-	private RestaurantTimmsCook cook;
-	private RestaurantTimmsHost host;
-	private RestaurantTimmsCashier cashier;
 	private int homePosition;
-	private RestaurantTimmsAnimatedWaiter animation;
 	private Timer timer = new Timer();
+	private RestaurantTimmsBuilding rtb;
+	private RestaurantTimmsAnimatedWaiter animation = null;
 	
 	public List<InternalCustomer> customers = new ArrayList<InternalCustomer>();
 	
@@ -45,21 +43,31 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	// Constructor
 	
-	public RestaurantTimmsWaiterRole(RestaurantTimmsCook cook, RestaurantTimmsHost host, RestaurantTimmsCashier cashier, int homePosition) {
+	/**
+	 * Construct a RestaurantTimmsWaiterRole.
+	 * 
+	 * @param b the RestaurantTimmsBuilding that this waiter will work at
+	 * @param shiftStart the hour (0-23) that the role's shift begins
+	 * @param shiftEnd the hour (0-23) that the role's shift ends
+	 * @param homePosition the index of the waiter, giving him a position to stand in when not working
+	 */
+	public RestaurantTimmsWaiterRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd, int homePosition) {
 		super();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		this.wantsBreak = false;
 		this.tiredness = 15;
-		this.cook = cook;
-		this.host = host;
-		this.cashier = cashier;
 		this.menuItem = null;
 		this.homePosition = homePosition;
 		this.lastMessage = "Constructed";
 		this.lastAction = "Constructed";
+		this.rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
 	}
 	
 	// Messages
 	
+	@Override
 	public void msgWantBreak() {
 		print("msgWantBreak");
 		this.lastMessage = "msgWantBreak";
@@ -67,12 +75,14 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAllowBreak(Boolean r) {
 		print("msgAllowBreak - " + r.toString());
 		this.wantsBreak = r;
 		waiterHover.release();
 	}
 	
+	@Override
 	public void msgSeatCustomer(RestaurantTimmsCustomer c, int n) {
 		print("msgSeatCustomer");
 		this.lastMessage = "msgSeatCustomer";
@@ -80,6 +90,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		stateChanged();
 	}
 	
+	@Override
 	public void msgWantFood(RestaurantTimmsCustomer c) {
 		print("msgWantFood");
 		this.lastMessage = "msgWantFood";
@@ -88,6 +99,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOrderFood(RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		print("msgOrderFood");
 		this.lastMessage = "msgOrderFood";
@@ -97,6 +109,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		waiterHover.release();
 	}
 	
+	@Override
 	public void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock) {
 		print("msgOrderPlaced");
 		this.lastMessage = "msgOrderPlaced";
@@ -110,6 +123,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		waiterHover.release();
 	}
 	
+	@Override
 	public void msgFoodReady(RestaurantTimmsCustomer c) {
 		print("msgFoodReady");
 		this.lastMessage = "msgFoodReady";
@@ -118,12 +132,14 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		stateChanged();
 	}
 	
+	@Override
 	public void msgCheckReady() {
 		print("msgCheckReady");
 		this.lastMessage = "msgCheckReady";
 		waiterHover.release();
 	}
 	
+	@Override
 	public void msgDoNotWantFood(RestaurantTimmsCustomer c) {
 		print("msgDoNotWantFood");
 		this.lastMessage = "msgDoNotWantFood";
@@ -132,24 +148,28 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		waiterHover.release();
 	}
 	
+	@Override
 	public void guiAtCustomer() {
 		print("guiAtCustomer");
 		this.lastMessage = "guiAtCustomer";
 		atCustomer.release();
 	}
 	
+	@Override
 	public void guiAtTable() {
 		print("guiAtTable");
 		this.lastMessage = "guiAtTable";
 		atTable.release();
 	}
 	
+	@Override
 	public void guiAtKitchen() {
 		print("guiAtKitchen");
 		this.lastMessage = "guiAtKitchen";
 		atKitchen.release();
 	}
 	
+	@Override
 	public void guiAtHome() {
 		print("guiAtHome");
 		this.lastMessage = "guiAtHome";
@@ -161,7 +181,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	private void actAskForBreak() throws InterruptedException {
 		print("actAskForBreak");
 		this.lastAction = "actAskForBreak";
-		host.msgAskForBreak(this);
+		rtb.host.msgAskForBreak(this);
 		waiterHover.acquire();
 		
 		if (wantsBreak) {
@@ -182,7 +202,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	private void actSeatCustomer(InternalCustomer c) throws InterruptedException {
 		print("actSeatCustomer");
 		this.lastAction = "actSeatCustomer";
-		animation.goToCustomer(c.getCustomer().getAnimation());
+		animation.goToCustomer(c.getCustomer().getAnimation(RestaurantTimmsAnimatedCustomer.class));
 		atCustomer.acquire();
 		animation.goToTable(c.getTableNumber(), null);
 		c.getCustomer().msgGoToTable(this, c.getTableNumber());
@@ -211,9 +231,9 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		print("actPlaceOrder");
 		this.lastAction = "actPlaceOrder";
 		RestaurantTimmsCustomer customer = c.getCustomer();
-		animation.goToKitchen(cook.getAnimation());
+		animation.goToKitchen(rtb.cook.getAnimation(RestaurantTimmsAnimatedCook.class));
 		atKitchen.acquire();
-		cook.msgCookOrder(this, customer, c.getStockItem());
+		rtb.cook.msgCookOrder(this, customer, c.getStockItem());
 		waiterHover.acquire();
 	}
 	
@@ -221,21 +241,22 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		print("actDeliverOrder");
 		this.lastAction = "actDeliverOrder";
 		RestaurantTimmsCustomer customer = c.getCustomer();
-		animation.goToKitchen(cook.getAnimation());
+		animation.goToKitchen(rtb.cook.getAnimation(RestaurantTimmsAnimatedCook.class));
 		atKitchen.acquire();
-		cook.msgPickUpOrder(customer);
+		rtb.cook.msgPickUpOrder(customer);
 		menuItem = c.getStockItem().toString();
 		animation.goToTable(c.getTableNumber(), c.getStockItem().toString());
 		atTable.acquire();
 		menuItem = null;
 		customer.msgWaiterDeliveredFood(c.getStockItem());
 		c.setState(InternalCustomer.State.none);
-		cashier.msgComputeCheck(this, c.getCustomer(), cook.getMenuItemPrice(c.getStockItem()));
+		rtb.cashier.msgComputeCheck(this, c.getCustomer(), rtb.cook.getMenuItemPrice(c.getStockItem()));
 		waiterHover.acquire();
 	}
 	
 	// Scheduler
 
+	@Override
 	public boolean runScheduler() {
 		InternalCustomer temp = null;
 		
@@ -296,38 +317,18 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	// Get
 	
-	public RestaurantTimmsHost getHost() {
-		return this.host;
-	}
-	
+	@Override
 	public Boolean getWantsBreak() {
 		return this.wantsBreak;
 	}
 	
-	public String getMenuItem() {
-		if (this.menuItem == null) {
-			return "Nothing";
-		} else {
-			return this.menuItem;
-		}
-	}
-	
-	public String getLastMessage() {
-		return lastMessage;
-	}
-	
-	public String getLastAction() {
-		return lastAction;
-	}
-	
-	public RestaurantTimmsAnimatedWaiter getAnimation() {
-		return this.animation;
-	}
-	
 	// Set
 	
-	public void setAnimation(RestaurantTimmsAnimatedWaiter animation) {
-		this.animation = animation;
+	@Override
+	public void setActive() {
+		this.animation = this.getAnimation(RestaurantTimmsAnimatedWaiter.class);
+		super.setActive();
+		// TODO
 	}
 	
 	// Utilities

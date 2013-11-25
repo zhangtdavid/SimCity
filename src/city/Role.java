@@ -1,5 +1,6 @@
 package city;
 
+import city.interfaces.AnimationInterface;
 import city.interfaces.Person;
 import city.interfaces.RoleInterface;
 
@@ -44,7 +45,7 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
-	public  <T extends Animation> T getAnimation(Class<T> type) {
+	public  <T extends AnimationInterface> T getAnimation(Class<T> type) {
 		return type.cast(animation);
 	}
 	

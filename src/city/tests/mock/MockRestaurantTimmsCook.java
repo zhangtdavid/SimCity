@@ -42,11 +42,6 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	}
 
 	@Override
-	public RestaurantTimmsAnimatedCook getAnimation() {
-		return new RestaurantTimmsCookAnimation();
-	}
-
-	@Override
 	public int getMenuItemPrice(FOOD_ITEMS stockItem) {
 		// TODO Auto-generated method stub
 		return 0;

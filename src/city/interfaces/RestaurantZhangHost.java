@@ -16,5 +16,7 @@ public interface RestaurantZhangHost extends RoleInterface {
 	public void msgWaiterRequestBreak(RestaurantZhangWaiter w);
 	
 	public void msgOffBreak(RestaurantZhangWaiter w);
+	
+	public void addWaiter(RestaurantZhangWaiter wa);
 
 }

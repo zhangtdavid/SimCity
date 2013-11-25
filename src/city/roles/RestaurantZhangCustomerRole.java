@@ -55,11 +55,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 * Constructor for CustomerAgent class
 	 *
 	 * @param name name of the customer
-<<<<<<< Updated upstream
-	 * @param gui  reference to the customergui so the customer can send it messages
-=======
 	 * @param gui  reference to the customerAnimation so the customer can send it messages
->>>>>>> Stashed changes
 	 */
 	public RestaurantZhangCustomerRole(String name){
 		super();
@@ -411,6 +407,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	
 	public int getPos() {
 		return waitingPosition;
+	}
+	
+	public void setActive() {
+		super.setActive();
+		gotHungry();
 	}
 }
 

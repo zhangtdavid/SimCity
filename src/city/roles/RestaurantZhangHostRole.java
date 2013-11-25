@@ -142,6 +142,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 				}
 			}
 		}
+		print("Giving customer " + c.getName() + " waiting position " + pos);
 		c.msgHereIsYourWaitingPosition(pos);
 	}
 	
