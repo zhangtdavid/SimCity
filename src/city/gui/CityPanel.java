@@ -14,7 +14,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	private static final long serialVersionUID = 7439702094727197622L;
 	protected MainFrame mainframe;
-	protected ArrayList<CityViewBuilding> statics, movings;
+	public ArrayList<CityViewBuilding> statics, movings;
 	protected Color background;
 	protected Timer timer;
 	
@@ -51,6 +51,11 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	
 	public void addStatic(CityViewBuilding c) {
 		statics.add(c);
+		System.out.println(c.toString());
+	}
+	
+	public int getStaticsSize() {
+		return statics.size();
 	}
 	
 	public void addMoving(CityViewBuilding c) {

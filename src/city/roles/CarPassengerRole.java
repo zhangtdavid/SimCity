@@ -23,10 +23,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	}
 	
 	// Messages
-	public void msgImGoingToDrive() { // From setactive, telling this role he/she wants to drive
-		myEvent = CarPassengerEvent.WANTTODRIVE;
-		stateChanged();
-	}
 
 	public void msgImAtCar() { // From animation, telling this role car is ready to drive
 		myEvent = CarPassengerEvent.ATCAR;
@@ -82,6 +78,13 @@ public class CarPassengerRole extends Role implements CarPassenger {
 //	void setGui(CarPassengerGui gui) {
 //		myGui = gui;
 //	}
+	
+	@Override
+	public void setActive() {
+		myEvent = CarPassengerEvent.WANTTODRIVE;
+		super.setActivityBegun();
+		super.setActive();
+	}
 	
 	// Utilities
 	

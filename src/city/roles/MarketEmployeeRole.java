@@ -2,19 +2,18 @@ package city.roles;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.animations.interfaces.MarketAnimatedEmployee;
 import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
-import city.interfaces.MarketManager;
-import city.roles.MarketDeliveryPersonRole.WorkingState;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 
@@ -30,8 +29,6 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 	private int loc; // location at front counter
 	
-	private MarketManager manager;
-	private MarketCashier cashier;
 	private MarketCustomer customer;
 	private MarketCustomerDelivery customerDelivery;
 	private MarketCustomerDeliveryPayment customerDeliveryPayment;
@@ -51,15 +48,20 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 //	Gui
 //	---------------------------------------------------------------
-//	private MarketEmployeeGui marketEmployeeGui;
-//	private Semaphore atCounter = new Semaphore(0, true);
-//	private Semaphore atPhone = new Semaphore(0, true);
-//	private Semaphore atCashier = new Semaphore(0, true);
+	private MarketAnimatedEmployee marketEmployeeGui;
+	private Semaphore atPhone = new Semaphore(0, true);
+	private Semaphore finishedCollectingItems = new Semaphore(0, true);
+	private Semaphore atCashier = new Semaphore(0, true);
+	private Semaphore atCounter = new Semaphore(0, true);
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketEmployeeRole() {
+	public MarketEmployeeRole(MarketBuilding b, int t1, int t2) {
 		super();
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
     }
 	
 	public void setActive(){
@@ -123,26 +125,6 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         orderId = id;
         stateChanged();
 	}
-
-//	Animation
-//	---------------------------------------------------------------
-//	public void msgAnimationAtCounter() {
-//		print("Employee at Counter");
-//		atCounter.release();
-//		stateChanged();
-//	}
-//	
-//	public void msgAnimationAtPhone() {
-//		print("Employee at Phone");
-//		atPhone.release();
-//		stateChanged();
-//	}
-//	
-//	public void msgAnimationAtCashier() {
-//		print("Employee at Cashier");
-//		atCashierrelease();
-//		stateChanged();
-//	}
 	
 //  Scheduler
 //	=====================================================================
@@ -177,14 +159,14 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 			customer.msgWhatWouldYouLike(this, loc);
 		}
 		else
-//			MarketEmployeeGui.doGoToPhone();
+			marketEmployeeGui.doGoToPhone();
 //			try {
 //				atPhone.acquire();
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			manager.msgWhatWouldCustomerDeliveryLike(this);
+			market.manager.msgWhatWouldCustomerDeliveryLike(this);
 		}
 	
 	private void collectItems() {
@@ -196,30 +178,37 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	else if (market.inventory.get(item) >= order.get(item)) {
         		market.inventory.put(item, market.inventory.get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
-//        		marketEmployeeGui.doCollectItems(order);
+        		marketEmployeeGui.doCollectItems();
+//        		try {
+//    			finishedCollectingItems.acquire();
+//    			} catch (InterruptedException e) {
+//    				// TODO Auto-generated catch block
+//    				e.printStackTrace();
+//    			}
         	}
         	if (market.inventory.get(item) < 10)
-        		manager.msgItemLow();
-//        	marketEmployeeGui.doDeliverItems();
+        		market.manager.msgItemLow();
+        	marketEmployeeGui.doDeliverItems();
 //    		try {
-//			atCashier.acquire();
+//				atCashier.acquire();
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
+
         	// dependent on customer type
         	if (customer != null)
-        		cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
+        		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
         	else
-        		cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
-//        	marketEmployeeGui.doGoToCounter();
+        		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
+        	marketEmployeeGui.doGoToCounter();
 //    		try {
-//			atCounter.acquire();
+//				atCounter.acquire();
 //			} catch (InterruptedException e) {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-        	manager.msgIAmAvailableToAssist(this);
+        	market.manager.msgIAmAvailableToAssist(this);
         	customer = null;
         	customerDelivery = null;
         	customerDeliveryPayment = null;
@@ -240,25 +229,6 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		this.market = market;
 	}
 	
-	// Manager
-	public MarketManager getManager() {
-		return manager;
-	}
-	
-	public MarketManager setManager() {
-		return manager;
-	}
-	
-	// Cashier
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	public void setCashier(MarketCashier cashier) {
-		this.cashier = cashier;
-	}
-	
 //  Utilities
 //	=====================================================================	
-
 }

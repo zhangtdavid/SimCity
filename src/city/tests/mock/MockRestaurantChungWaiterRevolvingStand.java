@@ -6,7 +6,7 @@ import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 
@@ -16,7 +16,7 @@ import utilities.LoggedEvent;
  * @author Monroe Ekilah
  *
  */
-public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements RestaurantChungWaiterBase {
+public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements RestaurantChungWaiter {
 	public EventLog log = new EventLog();
 
 	/**

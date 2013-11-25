@@ -11,7 +11,6 @@ import city.interfaces.CarPassenger;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
-import city.roles.MarketCashierRole.WorkingState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 
@@ -22,17 +21,17 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
+	private MarketCashier cashier;
+	
+	private MarketCustomerDelivery customerDelivery;
 	
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
 	
-	private MarketCashier cashier;
-
 	private CarAgent car;
 	private CarPassenger carPassenger;
-
-	private MarketCustomerDelivery customerDelivery;
+	
 	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	int orderId;
 	
@@ -44,9 +43,13 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketDeliveryPersonRole() {
-		super(); // TODO
-//		car = new CarAgent();
+	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
+		super();
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
+		car = new CarAgent();
     }
 	
 	public void setActive(){
@@ -91,31 +94,37 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 			deliverItems();
 		}
 		
-		// Role Scheduler
-		boolean blocking = false;
-		if (carPassenger.getActive() && carPassenger.getActivity()) {
-			blocking  = true;
-			boolean activity = carPassenger.runScheduler();
-			if (!activity) {
-				carPassenger.setActivityFinished();
-			}
-		}
-		
-		// Scheduler disposition
-		return blocking;
+//		// Role Scheduler
+//		boolean blocking = false;
+//		if (carPassenger.getActive() && carPassenger.getActivity()) {
+//			blocking  = true;
+//			boolean activity = carPassenger.runScheduler();
+//			if (!activity) {
+//				carPassenger.setActivityFinished();
+//			}
+//		}
+//		
+//		// Scheduler disposition
+//		return blocking;
+		return false;
 	}
 	
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
-		carPassenger = new CarPassengerRole(car, market); // TODO Update this to restaurant
+		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant());
+		carPassenger.setActive();
 		cashier.msgDeliveringItems(this);
 
-//		for (Delivery d: deliveries) {
-//        	deliveryTruckGui.doGoToAddress();
-//        }
+//      deliveryTruckGui.doGoToAddress();
         // notify customer if there is a difference between order and collected items
 		// switch into CarPassenger;
+		
+		while (carPassenger.getActive() && carPassenger.getActivity()) {
+			// do nothing
+		}
+
+		// TODO how does all this car stuff work??
 		
 		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
 		cashier.msgFinishedDeliveringItems(this, orderId);
@@ -143,15 +152,5 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	}
 	
 //  Utilities
-//	=====================================================================		
-	//	private Transaction findTransaction(MarketCustomerRole c) {
-//		for(Transaction t : transactions ){
-//			if(t.customer == c) {
-//				return t;		
-//			}
-//		}
-//		return null;
-//	}
-
-	// Classes
+//	=====================================================================
 }

@@ -36,7 +36,7 @@ public class RestaurantZhangCustomerAnimation extends Animation {
 	private enum Command {noCommand, GoToRestaurant, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
 
-	public RestaurantZhangCustomerAnimation(RestaurantZhangCustomerRole c){ //HostAgent m) {
+	public RestaurantZhangCustomerAnimation(RestaurantZhangCustomer c){ //HostAgent m) {
 		role = c;
 		xPos = CUSTGUIXPOS;
 		yPos = CUSTGUIYPOS;

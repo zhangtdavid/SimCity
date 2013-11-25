@@ -6,6 +6,7 @@ import city.MockRole;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.interfaces.RestaurantTimmsCustomer;
+import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
 public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantTimmsCustomer {
@@ -63,10 +64,11 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	public void guiAtExit() { 
 		log.add(new LoggedEvent("Received guiAtExit.")); 
 	}
-	
+
 	@Override
-	public RestaurantTimmsAnimatedCustomer getAnimation() {
-		return new RestaurantTimmsCustomerAnimation(null);
+	public void setHost(RestaurantTimmsHost h) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

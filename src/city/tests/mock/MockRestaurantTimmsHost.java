@@ -38,9 +38,4 @@ public class MockRestaurantTimmsHost extends MockRole implements RestaurantTimms
 
 	}
 
-	@Override
-	public RestaurantTimmsAnimatedHost getAnimation() {
-		return new RestaurantTimmsHostAnimation();
-	}
-
 }

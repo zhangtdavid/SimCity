@@ -1,12 +1,9 @@
 package city.gui;
 
-import java.awt.BorderLayout;
-import java.awt.Container;
 import java.awt.Dimension;
 import java.awt.GridBagConstraints;
 import java.awt.GridBagLayout;
 
-import javax.swing.BoxLayout;
 import javax.swing.JFrame;
 
 import trace.TracePanel;
@@ -26,11 +23,12 @@ public class MainFrame extends JFrame {
 	private static int TRACEPANELX = 1000;
 	private static int TRACEPANELY = 190;
 
-	CityViewPanel cityView;
-	BuildingView buildingView;
-	TracePanel tracePanel;
-	CityControlPanel CP;
+	public CityViewPanel cityView;
+	public BuildingView buildingView;
+	public TracePanel tracePanel;
+	public CityControlPanel CP;
 	GridBagConstraints c = new GridBagConstraints();
+
 
 	/**
 	 * Constructor method
