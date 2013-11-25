@@ -13,7 +13,7 @@ public class RestaurantZhangMenu {
 	
 	public RestaurantZhangMenu() {
 		menuItemsMap.put("Chicken", 8.99);
-		menuItemsMap.put("Beef", 12.99);
+		menuItemsMap.put("Steak", 12.99);
 		menuItemsMap.put("Pizza", 16.99);
 		allMenuItems = Collections.synchronizedMap(new HashMap<String, Double>(menuItemsMap));
 	}
