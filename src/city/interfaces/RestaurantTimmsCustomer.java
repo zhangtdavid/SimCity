@@ -1,21 +1,20 @@
 package city.interfaces;
 
 import city.Application;
-import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 
 public interface RestaurantTimmsCustomer extends RoleInterface {
 	
-	public abstract void msgGoToRestaurant();
-	public abstract void msgRestaurantFull();
-	public abstract void msgGoToTable(RestaurantTimmsWaiter w, int position);
-	public abstract void msgOrderFromWaiter();
-	public abstract void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem);
-	public abstract void msgPaidCashier(int change);
-	public abstract void guiAtLine();
-	public abstract void guiAtTable();
-	public abstract void guiAtCashier();
-	public abstract void guiAtExit();
+	public void msgGoToRestaurant();
+	public void msgRestaurantFull();
+	public void msgGoToTable(RestaurantTimmsWaiter w, int position);
+	public void msgOrderFromWaiter();
+	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem);
+	public void msgPaidCashier(int change);
+	public void guiAtLine();
+	public void guiAtTable();
+	public void guiAtCashier();
+	public void guiAtExit();
 	
-	public abstract RestaurantTimmsAnimatedCustomer getAnimation();
-
+	public void setHost(RestaurantTimmsHost h);
+	
 }

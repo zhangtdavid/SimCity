@@ -14,7 +14,7 @@ public abstract class CityViewBuilding {
 	public String ID;
 	public BuildingCard building;
 	boolean isActive;
-	enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, RESTAURANTCHUNG, BANK, ROAD, HOUSE};
+	public enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, RESTAURANTCHUNG, BANK, ROAD, HOUSE};
 	BuildingType type = BuildingType.NONE;
 	
 	public CityViewBuilding() {

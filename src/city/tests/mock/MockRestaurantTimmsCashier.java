@@ -32,10 +32,5 @@ public class MockRestaurantTimmsCashier extends MockRole implements RestaurantTi
 		log.add(new LoggedEvent("Received msgPayMarket from Market. Money: " + money));
 
 	}*/
-	
-	@Override
-	public RestaurantTimmsAnimatedCashier getAnimation() {
-		return new RestaurantTimmsCashierAnimation();
-	}
 
 }

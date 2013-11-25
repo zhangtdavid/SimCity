@@ -305,7 +305,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                 
         MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
         marketCustomerDelivery = new MarketCustomerDeliveryRole(o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
-        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPayment(), o.order.orderItems, o.order.orderId); // need to change this to a call to the manager, asking market manager for service
+        marketCustomerDelivery.setActive();
+//        selectedMarket.manager.msgIWouldLikeToPlaceADeliveryOrder(marketCustomerDelivery, restaurantChungCashier.getMarketCustomerDeliveryPaymentRole(), o, o.ID); // need to change this to a call to the manager, asking market manager for service
         return;
     }
     
