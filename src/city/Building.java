@@ -59,6 +59,10 @@ public abstract class Building {
 		this.customerAnimation = c;
 	}
 	
+	public Role addRole(Role r) {
+		return r;
+	}
+	
 	// Utilities 
 
 }
