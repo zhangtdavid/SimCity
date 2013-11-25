@@ -109,6 +109,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 	public void setActive(){
 		rentLastPaid = this.getPerson().getDate();
+		this.setActivityBegun();
 	}
 
 	// Classes

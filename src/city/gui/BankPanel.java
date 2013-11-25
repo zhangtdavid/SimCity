@@ -41,7 +41,7 @@ public class BankPanel extends BuildingCard implements ActionListener {
         Graphics2D graphics2D = (Graphics2D)graphics;
 
         // Clear the screen by painting a rectangle the size of the frame
-        graphics2D.setColor(getBackground());
+        graphics2D.setColor(background);
         graphics2D.fillRect(0, 0, panelX, panelY);
 
         // Update the position of each visible element
