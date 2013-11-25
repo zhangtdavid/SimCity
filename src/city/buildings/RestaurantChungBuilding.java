@@ -11,7 +11,7 @@ import city.interfaces.BankCustomer;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 
 public class RestaurantChungBuilding extends Building {
 
@@ -21,7 +21,7 @@ public class RestaurantChungBuilding extends Building {
 	public RestaurantChungCashier cashier;
 	public BankCustomer bankCustomer;
 	public RestaurantChungCook cook;
-	public List<RestaurantChungWaiterBase> employees = new ArrayList<RestaurantChungWaiterBase>();
+	public List<RestaurantChungWaiter> employees = new ArrayList<RestaurantChungWaiter>();
 	
 	private static final int WORKER_SALARY = 500;
 	

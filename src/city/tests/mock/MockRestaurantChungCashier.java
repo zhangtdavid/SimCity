@@ -7,7 +7,7 @@ import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.RestaurantChungMenu;
 
@@ -21,7 +21,7 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	public EventLog log = new EventLog();
 
 	@Override
-	public void msgComputeBill(RestaurantChungWaiterBase w,
+	public void msgComputeBill(RestaurantChungWaiter w,
 			RestaurantChungCustomer c, String order) {
 		// TODO Auto-generated method stub
 		

@@ -4,6 +4,10 @@ import java.util.*;
 import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
+import utilities.RestaurantChungOrder;
+import utilities.RestaurantChungRevolvingStand;
+import utilities.RestaurantZhangOrder;
+import utilities.RestaurantChungOrder.OrderState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
@@ -15,8 +19,7 @@ import city.buildings.RestaurantChungBuilding.FoodOrderState;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
-import city.interfaces.RestaurantChungWaiterBase;
-import city.roles.RestaurantChungCashierRole.WorkingState;
+import city.interfaces.RestaurantChungWaiter;
 
 /**
  * Restaurant Cook Agent
@@ -37,6 +40,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     private boolean cooking = false;
     private boolean plating = false;
     
+	RestaurantChungRevolvingStand orderStand;
+	boolean waitingToCheckStand = false;
+    
 	private Semaphore atCookHome = new Semaphore(0, true);
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
@@ -46,24 +52,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 //  Orders
 //  =====================================================================        
-    public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>()); // Holds orders, their states, and recipients
-    private class Order {
-    	RestaurantChungWaiterBase w;
-        String choice;
-        int table;
-        OrderState s;
-        
-        public Order(RestaurantChungWaiterBase w2, String selection, int tableNum, OrderState state) {
-                w = w2;
-                choice = selection;
-                table = tableNum;
-                s = state;
-        }
-    }
+    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
     
-    private enum OrderState
-    {Pending, Cooking, Cancelled, DoneCooking, Plating, DonePlating};
-        
 //  Markets
 //  =====================================================================
     private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
@@ -107,9 +97,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //	=====================================================================
 //  Waiter
 //  ---------------------------------------------------------------
-    public void msgHereIsAnOrder(RestaurantChungWaiterBase w, String choice, int table) {
+    public void msgHereIsAnOrder(RestaurantChungWaiter w, String choice, int table) {
         print("Cook received msgHereIsAnOrder");
-        orders.add(new Order(w, choice, table, OrderState.Pending));
+        orders.add(new RestaurantChungOrder(w, choice, table, OrderState.Pending));
         stateChanged();
     }
         
@@ -119,13 +109,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         stateChanged();
     }
     
-    public void msgSelfDoneCooking(Order o) {
+    public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
         print("DONE COOKING");
         stateChanged();
     }
     
-    public void msgSelfDonePlating(Order o) {
+    public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
         print("DONE PLATING");
        stateChanged();
@@ -219,7 +209,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             if (orders.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
             
             synchronized(orders) {
-                for (Order o : orders) {
+                for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.Cancelled) {
                         informWaiterOfCancellation(o);
                         removeOrder(o);
@@ -228,8 +218,25 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                 }
             }
             
+			if(!waitingToCheckStand) {
+				print("Waiting 5 seconds to check the stand");
+				waitingToCheckStand = true;
+				timer.schedule(new TimerTask() {
+					public void run() {
+						waitingToCheckStand = false;
+						RestaurantChungOrder newOrder = orderStand.remove();
+						if(newOrder != null) {
+							print("Found an item on the stand");
+							orders.add(newOrder);
+						}
+						stateChanged();
+					}
+				},
+				5000);
+			}
+            
             synchronized(orders) {
-                for (Order o : orders) {
+                for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.Pending) {
                         tryToCookIt(o);
                         return true;
@@ -238,7 +245,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
             
             synchronized(orders) {
-                for (Order o : orders) {
+                for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.DoneCooking) {
                         plateIt(o);
                         return true;
@@ -248,7 +255,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 
             synchronized(orders) {
-                for (Order o : orders) {
+                for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.DonePlating) {
                         removeOrder(o);
                         return true;
@@ -336,7 +343,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         
 //  Cooking
 //  ---------------------------------------------------------------
-    private void tryToCookIt(Order o) {
+    private void tryToCookIt(RestaurantChungOrder o) {
         Food f = restaurant.foods.get(o.choice);
         // If out of food
         identifyFoodThatIsLow();
@@ -354,7 +361,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         cookIt(o);
     }
     
-    private void cookIt(final Order o) {
+    private void cookIt(final RestaurantChungOrder o) {
         o.s = OrderState.Cooking;
         cookGui.DoGoToGrill(o.choice);
 //		try {
@@ -384,7 +391,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         restaurant.foods.get(o.choice).cookingTime*100);
     }
     
-    private void plateIt(final Order o) {
+    private void plateIt(final RestaurantChungOrder o) {
         o.s = OrderState.Plating;
         cookGui.DoGoToPlating(o.choice);
 //		try {
@@ -397,7 +404,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         plating = true;
         timer2.schedule(new TimerTask() {
             public void run() {
-            	RestaurantChungWaiterBase waiter = findWaiter(o); // Determines the waiter associated with the order
+            	RestaurantChungWaiter waiter = findWaiter(o); // Determines the waiter associated with the order
                 waiter.msgOrderIsReady(o.choice, o.table);
                 plating = false;
                 msgSelfDonePlating(o);
@@ -413,13 +420,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         500);
     }
     
-    private void removeOrder(Order o) {
+    private void removeOrder(RestaurantChungOrder o) {
         print("removing order");
         removeOrderFromList(o);
     }
 
-    private void informWaiterOfCancellation(Order o) {
-        RestaurantChungWaiterBase w = findWaiter(o);
+    private void informWaiterOfCancellation(RestaurantChungOrder o) {
+        RestaurantChungWaiter w = findWaiter(o);
         w.msgOutOfItem(o.choice, o.table);
     }
 
@@ -444,8 +451,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         markets.add(m);
     }
     
-    public RestaurantChungWaiterBase findWaiter(Order order) {
-        for(Order o : orders){
+    public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
+        for(RestaurantChungOrder o : orders){
             if(o == order) {
                 return o.w;
             }
@@ -471,7 +478,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         return null;
     }
     
-    public void removeOrderFromList(Order order) {
+    public void removeOrderFromList(RestaurantChungOrder order) {
         for(int i = 0; i < orders.size(); i++) {
             if(orders.get(i) == order) {
                 orders.remove(order);

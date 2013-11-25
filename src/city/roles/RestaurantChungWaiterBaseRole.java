@@ -1,6 +1,7 @@
 package city.roles;
 
 import utilities.RestaurantChungMenu;
+import utilities.RestaurantChungRevolvingStand;
 
 import java.util.*;
 import java.util.concurrent.Semaphore;
@@ -12,17 +13,18 @@ import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
-public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChungWaiterBase {
+public abstract class RestaurantChungWaiterBaseRole extends Role implements RestaurantChungWaiter {
 	RestaurantChungBuilding restaurant;
 	protected RestaurantChungHost host;
 	protected RestaurantChungCook cook;
 	protected RestaurantChungCashier cashier;
+	public RestaurantChungRevolvingStand orderStand;
 	protected RestaurantChungWaiterAnimation waiterGui = null;
 	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 	protected Semaphore atEntrance = new Semaphore(0, true);
@@ -414,22 +416,7 @@ public class RestaurantChungWaiterBaseRole extends Role implements RestaurantChu
 		waiterGui.DoReturnToWaiterHome();
 	}
 	
-	private void tellCookOrder(WCustomer customer, String choice, int table) {
-		waiterGui.DoGoToCook();
-
-		try {
-			atCook.acquire();
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
-		print("telling cook order " + choice + " for " + customer.c);
-		cook.msgHereIsAnOrder(this, choice, table);
-		customer.o.os = OrderStatus.Cooking;
-		
-		waiterGui.DoReturnToWaiterHome();
-	}
+	public abstract void tellCookOrder(WCustomer customer, String choice, int table);
 	
 	private void pickUpOrder(WCustomer customer) {
 		print("picking up order from cook");

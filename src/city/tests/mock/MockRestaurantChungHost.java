@@ -5,7 +5,7 @@ import city.MockRole;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 
@@ -53,25 +53,25 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 	}
 
 	@Override
-	public void msgWaiterAvailable(RestaurantChungWaiterBase w) {
+	public void msgWaiterAvailable(RestaurantChungWaiter w) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgIWantToGoOnBreak(RestaurantChungWaiterBase w) {
+	public void msgIWantToGoOnBreak(RestaurantChungWaiter w) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgIAmReturningToWork(RestaurantChungWaiterBase w) {
+	public void msgIAmReturningToWork(RestaurantChungWaiter w) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgTableIsFree(RestaurantChungWaiterBase waiter, int t, RestaurantChungCustomer c) {
+	public void msgTableIsFree(RestaurantChungWaiter waiter, int t, RestaurantChungCustomer c) {
 		// TODO Auto-generated method stub
 		
 	}

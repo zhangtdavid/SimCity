@@ -6,7 +6,7 @@ import city.Role;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import city.roles.RestaurantChungCashierRole.WorkingState;
 /**
  * Restaurant Host Agent
@@ -26,11 +26,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //	=====================================================================	
 	private List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	private class MyWaiter {
-		RestaurantChungWaiterBase w;
+		RestaurantChungWaiter w;
 		WaiterState s;
 		int numCustomers;
 		
-		public MyWaiter(RestaurantChungWaiterBase w2) {
+		public MyWaiter(RestaurantChungWaiter w2) {
 			w = w2;
 			s = WaiterState.Working;
 			numCustomers = 0;
@@ -152,27 +152,27 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
-	public void msgWaiterAvailable(RestaurantChungWaiterBase w) {
+	public void msgWaiterAvailable(RestaurantChungWaiter w) {
 		print("Host received msgWaiterAvailable");
 		waiters.add(new MyWaiter(w));
 		stateChanged();
 	}
 	
-	public void msgIWantToGoOnBreak(RestaurantChungWaiterBase w) {
+	public void msgIWantToGoOnBreak(RestaurantChungWaiter w) {
 		print("Host received msgIWantToGoOnBreak");
 		MyWaiter wa = findWaiter(w);
 		wa.s = WaiterState.WantBreak;
 		stateChanged();		
 	}
 	
-	public void msgIAmReturningToWork(RestaurantChungWaiterBase w) {
+	public void msgIAmReturningToWork(RestaurantChungWaiter w) {
 		print("Host received msgIAmReturningToWork");
 		MyWaiter wa = findWaiter(w);
 		wa.s = WaiterState.Working;
 		stateChanged();
 	}
 	
-	public void msgTableIsFree(RestaurantChungWaiterBase waiter, int t, RestaurantChungCustomer c) {
+	public void msgTableIsFree(RestaurantChungWaiter waiter, int t, RestaurantChungCustomer c) {
 		print("Host received msgTableIsFree");
 		HCustomer hc = findCustomer(c);
 		hc.s = CustomerState.Done;
@@ -355,7 +355,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		c.positionInLine = -1; // Makes the position in line variable invalid
 	}
 	
-	private void seatCustomer(HCustomer customer, Table table, RestaurantChungWaiterBase w) {
+	private void seatCustomer(HCustomer customer, Table table, RestaurantChungWaiter w) {
 		print("Host telling Waiter to seat customer");
 		w.msgSitAtTable(customer.c, table.tableNumber);
 		customer.s = CustomerState.WaitingToBeSeated;
@@ -422,7 +422,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //		}
 //	}
 	
-	public MyWaiter findWaiter(RestaurantChungWaiterBase w) {
+	public MyWaiter findWaiter(RestaurantChungWaiter w) {
 		for(MyWaiter waiter : waiters ){
 			if(waiter.w == w) {
 				return waiter;

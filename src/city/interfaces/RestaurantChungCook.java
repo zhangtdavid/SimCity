@@ -22,7 +22,7 @@ public interface RestaurantChungCook extends RoleInterface {
 	void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> orderItems, int id);
 
 	void msgHereIsAnOrder(
-			RestaurantChungWaiterBase restaurantChungWaiterBase,
+			RestaurantChungWaiter restaurantChungWaiterBase,
 			String choice, int table);
 
 }
