@@ -37,7 +37,7 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		repaint();
+
 	}
 
 	@Override
@@ -57,18 +57,13 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 		graphics.fillRect(100, 100, 200, 20);
 		graphics.drawString("Plating", 100, 100);
 		graphics.setColor(Color.ORANGE);
-		
-		graphics.setColor(Color.ORANGE);
-        for(RestaurantZhangTable t : tables) {
-        	graphics.fillRect(t.getX(), t.getY(), t.getW(), t.getH());
-        }
 
-		// Update the position of each visible element
-		for(Animation animation : animations) {
-			if (animation.getVisible()) {
-				animation.updatePosition();
-			}
+		graphics.setColor(Color.ORANGE);
+		for(RestaurantZhangTable t : tables) {
+			graphics.fillRect(t.getX(), t.getY(), t.getW(), t.getH());
 		}
+
+		animate();
 
 		// Draw each visible element after updating their positions
 		// TODO generates concurrent modification exception
@@ -79,10 +74,19 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 		}
 	}
 
+	public void animate() {
+		// Update the position of each visible element
+		for(Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.updatePosition();
+			}
+		}
+	}
+
 	public void addVisualizationElement(Animation ve) {
 		animations.add(ve);
 	}
-	
+
 	public void setTables(Collection<RestaurantZhangTable> t) {
 		tables = t;
 	}

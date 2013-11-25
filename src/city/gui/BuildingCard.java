@@ -28,4 +28,8 @@ public class BuildingCard extends JPanel {
 		this.setVisible(true);
 		background = c;
 	}
+	
+	public void animate() {
+		
+	}
 }
