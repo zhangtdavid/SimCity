@@ -8,6 +8,7 @@ import java.util.Map;
 import city.Building;
 import city.Application.FOOD_ITEMS;
 import city.interfaces.BankCustomer;
+import city.interfaces.MarketEmployee;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungHost;
@@ -21,7 +22,7 @@ public class RestaurantChungBuilding extends Building {
 	public RestaurantChungCashier cashier;
 	public BankCustomer bankCustomer;
 	public RestaurantChungCook cook;
-	public List<RestaurantChungWaiter> employees = new ArrayList<RestaurantChungWaiter>();
+	public List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
 	
 	private static final int WORKER_SALARY = 500;
 	
@@ -61,5 +62,18 @@ public class RestaurantChungBuilding extends Building {
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;
 	}
-
+	
+//	Utilities
+//	=====================================================================	
+//	Waiter
+		public void addWaiter(RestaurantChungWaiter waiter) {
+			waiters.add(waiter);
+			host.msgNewWaiter(waiter);
+			
+		}
+		
+		public void removeWaiter(RestaurantChungWaiter waiter) {
+			waiters.remove(waiter);
+			host.msgRemoveWaiter(waiter);		
+		}
 }

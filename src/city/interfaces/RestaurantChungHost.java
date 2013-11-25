@@ -16,4 +16,6 @@ public interface RestaurantChungHost extends RoleInterface {
 	public abstract void msgIAmReturningToWork(RestaurantChungWaiter w);
 	public abstract void msgTableIsFree(RestaurantChungWaiter w, int t, RestaurantChungCustomer c);
 	public abstract void msgFlakeAlert(RestaurantChungCustomer c, int d);
+	public abstract void msgNewWaiter(RestaurantChungWaiter waiter);
+	public abstract void msgRemoveWaiter(RestaurantChungWaiter waiter);
 }

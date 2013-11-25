@@ -82,4 +82,16 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 		System.out.println("Host received msgFlakeAlert from Cashier. Debt of " + d);				
 	}
 
+	@Override
+	public void msgNewWaiter(RestaurantChungWaiter waiter) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgRemoveWaiter(RestaurantChungWaiter waiter) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

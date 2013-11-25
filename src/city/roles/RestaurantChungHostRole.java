@@ -2,17 +2,20 @@ package city.roles;
 
 import java.util.*;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.Role;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import city.roles.RestaurantChungCashierRole.WorkingState;
 /**
  * Restaurant Host Agent
  */
 //A Host is the manager of a restaurant who sees that all is proceeded as he wishes.
 public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
+	public EventLog log = new EventLog();
+
 	RestaurantChungBuilding restaurant;
 	
 	private int nTables = 4;
@@ -109,7 +112,22 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	
 //  Messages
 //	=====================================================================
-//	Customer
+//	Restaurant
+//	---------------------------------------------------------------
+	public void msgNewWaiter(RestaurantChungWaiter w) {
+		log.add(new LoggedEvent("Market Manager received msgNewEmployee from Market."));
+		System.out.println("Market Manager received msgNewEmployee from Market.");
+		waiters.add(new MyWaiter(w));
+		stateChanged();
+	}
+	
+	public void msgRemoveWaiter(RestaurantChungWaiter w) {
+		log.add(new LoggedEvent("Market Manager received msgRemoveEmployee from Market."));
+		System.out.println("Market Manager received msgRemoveEmployee from Market.");
+		MyWaiter mw = findWaiter(w);
+		waiters.remove(mw);
+		stateChanged();
+	}//	Customer
 //	---------------------------------------------------------------
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
