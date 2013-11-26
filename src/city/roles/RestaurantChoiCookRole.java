@@ -1,13 +1,21 @@
 package city.roles;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
 import java.util.TimerTask;
+import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiCook;
+import city.interfaces.RestaurantChoiCook.FoodData;
+import city.interfaces.RestaurantChoiCook.myMarket;
 import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
@@ -21,6 +29,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	boolean checkback;
 	RestaurantChoiBuilding building;
 	boolean wantsToLeave;
+	public List<RestaurantChoiOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChoiOrder>());
+	Timer timer = new Timer(); // for cooking!
+	public ConcurrentHashMap <FOOD_ITEMS, FoodData> foods = new ConcurrentHashMap<FOOD_ITEMS, FoodData>(); // how much of each food cook has
+	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>());
 
 	//Constructor
 	/**
@@ -32,10 +44,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public RestaurantChoiCookRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		building = b;
-		foods.put(1, new Food(1));
-		foods.put(2, new Food(2));
-		foods.put(3, new Food(3));
-		foods.put(4, new Food(4));
+		foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
+		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
+		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad));
+		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak)); 
 		//ordering on initialization if needed
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
@@ -44,10 +56,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	
 	public RestaurantChoiCookRole(){ // to just test mechanics
 		super();
-		foods.put(1, new Food(1));
-		foods.put(2, new Food(2));
-		foods.put(3, new Food(3));
-		foods.put(4, new Food(4));
+		foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
+		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
+		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad));
+		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak)); 
 	}
 	//Messages
 	@Override
@@ -129,7 +141,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					cookGui.setOrderIcon(orders.get(i).getChoice());
 					DoGoToPlates();
 					MoveFoodToPlating(orders.get(i));
-					cookGui.setOrderIcon(-1);
+					cookGui.setOrderIcon(null);
 					return true;
 				}
 			}
@@ -140,7 +152,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					cookGui.setOrderIcon(orders.get(i).getChoice());
 					DoGoToGrills();
 					CookOrder(orders.get(i));
-					cookGui.setOrderIcon(-1);
+					cookGui.setOrderIcon(null);
 					return true;
 				}
 			}
@@ -153,8 +165,8 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					return true;
 				}
 			}
-		}//if you have no orders in the queue, we check for orders in queue.
-		if(orderqueue != null){
+		}//if you have no orders in the queue, we check for orders in revolving stand (orderqueue).
+		/*if(orderqueue != null){
 			synchronized(orderqueue){ // TODO do i need this? will it present problems?
 				if(orderqueue.peek() != null){
 					DoGoToPlates(); // go to stand/plating
@@ -167,7 +179,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					return true;
 				}
 			}
-		}
+		}*/
 		cookGui.DoLeave();
 		if(!checkback){
 			CheckBack();
@@ -183,27 +195,28 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		}
 		o.getWaiter().msgOrderComplete(o); //send this to waiter!
 		System.out.println("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
-
 	}
 
 	@Override
-	public void CheckBack() { // check every 2000 seconds
-		System.out.println("checkback");
-		timer.schedule(new TimerTask() {
-			public void run() {
-				synchronized(orderqueue){
-					if(!orderqueue.isEmpty()){
-						RestaurantChoiOrder o = orderqueue.poll();
-						orders.add(o);
-						DoGoToRefrig();
-						AnalyzeCookOrder(o);
+	public void CheckBack() { // check every 5000 seconds
+		System.out.println("checkback (REVOLVING STAND per 5000ticks)");
+		if(orderqueue != null){
+			timer.schedule(new TimerTask() {
+				public void run() {
+					synchronized(orderqueue){
+						if(!orderqueue.isEmpty()){
+							RestaurantChoiOrder o = orderqueue.poll();
+							orders.add(o);
+							DoGoToRefrig();
+							AnalyzeCookOrder(o);
+						}
 					}
+					//CheckBack();
+					checkback = false;
+					stateChanged();
 				}
-				//CheckBack();
-				checkback = false;
-				stateChanged();
-			}
-		}, 5000);
+			}, 5000);
+		}
 	}
 
 	public boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
@@ -212,14 +225,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		}
 		System.out.println("Checking if ingredients");
 		//this is the internal food object corresponding to the choice in order (below).
-		Food tempFood = foods.get(o.getChoice());
-
+		FoodData tempFood = foods.get(o.getChoice());
 		if(tempFood.inventory <= tempFood.threshold){
 			if(tempFood.amountOrdered == 0){ // if i haven't already ordered the food
 				//ask for food; use marketIndex, but it goes to infinity so take mod of markets.size();
 				//and we ask for the difference between the threshold and the capacity.
 				int outOfcounter = 0;
-				while(markets.get(marketIndex%markets.size()).outOf[tempFood.choiceID-1]){
+				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.choiceID) == true){
 					marketIndex++;
 					outOfcounter++;
 					if(outOfcounter == markets.size()){
@@ -252,41 +264,37 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 			o.setState(RestaurantChoiOrder.COOKING);
 		}
 		//this is the internal food object corresponding to the choice in order (below).
-		Food tempFood = foods.get(o.getChoice());
+		FoodData tempFood = foods.get(o.getChoice());
 		tempFood.inventory--;
 		print("Cooking now: "+ tempFood.inventory + " of item " + o.getChoice() +" left");
 		final RestaurantChoiOrder finalO = o;
-		switch (o.getChoice()) {
-		case 1:
+		if(o.getChoice() == FOOD_ITEMS.steak){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
 			}, tempFood.cookingTime);
-			break;
-		case 2:
+		}else if(o.getChoice() == FOOD_ITEMS.pizza){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
 			}, tempFood.cookingTime);
-			break;
-		case 3:
+		}else if(o.getChoice() == FOOD_ITEMS.chicken){
+			
 			timer.schedule(new TimerTask() {
 				public void run() {      
 					msgFoodsDone(finalO);
 				}
 			}, tempFood.cookingTime);
-			break;
-		case 4:
+		}else if(o.getChoice() == FOOD_ITEMS.salad){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
 			}, tempFood.cookingTime);
-			break;
 		}
-		return true;
+		return true; // <<why? lol
 	}
 
 	@Override
@@ -368,9 +376,9 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	}TODO */	
 	//Utilities
 	public void hackNoFood(){
-		foods.get(1).inventory = 0;
-		foods.get(2).inventory = 0;
-		foods.get(3).inventory = 0;
-		foods.get(4).inventory = 0;
+		foods.get(FOOD_ITEMS.chicken).inventory = 0;
+		foods.get(FOOD_ITEMS.pizza).inventory = 0;
+		foods.get(FOOD_ITEMS.salad).inventory = 0;
+		foods.get(FOOD_ITEMS.steak).inventory = 0;
 	}
 }

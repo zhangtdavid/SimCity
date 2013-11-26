@@ -1,12 +1,13 @@
 package utilities;
 
+import city.Application.FOOD_ITEMS;
 import city.interfaces.RestaurantChoiWaiter;
 
 
 public class RestaurantChoiOrder {
 
     private int state;
-    private int item; // e.g. 1=salad, 2=soup, 3=steak, 4=lobster?
+    private FOOD_ITEMS item; // e.g. 1=salad, 2=soup, 3=steak, 4=lobster?
     private int tableNumber; // since wouldn't be great to get all of table.
     private RestaurantChoiWaiter waiter;
     public static final int NOT_IN_EXISTENCE = -1; // what are enums? lol
@@ -22,22 +23,22 @@ public class RestaurantChoiOrder {
     public static final int GIVEN_TO_WAITER = 9;
     public static final int GIVEN_TO_CUSTOMER = 10;
 		
-    public RestaurantChoiOrder(int c, int tn, RestaurantChoiWaiter w) { // have order be synchronized!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
+    public RestaurantChoiOrder(FOOD_ITEMS choice, int tn, RestaurantChoiWaiter w) { // have order be synchronized!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!! 
         state = 0;
-        item = c;
+        item = choice;
         waiter = w;
         tableNumber = tn;
     }
     public RestaurantChoiOrder(){
     	state = NOT_IN_EXISTENCE;
-    	item = NOT_IN_EXISTENCE;
     	tableNumber = NOT_IN_EXISTENCE; // -1 is an error code
+    	//TODO if there's a nullpointer exception then need to do something with instantiating item
     }
 
     public void setState(int i) {
         state = i;
     }
-    public int getChoice(){
+    public FOOD_ITEMS getChoice(){
     	return item;
     }
     public int getState(){

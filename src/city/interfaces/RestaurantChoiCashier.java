@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 
 public interface RestaurantChoiCashier extends RoleInterface{
@@ -20,7 +21,7 @@ public interface RestaurantChoiCashier extends RoleInterface{
     
 	//Messages
 	// public abstract void msgPayMarket(Market m, int money); // TODO
-	public void msgCompute(int choice, RestaurantChoiCustomer c,
+	public void msgCompute(FOOD_ITEMS food_ITEMS, RestaurantChoiCustomer c,
 			RestaurantChoiWaiter restaurantChoiWaiter);
 	public void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash);
 	//public void msgHeresYourMarketBill(Market m, int type, int amount); TODO
@@ -55,7 +56,7 @@ public interface RestaurantChoiCashier extends RoleInterface{
 		private int state;
 		private RestaurantChoiCustomer ca;
 		private RestaurantChoiWaiter wa;
-		public Check(int choice, RestaurantChoiCustomer c, RestaurantChoiWaiter w){
+		public Check(FOOD_ITEMS choice, RestaurantChoiCustomer c, RestaurantChoiWaiter w){
 			this.setwa(w);
 			setBill(foodCost.get(choice)); // takes choice, gives cost.
 			this.setca(c);

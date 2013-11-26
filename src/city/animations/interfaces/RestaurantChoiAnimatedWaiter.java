@@ -1,5 +1,6 @@
 package city.animations.interfaces;
 
+import city.Application.FOOD_ITEMS;
 import city.interfaces.AnimationInterface;
 import city.interfaces.RestaurantChoiCustomer;
 
@@ -26,7 +27,7 @@ public interface RestaurantChoiAnimatedWaiter extends AnimationInterface{
 
 	public abstract void toWaitingZone();
 
-	public abstract void setOrderIcon(int choice);
+	public abstract void setOrderIcon(FOOD_ITEMS food_ITEMS);
     
     // Getters
     

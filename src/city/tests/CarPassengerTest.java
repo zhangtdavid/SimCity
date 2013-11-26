@@ -30,7 +30,7 @@ public class CarPassengerTest extends TestCase {
 		assertEquals("CarAgent's event should be NONE. Instead it's; " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
 		// Step 1: Make the passenger's role active
 		passenger.setActive();
-		passenger.msgImGoingToDrive();
+		//passenger.msgImGoingToDrive();
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.myCar, car);
 		assertEquals("CarPassenger's destination should be a bus stop. It isn't", passenger.destination, destination);
 		assertEquals("CarPassenger's state should be NOTDRIVING. Instead it's: " + passenger.myState.name(), passenger.myState, CarPassengerRole.CarPassengerState.NOTDRIVING);

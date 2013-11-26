@@ -5,7 +5,6 @@ import java.util.*;
 import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.Role;
-import city.animations.ResidentAnimation;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
@@ -72,7 +71,7 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		if(r instanceof ResidentRole) {
 			ResidentRole c = (ResidentRole)r;
 			if(!allRoles.containsKey(c)) {
-				ResidentAnimation anim = new ResidentAnimation(c); 
+				//TODO add personAnimation or something here for going around in the house.
 				c.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);

@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import city.Animation;
+import city.Application.FOOD_ITEMS;
 import city.Building;
 
 public interface RoleInterface {

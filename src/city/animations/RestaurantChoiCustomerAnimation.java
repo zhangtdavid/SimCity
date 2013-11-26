@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import city.Animation;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCustomer;
 
@@ -149,27 +150,15 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 		yPos = enterCoordY;
 	}
 	
-	public void setOrderIcon(int choice, boolean gotFood){
-		switch(choice){
-		case 1:
-			orderIcon = "St";
-			break;
-		case 2:
-			orderIcon = "C";
-			break;
-		case 3:
-			orderIcon = "Sa";
-			break;
-		case 4:
-			orderIcon = "P";
-			break;
-		default:
-			orderIcon = "";
-			break;
-		}
+	public void setOrderIcon(FOOD_ITEMS choice, boolean gotFood){
+		if(choice == FOOD_ITEMS.steak) orderIcon = "St";
+		else if(choice == FOOD_ITEMS.chicken) orderIcon = "C";
+		else if(choice == FOOD_ITEMS.salad) orderIcon = "Sa";
+		else if(choice == FOOD_ITEMS.pizza) orderIcon = "P";
+		else orderIcon = "";
 		//if you haven't gotten food; if gotFood is false; add "?"
 		if(!gotFood){
-			orderIcon+=" ?";
+			orderIcon += "?";
 		}
 	}
 }

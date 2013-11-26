@@ -5,6 +5,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 
 import utilities.RestaurantChoiMenu;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
@@ -24,16 +25,15 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	private RestaurantChoiAnimatedCustomer customerGui;  
 	private boolean currentlyHungry;
 	RestaurantChoiMenu menu;
-	int choice;
+	FOOD_ITEMS choice;
 	int line;
 	int waitingCoordX;
 	int waitingCoordY;
 	private int xTableDestination, yTableDestination;
-	ArrayList<Integer> previousCanAfford = new ArrayList<Integer>();
+	ArrayList<FOOD_ITEMS> previousCanAfford = new ArrayList<FOOD_ITEMS>();
 	boolean hasHitZero;
-
 	boolean consideredLeaving;
-	ArrayList<Integer> previousChoices = new ArrayList<Integer>();
+	ArrayList<FOOD_ITEMS> previousChoices = new ArrayList<FOOD_ITEMS>();
 
 	// agent correspondents
 	private RestaurantChoiHost host;
@@ -43,9 +43,8 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	AgentState state = AgentState.DoingNothing; //The start state
 
 	//Constructor
-	public RestaurantChoiCustomerRole(String name){
+	public RestaurantChoiCustomerRole(){
 		super();
-		this.name = name;
 		//TODO consider removing this feature because it doesn't make sense in the context of simcity201
 		cash = (int)(17*Math.random())+3; // the default customer starts with 3~20 dollars.
 		if(name.contains("evil")){ // evil person starts with -50 dollars. 
@@ -276,18 +275,34 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		if(name.contains("salad")){
 			if(hasHitZero){
 				System.out.println("has hit zero things available to buy");
-				choice = -1;
+				choice = null;
 			}else{
-				choice = menu.SALAD;
+				int rand = (int)(Math.floor(Math.random()*4));
+				if(rand == 4) rand = 3; //in the absurdly non-probable event this happens...
+				switch(rand){
+				case 0:
+					choice = FOOD_ITEMS.steak;		
+					break;
+				case 1:
+					choice = FOOD_ITEMS.pizza;
+					break;
+				case 2:
+					choice = FOOD_ITEMS.chicken;
+					break;
+				case 3:
+					choice = FOOD_ITEMS.salad;
+					break;
+				}
+				
 			}
 			if(previousCanAfford.isEmpty()) hasHitZero = true;
 			System.out.println("Picked order " + choice + " with cash: " + cash);
 			previousChoices.add(choice); // it's memory of what he ordered previously.
-			if(choice == -1){
+			if(choice == null){
 				//leave restaurant
 				LeaveNow();
 				waiter.msgHeresMyOrder(this, choice);
-				customerGui.setOrderIcon(0, true);
+				customerGui.setOrderIcon(null, true);
 			}else{
 				waiter.msgHeresMyOrder(this, choice);
 				customerGui.setOrderIcon(choice, false);
@@ -298,19 +313,19 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 			if(previousCanAfford.isEmpty()) hasHitZero = true;
 			System.out.println("Picked order " + choice + " with cash: " + cash + " (this is for ease of grading; only Customer knows his cash)");
 			previousChoices.add(choice); // it's memory of what he ordered previously.
-			if(choice == -1){
+			if(choice == null){
 				//leave restaurant
 				LeaveNow();
 				waiter.msgHeresMyOrder(this, choice);
-				customerGui.setOrderIcon(0, true);
+				customerGui.setOrderIcon(null, true);
 			}else{
 				waiter.msgHeresMyOrder(this, choice);
 				customerGui.setOrderIcon(choice, false);
 			}
 		}
 		else if(naughtyOrNice >= 7){ // MAYBE DISHONEST CASE
-			choice = (int)(Math.ceil(4*Math.random())); // pick any of the four!
-			System.out.println("Picked order " + choice + " with cash: " + cash);
+			choice = int2Food((int)(Math.ceil(4*Math.random()))); // pick any of the four!
+			System.out.println("Picked order " + choice.name() + " (with cash: " + cash+")");
 			waiter.msgHeresMyOrder(this, choice);
 			customerGui.setOrderIcon(choice, false);
 			//i mean you could pick one of the four things you COULD afford anyways.
@@ -320,24 +335,24 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	}
 
 	@Override
-	public int pickRandom(int cash, ArrayList<Integer> mem,
+	public FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem,
 			boolean hasHitZero) {
 		//GOTTA BE AN OPTION THAT HE CAN AFFORD. If he can't afford anything, he has to leave.
 		if(mem.isEmpty() && !hasHitZero){ // only do this if mem is empty; i.e. if this is the first time. 
 			//this is because it's impossible for someone to order a 2nd time legitimately otherwise
 			for(int i = 1; i<=menu.getNumberOfItems(); i++){ // 1 thru 4 because our items go from 1 to 4...
 				if(cash >= menu.foodPrice.get(i)){
-					if(menu.isAvailable(i))
-						mem.add(i); // add the food ID to list of things we can order
+					if(menu.isAvailable(int2Food(i)))
+						mem.add(int2Food(i)); // add the food ID to list of things we can order
 				}
 			}
 		}
 		if(mem.isEmpty()) hasHitZero = true; // first check if it's empty here
-		if(mem.size() == 0 && hasHitZero) return -1;
+		if(mem.size() == 0 && hasHitZero) return null;
 
 		int x = (int)Math.ceil(mem.size()*Math.random());
 		if(x == mem.size()) x--; // can't be .size() since it's going to access mem...
-		int y = mem.get(x);
+		FOOD_ITEMS y = mem.get(x);
 		mem.remove(mem.get(x)); // remove from list of things we can order. then we can use it as memory.
 		if(mem.isEmpty()) hasHitZero = true; //and check again if it's empty here
 		return y; 	
@@ -361,7 +376,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 				print("Done eating, cookie=" + cookie);
 				event = AgentEvent.doneEating;
 				//-1 sets icon to "". True eliminates "?".
-				customerGui.setOrderIcon(-1,true);
+				customerGui.setOrderIcon(null,true);
 				stateChanged();
 			}
 		},
@@ -454,7 +469,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		//giveCashOnHungry(); // TODO still free money problems in simcity201, remove?
 		event = AgentEvent.gotHungry;
 		stateChanged();
-		choice = 0;
+		//choice = null; TODO check if this causes the person to leave automatically
 		consideredLeaving = false;
 	}
 
@@ -468,7 +483,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	}
 
 	@Override
-	public int getChoice() {
+	public FOOD_ITEMS getChoice() {
 		return this.choice;
 	}
 
@@ -521,7 +536,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		event = AgentEvent.none;
 		previousCanAfford.clear();
 		hasHitZero = false;
-		customerGui.setOrderIcon(0,true); // reset order icon
+		customerGui.setOrderIcon(null,true); // reset order icon
 		previousChoices.clear();
 		//MONEY HAXXXXX TODO consider removing these, doens't fit in context of simcity201?
 		if(name.contains("salad")){
@@ -549,9 +564,18 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 
 
 	//Utilities
-
-
-
-
-
+	public FOOD_ITEMS int2Food(int index){
+		switch(index){
+		case 0:
+			return FOOD_ITEMS.steak;
+		case 1:
+			return FOOD_ITEMS.pizza;
+		case 2:
+			return FOOD_ITEMS.chicken;
+		case 3:
+			return FOOD_ITEMS.salad;
+		default: 
+			return null;
+		}
+	}
 }

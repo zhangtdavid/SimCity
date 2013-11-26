@@ -3,6 +3,7 @@ package city.roles;
 import java.util.ArrayList;
 
 import utilities.EventLog;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.interfaces.RestaurantChoiCashier;
@@ -51,7 +52,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	/**
 	 * Computes check for waiter
 	 */
-	public void msgCompute(int choice, RestaurantChoiCustomer c,
+	public void msgCompute(FOOD_ITEMS choice, RestaurantChoiCustomer c,
 			RestaurantChoiWaiter w) {
 		checks.add(new Check(choice, c, w));
 		stateChanged();
