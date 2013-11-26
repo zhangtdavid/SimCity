@@ -1,9 +1,14 @@
 package city.tests;
 
+import java.awt.Color;
+import java.awt.Dimension;
+
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.buildings.RestaurantZhangBuilding;
+import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantZhangWaiterBase;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 import city.tests.animations.mock.MockRestaurantZhangAnimatedWaiter;
@@ -32,7 +37,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		waiter = new RestaurantZhangWaiterSharedDataRole("Waiter");
+		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension())), 0, 100);
 		anim = new MockRestaurantZhangAnimatedWaiter(waiter); 
 		host = new MockRestaurantZhangHost();
 		cook = new MockRestaurantZhangCook();
@@ -42,7 +47,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		revolvingStand = new RestaurantZhangRevolvingStand();
 		table = new RestaurantZhangTable(0, 1, 1, 1, 1);
 
-		waiter.setPerson(new MockPerson("Person"));
+		waiter.setPerson(new MockPerson("Waiter"));
 		waiter.setHost(host);
 		waiter.setCook(cook);
 		waiter.setCashier(cashier);

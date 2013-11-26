@@ -28,7 +28,7 @@ public class RestaurantZhangCustomerTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		customer = new RestaurantZhangCustomerRole("Customer");
+		customer = new RestaurantZhangCustomerRole();
 		anim = new MockRestaurantZhangAnimatedCustomer(customer); 
 		host = new MockRestaurantZhangHost();
 		waiter = new MockRestaurantZhangWaiterRegular();

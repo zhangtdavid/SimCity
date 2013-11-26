@@ -12,6 +12,10 @@ import city.interfaces.RestaurantZhangCustomer;
 public class MockRestaurantZhangAnimatedCook extends MockAnimation implements RestaurantZhangAnimatedCook {
 
 	private RestaurantZhangCook cook;
+	
+	public MockRestaurantZhangAnimatedCook(RestaurantZhangCook cook) {
+		this.cook = cook;
+	}
 
 	@Override
 	public void updatePosition() {

@@ -20,6 +20,7 @@ import city.Building;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantZhangCookAnimation;
+import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantBaseBuilding;
 import city.interfaces.MarketCustomerDelivery;
@@ -40,23 +41,23 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	private final int COOKINGTIMEMULTIPLIER = 2;
 	private final int FOODTHRESHOLD = 3;
 
-	private List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
+	public List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
 
 	// REVOLVING STAND STUFF
-	RestaurantZhangRevolvingStand myOrderStand;
-	boolean waitingToCheckStand = false;
+	public RestaurantZhangRevolvingStand myOrderStand;
+	public boolean waitingToCheckStand = false;
 
-	private String name;
+	public String name;
 
-	private RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
-	private Map<String, Food> cookInventory = new HashMap<String, Food>();
+	public RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
+	public Map<String, Food> cookInventory = new HashMap<String, Food>();
 
-	private List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
-	private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
-	private RestaurantZhangCashier cashier;
-	private MarketCustomerDelivery marketCustomerDelivery;
+	public List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
+	public List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
+	public RestaurantZhangCashier cashier;
+	public MarketCustomerDelivery marketCustomerDelivery;
 
-	private RestaurantZhangCookAnimation thisGui;
+	public RestaurantZhangAnimatedCook thisGui;
 
 	Timer timer = new Timer();
 
@@ -249,7 +250,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		(long) cookInventory.get(tempOrder.choice).cookTime);
 	}
 
-	void orderIsReady(RestaurantZhangOrder o) {
+	public void orderIsReady(RestaurantZhangOrder o) {
 		print("Finished order: " + o.choice);
 		for(RestaurantZhangOrder order : ordersToCook) {
 			if(order.equals(o)) {
@@ -333,11 +334,11 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 	}
 
-	public void setAnimation(RestaurantZhangCookAnimation gui) {
+	public void setAnimation(RestaurantZhangAnimatedCook gui) {
 		thisGui = gui;
 	}
 
-	public RestaurantZhangCookAnimation getGui() {
+	public RestaurantZhangAnimatedCook getGui() {
 		return thisGui;
 	}
 
