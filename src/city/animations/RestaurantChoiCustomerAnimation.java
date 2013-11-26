@@ -79,7 +79,7 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 		g.fillRect(xPos, yPos, WIDTH, WIDTH);
 		g.drawString(orderIcon,xPos,yPos);
 		g.setColor(Color.BLACK);
-		g.drawString(choicustomer.getName(), xPos,yPos+WIDTH/2);
+		g.drawString(choicustomer.getPerson().getName(), xPos,yPos+WIDTH/2);
 	}
 
 	//Movements

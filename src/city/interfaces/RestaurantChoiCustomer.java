@@ -69,5 +69,5 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	//Utilities
 	FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem, boolean hasHitZero);
 	FOOD_ITEMS int2Food(int index);
-	public abstract String getName();
+	//public abstract String getName();
 }

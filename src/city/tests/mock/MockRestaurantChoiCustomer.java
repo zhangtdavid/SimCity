@@ -225,12 +225,6 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return name;
-	}
-
-	@Override
 	public RestaurantChoiAnimatedCustomer getGui() {
 		// TODO Auto-generated method stub
 		return null;

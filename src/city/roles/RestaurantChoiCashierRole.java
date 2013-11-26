@@ -129,6 +129,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	public boolean runScheduler() {
 		boolean blocking = false;
 		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			System.out.println("in nested scheduler");
 			blocking  = true;
 			boolean activity = r.runScheduler();
 			if (!activity) {
@@ -250,9 +251,9 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 
     
 	@Override
-	public void getMoney() {
-		moneyIncoming = IN_TRANSIT;
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+	public void getMoney() { //TODO bank needs to incorporate withdrawal
+		//moneyIncoming = IN_TRANSIT;
+		//this.building.bankConnection.setActive(TODO[something that makes withdraw work], RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
 	}
 	
 	@Override

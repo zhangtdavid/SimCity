@@ -61,22 +61,6 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         // Clear the screen by painting a rectangle the size of the frame
         graphics2D.setColor(Color.GRAY);
         graphics2D.fillRect(0, 0, panelX, panelY);
-
-        // Update the position of each visible element
-        for(Animation animation : animations) {
-        	if (animation.getVisible()) {
-                animation.updatePosition();
-            }
-        }
-
-        // Draw each visible element after updating their positions
-        // TODO generates concurrent modification exception
-        for(Animation animation : animations) {
-            if (animation.getVisible()) {
-                animation.draw(graphics2D);
-            }
-        }
-        
         // PERSONAL DRAWING STARTS HERE; FIRST DRAW STATIC OBJECTS (UTILITIES, TABLES, CASHIER)
         graphics.setColor(Color.ORANGE); //drawing tables
         for(int i = 0; i < TABLE_COUNT; i++){
@@ -91,7 +75,20 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         graphics.setColor(Color.WHITE); // dishes
         graphics.fillRect(DISHES_X, DISHES_Y, WIDTH, WIDTH);
         
-        
+        // Update the position of each visible element
+        for(Animation animation : animations) {
+        	if (animation.getVisible()) {
+                animation.updatePosition();
+            }
+        }
+
+        // Draw each visible element after updating their positions
+        // TODO generates concurrent modification exception
+        for(Animation animation : animations) {
+            if (animation.getVisible()) {
+                animation.draw(graphics2D);
+            }
+        }
     }
     
     public void addVisualizationElement(Animation ve) {

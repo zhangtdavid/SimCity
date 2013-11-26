@@ -57,24 +57,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public RestaurantChoiCookRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		building = b;
-		/*
-		foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
-		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
-		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad)); // declarations have been moved to building
-		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak));*/
-		//String name, int cookingTime, int amount (amount), int low (low), int capacity, int price
-		//ordering on initialization if needed
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 	
 	public RestaurantChoiCookRole(){ // to just test mechanics
-		super();
-		/*foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
-		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
-		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad));
-		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak));*/ 
+		super(); 
 	}
 	//Messages
 	@Override

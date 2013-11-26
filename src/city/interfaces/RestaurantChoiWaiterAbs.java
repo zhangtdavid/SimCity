@@ -11,6 +11,7 @@ import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.animations.RestaurantChoiWaiterAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
 import city.animations.interfaces.RestaurantChoiAnimatedWaiter;
@@ -49,7 +50,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	 * @param t1 : Start of shift
 	 * @param t2 : End of shift
 	 */
-	public RestaurantChoiWaiterAbs(RestaurantChoiBuilding b, int t1, int t2) {
+	public RestaurantChoiWaiterAbs(RestaurantChoiBuilding b, int t1, int t2) {		
 		super();
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
@@ -101,9 +102,9 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	@Override
 	public void msgReadyToOrder(RestaurantChoiCustomer c) {
 		for (int i = 0; i < myCustomers.size(); i++) {
-			if (c.getName().equals(myCustomers.get(i).getC().getName())) {
+			if (c.getPerson().getName().equals(myCustomers.get(i).getC().getPerson().getName())) {
 				myCustomers.get(i).setCustomerState(myCustomer.READY_TO_ORDER);
-				System.out.println("need to take an order from " + c.getName());
+				System.out.println("need to take an order from " + c.getPerson().getName());
 				stateChanged();
 			}
 		}
@@ -128,7 +129,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 						if (c.equals(myCustomers.get(i).getC())
 								&& myCustomers.get(i).getCustomerState() == myCustomer.ORDERING) {
 							myCustomers.get(i).setCustomerState(myCustomer.ORDERED);
-							System.out.println("Took order from customer " + c.getName());
+							System.out.println("Took order from customer " + c.getPerson().getName());
 							myCustomers.get(i).setOr(new RestaurantChoiOrder(choice,
 									myCustomers.get(i).getT().getTableNumber(), this));
 						}
@@ -262,7 +263,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 			e.printStackTrace();
 		}
 		customer.setCustomerState(myCustomer.SEATED);
-		customer.getC().msgHeresYourSeat(new RestaurantChoiMenu()); // we're allowed to spawn menus
+		customer.getC().msgHeresYourSeat(building.menu); // we're allowed to spawn menus
 		// by now, inProgress has already released. NO NEED to do it again in
 		// DoLeave();
 		waiterGui.DoLeave(); // head back to 50,50
@@ -425,9 +426,9 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	@Override
 	public boolean needToTakeOrder() {
 		for (int i = 0; i < myCustomers.size(); i++) {
-			if (myCustomers.get(i).getC().getChoice() == null) {
+			/*if (myCustomers.get(i).getC().getChoice() == null) {
 				return false;
-			}
+			}*/
 			if (myCustomers.get(i).getCustomerState() == myCustomer.READY_TO_ORDER) {
 				// then go to the customer and take his order.
 				DoGoToTable(myCustomers.get(i).getT()); // semaphore acquire is in
@@ -559,6 +560,10 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
+	public void setAnimation(RestaurantChoiWaiterAnimation r){
+		waiterGui = r;
+	}
+	
 	@Override
 	public boolean needToGiveCheck() {
 		for (int i = 0; i < myCustomers.size(); i++) {
@@ -574,6 +579,4 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 		return false;
 	}
-
-
 }
