@@ -27,7 +27,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		}
 
 		print("telling cook order " + choice + " for " + customer.c);
-		cook.msgHereIsAnOrder(this, choice, table);
+		restaurant.cook.msgHereIsAnOrder(this, choice, table);
 		customer.o.os = OrderStatus.Cooking;
 		
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();

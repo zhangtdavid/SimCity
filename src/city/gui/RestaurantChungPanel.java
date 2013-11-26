@@ -60,7 +60,7 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 //	--------------------------------------------------------------------
     public static final int WAITERHOMEX = 440, WAITERHOMEY = 120;
     public static final int CUSTOMERLINEX = 40, CUSTOMERLINEY = 100;
-    public static final int ORDERDROPX = 380, ORDERDROPY = 40;
+    public static final int ORDERDROPX = 280, ORDERDROPY = 20;
     public static final int WAITERBREAKX = 260, WAITERBREAKY = 40; 
     
 	private int panelX;
