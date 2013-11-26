@@ -79,7 +79,13 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         for(Animation animation : animations) {
         	if (animation.getVisible()) {
                 animation.updatePosition();
+                animation.draw(graphics2D);
+                 
             }
         }
+	}
+	
+	public void addVisualizationElement(Animation ve) {
+		animations.add(ve);
 	}
 }
