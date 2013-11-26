@@ -294,20 +294,12 @@ public class PersonAgent extends Agent implements Person {
 		Building b = CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
-		// Use reflection to get a Restaurant<name>CustomerAnimation to use when dining at the restaurant
 		try {
-			Class<?> c0 = Class.forName(b.getCustomerRole());
-			Constructor<?> r0 = c0.getConstructor(String.class);
-			restaurantCustomerRole = (Role) r0.newInstance(name);
+			Class<?> c0 = Class.forName(b.getCustomerRoleName());
+			Constructor<?> r0 = c0.getConstructor();
+			restaurantCustomerRole = (Role) r0.newInstance();
 			b.addRole(restaurantCustomerRole);
 			addRole(restaurantCustomerRole);
-			
-//			Class<?> c1 = Class.forName(b.getCustomerAnimation());
-//			Constructor<?> r1 = c1.getConstructor(c0.getInterfaces()[0]);
-//			Animation a0 = (Animation) r1.newInstance(restaurantCustomerRole);
-//			restaurantCustomerRole.setAnimation(a0);
-			
-			// TODO for testing
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
