@@ -32,11 +32,11 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Employees
 //	---------------------------------------------------------------
-	private List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
-	private class MyMarketEmployee {
+	public List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
+	public class MyMarketEmployee {
 		MarketEmployee employee;
-		MarketCustomerDelivery customerDelivery;
-		MarketEmployeeState s;
+		public MarketCustomerDelivery customerDelivery;
+		public MarketEmployeeState s;
 		
 		public MyMarketEmployee(MarketEmployee employee) {
 			this.employee = employee;
@@ -44,12 +44,12 @@ public class MarketManagerRole extends Role implements MarketManager {
 			s = MarketEmployeeState.Available;
 		}
 	}
-	private enum MarketEmployeeState
+	public enum MarketEmployeeState
 	{Available, GoingToPhone, GettingOrder, CollectingItems};
 
 //	Customers
 //	---------------------------------------------------------------
-	private List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
+	public List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
 	private class MyMarketCustomer {
 		MarketCustomer customer;
 		MarketCustomerDelivery customerDelivery;
@@ -137,6 +137,8 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	Employee
 //	---------------------------------------------------------------
 	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee e) {
+		log.add(new LoggedEvent("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee."));
+		System.out.println("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
 		MyMarketEmployee tempEmployee = findEmployee(e);
 		tempEmployee.s = MarketEmployeeState.GettingOrder;
 		stateChanged();

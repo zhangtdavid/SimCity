@@ -88,7 +88,7 @@ public class MarketEmployeeTest extends TestCase {
 		employeePerson = new MockPerson("Employee"); 
 		employee = new MarketEmployeeRole(market, 0, 12);
 		employee.setPerson(employeePerson);
-		employee.market = market;
+		employee.setMarket(market);
 //		employee.setAnimation((Animation) employeeGui);
 		
 		managerPerson = new MockPerson("Manager"); 
@@ -129,6 +129,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
         for (FOOD_ITEMS item: order.orderItems.keySet()) {
     		assertTrue("market.inventory should be 50.", market.inventory.get(item) == 50);
         }
@@ -160,22 +161,60 @@ public class MarketEmployeeTest extends TestCase {
         for (FOOD_ITEMS item: order.orderItems.keySet()) {
     		assertTrue("market.inventory should be market.inventory - order.orderItems.", market.inventory.get(item) == 45);
         }
-        assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
+		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
+		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
 		assertTrue("Employee customer should be null.", employee.customer == null);
 		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
+	}
+	public void testNormCustomerDeliveryScenario() {
+		assertEquals("Cashier should have an empty log.", cashier.log.size(), 0);
+		assertEquals("Employee should have an empty log.", employee.log.size(), 0);
+		assertEquals("Manager should have an empty log.", manager.log.size(), 0);
+		assertEquals("Customer should have an empty log.", customer.log.size(), 0);
+		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
+		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
+		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+    		assertTrue("market.inventory should be 50.", market.inventory.get(item) == 50);
+        }
 
-        // check that collecting items changes the inventory accordingly
-        
-//		cashier.msgHereIsPayment(order.orderId, 110);
-//		assertEquals("Cashier payment variable should be 110.00. It's " + cashier.transactions.get(0).payment + "instead", cashier.transactions.get(0).payment, 110);
-//		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment.", cashier.transactions.get(0).s == TransactionState.ReceivedPayment);	
-//		
-//		cashier.runScheduler();
-//		assertEquals("Customer log should have 2 entries.", customer.log.size(), 2);
-//		assertTrue("Customer log should have \"Customer received msgPaymentReceived from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgPaymentReceived from cashier"));
-//		assertEquals("Market money should be 1110.00. It's " + market.getCash() + "instead", market.getCash(), 1110);
-//		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);		
+		employee.msgAssistCustomerDelivery(customerDelivery, customerDeliveryPayment);
+		assertEquals("Employee log should have 1 entry.", employee.log.size(), 1);
+		assertTrue("Employee log should have \"Employee received msgAssistCustomer\". The last event logged is " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgAssistCustomer"));
+		assertTrue("Employee event should be AskedToAssistCustomer.", employee.event == MarketEmployeeEvent.AskedToAssistCustomer);
+		assertTrue("Employee customerDelivery should be customerDelivery.", employee.customerDelivery == customerDelivery);
+		assertTrue("Employee customerDeliveryPayment should be customerDeliveryPayment.", employee.customerDeliveryPayment == customerDeliveryPayment);
+
+		employee.runScheduler();
+		assertTrue("Employee state should be AskedForOrder.", employee.state == MarketEmployeeState.AskedForOrder);
+		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
+		assertTrue("Manager log should have \"Manager received msgWhatWouldCustomerDeliveryLike\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgWhatWouldCustomerDeliveryLike"));
+
+		employee.msgHereIsCustomerDeliveryOrder(order.orderItems, order.orderId);
+		assertEquals("Employee log should have 2 entries.", employee.log.size(), 2);
+		assertTrue("Employee log should have \"Employee received msgHereIsCustomerDeliveryOrder\". The last event logged is actually " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsCustomerDeliveryOrder"));
+		assertTrue("Employee event should be OrderReceived.", employee.event == MarketEmployeeEvent.OrderReceived);
+		assertTrue("employee.orderId should be order.orderId.", employee.orderId == order.orderId);
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+    		assertTrue("employee.orderItems should be order.orderItems.", employee.order.get(item) == order.orderItems.get(item));
+        }
+		
+		employee.runScheduler();
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+    		assertTrue("employee.collectedItems should be order.orderItems.", employee.collectedItems.get(item) == order.orderItems.get(item));
+        }
+        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+    		assertTrue("market.inventory should be market.inventory - order.orderItems.", market.inventory.get(item) == 45);
+        }
+		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
+		assertEquals("Manager log should have 2 entries.", manager.log.size(), 2);
+		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
+		assertTrue("Employee customer should be null.", employee.customer == null);
+		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
 	}
 }
 

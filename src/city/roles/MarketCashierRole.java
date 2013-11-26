@@ -27,7 +27,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	public MarketBuilding market;
+	private MarketBuilding market;
 	public BankCustomer bankCustomer;
 		
 	public enum WorkingState
