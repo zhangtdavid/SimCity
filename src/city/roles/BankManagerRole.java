@@ -7,6 +7,7 @@ import java.util.List;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
 import city.interfaces.BankManager;
@@ -21,8 +22,11 @@ public class BankManagerRole extends Role implements BankManager{
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
 // Constructor
-	public BankManagerRole (BankBuilding b){
+	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 	}
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){

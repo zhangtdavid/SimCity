@@ -7,7 +7,7 @@ import utilities.RestaurantJPWaiterBase;
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	
 	public RestaurantJPWaiterRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
-		super(b);
+		super(b, shiftStart, shiftEnd);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);

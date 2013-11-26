@@ -40,10 +40,13 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	
 	Map<String, Float> Prices = new HashMap<String, Float>();
 	public EventLog log  = new EventLog();
-	public RestaurantJPCashierRole(RestaurantJPBuilding b){
+	public RestaurantJPCashierRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd){
 		super();
 		building = b;
-		name = "Squidward";
+		name = this.getPerson().getName();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		Prices.put("Steak", (float) 12.99);
 		Prices.put("Chicken", (float) 10.99);
 		Prices.put("Salad", (float) 5.99);

@@ -27,9 +27,13 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	public RestaurantJPWaiterAnimation waiterGui;
 	private boolean wantsInactive = false;
 	
-	public RestaurantJPWaiterBase(RestaurantJPBuilding b) {
+	public RestaurantJPWaiterBase(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
+		name = this.getPerson().getName();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 			// TODO Auto-generated constructor stub
 	}
 	

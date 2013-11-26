@@ -41,7 +41,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	
 	public RestaurantJPCustomerRole(String n){
 		super();
-		name = n;
+		name = this.getPerson().getName();
 		if(name.equals("Flake"))
 			cash = (float) 0;
 		myMenu = new RestaurantJPMenuClass();

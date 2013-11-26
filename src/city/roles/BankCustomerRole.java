@@ -6,6 +6,7 @@ import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
