@@ -42,7 +42,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public RestaurantChoiRevolvingStand rs;
 	public RestaurantChoiTable t;
 	public BankBuilding bank;
-	public BankCustomerRole bankConnection; 
+	//public BankCustomerRole bankConnection; 
 	public static final int DAILY_CAPITAL = 1000;
 	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
 	public static final int WITHDRAW_THRESHOLD = 200;
@@ -57,7 +57,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole(this);
+		//bankConnection = new BankCustomerRole(this);
 		this.setCashOnSite(cash_on_site);	
 		
 		//set up tables
@@ -66,7 +66,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		// Add items and their cooking times to a map
 		
 		int rand = 7+(int)Math.ceil(10*Math.random());
-		foods.put(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
+		/*foods.put(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 16));
 		rand = 7+(int)Math.ceil(10*Math.random());
 		foods.put(FOOD_ITEMS.pizza, new Food("Pizza", (int)(Math.ceil(Math.random()*6)*1000),
@@ -77,8 +77,8 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		rand = 7+(int)Math.ceil(10*Math.random());
 		foods.put(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 6));
+		*/
 		
-		/*
 		foods.put(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 16));
 		rand = 7+(int)Math.ceil(10*Math.random());
@@ -89,7 +89,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				1, ((int)Math.floor(rand*0.2)), rand, 16));
 		rand = 7+(int)Math.ceil(10*Math.random());
 		foods.put(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
-				1, ((int)Math.floor(rand*0.2)), rand, 16));*/
+				1, ((int)Math.floor(rand*0.2)), rand, 16));
 	}
 
 
@@ -113,14 +113,14 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			RestaurantChoiCustomerRole c = (RestaurantChoiCustomerRole)r;
 			c.setCashier(cashier);
 			c.setHost(host);
-			if(!allRoles.containsKey(c)) {
+			if(!super.roleExists(c)) {
 				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				c.setGui(anim);	
 //				c.setAnimation(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				customers.add(c);
-				allRoles.put(c, anim);
+				super.addRole(c, anim);
 			}
 		}
 		if(r instanceof RestaurantChoiWaiter2Role) {
@@ -129,13 +129,13 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			w.setCook(cook);
 			w.setHost(host);
 			host.addWaiter(w);
-			if(!allRoles.containsKey(w)) {
+			if(!super.roleExists(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				allRoles.put(w, anim);
+				super.addRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantChoiWaiterRole) {
@@ -145,20 +145,20 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			w.setHost(host);
 			w.setRevolvingStand(rs);
 			host.addWaiter(w);
-			if(!allRoles.containsKey(w)) {
+			if(!super.roleExists(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				allRoles.put(w, anim);
+				super.addRole(w, anim);			
 			}
 		}
 		if(r instanceof RestaurantChoiHostRole) {
 			RestaurantChoiHostRole h = (RestaurantChoiHostRole)r;
-			if(!allRoles.containsKey(h)) { 
+			if(!super.roleExists(h)) { 
 				host = h;
-				allRoles.put(h, null);
+				super.addRole(h, null);
 			}
 		}
 		if(r instanceof RestaurantChoiCookRole) {
@@ -166,29 +166,26 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			rs = new RestaurantChoiRevolvingStand(); // set revolving stand
 			c.setRevolvingStand(rs);
 			c.CheckBack();
-			if(!allRoles.containsKey(c)) { 
+			if(!super.roleExists(c)) { 
 				RestaurantChoiCookAnimation anim = new RestaurantChoiCookAnimation(c);
-//				c.setGui(anim);
-	//			anim.isVisible = true;
 				c.setGui(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				cook = c;
-				allRoles.put(c, anim);
+				super.addRole(c, anim);
 			}
 		}
 		if(r instanceof RestaurantChoiCashierRole) {
 			RestaurantChoiCashierRole c = (RestaurantChoiCashierRole)r;
-			if(!allRoles.containsKey(c)) { 
+			if(!super.roleExists(c)) { 
 				RestaurantChoiCashierAnimation anim = new RestaurantChoiCashierAnimation();
 				cashier = c;
 				c.setGui(anim);
 				allRoles.put(c, null);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
-				allRoles.put(c, anim);
+				super.addRole(c, anim);
 			}
 		}
 	}
-	
 }

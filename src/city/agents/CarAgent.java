@@ -34,7 +34,7 @@ public class CarAgent extends Agent implements Car {
 	void msgImAtCarDestination() { // From myGui, tells car it is at destination
 		destination = null;
 		myEvent = CarEvent.ATDESTINATION;
-		stateChanged();
+		//stateChanged();
 	}
 	
 	// Scheduler

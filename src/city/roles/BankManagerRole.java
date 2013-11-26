@@ -42,9 +42,13 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	public void msgDirectDeposit(int acctNum, int money, BankCustomerRole r){
 		print("Direct Deposit message received");
-		bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
+		if(acctNum == -1)
+			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, null));
+		else
+			bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
 		directDepositer = r;
 		stateChanged();
+		runScheduler();
 	}
 	//from teller
 	public void msgAvailable(BankTellerRole t){
@@ -90,7 +94,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Scheduler
 	@Override
 	public boolean runScheduler() {
-		System.out.println("qwertyup0[okjhgfdsfgjklm,nbvcdfgtiklbhdftyuikjhbgvhfyiu IN THE SCHEDULER OF BANK MANAGER");
+		System.out.println("IN THE SCHEDULER OF BANK MANAGER");
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
@@ -116,7 +120,6 @@ public class BankManagerRole extends Role implements BankManager{
 				}
 			}
 		}	
-		System.out.println("inside bank manager scheduler");
 		for(BankTask bT : bankTasks){
 			if(bT.t == type.atmDeposit){
 				atmDeposit(bT);
@@ -175,10 +178,8 @@ public class BankManagerRole extends Role implements BankManager{
 		myT.teller.msgAddressCustomer(bc);
 	}
 	private void atmDeposit(BankTask bT){
-		System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg in the atmdeposit method");
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
-				System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg depositing");
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				directDepositer.msgDepositCompleted();
@@ -187,10 +188,8 @@ public class BankManagerRole extends Role implements BankManager{
 		}
 	}
 	private void Deposit(BankTask bT){
-		System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg in the deposit method");
 		for(Account a : building.getAccounts()){
-			if(a.acctNum == bT.acctNum){
-				System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg depositing");		
+			if(a.acctNum == bT.acctNum){		
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				bT.teller.msgTransactionSuccessful();

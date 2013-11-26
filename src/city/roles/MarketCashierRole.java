@@ -110,10 +110,10 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //		bankCustomer = new BankCustomerRole(); TODO Get a null point exception here
 
 	}
-	
+	/*
 	public void setActive(){
 		this.setActivityBegun();
-	}
+	}*/
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;

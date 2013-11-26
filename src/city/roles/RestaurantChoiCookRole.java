@@ -2,8 +2,8 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.ConcurrentHashMap;
@@ -99,8 +99,8 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	}
 
 */
-	public void msgFoodReceived(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-        print("Cook received msgOrderIsReady");
+	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id) {
+        print("Cook received msgFoodReceived");
         MyMarketOrder mo = findMarketOrder(id);
         removeMarketOrderFromList(mo);
         
@@ -244,7 +244,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				//ask for food; use marketIndex, but it goes to infinity so take mod of markets.size();
 				//and we ask for the difference between the low and the capacity.
 				int outOfcounter = 0;
-				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.item) == true){
+				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.item) == true){ // true = Out of that food
 					marketIndex++;
 					outOfcounter++;
 					if(outOfcounter == markets.size()){
@@ -257,7 +257,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					//markets.get(marketIndex%markets.size()).getMarket().msgHeresAnOrder(tempFood.item, tempFood.capacity-tempFood.low);
 					//give a MarketOrder to a MarketBuilding
 					
-					Map<FOOD_ITEMS, Integer> forOrder = null;
+					HashMap<FOOD_ITEMS, Integer> forOrder = new HashMap<FOOD_ITEMS, Integer>();
 					forOrder.put(o.getChoice(), t);
 					MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
 				}
@@ -391,6 +391,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		myMarket mm = new myMarket(m);
 		synchronized(markets){
 			markets.add(mm);            
+			mm.outOf.put("Steak", false);
+			mm.outOf.put("Pizza", false);
+			mm.outOf.put("Chicken", false);
+			mm.outOf.put("Salad", false);
 		}		
 	}
 	//Utilities

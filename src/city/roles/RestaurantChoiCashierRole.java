@@ -48,7 +48,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-		roles.add((Role) building.bankConnection); // TODO clean up
+		//roles.add((Role) building.bankConnection); // TODO clean up
     }
     public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
@@ -260,7 +260,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	
 	@Override
 	public void depositMoney() {
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
+		//this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
 	}
 	
 	//Classes

@@ -53,10 +53,7 @@ public interface RestaurantChoiCook extends RoleInterface{
 		
 		public myMarket(MarketBuilding m){
 			market = m;
-			outOf.put("Chicken", false);
-			outOf.put("Pizza", false);
-			outOf.put("Salad", false);
-			outOf.put("Steak", false);
+			outOf = new HashMap<String, Boolean>();
 		}
 		public MarketBuilding getMarket(){
 			return market;
