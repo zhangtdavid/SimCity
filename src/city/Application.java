@@ -84,7 +84,7 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
-		mp1 = new MarketPanel(Color.black; new Dimension(500,500));
+		mp1 = new MarketPanel(Color.black, new Dimension(500,500));
 		m1 = new MarketBuilding("MarketBuilding", null);
 		// Create buildings
 		b1 = new BankBuilding("BankBuilding");
