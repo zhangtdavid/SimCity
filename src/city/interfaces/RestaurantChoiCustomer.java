@@ -55,14 +55,12 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	public abstract boolean getLocation();
 	public abstract FOOD_ITEMS getChoice();	
 	public abstract AgentState getState();
-	public abstract String getName();
 	public abstract RestaurantChoiAnimatedCustomer getGui();
 	public abstract int getHungerLevel();
 	//Setters
 	public abstract void setWaiter(RestaurantChoiWaiter w);
 	public abstract void setHost(RestaurantChoiHost h);
 	public void setCashier(RestaurantChoiCashier c);
-	public void setName(String n);
 	public void setHungryNow();
 	public void setFullNow();
 	public void setHungerLevel(int hungerLevel);
@@ -71,4 +69,5 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	//Utilities
 	FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem, boolean hasHitZero);
 	FOOD_ITEMS int2Food(int index);
+	public abstract String getName();
 }

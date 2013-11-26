@@ -16,7 +16,6 @@ import city.interfaces.RestaurantChoiWaiter;
 public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCustomer{
 
 	//Data
-	String name;
 	int cash;
 	int amt;  
 	int punishment;
@@ -47,7 +46,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		super();
 		//TODO consider removing this feature because it doesn't make sense in the context of simcity201
 		cash = (int)(17*Math.random())+3; // the default customer starts with 3~20 dollars.
-		if(name.contains("evil")){ // evil person starts with -50 dollars. 
+		if(this.getName().contains("evil")){ // evil person starts with -50 dollars. 
 			cash = -10;
 		}
 
@@ -268,11 +267,11 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	@Override
 	public void giveOrder() {
 		int naughtyOrNice = (int)(10*Math.random()); // 6/10 chance of honesty. people are bad
-		if(name.contains("evil")){ // grading hack: if name is "evil", he will random guess from anything
+		if(getName().contains("evil")){ // grading hack: if name is "evil", he will random guess from anything
 			naughtyOrNice = 8; // guaranteed to lie. but this doesn't guarantee invalid order! 
 		}
 		//grading hack: salad only. if can't order salad, leaves.
-		if(name.contains("salad")){
+		if(getName().contains("salad")){
 			if(hasHitZero){
 				System.out.println("has hit zero things available to buy");
 				choice = null;
@@ -486,10 +485,10 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public FOOD_ITEMS getChoice() {
 		return this.choice;
 	}
-
+	
 	@Override
 	public String getName() {
-		return this.name;
+		return this.getName();
 	}
 
 	@Override
@@ -522,10 +521,6 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		cashier = c;
 	}
 
-	@Override
-	public void setName(String n) {
-		name = n;
-	}
 
 	@Override
 	public void setHungryNow() {
@@ -539,10 +534,10 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		customerGui.setOrderIcon(null,true); // reset order icon
 		previousChoices.clear();
 		//MONEY HAXXXXX TODO consider removing these, doens't fit in context of simcity201?
-		if(name.contains("salad")){
+		if(this.getName().contains("salad")){
 			cash = 4; // enough to buy just salad.
 		}
-		if(name.contains("pizza")){
+		if(this.getName().contains("pizza")){
 			cash = 6; // enough to buy pizza or salad
 		}
 	}
@@ -578,4 +573,5 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 			return null;
 		}
 	}
+
 }

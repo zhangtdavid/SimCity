@@ -261,11 +261,6 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void setName(String n) {
-		name = n;		
-	}
-
-	@Override
 	public void setHungryNow() {
 		// TODO Auto-generated method stub
 		
