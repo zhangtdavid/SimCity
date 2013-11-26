@@ -8,7 +8,9 @@ import java.util.concurrent.Semaphore;
 
 import city.Application;
 import city.Role;
+import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
@@ -32,8 +34,8 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private RestaurantTimmsCashier cashier;
 	private RestaurantTimmsHost host;
 	private RestaurantTimmsWaiter waiter;
-	private RestaurantTimmsAnimatedCustomer animation;
 	private Timer timer = new Timer();
+	private RestaurantTimmsAnimatedCustomer animation = null;
 	
 	private List<Application.FOOD_ITEMS> failedItems = new ArrayList<Application.FOOD_ITEMS>();
 	
@@ -48,20 +50,21 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Constructor
 
-	public RestaurantTimmsCustomerRole(RestaurantTimmsHost host, RestaurantTimmsCashier cashier){
+	public RestaurantTimmsCustomerRole(RestaurantTimmsBuilding b){
 		super();
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.hunger = 5;
 		this.pickiness = 3;
-		this.host = host;
-		this.cashier = cashier;
+		this.host = b.host;
+		this.cashier = b.cashier;
 		this.money = 0;
 		this.state = State.none;
 	}
 	
 	// Messages
 	
+	@Override
 	public void msgGoToRestaurant() {
 		print("msgGoToRestaurant");
 		money += (MONEY_MIN + (int)(Math.random() * ((MONEY_MAX - MONEY_MIN) + 1)));
@@ -71,6 +74,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
+	@Override
 	public void msgRestaurantFull() {
 		print("msgRestaurantFull");
 		 Double outcome = Math.random();
@@ -83,6 +87,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		 }
 	}
 	
+	@Override
 	public void msgGoToTable(RestaurantTimmsWaiter w, int position) {
 		print("msgGoToTable");
 		waiter = w;
@@ -91,6 +96,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOrderFromWaiter() {
 		print("msgOrderFromWaiter");
 		if (state != State.hasOrdered)
@@ -98,6 +104,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
+	@Override
 	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) {
 		print("msgWaiterDeliveredFood");
 		this.eatingItem = stockItem;
@@ -105,27 +112,32 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
+	@Override
 	public void msgPaidCashier(int change) {
 		print("msgPaidCashier");
 		money = change;
 		customerHover.release();
 	}
 	
+	@Override
 	public void guiAtLine() {
 		print("guiAtLine");
 		atRestaurant.release();
 	}
 	
+	@Override
 	public void guiAtTable() {
 		print("guiAtTable");
 		atTable.release();
 	}
 	
+	@Override
 	public void guiAtCashier() {
 		print("guiAtCashier");
 		atCashier.release();
 	}
 	
+	@Override
 	public void guiAtExit() {
 		print("guiAtExit");
 		atExit.release();
@@ -218,7 +230,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		} else if (orderItem != null) {
 			// Food has been eaten, must pay cashier
 			host.msgLeaving(this, tableNumber);
-			animation.goToCashier(cashier.getAnimation());
+			animation.goToCashier(cashier.getAnimation(RestaurantTimmsAnimatedCashier.class));
 			atCashier.acquire();
 			cashier.msgMakePayment(this, money);
 			customerHover.acquire();
@@ -235,6 +247,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Scheduler
 	
+	@Override
 	public boolean runScheduler() {
 		switch (state) {
 			case goToRestaurant:
@@ -273,27 +286,18 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	// Get
-
-	public String getState() {
-		return this.state.toString();
-	}
-	
-	public RestaurantTimmsHost getHost() {
-		return this.host;
-	}
-	
-	public RestaurantTimmsAnimatedCustomer getAnimation() {
-		return this.animation;
-	}
 	
 	// Set
 	
+	@Override
 	public void setHost(RestaurantTimmsHost h) {
 		this.host = h;
 	}
 	
-	public void setAnimation(RestaurantTimmsAnimatedCustomer a) {
-		this.animation = a;
+	@Override
+	public void setActive() {
+		this.animation = this.getAnimation(RestaurantTimmsAnimatedCustomer.class);
+		super.setActive();
 	}
 	
 }

@@ -79,8 +79,7 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 
 	@Override
 	public void msgOrderIsReady(String choice, RestaurantZhangTable t) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Order for table " + t.tableNumber + " and choice " + choice + " received"));
 	}
 
 	@Override
@@ -90,7 +89,7 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	}
 
 	@Override
-	public void msgAtTable() {
+	public void msgAtDestination() {
 		// TODO Auto-generated method stub
 		
 	}

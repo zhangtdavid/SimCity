@@ -14,5 +14,5 @@ public interface RestaurantZhangCook extends RoleInterface {
 
 	public abstract int getPosOfNewOrder();
 
-	public abstract void msgAtBase();
+	public abstract void msgAtDestination();
 }

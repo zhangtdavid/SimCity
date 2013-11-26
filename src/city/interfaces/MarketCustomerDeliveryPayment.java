@@ -8,8 +8,8 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsBill(MarketCashier c, int bill, int id);
-	public abstract void msgPaymentReceived();
+	public abstract void msgHereIsBill(int bill, int id);
+	public abstract void msgPaymentReceived(int id);
 	
 	// Scheduler
 	

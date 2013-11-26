@@ -1,4 +1,4 @@
-package city.roles;
+package utilities;
 
 import city.animations.RestaurantChoiFurnitureAnimation;
 import city.interfaces.RestaurantChoiCustomer;
@@ -44,7 +44,7 @@ public class RestaurantChoiTable {
 		this.yCoord = yCoord;
 	}
 
-	void setOccupant(RestaurantChoiCustomer c) {
+	public void setOccupant(RestaurantChoiCustomer c) {
 		occupiedBy = c;
 	}
 

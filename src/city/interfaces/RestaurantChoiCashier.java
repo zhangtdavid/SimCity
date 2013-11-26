@@ -8,10 +8,10 @@ import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 public interface RestaurantChoiCashier extends RoleInterface{
 
 	//Data
-	HashMap <Integer, Double> foodCost = new HashMap<Integer,Double>();
+	HashMap <Integer, Integer> foodCost = new HashMap<Integer,Integer>();
     ArrayList<Check> checks = new ArrayList<Check>();
 
-	//ConcurrentHashMap<Market, Double> marketBills = new ConcurrentHashMap<Market, Double>(); TODO
+	//ConcurrentHashMap<Market, Integer> marketBills = new ConcurrentHashMap<Market, Integer>(); TODO
 	//ArrayList<Market> markets = new ArrayList<Market>(); // TODO match with Market in simcity201 TODO
 	final static int NOT_IN_TRANSIT = 0;
 	final static int IN_TRANSIT = 1;
@@ -19,12 +19,12 @@ public interface RestaurantChoiCashier extends RoleInterface{
 
     
 	//Messages
-	// public abstract void msgPayMarket(Market m, double money); // TODO
+	// public abstract void msgPayMarket(Market m, int money); // TODO
 	public void msgCompute(int choice, RestaurantChoiCustomer c,
 			RestaurantChoiWaiter restaurantChoiWaiter);
-	public void msgHeresMyPayment(RestaurantChoiCustomer c, double allHisCash);
+	public void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash);
 	//public void msgHeresYourMarketBill(Market m, int type, int amount); TODO
-	public void msgHeresYourMoney(double withdrawal);
+	public void msgHeresYourMoney(int withdrawal);
 	public void msgDoneWithDishes(RestaurantChoiCustomer c);
 
 	//Actions
@@ -32,7 +32,7 @@ public interface RestaurantChoiCashier extends RoleInterface{
 	public void sendToDishes(Check ch);
 	public void returnChange(Check ch);
 	//public void getMoney(Banker b); TODO
-	//public void payMarketBill(Market m, double payment); TODO
+	//public void payMarketBill(Market m, int payment); TODO
 
 	//Getters
 	public RestaurantChoiAnimatedCashier getAnimation();
@@ -40,6 +40,7 @@ public interface RestaurantChoiCashier extends RoleInterface{
 	//Setters
 	//public void addMarket(Market m);
 	//public void setBanker(Banker b); // TODO fix this with simcity201 matching
+	public void setInactive();
 	
 	//Utilities
 	public class Check{
@@ -49,8 +50,8 @@ public interface RestaurantChoiCashier extends RoleInterface{
 		public final static int GET_PAID = 2;
 		public final static int NOT_FULFILLED = -5;
 		public final static int FULFILL_BY_DISHES = 3;
-		public double bill;
-		private double payment;
+		public int bill;
+		private int payment;
 		private int state;
 		private RestaurantChoiCustomer ca;
 		private RestaurantChoiWaiter wa;
@@ -68,16 +69,16 @@ public interface RestaurantChoiCashier extends RoleInterface{
 		public void setca(RestaurantChoiCustomer ca) {
 			this.ca = ca;
 		}
-		public double getBill() {
+		public int getBill() {
 			return bill;
 		}
-		public void setBill(double bill) {
+		public void setBill(int bill) {
 			this.bill = bill;
 		}
-		public double getPayment() {
+		public int getPayment() {
 			return payment;
 		}
-		public void setPayment(double payment) {
+		public void setPayment(int payment) {
 			this.payment = payment;
 		}
 		public int getState() {

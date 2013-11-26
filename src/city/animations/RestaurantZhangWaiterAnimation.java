@@ -4,9 +4,10 @@ import java.awt.*;
 
 import utilities.RestaurantZhangTable;
 import city.Animation;
+import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 import city.interfaces.RestaurantZhangWaiter;
 
-public class RestaurantZhangWaiterAnimation extends Animation {
+public class RestaurantZhangWaiterAnimation extends Animation implements RestaurantZhangAnimatedWaiter {
 
     private RestaurantZhangWaiter waiter = null;
 
@@ -48,7 +49,7 @@ public class RestaurantZhangWaiterAnimation extends Animation {
         
     	   if(xPos == xDestination && yPos == yDestination && atDestination == false) {
     		   atDestination = true;
-    		   waiter.msgAtTable();
+    		   waiter.msgAtDestination();
 	       }
     }
 

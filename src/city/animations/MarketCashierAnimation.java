@@ -15,7 +15,7 @@ public class MarketCashierAnimation extends Animation implements MarketAnimatedC
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 50, yPos = 40;
+	private int xPos = 465, yPos = 320;
 	private int xDestination = xPos, yDestination = yPos;
 
 	public MarketCashierAnimation(MarketCashier c) {

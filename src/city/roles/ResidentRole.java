@@ -4,39 +4,35 @@ import java.util.Calendar;
 import java.util.Date;
 
 import city.Role;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
 public class ResidentRole extends Role implements Resident {
-	
+
 	// Data
-	
+
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
+	private double maintenance;
+	private double upcomingRent;
 	private Date rentLastPaid;
-	
+	private ResidenceBaseBuilding house;
+
 	// Constructor
-	
+
 	public ResidentRole(Date rentLastPaid){
 		super();
+		this.maintenance = 0;
+		this.upcomingRent = 5; // low number for normative situations; i wish my rent was ($)
 		this.rentLastPaid = rentLastPaid;
 	}
-	
+
 	// Messages
-	
-	@Override
-	public void msgPayForMaintenance(double d) {
-		
-	}
-	
+
 	// Scheduler
 	@Override
 	public boolean runScheduler() {
-		if(rstate == STATE.needToPayMaintenance){
-			System.out.println("need to pay maintenance!");
-			payMaintenance();
-			return true;
-		}
 		if(rstate == STATE.needToPayRent){
 			System.out.println("need to pay rent!");
 			payRent();
@@ -46,18 +42,19 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	// Actions
-	
-	public void payMaintenance() {
-		
-	}
-	
+
 	public void payRent() {
-		// TODO update rentLastPaid here
-		// Example: rentLastPaid = this.getPerson().getDate();
+		landlord.msgHeresRent(house.rent); // pay rent
+		this.getPerson().setCash((int)(this.getPerson().getCash()-house.rent)); // lose $ for rent
+		if(house.total_current_maintenance != 0) // pay maintenance if needed
+			this.getPerson().setCash((int)(this.getPerson().getCash()-house.total_current_maintenance/house.residents.size())); // lose $ for maintenance;
+		System.out.println(rentLastPaid.getTime());
+		rentLastPaid = this.getPerson().getDate();
+		this.setInactive();
 	}
-	
+
 	// Getters
-	
+
 	/**
 	 * Takes the Date of the last rent payment and adds the set interval for
 	 * the next payment to it, returning a Date of the exact time rent is due.
@@ -68,13 +65,16 @@ public class ResidentRole extends Role implements Resident {
 	public Date getRentDueDate() {
 		Date dueDate = new Date(0);
 		dueDate.setTime(rentLastPaid.getTime() + RENT_DUE_INTERVAL);
+		System.out.println("within getRentDueDate: " + dueDate);
 		return dueDate;
 	}
-	
+	@Override
+	public boolean isLandlord() {
+		return (landlord != null);
+	}
 	// Setters
-
 	// Utilities
-	
+
 	/**
 	 * Returns true if today is the day that rent is due or rent is overdue 
 	 * 
@@ -83,11 +83,27 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public boolean rentIsDue() {
 		Calendar c = Calendar.getInstance();
-		c.setTime(this.getPerson().getDate());
-		int day = c.get(Calendar.DAY_OF_YEAR);
-		c.setTime(getRentDueDate());
-		int due = c.get(Calendar.DAY_OF_YEAR);
+		c.setTime(this.getPerson().getDate()); 
+		long day = c.getTimeInMillis();// this is the time and date RIGHT NOW
+		
+		Calendar d = Calendar.getInstance();
+		d.setTime(getRentDueDate());
+		long due = d.getTimeInMillis();
+		System.out.println("Time now: " + day);
+		System.out.println("Time due: " + due);
+		
 		return (day >= due);
+	}
+
+	@Override
+	public void setResidence(ResidenceBaseBuilding b) {
+		house = b;
+	}
+
+	@Override
+	public void setLandlord(Landlord l) {
+		landlord = l;
+		
 	}
 
 	// Classes

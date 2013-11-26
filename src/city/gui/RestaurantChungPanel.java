@@ -15,7 +15,7 @@ import javax.swing.Timer;
 import city.Animation;
 import city.roles.RestaurantChungHostRole;
 
-public class RestaurantChungPanel extends JPanel implements ActionListener {
+public class RestaurantChungPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1355285244678935863L;
 
@@ -37,28 +37,30 @@ public class RestaurantChungPanel extends JPanel implements ActionListener {
 
 	private int panelX;
 	private int panelY;
-//	private final int delayMS = 5;
+	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
-
-	public RestaurantChungPanel(Dimension panelDimension) {
+	
+	
+	public RestaurantChungPanel(Color color, Dimension panelDimension) {
+		super(color);
 		panelX = panelDimension.width;
 		panelY = panelDimension.height;
 
 		setVisible(true);
 
-//		Timer timer = new Timer(delayMS, this);
+		Timer timer = new Timer(delayMS, this);
 		timer.start();
 	}
 
 	public void actionPerformed(ActionEvent e) {
 		repaint();
 	}
-
-	public void paintComponent(Graphics graphics) {
+	
+	@Override
+	public void paint(Graphics graphics) {
 		Graphics2D g2 = (Graphics2D)graphics;
-
 		// Clear the screen by painting a rectangle the size of the frame
-		g2.setColor(getBackground());
+		g2.setColor(background);
 		g2.fillRect(0, 0, panelX, panelY);
 
         // kitchen area

@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import city.buildings.MarketBuilding;
+import city.roles.MarketCustomerDeliveryPaymentRole;
 
 /**
  * A sample Customer interface built to unit test a CashierAgent.
@@ -10,8 +11,7 @@ import city.buildings.MarketBuilding;
  */
 public interface RestaurantChungCashier extends RoleInterface {
 
-	public void msgComputeBill(RestaurantChungWaiterBase w, RestaurantChungCustomer c, String order);
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order);
 	public abstract void msgHereIsPayment(RestaurantChungCustomer c, int bill);
-	public void msgMarketOrderBill (MarketCashier c, int id, int bill);
-//	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPaymentRole(); TODO
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
 }

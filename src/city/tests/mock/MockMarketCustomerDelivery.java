@@ -4,6 +4,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Building;
 import city.MockRole;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
@@ -19,9 +20,15 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	}
 
 	@Override
-	public void msgHereIsOrder(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrder from deliveryPerson."));		
-		System.out.println("CustomerDelivery received msgHereIsOrder from deliveryPerson.");		
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
+		log.add(new LoggedEvent("CustomerDelivery received msgHereIsOrderDelivery from deliveryPerson."));		
+		System.out.println("CustomerDelivery received msgHereIsOrderDelivery from deliveryPerson.");		
+	}
+
+	@Override
+	public Building getRestaurant() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

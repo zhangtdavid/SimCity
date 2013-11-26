@@ -12,19 +12,19 @@ import city.buildings.BusStopBuilding;
 public class BusAgent extends Agent implements Bus {
 
 	// Data
-	enum BusState {DRIVING, DROPPINGPASSENGERSOFF, PICKINGPEOPLEUP};
-	BusState myState = BusState.DRIVING; // State of bus
-	enum BusEvent {NONE, ATSTOP};
-	BusEvent myEvent = BusEvent.ATSTOP; // Event of bus
-	List<MyBusPassenger> passengerList = Collections.synchronizedList(new ArrayList<MyBusPassenger>()); // List of bus passengers
-	BusStopBuilding currentStop; // Stop the bus is at
-	BusStopBuilding nextStop; // Stop the bus is going to
-	static final double busFare = 1.50; // Fare price of bus
-	double earnedMoney = 0.00; // Amount of fare the bus earned
+	public enum BusState {DRIVING, DROPPINGPASSENGERSOFF, PICKINGPEOPLEUP};
+	public BusState myState = BusState.DRIVING; // State of bus
+	public enum BusEvent {NONE, ATSTOP};
+	public BusEvent myEvent = BusEvent.ATSTOP; // Event of bus
+	public List<MyBusPassenger> passengerList = Collections.synchronizedList(new ArrayList<MyBusPassenger>()); // List of bus passengers
+	public BusStopBuilding currentStop; // Stop the bus is at
+	public BusStopBuilding nextStop; // Stop the bus is going to
+	public static final double busFare = 1.50; // Fare price of bus
+	public double earnedMoney = 0.00; // Amount of fare the bus earned
 	//BusGui myGui; // GUI for animations
 	
 	// Constructor
-	BusAgent(BusStopBuilding currentStop_, BusStopBuilding nextStop_) {
+	public BusAgent(BusStopBuilding currentStop_, BusStopBuilding nextStop_) {
 		currentStop = currentStop_;
 		nextStop = nextStop_;
 	}
@@ -32,11 +32,12 @@ public class BusAgent extends Agent implements Bus {
 	// Messages
 	public void msgAtBusDestination() { // From GUI, bus is at the bus stop
 		myEvent = BusEvent.ATSTOP;
+		currentStop = nextStop;
+		nextStop = currentStop.getNextStop();
 		stateChanged();
 	}
 
 	public void msgImOffBus(BusPassenger bp) { // From BusPassengerRole, role has gotten off bus
-		earnedMoney += busFare; // Add fare to money
 		for(MyBusPassenger mbp : passengerList) { // Set this role's state to OFFBUS  
 			if(mbp.bp == bp) {
 				mbp.myPassengerState = PassengerState.OFFBUS;
@@ -106,8 +107,6 @@ public class BusAgent extends Agent implements Bus {
 				mbp.bp.msgImAtYourDestination(); // Message this passenger to get off
 			}
 		}
-		currentStop = nextStop; // Assign the next stop to the current stop
-		nextStop = currentStop.getNextStop(); // Find the next stop[
 		// If no passengers were dropped off, tell people at stop to get on
 		if(passengersDroppedOff == false) {
 			myState = BusState.PICKINGPEOPLEUP;
@@ -132,12 +131,17 @@ public class BusAgent extends Agent implements Bus {
 
 	void driveToNextStop() { // Tells 
 		//myGui.DoGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		msgAtBusDestination();
 	}
 	// Getters
 	
 	// Setters
 	
 	// Utilities
+	public void startThread() {
+		super.startThread();
+		stateChanged();
+	}
 	
 	// Classes
 	enum PassengerState {GETTINGONBUS, ONBUS, GETTINGOFFBUS, OFFBUS};

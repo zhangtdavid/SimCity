@@ -1,23 +1,64 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import city.Application.FOOD_ITEMS;
-import city.Building;
 import city.Role;
+import city.interfaces.Landlord;
+import city.interfaces.Resident;
 
-public class HouseBuilding extends Building {
+public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
 	
-	public Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
-	
 	// Constructor
 	
-	public HouseBuilding(String name, Role manager) {
+	public HouseBuilding(String name, Landlord landlord) {
 		super(name);
-		// TODO Auto-generated constructor stub
+		this.landlord = landlord;
+		this.landlord.setResidence(this);
+	}
+	
+	// Getters
+
+	public Landlord getLandlord() {
+		return landlord;
+	}
+
+	public List<Resident> getResidents() {
+		return residents;
+	}
+
+	public int getRent() {
+		return rent;
+	}
+
+	public int getTotal_current_maintenance() {
+		return total_current_maintenance;
+	}
+	
+	// Setters
+
+	public void setLandlord(Landlord landlord) {
+		this.landlord = landlord;
+	}
+	public void setTotal_current_maintenance(int total_current_maintenance) {
+		this.total_current_maintenance = total_current_maintenance;
+	}
+	
+	public void setRent(int rent) {
+		this.rent = rent;
+	}
+	
+	public void setResidents(List<Resident> residents) {
+		this.residents = residents;
+	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
 	}
 
 }

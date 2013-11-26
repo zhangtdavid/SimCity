@@ -14,7 +14,7 @@ public interface RestaurantChoiAnimatedFurniture extends AnimationInterface{
 	static final int CRY = -20;
 	static final int CGX = 200; // grills (cook2)
 	static final int CGY = -20;
-	static final int DISHES_X = 550; // grills (cook2)
+	static final int DISHES_X = 480; // dishes
 	static final int DISHES_Y = 250;
 	static final int WIDTH = 30;
 	static final int TABLE_COUNT = 4;

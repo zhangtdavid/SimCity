@@ -15,7 +15,7 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	public abstract void msgGetInLinePosition(int positionInLine);
 	public abstract void msgNoTablesAvailable();
 	public abstract void msgSelfDecidedToLeave();
-	public abstract void msgFollowMeToTable(RestaurantChungWaiterBase w, RestaurantChungMenu menu);
+	public abstract void msgFollowMeToTable(RestaurantChungWaiter w, RestaurantChungMenu menu);
 	public abstract void msgAnimationAtSeat();
 	public abstract void msgSelfReadyToOrder();
 	public abstract void msgWhatWouldYouLike();

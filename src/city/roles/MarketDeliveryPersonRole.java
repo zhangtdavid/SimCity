@@ -1,7 +1,6 @@
 package city.roles;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
 import java.util.Map;
 
 import utilities.EventLog;
@@ -23,15 +22,17 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 	private MarketBuilding market;
 	
-	private MarketCashier cashier;
-	private List<Role> roles = new ArrayList<Role>();
-
+	public MarketCustomerDelivery customerDelivery;
+	
+	public enum WorkingState
+	{Working, GoingOffShift, NotWorking};
+	WorkingState workingState = WorkingState.Working;
+	
 	private CarAgent car;
 	private CarPassenger carPassenger;
-
-	private MarketCustomerDelivery customerDelivery;
-	private Map<FOOD_ITEMS, Integer> collectedItems;
-	int orderId;
+	
+	public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	public int orderId;
 	
 //	CityMap
 	
@@ -41,24 +42,38 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketDeliveryPersonRole() {
-		super(); // TODO
-//		car = new CarAgent();
+	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
+		super();
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
+		car = new CarAgent();
     }
+	
+	public void setActive(){
+		this.setActivityBegun();
+	}
+	
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
 	
 //  Messages
 //	=====================================================================	
 //	Cashier
 //	---------------------------------------------------------------
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
-		log.add(new LoggedEvent("Market Customer received msgDeliverOrder from Market Cashier."));
-		System.out.println("Market deliveryPerson received msgDeliverOrder from Market Cashier.");
-		customerDelivery = c;
-        for (FOOD_ITEMS s: i.keySet()) {
-        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-        }
-        orderId = id;
-        stateChanged();
+		log.add(new LoggedEvent("Market DeliveryPerson received msgDeliverOrder from Market Cashier."));
+		System.out.println("Market DeliveryPerson received msgDeliverOrder from Market Cashier.");
+		if (workingState != WorkingState.NotWorking) {
+			customerDelivery = c;
+	        for (FOOD_ITEMS s: i.keySet()) {
+	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
+	        }
+	        orderId = id;
+	        stateChanged();
+		}
 	}
 	
 //  Scheduler
@@ -66,37 +81,53 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 	@Override
 	public boolean runScheduler() {
+		if (workingState == WorkingState.GoingOffShift) {
+			if (market.deliveryPeople.size() > 1)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (customerDelivery == null && workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
 		if (customerDelivery != null) {
 			deliverItems();
+			return true;
 		}
 		
-		// Role Scheduler
-		boolean blocking = false;
-		for (Role r : roles) if (r.getActive()) {
-			if (carPassenger.getActive()) {
-				blocking  = true;
-				carPassenger.runScheduler();
-			}
-		}
-		
-		// Scheduler disposition
-		return blocking;
+//		// Role Scheduler
+//		boolean blocking = false;
+//		if (carPassenger.getActive() && carPassenger.getActivity()) {
+//			blocking  = true;
+//			boolean activity = carPassenger.runScheduler();
+//			if (!activity) {
+//				carPassenger.setActivityFinished();
+//			}
+//		}
+//		
+//		// Scheduler disposition
+//		return blocking;
+		return false;
 	}
 	
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
-		carPassenger = new CarPassengerRole(car, market); // TODO Update this to restaurant
-		cashier.msgDeliveringItems(this);
+		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant());
+		carPassenger.setActive();
+		market.cashier.msgDeliveringItems(this);
 
-//		for (Delivery d: deliveries) {
-//        	deliveryTruckGui.doGoToAddress();
-//        }
+//      deliveryTruckGui.doGoToAddress();
         // notify customer if there is a difference between order and collected items
 		// switch into CarPassenger;
 		
-		customerDelivery.msgHereIsOrder(collectedItems, orderId);
-		cashier.msgFinishedDeliveringItems(this, customerDelivery);
+//		while (carPassenger.getActive() && carPassenger.getActivity()) {
+//			// do nothing
+//		}
+
+		// TODO how does all this car stuff work??
+		
+		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
+		market.cashier.msgFinishedDeliveringItems(this, orderId);
 		customerDelivery = null;
 	}
 	
@@ -111,27 +142,6 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		this.market = market;
 	}
 	
-	// Cashier
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	public void setCashier(MarketCashier cashier) {
-		this.cashier = cashier;
-	}
-	
 //  Utilities
-//	=====================================================================	
-
-	
-	//	private Transaction findTransaction(MarketCustomerRole c) {
-//		for(Transaction t : transactions ){
-//			if(t.customer == c) {
-//				return t;		
-//			}
-//		}
-//		return null;
-//	}
-
-	// Classes
+//	=====================================================================
 }

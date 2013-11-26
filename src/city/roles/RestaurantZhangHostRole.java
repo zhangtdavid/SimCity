@@ -7,6 +7,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
@@ -16,6 +17,7 @@ import city.interfaces.RestaurantZhangWaiter;
  * Restaurant Host Agent
  */
 public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost {
+	private static final int RESTAURANTZHANGHOSTSALARY = 100;
 	private List<RestaurantZhangCustomer> enteringCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<RestaurantZhangCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<MyWaiter> myWaiterList = Collections.synchronizedList(new ArrayList<MyWaiter>());
@@ -23,14 +25,15 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	
 	private String name;
 
-	public RestaurantZhangHostRole(String name) {
+	public RestaurantZhangHostRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-
-		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
+		this.setSalary(RESTAURANTZHANGHOSTSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 	
 	// Messages
@@ -142,6 +145,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 				}
 			}
 		}
+		print("Giving customer " + c.getName() + " waiting position " + pos);
 		c.msgHereIsYourWaitingPosition(pos);
 	}
 	

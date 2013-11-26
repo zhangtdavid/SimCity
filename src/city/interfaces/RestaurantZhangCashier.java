@@ -7,4 +7,5 @@ public interface RestaurantZhangCashier extends RoleInterface {
 		public abstract void msgComputeBill(RestaurantZhangWaiter waiter, RestaurantZhangCustomer customer, String choice);
 		// Sent from customer to play for check
 		public abstract void msgHereIsPayment(RestaurantZhangCheck c, double cash);
+		public abstract MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
 }

@@ -2,6 +2,8 @@ package city.interfaces;
 
 import java.util.Map;
 
+import city.Application.FOOD_ITEMS;
+
 /**
  *
  * @author Monroe Ekilah
@@ -15,12 +17,12 @@ public interface RestaurantChungCook extends RoleInterface {
 
 	void msgAnimationAtPlating();
 
-	void msgCannotFulfill(int iD, Map<String, Integer> unfulfilled);
+//	void msgCannotFulfill(int iD, Map<String, Integer> unfulfilled);
 
-	void msgOrderIsReady(int iD, Map<String, Integer> orderItems);
+	void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> orderItems, int id);
 
 	void msgHereIsAnOrder(
-			RestaurantChungWaiterBase restaurantChungWaiterBase,
+			RestaurantChungWaiter restaurantChungWaiterBase,
 			String choice, int table);
 
 }

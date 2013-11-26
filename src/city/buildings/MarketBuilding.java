@@ -1,25 +1,35 @@
 package city.buildings;
 
-import java.util.List;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import city.Application.FOOD_ITEMS;
 import city.Building;
+import city.Role;
+import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 
-public class MarketBuilding extends Building {
+public class MarketBuilding extends Building { 
+	
+	// Data
+	
 	public MarketManager manager;
 	public MarketCashier cashier;
+	public BankCustomer bankCustomer;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
+	
+	private static final int WORKER_SALARY = 500;
+	
 	public Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
 	public Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
-	public int money;
+	
+	// Constructor
 	
 	public MarketBuilding(String name) {
 		super(name);
@@ -36,12 +46,19 @@ public class MarketBuilding extends Building {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		money = 1000;
+		super.setCash(1000);
 	}
 	
 	
 // Utilities
 //	=====================================================================	
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
+	}
+	
 	// Employee
 	public void addEmployee(MarketEmployee employee) {
 		employees.add(employee);
@@ -83,6 +100,11 @@ public class MarketBuilding extends Building {
 	
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
+	}
+
+
+	public static int getWorkerSalary() {
+		return WORKER_SALARY;
 	}
 	
 	// Employees

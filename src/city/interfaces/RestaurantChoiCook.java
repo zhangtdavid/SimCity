@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.concurrent.ConcurrentHashMap;
 
+import utilities.RestaurantChoiOrder;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.roles.RestaurantChoiOrder;
 public interface RestaurantChoiCook extends RoleInterface{
 
 	//Data
@@ -50,7 +50,7 @@ public interface RestaurantChoiCook extends RoleInterface{
 	//public void setRevolvingStand(RestaurantChoiRevolvingStand r);
 	//public RestaurantChoiRevolvingStand getRevolvingStand();
 	//public void addMarket(Market m);
-	
+	public void setInactive();
 
 	
 	//Utilities

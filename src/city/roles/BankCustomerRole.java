@@ -2,6 +2,7 @@ package city.roles;
 
 import city.Application;
 import city.Application.BANK_SERVICE;
+import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -33,13 +34,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	// Constructor
 	
-	public BankCustomerRole(Building bus) { //could change back to building = b, don't like cast
-		building = (BankBuilding) Application.CityMap.findBank();
-		business = bus;
+	public BankCustomerRole(Building b) {
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
+		business = b;
 	}
 	
-	public BankCustomerRole(){		//could change back to building = b
-		building = (BankBuilding) Application.CityMap.findBank();
+	public BankCustomerRole() {
+		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
 	}
 	
 	// Messages
@@ -132,7 +133,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void RequestWithdrawal(){
 		st = state.inProgress;
-		t.msgWithdraw(acctNum, amount, this.getPerson().getSalary());
+		t.msgWithdraw(acctNum, amount, this.getPerson().getOccupation().getSalary());
 	}
 	
 	public void ExitBank(){
@@ -144,7 +145,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
-		this.active = false;
+		super.setInactive();
 	}
 	
 	// Getters

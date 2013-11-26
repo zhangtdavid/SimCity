@@ -3,11 +3,10 @@ package city.tests.mock;
 
 import city.MockRole;
 import city.animations.RestaurantChungCustomerAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
@@ -49,7 +48,7 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void msgFollowMeToTable(RestaurantChungWaiterBase w, RestaurantChungMenu menu) {
+	public void msgFollowMeToTable(RestaurantChungWaiter w, RestaurantChungMenu menu) {
 		// TODO Auto-generated method stub
 		
 	}

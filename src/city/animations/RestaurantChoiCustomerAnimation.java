@@ -16,13 +16,13 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 	//RestaurantGui gui; // shouldn't need this
 	private int xPos, yPos;
 	public static final int WIDTH = 20;
-	private static int leaveCoordX = 640;//cashier conveniently placed here
+	private static int leaveCoordX = 520;//cashier conveniently placed here
 	private static int leaveCoordY = -20; 
-	private static int enterCoordX = 640;// in case we have situations where entrance != exit
+	private static int enterCoordX = 520;// in case we have situations where entrance != exit
 	private static int enterCoordY = -20;
 	private static int waitCoordX = 420; // people queue here
 	private static int waitCoordY = 170;
-	private static final int XDISHES = 550; // this is where the dishes are
+	private static final int XDISHES = 480; // this is where the dishes are
 	private static final int YDISHES = 250;
 	private int xDestination, yDestination;
 	private String orderIcon = new String();

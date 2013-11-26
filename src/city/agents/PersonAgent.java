@@ -7,7 +7,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
@@ -21,8 +20,8 @@ import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
-import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
+import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -37,8 +36,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Date date;
 	private Role occupation;
-	private Building workplace;
-	private HouseBuilding home;
+	private ResidenceBaseBuilding home;
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
@@ -47,6 +45,7 @@ public class PersonAgent extends Agent implements Person {
 	private Role restaurantCustomerRole; // not retained
 	private MarketCustomerRole marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
+	private Date lastWentToSleep;
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -67,9 +66,13 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		this.date = startDate;
 		this.lastAteAtRestaurant = startDate;
+		this.lastWentToSleep = startDate;
+		this.state = State.none;
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
+		this.addRole(residentRole);
+		this.addRole(bankCustomerRole);
 	}
 	
 	//==========//
@@ -78,6 +81,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void guiAtDestination() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atDestination.release();
 	}
 	
@@ -110,7 +114,7 @@ public class PersonAgent extends Agent implements Person {
 				performDailyTaskAction();
 				return true;
 			}
-		} else if (shouldLeaveWork()) {
+		} else if (state == State.atWork && shouldLeaveWork()) {
 			// Must go to intermediary leavingWork state to give setInactive() time to finish working
 			state = State.leavingWork;
 			occupation.setInactive();
@@ -208,6 +212,18 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
+		if (state == State.atSleep || state == State.none) { // TODO needs testing. 
+			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
+			// This will also ensure that no roles can run while the person is sleeping.
+			if (occupation == null) {
+				if (shouldWakeUp()) {
+					state = pickDailyTask();
+					performDailyTaskAction();
+					return true;
+				}
+			}
+			return false;
+		}
 		
 		//----------------/
 		// Role Scheduler /
@@ -237,7 +253,8 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToWork() throws InterruptedException {
-		processTransportationDeparture(workplace);
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		processTransportationDeparture(occupation.getWorkplace(Building.class));
 		state = State.goingToWork;
 	}
 	
@@ -247,6 +264,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException
 	 */
 	private void actGoToBank() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		BankBuilding b = (BankBuilding) CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = State.goingToBank;
@@ -258,6 +276,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToPayRent() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture(home);
 		state = State.goingToPayRent;
 	}
@@ -268,18 +287,21 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
-		Building b = CityMap.findRandomBuilding(BUILDING.restaurant);
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		Building building = CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
-			Class<?> c = Class.forName(b.getCustomerRole());
-			Constructor<?> r = c.getConstructor();
-			restaurantCustomerRole = (Role) r.newInstance();
+			Class<?> c0 = Class.forName(building.getCustomerRoleName());
+			Constructor<?> r0 = c0.getConstructor();
+			restaurantCustomerRole = (Role) r0.newInstance();
+			building.addRole(restaurantCustomerRole);
+			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		
-		processTransportationDeparture(b);
+		processTransportationDeparture(building);
 		state = State.goingToRestaurant;
 	}
 	
@@ -289,6 +311,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException
 	 */
 	private void actGoToMarket() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
 		processTransportationDeparture(b);
 		state = State.goingToMarket;
@@ -297,12 +320,14 @@ public class PersonAgent extends Agent implements Person {
 		HashMap<FOOD_ITEMS, Integer> items = null;
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(order);
+		this.addRole(marketCustomerRole);
 	}
 	
 	/**
 	 * Takes the person home so that they can cook and eat a meal.
 	 */
 	private void actGoToCook() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture(home);
 		state = State.goingToCook;
 	}
@@ -313,6 +338,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation.cookAndEatFood();
 		atDestination.acquire();
 		state = pickDailyTask();
@@ -326,6 +352,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture(home);
 		state = State.goingToSleep;
 	}
@@ -345,18 +372,18 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public int getSalary() {
-		return occupation.getSalary();
-	}
-	
-	@Override
 	public int getCash(){
 		return cash;
 	}
 	
 	@Override
-	public HouseBuilding getHome() {
+	public ResidenceBaseBuilding getHome() {
 		return home;
+	}
+	
+	@Override
+	public Role getOccupation() {
+		return occupation;
 	}
 	
 	//=========//
@@ -371,32 +398,32 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void setOccupation(Role r) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
 		addRole(r);
 	}
 	
 	@Override
 	public void setAnimation(city.animations.interfaces.AnimatedPerson p) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation = p;
 	}
 
 	@Override
 	public void setCar(Car c) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		car = c;
 	}
 	
 	@Override
-	public void setWorkplace(Building b) {
-		workplace = b;
-	}
-	
-	@Override
 	public void setCash(int c) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		cash = c;
 	}
 	
 	@Override
-	public void setHome(HouseBuilding h) {
+	public void setHome(ResidenceBaseBuilding h) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		home = h;
 	}
 	
@@ -406,8 +433,8 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void addRole(Role r) {
+		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 		roles.add(r);
-		r.setPerson(this);
 	}
 	
 	/**
@@ -417,11 +444,12 @@ public class PersonAgent extends Agent implements Person {
 	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(Building destination) throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (car != null) {
 			carPassengerRole = new CarPassengerRole(car, destination);
 			carPassengerRole.setActive();
 			carPassengerRole.setPerson(this);
-			roles.add(carPassengerRole);
+			this.addRole(carPassengerRole);
 		} else {
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
@@ -430,7 +458,7 @@ public class PersonAgent extends Agent implements Person {
 			busPassengerRole = new BusPassengerRole(d, b);
 			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
-			roles.add(busPassengerRole);
+			this.addRole(busPassengerRole);
 		}
 	}
 	
@@ -444,11 +472,12 @@ public class PersonAgent extends Agent implements Person {
 	 * @param s the state to select on arrival
 	 */
 	private boolean processTransportationArrival() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (car != null && !carPassengerRole.getActive()) {
 			roles.remove(carPassengerRole);
 			carPassengerRole = null;
 			return true;
-		} else if (!busPassengerRole.getActive()) {
+		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
 			roles.remove(busPassengerRole);
 			busPassengerRole = null;
 			return true;
@@ -465,6 +494,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @return a State to indicate which daily task to perform
 	 */
 	private State pickDailyTask() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		State disposition = State.none;
 		if (shouldGoToBank()) {
 			disposition = State.goingToBank;
@@ -488,6 +518,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void performDailyTaskAction() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		switch(state) {
 			case goingToBank:
 				actGoToBank();
@@ -516,11 +547,13 @@ public class PersonAgent extends Agent implements Person {
 	 * If the person is not at work and the current time is at or within
 	 * their working hours, then the person should go to work.
 	 * 
+	 * Supports people not having jobs, in which case
+	 * 
 	 * @return true if the person should go to work
 	 */
 	private boolean shouldGoToWork() {
 		boolean disposition = false;
-		if (!occupation.getActive() && inShiftRange()) {
+		if (occupation != null && !occupation.getActive() && inShiftRange()) {
 			disposition = true;
 		}
 		return disposition;
@@ -534,8 +567,12 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean shouldLeaveWork() {
 		boolean disposition = false;
-		if (occupation.getActive() && !inShiftRange()) {
+		if (occupation != null && occupation.getActive() && !inShiftRange()) {
 			disposition = true;
+		}
+		// TODO testing
+		if (this.name != "Landlord") {
+			disposition = false;
 		}
 		return disposition;
 	}
@@ -548,6 +585,7 @@ public class PersonAgent extends Agent implements Person {
 	 * enough cash, it will go and take a withdrawal or a loan.
 	 */
 	private boolean shouldGoToBank() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (cash >= BANK_DEPOSIT_THRESHOLD) { disposition = true; }
 		if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
@@ -559,6 +597,7 @@ public class PersonAgent extends Agent implements Person {
 	 * Returns true if the person should pay the landlord their rent/maintenance.
 	 */
 	private boolean shouldPayLandlord() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		return residentRole.rentIsDue();
 	}
 	
@@ -569,6 +608,7 @@ public class PersonAgent extends Agent implements Person {
 	 * the time since the person last ate at a restaurant.
 	 */
 	private boolean shouldGoToRestaurant() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		// Calculations
 		Date thresholdDate = new Date(0);
 		thresholdDate.setTime(lastAteAtRestaurant.getTime() + RESTAURANT_DINING_INTERVAL);
@@ -592,6 +632,7 @@ public class PersonAgent extends Agent implements Person {
 	 * The person will visit the market if they have 3 or fewer items in their home. 
 	 */
 	private boolean shouldGoToMarket() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		int items = 0;
 		for (FOOD_ITEMS i : home.foodItems.keySet()) {
@@ -608,8 +649,24 @@ public class PersonAgent extends Agent implements Person {
 	 * if a market has just been visited.
 	 */
 	private boolean shouldGoToCook() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (state == State.atMarket) { disposition = true; }
+		return disposition;
+	}
+	
+	/**
+	 * Returns true if the person should wake up. Only called for persons who don't have jobs.
+	 */
+	private boolean shouldWakeUp() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		// Calculations
+		Date thresholdDate = new Date(0);
+		thresholdDate.setTime(lastWentToSleep.getTime() + WAKE_UP_THRESHOLD);
+		
+		// Decision
+		boolean disposition = false;
+		if (thresholdDate.getTime() >= date.getTime()) { disposition = true; }
 		return disposition;
 	}
 	

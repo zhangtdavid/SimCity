@@ -20,5 +20,5 @@ public interface RestaurantZhangWaiter extends RoleInterface {
 	public abstract void msgGoOnBreak(boolean b);
 	public abstract void msgOutOfFood(RestaurantZhangTable t);
 	public abstract void msgOrderIsReady(String choice, RestaurantZhangTable t);
-	public abstract void msgAtTable();
+	public abstract void msgAtDestination();
 }

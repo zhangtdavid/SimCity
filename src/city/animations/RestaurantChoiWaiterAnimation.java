@@ -15,7 +15,7 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	private int xDestination = 640, yDestination = -20;//default start position
 	public static final int COOKX = 270; // go to plating; also put orders there
 	public static final int COOKY = 20;    
-	public static final int CASHX = 540;
+	public static final int CASHX = 480;
 	public static final int CASHY = 0;
 	public static int xTable = 200;
 	public static int yTable = 400;

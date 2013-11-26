@@ -8,8 +8,12 @@ import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
 public class BuildingView extends JPanel implements MouseListener, ActionListener {
 	
@@ -19,6 +23,7 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 	MainFrame mainframe;
 	public static final int VIEW_WIDTH = 500, VIEW_HEIGHT = 500;
 	CardLayout layout;
+	private final int delayMS = 5;
 	
 	public BuildingView(MainFrame mf) {
 		
@@ -30,7 +35,7 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 		this.mainframe = mf;
 		
 		cards = new HashMap<String, BuildingCard>();
-		cards.put("null", new BuildingCard(mf, Color.DARK_GRAY));
+		cards.put("null", new BuildingCard(Color.DARK_GRAY));
 
 		layout = new CardLayout();
 		this.setLayout(layout);
@@ -38,8 +43,10 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 			this.add(cards.get(key), key);
 		}
 		
-
 		layout.show(this, "null");
+		
+		Timer timer = new Timer(delayMS, this);
+		timer.start();
 	}
 	
 	public boolean addView(BuildingCard panel, String key) {
@@ -58,7 +65,15 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 
 	
 	public void actionPerformed(ActionEvent arg0) {
-		
+		Iterator<Entry<String, BuildingCard>> it = cards.entrySet().iterator();
+		while(it.hasNext()) {
+			Map.Entry<String, BuildingCard> temp = it.next();
+			if(temp.getValue().isVisible()) {
+				temp.getValue().repaint();
+			} else {
+				temp.getValue().animate();
+			}
+		}
 	}
 
 	

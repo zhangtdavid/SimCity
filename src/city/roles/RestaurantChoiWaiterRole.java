@@ -1,5 +1,7 @@
 package city.roles;
 
+import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import city.interfaces.RestaurantChoiWaiterAbs;
 
 public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{

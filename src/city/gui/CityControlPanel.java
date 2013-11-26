@@ -20,7 +20,7 @@ public class CityControlPanel extends JPanel implements ActionListener{
 
 	MainFrame mainframe;
 	public static final int CP_WIDTH = 200, CP_HEIGHT = 700;
-	JButton addRestaurantZhang, addRestaurantChoi, addRestaurantJP, addRestaurantTimms, addBank;
+	JButton addRestaurantZhang, addRestaurantChoi, addRestaurantJP, addRestaurantTimms, addRestaurantChung, addBank;
 
 	//For managing traces
 	JRadioButton toggleInfo;
@@ -61,6 +61,11 @@ public class CityControlPanel extends JPanel implements ActionListener{
 		addRestaurantTimms.addActionListener(this);
 		c.gridx = 0; c.gridy = gridBagYPos++;
 		add(addRestaurantTimms, c);
+		
+		addRestaurantChung = new JButton("Add RestaurantChung");
+		addRestaurantChung.addActionListener(this);
+		c.gridx = 0; c.gridy = gridBagYPos++;
+		add(addRestaurantChung, c);
 
 		addBank = new JButton("Add Bank");
 		addBank.addActionListener(this);
@@ -86,7 +91,7 @@ public class CityControlPanel extends JPanel implements ActionListener{
 	public void actionPerformed(ActionEvent e) {
 		if (e.getSource().equals(addRestaurantZhang)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTZHANG);
-			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantZhang");
 		} else if (e.getSource().equals(addRestaurantChoi)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHOI);
 			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
@@ -95,8 +100,11 @@ public class CityControlPanel extends JPanel implements ActionListener{
 			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantJP");
 		} else if (e.getSource().equals(addRestaurantTimms)) {
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTTIMMS);
-			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New Restaurant Zhang");
-		}else if (e.getSource().equals(addBank)) {
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantTimms");
+		} else if (e.getSource().equals(addRestaurantChung)) {
+			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHUNG);
+			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChung");
+		} else if (e.getSource().equals(addBank)) {
 			AlertLog.getInstance().logInfo(AlertTag.BANK, this.name, "Adding New Bank");
 			mainframe.cityView.addObject(CityViewBuilding.BuildingType.BANK);
 		}

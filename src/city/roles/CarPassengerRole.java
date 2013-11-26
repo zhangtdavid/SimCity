@@ -8,9 +8,9 @@ import city.Building;
 public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
-	public enum CarPassengerState {NOTDRIVING, GOINGTOCAR, DRIVING};
+	public enum CarPassengerState {NOTDRIVING, DRIVING};
 	public CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
-	public enum CarPassengerEvent {NONE, WANTTODRIVE, ATCAR, ATDESTINATION};
+	public enum CarPassengerEvent {NONE, ATCAR, ATDESTINATION};
 	public CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
 	public Car myCar; // Car this person is getting into
 	public Building destination; // Building this car is going to
@@ -23,10 +23,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	}
 	
 	// Messages
-	public void msgImGoingToDrive() { // From setactive, telling this role he/she wants to drive
-		myEvent = CarPassengerEvent.WANTTODRIVE;
-		stateChanged();
-	}
 
 	public void msgImAtCar() { // From animation, telling this role car is ready to drive
 		myEvent = CarPassengerEvent.ATCAR;
@@ -42,12 +38,7 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public boolean runScheduler() {
-		if(myState == CarPassengerState.NOTDRIVING && myEvent == CarPassengerEvent.WANTTODRIVE) { // Wants to drive, go to car
-			myState = CarPassengerState.GOINGTOCAR;
-			goToCar();
-			return true;
-		}
-		if(myState == CarPassengerState.GOINGTOCAR && myEvent == CarPassengerEvent.ATCAR) { // In car, start driving
+		if(myState == CarPassengerState.NOTDRIVING && myEvent == CarPassengerEvent.ATCAR) { // In car, start driving
 			myState = CarPassengerState.DRIVING;
 			driveCar();
 			return true;
@@ -59,18 +50,14 @@ public class CarPassengerRole extends Role implements CarPassenger {
 		}
 		return false;
 	}
-	
-	// Actions
-	void goToCar() {
-//		myGui.doGoToCar(myCar); // This will call a msg to the GUI, which will animate and then call msgImAtCar() on this passenger
-		msgImAtCar();
-	}
 
 	void driveCar() {
+		print("Going to drive car " + myCar.getName() + " to go to " + destination);
 		myCar.msgIWantToDrive(this, destination); // This will tell the car to start driving to the destination
 	}
 
 	void getOutOfCar() {
+		print("Getting out of car " + myCar.getName());
 //		myGui.doGetOutOfCar(myCar); // This will pause this agent until the animation is finished
 		myState = CarPassengerState.NOTDRIVING; // Reset state and event
 		myEvent = CarPassengerEvent.NONE;
@@ -82,6 +69,13 @@ public class CarPassengerRole extends Role implements CarPassenger {
 //	void setGui(CarPassengerGui gui) {
 //		myGui = gui;
 //	}
+	
+	@Override
+	public void setActive() {
+		super.setActivityBegun();
+		super.setActive();
+		myEvent = CarPassengerEvent.ATCAR;
+	}
 	
 	// Utilities
 	
