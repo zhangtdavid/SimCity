@@ -378,7 +378,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             public void run() {
                 Food f = restaurant.foods.get(FOOD_ITEMS.valueOf(o.choice));
                 f.amount--;
-//              print(o.choice + " amount after cooking " + f.amount);
+                print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
                 msgSelfDoneCooking(o);
                 cookGui.DoReturnToCookHome();

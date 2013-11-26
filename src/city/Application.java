@@ -15,12 +15,15 @@ import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.CityViewMarket;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
 import city.gui.MainFrame;
+import city.gui.MarketPanel;
 import city.gui.RestaurantChungPanel;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
@@ -54,6 +57,7 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
 //	public static RestaurantZhangBuilding rzb1;
+	public static MarketBuilding mb1;
 	public static RestaurantChungBuilding rcb1;
 	/**
 	 * Main routine to start the program.
@@ -101,7 +105,7 @@ public class Application {
 //		// SIXTH add the new building to the map
 //		CityMap.addBuilding(BUILDING.restaurant, rzb1);
 		// SEVENTH create all your roles after
-
+		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
@@ -116,6 +120,7 @@ public class Application {
 		// SIXTH add the new building to the map
 		
 		CityMap.addBuilding(BUILDING.restaurant, rcb1);
+
 		// SEVENTH create all your roles after
 		
 		// Create buildings
@@ -220,6 +225,46 @@ public class Application {
 		p2.startThread();
 		p3.startThread();
 		p4.startThread();
+		
+		
+		// MARKET
+		MarketPanel mp1 = new MarketPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		CityViewMarket market1 = new CityViewMarket(250, 250, "Market " + (mainFrame.cityView.getStaticsSize()), Color.blue, mp1); 
+		mainFrame.cityView.addStatic(market1);
+		mb1 = new MarketBuilding("Market1", mp1);
+		mainFrame.buildingView.addView(mp1, market1.ID);
+		CityMap.addBuilding(BUILDING.market, mb1);
+		
+		// Market People
+		// Create houses
+		HouseBuilding h5 = new HouseBuilding("House 5", p0r1, rhp1);
+		HouseBuilding h6 = new HouseBuilding("House 6", p0r1, rhp1);
+		HouseBuilding h7 = new HouseBuilding("House 7", p0r1, rhp1);
+		HouseBuilding h8 = new HouseBuilding("House 8", p0r1, rhp1);
+
+		// Create people
+		PersonAgent p5 = new PersonAgent("MarketCashier 1", date);
+		PersonAgent p6 = new PersonAgent("MarketDeliveryPerson 1", date);
+		PersonAgent p7 = new PersonAgent("MarketEmployee 1", date);
+		PersonAgent p8 = new PersonAgent("MarketManager 1", date);
+		people.add(p5);
+		people.add(p6);
+		people.add(p7);
+		people.add(p8);
+		p5.setHome(h5);
+		p6.setHome(h6);
+		p7.setHome(h7);
+		p8.setHome(h8);
+
+		// Give people cars
+		CarAgent c6 = new CarAgent();
+		CarAgent c7 = new CarAgent();
+		CarAgent c8 = new CarAgent();
+		CarAgent c9 = new CarAgent();
+		p0.setCar(c6);
+		p1.setCar(c7);
+		p2.setCar(c8);
+		p3.setCar(c9);		
 	}
 
 	public static class CityMap {
