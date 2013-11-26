@@ -64,7 +64,12 @@ public class CityRoad extends CityViewBuilding {
 		double vHeight = 0;
 		if(vehicle instanceof CarAnimation) {
 			vehicle = (CarAnimation)vehicle;
-			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).currentRoad == null) {
+			if(((CarAnimation) vehicle).endRoad == this) {
+				((CarAnimation) vehicle).atDestinationRoad = true;
+				vehicle = null;
+				return;
+			}
+			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).startingRoad == null) {
 				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 			}
@@ -87,20 +92,18 @@ public class CityRoad extends CityViewBuilding {
 		//Remove the vehicle from the list if it is at the end of the lane
 		if ( isHorizontal ) {
 			//End of lane is xOrigin + width - vehicle width
-			double endOfLane = xOrigin + width - vWidth;
-			if ( xVelocity > 0 && x >= xOrigin + width) {
+			if ( xVelocity > 0 && x >= xOrigin + vWidth) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
-			} else if ( xVelocity < 0 && x <= xOrigin - width ) {
+			} else if ( xVelocity < 0 && x <= xOrigin - vWidth ) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
 			}
 		} else {
-			//End of lane is xOrigin + height - vehicle height
-			if ( yVelocity > 0 && y >= yOrigin + height ) {
+			if ( yVelocity > 0 && y >= yOrigin + vHeight ) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
-			} else if ( yVelocity < 0 && y <= yOrigin - height ) {
+			} else if ( yVelocity < 0 && y <= yOrigin - vHeight ) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
 			}

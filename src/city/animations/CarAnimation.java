@@ -19,12 +19,13 @@ public class CarAnimation extends Animation implements AnimatedCar {
 
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
-	
+
 	Building currentBuilding;
 	Building destinationBuilding = null;
-	public CityRoad currentRoad = null;
+	public CityRoad startingRoad = null;
+	public CityRoad endRoad = null;
 	
-	private boolean atRoad = false;
+	public boolean atDestinationRoad = false;
 	private boolean atDestination = true;
 
 	public static final int SIZE = 25;
@@ -37,33 +38,38 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	}
 
 	public void updatePosition() {
-//		if (xPos < xDestination)
-//			xPos++;
-//		else if (xPos > xDestination)
-//			xPos--;
-//
-//		if (yPos < yDestination)
-//			yPos++;
-//		else if (yPos > yDestination)
-//			yPos--;
-		if(currentRoad != null) {
-			if(currentRoad.addVehicle(this) == false && currentRoad.vehicle != this) {
+		// Getting on the first road
+		if(startingRoad != null) {
+			if(startingRoad.addVehicle(this) == false && startingRoad.vehicle != this) {
 				return;
 			}
-			if (xPos < currentRoad.x && !currentRoad.isHorizontal)
+			if (xPos < startingRoad.x && !startingRoad.isHorizontal)
 				xPos++;
-			else if (xPos > currentRoad.x && !currentRoad.isHorizontal)
+			else if (xPos > startingRoad.x && !startingRoad.isHorizontal)
+				xPos--;
+
+			if (yPos < startingRoad.y && startingRoad.isHorizontal)
+				yPos++;
+			else if (yPos > startingRoad.y && startingRoad.isHorizontal)
+				yPos--;
+			if(xPos == startingRoad.x && yPos == startingRoad.y)
+				startingRoad = null;
+		}
+		// Getting on the destination road
+		if(atDestinationRoad == true) {
+			if (xPos < xDestination)
+				xPos++;
+			else if (xPos > xDestination)
 				xPos--;
 	
-			if (yPos < currentRoad.y && currentRoad.isHorizontal)
+			if (yPos < yDestination)
 				yPos++;
-			else if (yPos > currentRoad.y && currentRoad.isHorizontal)
+			else if (yPos > yDestination)
 				yPos--;
-			if(xPos == currentRoad.x && yPos == currentRoad.y)
-				currentRoad = null;
 		}
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
+			atDestinationRoad = false;
 			car.msgAtDestination();
 		}
 	}
@@ -83,10 +89,11 @@ public class CarAnimation extends Animation implements AnimatedCar {
 
 	public void goToDestination(Building destination) {
 		destinationBuilding = destination;
-		currentRoad = Application.CityMap.findClosestRoad(currentBuilding);
-		currentRoad.addVehicle(this);
+		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
+		startingRoad.addVehicle(this);
 		xDestination = destination.cityBuilding.x;
 		yDestination = destination.cityBuilding.y;
+		endRoad = Application.CityMap.findClosestRoad(destination);
 		atDestination = false;
 	}
 
