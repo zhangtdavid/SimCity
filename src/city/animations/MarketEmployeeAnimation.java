@@ -1,8 +1,10 @@
 package city.animations;
 
 import java.awt.*;
+import java.util.Map;
 
 import city.Animation;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.MarketAnimatedEmployee;
 import city.interfaces.MarketEmployee;
 
@@ -45,5 +47,26 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 
 	public boolean isPresent() {
 		return true;
+	}
+
+	public void doGoToPhone() {
+		// TODO Auto-generated method stub
+		
+	}
+	
+	public void doDeliverItems() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void doCollectItems() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void doGoToCounter() {
+		// TODO Auto-generated method stub
+		
 	}
 }

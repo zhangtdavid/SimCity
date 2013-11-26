@@ -10,6 +10,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.buildings.MarketBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -17,6 +18,7 @@ import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 
 public class MarketCashierRole extends Role implements MarketCashier {
@@ -26,7 +28,8 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public EventLog log = new EventLog();
 
 	public MarketBuilding market;
-	
+	public BankCustomer bankCustomer;
+		
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
@@ -98,11 +101,15 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCashierRole(MarketBuilding market) {
+	public MarketCashierRole(MarketBuilding b, int t1, int t2) {
 		super();
-		this.market = market;
-//		super.setWorkplace(market);
-    }
+		market = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(MarketBuilding.getWorkerSalary());
+//		bankCustomer = new BankCustomerRole(); TODO Get a null point exception here
+
+	}
 	
 	public void setActive(){
 		this.setActivityBegun();
@@ -140,6 +147,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
 			stateChanged();			
 		}
+		// TODO inform sender of inactivity
 	}
 	
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
@@ -149,6 +157,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
 			stateChanged();			
 		}
+		// TODO inform sender of inactivity
 	}
 
 //	Customer
@@ -185,16 +194,23 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 	@Override
 	public boolean runScheduler() {
+		// Role Scheduler
+		boolean blocking = false;
+		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
+			blocking  = true;
+			boolean activity = market.bankCustomer.runScheduler();
+			if (!activity) {
+				market.bankCustomer.setActivityFinished();
+			}
+		}
+		
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.cashier != this)
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (transactions.size() == 0 && workingState == WorkingState.NotWorking)
-			super.setInactive();
-		
 		if (market.getCash() > 1000)
-			// msg bank
+			depositMoney();
 		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
@@ -225,11 +241,18 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			}
 		}
 		
-		return false;
+		if (workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
+		return blocking;
 	}
 	
 //  Actions
 //	=====================================================================	
+	private void depositMoney() {
+		market.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
+	}
+	
 	private void computeBill(Transaction t) {
 		t.s = TransactionState.Calculating;
 
@@ -242,7 +265,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 			t.customer.msgHereIsOrderandBill(t.collectedItems, t.bill, t.orderId);			
 		}
 		else
-			t.customerDeliveryPayment.msgHereIsBill(this, t.bill, t.orderId);
+			t.customerDeliveryPayment.msgHereIsBill(t.bill, t.orderId);
 			
 	}
 	
@@ -292,33 +315,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		for(Transaction t : transactions){
 			if(t.orderId == id) {
 				return t;
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomer c) {
-		for(Transaction t : transactions){
-			if(t.customer == c) {
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomerDelivery c) {
-		for(Transaction t : transactions){
-			if(t.customerDelivery == c) {
-				return t;		
-			}
-		}
-		return null;
-	}
-	
-	private Transaction findTransaction(MarketCustomerDeliveryPayment c) {
-		for(Transaction t : transactions){
-			if(t.customerDeliveryPayment == c) {
-				return t;		
 			}
 		}
 		return null;

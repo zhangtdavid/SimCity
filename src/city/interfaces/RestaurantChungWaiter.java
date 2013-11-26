@@ -9,7 +9,7 @@ import city.animations.interfaces.RestaurantChungAnimatedWaiter;
  * @author Monroe Ekilah
  *
  */
-public interface RestaurantChungWaiterBase extends RoleInterface {
+public interface RestaurantChungWaiter extends RoleInterface {
 
 	public abstract void msgAnimationAskedForBreak();
 	public abstract void msgApprovedForBreak();
