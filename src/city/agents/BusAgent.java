@@ -3,10 +3,12 @@ package city.agents;
 import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
+import java.util.concurrent.Semaphore;
 
 import city.Agent;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
+import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
 
 public class BusAgent extends Agent implements Bus {
@@ -21,7 +23,9 @@ public class BusAgent extends Agent implements Bus {
 	public BusStopBuilding nextStop; // Stop the bus is going to
 	public static final double busFare = 1.50; // Fare price of bus
 	public double earnedMoney = 0.00; // Amount of fare the bus earned
-	//BusGui myGui; // GUI for animations
+	public AnimatedBus animation;
+	
+	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	public BusAgent(BusStopBuilding currentStop_, BusStopBuilding nextStop_) {
@@ -130,17 +134,30 @@ public class BusAgent extends Agent implements Bus {
 	}
 
 	void driveToNextStop() { // Tells 
-		//myGui.DoGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		animation.DoGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		msgAtBusDestination();
 	}
 	// Getters
 	
 	// Setters
+	public void setAnimation(AnimatedBus anim) {
+		animation = anim;
+	}
 	
 	// Utilities
 	public void startThread() {
 		super.startThread();
 		stateChanged();
+	}
+	
+	@Override
+	public void msgAtDestination() {
+		atDestination.release();
 	}
 	
 	// Classes

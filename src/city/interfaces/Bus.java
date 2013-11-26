@@ -7,6 +7,8 @@ public interface Bus extends AgentInterface {
 
 	void msgImOffBus(BusPassenger busPassengerRole);
 
+	void msgAtDestination();
+
 	// Data
 	
 	// Constructor

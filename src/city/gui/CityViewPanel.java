@@ -26,14 +26,6 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		this.setMaximumSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
 		this.setVisible(true);
 		background = new Color(128, 64, 0);
-		CityRoad road1 = new CityRoad(100, 100, CITY_WIDTH - 200, CITY_HEIGHT / 10, -1, 0, true, Color.black, Color.gray);
-		movings.add(road1);
-		CityRoad road2 = new CityRoad(100, 100 + CITY_HEIGHT / 10, CITY_WIDTH / 10, CITY_HEIGHT - 300, 0, 1, false, Color.black, Color.gray);
-		movings.add(road2);
-		CityRoad road3 = new CityRoad(100, 350, CITY_WIDTH - 200, CITY_HEIGHT / 10, 1, 0, true, Color.black, Color.gray);
-		movings.add(road3);
-		CityRoad road4 = new CityRoad(350, 100 + CITY_HEIGHT / 10, CITY_WIDTH / 10, CITY_HEIGHT - 300, 0, -1, false, Color.black, Color.gray);
-		movings.add(road4);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}

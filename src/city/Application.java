@@ -10,8 +10,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
+import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
@@ -19,7 +21,9 @@ import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.BusStopPanel;
+import city.gui.CityRoad;
 import city.gui.CityViewBusStop;
+import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
 import city.gui.RestaurantZhangPanel;
@@ -78,6 +82,16 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
+		// Create roads
+		CityRoad road1 = new CityRoad(100, 100, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 10, -1, 0, true, Color.black, Color.gray);
+		mainFrame.cityView.addMoving(road1);
+		CityRoad road2 = new CityRoad(100, 100 + CityViewPanel.CITY_HEIGHT / 10, CityViewPanel.CITY_WIDTH / 10, CityViewPanel.CITY_HEIGHT - 300, 0, 1, false, Color.black, Color.gray);
+		mainFrame.cityView.addMoving(road2);
+		CityRoad road3 = new CityRoad(100, 350, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 10, 1, 0, true, Color.black, Color.gray);
+		mainFrame.cityView.addMoving(road3);
+		CityRoad road4 = new CityRoad(350, 100 + CityViewPanel.CITY_HEIGHT / 10, CityViewPanel.CITY_WIDTH / 10, CityViewPanel.CITY_HEIGHT - 300, 0, -1, false, Color.black, Color.gray);
+		mainFrame.cityView.addMoving(road4);
+		
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
@@ -134,6 +148,13 @@ public class Application {
 		busStop3.setPreviousStop(busStop2);
 		busStop4.setNextStop(busStop1);
 		busStop4.setPreviousStop(busStop3);
+		
+		// Create buses
+		BusAgent bus1 = new BusAgent(busStop1, busStop2);
+		BusAnimation b1Anim = new BusAnimation(bus1, busStop2);
+		bus1.setAnimation(b1Anim);
+		mainFrame.cityView.addAnimation(b1Anim);
+		bus1.startThread();
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
