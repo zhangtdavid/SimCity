@@ -1,12 +1,16 @@
 package city.roles;
 
 import city.buildings.RestaurantJPBuilding;
+import city.buildings.RestaurantTimmsBuilding;
 import utilities.RestaurantJPWaiterBase;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	
-	public RestaurantJPWaiterRole(RestaurantJPBuilding b) {
+	public RestaurantJPWaiterRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super(b);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 	}
 	
 	public void GiveOrderToCook(MyCustomer myC){
