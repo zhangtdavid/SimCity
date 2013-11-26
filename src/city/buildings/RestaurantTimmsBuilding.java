@@ -195,6 +195,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 		} else if (r instanceof RestaurantTimmsCustomer) {
 			RestaurantTimmsCustomer customer = (RestaurantTimmsCustomer) r;
 			if (!super.roleExists(r)) {
+				customer.setRestaurantTimmsBuilding(this);
 				RestaurantTimmsCustomerAnimation a = new RestaurantTimmsCustomerAnimation(customer);
 				customer.setAnimation(a);
 				panel.addVisualizationElement(a);

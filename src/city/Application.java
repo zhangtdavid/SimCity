@@ -15,18 +15,18 @@ import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
-import city.buildings.RestaurantZhangBuilding;
+import city.buildings.RestaurantTimmsBuilding;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
 import city.gui.MainFrame;
-import city.gui.RestaurantZhangPanel;
+import city.gui.RestaurantTimmsPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
-import city.roles.RestaurantZhangCashierRole;
-import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
+import city.roles.RestaurantTimmsCashierRole;
+import city.roles.RestaurantTimmsCookRole;
+import city.roles.RestaurantTimmsHostRole;
+import city.roles.RestaurantTimmsWaiterRole;
 
 public class Application {
 
@@ -41,8 +41,6 @@ public class Application {
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
-
-	public static RestaurantZhangBuilding rzb1;
 	
 	/**
 	 * Main routine to start the program.
@@ -75,25 +73,20 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
-		// FIRST add a panel
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		
+        // Create panels
+		RestaurantTimmsPanel rtp1 = new RestaurantTimmsPanel(Color.GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		CityViewRestaurant cvr1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rtp1); 
+		mainFrame.cityView.addStatic(cvr1);
+		// Skipping creating a bank panel
 		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
-		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
-		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantZhang1);
-		// FOURTH create a new building, last argument is the panel in step ONE
-		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
-		rzp1.setTables(rzb1.tables);
-		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
-		// SIXTH add the new building to the map
-		CityMap.addBuilding(BUILDING.restaurant, rzb1);
-		// SEVENTH create all your roles after
-
-		// Create buildings
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		
+        // Create buildings
+        RestaurantTimmsBuilding rtb = (RestaurantTimmsBuilding) Application.CityMap.addBuilding(BUILDING.restaurant, new RestaurantTimmsBuilding("RestaurantTimms", rtp1));
+        mainFrame.buildingView.addView(rtp1, cvr1.ID);
+        CityMap.addBuilding(BUILDING.restaurant, rtb);
+        Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+        // Skipping creating a house
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -137,23 +130,23 @@ public class Application {
 		p4.setCar(c4);
 
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p1r1);
+		RestaurantTimmsCashierRole p1r1 = new RestaurantTimmsCashierRole(rtb, 0, 100); // TODO Change shift times
+		rtb.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p2r1);
+		RestaurantTimmsCookRole p2r1 = new RestaurantTimmsCookRole(rtb, 0, 100); // TODO Change shift times
+		rtb.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p3r1);
+		RestaurantTimmsHostRole p3r1 = new RestaurantTimmsHostRole(rtb, 0, 100); // TODO Change shift times
+		rtb.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p4r1);
+		RestaurantTimmsWaiterRole p4r1 = new RestaurantTimmsWaiterRole(rtb, 0, 100); // TODO Change shift times
+		rtb.addRole(p4r1);
 		p4.setOccupation(p4r1);
 
 		// Start threads
