@@ -3,11 +3,8 @@ package city.tests;
 import java.util.Date;
 
 import junit.framework.TestCase;
-import city.agents.CarAgent;
-import city.agents.PersonAgent;
 import city.buildings.AptBuilding;
 import city.buildings.HouseBuilding;
-import city.roles.LandlordRole;
 import city.roles.ResidentRole;
 import city.tests.mock.MockLandlord;
 import city.tests.mock.MockPerson;
@@ -32,16 +29,16 @@ public class HousingTest extends TestCase{
 		System.out.println("Testing HouseBuilding");
 		System.out.println("===============================");
 		Date date = new Date(0);
-		PersonAgent p1 = new PersonAgent("Resident 1", date);
+		MockPerson p1 = new MockPerson("P1");
 		p1.setCash(1000);
 		p1.setDate(date);
-		ResidentRole p1r1 = new ResidentRole();
+		ResidentRole p1r1 = new ResidentRole(date);
 		p1.setOccupation(p1r1);
 		p1.startThread();
 
 		MockResident p2r1 = new MockResident();
 		MockLandlord p2rL = new MockLandlord();
-		HouseBuilding hb = new HouseBuilding("House 1", p2rL);
+		HouseBuilding hb = new HouseBuilding("House 1", p2rL, null);
 		p2rL.addResident(p2r1);
 		p2rL.addResident(p1r1);
 		hb.residents.add(p2r1);
@@ -69,15 +66,15 @@ public class HousingTest extends TestCase{
 	 * Landlord getting $ for it, but not the $ from maintenance, which is a net loss. Also the division of maintenance fees over people
 	 * MockResident doesn't pay his share, but ResidentRole does (since its thread runs), and he pays his half-share ($10). 
 	 */
-	public void testApartment(){
+	public void testApartmentForTheSame(){
 		System.out.println("===============================");
 		System.out.println("Testing AptBuilding");
 		System.out.println("===============================");
 		Date date = new Date(0);
-		PersonAgent p1 = new PersonAgent("Resident 1", date);
+		MockPerson p1 = new MockPerson("Resident 1");
 		p1.setCash(1000);
 		p1.setDate(date);
-		ResidentRole p1r1 = new ResidentRole();
+		ResidentRole p1r1 = new ResidentRole(date);
 		p1.setOccupation(p1r1);
 		p1.startThread();
 
@@ -95,7 +92,6 @@ public class HousingTest extends TestCase{
 		p2r1.setLandlord(p2rL);
 		
 		p1.setDate(new Date(3360000)); // let's time-travel to a future date i.e. let's go to when rent is due...		
-		
 		System.out.println("Payer funds before rent: " + p1r1.getPerson().getCash());
 		System.out.println("Landlord funds before rent: " + p2rL.mockcash);
 		assertTrue("before paying rent, rentIsDue should return true", p1r1.rentIsDue());

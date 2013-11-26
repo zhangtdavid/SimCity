@@ -1,31 +1,28 @@
 package city.tests;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
-import city.Animation;
 import city.Application.FOOD_ITEMS;
-import city.animations.interfaces.MarketAnimatedEmployee;
 import city.buildings.MarketBuilding;
-import city.roles.BankCustomerRole;
-import city.roles.MarketCashierRole;
+import city.gui.MarketPanel;
 import city.roles.MarketEmployeeRole;
 import city.roles.MarketEmployeeRole.MarketEmployeeEvent;
 import city.roles.MarketEmployeeRole.MarketEmployeeState;
-import city.roles.MarketCashierRole.TransactionState;
 import city.tests.mock.MockMarketCashier;
 import city.tests.mock.MockMarketCustomer;
 import city.tests.mock.MockMarketCustomerDelivery;
 import city.tests.mock.MockMarketCustomerDeliveryPayment;
 import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketEmployee;
 import city.tests.mock.MockMarketManager;
 import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketEmployeeTest extends TestCase {
-	
+	MarketPanel marketPanel;	
 	MarketBuilding market;
 	
 	MockPerson cashierPerson;
@@ -58,7 +55,8 @@ public class MarketEmployeeTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		market = new MarketBuilding("Market1");
+		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
+		market = new MarketBuilding("Market1", marketPanel);
 		
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MockMarketCashier();

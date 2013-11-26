@@ -25,6 +25,7 @@ import city.gui.CityRoad;
 import city.gui.CityViewBusStop;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
+import city.gui.HousePanel;
 import city.gui.MainFrame;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
@@ -83,18 +84,19 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// Create roads
-		CityRoad road1 = new CityRoad(100, 100, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 10, -1, 0, true, Color.black, Color.gray);
+		CityRoad road1 = new CityRoad(100, 100, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 20, -1, 0, true, Color.black, Color.gray);
 		mainFrame.cityView.addMoving(road1);
-		CityRoad road2 = new CityRoad(100, 100 + CityViewPanel.CITY_HEIGHT / 10, CityViewPanel.CITY_WIDTH / 10, CityViewPanel.CITY_HEIGHT - 300, 0, 1, false, Color.black, Color.gray);
+		CityRoad road2 = new CityRoad(100, 100 + CityViewPanel.CITY_HEIGHT / 20, CityViewPanel.CITY_WIDTH / 20, CityViewPanel.CITY_HEIGHT - 250, 0, 1, false, Color.black, Color.gray);
 		mainFrame.cityView.addMoving(road2);
-		CityRoad road3 = new CityRoad(100, 350, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 10, 1, 0, true, Color.black, Color.gray);
+		CityRoad road3 = new CityRoad(100, 350, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 20, 1, 0, true, Color.black, Color.gray);
 		mainFrame.cityView.addMoving(road3);
-		CityRoad road4 = new CityRoad(350, 100 + CityViewPanel.CITY_HEIGHT / 10, CityViewPanel.CITY_WIDTH / 10, CityViewPanel.CITY_HEIGHT - 300, 0, -1, false, Color.black, Color.gray);
+		CityRoad road4 = new CityRoad(375, 100 + CityViewPanel.CITY_HEIGHT / 20, CityViewPanel.CITY_WIDTH / 20, CityViewPanel.CITY_HEIGHT - 250, 0, -1, false, Color.black, Color.gray);
 		mainFrame.cityView.addMoving(road4);
 		
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(100, 50, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
 		// THIRD add it to the list of statics in the cityView
@@ -124,7 +126,7 @@ public class Application {
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 		
 		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 400, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 375, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.ID);
@@ -139,7 +141,7 @@ public class Application {
 		
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
-		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding"));
+//		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding"));
 		
 		busStop1.setNextStop(busStop2);
 		busStop1.setPreviousStop(busStop4);
@@ -161,16 +163,16 @@ public class Application {
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
-		HouseBuilding h0 = new HouseBuilding("House 0", p0r1);
+		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
 		p0r1.setActive();
 		people.add(p0);
 
 		// Create houses
-		HouseBuilding h1 = new HouseBuilding("House 1", p0r1);
-		HouseBuilding h2 = new HouseBuilding("House 2", p0r1);
-		HouseBuilding h3 = new HouseBuilding("House 3", p0r1);
-		HouseBuilding h4 = new HouseBuilding("House 4", p0r1);
+		HouseBuilding h1 = new HouseBuilding("House 1", p0r1, rhp1);
+		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp1);
+		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp1);
+		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp1);
 
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
@@ -191,6 +193,7 @@ public class Application {
 		CarAnimation c0Anim = new CarAnimation(c0, busStop2);
 		c0.setAnimation(c0Anim);
 		mainFrame.cityView.addAnimation(c0Anim);
+		road2.addVehicle(c0Anim);
 		CarAgent c1 = new CarAgent(busStop2);
 		CarAnimation c1Anim = new CarAnimation(c1, busStop2);
 		c1 .setAnimation(c1Anim);

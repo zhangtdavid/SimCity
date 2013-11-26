@@ -7,22 +7,28 @@ import java.util.List;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
+import city.interfaces.BankCustomer;
 import city.interfaces.BankManager;
+import city.interfaces.BankTeller;
 
 public class BankManagerRole extends Role implements BankManager{
 // Data
 	BankBuilding building;
 	List<MyTeller> myTellers = new ArrayList<MyTeller>();
-	List<BankCustomerRole> customers = new ArrayList<BankCustomerRole>();
-	List<BankTask> bankTasks = new ArrayList<BankTask>();
-	BankCustomerRole directDepositer = null;
+	List<BankCustomer> customers = new ArrayList<BankCustomer>();
+	public List<BankTask> bankTasks = new ArrayList<BankTask>();
+	BankCustomer directDepositer = null;
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
 // Constructor
-	public BankManagerRole (BankBuilding b){
+	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 	}
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
@@ -33,19 +39,19 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 // Messages
 	//from customer
-	public void msgNeedService(BankCustomerRole bc){
+	public void msgNeedService(BankCustomer bc){
 		print("Need service message received");
 		customers.add(bc);
 		stateChanged();
 	}
-	public void msgDirectDeposit(int acctNum, int money, BankCustomerRole r){
+	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
 		print("Direct Deposit message received");
-		bankTasks.add(new BankTask(acctNum, type.deposit, money, null));
+		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null));
 		directDepositer = r;
 		stateChanged();
 	}
 	//from teller
-	public void msgAvailable(BankTellerRole t){
+	public void msgAvailable(BankTeller t){
 		print("Available message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
@@ -56,7 +62,7 @@ public class BankManagerRole extends Role implements BankManager{
 		myTellers.add(new MyTeller(t));
 		stateChanged();
 	}
-	public void msgUnavailable(BankTellerRole t){
+	public void msgUnavailable(BankTeller t){
 		print("Unavailable message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
@@ -67,12 +73,12 @@ public class BankManagerRole extends Role implements BankManager{
 		myTellers.add(new MyTeller(t));
 		stateChanged();
 	}
-	public void msgWithdraw(int acctNum, int money, BankTellerRole t){
+	public void msgWithdraw(int acctNum, int money, BankTeller t){
 		print("Withdraw message received from Teller");
 		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t));
 		stateChanged();
 	}
-	public void msgTryDeposit(int money, int acctNum, BankTellerRole t){
+	public void msgTryDeposit(int money, int acctNum, BankTeller t){
 		print("Try deposit message received from teller");
 		if(acctNum == -1)
 			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t));
@@ -105,7 +111,7 @@ public class BankManagerRole extends Role implements BankManager{
 			}
 		}
 		else {
-		for(BankCustomerRole bc : customers){
+		for(BankCustomer bc : customers){
 			for(MyTeller myT : myTellers){
 				if(myT.s == state.available){
 					AssignCustomer(bc, myT);
@@ -165,19 +171,24 @@ public class BankManagerRole extends Role implements BankManager{
 		return dueDate;
 	}
 	
-	private void AssignCustomer(BankCustomerRole bc, MyTeller myT){
+	private void AssignCustomer(BankCustomer bc, MyTeller myT){
 		myT.s = state.busy;
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
 	}
 	private void atmDeposit(BankTask bT){
+		if(bT.acctNum == -1)
+			CreateAccount(bT);
+		else{
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				directDepositer.msgDepositCompleted();
 				directDepositer = null;
+				return;
 			}
+		}
 		}
 	}
 	private void Deposit(BankTask bT){
@@ -205,7 +216,12 @@ public class BankManagerRole extends Role implements BankManager{
 	private void CreateAccount(BankTask bT){
 		building.accounts.add(new Account(building.accounts.size() + 1, bT.money));
 		bankTasks.remove(bT);
-		bT.teller.msgHereIsAccount(building.accounts.size());
+		if(bT.t == type.acctCreate)
+			bT.teller.msgHereIsAccount(building.accounts.size());
+		else if(bT.t == type.atmDeposit){
+			directDepositer.msgAccountCreated(building.accounts.size());
+			directDepositer = null;
+		}
 	}
 	private void PayLoan(Loan l){
 		List<Account> temp = building.getAccounts();
@@ -225,10 +241,10 @@ public class BankManagerRole extends Role implements BankManager{
 	
 // Classes
 	public class MyTeller {
-		BankTellerRole teller;
+		BankTeller teller;
 		int salary;
 		state s;
-		public MyTeller(BankTellerRole t){
+		public MyTeller(BankTeller t){
 			teller = t;
 			salary = 100000000;
 			s = state.available;
@@ -238,9 +254,9 @@ public class BankManagerRole extends Role implements BankManager{
 		int acctNum;
 		type t;
 		int money;
-		BankTellerRole teller;
+		BankTeller teller;
 		BankCustomerRole bc;
-		public BankTask(int acct, type typ, int m, BankTellerRole tell){
+		public BankTask(int acct, type typ, int m, BankTeller tell){
 			acctNum = acct;
 			t = typ;
 			money = m;

@@ -19,7 +19,7 @@ public class BusAnimation extends Animation implements AnimatedBus {
 
 	private boolean atDestination = true;
 
-	public static final int SIZE = 50;
+	public static final int SIZE = 25;
 
 	public BusAnimation(Bus b, Building startingBuilding) {
 		bus = b;
@@ -48,7 +48,7 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		g.setColor(Color.CYAN);
 		g.fillRect(xPos, yPos, SIZE, SIZE);
 		g.setColor(Color.black);
-		g.drawString("Bus", xPos + 10, yPos + 10);
+		g.drawString("Bus", xPos, yPos + 10);
 	}
 
 	public boolean isPresent() {
@@ -75,5 +75,15 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		xDestination = nextStop.cityBuilding.x;
 		yDestination = nextStop.cityBuilding.y;
 		atDestination = false;
+	}
+
+	public void setXPos(int x) {
+		xPos = x;
+		
+	}
+
+	public void setYPos(int y) {
+		yPos = y;
+		
 	}
 }

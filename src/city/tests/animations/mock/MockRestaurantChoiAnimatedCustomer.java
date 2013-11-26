@@ -2,6 +2,7 @@ package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
+import city.Application.FOOD_ITEMS;
 import city.MockAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 
@@ -74,12 +75,6 @@ public class MockRestaurantChoiAnimatedCustomer extends MockAnimation implements
 	}
 
 	@Override
-	public void setOrderIcon(int i, boolean b) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setPresent(boolean b) {
 		// TODO Auto-generated method stub
 		
@@ -93,6 +88,12 @@ public class MockRestaurantChoiAnimatedCustomer extends MockAnimation implements
 
 	@Override
 	public void resetLocation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOrderIcon(FOOD_ITEMS f, boolean b) {
 		// TODO Auto-generated method stub
 		
 	}

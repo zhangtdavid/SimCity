@@ -46,7 +46,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
 	
-	private MarketCustomerDelivery marketCustomerDelivery;
+	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
+	
 	private RestaurantChungCashier restaurantChungCashier;
 
 //  Orders
@@ -183,13 +184,14 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		boolean blocking = false;
 		if (!cooking && !plating) {
     		// Role Scheduler
-    		if (marketCustomerDelivery != null && marketCustomerDelivery.getActive() && marketCustomerDelivery.getActivity()) {
-    			blocking  = true;
-    			boolean activity = marketCustomerDelivery.runScheduler();
-    			if (!activity) {
-    				marketCustomerDelivery.setActivityFinished();
-    			}
-    		}
+			for (Role r : marketCustomerDeliveryRoles) if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
+			}
     		
     		if (workingState == WorkingState.GoingOffShift) {
     			if (restaurant.cashier != this)
@@ -290,10 +292,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         Map<FOOD_ITEMS, Integer> normal = new HashMap<FOOD_ITEMS, Integer>();                
         int numLow = 0;
         
-        for (FOOD_ITEMS i: restaurant.foods.keySet()) {
-            if (restaurant.foods.get(i).s == FoodOrderState.None && (restaurant.foods.get(i).amount <= restaurant.foods.get(i).low)) {
-                normal.put(i, restaurant.foods.get(i).capacity - restaurant.foods.get(i).amount);
-                restaurant.foods.get(i).s = FoodOrderState.Pending;
+        for (FOOD_ITEMS i: restaurant.getFoods().keySet()) {
+            if (restaurant.getFoods().get(i).s == FoodOrderState.None && (restaurant.getFoods().get(i).amount <= restaurant.getFoods().get(i).low)) {
+                normal.put(i, restaurant.getFoods().get(i).capacity - restaurant.getFoods().get(i).amount);
+                restaurant.getFoods().get(i).s = FoodOrderState.Pending;
                 numLow++;
             }
             else normal.put(i, 0);
@@ -320,8 +322,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
         }
 
-        for (FOOD_ITEMS i: restaurant.foods.keySet()) {
-            print("Current Inventory: " + i + " " + restaurant.foods.get(i).amount);
+        for (FOOD_ITEMS i: restaurant.getFoods().keySet()) {
+            print("Current Inventory: " + i + " " + restaurant.getFoods().get(i).amount);
         }
 
         
@@ -330,8 +332,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
-        marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+    	MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setActive();
+        marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
         return;
     }
     
@@ -343,7 +347,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  Cooking
 //  ---------------------------------------------------------------
     private void tryToCookIt(RestaurantChungOrder o) {
-        Food f = restaurant.foods.get(o.choice);
+        Food f = restaurant.getFoods().get(o.choice);
         // If out of food
         identifyFoodThatIsLow();
 
@@ -373,7 +377,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         cooking = true;
         timer.schedule(new TimerTask() {
             public void run() {
-                Food f = restaurant.foods.get(o.choice);
+                Food f = restaurant.getFoods().get(o.choice);
                 f.amount--;
 //              print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
@@ -387,7 +391,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //        		}
             }
         },
-        restaurant.foods.get(o.choice).cookingTime*100);
+        restaurant.getFoods().get(o.choice).cookingTime*100);
     }
     
     private void plateIt(final RestaurantChungOrder o) {
@@ -460,7 +464,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
     
     public Food findFood(String choice) {
-        for(Food f: restaurant.foods.values()){
+        for(Food f: restaurant.getFoods().values()){
             if(f.item.equals(choice)) {
                 return f;
             }

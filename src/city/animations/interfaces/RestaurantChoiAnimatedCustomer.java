@@ -1,5 +1,6 @@
 package city.animations.interfaces;
 
+import city.Application.FOOD_ITEMS;
 import city.interfaces.AnimationInterface;
 
 public interface RestaurantChoiAnimatedCustomer extends AnimationInterface{
@@ -25,7 +26,7 @@ public interface RestaurantChoiAnimatedCustomer extends AnimationInterface{
     int getXWait();
     int getYWait();
     // Setters
-    void setOrderIcon(int i, boolean b);
+    void setOrderIcon(FOOD_ITEMS f, boolean b);
     void setPresent(boolean b);
     void setHungry();
     // Utilities

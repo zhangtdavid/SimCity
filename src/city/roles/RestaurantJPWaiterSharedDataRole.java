@@ -5,8 +5,11 @@ import city.buildings.RestaurantJPBuilding;
 
 public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 	 
-	public RestaurantJPWaiterSharedDataRole(RestaurantJPBuilding b) {
-         super(b);
+	public RestaurantJPWaiterSharedDataRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
+         super(b, shiftStart, shiftEnd);
+         this.setWorkplace(b);
+ 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+ 		this.setShift(shiftStart, shiftEnd);
 	}
 	
 	public void GiveOrderToCook(RestaurantJPWaiterRole.MyCustomer myC) {

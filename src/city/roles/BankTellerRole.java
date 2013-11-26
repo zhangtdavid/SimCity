@@ -3,6 +3,7 @@ package city.roles;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 import city.interfaces.BankCustomer.state;
@@ -16,8 +17,11 @@ public class BankTellerRole extends Role implements BankTeller {
 	private boolean wantsInactive = false;
 	public MyCustomer currentCustomer;
 // Constructor
-	public BankTellerRole (BankBuilding b){
+	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 	}
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
 		print("Customer has been set active");
@@ -130,6 +134,7 @@ public class BankTellerRole extends Role implements BankTeller {
 
 			if(currentCustomer.s == serviceState.done){
 				GetNewCustomer();
+				return true;
 			}
 		}
 		return false;

@@ -2,14 +2,10 @@ package utilities;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-import city.interfaces.RestaurantChoiCook;
-
 public class RestaurantChoiRevolvingStand {
 	private ConcurrentLinkedQueue<RestaurantChoiOrder> ordersInQueue;
-	private RestaurantChoiCook cook;
 	
-	public RestaurantChoiRevolvingStand(RestaurantChoiCook c){
-		cook = c;
+	public RestaurantChoiRevolvingStand(){
 		ordersInQueue = new ConcurrentLinkedQueue<RestaurantChoiOrder>();
 	}
 	

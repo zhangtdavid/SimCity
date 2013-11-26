@@ -32,15 +32,15 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	}
 
 	public void updatePosition() {
-		if (xPos < xDestination)
-			xPos++;
-		else if (xPos > xDestination)
-			xPos--;
-
-		if (yPos < yDestination)
-			yPos++;
-		else if (yPos > yDestination)
-			yPos--;
+//		if (xPos < xDestination)
+//			xPos++;
+//		else if (xPos > xDestination)
+//			xPos--;
+//
+//		if (yPos < yDestination)
+//			yPos++;
+//		else if (yPos > yDestination)
+//			yPos--;
 
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
@@ -70,5 +70,15 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		xDestination = destination.cityBuilding.x;
 		yDestination = destination.cityBuilding.y;
 		atDestination = false;
+	}
+
+	@Override
+	public void setXPos(int x) {
+		xPos = x;
+	}
+
+	@Override
+	public void setYPos(int y) {
+		yPos = y;
 	}
 }

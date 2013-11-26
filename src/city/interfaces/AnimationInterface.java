@@ -29,6 +29,8 @@ public interface AnimationInterface {
     
     // Setters
     
+    public void setVisible(boolean b);
+    
     // Utilities
 
 }

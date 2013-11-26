@@ -85,7 +85,7 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(c)) {
 				RestaurantZhangCustomerAnimation anim = new RestaurantZhangCustomerAnimation(c); 
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				customers.add(c);
 				super.addRole(c, anim);
@@ -101,7 +101,7 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				super.addRole(w, anim);
@@ -118,7 +118,7 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				super.addRole(w, anim);
@@ -136,11 +136,11 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
 			c.setMenuTimes(menu, foods);
-			c.addMarket(new MarketBuilding("Market"));
+//			c.addMarket(new MarketBuilding("Market"));
 			if(!super.roleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cook = c;
 				super.addRole(c, anim);

@@ -21,7 +21,6 @@ public class RestaurantTimmsHostAnimation extends Animation implements Restauran
     public RestaurantTimmsHostAnimation() {
         xPos = INITIAL_X;
         yPos = INITIAL_Y;
-        isVisible = true; // TODO solve how this should become visible
     }
 
 	// Abstract

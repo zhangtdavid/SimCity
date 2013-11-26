@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.ArrayList;
 
 import utilities.RestaurantChoiMenu;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 
 public interface RestaurantChoiCustomer extends RoleInterface{
@@ -39,7 +40,6 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	void goToDishes();
 	void LookAtMenu();
 	void giveOrder();
-	int pickRandom(int cash, ArrayList<Integer> mem, boolean hasHitZero);
 	void EatFood();
 	void Checkplz();
 	void ImLeaving();
@@ -53,20 +53,21 @@ public interface RestaurantChoiCustomer extends RoleInterface{
 	public boolean isHungryNow();
 	public void gotHungry(); // from animation?
 	public abstract boolean getLocation();
-	public abstract int getChoice();	
+	public abstract FOOD_ITEMS getChoice();	
 	public abstract AgentState getState();
-	public abstract String getName();
 	public abstract RestaurantChoiAnimatedCustomer getGui();
 	public abstract int getHungerLevel();
 	//Setters
 	public abstract void setWaiter(RestaurantChoiWaiter w);
 	public abstract void setHost(RestaurantChoiHost h);
 	public void setCashier(RestaurantChoiCashier c);
-	public void setName(String n);
 	public void setHungryNow();
 	public void setFullNow();
 	public void setHungerLevel(int hungerLevel);
 	public void setInactive();
 	void setGui(RestaurantChoiAnimatedCustomer anim);
-
+	//Utilities
+	FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem, boolean hasHitZero);
+	FOOD_ITEMS int2Food(int index);
+	public abstract String getName();
 }

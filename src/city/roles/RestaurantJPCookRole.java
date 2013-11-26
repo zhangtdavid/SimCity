@@ -37,10 +37,13 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	int low = 2;
 	int marketCount = 0;
 
-	public RestaurantJPCookRole(RestaurantJPBuilding b) {
+	public RestaurantJPCookRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
-		name = "spongebob";
+		name = this.getPerson().getName();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		Foods.put("Steak", new Food(5000, 5, "Steak"));
 		Foods.put("Chicken", new Food(4000, 5, "Chicken"));
 		Foods.put("Salad", new Food(3000, 5, "Salad"));

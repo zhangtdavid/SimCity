@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import city.Building;
 import city.Role;
 import city.gui.BusStopPanel;
+import city.gui.CityRoad;
 import city.gui.CityViewBusStop;
 import city.roles.BusPassengerRole;
 
@@ -17,6 +18,7 @@ public class BusStopBuilding extends Building {
 	public BusStopBuilding nextStop = null;
 	public BusStopBuilding previousStop = null;
 	public List<BusPassengerRole> waitingList = Collections.synchronizedList(new ArrayList<BusPassengerRole>());
+	public CityRoad roadLocatedOn;
 	
 	// Constructor
 	
@@ -48,6 +50,10 @@ public class BusStopBuilding extends Building {
 	
 	public void setPreviousStop(BusStopBuilding b) {
 		previousStop = b;
+	}
+	
+	public void setRoad(CityRoad road) {
+		this.roadLocatedOn = road;
 	}
 	
 	// Utilities

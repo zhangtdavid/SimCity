@@ -17,7 +17,7 @@ public class CarAgent extends Agent implements Car {
 	public CarEvent myEvent = CarEvent.NONE; // Event for car
 	public CarPassenger carPassenger; // Current passenger
 	public Building destination; // Destination to go to
-	AnimatedCar animation; // GUI for animations
+	public AnimatedCar animation; // GUI for animations
 	
 	private Semaphore atDestination = new Semaphore(0, true);
 	

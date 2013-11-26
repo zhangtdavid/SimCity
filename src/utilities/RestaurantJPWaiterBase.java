@@ -27,19 +27,22 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	public RestaurantJPWaiterAnimation waiterGui;
 	private boolean wantsInactive = false;
 	
-	public RestaurantJPWaiterBase(RestaurantJPBuilding b) {
+	public RestaurantJPWaiterBase(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
+		name = this.getPerson().getName();
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 			// TODO Auto-generated constructor stub
 	}
 	
 	public void setInactive(){
-		if(myCustomers.size() == 0){
+		if(myCustomers.size() == 0)
 			super.setInactive();
-			building.host.msgSetUnavailable(this);
-		}
 		else
 			wantsInactive = true;
+		building.host.msgSetUnavailable(this);
 	}
 
 //MSGS---------------------------------------------------------------------------------

@@ -9,6 +9,7 @@ import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
@@ -34,7 +35,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	private String name;
 	protected Semaphore inProgress = new Semaphore(0, true);
 	public RestaurantChoiAnimatedWaiter waiterGui;
-	private ArrayList<Integer> outOf = new ArrayList<Integer>();
+	private ArrayList<FOOD_ITEMS> outOf = new ArrayList<FOOD_ITEMS>();
 	private boolean breakRequested;
 	private boolean onBreak;
 	protected RestaurantChoiRevolvingStand orderqueue;
@@ -48,13 +49,12 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	 * @param t1 : Start of shift
 	 * @param t2 : End of shift
 	 */
-	public RestaurantChoiWaiterAbs(String name, RestaurantChoiBuilding b, int t1, int t2) {
+	public RestaurantChoiWaiterAbs(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building = b;
-		this.name = name;
 		// make some tables
 		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
@@ -62,8 +62,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 	}	
 
-	public RestaurantChoiWaiterAbs(String name2) { // secondary constructor for mechanics testing
-		name = name2;
+	public RestaurantChoiWaiterAbs() { // secondary constructor for mechanics testing
 		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
@@ -112,9 +111,9 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	@Override
-	public void msgHeresMyOrder(RestaurantChoiCustomer c, int choice) {
+	public void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
 		synchronized (myCustomers) {
-			if (choice == -1) {
+			if (choice == null) {
 				// if choice is -1 (customer can't buy anything)
 				for (int i = 0; i < myCustomers.size(); i++) {
 					if (c.equals(myCustomers.get(i).getC())) {
@@ -175,7 +174,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	@Override
-	public void msgCheckPlz(RestaurantChoiCustomer c, int choice) {
+	public void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (c.equals(myCustomers.get(i).getC())
 					&& myCustomers.get(i).getCustomerState() == myCustomer.SERVED) {
@@ -426,7 +425,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	@Override
 	public boolean needToTakeOrder() {
 		for (int i = 0; i < myCustomers.size(); i++) {
-			if (myCustomers.get(i).getC().getChoice() == -1) {
+			if (myCustomers.get(i).getC().getChoice() == null) {
 				return false;
 			}
 			if (myCustomers.get(i).getCustomerState() == myCustomer.READY_TO_ORDER) {
@@ -510,7 +509,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 					myCustomers.get(i).getC().getGui().setOrderIcon(
 							myCustomers.get(i).getC().getChoice(), true);
 					// NOW WAITER DOES NOT HAVE ICON.
-					waiterGui.setOrderIcon(-1);
+					waiterGui.setOrderIcon(null);
 					myCustomers.get(i).getOr().setState(RestaurantChoiOrder.GIVEN_TO_CUSTOMER);
 					waiterGui.DoLeave();
 					return true;

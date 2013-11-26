@@ -34,10 +34,10 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		this.panel = panel;
 		
         // Add items and their cooking times to a map
-        foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10, 16));
-        foods.put(FOOD_ITEMS.pizza, new Food("pizza", 15, 10, 5, 10, 12));
-        foods.put(FOOD_ITEMS.salad, new Food("salad", 5, 10, 5, 10, 6));
-        foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 10, 5, 10, 10));
+		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10, 16));
+		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 10, 5, 10, 12));
+		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 10, 5, 10, 6));
+		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 10, 5, 10, 10));
         
         setCash(500);
 	}
