@@ -1,28 +1,20 @@
 package city.tests;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
-import city.Animation;
 import city.Application.FOOD_ITEMS;
-import city.animations.MarketCustomerAnimation;
-import city.animations.interfaces.MarketAnimatedCustomer;
-import city.animations.interfaces.MarketAnimatedEmployee;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
-import city.roles.BankCustomerRole;
-import city.roles.MarketCashierRole;
+import city.gui.MarketPanel;
 import city.roles.MarketCustomerRole;
 import city.roles.MarketCustomerRole.MarketCustomerEvent;
 import city.roles.MarketCustomerRole.MarketCustomerState;
-import city.roles.MarketEmployeeRole;
-import city.roles.MarketEmployeeRole.MarketEmployeeEvent;
-import city.roles.MarketEmployeeRole.MarketEmployeeState;
-import city.roles.MarketCashierRole.TransactionState;
 import city.tests.mock.MockLandlord;
 import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomer;
 import city.tests.mock.MockMarketCustomerDelivery;
 import city.tests.mock.MockMarketCustomerDeliveryPayment;
 import city.tests.mock.MockMarketDeliveryPerson;
@@ -32,7 +24,7 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketCustomerTest extends TestCase {
-	
+	MarketPanel marketPanel;	
 	MarketBuilding market;
 	
 	MockPerson cashierPerson;
@@ -67,7 +59,8 @@ public class MarketCustomerTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		market = new MarketBuilding("Market1");
+		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
+		market = new MarketBuilding("Market1", marketPanel);
 
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);

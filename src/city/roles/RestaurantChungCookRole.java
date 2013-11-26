@@ -46,7 +46,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
 	
-	private MarketCustomerDelivery marketCustomerDelivery;
+	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
+	
 	private RestaurantChungCashier restaurantChungCashier;
 
 //  Orders
@@ -183,13 +184,14 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		boolean blocking = false;
 		if (!cooking && !plating) {
     		// Role Scheduler
-    		if (marketCustomerDelivery != null && marketCustomerDelivery.getActive() && marketCustomerDelivery.getActivity()) {
-    			blocking  = true;
-    			boolean activity = marketCustomerDelivery.runScheduler();
-    			if (!activity) {
-    				marketCustomerDelivery.setActivityFinished();
-    			}
-    		}
+			for (Role r : marketCustomerDeliveryRoles) if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
+			}
     		
     		if (workingState == WorkingState.GoingOffShift) {
     			if (restaurant.cashier != this)
@@ -330,8 +332,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
-        marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+    	MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setActive();
+        marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
         return;
     }
     

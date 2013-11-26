@@ -16,7 +16,9 @@ import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
+import city.gui.HousePanel;
 import city.gui.MainFrame;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
@@ -76,6 +78,7 @@ public class Application {
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
 		// THIRD add it to the list of statics in the cityView
@@ -96,16 +99,16 @@ public class Application {
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
-		HouseBuilding h0 = new HouseBuilding("House 0", p0r1);
+		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
 		p0r1.setActive();
 		people.add(p0);
 
 		// Create houses
-		HouseBuilding h1 = new HouseBuilding("House 1", p0r1);
-		HouseBuilding h2 = new HouseBuilding("House 2", p0r1);
-		HouseBuilding h3 = new HouseBuilding("House 3", p0r1);
-		HouseBuilding h4 = new HouseBuilding("House 4", p0r1);
+		HouseBuilding h1 = new HouseBuilding("House 1", p0r1, rhp1);
+		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp1);
+		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp1);
+		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp1);
 
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);

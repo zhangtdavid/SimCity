@@ -4,19 +4,28 @@ import city.Application;
 
 public interface RestaurantTimmsWaiter extends RoleInterface {
 	
-	public abstract void msgWantBreak();
-	public abstract void msgAllowBreak(Boolean r);
-	public abstract void msgSeatCustomer(RestaurantTimmsCustomer c, int n);
-	public abstract void msgWantFood(RestaurantTimmsCustomer c);
-	public abstract void msgOrderFood(RestaurantTimmsCustomer c, Application.FOOD_ITEMS s);
-	public abstract void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock);
-	public abstract void msgFoodReady(RestaurantTimmsCustomer c);
-	public abstract void msgCheckReady();
-	public abstract void msgDoNotWantFood(RestaurantTimmsCustomer c);
-	public abstract void guiAtCustomer();
-	public abstract void guiAtTable();
-	public abstract void guiAtKitchen();
-	public abstract void guiAtHome();
+	// Messages
+	
+	public void msgWantBreak();
+	public void msgAllowBreak(Boolean r);
+	public void msgSeatCustomer(RestaurantTimmsCustomer c, int n);
+	public void msgWantFood(RestaurantTimmsCustomer c);
+	public void msgOrderFood(RestaurantTimmsCustomer c, Application.FOOD_ITEMS s);
+	public void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock);
+	public void msgFoodReady(RestaurantTimmsCustomer c);
+	public void msgCheckReady();
+	public void msgDoNotWantFood(RestaurantTimmsCustomer c);
+	public void guiAtCustomer();
+	public void guiAtTable();
+	public void guiAtKitchen();
+	public void guiAtHome();
+	
+	// Getters
 
-	public abstract Boolean getWantsBreak();
+	public Boolean getWantsBreak();
+	
+	// Setters
+	
+	public void setActive();
+	
 }

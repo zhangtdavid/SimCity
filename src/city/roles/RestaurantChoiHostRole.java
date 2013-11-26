@@ -11,7 +11,6 @@ import city.animations.interfaces.RestaurantChoiAnimatedHost;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
-import city.interfaces.RestaurantChoiWaiter;
 import city.interfaces.RestaurantChoiWaiterAbs;
 
 public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
@@ -28,7 +27,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer> waiterBalance = new ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer>();
 	int waitersOnBreak;
 	private RestaurantChoiWaiterAbs leastActiveWaiter;
-	private int leastActiveWaiterIndex;
+	//private int leastActiveWaiterIndex; //TODO Bad impact on functionality? lines 167, 176
 	//public WaiterGUI hostGui = null;
 	RestaurantChoiAnimatedHost animation;
 	RestaurantChoiBuilding building;
@@ -165,7 +164,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public void findLeastActiveWaiter(){
 		synchronized(waiters){
 			leastActiveWaiter = null;
-			leastActiveWaiterIndex = -1;
+			//leastActiveWaiterIndex = -1;
 			int min = 99999; // come on, we're not going to have 99999 customers.
 			for(int i = 0 ; i < waiters.size(); i++){
 				if(waiters.get(i).isOnBreak() || (waiters.get(i).askedForBreak() && waiters.size() > 1)) i++; 
@@ -174,7 +173,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 				if(i<waiters.size()){ // no out of bounds exception!
 					if(min > waiterBalance.get(waiters.get(i))){ // find the minimum workload
 						leastActiveWaiter = waiters.get(i); //if found min, set waiter to least active
-						leastActiveWaiterIndex = i;
+						//leastActiveWaiterIndex = i;
 						min = waiterBalance.get(waiters.get(i));
 					}
 				}

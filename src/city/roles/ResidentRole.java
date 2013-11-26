@@ -14,8 +14,6 @@ public class ResidentRole extends Role implements Resident {
 
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
-	private double maintenance;
-	private double upcomingRent;
 	private Date rentLastPaid;
 	private ResidenceBaseBuilding house;
 
@@ -23,13 +21,11 @@ public class ResidentRole extends Role implements Resident {
 
 	public ResidentRole(Date rentLastPaid){
 		super();
-		this.maintenance = 0;
-		this.upcomingRent = 5; // low number for normative situations; i wish my rent was ($)
 		this.rentLastPaid = rentLastPaid;
 	}
 
 	// Messages
-
+	
 	// Scheduler
 	@Override
 	public boolean runScheduler() {
@@ -50,7 +46,7 @@ public class ResidentRole extends Role implements Resident {
 			this.getPerson().setCash((int)(this.getPerson().getCash()-house.total_current_maintenance/house.residents.size())); // lose $ for maintenance;
 		System.out.println(rentLastPaid.getTime());
 		rentLastPaid = this.getPerson().getDate();
-		this.setInactive();
+		this.setInactive(); // step out of resident role
 	}
 
 	// Getters

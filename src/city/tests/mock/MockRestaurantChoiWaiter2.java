@@ -6,6 +6,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiTable;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
@@ -31,11 +32,6 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 		// TODO Auto-generated method stub		
 	}
 
-	@Override
-	public void msgHeresMyOrder(RestaurantChoiCustomer c, int choice) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgOrderComplete(RestaurantChoiOrder o) {
@@ -44,7 +40,7 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
  		System.out.println("State:" + o.getState() + " ");
  		System.out.println("Choice:" + o.getChoice() + " ");		
 	}
-
+	
 	@Override
 	public void msgImDone(RestaurantChoiCustomer c) {
 		// TODO Auto-generated method stub
@@ -53,12 +49,6 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 
 	@Override
 	public void msgOutOfThisFood(RestaurantChoiOrder o) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgCheckPlz(RestaurantChoiCustomer c, int choice) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -228,6 +218,16 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 
 	@Override
 	public void setCashier(RestaurantChoiCashier ca) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
 		// TODO Auto-generated method stub
 		
 	}

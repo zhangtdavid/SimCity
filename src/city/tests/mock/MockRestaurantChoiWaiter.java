@@ -5,7 +5,9 @@ import java.util.List;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
@@ -16,6 +18,7 @@ import city.interfaces.RestaurantChoiWaiter;
 public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoiWaiter  {
 	String name;
 	public EventLog log = new EventLog();
+	RestaurantChoiRevolvingStand rs;
 	
 	public MockRestaurantChoiWaiter(String name){
 	this.name = name;	
@@ -31,12 +34,10 @@ public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoi
 		// TODO Auto-generated method stub		
 	}
 
-	@Override
-	public void msgHeresMyOrder(RestaurantChoiCustomer c, int choice) {
-		// TODO Auto-generated method stub
-		
+	public void setRevolvingStand(RestaurantChoiRevolvingStand r){
+		rs = r;
 	}
-
+	
 	@Override
 	public void msgOrderComplete(RestaurantChoiOrder o) {
  		log.add(new LoggedEvent("Received msgOrderComplete from cook."));
@@ -57,11 +58,6 @@ public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoi
 		
 	}
 
-	@Override
-	public void msgCheckPlz(RestaurantChoiCustomer c, int choice) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void msgHeresCheck(int total, RestaurantChoiCustomer ca) {
@@ -228,6 +224,16 @@ public class MockRestaurantChoiWaiter extends MockRole implements RestaurantChoi
 
 	@Override
 	public void setCashier(RestaurantChoiCashier ca) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -31,4 +31,10 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 		return null;
 	}
 
+	@Override
+	public void setMarket(MarketBuilding selectedMarket) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
