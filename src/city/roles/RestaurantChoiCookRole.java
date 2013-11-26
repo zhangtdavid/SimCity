@@ -256,7 +256,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				synchronized(markets){
 					//markets.get(marketIndex%markets.size()).getMarket().msgHeresAnOrder(tempFood.item, tempFood.capacity-tempFood.low);
 					//give a MarketOrder to a MarketBuilding
-					
+					//markets.get(marketIndex%markets.size()).getMarket().getCashier().msg  (tempFood.item, tempFood.capacity-tempFood.low);
 					HashMap<FOOD_ITEMS, Integer> forOrder = new HashMap<FOOD_ITEMS, Integer>();
 					forOrder.put(o.getChoice(), t);
 					MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~

@@ -116,7 +116,6 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!super.roleExists(c)) {
 				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				c.setGui(anim);	
-//				c.setAnimation(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				customers.add(c);

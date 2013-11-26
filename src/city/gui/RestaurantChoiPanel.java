@@ -81,17 +81,5 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
                 animation.updatePosition();
             }
         }
-
-        // Draw each visible element after updating their positions
-        // TODO generates concurrent modification exception
-        for(Animation animation : animations) {
-            if (animation.getVisible()) {
-                animation.draw(graphics2D);
-            }
-        }
-    }
-    
-    public void addVisualizationElement(Animation ve) {
-    	animations.add(ve);
-    }
+	}
 }
