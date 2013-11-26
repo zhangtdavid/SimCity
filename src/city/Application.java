@@ -12,6 +12,7 @@ import java.util.TimerTask;
 
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
+import city.animations.RestaurantTimmsTableAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
@@ -73,7 +74,6 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		
         // Create panels
 		RestaurantTimmsPanel rtp1 = new RestaurantTimmsPanel(Color.GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewRestaurant cvr1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rtp1); 
@@ -87,13 +87,21 @@ public class Application {
         CityMap.addBuilding(BUILDING.restaurant, rtb);
         Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
         // Skipping creating a house
-
+        
+        // Create tables
+		int i = 0;
+		while (i < 9) {
+			rtp1.addVisualizationElement(new RestaurantTimmsTableAnimation(i));
+			i++;
+		}
+		
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
 		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
+		p0.setCash(10);
 		p0r1.setActive();
 		people.add(p0);
 
