@@ -4,6 +4,7 @@ import utilities.LoggedEvent;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 import city.roles.RestaurantTimmsCustomerRole.State;
@@ -69,6 +70,12 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	public FOOD_ITEMS getOrderItem() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

@@ -54,6 +54,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		this.setShift(shiftStart, shiftEnd);
 		this.speed = 3;
 		this.rtb = b;
+		this.marketCustomerDeliveryRole = null;
 	}
 	
 	// Messages
@@ -119,7 +120,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		// Role Scheduler (for market orders) /
 		//------------------------------------/
 		
-		if (!marketCustomerDeliveryRole.getActive()) {
+		if (marketCustomerDeliveryRole != null && !marketCustomerDeliveryRole.getActive()) {
 			roles.remove(marketCustomerDeliveryRole);
 			marketCustomerDeliveryRole = null;
 		}

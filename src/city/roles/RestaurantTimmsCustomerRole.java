@@ -42,12 +42,12 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Constructor
 
-	public RestaurantTimmsCustomerRole(RestaurantTimmsBuilding b){
+	public RestaurantTimmsCustomerRole(){
 		super();
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.state = State.none;
-		this.rtb = b;
+		this.rtb = null;
 	}
 	
 	// Messages
@@ -280,6 +280,11 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setVisible(true);
 		super.setActive();
 		stateChanged();
+	}
+	
+	@Override
+	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+		this.rtb = b;
 	}
 	
 }
