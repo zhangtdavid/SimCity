@@ -5,8 +5,8 @@ import city.interfaces.RestaurantZhangWaiterBase;
 
 public class RestaurantZhangWaiterRegularRole extends RestaurantZhangWaiterBase {
 
-	public RestaurantZhangWaiterRegularRole(String name) {
-		super(name);
+	public RestaurantZhangWaiterRegularRole(String name, int shiftStart_, int shiftEnd_) {
+		super(name, shiftStart_, shiftEnd_);
 	}
 	
 	public void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {

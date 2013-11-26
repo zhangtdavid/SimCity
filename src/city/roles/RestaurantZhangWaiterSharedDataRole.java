@@ -6,8 +6,8 @@ import city.interfaces.RestaurantZhangWaiterBase;
 
 public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBase {
 	
-	public RestaurantZhangWaiterSharedDataRole(String name) {
-		super(name);
+	public RestaurantZhangWaiterSharedDataRole(String name, int shiftStart_, int shiftEnd_) {
+		super(name, shiftStart_, shiftEnd_);
 	}
 	
 	public void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {

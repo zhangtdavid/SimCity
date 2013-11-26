@@ -23,6 +23,7 @@ import city.roles.RestaurantChungCashierRole.MarketTransactionState;
 public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier {
 	private static final int CASHIERX = 0;
 	private static final int CASHIERY = 200;
+	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
 	public double balance = 10000;
 	public Map<RestaurantZhangCustomer, Double> tabCustomers = new HashMap<RestaurantZhangCustomer, Double>();
 	//public Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
@@ -38,9 +39,11 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	
 	private List<Role> roles = new ArrayList<Role>();
 
-	public RestaurantZhangCashierRole(String name) {
+	public RestaurantZhangCashierRole(String name, int shiftStart_, int shiftEnd_) {
 		super();
 		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 //		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
 	}
 

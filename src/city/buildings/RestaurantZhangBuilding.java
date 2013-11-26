@@ -105,11 +105,13 @@ public class RestaurantZhangBuilding extends Building {
 			return w;
 		}
 		if(r instanceof RestaurantZhangWaiterSharedDataRole) {
-			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
+			RestaurantZhangWaiterSharedDataRole w = (RestaurantZhangWaiterSharedDataRole)r;
 			w.setCashier(cashier);
 			w.setCook(cook);
 			w.setHost(host);
 			w.setMenu(menu);
+			w.setRevolvingStand(orderStand);
+			host.addWaiter(w);
 			if(!allRoles.containsKey(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);

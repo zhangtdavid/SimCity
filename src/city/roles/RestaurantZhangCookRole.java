@@ -31,6 +31,7 @@ import city.interfaces.RestaurantZhangWaiter;
  */
 
 public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook {
+	private static final int RESTAURANTZHANGCOOKSALARY = 100;
 	private final int COOKX = 190;
 	private final int COOKY = 120;
 
@@ -60,9 +61,11 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	private Semaphore atBase = new Semaphore(0, false);
 
-	public RestaurantZhangCookRole(String name) {
+	public RestaurantZhangCookRole(String name, int shiftStart_, int shiftEnd_) {
 		super();
 		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setSalary(RESTAURANTZHANGCOOKSALARY);
 	}
 
 	public String getName() {
@@ -347,6 +350,11 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
+	}
+	
+	public void setActive() {
+		super.setActive();
+		runScheduler();
 	}
 
 	private class Food {

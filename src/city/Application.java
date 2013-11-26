@@ -43,6 +43,7 @@ import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCookRole;
 import city.roles.RestaurantTimmsHostRole;
 import city.roles.RestaurantTimmsWaiterRole;
+import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class Application {
 
@@ -50,7 +51,7 @@ public class Application {
 	private static List<Person> people = new ArrayList<Person>();
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
-	
+
 	public static final int INTERVAL = 1000; // 10000; // One interval is the simulation's equivalent of a half-hour
 	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
@@ -58,20 +59,20 @@ public class Application {
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
-	
+
 	public static RestaurantZhangBuilding rzb1;
-    /**
-     * Main routine to start the program.
-     * 
-     * When the program is started, this is the first call. It opens the GUI window, loads
-     * configuration files, and causes the program to run.
-     *
-     * @param args no input required
-     */
+	/**
+	 * Main routine to start the program.
+	 * 
+	 * When the program is started, this is the first call. It opens the GUI window, loads
+	 * configuration files, and causes the program to run.
+	 *
+	 * @param args no input required
+	 */
 	public static void main(String[] args) {
 		// Open the animation GUI
 		mainFrame = new MainFrame();
-		
+
 		// Load a scenario
 		parseConfig();
 		// Start the simulation
@@ -85,7 +86,7 @@ public class Application {
 		};
 		timer.scheduleAtFixedRate(tt, 0, INTERVAL);
 	}
-	
+
 	/**
 	 * This will eventually load some type of configuration file that specifies how many
 	 * people to create and what roles to create them in.
@@ -109,7 +110,7 @@ public class Application {
 
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
-		
+
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
@@ -118,13 +119,13 @@ public class Application {
 		p0.setHome(h0);
 		p0r1.setActive();
 		people.add(p0);
-		
+
 		// Create houses
 		HouseBuilding h1 = new HouseBuilding("House 1", p0r1);
 		HouseBuilding h2 = new HouseBuilding("House 2", p0r1);
 		HouseBuilding h3 = new HouseBuilding("House 3", p0r1);
 		HouseBuilding h4 = new HouseBuilding("House 4", p0r1);
-		
+
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
 		PersonAgent p2 = new PersonAgent("Cook 1", date);
@@ -138,7 +139,7 @@ public class Application {
 		p2.setHome(h2);
 		p3.setHome(h3);
 		p4.setHome(h4);
-		
+
 		// Give people cars
 		CarAgent c0 = new CarAgent();
 		CarAgent c1 = new CarAgent();
@@ -150,27 +151,28 @@ public class Application {
 		p2.setCar(c2);
 		p3.setCar(c3);
 		p4.setCar(c4);
-		
+
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role");
+		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role", 0, 100); // TODO Change shift times
 		rzb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
-		
+
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role");
+		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role", 0, 100);
 		rzb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
-		
+
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role");
+		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role", 0, 100);
 		rzb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
-		
+
 		// Create waiter
-		RestaurantZhangWaiterRegularRole p4r1 = new RestaurantZhangWaiterRegularRole("Waiter 1 Role");
+		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole("Waiter Shared 1 Role", 0, 100);
 		rzb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
-		
+
+
 		// Start threads
 		c0.startThread();
 		c1.startThread();
@@ -183,7 +185,7 @@ public class Application {
 		p3.startThread();
 		p4.startThread();
 	}
-	
+
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		/**
@@ -206,7 +208,7 @@ public class Application {
 			}
 			return b;
 		}
-		
+
 		/**
 		 * Returns a random building of type
 		 */
@@ -215,7 +217,7 @@ public class Application {
 			Collections.shuffle(list);
 			return list.get(0);
 		}
-		
+
 		/**
 		 * Return the building of type closest to the person's location
 		 */
@@ -232,7 +234,7 @@ public class Application {
 			Building d = new BusStopBuilding("placeholder");
 			return d;
 		}
-		
+
 	}
 
 }

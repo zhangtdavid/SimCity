@@ -16,6 +16,7 @@ import city.interfaces.RestaurantZhangWaiter;
  * Restaurant Host Agent
  */
 public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost {
+	private static final int RESTAURANTZHANGHOSTSALARY = 100;
 	private List<RestaurantZhangCustomer> enteringCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<RestaurantZhangCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<MyWaiter> myWaiterList = Collections.synchronizedList(new ArrayList<MyWaiter>());
@@ -23,10 +24,11 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	
 	private String name;
 
-	public RestaurantZhangHostRole(String name) {
+	public RestaurantZhangHostRole(String name, int shiftStart_, int shiftEnd_) {
 		super();
-
 		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setSalary(RESTAURANTZHANGHOSTSALARY);
 	}
 
 	public String getName() {

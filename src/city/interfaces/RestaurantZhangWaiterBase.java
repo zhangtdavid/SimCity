@@ -27,7 +27,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	public List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
 	
-	String name;
+	protected String name;
 	
 	public enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
 	public breakStatus wBreakStatus = breakStatus.notOnBreak;
@@ -38,10 +38,13 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	static final int BREAKX = 600;
 	static final int BREAKY = 600;
 	static final int BREAKTIME = 10000;
+	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
 	
-	public RestaurantZhangWaiterBase(String name) {
+	public RestaurantZhangWaiterBase(String name, int shiftStart_, int shiftEnd_) {
 		super();
 		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 	}
 
 	public String getName() {

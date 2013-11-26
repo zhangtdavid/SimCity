@@ -61,7 +61,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	public RestaurantZhangCustomerRole(String name){
 		super();
 		this.name = name;
-		money = new Random().nextDouble()*40 + 5;
+		money = new Random().nextDouble()*40 + 5; // TODO get rid of this and replace with the actual money
 		money = Math.round(money * 100) / 100;
 		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
 			money = 0.99;
