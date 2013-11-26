@@ -94,7 +94,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(c)) {
 				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				customers.add(c);
 				allRoles.put(c, anim);
@@ -110,7 +110,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				allRoles.put(w, anim);
@@ -125,7 +125,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				allRoles.put(w, anim);
@@ -145,7 +145,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(c)) { 
 				RestaurantChoiCookAnimation anim = new RestaurantChoiCookAnimation(c);
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				cook = c;
 				allRoles.put(c, anim);
@@ -158,7 +158,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				cashier = c;
 				c.setAnimation(anim);
 				allRoles.put(c, null);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				allRoles.put(c, anim);
 			}
