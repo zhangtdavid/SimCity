@@ -251,7 +251,9 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	private void actGoToHome() throws InterruptedException {
 		print("actGoToHome");
-		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToHome(rtb.getWaiterIndex(this));
+		int homePosition = rtb.getWaiterIndex(this);
+		RestaurantTimmsAnimatedWaiter animation = this.getAnimation(RestaurantTimmsAnimatedWaiter.class);
+		animation.goToHome(homePosition);
 		atHome.acquire();
 	}
 	
@@ -304,6 +306,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	@Override
 	public void setActive() {
 		rtb.addWaiter(this);
+		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).setVisible(true);
 		super.setActive();
 	}
 	
