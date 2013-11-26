@@ -232,7 +232,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		System.out.println("------------TESTING CUSTOMER UNABLE TO PAY SCENARIO");
 		cashier.money = 0;
 		customer.choice = 2;
-		customer.setName("evil");
+		customer.name = "evil";
 		assertTrue("should have no checks", cashier.checks.size() ==0);
 		cashier.msgCompute(FOOD_ITEMS.pizza, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
 		System.out.println("Cashier # of checks after receiving check: " + cashier.checks.size());

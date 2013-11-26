@@ -6,56 +6,60 @@ import java.util.HashMap;
 import utilities.RestaurantChoiOrder;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.buildings.MarketBuilding;
 public interface RestaurantChoiCook extends RoleInterface{
 	//Constructor
 	
 	//Messages
-	public void msgRelease();
-	public void msgHeresAnOrder(RestaurantChoiOrder or);
-	public void msgFoodsDone(RestaurantChoiOrder o);
-	//public void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
-	//public void msgFoodReceived(int choice, int amount, Market m);
+	public abstract void msgRelease();
+	public abstract void msgHeresAnOrder(RestaurantChoiOrder or);
+	public abstract void msgFoodsDone(RestaurantChoiOrder o);
+	//public abstract void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
+	//public abstract void msgFoodReceived(int choice, int amount, Market m);
 	//msgs from gui
-	public void msgAtRefrigerator();
-	public void msgAtGrills();
-	public void msgAtPlatingArea();
+	public abstract void msgAtRefrigerator();
+	public abstract void msgAtGrills();
+	public abstract void msgAtPlatingArea();
 	
 	//Scheduler
 	
 	//Actions
-	public void CheckBack();
-	public void MoveFoodToPlating(RestaurantChoiOrder o);
-	public boolean AnalyzeCookOrder(RestaurantChoiOrder o);
-	public boolean CookOrder(RestaurantChoiOrder o);
-	public void DoGoToRefrig();
-	public void DoGoToGrills();
-	public void DoGoToPlates();
+	public abstract void CheckBack();
+	public abstract void MoveFoodToPlating(RestaurantChoiOrder o);
+	public abstract boolean AnalyzeCookOrder(RestaurantChoiOrder o);
+	public abstract boolean CookOrder(RestaurantChoiOrder o);
+	public abstract void DoGoToRefrig();
+	public abstract void DoGoToGrills();
+	public abstract void DoGoToPlates();
 	
 	//Getters
-	public String getName();
-	public RestaurantChoiAnimatedCook getGui();
+	public abstract String getName();
+	public abstract RestaurantChoiAnimatedCook getGui();
 	
 	//Setters
-	public void setGui(RestaurantChoiAnimatedCook gui);
-	//public void setRevolvingStand(RestaurantChoiRevolvingStand r);
-	//public RestaurantChoiRevolvingStand getRevolvingStand();
-	//public void addMarket(Market m);
-	public void setInactive();
+	public abstract void setGui(RestaurantChoiAnimatedCook gui);
+	//public abstract void setRevolvingStand(RestaurantChoiRevolvingStand r);
+	//public abstract RestaurantChoiRevolvingStand getRevolvingStand();
+	public abstract void addMarket(MarketBuilding m);
+	public abstract void setInactive();
 
 	
 	//Utilities
-	public void hackNoFood();
+	public abstract void hackNoFood();
 	
 	class myMarket{
-		//Market market; TODO
-		public HashMap<FOOD_ITEMS, Boolean> outOf;
+		MarketBuilding market;
+		public HashMap<String, Boolean> outOf;
 		
-		myMarket(/*Market m TODO*/){
-			//market = m; TODO
-			outOf.put(FOOD_ITEMS.chicken, false);
-			outOf.put(FOOD_ITEMS.pizza, false);
-			outOf.put(FOOD_ITEMS.salad, false);
-			outOf.put(FOOD_ITEMS.steak, false);
+		public myMarket(MarketBuilding m){
+			market = m;
+			outOf.put("Chicken", false);
+			outOf.put("Pizza", false);
+			outOf.put("Salad", false);
+			outOf.put("Steak", false);
+		}
+		public MarketBuilding getMarket(){
+			return market;
 		}
 	}
 

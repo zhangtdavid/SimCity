@@ -8,12 +8,13 @@ import java.util.Map;
 
 import utilities.RestaurantChoiRevolvingStand;
 import city.Animation;
-import city.Building;
 import city.Role;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.RestaurantChoiWaiterAnimation;
+import city.buildings.RestaurantBaseBuilding.Food;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiterAbs;
@@ -25,7 +26,7 @@ import city.roles.RestaurantChoiCustomerRole;
 import city.roles.RestaurantChoiWaiter2Role;
 import city.roles.RestaurantChoiWaiterRole;
 
-public class RestaurantChoiBuilding extends Building{
+public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	
 	public RestaurantChoiCookRole cook;
 	public RestaurantChoiCashierRole cashier;
@@ -42,6 +43,7 @@ public class RestaurantChoiBuilding extends Building{
 	// ^this high value helps accelerate normative testing. Also everyone makes the same amount!
 	public static final int DAILY_CAPITAL = 1000;
 	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
+	public static final int WITHDRAW_THRESHOLD = 200; // low enough so that I can see depositing behavior
 	private int cash_on_site;
 	
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel){
@@ -52,6 +54,19 @@ public class RestaurantChoiBuilding extends Building{
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
 		this.setCashOnSite(DAILY_CAPITAL);	
+        // Add items and their cooking times to a map
+		int rand = 7+(int)Math.ceil(10*Math.random());
+        foods.put(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
+				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 16));
+		rand = 7+(int)Math.ceil(10*Math.random());
+		foods.put(FOOD_ITEMS.pizza, new Food("Pizza", (int)(Math.ceil(Math.random()*6)*1000),
+				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 11));
+		rand = 7+(int)Math.ceil(10*Math.random());
+		foods.put(FOOD_ITEMS.chicken, new Food("Chicken", (int)(Math.ceil(Math.random()*6)*1000),
+				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 9));
+		rand = 7+(int)Math.ceil(10*Math.random());
+		foods.put(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
+				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 6));
 }
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;

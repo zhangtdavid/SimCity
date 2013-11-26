@@ -1,15 +1,21 @@
 package city.roles;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import utilities.EventLog;
+import utilities.MarketOrder;
+import utilities.MarketTransaction;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
@@ -21,6 +27,8 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	private boolean wantsToLeave;
 	private RestaurantChoiBuilding building;
     public ArrayList<Check> checks = new ArrayList<Check>();
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	private List<Role> roles = new ArrayList<Role>();
 	
     //Constructor
 	/**
@@ -39,6 +47,8 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
+		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
+		roles.add((Role) building.bankConnection); // TODO clean up
     }
     public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
@@ -79,6 +89,14 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				}
 				stateChanged();
 	}
+	
+	/**
+	 * When the cook requests an order from a market, he forwards the cashier a bill.
+	 */
+	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
+		marketTransactions.add(new MarketTransaction(m, o));	
+	}
+	
 	/*
  	public void msgHeresYourMarketBill(Market m, int type, int amount){
 		double owed = foodCost.get(type)*amount;
@@ -109,7 +127,17 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     //Scheduler
 	@Override
 	public boolean runScheduler() {
-		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0){
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			blocking  = true;
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
+			break;
+		}
+		
+		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
 			wantsToLeave = false;
 			super.setInactive();
 		}
@@ -153,7 +181,11 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 						return true;
 					}
 				}
-				return false;
+				
+				//Bank interactions lowest priority.
+				if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD) this.depositMoney();
+				if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+				return blocking;
 	}
     //Actions
 	public void returnCheck(Check c) {
@@ -270,6 +302,9 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		}
 		public int getState() {
 			return state;
+		}
+		public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+			return (MarketCustomerDeliveryPayment) roles.get(0);
 		}
 		public void setState(int state) {
 			this.state = state;
