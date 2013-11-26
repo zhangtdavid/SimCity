@@ -9,21 +9,26 @@ import city.tests.mock.MockRestaurantTimmsCustomer;
 import city.tests.mock.MockRestaurantTimmsWaiter;
 
 public class RestaurantTimmsCashierTest extends TestCase {
-	
+
 	MockRestaurantTimmsCustomer customer;
 	MockRestaurantTimmsWaiter waiter;
+	
+	RestaurantTimmsBuilding rtb;
 	
 	MockPerson cashierPerson;
 	RestaurantTimmsCashierRole cashier;
 
 	public void setUp() throws Exception {
 		super.setUp();
+		
 		customer = new MockRestaurantTimmsCustomer();
-		
-		cashierPerson = new MockPerson("Cashier");		
-		cashier.setPerson(cashierPerson);
-		
 		waiter = new MockRestaurantTimmsWaiter();
+		
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
+		
+		cashierPerson = new MockPerson("Cashier");
+		cashier = new RestaurantTimmsCashierRole(rtb, 0, 23);
+		cashier.setPerson(cashierPerson);
 	}
 	
 	public void testExactCustomerPayment() {

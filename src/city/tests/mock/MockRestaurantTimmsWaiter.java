@@ -11,11 +11,12 @@ import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 
 public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTimmsWaiter {
 
-	public MockRestaurantTimmsWaiter() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Constructor
+	
+	public MockRestaurantTimmsWaiter() {}
 
+	// Messages
+	
 	@Override
 	public void msgWantBreak() {
 		log.add(new LoggedEvent("Received msgWantBreak."));
@@ -92,6 +93,8 @@ public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTim
 	public void guiAtHome() {
 		log.add(new LoggedEvent("Received guiAtHome"));
 	}
+	
+	// Getters
 
 	@Override
 	public Boolean getWantsBreak() {
@@ -101,7 +104,6 @@ public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTim
 
 	@Override
 	public List<InternalCustomer> getCustomers() {
-		// TODO Auto-generated method stub
 		return null;
 	}
 

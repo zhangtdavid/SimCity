@@ -7,13 +7,14 @@ import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application;
-import city.Role;
 import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
+import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
 import city.gui.RestaurantTimmsPanel;
 import city.interfaces.RestaurantBaseBuildingInterface;
 import city.interfaces.RestaurantTimmsCashier;
@@ -69,7 +70,9 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 		for (Application.FOOD_ITEMS f : Application.FOOD_ITEMS.values()) {
 			int randomAmount = KITCHEN_STORE_MIN + (int)(Math.random() * ((KITCHEN_STORE_MAX - KITCHEN_STORE_MIN) + 1));
 			int randomPrice = MENU_PRICE_MIN + (int)(Math.random() * ((MENU_PRICE_MAX - MENU_PRICE_MIN) + 1));
-			restaurantMenu.add(new MenuItem(f, randomAmount, randomPrice));
+			MenuItem item = new MenuItem(f, randomAmount, randomPrice);
+			item.setState(State.inStock);
+			restaurantMenu.add(item);
 		}
 	}
 	

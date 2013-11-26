@@ -10,11 +10,12 @@ import city.interfaces.RestaurantTimmsWaiter;
 
 public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimmsCook {
 
-	public MockRestaurantTimmsCook() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Constructor
+	
+	public MockRestaurantTimmsCook() {}
 
+	// Messages
+	
 	@Override
 	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		log.add(new LoggedEvent("Received msgCookOrder from Waiter. Item: " + s.toString()));
@@ -26,10 +27,11 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 		log.add(new LoggedEvent("Received msgPickUpOrder from Waiter."));
 
 	}
+	
+	// Getters
 
 	@Override
 	public int getMenuItemPrice(FOOD_ITEMS stockItem) {
-		// TODO Auto-generated method stub
 		return 0;
 	}
 

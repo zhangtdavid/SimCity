@@ -48,7 +48,6 @@ public class MockPerson extends MockAgent implements Person {
 	
 	@Override
 	public int getCash() {
-		// TODO Auto-generated method stub
 		return cash;
 	}
 
@@ -92,7 +91,6 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public void setCash(int c) {
 		cash = c;
-		
 	}
 	
 	@Override

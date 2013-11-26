@@ -8,11 +8,12 @@ import city.interfaces.RestaurantTimmsWaiter;
 
 public class MockRestaurantTimmsHost extends MockRole implements RestaurantTimmsHost {
 
-	public MockRestaurantTimmsHost() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Constructors
+	
+	public MockRestaurantTimmsHost() {}
 
+	// Messages
+	
 	@Override
 	public void msgWantSeat(RestaurantTimmsCustomer customer) {
 		log.add(new LoggedEvent("Received msgWantSeat from Customer."));

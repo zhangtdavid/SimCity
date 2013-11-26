@@ -10,16 +10,14 @@ import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantTimmsCashier;
 import city.tests.mock.MockRestaurantTimmsCook;
 import city.tests.mock.MockRestaurantTimmsCustomer;
-import city.tests.mock.MockRestaurantTimmsHost;
 
 public class RestaurantTimmsWaiterTest extends TestCase {
-	
-	RestaurantTimmsBuilding rtb;
 	
 	MockRestaurantTimmsCashier cashier;
 	MockRestaurantTimmsCook cook;
 	MockRestaurantTimmsCustomer customer;
-	MockRestaurantTimmsHost host;
+	
+	RestaurantTimmsBuilding rtb;
 	
 	MockPerson waiterPerson;
 	RestaurantTimmsWaiterRole waiter;
@@ -27,16 +25,20 @@ public class RestaurantTimmsWaiterTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		this.rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
-		this.cashier = new MockRestaurantTimmsCashier();
-		this.cook = new MockRestaurantTimmsCook();
-		this.customer = new MockRestaurantTimmsCustomer();
-		this.host = new MockRestaurantTimmsHost();
-		this.waiterPerson = new MockPerson("Waiter");
-		this.waiter = new RestaurantTimmsWaiterRole(rtb, 0, 23);
-		this.animation = new MockRestaurantTimmsAnimatedWaiter(waiter);
-		waiter.setAnimation(animation);
+		
+		cashier = new MockRestaurantTimmsCashier();
+		cook = new MockRestaurantTimmsCook();
+		customer = new MockRestaurantTimmsCustomer();
+		
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
+		rtb.setCashier(cashier);
+		rtb.setCook(cook);
+		
+		waiterPerson = new MockPerson("Waiter");
+		waiter = new RestaurantTimmsWaiterRole(rtb, 0, 23);
+		animation = new MockRestaurantTimmsAnimatedWaiter(waiter);
 		waiter.setPerson(waiterPerson);
+		waiter.setAnimation(animation);
 	}
 	
 	public void testNormalScenario() {
