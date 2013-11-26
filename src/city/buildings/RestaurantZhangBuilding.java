@@ -9,9 +9,11 @@ import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Building;
 import city.Role;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
+import city.buildings.RestaurantBaseBuilding.Food;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -25,7 +27,7 @@ import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-public class RestaurantZhangBuilding extends Building {
+public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 	
 	// Data
 	
@@ -65,6 +67,9 @@ public class RestaurantZhangBuilding extends Building {
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
+    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 1, 0, 3, menu.getPrice("Chicken")));
+        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 1, 0, 3, menu.getPrice("Pizza")));
+        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 1, 0, 3, menu.getPrice("Steak")));
 	}
 	
 	// Utilities
@@ -128,7 +133,7 @@ public class RestaurantZhangBuilding extends Building {
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
-			c.setMenuTimes(menu);
+			c.setMenuTimes(menu, foods);
 			if(!super.roleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);

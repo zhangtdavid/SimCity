@@ -39,6 +39,7 @@ public class RestaurantZhangCustomerTest extends TestCase {
 		customer.setHost(host);
 		customer.setCashier(cashier);
 		customer.setAnimation(anim);
+		customer.money = 30;
 	}
 
 	public void testOneNormalCustomerScenario() { // Tests when customer has more than enough money to pay

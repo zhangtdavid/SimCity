@@ -41,8 +41,8 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	
 	public RestaurantZhangCashier myCashier;
 	public RestaurantZhangCheck myCheck;
-	public double money;
-	public double myTab = 0.00;
+	public int money;
+	public int myTab = 0;
 	
 	public enum AgentState
 	{DoingNothing, AtEntrance, GoingToWaitingPosition, WaitingInRestaurant, ChoosingToLeave, DecidedToWait, BeingSeated, Deciding, Ordering, Ordered, Eating, WaitingForCheck, PayingForCheck, Leaving};
@@ -60,8 +60,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 */
 	public RestaurantZhangCustomerRole(){
 		super();
-		money = new Random().nextDouble()*40 + 5; // TODO get rid of this and replace with the actual money
-		money = Math.round(money * 100) / 100;
+		money = Math.abs(new Random().nextInt()%40) + 5; // TODO get rid of this and replace with the actual money
 //		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
 //			money = 0.99;
 //		if(name.contains("thief"))
@@ -134,15 +133,15 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		stateChanged();
 	}
 	
-	public void msgHereIsChange(double change) {
+	public void msgHereIsChange(int change) {
 		money = change;
 		event = AgentEvent.gotChange;
 		stateChanged();
 	}
 	
-	public void msgPayLater(double tab) {
+	public void msgPayLater(int tab) {
 		event = AgentEvent.gotTab;
-		money = 0.00;
+		money = 0;
 		myTab += tab;
 		stateChanged();
 	}

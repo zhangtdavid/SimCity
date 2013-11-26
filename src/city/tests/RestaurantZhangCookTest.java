@@ -45,7 +45,7 @@ public class RestaurantZhangCookTest extends TestCase {
 		cook.setPerson(new MockPerson("Cook"));
 		cook.setRevolvingStand(stand);
 		cook.setAnimation(anim);
-		cook.setMenuTimes(menu);
+		cook.setMenuTimes(menu, cook.getWorkplace(RestaurantZhangBuilding.class).foods);
 	}
 
 	public void testOneNormalCustomerOrderScenario() {

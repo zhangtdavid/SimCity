@@ -7,18 +7,18 @@ import java.util.Map;
 import java.util.HashMap;
 
 public class RestaurantZhangMenu {
-	private static Map<String, Double> menuItemsMap = Collections.synchronizedMap(new HashMap<String, Double>());
-	private static Map<String, Double> allMenuItems;
+	private static Map<String, Integer> menuItemsMap = Collections.synchronizedMap(new HashMap<String, Integer>());
+	private static Map<String, Integer> allMenuItems;
 //	private RestaurantPanel panel;
 	
 	public RestaurantZhangMenu() {
-		menuItemsMap.put("Chicken", 8.99);
-		menuItemsMap.put("Steak", 12.99);
-		menuItemsMap.put("Pizza", 16.99);
-		allMenuItems = Collections.synchronizedMap(new HashMap<String, Double>(menuItemsMap));
+		menuItemsMap.put("Chicken", 9);
+		menuItemsMap.put("Steak", 13);
+		menuItemsMap.put("Pizza", 17);
+		allMenuItems = Collections.synchronizedMap(new HashMap<String, Integer>(menuItemsMap));
 	}
 	
-	public void addItem(String name, double price) {
+	public void addItem(String name, int price) {
 		menuItemsMap.put(name, price);
 	}
 	
@@ -36,9 +36,9 @@ public class RestaurantZhangMenu {
 		String optionsArray[] = new String[menuItemsMap.size()];
 		int optionsArraySize = 0;
 		synchronized(menuItemsMap) {
-			Iterator<Map.Entry<String, Double>> it = menuItemsMap.entrySet().iterator();
+			Iterator<Map.Entry<String, Integer>> it = menuItemsMap.entrySet().iterator();
 			for(int i = 0; i < menuItemsMap.size(); i++) {
-				Map.Entry<String, Double> currentItem = it.next();
+				Map.Entry<String, Integer> currentItem = it.next();
 				if(currentItem.getValue() <= money) {
 					optionsArray[optionsArraySize] = currentItem.getKey();
 					optionsArraySize++;
@@ -46,7 +46,7 @@ public class RestaurantZhangMenu {
 			}
 			// Small chance to order something too expensive, might actually not be too expensive
 			// Depends on what stuff is available in the menu
-			if(optionsArraySize < menuItemsMap.size() && money < 8.99) {
+			if(optionsArraySize < menuItemsMap.size() && money < 9) {
 				if(new Random().nextInt(5) == 0)
 					if(menuItemsMap.containsKey("Pizza")) {
 						return "Pizza";
@@ -67,11 +67,11 @@ public class RestaurantZhangMenu {
 		}
 	}
 	
-	public double getPrice(String choice) {
+	public int getPrice(String choice) {
 		return menuItemsMap.get(choice);
 	}
 	
-	public Map<String, Double> getMenu() {
+	public Map<String, Integer> getMenu() {
 		return menuItemsMap;
 	}
 	

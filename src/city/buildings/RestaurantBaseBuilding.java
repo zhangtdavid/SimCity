@@ -57,6 +57,7 @@ public abstract class RestaurantBaseBuilding extends Building {
             this.amount = amount;
             this.low = low;
             this.capacity = capacity;
+            this.price = price;
             s = FoodOrderState.None;
         }
     }

@@ -10,9 +10,9 @@ public interface RestaurantZhangCustomer extends RoleInterface {
 	// Sent by waiter after waiter gets check from cashier
 	public abstract void msgHereIsCustCheck(RestaurantZhangCheck c);
 	// Sent by cashier if customer successfully pays for his bill
-	public abstract void msgHereIsChange(double change);
+	public abstract void msgHereIsChange(int change);
 	// Sent by cashier if customer still owes money to restaurant
-	public abstract void msgPayLater(double tab);
+	public abstract void msgPayLater(int tab);
 	// Gets name
 	public abstract String getName();
 	public abstract void msgRestaurantFull();

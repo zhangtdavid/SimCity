@@ -26,15 +26,15 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	private static final int CASHIERX = 0;
 	private static final int CASHIERY = 200;
 	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
-	public double balance = 10000;
-	public Map<RestaurantZhangCustomer, Double> tabCustomers = new HashMap<RestaurantZhangCustomer, Double>();
+	public int balance = 10000;
+	public Map<RestaurantZhangCustomer, Integer> tabCustomers = new HashMap<RestaurantZhangCustomer, Integer>();
 	//public Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	
 	private String name;
 
-	public Map<String, Double> menu;
+	public Map<String, Integer> menu;
 
 	public List<RestaurantZhangCheck> pendingChecks = Collections.synchronizedList(new ArrayList<RestaurantZhangCheck>());
 	
@@ -57,7 +57,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		stateChanged();
 	}
 
-	public void msgHereIsPayment(RestaurantZhangCheck c, double cash) {
+	public void msgHereIsPayment(RestaurantZhangCheck c, int cash) {
 		pendingChecks.add(c);
 		c.status = RestaurantZhangCheck.CheckStatus.atCustomer;
 		c.payment = cash;
@@ -114,12 +114,11 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		if(tabCustomers.containsKey(c.cust)) { //
 			print("Tab needs to be paid, added to check: " + tabCustomers.get(c.cust));
 			c.price += tabCustomers.get(c.cust);
-			c.price =  Math.floor(c.price * 100) / 100;
 			tabCustomers.remove(c.cust);
 		}
-		double change = c.payment - c.price;//Math.round((c.payment - c.price) * 100) / 100; // Calculate the change
+		int change = c.payment - c.price;//Math.round((c.payment - c.price) * 100) / 100; // Calculate the change
 		if(change < 0) {
-			double tab = Math.abs(change);
+			int tab = Math.abs(change);
 			balance += c.payment;
 			print("Adding customer " + c.cust.getName() + " to tabs list, tab of " + tab);
 			tabCustomers.put(c.cust, tab);
@@ -136,7 +135,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	//		Do("Paying Market " + m.getName() + " bill of " + bill);
 	//		marketBills.remove(m);
 	//		m.msgPayBill(bill);
-	//		balance -= (double)bill;
+	//		balance -= (int)bill;
 	//		Do("Cashier balance after paying Market " + m.getName() + ": " + balance);
 	//	}
 	
@@ -156,7 +155,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	}
 
 	public void setMenu(RestaurantZhangMenu m) {
-		menu = new HashMap<String, Double>(m.getMenu());
+		menu = new HashMap<String, Integer>(m.getMenu());
 	}
 
 	public enum MarketTransactionState

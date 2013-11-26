@@ -19,10 +19,10 @@ import utilities.RestaurantZhangTable;
 import city.Building;
 import city.Role;
 import city.Application.FOOD_ITEMS;
-import city.animations.RestaurantZhangCookAnimation;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantBaseBuilding;
+import city.buildings.RestaurantBaseBuilding.Food;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -212,7 +212,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
 		if(cookInventory.get(o.choice).amount  <= 0) {
-			print("Out of " + cookInventory.get(o.choice).name);
+			print("Out of " + cookInventory.get(o.choice).item);
 			mainMenu.remove(o.choice);
 			thisGui.removeFromPlatingArea(o.pos);
 			ordersToCook.remove(o);
@@ -222,7 +222,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 					return;
 				}
 			}
-			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).threshold - cookInventory.get(o.choice).amount, markets.get(0));
+			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).capacity - cookInventory.get(o.choice).amount, markets.get(0));
 			cookInvoiceList.add(tempInvoice);
 			marketCustomerDelivery = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBaseBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
 			marketCustomerDelivery.setActive();
@@ -232,7 +232,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			cookInventory.get(o.choice).amount--;
 		}
 		// Cooking
-		print("Cooking order: " + o.choice);
 		thisGui.goToPlating();
 		waitForAnimation();
 		thisGui.removeFromPlatingArea(o.pos);
@@ -247,7 +246,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 				orderIsReady(tempOrder);
 			}
 		},
-		(long) cookInventory.get(tempOrder.choice).cookTime);
+		(long) cookInventory.get(tempOrder.choice).cookingTime);
 	}
 
 	public void orderIsReady(RestaurantZhangOrder o) {
@@ -324,13 +323,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		return COOKY;
 	}
 
-	public void setMenuTimes(RestaurantZhangMenu m) {
+	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food) {
 		mainMenu = m;
-		Iterator<Map.Entry<String, Double>> it = m.getMenu().entrySet().iterator();
-		int cookingTime = COOKINGTIMESTART;
-		while(it.hasNext()) {
-			Map.Entry<String, Double> entry = it.next();
-			cookInventory.put(entry.getKey(), new Food(entry.getKey(), cookingTime *= COOKINGTIMEMULTIPLIER, 1));
+		Iterator<Map.Entry<FOOD_ITEMS, Food>> foodIt = food.entrySet().iterator();
+		while(foodIt.hasNext()) {
+			Map.Entry<FOOD_ITEMS, Food> entry = foodIt.next();
+			cookInventory.put(entry.getValue().item, entry.getValue());
 		}
 	}
 
@@ -357,18 +355,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	public void setActive() {
 		super.setActive();
 		runScheduler();
-	}
-
-	private class Food {
-		String name;
-		int cookTime;
-		int amount;
-		int threshold = FOODTHRESHOLD;
-		Food(String name_, int cookTime_, int amount_) {
-			name = name_;
-			cookTime = cookTime_;
-			amount = amount_;
-		}
 	}
 
 	enum CookInvoiceStatus {created, processing, changedMarket, completed};
