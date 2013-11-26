@@ -1,11 +1,14 @@
 package city.tests;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
+import city.gui.MarketPanel;
 import city.roles.MarketManagerRole;
 import city.roles.MarketManagerRole.MarketEmployeeState;
 import city.tests.mock.MockMarketCashier;
@@ -18,6 +21,7 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketManagerTest extends TestCase {
+	MarketPanel marketPanel;
 	MarketBuilding market;
 	
 	MockPerson cashierPerson;
@@ -49,7 +53,8 @@ public class MarketManagerTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		market = new MarketBuilding("Market1");
+		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
+		market = new MarketBuilding("Market1", marketPanel);
 		
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MockMarketCashier();
