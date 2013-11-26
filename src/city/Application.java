@@ -114,28 +114,29 @@ public class Application {
 		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.ID);
-		CityMap.addBuilding(BUILDING.busStop, busStop1);
+		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
 		
 		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp2);
 		mainFrame.cityView.addStatic(cityViewBusStop2);
 		busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.ID);
-		CityMap.addBuilding(BUILDING.busStop, busStop2); 
+		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 		
 		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 400, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.ID);
-		CityMap.addBuilding(BUILDING.busStop, busStop3); 
+		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
 		
 		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(400, 150, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp4);
 		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.ID);
-		CityMap.addBuilding(BUILDING.busStop, busStop4 ); 
+		Application.CityMap.addBuilding(BUILDING.busStop, busStop4 ); 
+		
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding"));
@@ -206,7 +207,7 @@ public class Application {
 		CarAnimation c4Anim = new CarAnimation(c4, busStop2);
 		c4.setAnimation(c4Anim);
 		mainFrame.cityView.addAnimation(c4Anim);
-		p0.setCar(c0);
+		//p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
 		p3.setCar(c3);
@@ -281,7 +282,7 @@ public class Application {
 		/**
 		 * Return the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, Person p) {
+		public static Building findClosestBuilding() {
 			// TODO
 			return busStop2;
 		}
@@ -292,8 +293,33 @@ public class Application {
 		 * @param b the destination you wish to reach
 		 */
 		public static Building findClosestBuilding(BUILDING type, Building b) {
-			// TODO
-			return busStop2;
+			int x = b.cityBuilding.x;
+			int y = b.cityBuilding.y;
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building tempBuilding : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(tempBuilding.cityBuilding.x - x, 2) + Math.pow(tempBuilding.cityBuilding.y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = tempBuilding;
+				}
+			}
+			return returnBuilding;
+		}
+		
+		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+			int x = 100;//p.animation.getXPos();
+			int y = 100;//p.animation.getYPos();
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building b : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(b.cityBuilding.x - x, 2) + Math.pow(b.cityBuilding.y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = b;
+				}
+			}
+			return returnBuilding;
 		}
 
 	}

@@ -1,5 +1,6 @@
 package city.buildings;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -15,7 +16,7 @@ public class BusStopBuilding extends Building {
 	
 	public BusStopBuilding nextStop = null;
 	public BusStopBuilding previousStop = null;
-	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
+	public List<BusPassengerRole> waitingList = Collections.synchronizedList(new ArrayList<BusPassengerRole>());
 	
 	// Constructor
 	

@@ -68,14 +68,16 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Actions
 	
 	void getOnBus() {
+		print("Getting on bus " + myBus.getName() + " at stop " + destination.getName() + " to go to " + destination.getName());
 //		myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
-//		myPerson.money -= myBus.busFare;
+		this.getPerson().setCash(this.getPerson().getCash() - Bus.busFare);
 		busStopToWaitAt.waitingList.remove(this);
 		myState = BusPassengerState.ONBUS;
 		myBus.msgImOnBus(this, destination);
 	}
 	
 	void getOffBus() {
+		print("Getting off bus " + myBus.getName() + " at stop " + destination.getName());
 //		animation.doGetOffBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 		myBus.msgImOffBus(this);
 		myState = BusPassengerState.NOTBUSSING;

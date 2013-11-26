@@ -49,7 +49,7 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private List<Role> roles = new ArrayList<Role>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private city.animations.interfaces.AnimatedPerson animation;
+	public city.animations.interfaces.AnimatedPerson animation;
 	private State state; 
 	private int cash;
 	
@@ -453,11 +453,11 @@ public class PersonAgent extends Agent implements Person {
 		} else {
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
-			animation.goToBusStop(b);
-			atDestination.acquire();
+//			animation.goToBusStop(b);
+//			atDestination.acquire();
 			busPassengerRole = new BusPassengerRole(d, b);
-			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
+			busPassengerRole.setActive();
 			this.addRole(busPassengerRole);
 		}
 	}
@@ -473,14 +473,19 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		if (car != null && !carPassengerRole.getActive()) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-			return true;
-		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-			return true;
+		if (car != null && carPassengerRole != null) {
+			if(!carPassengerRole.getActive()) {
+				roles.remove(carPassengerRole);
+				carPassengerRole = null;
+				return true;
+			}
+		}
+		if (busPassengerRole != null && busPassengerRole != null) {
+			if(!busPassengerRole.getActive()) {
+				roles.remove(busPassengerRole);
+				busPassengerRole = null;
+				return true;
+			}
 		}
 		return false;
 	}
