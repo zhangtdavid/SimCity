@@ -8,13 +8,13 @@ import city.buildings.BusStopBuilding;
 public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Data
-	enum BusPassengerState {NOTBUSSING, GOINGTOSTOP, WAITINGFORBUS, GETTINGONBUS, GETTINGOFFBUS, ONBUS};
-	BusPassengerState myState = BusPassengerState.NOTBUSSING;
-	enum BusPassengerEvent {NONE, WANTTOBUS, ATSTOP, BUSISHERE, ATDESTINATION};
-	BusPassengerEvent myEvent = BusPassengerEvent.NONE;
-	Bus myBus;
-	BusStopBuilding busStopToWaitAt;
-	BusStopBuilding destination;
+	public enum BusPassengerState {NOTBUSSING, WAITINGFORBUS, GETTINGONBUS, GETTINGOFFBUS, ONBUS};
+	public BusPassengerState myState = BusPassengerState.NOTBUSSING;
+	public enum BusPassengerEvent {NONE, ATSTOP, BUSISHERE, ATDESTINATION};
+	public BusPassengerEvent myEvent = BusPassengerEvent.NONE;
+	public Bus myBus;
+	public BusStopBuilding busStopToWaitAt;
+	public BusStopBuilding destination;
 	// CarPassengerGui myGui;
 	
 	// Constructor
@@ -45,14 +45,17 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public boolean runScheduler() {
 		if(myState == BusPassengerState.NOTBUSSING && myEvent == BusPassengerEvent.ATSTOP) {
 			myState = BusPassengerState.WAITINGFORBUS;
+			return true;
 		}
 		if(myState == BusPassengerState.WAITINGFORBUS && myEvent == BusPassengerEvent.BUSISHERE) {
 			myState = BusPassengerState.GETTINGONBUS;
 			getOnBus();
+			return true;
 		}
 		if(myState == BusPassengerState.ONBUS && myEvent == BusPassengerEvent.ATDESTINATION) {
 			myState = BusPassengerState.GETTINGOFFBUS;
 			getOffBus();
+			return true;
 		}
 		return false;
 	}
@@ -62,8 +65,9 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	void getOnBus() {
 //		myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 //		myPerson.money -= myBus.busFare;
-		myBus.msgImOnBus(this, destination);
+		busStopToWaitAt.waitingList.remove(this);
 		myState = BusPassengerState.ONBUS;
+		myBus.msgImOnBus(this, destination);
 	}
 	
 	void getOffBus() {
@@ -79,7 +83,8 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Utilities
 	public void setActive() {
-		
+		super.setActive();
+		msgAtWaitingStop();
 	}
 	// Classes
 

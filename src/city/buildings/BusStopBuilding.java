@@ -7,8 +7,8 @@ import city.Building;
 import city.roles.BusPassengerRole;
 
 public class BusStopBuilding extends Building {
-	BusStopBuilding nextStop = null;
-	BusStopBuilding previousStop = null;
+	public BusStopBuilding nextStop = null;
+	public BusStopBuilding previousStop = null;
 	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
 	
 	public BusStopBuilding(String name) {
@@ -25,5 +25,13 @@ public class BusStopBuilding extends Building {
 	
 	public BusStopBuilding getNextStop() {
 		return nextStop;
+	}
+	
+	public void setNextStop(BusStopBuilding b) {
+		nextStop = b;
+	}
+	
+	public void setPreviousStop(BusStopBuilding b) {
+		previousStop = b;
 	}
 }
