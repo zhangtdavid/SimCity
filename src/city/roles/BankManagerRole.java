@@ -90,6 +90,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Scheduler
 	@Override
 	public boolean runScheduler() {
+		System.out.println("qwertyup0[okjhgfdsfgjklm,nbvcdfgtiklbhdftyuikjhbgvhfyiu IN THE SCHEDULER OF BANK MANAGER");
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
@@ -174,8 +175,10 @@ public class BankManagerRole extends Role implements BankManager{
 		myT.teller.msgAddressCustomer(bc);
 	}
 	private void atmDeposit(BankTask bT){
+		System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg in the atmdeposit method");
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
+				System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg depositing");
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				directDepositer.msgDepositCompleted();
@@ -184,10 +187,10 @@ public class BankManagerRole extends Role implements BankManager{
 		}
 	}
 	private void Deposit(BankTask bT){
-		System.out.println("wwwwwwfkwuehfliaewkfjeiwjf");
+		System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg in the deposit method");
 		for(Account a : building.getAccounts()){
 			if(a.acctNum == bT.acctNum){
-				System.out.println("accnt numbers match");
+				System.out.println("awrgjkaherglkajrgoaierjgao;ligjae;orlgjaor;gilkjarg depositing");		
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				bT.teller.msgTransactionSuccessful();

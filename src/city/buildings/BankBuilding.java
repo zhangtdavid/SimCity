@@ -72,7 +72,7 @@ public class BankBuilding extends Building {
 			}*/
 			manager = c;
 			c.setActive();
-			c.setActivityBegun();
+			//c.setActivityBegun();
 			System.out.println("Bank Manager set");
 		}
 		if(r instanceof BankTellerRole) {
@@ -88,7 +88,7 @@ public class BankBuilding extends Building {
 			}*/
 			employees.add(c);
 			c.setActive();
-			c.setActivityBegun();
+			//c.setActivityBegun();
 			System.out.println("Bank Teller set");
 		}
 	}
