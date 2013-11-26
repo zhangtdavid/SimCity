@@ -125,7 +125,6 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		rtb.setHost(this);
 		this.getAnimation(RestaurantTimmsAnimatedHost.class).setVisible(true);
 		super.setActive();
-		// TODO
 	}
 
 }

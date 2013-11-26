@@ -1,8 +1,9 @@
-//TODO commented by ryan choi, error was bugging me
-/*package city.tests;
+package city.tests;
 
 import junit.framework.TestCase;
 import city.Application;
+import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.RestaurantTimmsCustomer;
 import city.roles.RestaurantTimmsCustomerRole;
 import city.tests.animations.mock.MockRestaurantTimmsAnimatedCustomer;
 import city.tests.mock.MockPerson;
@@ -12,6 +13,8 @@ import city.tests.mock.MockRestaurantTimmsWaiter;
 
 public class RestaurantTimmsCustomerTest extends TestCase {
 	
+	RestaurantTimmsBuilding rtb;
+	
 	MockRestaurantTimmsCashier cashier;
 	MockRestaurantTimmsHost host;
 	MockRestaurantTimmsWaiter waiter;
@@ -19,25 +22,19 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 	MockPerson customerPerson;
 	RestaurantTimmsCustomerRole customer;
 	MockRestaurantTimmsAnimatedCustomer animation;
-	
-// TODO Needed for setting menu prices. Will city market do this or..?
-//	CookAgent cookAgent;
 
 	public void setUp() throws Exception {
 		super.setUp();
+		this.rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
 		this.cashier = new MockRestaurantTimmsCashier();
 		this.host = new MockRestaurantTimmsHost();
 		this.waiter = new MockRestaurantTimmsWaiter();
 		this.customerPerson = new MockPerson("Customer");
-		this.customer = new RestaurantTimmsCustomerRole(host, cashier);
+		this.customer = new RestaurantTimmsCustomerRole(rtb);
 		this.animation = new MockRestaurantTimmsAnimatedCustomer(customer);
 		
 		customer.setPerson(customerPerson);
 		customer.setAnimation(animation);
-		customer.setPerson(customerPerson);
-		
-		// TODO Required to set prices for menu items
-		// cookAgent = new CookAgent("Cook", cashier);
 	}
 	
 	public void testNormalScenario() throws InterruptedException {
@@ -47,8 +44,8 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		assertEquals("Waiter's log should be empty.", 0, waiter.log.size());
 		assertEquals("Customer's state should be none.", "none", customer.getState());
 		
-		// Send a message to send the customer to the restaurant.
-		customer.msgGoToRestaurant();
+		// Set the customer active (so he goes to the restaurant)
+		customer.setActive();
 		
 		assertEquals("Customer's state should be goToRestaurant.", "goToRestaurant", customer.getState());
 		assertFalse("Customer's scheduler should return false.", customer.runScheduler());
@@ -62,7 +59,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		assertEquals("Customer's state should be goToTable.", "goToTable", customer.getState());
 		assertEquals("Waiter's log should be empty.", 0, waiter.log.size());
 		assertFalse("Customer's scheduler should return false.", customer.runScheduler());
-		Thread.sleep((customer.pickiness * 1000) + 1000); // Wait for the timer to finish
+		Thread.sleep((RestaurantTimmsCustomer.PICKINESS * 1000) + 1000); // Wait for the timer to finish
 		assertEquals("Waiter's log length should be 1.", 1, waiter.log.size());
 		assertTrue("Waiter should have been told to take customer's order.", waiter.log.containsString("Received msgWantFood from Customer."));
 		assertEquals("Customer's state should be goToTable.", "goToTable", customer.getState());
@@ -73,7 +70,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		assertEquals("Customer's state should be orderFromWaiter.", "orderFromWaiter", customer.getState());
 		assertFalse("Customer's scheduler should return false.", customer.runScheduler());
 		assertEquals("Waiter's log length should be 2.", 2, waiter.log.size());
-		assertTrue("Waiter should have received customer's order.", waiter.log.containsString("Received msgOrderFood from Customer. Item: " + customer.orderItem.toString())); // Item is also included in the response, but it is random
+		assertTrue("Waiter should have received customer's order.", waiter.log.containsString("Received msgOrderFood from Customer. Item: " + customer.getOrderItem().toString())); // Item is also included in the response, but it is random
 		assertEquals("Customer's state should be hasOrdered.", "hasOrdered", customer.getState());
 		
 		// Send a message from a Waiter to deliver the customer's food. This is also expected to cause the customer to leave the restaurant.
@@ -81,13 +78,12 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		
 		assertEquals("Customer's state should be waiterDeliveredFood.", "waiterDeliveredFood", customer.getState());
 		assertFalse("Customer's scheduler should return false.", customer.runScheduler());
-		Thread.sleep((customer.hunger * 1000) + 1000); // Wait for the timer to finish
+		Thread.sleep((RestaurantTimmsCustomer.HUNGER * 1000) + 1000); // Wait for the timer to finish
 		assertEquals("Host's log length should be 2.", 2, host.log.size());
 		assertTrue("Host should be notified customer is leaving.", host.log.containsString("Received msgLeaving from Customer. Table: 0"));
 		assertEquals("Cashier's log length should be 1.", 1, cashier.log.size());
-		assertTrue("Cashier should receive payment.", cashier.log.containsString("Received msgMakePayment from Customer. Money: " + customer.money));
+		assertTrue("Cashier should receive payment.", cashier.log.containsString("Received msgMakePayment from Customer. Money: " + customer.getPerson().getCash()));
 		assertEquals("Customer's state should be none.", "none", customer.getState());
 	}
 	
 }
-*/

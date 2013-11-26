@@ -2,9 +2,11 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.Application;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
+import city.roles.RestaurantTimmsCustomerRole.State;
 
 public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantTimmsCustomer {
 	
@@ -55,6 +57,18 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	@Override
 	public void guiAtExit() { 
 		log.add(new LoggedEvent("Received guiAtExit.")); 
+	}
+
+	@Override
+	public State getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public FOOD_ITEMS getOrderItem() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -186,6 +186,21 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		return marketPaymentRole;
 	}
 	
+	@Override
+	public int getMoneyCollected() {
+		return moneyCollected;
+	}
+
+	@Override
+	public int getMoneyOwed() {
+		return moneyOwed;
+	}
+	
+	@Override
+	public List<Check> getChecks() {
+		return checks;
+	}
+	
 	// Setters
 	
 	@Override

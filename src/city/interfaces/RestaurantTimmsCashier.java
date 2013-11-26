@@ -1,5 +1,8 @@
 package city.interfaces;
 
+import java.util.List;
+
+import city.roles.RestaurantTimmsCashierRole.Check;
 
 public interface RestaurantTimmsCashier extends RoleInterface {
 	
@@ -12,6 +15,9 @@ public interface RestaurantTimmsCashier extends RoleInterface {
 	// Getters
 	
 	public MarketCustomerDeliveryPayment getMarketPaymentRole();
+	public int getMoneyCollected();
+	public int getMoneyOwed();
+	public List<Check> getChecks();
 	
 	// Setters
 	

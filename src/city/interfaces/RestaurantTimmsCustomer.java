@@ -1,8 +1,14 @@
 package city.interfaces;
 
 import city.Application;
+import city.roles.RestaurantTimmsCustomerRole.State;
 
 public interface RestaurantTimmsCustomer extends RoleInterface {
+	
+	// Data
+	
+	public static final int HUNGER = 5;
+	public static final int PICKINESS = 3;
 	
 	// Messages
 	
@@ -15,6 +21,11 @@ public interface RestaurantTimmsCustomer extends RoleInterface {
 	public void guiAtTable();
 	public void guiAtCashier();
 	public void guiAtExit();
+	
+	// Getters
+	
+	public State getState();
+	public Application.FOOD_ITEMS getOrderItem();
 	
 	// Setters
 	

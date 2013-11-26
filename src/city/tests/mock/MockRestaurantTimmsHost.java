@@ -2,8 +2,6 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.MockRole;
-import city.animations.RestaurantTimmsHostAnimation;
-import city.animations.interfaces.RestaurantTimmsAnimatedHost;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;

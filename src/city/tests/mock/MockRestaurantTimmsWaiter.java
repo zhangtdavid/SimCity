@@ -1,10 +1,13 @@
 package city.tests.mock;
 
+import java.util.List;
+
 import utilities.LoggedEvent;
 import city.Application;
 import city.MockRole;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
+import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 
 public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTimmsWaiter {
 
@@ -94,6 +97,12 @@ public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTim
 	public Boolean getWantsBreak() {
 		// This may not be suitable in the future.
 		return false;
+	}
+
+	@Override
+	public List<InternalCustomer> getCustomers() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
