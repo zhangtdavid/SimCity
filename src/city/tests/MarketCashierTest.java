@@ -5,9 +5,7 @@ import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
-import city.Building;
 import city.buildings.MarketBuilding;
-import city.roles.BankCustomerRole;
 import city.roles.MarketCashierRole;
 import city.roles.MarketCashierRole.TransactionState;
 import city.tests.mock.MockMarketCustomer;
