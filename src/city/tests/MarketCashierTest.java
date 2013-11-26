@@ -118,11 +118,6 @@ public class MarketCashierTest extends TestCase {
 		collectedItemsPartial.put(FOOD_ITEMS.pizza, 3);
 		collectedItemsPartial.put(FOOD_ITEMS.salad, 3);
 		collectedItemsPartial.put(FOOD_ITEMS.steak, 3);
-		
-//		prices.put("Steak", (16/2);
-//		prices.put("Chicken", (12/2);
-//		prices.put("Salad", (6/2);
-//		prices.put("Pizza", (10/2);		
 	}
 	
 	public void testNormCustomerScenario() {
