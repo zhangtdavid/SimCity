@@ -8,6 +8,6 @@ public interface RestaurantJPCustomer extends RoleInterface {
 	 *
 	 * Sent by the waiter prompting the customer to give cashier check after the customer is done eating.
 	 */
-	public abstract void msgHereIsCheck(Float check, RestaurantJPCashierRole csh);
+	public abstract void msgHereIsCheck(int check, RestaurantJPCashierRole csh);
 
 }

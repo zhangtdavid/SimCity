@@ -18,7 +18,7 @@ public class MockRestaurantJPWaiter extends MockRole implements RestaurantJPWait
 	}
 
 	@Override
-	public void msgHereIsCheck(Float check, RestaurantJPCashierRole csh,
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh,
 			RestaurantJPCustomer c) {
 		log.add(new LoggedEvent("Received HereIsYourTotal from cashier. Total = "+ check));
 

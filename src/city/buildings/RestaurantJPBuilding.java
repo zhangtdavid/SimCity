@@ -13,6 +13,7 @@ public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 	public RestaurantJPCashierRole cashier;
 	public RestaurantJPHostRole host;
 	public int seatedCustomers = 0;
+	public int funds = 2000;
 	public static final int WORKER_SALARY = 200;
 	
 	

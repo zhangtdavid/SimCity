@@ -101,7 +101,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(Float check, RestaurantJPCashierRole csh, RestaurantJPCustomer c){
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh, RestaurantJPCustomer c){
 		//Do("Check received from cashier");
 		for(MyCustomer myC : myCustomers){
 			if(myC.customer == c){
@@ -350,7 +350,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		public String choice;
 		public state s;
 		public RestaurantJPTableClass table;
-		Float check;
+		int check;
 		
 		RestaurantJPCustomerRole getCustomer(){
 			return customer;

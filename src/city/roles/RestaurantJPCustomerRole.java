@@ -33,17 +33,13 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	AgentEvent event = AgentEvent.none;
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
-	
-	Float cash = (float) 20;
-	Float bill = (float) 0;
+	int bill = 0;
 	
 	RestaurantJPCashierRole cashier;
 	
 	public RestaurantJPCustomerRole(String n){
 		super();
 		name = this.getPerson().getName();
-		if(name.equals("Flake"))
-			cash = (float) 0;
 		myMenu = new RestaurantJPMenuClass();
 	}
 
@@ -110,9 +106,9 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(Float check, RestaurantJPCashierRole csh){
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh){
 		//Do("Check received");
-		bill = new Float(check);
+		bill = check;
 		cashier = csh;
 		event = AgentEvent.readyToPay;
 		stateChanged();
@@ -215,7 +211,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		//Do("inside decide order");
 		List<String> cannotAfford = new ArrayList<String>();
 		for(String food : myMenu.foods){
-			if(cash < myMenu.Prices.get(food) && !name.equals("Flake"))
+			if(this.getPerson().getCash() < myMenu.Prices.get(food) && !name.equals("Flake"))
 				cannotAfford.add(food);
 		}
 		for(String food : cannotAfford){
@@ -254,13 +250,11 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	}
 
 	private void Pay(){
-		cash -= bill;
-		if(cash > 0)
+		this.getPerson().setCash(this.getPerson().getCash() - bill);
+		if(this.getPerson().getCash() > 0)
 			cashier.msgPayment(this, bill);
 		else
 			cashier.msgFlaking(this, bill);
-		if(name.equals("Flake"))
-			cash = (float) 50;
 		event = AgentEvent.donePaying;
 	}
 	

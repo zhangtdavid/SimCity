@@ -34,7 +34,6 @@ public class RestaurantJPCashierTest extends TestCase
 		//market1 = new MockMarket("mockmarket1");
 		//market2 = new MockMarket("mockmarket2");
 		
-		cashier.setFunds(100);
 	}	
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.

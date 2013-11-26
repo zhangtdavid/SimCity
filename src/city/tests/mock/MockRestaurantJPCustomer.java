@@ -18,15 +18,15 @@ public class MockRestaurantJPCustomer extends MockRole implements RestaurantJPCu
 	}
 
 	@Override
-	public void msgHereIsCheck(Float check, RestaurantJPCashierRole csh) {
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh) {
 		log.add(new LoggedEvent("Received check."));
 
-		if(check.equals((float)10)){
-			csh.msgFlaking(this, (float)0);
+		if(check == 10){
+			csh.msgFlaking(this, 0);
 			return;
 		}
 			
-		Float bill = check;
+		int bill = check;
 		cashier.msgPayment(this, bill);
 	}
 

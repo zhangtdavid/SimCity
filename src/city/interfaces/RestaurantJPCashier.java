@@ -6,7 +6,7 @@ public interface RestaurantJPCashier extends RoleInterface {
 	 *
 	 * Sent by the cashier prompting the customer's money after the customer has approached the cashier.
 	 */
-	public abstract void msgPayment(RestaurantJPCustomer cust, Float bill);
+	public abstract void msgPayment(RestaurantJPCustomer cust, int bill);
 
 	/**
 	 * @param total change (if any) due to the customer

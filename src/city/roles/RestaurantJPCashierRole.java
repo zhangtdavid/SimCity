@@ -18,7 +18,6 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 															//DATA	
 	public List<MyBill> Bills = Collections.synchronizedList(new ArrayList<MyBill>());
 	String name;
-	public Float funds = (float) 100;
 	private boolean wantsInactive = false;
 	private RestaurantJPBuilding building;
 	public class MyBill{
@@ -27,7 +26,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		public MarketManagerRole m = null;
 		public String choice;
 		public RestaurantJPCustomer c;
-		Float tab = (float) 0;
+		int tab = 0;
 		public MyBill(RestaurantJPWaiter wait, MarketManagerRole market, String ch, RestaurantJPCustomer cust){
 			s = state.pending;
 			w = wait;
@@ -38,7 +37,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	};
 	public enum state{pending, computing, charging, finished};
 	
-	Map<String, Float> Prices = new HashMap<String, Float>();
+	Map<String, Integer> Prices = new HashMap<String, Integer>();
 	public EventLog log  = new EventLog();
 	public RestaurantJPCashierRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd){
 		super();
@@ -47,10 +46,10 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
-		Prices.put("Steak", (float) 12.99);
-		Prices.put("Chicken", (float) 10.99);
-		Prices.put("Salad", (float) 5.99);
-		Prices.put("Pizza", (float) 7.99);
+		Prices.put("Steak", 13);
+		Prices.put("Chicken", 11);
+		Prices.put("Salad", 6);
+		Prices.put("Pizza", 8);
 	}
 	public void setInactive(){
 		if(Bills.size() == 0 && building.seatedCustomers == 0){
@@ -63,9 +62,6 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	public String getName() {
 		return name;
 	}
-	public void setFunds(int m){
-		funds = (float) m;
-	}
 //MSGS-----------------------------------------------------------------------------------------------------------
 	
 	public void msgComputeBill(RestaurantJPWaiter w, RestaurantJPCustomer c, String choice) {
@@ -77,7 +73,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		stateChanged();
 	}
 
-	public void msgPayment(RestaurantJPCustomer c, Float cash){
+	public void msgPayment(RestaurantJPCustomer c, int cash){
 		//log.add(new LoggedEvent("Payment received"));
 		RestaurantJPCustomer temp = c;
 		//Do("Payment received from " + temp.toString());
@@ -85,7 +81,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		synchronized(Bills){
 		for(MyBill b : Bills){
 			if(b.c == c){
-				if(b.tab.equals(cash))
+				if(b.tab == cash)
 				b.s = state.charging;
 			}
 		}
@@ -93,7 +89,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		stateChanged();
 	}
 	
-	public void msgFlaking(RestaurantJPCustomer c, Float cash){
+	public void msgFlaking(RestaurantJPCustomer c, int bill){
 		//log.add(new LoggedEvent("Customer flaked!"));
 		//Do("Customer flaked!");
 		stateChanged();
@@ -159,14 +155,14 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	}
 	private void ChargeIt(MyBill b) {
 		if(b.m == null){
-			funds += b.tab;
+			building.funds += b.tab;
 			synchronized(Bills){
 				Bills.remove(b);
 			}
 		}
 		if(b.w == null){
-			if(funds >= b.tab){
-				funds -= b.tab;
+			if(building.funds >= b.tab){
+				building.funds -= b.tab;
 				//b.m.msgChargePaid(b.choice);
 			}
 			else
