@@ -21,7 +21,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	=====================================================================
 	public EventLog log = new EventLog();
 
-	public MarketBuilding market;
+	private MarketBuilding market;
 	
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};

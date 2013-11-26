@@ -88,7 +88,7 @@ public class MarketEmployeeTest extends TestCase {
 		employeePerson = new MockPerson("Employee"); 
 		employee = new MarketEmployeeRole(market, 0, 12);
 		employee.setPerson(employeePerson);
-		employee.market = market;
+		employee.setMarket(market);
 //		employee.setAnimation((Animation) employeeGui);
 		
 		managerPerson = new MockPerson("Manager"); 
@@ -129,6 +129,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
         for (FOOD_ITEMS item: order.orderItems.keySet()) {
     		assertTrue("market.inventory should be 50.", market.inventory.get(item) == 50);
         }
@@ -175,6 +176,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertTrue("Employee state should be None.", employee.state == MarketEmployeeState.None);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
         for (FOOD_ITEMS item: order.orderItems.keySet()) {
     		assertTrue("market.inventory should be 50.", market.inventory.get(item) == 50);
         }
