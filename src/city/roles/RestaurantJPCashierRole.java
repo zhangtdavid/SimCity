@@ -8,8 +8,10 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketTransaction;
 import city.Role;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -19,7 +21,9 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	public List<MyBill> Bills = Collections.synchronizedList(new ArrayList<MyBill>());
 	String name;
 	private boolean wantsInactive = false;
+	MarketCustomerDeliveryPayment marketPaymentRole;
 	private RestaurantJPBuilding building;
+	List<MarketTransaction> marketTransactions = new ArrayList<MarketTransaction>();
 	public class MyBill{
 		public state s;
 		RestaurantJPWaiter w = null;
@@ -42,10 +46,12 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	public RestaurantJPCashierRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd){
 		super();
 		building = b;
+		building.setCashier(this);
 		name = this.getPerson().getName();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
+		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(b, marketTransactions);
 		Prices.put("Steak", 13);
 		Prices.put("Chicken", 11);
 		Prices.put("Salad", 6);
@@ -173,6 +179,9 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		}
 	}
 	
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment(){
+		return marketPaymentRole;
+	}
 }
 
 

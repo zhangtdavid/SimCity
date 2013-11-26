@@ -10,6 +10,7 @@ import java.util.TimerTask;
 
 import city.Role;
 import city.animations.RestaurantJPCustomerAnimation;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
 
@@ -20,10 +21,10 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private String name = new String();
 	private int hungerLevel = 5;        // determines length of meal
 	int currentTable;
+	RestaurantJPBuilding building;
 	Timer timer = new Timer();
 	private RestaurantJPWaiter waiter;    
 	private RestaurantJPCustomerAnimation customerGui;
-	private RestaurantJPHostRole host;
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
 	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Choosing, PlacingOrder, Eating, DoneEating, Paying, Leaving};
@@ -34,7 +35,6 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
 	int bill = 0;
-	
 	RestaurantJPCashierRole cashier;
 	
 	public RestaurantJPCustomerRole(String n){
@@ -43,18 +43,14 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		myMenu = new RestaurantJPMenuClass();
 	}
 
-	public RestaurantJPCustomerRole(RestaurantJPHostRole h, RestaurantJPCashierRole c) {
-		host = h;
-		cashier = c;
+	public RestaurantJPCustomerRole(RestaurantJPBuilding b) {
+		building = b;
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(RestaurantJPHostRole h) {
-		host = h;
-	}
     public void setWaiter(RestaurantJPWaiter w)
     {
     	waiter = w;
@@ -195,7 +191,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 //-----------------------------------------------------------------------------------------------------------Actions
 
 	public void goToRestaurant() {
-		host.msgIWantToEat(this);//send our instance, so he can respond to us
+		building.host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
@@ -267,7 +263,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private void DecideToLeave(){
 		int leave = (int) (Math.random() * 2);
 		if(leave == 1){
-			host.msgLeaving(this);
+			building.host.msgLeaving(this);
 			customerGui.DoExitRestaurant();
 			state = AgentState.DoingNothing;
 			event = AgentEvent.none;
