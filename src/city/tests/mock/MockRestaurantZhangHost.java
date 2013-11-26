@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import utilities.LoggedEvent;
 import utilities.RestaurantZhangTable;
 import city.MockRole;
 import city.interfaces.RestaurantZhangCustomer;
@@ -14,38 +15,33 @@ public class MockRestaurantZhangHost extends MockRole implements RestaurantZhang
 
 	@Override
 	public void msgImEntering(RestaurantZhangCustomer cust) {
-		// TODO Auto-generated method stub
+		log.add(new LoggedEvent(cust.getName() + " entered restaurant"));
 		
 	}
 
 	@Override
 	public void msgIWantFood(RestaurantZhangCustomer cust) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Customer " + cust.getName() + " wants food"));
 	}
 
 	@Override
 	public void msgImLeaving(RestaurantZhangCustomer cust) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Customer " + cust.getName() + " is leaving"));
 	}
 
 	@Override
 	public void msgTableOpen(RestaurantZhangTable t) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Table " + t.tableNumber + " is empty"));
 	}
 
 	@Override
 	public void msgWaiterRequestBreak(RestaurantZhangWaiter w) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter " + w.getName() + " requested break"));
 	}
 
 	@Override
 	public void msgOffBreak(RestaurantZhangWaiter w) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter " + w.getName() + " is off break"));
 	}
 
 	@Override

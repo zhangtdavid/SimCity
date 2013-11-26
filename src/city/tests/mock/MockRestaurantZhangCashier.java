@@ -1,12 +1,11 @@
 package city.tests.mock;
 
+import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
-import utilities.RestaurantZhangTable;
 import city.MockRole;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 public class MockRestaurantZhangCashier extends MockRole implements RestaurantZhangCashier {
@@ -18,14 +17,12 @@ public class MockRestaurantZhangCashier extends MockRole implements RestaurantZh
 	@Override
 	public void msgComputeBill(RestaurantZhangWaiter waiter,
 			RestaurantZhangCustomer customer, String choice) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Making bill from " + waiter.getName() + " for order " + choice));
 	}
 
 	@Override
 	public void msgHereIsPayment(RestaurantZhangCheck c, double cash) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Got check from " + c.cust.getName() + " with payment " + cash));
 	}
 
 	@Override

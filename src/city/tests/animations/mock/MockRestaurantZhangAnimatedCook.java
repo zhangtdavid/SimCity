@@ -72,6 +72,7 @@ public class MockRestaurantZhangAnimatedCook extends MockAnimation implements Re
 	@Override
 	public boolean ReturnToBase() {
 		cook.msgAtDestination();
+		return false;
 	}
 
 	@Override
