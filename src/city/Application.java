@@ -32,6 +32,10 @@ import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 import city.roles.LandlordRole;
+import city.roles.MarketCashierRole;
+import city.roles.MarketDeliveryPersonRole;
+import city.roles.MarketEmployeeRole;
+import city.roles.MarketManagerRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungCustomerRole;
@@ -167,7 +171,6 @@ public class Application {
 		CarAgent c2 = new CarAgent();
 		CarAgent c3 = new CarAgent();
 		CarAgent c4 = new CarAgent();
-		CarAgent c5 = new CarAgent();
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
@@ -226,7 +229,6 @@ public class Application {
 		p3.startThread();
 		p4.startThread();
 		
-		
 		// MARKET
 		MarketPanel mp1 = new MarketPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		CityViewMarket market1 = new CityViewMarket(250, 250, "Market " + (mainFrame.cityView.getStaticsSize()), Color.blue, mp1); 
@@ -257,14 +259,43 @@ public class Application {
 		p8.setHome(h8);
 
 		// Give people cars
+		CarAgent c5 = new CarAgent();
 		CarAgent c6 = new CarAgent();
 		CarAgent c7 = new CarAgent();
 		CarAgent c8 = new CarAgent();
-		CarAgent c9 = new CarAgent();
-		p0.setCar(c6);
-		p1.setCar(c7);
-		p2.setCar(c8);
-		p3.setCar(c9);		
+		p5.setCar(c5);
+		p6.setCar(c6);
+		p7.setCar(c7);
+		p8.setCar(c8);
+		
+		// Create cashier
+		MarketCashierRole p5r1 = new MarketCashierRole(mb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p5r1);
+		p5.setOccupation(p5r1);
+
+		// Create cook
+		MarketDeliveryPersonRole p6r1 = new MarketDeliveryPersonRole(mb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p6r1);
+		p6.setOccupation(p6r1);
+
+		// Create host
+		MarketEmployeeRole p7r1 = new MarketEmployeeRole(mb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p7r1);
+		p7.setOccupation(p7r1);
+
+		// Create waiter
+		MarketManagerRole p8r1 = new MarketManagerRole(mb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p8r1);
+		p8.setOccupation(p8r1);
+		
+		c5.startThread();
+		c6.startThread();
+		c7.startThread();
+		c8.startThread();
+		p5.startThread();
+		p6.startThread();
+		p7.startThread();
+		p8.startThread();
 	}
 
 	public static class CityMap {

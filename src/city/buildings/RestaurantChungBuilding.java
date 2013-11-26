@@ -46,10 +46,10 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		orderStand = new RestaurantChungRevolvingStand();
 		
         // Add items and their cooking times to a map
-        foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 1, 5, 10, 16));
-        foods.put(FOOD_ITEMS.pizza, new Food("pizza", 15, 1, 5, 10, 12));
-        foods.put(FOOD_ITEMS.salad, new Food("salad", 5, 1, 5, 10, 6));
-        foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 1, 5, 10, 10));
+        foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
+        foods.put(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));
+        foods.put(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
+        foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
         
         setCash(500);
 	}

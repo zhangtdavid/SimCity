@@ -7,6 +7,8 @@ import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungRevolvingStand;
 import utilities.RestaurantChungOrder.OrderState;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
@@ -54,8 +56,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
 //  Markets
 //  =====================================================================
-    private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
-    int currentMarket = 0; // Index of market in the list to order from
+//    int currentMarket = 0; // Index of market in the list to order from
         
 //  Market Orders
 //  =====================================================================        
@@ -329,9 +330,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             print("Order: " + i + " " + o.order.orderItems.get(i));
         }
                 
-        MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
-    	MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
-        marketCustomerDelivery.setMarket(selectedMarket);
+        MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
+    	System.out.println(restaurant);
+    	System.out.println(o.order);
+    	System.out.println(restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+    	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
         return;
@@ -445,11 +449,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
 
 //  Utilities
-//  =====================================================================           
-    public void addMarket(MarketBuilding m) {
-        markets.add(m);
-    }
-    
+//  =====================================================================               
     public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
         for(RestaurantChungOrder o : orders){
             if(o == order) {
