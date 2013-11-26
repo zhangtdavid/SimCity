@@ -51,6 +51,7 @@ public class Application {
 
 	public static RestaurantZhangBuilding rzb1;
 	public static BusStopBuilding busStop2;
+	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	
 	/**
 	 * Main routine to start the program.
@@ -84,14 +85,33 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// Create roads
-		CityRoad road1 = new CityRoad(100, 100, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 20, -1, 0, true, Color.black, Color.gray);
-		mainFrame.cityView.addMoving(road1);
-		CityRoad road2 = new CityRoad(100, 100 + CityViewPanel.CITY_HEIGHT / 20, CityViewPanel.CITY_WIDTH / 20, CityViewPanel.CITY_HEIGHT - 250, 0, 1, false, Color.black, Color.gray);
-		mainFrame.cityView.addMoving(road2);
-		CityRoad road3 = new CityRoad(100, 350, CityViewPanel.CITY_WIDTH - 200, CityViewPanel.CITY_HEIGHT / 20, 1, 0, true, Color.black, Color.gray);
-		mainFrame.cityView.addMoving(road3);
-		CityRoad road4 = new CityRoad(375, 100 + CityViewPanel.CITY_HEIGHT / 20, CityViewPanel.CITY_WIDTH / 20, CityViewPanel.CITY_HEIGHT - 250, 0, -1, false, Color.black, Color.gray);
-		mainFrame.cityView.addMoving(road4);
+		for(int i = 375; i >= 125; i -= 25) {
+			CityRoad tempRoad = new CityRoad(i, 100, 25, 25, -1, 0, true, Color.black);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		for(int i = 100; i <= 300; i+=25) {
+			CityRoad tempRoad = new CityRoad(100, i, 25, 25, 0, 1, false, Color.black);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		for(int i = 100; i <= 350; i+=25) {
+			CityRoad tempRoad = new CityRoad(i, 325, 25, 25, 1, 0, true, Color.black);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		for(int i = 325; i >= 125; i-=25) {
+			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		for(int i = 0; i < roads.size(); i++) { // Connect all roads
+			if(i == roads.size() - 1) {
+				roads.get(i).nextRoad = roads.get(0);
+				continue;
+			}
+			roads.get(i).nextRoad = roads.get(i+1);
+		}
 		
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
@@ -193,7 +213,6 @@ public class Application {
 		CarAnimation c0Anim = new CarAnimation(c0, busStop2);
 		c0.setAnimation(c0Anim);
 		mainFrame.cityView.addAnimation(c0Anim);
-		road2.addVehicle(c0Anim);
 		CarAgent c1 = new CarAgent(busStop2);
 		CarAnimation c1Anim = new CarAnimation(c1, busStop2);
 		c1 .setAnimation(c1Anim);
@@ -323,6 +342,21 @@ public class Application {
 				}
 			}
 			return returnBuilding;
+		}
+		
+		public static CityRoad findClosestRoad(Building b) {
+			int x = b.cityBuilding.x;
+			int y = b.cityBuilding.y;
+			double closestDistance = 1000000;
+			CityRoad returnRoad = null;
+			for(CityRoad r : roads) {
+				double distance = Math.sqrt((double)(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnRoad = r;
+				}
+			}
+			return returnRoad;
 		}
 
 	}

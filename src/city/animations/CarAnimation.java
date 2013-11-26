@@ -4,9 +4,11 @@ import java.awt.*;
 
 import utilities.RestaurantZhangTable;
 import city.Animation;
+import city.Application;
 import city.Building;
 import city.agents.CarAgent;
 import city.animations.interfaces.AnimatedCar;
+import city.gui.CityRoad;
 import city.gui.CityViewBuilding;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
@@ -17,18 +19,21 @@ public class CarAnimation extends Animation implements AnimatedCar {
 
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
-
-	private String foodString = null;
-	private static final int TEXTHEIGHT = 14;
-
+	
+	Building currentBuilding;
+	Building destinationBuilding = null;
+	CityRoad currentRoad = null;
+	
+	private boolean atRoad = false;
 	private boolean atDestination = true;
 
-	public static final int SIZE = 50;
+	public static final int SIZE = 25;
 
 	public CarAnimation(Car c, Building startingBuilding) {
 		car = c;
 		xDestination = xPos = startingBuilding.cityBuilding.x;
 		yDestination = yPos = startingBuilding.cityBuilding.y;
+		currentBuilding = startingBuilding;
 	}
 
 	public void updatePosition() {
@@ -41,7 +46,22 @@ public class CarAnimation extends Animation implements AnimatedCar {
 //			yPos++;
 //		else if (yPos > yDestination)
 //			yPos--;
-
+		if(currentRoad != null) {
+			if(currentRoad.addVehicle(this) == false) {
+				return;
+			}
+			if (xPos < currentRoad.x)
+				xPos++;
+			else if (xPos > currentRoad.x)
+				xPos--;
+	
+			if (yPos < currentRoad.y)
+				yPos++;
+			else if (yPos > currentRoad.y)
+				yPos--;
+			if(xPos == currentRoad.x && yPos == currentRoad.y)
+				currentRoad = null;
+		}
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			car.msgAtDestination();
@@ -53,10 +73,6 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		g.fillRect(xPos, yPos, SIZE, SIZE);
 	}
 
-	public boolean isPresent() {
-		return true;
-	}
-
 	public int getXPos() {
 		return xPos;
 	}
@@ -65,8 +81,10 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		return yPos;
 	}
 
-	@Override
 	public void goToDestination(Building destination) {
+		destinationBuilding = destination;
+		currentRoad = Application.CityMap.findClosestRoad(currentBuilding);
+		currentRoad.addVehicle(this);
 		xDestination = destination.cityBuilding.x;
 		yDestination = destination.cityBuilding.y;
 		atDestination = false;

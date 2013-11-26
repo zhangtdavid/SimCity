@@ -19,6 +19,8 @@ public class BusAnimation extends Animation implements AnimatedBus {
 
 	private boolean atDestination = true;
 
+	private boolean isPresent = true;
+
 	public static final int SIZE = 25;
 
 	public BusAnimation(Bus b, Building startingBuilding) {
@@ -52,7 +54,11 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	}
 
 	public boolean isPresent() {
-		return true;
+		return isPresent;
+	}
+	
+	public void setPresent(boolean isPresent) {
+		this.isPresent = isPresent;
 	}
 
 	public int getXPos() {
