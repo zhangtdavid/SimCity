@@ -110,6 +110,7 @@ public abstract class Role implements RoleInterface {
 	@Override
 	public void setActive() {
 		this.active = true;
+		setActivityBegun();
 	}
 	
 	@Override

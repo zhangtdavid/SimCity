@@ -58,15 +58,14 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 * @param name name of the customer
 	 * @param gui  reference to the customerAnimation so the customer can send it messages
 	 */
-	public RestaurantZhangCustomerRole(String name){
+	public RestaurantZhangCustomerRole(){
 		super();
-		this.name = name;
 		money = new Random().nextDouble()*40 + 5; // TODO get rid of this and replace with the actual money
 		money = Math.round(money * 100) / 100;
-		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
-			money = 0.99;
-		if(name.contains("thief"))
-			money = 0.00;
+//		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
+//			money = 0.99;
+//		if(name.contains("thief"))
+//			money = 0.00;
 	}
 
 	/**
@@ -260,18 +259,18 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	}
 	
 	private void chooseToLeave() {
-		if(name.contains("stayer")) {
-			print("I'm waiting for a full restaurant");
-			state = AgentState.DecidedToWait;
-			return;
-		}
-		if(name.contains("leaver")) {
-			print("I'm leaving a full restaurant");
-			host.msgImLeaving(this);
-			state = AgentState.Leaving;
-			leaveRestaurant();
-			return;
-		}
+//		if(name.contains("stayer")) {
+//			print("I'm waiting for a full restaurant");
+//			state = AgentState.DecidedToWait;
+//			return;
+//		}
+//		if(name.contains("leaver")) {
+//			print("I'm leaving a full restaurant");
+//			host.msgImLeaving(this);
+//			state = AgentState.Leaving;
+//			leaveRestaurant();
+//			return;
+//		}
 		if(new Random().nextInt(CHANCETOLEAVE) == 0) {
 			print("I'm leaving a full restaurant");
 			host.msgImLeaving(this);
@@ -295,16 +294,16 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		timer.schedule(new TimerTask() {
 			public void run() {
 				choice = customerMenu.randomChoice(money);
-				if(name.contains("thief")) { // Hack to make customer steal
-					choice = customerMenu.randomChoice(50.00);
-				}
-				if(name.contains("chicken")) {
-					if(customerMenu.getMenu().containsKey("Chicken")) {
-						choice = "Chicken";
-					} else {
-						choice = "None";
-					}
-				}
+//				if(name.contains("thief")) { // Hack to make customer steal
+//					choice = customerMenu.randomChoice(50.00);
+//				}
+//				if(name.contains("chicken")) {
+//					if(customerMenu.getMenu().containsKey("Chicken")) {
+//						choice = "Chicken";
+//					} else {
+//						choice = "None";
+//					}
+//				}
 				if(choice == "None") {
 					print("No more items on menu, leaving");
 					leaveRestaurantWithoutOrdering();
@@ -379,7 +378,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	// Accessors, etc.
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 	
 	public int getHungerLevel() {
