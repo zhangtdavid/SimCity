@@ -212,7 +212,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
 	@Override
 	public void CheckBack() { // check every 5000 seconds
-		System.out.println("checkback (REVOLVING STAND per 5000ticks)");
+		//System.out.println("checkback (REVOLVING STAND per 5000ticks)");
 		if(orderqueue != null){
 			timer.schedule(new TimerTask() {
 				public void run() {

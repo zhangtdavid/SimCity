@@ -2,12 +2,18 @@ package city.buildings;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
+import city.Animation;
 import city.Building;
 import city.Role;
+import city.animations.RestaurantChoiCustomerAnimation;
 import city.interfaces.BankManager;
+import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
+import city.roles.RestaurantChoiCustomerRole;
 
 public class BankBuilding extends Building {
 	
@@ -19,6 +25,8 @@ public class BankBuilding extends Building {
 	public List<BankTellerRole> employees = new ArrayList<BankTellerRole>();
 	double funds;
 	public Date loanLastPaid;
+	public HashMap<Role, Animation> allRoles = new HashMap<Role, Animation>();
+
 	
 	// Constructor
 	
@@ -50,8 +58,39 @@ public class BankBuilding extends Building {
 	
 	@Override
 	public void addRole(Role r) {
-		// TODO
-		return;
+		if(r instanceof BankManagerRole) {
+			BankManagerRole c = (BankManagerRole)r;
+			
+			/*if(!allRoles.containsKey(c)) {
+				BankManagerAnimation anim = new BankManagerAnimation(c); // no bank animation files 
+				c.setGui(anim);	
+//				c.setAnimation(anim);
+				anim.setVisible(true);
+				panel.addVisualizationElement(anim);
+				manager = c;
+				allRoles.put(c, anim);
+			}*/
+			manager = c;
+			c.setActive();
+			c.setActivityBegun();
+			System.out.println("Bank Manager set");
+		}
+		if(r instanceof BankTellerRole) {
+			BankTellerRole c = (BankTellerRole)r;
+			/*if(!allRoles.containsKey(c)) {
+				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
+				c.setGui(anim);	
+//				c.setAnimation(anim);
+				anim.setVisible(true);
+				panel.addVisualizationElement(anim);
+				employees.add(c);
+				allRoles.put(c, anim);
+			}*/
+			employees.add(c);
+			c.setActive();
+			c.setActivityBegun();
+			System.out.println("Bank Teller set");
+		}
 	}
 	
 	// Classes

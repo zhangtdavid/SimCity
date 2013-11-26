@@ -352,7 +352,6 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		if(mem.isEmpty() && !hasHitZero){ // only do this if mem is empty; i.e. if this is the first time. 
 			//this is because it's impossible for someone to order a 2nd time legitimately otherwise
 			for(int i = 0; i<=menu.getNumberOfItems()-1; i++){ // 1 thru 4 because our items go from 1 to 4...
-				System.out.println(int2Food(i));
 				if(cash >= menu.foodPrice.get(int2Food(i))){
 					if(menu.isAvailable(int2Food(i)))
 						mem.add(int2Food(i)); // add the food ID to list of things we can order

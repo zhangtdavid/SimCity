@@ -20,9 +20,11 @@ public class BankManagerRole extends Role implements BankManager{
 	BankCustomerRole directDepositer = null;
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
+	
 // Constructor
 	public BankManagerRole (BankBuilding b){
 		building = b;
+		setActivityBegun();
 	}
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
@@ -113,6 +115,7 @@ public class BankManagerRole extends Role implements BankManager{
 				}
 			}
 		}	
+		System.out.println("inside bank manager scheduler");
 		for(BankTask bT : bankTasks){
 			if(bT.t == type.atmDeposit){
 				atmDeposit(bT);
@@ -181,8 +184,10 @@ public class BankManagerRole extends Role implements BankManager{
 		}
 	}
 	private void Deposit(BankTask bT){
+		System.out.println("wwwwwwfkwuehfliaewkfjeiwjf");
 		for(Account a : building.getAccounts()){
 			if(a.acctNum == bT.acctNum){
+				System.out.println("accnt numbers match");
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				bT.teller.msgTransactionSuccessful();

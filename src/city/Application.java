@@ -12,12 +12,16 @@ import java.util.TimerTask;
 
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
+import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.AptPanel;
+import city.gui.BankPanel;
+import city.gui.CityViewBank;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
@@ -25,6 +29,8 @@ import city.gui.MainFrame;
 import city.gui.MarketPanel;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.Person;
+import city.roles.BankManagerRole;
+import city.roles.BankTellerRole;
 import city.roles.LandlordRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
@@ -50,6 +56,7 @@ public class Application {
 	public static MarketBuilding m1;
 	public static MarketPanel mp1;
 	public static BankBuilding b1;
+	public static BankPanel bp1;
 	//public static RestaurantZhangBuilding rzb1;
 	
 	/**
@@ -87,6 +94,7 @@ public class Application {
 		mp1 = new MarketPanel(Color.black, new Dimension(500,500));
 		m1 = new MarketBuilding("MarketBuilding", null);
 		// Create buildings
+		bp1 = new BankPanel(mainFrame, Color.blue, new Dimension(500,500));
 		b1 = new BankBuilding("BankBuilding");
 		CityMap.addBuilding(BUILDING.bank, b1);
 		//Application.CityMap.addBuilding(BUILDING.house, new HouseBuilding("house1"));
@@ -99,6 +107,7 @@ public class Application {
 		HousePanel rhp2 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp3 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp4 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		AptPanel app = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		/*HousePanel rhp5 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp6 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp7 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
@@ -107,20 +116,24 @@ public class Application {
 		
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantChoi1 = new CityViewRestaurant(200, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, rchoip1);
-
+		CityViewBank bank1 = new CityViewBank(500,500);
+		
 		// THIRD add it to the list of statics in the cityView
 		mainFrame.cityView.addStatic(restaurantChoi1);
 		//mainFrame.cityView.addStatic(house1);
-
+		mainFrame.cityView.addStatic(bank1);
+		
 		// FOURTH create a new building, last argument is the panel in step ONE
 		rchoib1 = new RestaurantChoiBuilding("RestaurantChoi1", rchoip1);
 		//hb1 = new HouseBuilding("House1", rhp1);
-
+		
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rchoip1, restaurantChoi1.ID);
+		mainFrame.buildingView.addView(bp1, bank1.ID);
 
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
+		CityMap.addBuilding(BUILDING.bank, b1);
 /*
 		// FIRST add a panel
 		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
@@ -153,30 +166,32 @@ public class Application {
 		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp2);
 		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp3);
 		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp4);
-		/*HouseBuilding h5 = new HouseBuilding("House 5", p0r1, rhp5);
-		HouseBuilding h6 = new HouseBuilding("House 5", p0r1, rhp5);
-		HouseBuilding h7 = new HouseBuilding("House 5", p0r1, rhp5);
-*/
+		AptBuilding app0 = new AptBuilding("AptBuilding", p0r1); // this landlord owns everything!
+		
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
 		PersonAgent p2 = new PersonAgent("Cook 1", date);
 		PersonAgent p3 = new PersonAgent("Host 1", date);
 		PersonAgent p4 = new PersonAgent("Waiter 1", date);
-		PersonAgent p5 = new PersonAgent("Market Manager1", date);
-		PersonAgent p6 = new PersonAgent("Market Cashier1", date);
-		PersonAgent p7 = new PersonAgent("Market Employee1", date);
+		PersonAgent p5 = new PersonAgent("Bank mgr", date);
+		PersonAgent p6 = new PersonAgent("Bank tlr", date);
 
 		people.add(p1);
 		people.add(p2);
 		people.add(p3);
 		people.add(p4);
+		people.add(p5);
+		people.add(p6);
 		RestaurantChoiCashierRole p1r1 = new RestaurantChoiCashierRole(rchoib1, 0, 24);
 		rchoib1.addRole(p1r1);
 		p1.setOccupation(p1r1);
+		
 		p1.setHome(h1);
 		p2.setHome(h2);
 		p3.setHome(h3);
 		p4.setHome(h4);
+		p5.setHome(app0);
+		p6.setHome(app0);
 
 		// Create cook
 		RestaurantChoiCookRole p2r1 = new RestaurantChoiCookRole(rchoib1, 0, 24);
@@ -192,6 +207,14 @@ public class Application {
 		RestaurantChoiWaiterRole p4r1 = new RestaurantChoiWaiterRole(rchoib1, 0, 24);
 		rchoib1.addRole(p4r1);
 		p4.setOccupation(p4r1);
+
+		//Create bank roles
+		BankManagerRole p5r1 = new BankManagerRole(b1);
+		b1.addRole(p5r1);
+		p5.setOccupation(p5r1);
+		BankTellerRole p6r1 = new BankTellerRole(b1);
+		b1.addRole(p6r1);
+		p6.setOccupation(p6r1);
 		
 		// Give people cars
 		CarAgent c0 = new CarAgent();
@@ -199,12 +222,16 @@ public class Application {
 		CarAgent c2 = new CarAgent();
 		CarAgent c3 = new CarAgent();
 		CarAgent c4 = new CarAgent();
+		CarAgent c5 = new CarAgent();
+		CarAgent c6 = new CarAgent();
 	
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
 		p3.setCar(c3);
 		p4.setCar(c4);
+		p5.setCar(c5);
+		p6.setCar(c6);
 /*
 		// Create cashier
 		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
@@ -232,11 +259,15 @@ public class Application {
 		c2.startThread();
 		c3.startThread();
 		c4.startThread();
+		c5.startThread();
+		c6.startThread();
 		p0.startThread();
 		p1.startThread();
 		p2.startThread();
 		p3.startThread();
 		p4.startThread();
+		p5.startThread();
+		p6.startThread();
 
 		//Create Market people
 		/*

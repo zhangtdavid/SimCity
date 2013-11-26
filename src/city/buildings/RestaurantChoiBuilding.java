@@ -54,12 +54,11 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel) {
 		super(name);
 		menu = new RestaurantChoiMenu();
-		bank = new BankBuilding("bank1");
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
-		this.setCashOnSite(DAILY_CAPITAL);	
+		this.setCashOnSite(cash_on_site);	
 		
 		//set up tables
 		
@@ -100,7 +99,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		return WORKER_SALARY;
 	}
 	
-	protected int getCashOnSite() {
+	public int getCashOnSite() {
 		return cash_on_site;
 	}
 	private void setCashOnSite(int in){

@@ -128,14 +128,15 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	@Override
 	public boolean runScheduler() {
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
-			System.out.println("in nested scheduler");
-			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
+		for (Role r : roles){
+			if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
 			}
-			break;
 		}
 		
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
@@ -182,10 +183,11 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 						return true;
 					}
 				}
-				
-				//Bank interactions lowest priority.
-				if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD) this.depositMoney();
-				if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+				//Bank interactions toppest priority.
+				if(building.getCashOnSite() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
+					this.depositMoney();
+				}
+				if(building.getCashOnSite() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
 				return blocking;
 	}
     //Actions
