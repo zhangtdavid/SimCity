@@ -4,14 +4,13 @@ import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
-import city.interfaces.RestaurantChoiCook;
 import city.roles.RestaurantChoiCookRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChoiWaiter;
 import city.tests.mock.MockRestaurantChoiWaiter2;
 import junit.framework.TestCase;
 
-public class RestaurantChoiWaiterTest extends TestCase{
+public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	RestaurantChoiCookRole cook;
 	RestaurantChoiRevolvingStand rs;
 	PersonAgent p;

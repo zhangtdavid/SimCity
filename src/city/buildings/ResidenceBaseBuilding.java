@@ -3,7 +3,6 @@ package city.buildings;
 import java.util.*;
 
 import city.Building;
-import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;

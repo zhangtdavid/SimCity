@@ -5,20 +5,9 @@ import java.util.*;
 import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.Role;
-import city.animations.RestaurantZhangCookAnimation;
-import city.animations.RestaurantZhangCustomerAnimation;
-import city.animations.RestaurantZhangWaiterAnimation;
 import city.gui.HousePanel;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
-import city.roles.ResidentRole;
-import city.roles.RestaurantZhangCashierRole;
-import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangCustomerRole;
-import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterRegularRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
-
 public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
@@ -67,6 +56,7 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		if(residents.isEmpty()) //ONLY ONE PERSON PER HOUSE
 			this.residents.add(resident); 
 	}
+	/*
 	public Role addRole(Role r) {
 		if(r instanceof ResidentRole) {
 			ResidentRole c = (ResidentRole)r;
@@ -81,7 +71,7 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 			return c;
 		}
 		return null;
-	}
+	}*/
 
 	@Override
 	public void addFood(FOOD_ITEMS f, int toadd) {

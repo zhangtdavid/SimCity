@@ -7,7 +7,6 @@ import java.util.List;
 import java.util.Map;
 
 import utilities.RestaurantChoiRevolvingStand;
-import utilities.RestaurantChoiTable;
 import city.Animation;
 import city.Building;
 import city.Role;
@@ -18,6 +17,7 @@ import city.animations.RestaurantChoiWaiterAnimation;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiterAbs;
+import city.roles.BankCustomerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
@@ -26,6 +26,7 @@ import city.roles.RestaurantChoiWaiter2Role;
 import city.roles.RestaurantChoiWaiterRole;
 
 public class RestaurantChoiBuilding extends Building{
+	
 	public RestaurantChoiCookRole cook;
 	public RestaurantChoiCashierRole cashier;
 	public RestaurantChoiHostRole host;
@@ -35,19 +36,26 @@ public class RestaurantChoiBuilding extends Building{
 	public List<RestaurantChoiCustomer> customers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
 	public List<RestaurantChoiWaiterAbs> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterAbs>());
 	public RestaurantChoiRevolvingStand rs;
+	public BankBuilding bank;
+	public BankCustomerRole bankConnection; 
+	public static final int WORKER_SALARY = 500;
+	// ^this high value helps accelerate normative testing. Also everyone makes the same amount!
+	public static final int DAILY_CAPITAL = 1000;
+	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
+	private int cash_on_site;
 	
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel){
 		super(name);
+		bank = new BankBuilding("bank1");
 		this.setCustomerRole("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimation("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		
-	}
+		bankConnection = new BankCustomerRole(this);
+		this.setCashOnSite(DAILY_CAPITAL);	
+}
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;
 	}
-	private static final int WORKER_SALARY = 500; 
-	// this high value helps accelerate normative testing. Also everyone makes the same amount!
 	
 	public Role addRole(Role r) {
 		if(r instanceof RestaurantChoiCustomerRole) {
@@ -86,6 +94,7 @@ public class RestaurantChoiBuilding extends Building{
 			w.setCashier(cashier);
 			w.setCook(cook);
 			w.setHost(host);
+			w.setRevolvingStand(rs);
 			if(!allRoles.containsKey(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
@@ -106,7 +115,7 @@ public class RestaurantChoiBuilding extends Building{
 		}
 		if(r instanceof RestaurantChoiCookRole) {
 			RestaurantChoiCookRole c = (RestaurantChoiCookRole)r;
-			rs = new RestaurantChoiRevolvingStand(cook); // set revolving stand
+			rs = new RestaurantChoiRevolvingStand(); // set revolving stand
 			c.setRevolvingStand(rs);
 			if(!allRoles.containsKey(c)) { 
 				RestaurantChoiCookAnimation anim = new RestaurantChoiCookAnimation(c);
@@ -132,5 +141,11 @@ public class RestaurantChoiBuilding extends Building{
 			return c;
 		}
 		return null;
+	}
+	protected int getCashOnSite() {
+		return cash_on_site;
+	}
+	private void setCashOnSite(int in){
+		cash_on_site = in;
 	}
 }

@@ -14,8 +14,6 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiCook;
-import city.interfaces.RestaurantChoiCook.FoodData;
-import city.interfaces.RestaurantChoiCook.myMarket;
 import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {

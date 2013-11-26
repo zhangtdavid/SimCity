@@ -1,11 +1,7 @@
 package city.interfaces;
 
-import java.util.ArrayList;
-import java.util.Collections;
+
 import java.util.HashMap;
-import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.ConcurrentHashMap;
 
 import utilities.RestaurantChoiOrder;
 import city.Application.FOOD_ITEMS;

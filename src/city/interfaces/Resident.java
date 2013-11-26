@@ -3,7 +3,6 @@ package city.interfaces;
 import java.util.Date;
 
 import city.Application;
-import city.buildings.AptBuilding;
 import city.buildings.ResidenceBaseBuilding;
 
 public interface Resident extends RoleInterface {

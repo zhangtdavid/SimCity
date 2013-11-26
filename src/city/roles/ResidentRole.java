@@ -14,8 +14,6 @@ public class ResidentRole extends Role implements Resident {
 
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
-	private double maintenance;
-	private double upcomingRent;
 	private Date rentLastPaid;
 	private ResidenceBaseBuilding house;
 
@@ -23,8 +21,6 @@ public class ResidentRole extends Role implements Resident {
 
 	public ResidentRole(Date rentLastPaid){
 		super();
-		this.maintenance = 0;
-		this.upcomingRent = 5; // low number for normative situations; i wish my rent was ($)
 		this.rentLastPaid = rentLastPaid;
 	}
 
