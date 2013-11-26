@@ -27,9 +27,9 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 
 //	Tables
 //	--------------------------------------------------------------------
-    private static final int TABLEX = 125, TABLEY = 125;
-    private static final int TABLEGAP = 100;
-    private static final int TABLEDIM = 50;
+    public static final int TABLEX = 125, TABLEY = 125;
+    public static final int TABLEGAP = 100;
+    public static final int TABLEDIM = 50;
 
 //	Kitchen
 //	--------------------------------------------------------------------    
@@ -43,13 +43,14 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 
 //	Cook
 //	--------------------------------------------------------------------
-    public static final int COOKHOMEX = KITCHEN1X+50, COOKHOMEY = KITCHEN1Y+35;	
+    public static final int COOKHOMEX = KITCHEN1X+50, COOKHOMEY = KITCHEN1Y+20;	
 
 //	Cashier
 //	--------------------------------------------------------------------
-    public static final int CASHIERX= 140, CASHIERY = 20;  
+    public static final int CASHIERX= 140, CASHIERY = 5;
     public static final int CASHIERDESKX= 140, CASHIERDESKY = 20+10;  
-    private static final int CASHIERDESKW = 20, CASHIERDESKL = 15;
+    private static final int CASHIERDESKW = 20, CASHIERDESKL = 10;
+    public static final int CASHIERINTERACTIONX = 140, CASHIERINTERACTIONY = CASHIERDESKY+CASHIERDESKL;
    
 //	Customer
 //	--------------------------------------------------------------------

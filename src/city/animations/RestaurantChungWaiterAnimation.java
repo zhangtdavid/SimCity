@@ -7,7 +7,6 @@ import java.util.Vector;
 
 import utilities.StringUtil;
 import city.Animation;
-import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCustomer;
@@ -117,7 +116,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     public void DoBringToTable(RestaurantChungCustomer customer, int table) {
     	DoGoToTable(table);
     	System.out.println("Waiter Gui bringing " + customer + " to table " + (table+1));
-    	customer.getGui().DoGoToSeat(findTableX(table), findTableY(table));
+    	customer.getAnimation(RestaurantChungCustomerAnimation.class).DoGoToSeat(findTableX(table), findTableY(table));
     }
 
     public void DoDeliverFood(int table, String choice) {

@@ -76,9 +76,9 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		super.setActive();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;

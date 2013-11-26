@@ -110,9 +110,9 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		bankCustomer = b.bankCustomer;
 	}
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;

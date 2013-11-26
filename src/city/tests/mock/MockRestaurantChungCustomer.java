@@ -120,12 +120,6 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void setGui(RestaurantChungCustomerAnimation g) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setHost(RestaurantChungHost host) {
 		// TODO Auto-generated method stub
 		
@@ -141,12 +135,6 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	public int getHungerLevel() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public RestaurantChungCustomerAnimation getGui() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

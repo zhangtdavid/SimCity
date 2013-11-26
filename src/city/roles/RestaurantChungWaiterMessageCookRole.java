@@ -1,5 +1,6 @@
 package city.roles;
 
+import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
 
 /**
@@ -16,7 +17,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 	}
 
 	public void tellCookOrder(WCustomer customer, String choice, int table) {
-		waiterGui.DoGoToCook();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 
 		try {
 			atCook.acquire();
@@ -29,7 +30,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		cook.msgHereIsAnOrder(this, choice, table);
 		customer.o.os = OrderStatus.Cooking;
 		
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 }
 

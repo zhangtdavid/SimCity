@@ -3,7 +3,6 @@ package city.animations;
 import java.awt.*;
 
 import city.Animation;
-import city.animations.interfaces.RestaurantChungAnimatedCashier;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCook;
@@ -19,7 +18,7 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 500, yPos = 60;
+	private int xPos = RestaurantChungPanel.COOKHOMEX, yPos = RestaurantChungPanel.COOKHOMEY;
 	private int xDestination = xPos, yDestination = yPos;
 	private enum Command {noCommand, GoToCookHome, GoToGrill, GoToPlating};
 	private Command command = Command.noCommand;

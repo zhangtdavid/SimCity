@@ -51,9 +51,9 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		car = new CarAgent();
     }
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;

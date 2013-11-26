@@ -126,18 +126,6 @@ public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements
 	}
 
 	@Override
-	public RestaurantChungAnimatedWaiter getGui() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setGui(RestaurantChungWaiterAnimation g) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgAnimationAtWaiterHome() {
 		// TODO Auto-generated method stub
 		

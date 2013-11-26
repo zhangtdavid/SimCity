@@ -5,6 +5,7 @@ import java.util.List;
 
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
@@ -62,31 +63,26 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(c)) {
 				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				customers.add(c);
 				super.addRole(c, anim);
+				host.msgIWantToEat(c);
 			}
 		}
 		if(r instanceof RestaurantChungWaiterMessageCookRole) {
 			RestaurantChungWaiterMessageCookRole w = (RestaurantChungWaiterMessageCookRole)r;
 			if(!super.roleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
-				w.setAnimation(anim);
-				anim.isVisible = true;
-				panel.addVisualizationElement(anim);
-				waiters.add(w);
+				addWaiter(w, anim);
 				super.addRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantChungWaiterRevolvingStandRole) {
 			RestaurantChungWaiterRevolvingStandRole w = (RestaurantChungWaiterRevolvingStandRole)r;
 			if(!super.roleExists(w)) {
-				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
-				w.setAnimation(anim);
-				anim.isVisible = true;
-				panel.addVisualizationElement(anim);
-				waiters.add(w);
+				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
+				addWaiter(w, anim);
 				super.addRole(w, anim);
 			}
 		}
@@ -102,7 +98,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(c)) {
 				RestaurantChungCookAnimation anim = new RestaurantChungCookAnimation(c);
 				c.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cook = c;
 				super.addRole(c, anim);
@@ -111,16 +107,26 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		if(r instanceof RestaurantChungCashierRole) {
 			RestaurantChungCashierRole c = (RestaurantChungCashierRole)r;
 			if(!super.roleExists(c)) {
+				RestaurantChungCashierAnimation anim = new RestaurantChungCashierAnimation(c); 
+				c.setAnimation(anim);
+				anim.setVisible(true); // TODO set this in setActive()
+				panel.addVisualizationElement(anim);
 				cashier = c;
-				super.addRole(c, null);
+				super.addRole(c, anim);
 			}
 		}
 	}
 		
-	public void addWaiter(RestaurantChungWaiter waiter) {
-		waiters.add(waiter);
-		host.msgNewWaiter(waiter);
-		
+	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
+		waiters.add(w);
+		w.setAnimation(anim);
+		System.out.println("WAITER ANIMATION SET");
+		anim.setVisible(true); // TODO set this in setActive()
+		panel.addVisualizationElement(anim);
+    	for (int i = 0; i < 9; i++) {
+    		anim.addTable(RestaurantChungPanel.TABLEX+((i%3)*RestaurantChungPanel.TABLEGAP), RestaurantChungPanel.TABLEY+((i/3)*RestaurantChungPanel.TABLEGAP));
+    	}	
+		host.msgNewWaiter(w);
 	}
 	
 	public void removeWaiter(RestaurantChungWaiter waiter) {

@@ -134,8 +134,8 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 	}
 
 	public void DoGoToCashier() {
-		xDestination = RestaurantChungPanel.CASHIERX;
-		yDestination = RestaurantChungPanel.CASHIERY;
+		xDestination = RestaurantChungPanel.CASHIERINTERACTIONX;
+		yDestination = RestaurantChungPanel.CASHIERINTERACTIONY;
 		command = Command.GoToCashier;
 	}
 }

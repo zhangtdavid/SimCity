@@ -25,7 +25,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	protected RestaurantChungCook cook;
 	protected RestaurantChungCashier cashier;
 	public RestaurantChungRevolvingStand orderStand;
-	protected RestaurantChungWaiterAnimation waiterGui = null;
+//	protected RestaurantChungWaiterAnimation waiterGui;
 	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 	protected Semaphore atEntrance = new Semaphore(0, true);
 	protected Semaphore atWaiterHome = new Semaphore(0, true);
@@ -75,9 +75,9 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		super();
 	}
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 //  Messages
 //	=====================================================================
@@ -252,6 +252,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		}
 		
 		for (WCustomer customer : customers) {
+//			System.out.println(customers.size());
 			if (customer.s == CustomerState.Waiting) {
 				seatCustomer(customer);
 				return true;
@@ -330,7 +331,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	}	
 
 	private void rejectForBreak() {
-		waiterGui.setOffBreak();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).setOffBreak();
 		host.msgIAmReturningToWork(this);
 		state = WaiterState.Working;
 	}
@@ -338,22 +339,22 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	private void goOnBreak() {
 		print("Waiter going on break");
 		state = WaiterState.OnBreak;
-		waiterGui.DoGoOnBreak();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoOnBreak();
 	}
 	
 	private void returnToWork() {
 		print("Waiter returning to work");
 		state = WaiterState.Working;
 		host.msgIAmReturningToWork(this);
-		waiterGui.DoReturnToWaiterHome();		
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();		
 	}
 	
 //	Customer
 //	---------------------------------------------------------------
 	private void seatCustomer(WCustomer customer) {	
 		print("Waiter seating " + customer.c + " at " + customer.table);
-		
-		waiterGui.DoGoToCustomerLine();
+
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCustomerLine();
 		try {
 //			atEntrance.drainPermits(); // Have to drain because of multiple calls of DoReturnToEntrance() without atEntrance.acquires();
 			atLine.acquire();
@@ -363,7 +364,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		}
 
 		host.msgTakingCustomerToTable(customer.c);
-		waiterGui.DoBringToTable(customer.c, customer.table-1);
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoBringToTable(customer.c, customer.table-1);
 		customer.c.msgFollowMeToTable(this, menu);
 		
 		try {
@@ -374,12 +375,12 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		}
 		customer.s = CustomerState.Seated;
 
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 	
 	private void informCustomerOfCancellation(WCustomer customer) {
 		// TODO Auto-generated method stub
-		waiterGui.DoGoToTable(customer.table-1);
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.table-1);
 		
 		try {
 			atTable.acquire();
@@ -396,11 +397,11 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		customer.s = CustomerState.Seated;
 		customer.o.os = OrderStatus.None;		
 
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 	
 	private void takeOrder(WCustomer customer) {
-		waiterGui.DoGoToTable(customer.table-1);
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.table-1);
 		
 		try {
 			atTable.acquire();
@@ -413,14 +414,14 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		customer.c.msgWhatWouldYouLike();
 		customer.s = CustomerState.Asked;
 		
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 	
 	public abstract void tellCookOrder(WCustomer customer, String choice, int table);
 	
 	private void pickUpOrder(WCustomer customer) {
 		print("picking up order from cook");
-		waiterGui.DoGoToCook();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 		
 		try {
 			atCook.acquire();
@@ -433,7 +434,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	}
 	
 	private void deliverOrder(WCustomer customer) {
-		waiterGui.DoDeliverFood(customer.table-1, customer.o.choice);
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoDeliverFood(customer.table-1, customer.o.choice);
 		
 		try {
 			atTable.acquire();
@@ -446,11 +447,11 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		customer.c.msgHereIsYourFood();
 		customer.s = CustomerState.Eating;
 		
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 	
 	private void getCheck(WCustomer customer) {
-		waiterGui.DoGoToCashier();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCashier();
 
 		try {
 			atCashier.acquire();
@@ -464,7 +465,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	}
 	
 	private void giveCheck(WCustomer customer) {
-		waiterGui.DoGoToTable(customer.table-1);
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.table-1);
 
 		try {
 			atTable.acquire();
@@ -476,7 +477,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		customer.cs = CheckState.DeliveredBill;
 		customer.c.msgHereIsCheck(customer.bill);
 		
-		waiterGui.DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 
 	private void removeCustomer(WCustomer customer) {
@@ -486,14 +487,14 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	
 //  Utilities
 //	=====================================================================	
-	public void setGui(RestaurantChungWaiterAnimation gui) {
-		waiterGui = gui;
-	}
-	
-	public RestaurantChungWaiterAnimation getGui() {
-		return waiterGui;
-	}
-	
+//	public void setGui(RestaurantChungWaiterAnimation gui) {
+//		waiterGui = gui;
+//	}
+//	
+//	public RestaurantChungWaiterAnimation getGui() {
+//		return waiterGui;
+//	}
+//	
 	public WCustomer findCustomer(RestaurantChungCustomer ca) {
 		for(WCustomer customer : customers ){
 			if(customer.c == ca) {

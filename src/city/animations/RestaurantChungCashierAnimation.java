@@ -10,12 +10,9 @@ import city.interfaces.RestaurantChungCashier;
 
 public class RestaurantChungCashierAnimation extends Animation implements RestaurantChungAnimatedCashier {
 	private RestaurantChungCashier agent = null;
-
-//	Fixed Numbers
-//	=====================================================================
 	
 //	Location Information
-//	=====================================================================	
+//	=====================================================================
 	private int xPos = RestaurantChungPanel.CASHIERX, yPos = RestaurantChungPanel.CASHIERY;
 	private int xDestination = xPos, yDestination = yPos;
 

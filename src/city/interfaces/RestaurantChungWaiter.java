@@ -27,8 +27,6 @@ public interface RestaurantChungWaiter extends RoleInterface {
 	public abstract void msgAnimationAtTable();
 	public abstract void msgAnimationAtCook();
 	public abstract void msgAnimationAtCashier();
-	public abstract void setGui(RestaurantChungWaiterAnimation g);
-	public abstract RestaurantChungAnimatedWaiter getGui();
 	public abstract void msgAnimationAtWaiterHome();
 	public abstract void msgAnimationAtLine();
 

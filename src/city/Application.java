@@ -31,6 +31,7 @@ import city.interfaces.RestaurantChungWaiter;
 import city.roles.LandlordRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungCustomerRole;
 import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantZhangCashierRole;
@@ -157,6 +158,7 @@ public class Application {
 		CarAgent c2 = new CarAgent();
 		CarAgent c3 = new CarAgent();
 		CarAgent c4 = new CarAgent();
+		CarAgent c5 = new CarAgent();
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
@@ -184,24 +186,24 @@ public class Application {
 //		p4.setOccupation(p4r1);
 
 		// Create cashier
-		RestaurantChungCashier p1r1 = new RestaurantChungCashierRole(rcb1, 0, 100); // TODO Change shift times
-		rcb1.addRole((Role) p1r1);
-		p1.setOccupation((Role) p1r1);
+		RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p1r1);
+		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantChungCook p2r1 = new RestaurantChungCookRole(rcb1, 0, 100); // TODO Change shift times
-		rcb1.addRole((Role) p2r1);
-		p2.setOccupation((Role) p2r1);
+		RestaurantChungCookRole p2r1 = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p2r1);
+		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantChungHost p3r1 = new RestaurantChungHostRole(rcb1, 0, 100); // TODO Change shift times
-		rcb1.addRole((Role) p3r1);
-		p3.setOccupation((Role) p3r1);
+		RestaurantChungHostRole p3r1 = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p3r1);
+		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantChungWaiter p4r1 = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 100); // TODO Change shift times
-		rcb1.addRole((Role) p4r1);
-		p4.setOccupation((Role) p4r1);
+		RestaurantChungWaiterMessageCookRole p4r1 = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p4r1);
+		p4.setOccupation(p4r1);
 		
 		// Start threads
 		c0.startThread();

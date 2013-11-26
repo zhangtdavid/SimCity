@@ -85,9 +85,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
     
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;

@@ -57,9 +57,13 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 		g2.setColor(background);
 		g2.fillRect(0, 0, panelX, panelY);
 
-        // kitchen area
+      g2.setColor(Color.DARK_GRAY);
+      for (int i = 0; i < 5; i ++) {
+        g2.fillRect(SHELFX, SHELFY, SHELFW + (SHELFW*i), SHELFH);
+      }
+
+// kitchen area
 //        g2.setColor(Color.YELLOW);
-//        g2.fillRect(KITCHEN1X, KITCHEN1Y, KITCHEN1W, KITCHEN1L);
 //        g2.fillRect(KITCHEN1X, KITCHEN2Y, KITCHEN2W, KITCHEN2L);
 //        
 //        g2.setColor(Color.GRAY);
