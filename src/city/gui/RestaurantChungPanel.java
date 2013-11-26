@@ -9,11 +9,9 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import city.Animation;
-import city.roles.RestaurantChungHostRole;
 
 public class RestaurantChungPanel extends BuildingCard implements ActionListener {
 
@@ -23,18 +21,47 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 	
 //	Fixed Numbers
 //	=====================================================================
-//    private final int WINDOWX = 600;
-//    private final int WINDOWY = 600;   
-    private static final int TABLEX = 125, TABLEY = 200;
-    private static final int TABLEGAP = 80;
-    private static final int TABLEW = 50, TABLEH = 50;
-    private static final int KITCHEN1X = 450, KITCHEN1Y = 40;
+	public static final int RECTDIM = 20;
+    public static final int ENTRANCEX = 40, ENTRANCEY = 480;
+    public static final int EXITX = 40, EXITY = -20;
+
+//	Tables
+//	--------------------------------------------------------------------
+    private static final int TABLEX = 125, TABLEY = 125;
+    private static final int TABLEGAP = 100;
+    private static final int TABLEDIM = 50;
+
+//	Kitchen
+//	--------------------------------------------------------------------    
+    private static final int KITCHEN1X = 300, KITCHEN1Y = 0;
     private static final int KITCHEN1W = 30, KITCHEN1L = 60;
     private static final int KITCHEN2Y = KITCHEN1Y+KITCHEN1L;
-    private static final int KITCHEN2W = 90, KITCHEN2L = 30;
-    private static final int GRILLX = KITCHEN1X+40, GRILLY = KITCHEN2Y;
-    private static final int GRILLW = 35, GRILLL = 15;
+    private static final int KITCHEN2W = 200, KITCHEN2L = 30;
+    public static final int GRILLX = KITCHEN1X+120, GRILLY = KITCHEN2Y;
+    private static final int GRILLW = 60, GRILLL = 15;
+    public static final int PLATINGX = KITCHEN1X+20, PLATINGY = KITCHEN2Y;
 
+//	Cook
+//	--------------------------------------------------------------------
+    public static final int COOKHOMEX = KITCHEN1X+50, COOKHOMEY = KITCHEN1Y+35;	
+
+//	Cashier
+//	--------------------------------------------------------------------
+    public static final int CASHIERX= 140, CASHIERY = 20;  
+    public static final int CASHIERDESKX= 140, CASHIERDESKY = 20+10;  
+    private static final int CASHIERDESKW = 20, CASHIERDESKL = 15;
+   
+//	Customer
+//	--------------------------------------------------------------------
+    public static final int WAITINGAREAX = 50, WAITINGAREAY = 100;
+    
+//	Waiter
+//	--------------------------------------------------------------------
+    public static final int WAITERHOMEX = 440, WAITERHOMEY = 120;
+    public static final int CUSTOMERLINEX = 40, CUSTOMERLINEY = 100;
+    public static final int ORDERDROPX = 380, ORDERDROPY = 40;
+    public static final int WAITERBREAKX = 260, WAITERBREAKY = 40; 
+    
 	private int panelX;
 	private int panelY;
 	private final int delayMS = 5;
@@ -59,7 +86,6 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 	@Override
 	public void paint(Graphics graphics) {
 		Graphics2D g2 = (Graphics2D)graphics;
-		// Clear the screen by painting a rectangle the size of the frame
 		g2.setColor(background);
 		g2.fillRect(0, 0, panelX, panelY);
 
@@ -70,10 +96,13 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
         
         g2.setColor(Color.GRAY);
         g2.fillRect(GRILLX, GRILLY, GRILLW, GRILLL);
-        for (int i = 0; i < 4; i++) {
-            //Here is the table
-            g2.setColor(Color.ORANGE);
-            g2.fillRect(TABLEX+((i%5)*TABLEGAP), TABLEY+((i/5)*TABLEGAP), TABLEW, TABLEH);        	
+        
+        g2.setColor(Color.YELLOW);
+        g2.fillRect(CASHIERDESKX, CASHIERDESKY, CASHIERDESKW, CASHIERDESKL);
+        
+        for (int i = 0; i < 9; i++) {
+            g2.setColor(Color.YELLOW);
+            g2.fillRect(TABLEX+((i%3)*TABLEGAP), TABLEY+((i/3)*TABLEGAP), TABLEDIM, TABLEDIM);        	
         }
 		
 		// Update the position of each visible element

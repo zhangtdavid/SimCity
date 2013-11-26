@@ -5,6 +5,7 @@ import java.awt.*;
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCashier;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
+import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCook;
 
 public class RestaurantChungCookAnimation extends Animation implements RestaurantChungAnimatedCook {
@@ -15,14 +16,6 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	
 	private boolean plating = false;
 	private String platingItem;
-	
-
-//	Fixed Numbers
-//	=====================================================================
-	private static final int CRECTDIM = 20;
-    private static final int xCookHome = 500, yCookHome = 60;	
-	private static final int xGrill = 500, yGrill = 80;
-	private static final int xPlating = 480, yPlating = 60;
 	
 //	Location Information
 //	=====================================================================	
@@ -71,7 +64,7 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.RED);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, RestaurantChungPanel.RECTDIM, RestaurantChungPanel.RECTDIM);
 		g.setColor(Color.BLACK);
 		if (cooking) {
 			g.drawString(cookingItem, xPos+3, yPos+16);
@@ -86,24 +79,24 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	}
 	
     public void DoReturnToCookHome() {
-        xDestination = xCookHome;
-        yDestination = yCookHome;
+        xDestination = RestaurantChungPanel.COOKHOMEX;
+        yDestination = RestaurantChungPanel.COOKHOMEY;
 		command = Command.GoToCookHome;
     }
     
 	public void DoGoToGrill(String item) {
         cookingItem = item;
         cooking = true;
-        xDestination = xGrill;
-        yDestination = yGrill;
+        xDestination = RestaurantChungPanel.GRILLX;
+        yDestination = RestaurantChungPanel.GRILLY;
 		command = Command.GoToGrill;
 	}
 	
 	public void DoGoToPlating(String item) {
         platingItem = item;
         plating = true;
-        xDestination = xPlating;
-        yDestination = yPlating;
+        xDestination = RestaurantChungPanel.PLATINGX;
+        yDestination = RestaurantChungPanel.PLATINGY;
 		command = Command.GoToPlating;
 	}
 }

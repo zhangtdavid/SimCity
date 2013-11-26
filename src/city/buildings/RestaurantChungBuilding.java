@@ -5,18 +5,26 @@ import java.util.List;
 
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.animations.RestaurantChungCookAnimation;
+import city.animations.RestaurantChungCustomerAnimation;
+import city.animations.RestaurantChungWaiterAnimation;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungCustomerRole;
+import city.roles.RestaurantChungHostRole;
+import city.roles.RestaurantChungWaiterMessageCookRole;
+import city.roles.RestaurantChungWaiterRevolvingStandRole;
 
 public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	
 	// Data
-	
-	public RestaurantChungPanel panel; //reference to main gui	
+	public RestaurantChungPanel panel;
 	public RestaurantChungHost host;
 	public RestaurantChungCashier cashier;
 	public RestaurantChungCook cook;
@@ -26,7 +34,6 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	private static final int WORKER_SALARY = 500;
 	
 	// Constructor
-	
 	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
@@ -49,87 +56,65 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	}
 
 	// Utilities
-	
 	public void addRole(Role r) {
-//		if(r instanceof RestaurantChungCustomerRole) {
-//			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
-//			c.setCashier(cashier);
-//			c.setHost(host);
-//			if(!allRoles.containsKey(c)) {
-//				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
-//				c.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				customers.add(c);
-//				allRoles.put(c, anim);
-//			}
-//			return c;
-//		}
-//		if(r instanceof RestaurantZhangWaiterRegularRole) {
-//			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
-//			w.setCashier(cashier);
-//			w.setCook(cook);
-//			w.setHost(host);
-//			w.setMenu(menu);
-//			host.addWaiter(w);
-//			if(!allRoles.containsKey(w)) {
-//				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
-//				w.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				waiters.add(w);
-//				allRoles.put(w, anim);
-//			}
-//			return w;
-//		}
-//		if(r instanceof RestaurantZhangWaiterSharedDataRole) {
-//			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
-//			w.setCashier(cashier);
-//			w.setCook(cook);
-//			w.setHost(host);
-//			w.setMenu(menu);
-//			if(!allRoles.containsKey(w)) {
-//				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
-//				w.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				waiters.add(w);
-//				allRoles.put(w, anim);
-//			}
-//			return w;
-//		}
-//		if(r instanceof RestaurantZhangHostRole) {
-//			RestaurantZhangHostRole h = (RestaurantZhangHostRole)r;
-//			h.setTables(tables);
-//			if(!allRoles.containsKey(h)) { 
-//				host = h;
-//				allRoles.put(h, null);
-//			}
-//			return h;
-//		}
-//		if(r instanceof RestaurantZhangCookRole) {
-//			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
-//			c.setRevolvingStand(orderStand);
-//			c.setMenuTimes(menu);
-//			if(!allRoles.containsKey(c)) { 
-//				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
-//				c.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				cook = c;
-//				allRoles.put(c, anim);
-//			}
-//			return c;
-//		}
-//		if(r instanceof RestaurantZhangCashierRole) {
-//			RestaurantZhangCashierRole c = (RestaurantZhangCashierRole)r;
-//			c.setMenu(menu);
-//			if(!allRoles.containsKey(c)) { 
-//				cashier = c;
-//				allRoles.put(c, null);
-//			}
-//			return c;
-//		}
+		if(r instanceof RestaurantChungCustomerRole) {
+			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
+			if(!super.roleExists(c)) {
+				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
+				c.setAnimation(anim);
+				anim.isVisible = true;
+				panel.addVisualizationElement(anim);
+				customers.add(c);
+				super.addRole(c, anim);
+			}
+		}
+		if(r instanceof RestaurantChungWaiterMessageCookRole) {
+			RestaurantChungWaiterMessageCookRole w = (RestaurantChungWaiterMessageCookRole)r;
+			if(!super.roleExists(w)) {
+				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
+				w.setAnimation(anim);
+				anim.isVisible = true;
+				panel.addVisualizationElement(anim);
+				waiters.add(w);
+				super.addRole(w, anim);
+			}
+		}
+		if(r instanceof RestaurantChungWaiterRevolvingStandRole) {
+			RestaurantChungWaiterRevolvingStandRole w = (RestaurantChungWaiterRevolvingStandRole)r;
+			if(!super.roleExists(w)) {
+				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
+				w.setAnimation(anim);
+				anim.isVisible = true;
+				panel.addVisualizationElement(anim);
+				waiters.add(w);
+				super.addRole(w, anim);
+			}
+		}
+		if(r instanceof RestaurantChungHostRole) {
+			RestaurantChungHostRole h = (RestaurantChungHostRole)r;
+			if(!super.roleExists(h)) { 
+				host = h;
+				super.addRole(h, null);
+			}
+		}
+		if(r instanceof RestaurantChungCookRole) {
+			RestaurantChungCookRole c = (RestaurantChungCookRole)r;
+			if(!super.roleExists(c)) {
+				RestaurantChungCookAnimation anim = new RestaurantChungCookAnimation(c);
+				c.setAnimation(anim);
+				anim.isVisible = true;
+				panel.addVisualizationElement(anim);
+				cook = c;
+				super.addRole(c, anim);
+			}
+		}
+		if(r instanceof RestaurantChungCashierRole) {
+			RestaurantChungCashierRole c = (RestaurantChungCashierRole)r;
+			if(!super.roleExists(c)) {
+				cashier = c;
+				super.addRole(c, null);
+			}
+		}
 	}
 		
 	public void addWaiter(RestaurantChungWaiter waiter) {

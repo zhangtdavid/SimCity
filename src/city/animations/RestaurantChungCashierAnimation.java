@@ -5,6 +5,7 @@ import java.awt.*;
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
+import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 
 public class RestaurantChungCashierAnimation extends Animation implements RestaurantChungAnimatedCashier {
@@ -12,11 +13,10 @@ public class RestaurantChungCashierAnimation extends Animation implements Restau
 
 //	Fixed Numbers
 //	=====================================================================
-	private static final int CRECTDIM = 20;
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 50, yPos = 40;
+	private int xPos = RestaurantChungPanel.CASHIERX, yPos = RestaurantChungPanel.CASHIERY;
 	private int xDestination = xPos, yDestination = yPos;
 
 	public RestaurantChungCashierAnimation(RestaurantChungCashier c) {
@@ -41,7 +41,7 @@ public class RestaurantChungCashierAnimation extends Animation implements Restau
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.BLUE);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, RestaurantChungPanel.RECTDIM, RestaurantChungPanel.RECTDIM);
 	}
 
 	public boolean isPresent() {

@@ -1,12 +1,18 @@
 package city.roles;
 
+import city.buildings.RestaurantChungBuilding;
+
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterBaseRole {
-	public RestaurantChungWaiterMessageCookRole() {
+	public RestaurantChungWaiterMessageCookRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
 
 	public void tellCookOrder(WCustomer customer, String choice, int table) {

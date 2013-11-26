@@ -1,5 +1,6 @@
 package city.roles;
 
+import city.buildings.RestaurantChungBuilding;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 
@@ -8,8 +9,12 @@ import utilities.RestaurantChungOrder.OrderState;
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBaseRole {	
-	public RestaurantChungWaiterRevolvingStandRole() {
+	public RestaurantChungWaiterRevolvingStandRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
+		restaurant = b;
+		this.setShift(t1, t2);
+		this.setWorkplace(b);
+		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
 
 	public void tellCookOrder(WCustomer customer, String choice, int table) {
