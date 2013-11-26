@@ -15,6 +15,7 @@ import city.agents.PersonAgent;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
@@ -91,6 +92,7 @@ public class Application {
 
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding"));
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);

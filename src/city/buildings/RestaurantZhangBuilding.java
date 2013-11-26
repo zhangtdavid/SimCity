@@ -67,9 +67,9 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 1, 0, 3, menu.getPrice("Chicken")));
-        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 1, 0, 3, menu.getPrice("Pizza")));
-        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 1, 0, 3, menu.getPrice("Steak")));
+    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
+        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
+        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak")));
 	}
 	
 	// Utilities
@@ -134,6 +134,7 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
 			c.setMenuTimes(menu, foods);
+			c.addMarket(new MarketBuilding("Market"));
 			if(!super.roleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);

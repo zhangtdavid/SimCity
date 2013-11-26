@@ -37,10 +37,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	private final int COOKX = 190;
 	private final int COOKY = 120;
 
-	private final int COOKINGTIMESTART = 1000;
-	private final int COOKINGTIMEMULTIPLIER = 2;
-	private final int FOODTHRESHOLD = 3;
-
 	public List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
 
 	// REVOLVING STAND STUFF
@@ -55,7 +51,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	public List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
 	public List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
 	public RestaurantZhangCashier cashier;
-	public MarketCustomerDelivery marketCustomerDelivery;
+	public List<MarketCustomerDelivery> marketCustomerDeliveryList = new ArrayList<MarketCustomerDelivery>();
 
 	public RestaurantZhangAnimatedCook thisGui;
 
@@ -139,11 +135,14 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		try {
 			// Role Scheduler
 			boolean blocking = false;
-			if (marketCustomerDelivery != null && marketCustomerDelivery.getActive() && marketCustomerDelivery.getActivity()) {
-				blocking  = true;
-				boolean activity = marketCustomerDelivery.runScheduler();
-				if (!activity) {
-					marketCustomerDelivery.setActivityFinished();
+			if (marketCustomerDeliveryList.isEmpty() != true) {
+				for(MarketCustomerDelivery r : marketCustomerDeliveryList) {
+					if(r.getActive() && r.getActivity())
+						blocking  = true;
+					boolean activity = r.runScheduler();
+					if (!activity) {
+						r.setActivityFinished();
+					}
 				}
 			}
 			for(RestaurantZhangOrder o : ordersToCook) {
@@ -224,8 +223,9 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			}
 			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).capacity - cookInventory.get(o.choice).amount, markets.get(0));
 			cookInvoiceList.add(tempInvoice);
-			marketCustomerDelivery = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBaseBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
-			marketCustomerDelivery.setActive();
+			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBaseBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
+			marketCustomerDeliveryList.add(tempDeliveryRole);
+			tempDeliveryRole.setActive();
 			stateChanged();
 			return;
 		} else {
