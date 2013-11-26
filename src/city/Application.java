@@ -177,6 +177,7 @@ public class Application {
 		BusAnimation b1Anim = new BusAnimation(bus1, busStop2);
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
+		CityMap.findClosestRoad(busStop2).vehicle = b1Anim; 
 		bus1.startThread();
 
 		// Create landlord
