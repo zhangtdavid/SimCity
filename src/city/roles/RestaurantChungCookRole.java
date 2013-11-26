@@ -10,7 +10,6 @@ import utilities.RestaurantChungOrder.OrderState;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantBaseBuilding.Food;
@@ -34,12 +33,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
-    private RestaurantChungAnimatedCook cookGui = null;
-    
+	RestaurantChungRevolvingStand orderStand;
+   
     private boolean cooking = false;
     private boolean plating = false;
     
-	RestaurantChungRevolvingStand orderStand;
 	boolean waitingToCheckStand = false;
     
 	private Semaphore atCookHome = new Semaphore(0, true);
@@ -111,13 +109,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
-        print("DONE COOKING");
+        print("Done cooking");
         stateChanged();
     }
     
     public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
-        print("DONE PLATING");
+        print("Done plating");
        stateChanged();
     }
 
@@ -498,6 +496,14 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     public void setRestaurantCashier(RestaurantChungCashier c) {
     	restaurantChungCashier = c;
     }
+    
+	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
+		orderStand = stand;
+	}
+	
+	public RestaurantChungRevolvingStand getRevolvingStand() {
+		return orderStand;
+	}
     
     // HACK------------------------------------------------------------------
     public void depleteSalad() {

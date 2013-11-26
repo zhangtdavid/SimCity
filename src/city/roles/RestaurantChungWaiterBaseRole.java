@@ -24,7 +24,6 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	protected RestaurantChungHost host;
 	protected RestaurantChungCook cook;
 	protected RestaurantChungCashier cashier;
-	public RestaurantChungRevolvingStand orderStand;
 //	protected RestaurantChungWaiterAnimation waiterGui;
 	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 	protected Semaphore atEntrance = new Semaphore(0, true);

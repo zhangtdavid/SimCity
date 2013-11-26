@@ -3,6 +3,7 @@ package city.buildings;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCashierAnimation;
@@ -32,6 +33,8 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	public List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
 	public List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();
 	
+	private RestaurantChungRevolvingStand orderStand;
+	
 	private static final int WORKER_SALARY = 500;
 	
 	// Constructor
@@ -40,6 +43,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
+		orderStand = new RestaurantChungRevolvingStand();
 		
         // Add items and their cooking times to a map
         foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10, 16));
@@ -63,6 +67,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(c)) {
 				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
 				c.setAnimation(anim);
+				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				customers.add(c);
@@ -83,6 +88,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 			if(!super.roleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
 				addWaiter(w, anim);
+				w.setRevolvingStand(orderStand);
 				super.addRole(w, anim);
 			}
 		}
@@ -101,6 +107,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cook = c;
+				c.setRevolvingStand(orderStand);
 				super.addRole(c, anim);
 			}
 		}

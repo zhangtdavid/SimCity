@@ -40,7 +40,7 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     public static final int GRILLX = KITCHEN1X+120, GRILLY = KITCHEN2Y;
     private static final int GRILLW = 60, GRILLL = 15;    
     public static final int COOKGRILLX = KITCHEN1X+120, COOKGRILLY = KITCHEN2Y-20;
-    public static final int PLATINGX = KITCHEN1X+30, PLATINGY = KITCHEN1L+20;
+    public static final int PLATINGX = KITCHEN1X+30, PLATINGY = KITCHEN1L-20;
 
 //	Cook
 //	--------------------------------------------------------------------

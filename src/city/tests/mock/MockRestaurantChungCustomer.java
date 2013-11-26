@@ -120,18 +120,6 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void setHost(RestaurantChungHost host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setCashier(RestaurantChungCashier cashier) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public int getHungerLevel() {
 		// TODO Auto-generated method stub
 		return 0;

@@ -5,12 +5,15 @@ import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.buildings.RestaurantChungBuilding;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
+import utilities.RestaurantChungRevolvingStand;
 
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBaseRole {	
+	RestaurantChungRevolvingStand orderStand;
+
 	public RestaurantChungWaiterRevolvingStandRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
 		restaurant = b;
@@ -37,5 +40,14 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
+	
+	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
+		orderStand = stand;
+	}
+	
+	public RestaurantChungRevolvingStand getRevolvingStand() {
+		return orderStand;
+	}
+	
 }
 
