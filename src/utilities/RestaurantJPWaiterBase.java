@@ -34,12 +34,11 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	}
 	
 	public void setInactive(){
-		if(myCustomers.size() == 0){
+		if(myCustomers.size() == 0)
 			super.setInactive();
-			building.host.msgSetUnavailable(this);
-		}
 		else
 			wantsInactive = true;
+		building.host.msgSetUnavailable(this);
 	}
 
 //MSGS---------------------------------------------------------------------------------

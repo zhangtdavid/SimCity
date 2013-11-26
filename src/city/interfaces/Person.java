@@ -4,7 +4,6 @@ import java.util.Date;
 
 import city.Application;
 import city.Role;
-import city.buildings.HouseBuilding;
 import city.buildings.ResidenceBaseBuilding;
 
 public interface Person extends AgentInterface {

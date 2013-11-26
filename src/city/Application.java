@@ -17,28 +17,19 @@ import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
 import city.gui.MainFrame;
+import city.gui.MarketPanel;
 import city.gui.RestaurantChoiPanel;
-import city.gui.RestaurantChungPanel;
-import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
-import city.roles.MarketCashierRole;
-import city.roles.MarketEmployeeRole;
-import city.roles.MarketManagerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterRole;
-import city.roles.RestaurantChungCashierRole;
-import city.roles.RestaurantChungCookRole;
-import city.roles.RestaurantChungHostRole;
-import city.roles.RestaurantChungWaiterMessageCookRole;
 
 public class Application {
 
@@ -48,7 +39,6 @@ public class Application {
 	private static Date date = new Date(0);
 
 	public static final int INTERVAL = 1000; // 10000; // One interval is the simulation's equivalent of a half-hour
-	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
@@ -58,6 +48,10 @@ public class Application {
 	public static RestaurantChoiBuilding rchoib1;
 	public static HouseBuilding hb1;
 	public static MarketBuilding m1;
+	public static MarketPanel mp1;
+	public static BankBuilding b1;
+	//public static RestaurantZhangBuilding rzb1;
+	
 	/**
 	 * Main routine to start the program.
 	 * 
@@ -90,9 +84,11 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
-		m1 = new MarketBuilding("MarketBuilding");
+		mp1 = new MarketPanel(Color.black; new Dimension(500,500));
+		m1 = new MarketBuilding("MarketBuilding", null);
 		// Create buildings
-		CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		b1 = new BankBuilding("BankBuilding");
+		CityMap.addBuilding(BUILDING.bank, b1);
 		//Application.CityMap.addBuilding(BUILDING.house, new HouseBuilding("house1"));
 		CityMap.addBuilding(BUILDING.market, m1);
 		
@@ -125,8 +121,23 @@ public class Application {
 
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
-
-
+/*
+		// FIRST add a panel
+		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantZhang1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
+		rzp1.setTables(rzb1.tables);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		// SEVENTH create all your roles after
+*/
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -134,7 +145,6 @@ public class Application {
 		p0.addRole(p0r1);
 		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp0);
 		p0.setHome(h0);
-		p0r1.setResidence(h0); // this is a fix corresponding to changes made in Landlord and Resident
 		p0r1.setActive();
 		people.add(p0);
 
@@ -155,23 +165,18 @@ public class Application {
 		PersonAgent p5 = new PersonAgent("Market Manager1", date);
 		PersonAgent p6 = new PersonAgent("Market Cashier1", date);
 		PersonAgent p7 = new PersonAgent("Market Employee1", date);
+
 		people.add(p1);
 		people.add(p2);
 		people.add(p3);
 		people.add(p4);
-	/*	people.add(p5);
-		people.add(p6);
-		people.add(p7);*/
-		p1.setHome(h1);
-		p2.setHome(h2);
-		p3.setHome(h3);
-		p4.setHome(h4);/*
-		p4.setHome(h5);
-		p4.setHome(h6);
-		p4.setHome(h7);*/
 		RestaurantChoiCashierRole p1r1 = new RestaurantChoiCashierRole(rchoib1, 0, 24);
 		rchoib1.addRole(p1r1);
 		p1.setOccupation(p1r1);
+		p1.setHome(h1);
+		p2.setHome(h2);
+		p3.setHome(h3);
+		p4.setHome(h4);
 
 		// Create cook
 		RestaurantChoiCookRole p2r1 = new RestaurantChoiCookRole(rchoib1, 0, 24);
@@ -193,38 +198,45 @@ public class Application {
 		CarAgent c1 = new CarAgent();
 		CarAgent c2 = new CarAgent();
 		CarAgent c3 = new CarAgent();
-		CarAgent c4 = new CarAgent();/*
-		CarAgent c5 = new CarAgent();
-		CarAgent c6 = new CarAgent();
-		CarAgent c7 = new CarAgent();*/
+		CarAgent c4 = new CarAgent();
+	
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
 		p3.setCar(c3);
-		p4.setCar(c4);/*
-		p5.setCar(c5);
-		p6.setCar(c6);
-		p7.setCar(c7);*/
+		p4.setCar(c4);
+/*
+		// Create cashier
+		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
+		rzb1.addRole(p1r1);
+		p1.setOccupation(p1r1);
 
+		// Create cook
+		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
+		rzb1.addRole(p2r1);
+		p2.setOccupation(p2r1);
 
+		// Create host
+		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
+		rzb1.addRole(p3r1);
+		p3.setOccupation(p3r1);
+
+		// Create waiter
+		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
+		rzb1.addRole(p4r1);
+		p4.setOccupation(p4r1);
+*/
 		// Start threads
-
 		c0.startThread();
 		c1.startThread();
 		c2.startThread();
 		c3.startThread();
-		c4.startThread();/*
-		c5.startThread();
-		c6.startThread();
-		c7.startThread();*/
+		c4.startThread();
 		p0.startThread();
 		p1.startThread();
 		p2.startThread();
 		p3.startThread();
-		p4.startThread();/*
-		p5.startThread();
-		p6.startThread();
-		p7.startThread();*/
+		p4.startThread();
 
 		//Create Market people
 		/*
@@ -239,6 +251,7 @@ public class Application {
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
+		
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -272,18 +285,23 @@ public class Application {
 		/**
 		 * Return the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, Person p) { // TODO
+		public static Building findClosestBuilding(BUILDING type, Person p) {
+			// TODO
 			Building b = new BusStopBuilding("placeholder");
 			return b;
 		}
+		
 		/**
 		 * Return the building of type closest to the destination building
 		 * 
 		 * @param b the destination you wish to reach
 		 */
-		public static Building findClosestBuilding(BUILDING type, Building b) { // TODO
+		public static Building findClosestBuilding(BUILDING type, Building b) {
+			// TODO
 			Building d = new BusStopBuilding("placeholder");
 			return d;
-		}		
+		}
+
 	}
+
 }

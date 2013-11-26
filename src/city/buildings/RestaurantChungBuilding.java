@@ -1,53 +1,38 @@
 package city.buildings;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
-import city.Animation;
-import city.Building;
-import city.Role;
 import city.Application.FOOD_ITEMS;
-import city.animations.RestaurantChungCustomerAnimation;
-import city.animations.RestaurantZhangCookAnimation;
-import city.animations.RestaurantZhangWaiterAnimation;
+import city.Role;
 import city.gui.RestaurantChungPanel;
-import city.interfaces.BankCustomer;
-import city.interfaces.MarketEmployee;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import city.roles.RestaurantChungCustomerRole;
-import city.roles.RestaurantZhangCashierRole;
-import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterRegularRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class RestaurantChungBuilding extends RestaurantBaseBuilding {
-
-//  Food
-//  =====================================================================
-	public RestaurantChungPanel panel; //reference to main gui
-	Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
 	
+	// Data
+	
+	public RestaurantChungPanel panel; //reference to main gui	
 	public RestaurantChungHost host;
 	public RestaurantChungCashier cashier;
-	public BankCustomer bankCustomer;
 	public RestaurantChungCook cook;
 	public List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
 	public List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();
 	
 	private static final int WORKER_SALARY = 500;
 	
+	// Constructor
+	
 	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
 		super(name);
-		this.setCustomerRole("city.roles.RestaurantChungCustomerRole");
-		this.setCustomerAnimation("city.animations.RestaurantChungCustomerAnimation");
+		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
+		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
+		
         // Add items and their cooking times to a map
         foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10, 16));
         foods.put(FOOD_ITEMS.pizza, new Food("pizza", 15, 10, 5, 10, 12));
@@ -56,8 +41,16 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
         
         setCash(500);
 	}
+	
+	// Getters
+	
+	public static int getWorkerSalary() {
+		return WORKER_SALARY;
+	}
 
-	public Role addRole(Role r) {
+	// Utilities
+	
+	public void addRole(Role r) {
 //		if(r instanceof RestaurantChungCustomerRole) {
 //			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
 //			c.setCashier(cashier);
@@ -137,25 +130,16 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 //			}
 //			return c;
 //		}
-		return null;
 	}
-
+		
+	public void addWaiter(RestaurantChungWaiter waiter) {
+		waiters.add(waiter);
+		host.msgNewWaiter(waiter);
+		
+	}
 	
-//	Utilities
-//	=====================================================================	
-//	Waiter
-		public static int getWorkerSalary() {
-			return WORKER_SALARY;
-		}
-		
-		public void addWaiter(RestaurantChungWaiter waiter) {
-			waiters.add(waiter);
-			host.msgNewWaiter(waiter);
-			
-		}
-		
-		public void removeWaiter(RestaurantChungWaiter waiter) {
-			waiters.remove(waiter);
-			host.msgRemoveWaiter(waiter);		
-		}
+	public void removeWaiter(RestaurantChungWaiter waiter) {
+		waiters.remove(waiter);
+		host.msgRemoveWaiter(waiter);		
+	}
 }

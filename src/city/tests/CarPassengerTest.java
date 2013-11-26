@@ -30,26 +30,17 @@ public class CarPassengerTest extends TestCase {
 		assertEquals("CarAgent's event should be NONE. Instead it's; " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
 		// Step 1: Make the passenger's role active
 		passenger.setActive();
+
 		//passenger.msgImGoingToDrive();
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.myCar, car);
 		assertEquals("CarPassenger's destination should be a bus stop. It isn't", passenger.destination, destination);
 		assertEquals("CarPassenger's state should be NOTDRIVING. Instead it's: " + passenger.myState.name(), passenger.myState, CarPassengerRole.CarPassengerState.NOTDRIVING);
-		assertEquals("CarPassenger's event should be WANTTODRIVE. Instead it's: " + passenger.myEvent.name(), passenger.myEvent, CarPassengerRole.CarPassengerEvent.WANTTODRIVE);
-		assertEquals("CarAgent's passenger should be null. It isn't", car.carPassenger, null);
-		assertEquals("CarAgent's destination should be null. It isn't", car.destination, null);
-		assertEquals("CarAgent's state should be NOTDRIVING. Instead it's " + car.myState.name(), car.myState, CarAgent.CarState.NOTDRIVING);
-		assertEquals("CarAgent's event should be NONE. Instead it's; " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
-		// Step 2: Run the passenger's scheduler
-		assertTrue("CarPassenger scheduler should have returned true. It didn't", passenger.runScheduler());
-		assertEquals("CarPassenger should have a car, but doesn't", passenger.myCar, car);
-		assertEquals("CarPassenger's destination should be a bus stop. It isn't", passenger.destination, destination);
-		assertEquals("CarPassenger's state should be GOINGTOCAR. Instead it's: " + passenger.myState.name(), passenger.myState, CarPassengerRole.CarPassengerState.GOINGTOCAR);
 		assertEquals("CarPassenger's event should be ATCAR. Instead it's: " + passenger.myEvent.name(), passenger.myEvent, CarPassengerRole.CarPassengerEvent.ATCAR);
 		assertEquals("CarAgent's passenger should be null. It isn't", car.carPassenger, null);
 		assertEquals("CarAgent's destination should be null. It isn't", car.destination, null);
 		assertEquals("CarAgent's state should be NOTDRIVING. Instead it's " + car.myState.name(), car.myState, CarAgent.CarState.NOTDRIVING);
 		assertEquals("CarAgent's event should be NONE. Instead it's; " + car.myEvent.name(), car.myEvent, CarAgent.CarEvent.NONE);
-		// Step 3: Run the passenger's scheduler (step 2 ran the message msgImAtCar)
+		// Step 2: Run the passenger's scheduler
 		assertTrue("CarPassenger scheduler should have returned true. It didn't", passenger.runScheduler());
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.myCar, car);
 		assertEquals("CarPassenger's destination should be a bus stop. It isn't", passenger.destination, destination);

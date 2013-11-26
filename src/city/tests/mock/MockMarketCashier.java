@@ -3,6 +3,7 @@ package city.tests.mock;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
@@ -26,45 +27,43 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	@Override
 	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgNewDeliveryPerson from Market Manager"));		
+		System.out.println("Market Cashier received msgNewDeliveryPerson from Market Manager");		
 	}
 
 	@Override
 	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market Manager"));		
+		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market Manager");		
 	}
 	
 	@Override
-	public void msgComputeBill(MarketEmployee e, MarketCustomer c,
-			Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-		// TODO Auto-generated method stub
-		
+	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill for In Person Customer from Market Employee"));		
+		System.out.println("Market Cashier received msgComputeBill for In Person Customer from Market Employee");	
 	}
 
 	@Override
 	public void msgHereIsPayment(int id, int money) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Market Customer for " + money));		
+		System.out.println("Market Cashier received msgHereIsPayment from Market Customer for " + money);			
 	}
 
 	@Override
-	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c,
-			MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-		// TODO Auto-generated method stub
-		
+	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill for Delivery Customer from Market Employee"));		
+		System.out.println("Market Cashier received msgComputeBill for Delivery Customer from Market Employee");			
 	}
 
 	@Override
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Market Delivery Person"));		
+		System.out.println("Market Cashier received msgDeliveringItems from Market Delivery Person");	
 	}
 
 	@Override
 	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person"));		
+		System.out.println("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person");			
 	}
 }

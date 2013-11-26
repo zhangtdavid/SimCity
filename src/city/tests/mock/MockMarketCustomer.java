@@ -34,26 +34,26 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 
 	@Override
 	public void msgPaymentReceived() {
-		log.add(new LoggedEvent("Customer received msgPaymentReceived from cashier."));		
-		System.out.println("Customer received msgPaymentReceived from cashier.");					
+		log.add(new LoggedEvent("Customer received msgPaymentReceived from Market Cashier."));		
+		System.out.println("Customer received msgPaymentReceived from Market Cashier.");					
 	}
 
 	@Override
 	public void msgAnimationFinishedLeaveMarket() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Customer received msgAnimationFinishedLeaveMarket from Market Customer Animation."));		
+		System.out.println("Customer received msgAnimationFinishedLeaveMarket from Market Customer Animation.");		
 	}
 
 	@Override
 	public void msgAnimationAtCounter() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Customer received msgAnimationAtCounter from Market Customer Animation."));		
+		System.out.println("Customer received msgAnimationAtCounter from Market Customer Animation.");				
 	}
 
 	@Override
 	public void msgAnimationAtCashier() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Customer received msgAnimationAtCashier from Market Customer Animation."));		
+		System.out.println("Customer received msgAnimationAtCashier from Market Customer Animation.");				
 	}
 
 }

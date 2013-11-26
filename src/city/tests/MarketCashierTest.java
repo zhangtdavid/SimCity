@@ -1,13 +1,14 @@
 package city.tests;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
-import city.Building;
 import city.buildings.MarketBuilding;
-import city.roles.BankCustomerRole;
+import city.gui.MarketPanel;
 import city.roles.MarketCashierRole;
 import city.roles.MarketCashierRole.TransactionState;
 import city.tests.mock.MockMarketCustomer;
@@ -20,8 +21,11 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketCashierTest extends TestCase {
-	
+	MarketPanel marketPanel;
 	MarketBuilding market;
+	
+	MockPerson cashierPerson;
+	MarketCashierRole cashier;
 	
 	MockPerson customerPerson;
 	MockMarketCustomer customer;
@@ -41,10 +45,6 @@ public class MarketCashierTest extends TestCase {
 	MockPerson managerPerson;
 	MockMarketManager manager;
 	
-	MockPerson cashierPerson;
-	MarketCashierRole cashier;
-	BankCustomerRole bankCustomer;
-	
 	Map<FOOD_ITEMS, Integer> orderItems;
 	MarketOrder order;
 	
@@ -53,11 +53,16 @@ public class MarketCashierTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		market = new MarketBuilding("Market1");
+		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
+		market = new MarketBuilding("Market1", marketPanel);
+		
+		cashierPerson = new MockPerson("Cashier"); 
+		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
+		cashier.setPerson(cashierPerson);
+		cashier.setMarket(market);
 		
 		customerPerson = new MockPerson("Customer"); 
 		customer = new MockMarketCustomer();
-//		customerPerson.setOccupation(customer); // TODO Why does this not work? Issues with role, mock role inheritance stuff
 		customer.setPerson(customerPerson);
 		customer.market = market;
 
@@ -85,11 +90,6 @@ public class MarketCashierTest extends TestCase {
 		manager = new MockMarketManager();
 		manager.setPerson(managerPerson);
 		manager.market = market;
-		
-		cashierPerson = new MockPerson("Cashier"); 
-		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
-		cashier.setPerson(cashierPerson);
-		cashier.market = market;
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
@@ -125,6 +125,7 @@ public class MarketCashierTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("Cashier should have an empty log.", cashier.log.size(), 0);
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
 		assertEquals("Market money should be 1000. It's " + market.getCash() + "instead", market.getCash(), 1000);
 		
 		cashier.msgComputeBill(employee, customer, orderItems, collectedItemsAll, order.orderId);
@@ -160,6 +161,7 @@ public class MarketCashierTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("Cashier should have an empty log.", cashier.log.size(), 0);
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);
+		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
 		assertEquals("Market money should be 1000. It's " + market.getCash() + "instead", market.getCash(), 1000);
 		
 		cashier.msgNewDeliveryPerson(deliveryPerson);

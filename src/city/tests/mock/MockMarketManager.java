@@ -3,6 +3,7 @@ package city.tests.mock;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
@@ -35,31 +36,31 @@ public class MockMarketManager extends MockRole implements MarketManager {
 
 	@Override
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from MarketCustomer."));		
+		System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from MarketCustomer.");				
 	}
 
 	@Override
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));		
+		System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");				
 	}
 	
 	@Override
 	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee marketEmployee) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee."));		
+		System.out.println("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");		
 	}
 
 	@Override
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));		
+		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");		
 	}
 
 	@Override
 	public void msgItemLow() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));		
+		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");				
 	}
 }

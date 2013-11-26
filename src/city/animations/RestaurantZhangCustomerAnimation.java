@@ -5,11 +5,12 @@ import java.awt.Graphics2D;
 
 import utilities.RestaurantZhangTable;
 import city.Animation;
+import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.interfaces.RestaurantZhangCustomer;
 import city.roles.RestaurantZhangCustomerRole;
 import city.roles.RestaurantZhangHostRole;
 
-public class RestaurantZhangCustomerAnimation extends Animation {
+public class RestaurantZhangCustomerAnimation extends Animation implements RestaurantZhangAnimatedCustomer {
 
 	private static final int CUSTGUIXPOS = -40;
 	private static final int CUSTGUIYPOS = -40;

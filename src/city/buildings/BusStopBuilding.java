@@ -4,12 +4,18 @@ import java.util.List;
 import java.util.ArrayList;
 
 import city.Building;
+import city.Role;
 import city.roles.BusPassengerRole;
 
 public class BusStopBuilding extends Building {
-	BusStopBuilding nextStop = null;
-	BusStopBuilding previousStop = null;
+	
+	// Data
+	
+	public BusStopBuilding nextStop = null;
+	public BusStopBuilding previousStop = null;
 	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
+	
+	// Constructor
 	
 	public BusStopBuilding(String name) {
 		super(name);
@@ -23,7 +29,27 @@ public class BusStopBuilding extends Building {
 		previousStop.nextStop = this; // Assign the previousStop's nextStop to this
 	}
 	
+	// Getters
+	
 	public BusStopBuilding getNextStop() {
 		return nextStop;
+	}
+	
+	// Setters
+	
+	public void setNextStop(BusStopBuilding b) {
+		nextStop = b;
+	}
+	
+	public void setPreviousStop(BusStopBuilding b) {
+		previousStop = b;
+	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
 	}
 }

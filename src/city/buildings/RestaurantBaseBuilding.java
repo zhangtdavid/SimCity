@@ -3,19 +3,45 @@ package city.buildings;
 import java.util.HashMap;
 import java.util.Map;
 
-import city.Application;
-import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.Building;
+import city.interfaces.BankCustomer;
 
 /**
  * The base restaurant class for all SimCity201 Restaurants.
- * 
  */
 public abstract class RestaurantBaseBuilding extends Building {
 	
 	// Data
 	
+	public BankCustomer bankCustomer;
 	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	public enum FoodOrderState {None, Pending, Ordered};
+	
+	// Constructor
+
+	public RestaurantBaseBuilding(String name) {
+		super(name);
+	}
+    
+    // Messages
+    
+    // Scheduler
+	
+	// Actions
+	
+	// Getters
+	
+	// Utilities 
+	
+	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
+        for (FOOD_ITEMS s: receivedItems.keySet()) {
+        	foods.get(s).amount += receivedItems.get(s); // Add delivered food items to restaurant inventory
+        }		
+	}
+	
+	// Classes
+	
     public class Food {
         public String item;
         public int cookingTime;
@@ -34,27 +60,4 @@ public abstract class RestaurantBaseBuilding extends Building {
             s = FoodOrderState.None;
         }
     }
-    public enum FoodOrderState
-    {None, Pending, Ordered};
-	
-	// Constructor
-
-	public RestaurantBaseBuilding(String name) {
-		super(name);
-	}
-    
-    // Messages
-    
-    // Scheduler
-	
-	// Actions
-	
-	// Getters
-	
-	// Utilities 
-	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
-        for (FOOD_ITEMS s: receivedItems.keySet()) {
-        	foods.get(s).amount += receivedItems.get(s); // Add delivered food items to restaurant inventory
-        }		
-	}
 }

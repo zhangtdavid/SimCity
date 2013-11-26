@@ -10,8 +10,8 @@ import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
-import city.Role;
 import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
@@ -22,13 +22,14 @@ import city.interfaces.RestaurantChoiWaiterAbs;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
-import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiCustomerRole;
+import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiter2Role;
 import city.roles.RestaurantChoiWaiterRole;
 
 public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 
+	// Data
 	public RestaurantChoiCookRole cook;
 	public RestaurantChoiCashierRole cashier;
 	public RestaurantChoiHostRole host;
@@ -42,19 +43,20 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public RestaurantChoiTable t;
 	public BankBuilding bank;
 	public BankCustomerRole bankConnection; 
-	public static final int WORKER_SALARY = 500;
-	// ^this high value helps accelerate normative testing. Also everyone makes the same amount!
 	public static final int DAILY_CAPITAL = 1000;
 	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
 	public static final int WITHDRAW_THRESHOLD = 200;
 	private int cash_on_site = 1200;
-
-	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel){
+	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
+	
+	// Constructor
+	
+	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel) {
 		super(name);
 		menu = new RestaurantChoiMenu();
 		bank = new BankBuilding("bank1");
-		this.setCustomerRole("city.roles.RestaurantChoiCustomerRole");
-		this.setCustomerAnimation("city.animations.RestaurantChoiCustomerAnimation");
+		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
+		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
 		this.setCashOnSite(DAILY_CAPITAL);	
@@ -90,24 +92,37 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		foods.put(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 16));*/
 	}
+
+
+	// Getters
+	
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;
 	}
-
-	public Role addRole(Role r) {
+	
+	protected int getCashOnSite() {
+		return cash_on_site;
+	}
+	private void setCashOnSite(int in){
+		cash_on_site = in;
+	}
+	
+	// Utilities
+	
+	public void addRole(Role r) {
 		if(r instanceof RestaurantChoiCustomerRole) {
 			RestaurantChoiCustomerRole c = (RestaurantChoiCustomerRole)r;
 			c.setCashier(cashier);
 			c.setHost(host);
 			if(!allRoles.containsKey(c)) {
 				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
-				c.setGui(anim);
-				anim.isVisible = true;
+				c.setGui(anim);	
+//				c.setAnimation(anim);
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				customers.add(c);
 				allRoles.put(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantChoiWaiter2Role) {
 			RestaurantChoiWaiter2Role w = (RestaurantChoiWaiter2Role)r;
@@ -118,12 +133,11 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				allRoles.put(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantChoiWaiterRole) {
 			RestaurantChoiWaiterRole w = (RestaurantChoiWaiterRole)r;
@@ -135,12 +149,11 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			if(!allRoles.containsKey(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
 				allRoles.put(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantChoiHostRole) {
 			RestaurantChoiHostRole h = (RestaurantChoiHostRole)r;
@@ -148,7 +161,6 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				host = h;
 				allRoles.put(h, null);
 			}
-			return h;
 		}
 		if(r instanceof RestaurantChoiCookRole) {
 			RestaurantChoiCookRole c = (RestaurantChoiCookRole)r;
@@ -157,13 +169,14 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 			c.CheckBack();
 			if(!allRoles.containsKey(c)) { 
 				RestaurantChoiCookAnimation anim = new RestaurantChoiCookAnimation(c);
+//				c.setGui(anim);
+	//			anim.isVisible = true;
 				c.setGui(anim);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				cook = c;
 				allRoles.put(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantChoiCashierRole) {
 			RestaurantChoiCashierRole c = (RestaurantChoiCashierRole)r;
@@ -172,18 +185,11 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				cashier = c;
 				c.setGui(anim);
 				allRoles.put(c, null);
-				anim.isVisible = true;
+				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				allRoles.put(c, anim);
 			}
-			return c;
 		}
-		return null;
 	}
-	protected int getCashOnSite() {
-		return cash_on_site;
-	}
-	private void setCashOnSite(int in){
-		cash_on_site = in;
-	}
+	
 }

@@ -56,11 +56,13 @@ public class CarAgent extends Agent implements Car {
 	
 	// Actions
 	void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
+		print("Going to destination " + destination.getName());
 //		myGui.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
 		msgImAtCarDestination();
 	}
 
 	void stopDriving() { // Call to passenger at destination, set this car inactive
+		print("Stopping driving");
 		carPassenger.msgImAtDestination();
 		carPassenger = null;
 	}

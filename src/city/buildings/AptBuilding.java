@@ -1,20 +1,27 @@
 package city.buildings;
 
-import java.util.*;
+import java.util.List;
 
 import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
 public class AptBuilding extends ResidenceBaseBuilding{
+	
+	// Data
 
 	public final static int NUMBER_OF_BEDS = 5;
+	
+	// Constructor
 
 	public AptBuilding(String name, Landlord landlord) { 
 		super(name); // set building name
 		this.landlord = landlord;
 		//this.landlord.setResidence(this); // landlord != any of the residents
 	}
+
+	// Getters
 
 	public Landlord getLandlord() {
 		return landlord;
@@ -31,6 +38,8 @@ public class AptBuilding extends ResidenceBaseBuilding{
 	public int getTotal_current_maintenance() {
 		return total_current_maintenance;
 	}
+	
+	// Setters
 
 	public void setLandlord(Landlord landlord) {
 		this.landlord = landlord;
@@ -51,4 +60,13 @@ public class AptBuilding extends ResidenceBaseBuilding{
 	public void addFood(FOOD_ITEMS f, int toadd) {
 		foodItems.put(f, foodItems.get(f)+toadd);
 	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
+	}
+	
 }

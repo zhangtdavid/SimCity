@@ -3,9 +3,10 @@ package city.animations;
 import java.awt.*;
 
 import city.Animation;
+import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.interfaces.RestaurantZhangCook;
 
-public class RestaurantZhangCookAnimation extends Animation {
+public class RestaurantZhangCookAnimation extends Animation implements RestaurantZhangAnimatedCook {
 
     private RestaurantZhangCook cook = null;
 
@@ -49,7 +50,7 @@ public class RestaurantZhangCookAnimation extends Animation {
         
     	   if(xPos == xDestination && yPos == yDestination && atDestination == false) {
     		   atDestination = true;
-    		   cook.msgAtBase();
+    		   cook.msgAtDestination();
 	       }
     }
 

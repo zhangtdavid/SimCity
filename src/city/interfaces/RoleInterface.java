@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import city.Animation;
-import city.Application.FOOD_ITEMS;
 import city.Building;
 
 public interface RoleInterface {
@@ -32,7 +30,7 @@ public interface RoleInterface {
 	// Setters
 	
 	public void setPerson(Person p);
-	public void setAnimation(Animation a);
+	public void setAnimation(AnimationInterface a);
 	public void setSalary(int s);
 	public void setWorkplace(Building b);
 	public void setShift(int shiftStart, int shiftEnd);

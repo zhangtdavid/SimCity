@@ -20,7 +20,7 @@ public abstract class Role implements RoleInterface {
 	private boolean active;
 	private boolean activity;
 	private Building workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
-	private Animation animation;
+	private AnimationInterface animation;
 	
 	// Constructor
 	
@@ -87,7 +87,7 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
-	public void setAnimation(Animation a) {
+	public void setAnimation(AnimationInterface a) {
 		this.animation = a;
 	}
 	
@@ -110,6 +110,7 @@ public abstract class Role implements RoleInterface {
 	@Override
 	public void setActive() {
 		this.active = true;
+		setActivityBegun();
 	}
 	
 	@Override

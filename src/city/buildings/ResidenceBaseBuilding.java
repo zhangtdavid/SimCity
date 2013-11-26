@@ -17,8 +17,10 @@ public abstract class ResidenceBaseBuilding extends Building{
 
 	public ResidenceBaseBuilding(String name) {
 		super(name);
-		// TODO Auto-generated constructor stub
-	}
+        for (FOOD_ITEMS s: FOOD_ITEMS.values()) {
+        	foodItems.put(s, 1); // Add delivered food items to restaurant inventory
+        }	
+    }
 
 	//getters abstract
 	public abstract Landlord getLandlord();

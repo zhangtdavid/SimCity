@@ -6,31 +6,32 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
-import city.animations.RestaurantZhangWaiterAnimation;
+import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 
 public abstract class RestaurantZhangWaiterBase extends Role implements RestaurantZhangWaiter {
 	// Customers
 	
-	List<MyCustomer> myCustomerList = new ArrayList<MyCustomer>();
-	int numberCustomersServed = 0; // Host uses this to decide which waiter to choose
+	public List<MyCustomer> myCustomerList = new ArrayList<MyCustomer>();
+	public int numberCustomersServed = 0; // Host uses this to decide which waiter to choose
 	// Other employees
-	protected RestaurantZhangCook myCook;
-	RestaurantZhangHost myHost;
-	RestaurantZhangCashier myCashier;
+	public RestaurantZhangCook myCook;
+	public RestaurantZhangHost myHost;
+	public RestaurantZhangCashier myCashier;
 	//Menu
-	RestaurantZhangMenu waiterMenu;
+	public RestaurantZhangMenu waiterMenu;
 	// Revolving stand
 	public RestaurantZhangRevolvingStand myOrderStand;
 	// GUI
-	protected RestaurantZhangWaiterAnimation thisGui;
+	public RestaurantZhangAnimatedWaiter thisGui;
 	
-	List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
+	public List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
 	
-	String name;
+	protected String name;
 	
-	enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
-	breakStatus wBreakStatus = breakStatus.notOnBreak;
+	public enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
+	public breakStatus wBreakStatus = breakStatus.notOnBreak;
 	
 	Timer timer = new Timer(); // Timer for waiting actions
 	Semaphore atTable = new Semaphore(0, false);
@@ -38,14 +39,17 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	static final int BREAKX = 600;
 	static final int BREAKY = 600;
 	static final int BREAKTIME = 10000;
+	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
 	
-	public RestaurantZhangWaiterBase(String name) {
+	public RestaurantZhangWaiterBase(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
+		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
+		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 
 	// Messages
@@ -132,7 +136,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 
-	public void msgAtTable() { //from animation
+	public void msgAtDestination() { //from animation
 		atTable.release();
 		stateChanged();
 	}
@@ -324,11 +328,11 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 
 	//utilities
 
-	public void setAnimation(RestaurantZhangWaiterAnimation gui) {
+	public void setAnimation(RestaurantZhangAnimatedWaiter gui) {
 		thisGui = gui;
 	}
 
-	public RestaurantZhangWaiterAnimation getAnimation() {
+	public RestaurantZhangAnimatedWaiter getAnimation() {
 		return thisGui;
 	}
 	
@@ -372,8 +376,8 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 			reOrder, orderCooking, orderReady, eating, doneEating, waitingForCheck, leaving};
 	public class MyCustomer {
 		public RestaurantZhangCustomer customer;
-		RestaurantZhangTable table;
-		String choice; 
+		public RestaurantZhangTable table;
+		public String choice = null;
 		public mcState state;
 		
 		MyCustomer(RestaurantZhangCustomer c, RestaurantZhangTable t) {

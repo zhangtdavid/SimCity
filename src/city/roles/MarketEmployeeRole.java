@@ -29,26 +29,25 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 	private int loc; // location at front counter
 	
-	private MarketCustomer customer;
-	private MarketCustomerDelivery customerDelivery;
-	private MarketCustomerDeliveryPayment customerDeliveryPayment;
+	public MarketCustomer customer;
+	public MarketCustomerDelivery customerDelivery;
+	public MarketCustomerDeliveryPayment customerDeliveryPayment;
 	
-	private enum MarketEmployeeState
+	public enum MarketEmployeeState
 	{None, AskedForOrder};
-	private MarketEmployeeState state;
+	public MarketEmployeeState state;
 
-	private enum MarketEmployeeEvent
+	public enum MarketEmployeeEvent
 	{AskedToAssistCustomer, OrderReceived};
-	private MarketEmployeeEvent event;
+	public MarketEmployeeEvent event;
 	
-    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
-    private int orderId;
+    public Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+    public int orderId;
     
-    private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+    public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
 //	Gui
 //	---------------------------------------------------------------
-	private MarketAnimatedEmployee marketEmployeeGui;
 	private Semaphore atPhone = new Semaphore(0, true);
 	private Semaphore finishedCollectingItems = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
@@ -62,6 +61,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
+		customer = null;
+		customerDelivery = null;
+		customerDeliveryPayment = null;
+		state = MarketEmployeeState.None;
+		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
     }
 	
 	public void setActive(){
@@ -158,8 +162,8 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		if (customer != null) {
 			customer.msgWhatWouldYouLike(this, loc);
 		}
-		else
-			marketEmployeeGui.doGoToPhone();
+		else {
+//			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
 //			try {
 //				atPhone.acquire();
 //			} catch (InterruptedException e) {
@@ -168,6 +172,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //			}
 			market.manager.msgWhatWouldCustomerDeliveryLike(this);
 		}
+	}
 	
 	private void collectItems() {
         for (FOOD_ITEMS item: order.keySet()) {
@@ -178,7 +183,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	else if (market.inventory.get(item) >= order.get(item)) {
         		market.inventory.put(item, market.inventory.get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
-        		marketEmployeeGui.doCollectItems();
+//        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
 //        		try {
 //    			finishedCollectingItems.acquire();
 //    			} catch (InterruptedException e) {
@@ -188,7 +193,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	}
         	if (market.inventory.get(item) < 10)
         		market.manager.msgItemLow();
-        	marketEmployeeGui.doDeliverItems();
+//        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
 //    		try {
 //				atCashier.acquire();
 //			} catch (InterruptedException e) {
@@ -196,25 +201,24 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				e.printStackTrace();
 //			}
 
-        	// dependent on customer type
-        	if (customer != null)
-        		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
-        	else
-        		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
-        	marketEmployeeGui.doGoToCounter();
-//    		try {
-//				atCounter.acquire();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-        	market.manager.msgIAmAvailableToAssist(this);
-        	customer = null;
-        	customerDelivery = null;
-        	customerDeliveryPayment = null;
-    		state = MarketEmployeeState.None;
         }
-        	
+    	// dependent on customer type
+    	if (customer != null)
+    		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
+    	else
+    		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
+//    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
+//		try {
+//			atCounter.acquire();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	market.manager.msgIAmAvailableToAssist(this);
+    	customer = null;
+    	customerDelivery = null;
+    	customerDeliveryPayment = null;
+		state = MarketEmployeeState.None;
 	}
 
 

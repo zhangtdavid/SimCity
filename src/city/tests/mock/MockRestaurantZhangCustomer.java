@@ -11,7 +11,7 @@ import city.interfaces.RestaurantZhangWaiter;
 public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZhangCustomer {
 	
 	public MockRestaurantZhangCustomer() {
-		
+		super();
 	}
 	
 	public void msgHereIsCustCheck(RestaurantZhangCheck c) {
@@ -28,38 +28,32 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 
 	@Override
 	public void msgRestaurantFull() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Host said restaurant is full"));
 	}
 
 	@Override
 	public void msgHereIsYourWaitingPosition(int pos) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Host gave me waitingposition " + pos));
 	}
 
 	@Override
 	public void msgFollowMe(RestaurantZhangWaiter w, RestaurantZhangMenu waiterMenu, RestaurantZhangTable table) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter " + w.getName() + " seated me at table " + table.tableNumber));
 	}
 
 	@Override
 	public void msgWhatWouldYouLike() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter asked what I would like"));
 	}
 
 	@Override
 	public void msgOrderAgain() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter asked me to order again"));
 	}
 
 	@Override
 	public void msgHereIsYourFood(String choice) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Waiter gave me my food " + choice));
 	}
 
 	@Override

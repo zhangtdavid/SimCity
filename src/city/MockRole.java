@@ -17,7 +17,7 @@ public abstract class MockRole implements RoleInterface {
 	// Data
 
 	private Person person;
-	private Animation animation;
+	private AnimationInterface animation;
 	private int salary;
 	private boolean active;
 	private boolean activity;
@@ -93,7 +93,7 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	@Override
-	public void setAnimation(Animation a) {
+	public void setAnimation(AnimationInterface a) {
 		this.animation = a;
 	}
 	
