@@ -22,7 +22,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	
 	Building currentBuilding;
 	Building destinationBuilding = null;
-	CityRoad currentRoad = null;
+	public CityRoad currentRoad = null;
 	
 	private boolean atRoad = false;
 	private boolean atDestination = true;
@@ -47,17 +47,17 @@ public class CarAnimation extends Animation implements AnimatedCar {
 //		else if (yPos > yDestination)
 //			yPos--;
 		if(currentRoad != null) {
-			if(currentRoad.addVehicle(this) == false) {
+			if(currentRoad.addVehicle(this) == false && currentRoad.vehicle != this) {
 				return;
 			}
-			if (xPos < currentRoad.x)
+			if (xPos < currentRoad.x && !currentRoad.isHorizontal)
 				xPos++;
-			else if (xPos > currentRoad.x)
+			else if (xPos > currentRoad.x && !currentRoad.isHorizontal)
 				xPos--;
 	
-			if (yPos < currentRoad.y)
+			if (yPos < currentRoad.y && currentRoad.isHorizontal)
 				yPos++;
-			else if (yPos > currentRoad.y)
+			else if (yPos > currentRoad.y && currentRoad.isHorizontal)
 				yPos--;
 			if(xPos == currentRoad.x && yPos == currentRoad.y)
 				currentRoad = null;

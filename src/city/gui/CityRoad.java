@@ -21,10 +21,10 @@ public class CityRoad extends CityViewBuilding {
 	int yOrigin;
 	int width;
 	int height;
-	boolean isHorizontal;
+	public boolean isHorizontal;
 	boolean startAtOrigin;
 	Color laneColor;
-	Animation vehicle = null;
+	public Animation vehicle = null;
 	public CityRoad nextRoad;
 
 	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc) {
@@ -64,7 +64,7 @@ public class CityRoad extends CityViewBuilding {
 		double vHeight = 0;
 		if(vehicle instanceof CarAnimation) {
 			vehicle = (CarAnimation)vehicle;
-			if(nextRoad.vehicle != null) {
+			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).currentRoad == null) {
 				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 			}
@@ -75,7 +75,7 @@ public class CityRoad extends CityViewBuilding {
 		}
 		if(vehicle instanceof BusAnimation) {
 			vehicle = (BusAnimation)vehicle;
-			if(nextRoad.vehicle != null) {
+			if(nextRoad.vehicle == null) {
 				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 			}
@@ -88,26 +88,26 @@ public class CityRoad extends CityViewBuilding {
 		if ( isHorizontal ) {
 			//End of lane is xOrigin + width - vehicle width
 			double endOfLane = xOrigin + width - vWidth;
-			if ( xVelocity > 0 && x >= endOfLane ) {
+			if ( xVelocity > 0 && x >= xOrigin + width) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
-			} else if ( x <= xOrigin ) {
+			} else if ( xVelocity < 0 && x <= xOrigin - width ) {
+				nextRoad.vehicle = vehicle;
 				vehicle = null;
 			}
 		} else {
 			//End of lane is xOrigin + height - vehicle height
-			double endOfLane = yOrigin + height - vHeight;
-			if ( yVelocity > 0 && y >= endOfLane ) {
+			if ( yVelocity > 0 && y >= yOrigin + height ) {
 				nextRoad.vehicle = vehicle;
-				vehicle = null;		
-			} else if ( y <= yOrigin ) {
+				vehicle = null;
+			} else if ( yVelocity < 0 && y <= yOrigin - height ) {
 				nextRoad.vehicle = vehicle;
 				vehicle = null;
 			}
 		}
 
-		if(vehicle != null)
-			vehicle.draw((Graphics2D) g2);
+//		if(vehicle != null)
+//			vehicle.draw((Graphics2D) g2);
 	}
 
 	public void redLight() {
