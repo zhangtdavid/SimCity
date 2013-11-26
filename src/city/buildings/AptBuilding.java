@@ -1,18 +1,24 @@
 package city.buildings;
 
-import java.util.*;
-import city.Building;
+import java.util.List;
+
 import city.Role;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
 public class AptBuilding extends ResidenceBaseBuilding{
 	
+	// Data
+	
+	// Constructor
+	
 	public AptBuilding(String name, Landlord landlord) { 
 		super(name); // set building name
 		this.landlord = landlord;
 		this.landlord.setResidence(this);
 	}
+	
+	// Getters
 	
 	public Landlord getLandlord() {
 		return landlord;
@@ -29,6 +35,8 @@ public class AptBuilding extends ResidenceBaseBuilding{
 	public int getTotal_current_maintenance() {
 		return total_current_maintenance;
 	}
+	
+	// Setters
 
 	public void setLandlord(Landlord landlord) {
 		this.landlord = landlord;
@@ -44,4 +52,13 @@ public class AptBuilding extends ResidenceBaseBuilding{
 	public void setResidents(List<Resident> residents) {
 		this.residents = residents;
 	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
+	}
+	
 }

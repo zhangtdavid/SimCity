@@ -11,8 +11,6 @@ import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
 import city.Agent;
-import city.Animation;
-import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
@@ -24,7 +22,6 @@ import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.ResidenceBaseBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -291,20 +288,20 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		Building b = CityMap.findRandomBuilding(BUILDING.restaurant);
+		Building building = CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
-			Class<?> c0 = Class.forName(b.getCustomerRole());
+			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (Role) r0.newInstance();
-			b.addRole(restaurantCustomerRole);
-			addRole(restaurantCustomerRole);
+			building.addRole(restaurantCustomerRole);
+			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
 		}
 		
-		processTransportationDeparture(b);
+		processTransportationDeparture(building);
 		state = State.goingToRestaurant;
 	}
 	
@@ -323,6 +320,7 @@ public class PersonAgent extends Agent implements Person {
 		HashMap<FOOD_ITEMS, Integer> items = null;
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(order);
+		this.addRole(marketCustomerRole);
 	}
 	
 	/**
@@ -435,7 +433,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void addRole(Role r) {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 		roles.add(r);
 	}
@@ -452,7 +449,7 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole = new CarPassengerRole(car, destination);
 			carPassengerRole.setActive();
 			carPassengerRole.setPerson(this);
-			roles.add(carPassengerRole);
+			this.addRole(carPassengerRole);
 		} else {
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
@@ -461,7 +458,7 @@ public class PersonAgent extends Agent implements Person {
 			busPassengerRole = new BusPassengerRole(d, b);
 			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
-			roles.add(busPassengerRole);
+			this.addRole(busPassengerRole);
 		}
 	}
 	

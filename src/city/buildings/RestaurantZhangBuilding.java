@@ -2,17 +2,11 @@ package city.buildings;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.Animation;
 import city.Building;
 import city.Role;
 import city.animations.RestaurantZhangCookAnimation;
@@ -32,6 +26,9 @@ import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class RestaurantZhangBuilding extends Building {
+	
+	// Data
+	
 	private int nTables = 3;
 	private static final int TABLEXSTART = 80;
 	private static final int TABLEXSPACING = 150;
@@ -41,7 +38,7 @@ public class RestaurantZhangBuilding extends Building {
 	private static final int TABLECOLUMN = 3;
 	private static final int TABLEW = 50;
 	private static final int TABLEH = 50;
-	private static int numberOfWaiters = 0;
+	// private static int numberOfWaiters = 0;
 
 	public Collection<RestaurantZhangTable> tables;
 	public RestaurantZhangMenu menu = new RestaurantZhangMenu();
@@ -49,19 +46,18 @@ public class RestaurantZhangBuilding extends Building {
 
 	public RestaurantZhangHost host;
 	private RestaurantZhangCook cook;
-	//	public RestaurantZhangMarket market1;
 	public RestaurantZhangCashier cashier;
 	public Vector<RestaurantZhangCustomer> customers = new Vector<RestaurantZhangCustomer>();
 	public Vector<RestaurantZhangWaiter> waiters = new Vector<RestaurantZhangWaiter>();
 
-	Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
-
 	public RestaurantZhangPanel panel; //reference to main gui
 
+	// Constructor
+	
 	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel) {
 		super(name);
-		this.setCustomerRole("city.roles.RestaurantZhangCustomerRole");
-		this.setCustomerAnimation("city.animations.RestaurantZhangCustomerAnimation");
+		this.setCustomerRoleName("city.roles.RestaurantZhangCustomerRole");
+		this.setCustomerAnimationName("city.animations.RestaurantZhangCustomerAnimation");
 		this.panel = panel;
 		tables = new ArrayList<RestaurantZhangTable>(nTables);
     	for (int ix = 0; ix < nTables; ix++) {
@@ -70,21 +66,23 @@ public class RestaurantZhangBuilding extends Building {
     				TABLEW, TABLEH));
     	}
 	}
+	
+	// Utilities
 
-	public Role addRole(Role r) {
+	@Override
+	public void addRole(Role r) {
 		if(r instanceof RestaurantZhangCustomerRole) {
 			RestaurantZhangCustomerRole c = (RestaurantZhangCustomerRole)r;
 			c.setCashier(cashier);
 			c.setHost(host);
-			if(!allRoles.containsKey(c)) {
+			if(!super.roleExists(c)) {
 				RestaurantZhangCustomerAnimation anim = new RestaurantZhangCustomerAnimation(c); 
 				c.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
 				customers.add(c);
-				allRoles.put(c, anim);
+				super.addRole(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantZhangWaiterRegularRole) {
 			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
@@ -93,15 +91,14 @@ public class RestaurantZhangBuilding extends Building {
 			w.setHost(host);
 			w.setMenu(menu);
 			host.addWaiter(w);
-			if(!allRoles.containsKey(w)) {
+			if(!super.roleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				allRoles.put(w, anim);
+				super.addRole(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantZhangWaiterSharedDataRole) {
 			RestaurantZhangWaiterSharedDataRole w = (RestaurantZhangWaiterSharedDataRole)r;
@@ -111,49 +108,44 @@ public class RestaurantZhangBuilding extends Building {
 			w.setMenu(menu);
 			w.setRevolvingStand(orderStand);
 			host.addWaiter(w);
-			if(!allRoles.containsKey(w)) {
+			if(!super.roleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				allRoles.put(w, anim);
+				super.addRole(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantZhangHostRole) {
 			RestaurantZhangHostRole h = (RestaurantZhangHostRole)r;
 			h.setTables(tables);
-			if(!allRoles.containsKey(h)) { 
+			if(!super.roleExists(h)) { 
 				host = h;
-				allRoles.put(h, null);
+				super.addRole(h, null);
 			}
-			return h;
 		}
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
 			c.setMenuTimes(menu);
-			if(!allRoles.containsKey(c)) { 
+			if(!super.roleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
 				anim.isVisible = true;
 				panel.addVisualizationElement(anim);
 				cook = c;
-				allRoles.put(c, anim);
+				super.addRole(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantZhangCashierRole) {
 			RestaurantZhangCashierRole c = (RestaurantZhangCashierRole)r;
 			c.setMenu(menu);
-			if(!allRoles.containsKey(c)) { 
+			if(!super.roleExists(c)) { 
 				cashier = c;
-				allRoles.put(c, null);
+				super.addRole(c, null);
 			}
-			return c;
 		}
-		return null;
 	}
 
 }

@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Building;
+import city.Role;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -33,14 +34,22 @@ public class RestaurantTimmsBuilding extends Building {
 	public RestaurantTimmsBuilding(String name) {
 		super(name);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
-		this.setCustomerRole("city.roles.RestaurantTimmsCustomerRole");
-		this.setCustomerAnimation("city.animations.RestaurantTimmsCustomerAnimation");
+		this.setCustomerRoleName("city.roles.RestaurantTimmsCustomerRole");
+		this.setCustomerAnimationName("city.animations.RestaurantTimmsCustomerAnimation");
 		
 		int i = 0;
 		while (i < 9) {
 			restaurantTables.add(new Table(i));
 			i++;
 		}
+	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
 	}
 	
 	// Classes
