@@ -15,7 +15,6 @@ import city.interfaces.RestaurantChungWaiter;
  * Restaurant Customer agent.
  */
 public class RestaurantChungCustomerRole extends Role implements RestaurantChungCustomer {
-	private String name;
 	private int hungerLevel = 10; // determines length of meal
 	private RestaurantChungCustomerAnimation customerGui;
 	private RestaurantChungHost host;
@@ -47,9 +46,8 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	 *
 	 * @param name name of the customer
 	 */
-	public RestaurantChungCustomerRole(String name){
+	public RestaurantChungCustomerRole(){
 		super();
-		this.name = name;
 		money = 20; // TODO change
 	}
 
@@ -521,8 +519,8 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		int leaving = rand.nextInt(2);
 
 // HACK------------------------------------------------------------------
-		if (name.equals("Leave")) leaving = 0;
-		else if (name.equals("Stay")) leaving = 1;
+//		if (name.equals("Leave")) leaving = 0;
+//		else if (name.equals("Stay")) leaving = 1;
 // END HACK------------------------------------------------------------------
 
 		if (leaving == 0) {
@@ -551,10 +549,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //		//could be a state change. Maybe you don't
 //		//need to eat until hunger lever is > 5?
 //	}
-	
-	public String getName() {
-		return name;
-	}
 	
 	public void setGui(RestaurantChungCustomerAnimation g) {
 		customerGui = g;
@@ -585,10 +579,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 
 	public String getOrder() {
 		return order;
-	}
-	
-	public String toString() {
-		return "customer " + getName();
 	}
 }
 

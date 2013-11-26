@@ -3,6 +3,7 @@ package city.tests.mock;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.MockRole;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
@@ -23,25 +24,25 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 
 	@Override
 	public void msgAssistCustomer(MarketCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Manager."));		
+		System.out.println("Market Employee received msgAssistCustomer from Manager.");		
 	}
 
 	@Override
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Manager."));		
+		System.out.println("Market Employee received msgAssistCustomerDelivery from Manager.");		
 	}
 
 	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Employee received msgHereIsMyOrder from MarketCustomer."));		
+		System.out.println("Market Employee received msgHereIsMyOrder from MarketCustomer.");		
 	}
 
 	@Override
 	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Employee received msgHereIsCustomerDeliveryOrder from Manager."));		
+		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Manager.");		
 	}
 
 }

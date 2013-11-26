@@ -36,7 +36,6 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	
 	public RestaurantChungHost host;
 	public RestaurantChungCashier cashier;
-	public BankCustomer bankCustomer;
 	public RestaurantChungCook cook;
 	public List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
 	public List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();

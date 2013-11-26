@@ -20,8 +20,10 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketCashierTest extends TestCase {
-	
 	MarketBuilding market;
+	
+	MockPerson cashierPerson;
+	MarketCashierRole cashier;
 	
 	MockPerson customerPerson;
 	MockMarketCustomer customer;
@@ -41,10 +43,6 @@ public class MarketCashierTest extends TestCase {
 	MockPerson managerPerson;
 	MockMarketManager manager;
 	
-	MockPerson cashierPerson;
-	MarketCashierRole cashier;
-	BankCustomerRole bankCustomer;
-	
 	Map<FOOD_ITEMS, Integer> orderItems;
 	MarketOrder order;
 	
@@ -54,6 +52,11 @@ public class MarketCashierTest extends TestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		market = new MarketBuilding("Market1");
+		
+		cashierPerson = new MockPerson("Cashier"); 
+		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
+		cashier.setPerson(cashierPerson);
+		cashier.market = market;
 		
 		customerPerson = new MockPerson("Customer"); 
 		customer = new MockMarketCustomer();
@@ -85,11 +88,6 @@ public class MarketCashierTest extends TestCase {
 		manager = new MockMarketManager();
 		manager.setPerson(managerPerson);
 		manager.market = market;
-		
-		cashierPerson = new MockPerson("Cashier"); 
-		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
-		cashier.setPerson(cashierPerson);
-		cashier.market = market;
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);

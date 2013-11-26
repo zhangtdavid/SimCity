@@ -6,6 +6,7 @@ import java.util.Map;
 import city.Application;
 import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.interfaces.BankCustomer;
 
 /**
  * The base restaurant class for all SimCity201 Restaurants.
@@ -14,7 +15,8 @@ import city.Application.FOOD_ITEMS;
 public abstract class RestaurantBaseBuilding extends Building {
 	
 	// Data
-	
+	public BankCustomer bankCustomer;
+
 	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
     public class Food {
         public String item;
