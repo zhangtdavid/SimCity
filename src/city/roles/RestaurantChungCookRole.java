@@ -347,7 +347,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  Cooking
 //  ---------------------------------------------------------------
     private void tryToCookIt(RestaurantChungOrder o) {
-        Food f = restaurant.foods.get(o.choice);
+        Food f = restaurant.foods.get(FOOD_ITEMS.valueOf(o.choice));
         // If out of food
         identifyFoodThatIsLow();
 
@@ -366,6 +366,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void cookIt(final RestaurantChungOrder o) {
         o.s = OrderState.Cooking;
+        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
         cookGui.DoGoToGrill(o.choice);
 //		try {
 //			atGrill.acquire();
@@ -377,7 +378,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         cooking = true;
         timer.schedule(new TimerTask() {
             public void run() {
-                Food f = restaurant.foods.get(o.choice);
+                Food f = restaurant.foods.get(FOOD_ITEMS.valueOf(o.choice));
                 f.amount--;
 //              print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
@@ -391,11 +392,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //        		}
             }
         },
-        restaurant.foods.get(o.choice).cookingTime*100);
+        restaurant.foods.get(FOOD_ITEMS.valueOf(o.choice)).cookingTime*100);
     }
     
     private void plateIt(final RestaurantChungOrder o) {
         o.s = OrderState.Plating;
+        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
         cookGui.DoGoToPlating(o.choice);
 //		try {
 //			atPlating.acquire();
@@ -445,11 +447,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
 
 //  Utilities
-//  =====================================================================        
-    public void setGui(RestaurantChungCookAnimation gui) {
-        cookGui = gui;
-    }
-    
+//  =====================================================================           
     public void addMarket(MarketBuilding m) {
         markets.add(m);
     }

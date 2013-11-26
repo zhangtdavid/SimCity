@@ -165,8 +165,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	 */
 	public boolean runScheduler() {
 		//	CustomerAgent is a finite state machine
-		System.out.println("STATE: " + state);
-		System.out.println("EVENT: " + event);
 
 //		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
 //			goToRestaurant();

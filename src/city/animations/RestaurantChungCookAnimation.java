@@ -86,8 +86,8 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	public void DoGoToGrill(String item) {
         cookingItem = item;
         cooking = true;
-        xDestination = RestaurantChungPanel.GRILLX;
-        yDestination = RestaurantChungPanel.GRILLY;
+        xDestination = RestaurantChungPanel.COOKGRILLX;
+        yDestination = RestaurantChungPanel.COOKGRILLY;
 		command = Command.GoToGrill;
 	}
 	
