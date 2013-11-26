@@ -62,7 +62,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	        for (FOOD_ITEMS item: collectedItems.keySet()) {
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
-	        restaurant.addFood(receivedItems);
+	        restaurant.incrementFoodQuantity(receivedItems);
 		}
 		super.setInactive(); // set role inactive after receiving order
 	}

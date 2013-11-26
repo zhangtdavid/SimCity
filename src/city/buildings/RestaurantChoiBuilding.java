@@ -58,16 +58,16 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		this.setCashOnSite(DAILY_CAPITAL);	
         // Add items and their cooking times to a map
 		int rand = 7+(int)Math.ceil(10*Math.random());
-        foods.put(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
+        super.addFood(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 16));
 		rand = 7+(int)Math.ceil(10*Math.random());
-		foods.put(FOOD_ITEMS.pizza, new Food("Pizza", (int)(Math.ceil(Math.random()*6)*1000),
+		super.addFood(FOOD_ITEMS.pizza, new Food("Pizza", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 11));
 		rand = 7+(int)Math.ceil(10*Math.random());
-		foods.put(FOOD_ITEMS.chicken, new Food("Chicken", (int)(Math.ceil(Math.random()*6)*1000),
+		super.addFood(FOOD_ITEMS.chicken, new Food("Chicken", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 9));
 		rand = 7+(int)Math.ceil(10*Math.random());
-		foods.put(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
+		super.addFood(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
 				(3+(int)Math.ceil(4*Math.random())), ((int)Math.floor(rand*0.2)), rand, 6));
 	}
 

@@ -6,24 +6,21 @@ import java.util.List;
 import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.Semaphore;
 
 import utilities.MarketOrder;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
-import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChoiCashier;
-import city.interfaces.RestaurantChoiCook;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding;
 import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
 import city.buildings.RestaurantChoiBuilding;
+import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.RestaurantChoiCashier;
+import city.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
@@ -249,7 +246,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		}
 		System.out.println("Checking if I have ingredients");
 		//this is the internal food object corresponding to the choice in order (below).
-		Food tempFood = building.foods.get(o.getChoice());
+		Food tempFood = building.getFoods().get(o.getChoice());
 		if(tempFood.amount <= tempFood.low){
 			if(tempFood.s == FoodOrderState.None){ // if i haven't already ordered the food
 				//ask for food; use marketIndex, but it goes to infinity so take mod of markets.size();
@@ -294,7 +291,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 			o.setState(RestaurantChoiOrder.COOKING);
 		}
 		//this is the internal food object corresponding to the choice in order (below).
-		Food tempFood = building.foods.get(o.getChoice());
+		Food tempFood = building.getFoods().get(o.getChoice());
 		tempFood.amount--;
 		print("Cooking now: "+ tempFood.amount + " of item " + o.getChoice() +" left");
 		final RestaurantChoiOrder finalO = o;
@@ -406,10 +403,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	}
 	//Utilities
 	public void hackNoFood(){
-		building.foods.get(FOOD_ITEMS.chicken).amount = 0;
-		building.foods.get(FOOD_ITEMS.pizza).amount = 0;
-		building.foods.get(FOOD_ITEMS.salad).amount = 0;
-		building.foods.get(FOOD_ITEMS.steak).amount = 0;
+		building.updateFoodQuantity(FOOD_ITEMS.chicken, 0);
+		building.updateFoodQuantity(FOOD_ITEMS.pizza, 0);
+		building.updateFoodQuantity(FOOD_ITEMS.salad, 0);
+		building.updateFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
@@ -427,7 +424,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
         }
     }
     public Food findFood(String choice) {
-        for(Food f: building.foods.values()){
+        for(Food f: building.getFoods().values()){
             if(f.item.equals(choice)) {
                 return f;
             }
