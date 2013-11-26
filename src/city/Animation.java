@@ -11,7 +11,7 @@ public abstract class Animation implements AnimationInterface {
 	
 	// Data
 	
-	public boolean isVisible = false;
+	private boolean isVisible = false;
 	protected int xPos, yPos;
 	
 	// Constructor
@@ -46,6 +46,11 @@ public abstract class Animation implements AnimationInterface {
     }
     
     // Setters
+	
+	@Override
+	public void setVisible(boolean b) {
+		this.isVisible = b;
+	}
     
     // Utilities
 

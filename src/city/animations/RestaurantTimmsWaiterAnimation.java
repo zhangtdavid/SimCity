@@ -50,7 +50,6 @@ public class RestaurantTimmsWaiterAnimation extends Animation implements Restaur
 		this.yPos = INITIAL_Y;
 		this.xDestination = INITIAL_X;
 		this.yDestination = INITIAL_Y;
-		isVisible = true; // TODO solve how this should become visible
 	}
 	
 	// Abstract

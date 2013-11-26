@@ -47,6 +47,12 @@ public abstract class MockAnimation implements AnimationInterface {
 	
 	// Setters
 	
+	@Override
+	public void setVisible(boolean b) {
+		// TODO Auto-generated method stub
+		
+	}
+	
 	// Utilities
 
 }

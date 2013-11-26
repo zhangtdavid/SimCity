@@ -70,8 +70,7 @@ public class RestaurantTimmsCustomerAnimation extends Animation implements Resta
 			} else if (command == Command.LeaveRestaurant) {
 				customer.guiAtExit();
 				atRestaurant = false;
-				isVisible = false;
-				// controlPanel.setCustomerEnabled(customer); // TODO
+				this.setVisible(false);
 			}
 			command = Command.noCommand;
 		}
@@ -94,7 +93,7 @@ public class RestaurantTimmsCustomerAnimation extends Animation implements Resta
 	 */
 	public void goToRestaurant() {
 		atRestaurant = true;
-		isVisible = true;
+		this.setVisible(true);
 		xDestination = WAITING_X;
 		yDestination = WAITING_Y;
 		command = Command.goToRestaurant;
