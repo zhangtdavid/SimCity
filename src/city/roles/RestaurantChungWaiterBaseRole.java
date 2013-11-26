@@ -252,7 +252,6 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		}
 		
 		for (WCustomer customer : customers) {
-//			System.out.println(customers.size());
 			if (customer.s == CustomerState.Waiting) {
 				seatCustomer(customer);
 				return true;
@@ -327,12 +326,12 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	private void askForBreak() {
 		print("Waiter asking for break");
 		state = WaiterState.AskedForBreak;
-		host.msgIWantToGoOnBreak(this);
+		restaurant.host.msgIWantToGoOnBreak(this);
 	}	
 
 	private void rejectForBreak() {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).setOffBreak();
-		host.msgIAmReturningToWork(this);
+		restaurant.host.msgIAmReturningToWork(this);
 		state = WaiterState.Working;
 	}
 	
@@ -345,7 +344,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	private void returnToWork() {
 		print("Waiter returning to work");
 		state = WaiterState.Working;
-		host.msgIAmReturningToWork(this);
+		restaurant.host.msgIAmReturningToWork(this);
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();		
 	}
 	
@@ -363,7 +362,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 			e.printStackTrace();
 		}
 
-		host.msgTakingCustomerToTable(customer.c);
+		restaurant.host.msgTakingCustomerToTable(customer.c);
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoBringToTable(customer.c, customer.table-1);
 		customer.c.msgFollowMeToTable(this, menu);
 		
@@ -461,7 +460,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 		}
 		
 		customer.cs = CheckState.AskedForBill;
-		cashier.msgComputeBill(this, customer.c, customer.o.choice);
+		restaurant.cashier.msgComputeBill(this, customer.c, customer.o.choice);
 	}
 	
 	private void giveCheck(WCustomer customer) {
@@ -481,7 +480,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	}
 
 	private void removeCustomer(WCustomer customer) {
-		host.msgTableIsFree(this, customer.table, customer.c);
+		restaurant.host.msgTableIsFree(this, customer.table, customer.c);
 		removeCustomerFromList(customer);
 	}
 	

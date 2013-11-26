@@ -125,6 +125,7 @@ public class Application {
 		
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
+//		p0.setCash(500); // TODO remove later
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
 		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);

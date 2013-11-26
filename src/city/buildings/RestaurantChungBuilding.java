@@ -120,7 +120,6 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
 		waiters.add(w);
 		w.setAnimation(anim);
-		System.out.println("WAITER ANIMATION SET");
 		anim.setVisible(true); // TODO set this in setActive()
 		panel.addVisualizationElement(anim);
     	for (int i = 0; i < 9; i++) {

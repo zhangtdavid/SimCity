@@ -55,7 +55,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //  Messages
 //	=====================================================================
 	public void gotHungry() {//from animation
-		print("I'm hungry");
+//		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
@@ -107,7 +107,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	
 	public void msgOutOfItem(String choice, RestaurantChungMenu menu) {
 		print("Customer received msgOutOfItem " + choice);
-		this.menu = new RestaurantChungMenu(menu); // is this a memory leak?
+		this.menu = new RestaurantChungMenu(menu);
 		event = AgentEvent.seated;
 		stateChanged();
 	}
@@ -164,16 +164,21 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
-		print("IN SCHEDULER");
-		print(state.toString());
-		print(event.toString());
-		//	CustomerAgent is a finite state machineE
-		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
-			goToRestaurant();
-			return true;
-		}
+		//	CustomerAgent is a finite state machine
+		System.out.println("STATE: " + state);
+		System.out.println("EVENT: " + event);
+
+//		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
+//			goToRestaurant();
+//			return true;
+//		}
 		
-		if (state == AgentState.GoingToRestaurant && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
+//		if (state == AgentState.GoingToRestaurant && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
+//			getInLine();
+//			return true;
+//		}
+		
+		if (state == AgentState.DoingNothing && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
 			getInLine();
 			return true;
 		}
@@ -294,6 +299,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		order = null; // erases any old orders
 		// Randomly select food from the menu
 		final int money = this.getPerson().getCash(); // Need to do this to get access to money in the timer task
+		System.out.println(money);
 		timer.schedule(new TimerTask() {
 			public void run() {
 				// HACK------------------------------------------------------------------
