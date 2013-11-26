@@ -51,9 +51,9 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 			yPos--;
 
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command == Command.GoToEntrance) customer.msgAnimationAtEntrance(); // Released atEntrance semaphore
-			else if (command == Command.GoToCashier) customer.msgAnimationAtCashier(); // Released atCashier semaphore
-			else if (command == Command.LeaveMarket) customer.msgAnimationFinishedLeaveMarket();
+			if (command == Command.GoToCounter) customer.msgAnimationAtCounter();
+			if (command == Command.GoToCashier) customer.msgAnimationAtCashier();
+			if (command == Command.LeaveMarket) customer.msgAnimationFinishedLeaveMarket();
 			command=Command.noCommand;
 		}
 	}
@@ -75,17 +75,19 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 	}
 
 	public void DoStandInWaitingForServiceLine() {
-		
+		xDestination = xWaitingArea;
+		yDestination = yWaitingArea;//+(waitingPosition*30);		
 	}
 	
 	public void DoGoToCounter(int loc) {
 		xDestination = xCounter+(50*loc);
 		yDestination = yCounter;		
+		command = Command.GoToCounter;
 	}
 	
-	public void DoGoToWaitingArea(int waitingPosition) {
+	public void DoGoToWaitingArea() {
 		xDestination = xWaitingArea;
-		yDestination = yWaitingArea+(waitingPosition*30);
+		yDestination = yWaitingArea;//+(waitingPosition*30);
 	}
 	
 	public void DoGoToCashier() {

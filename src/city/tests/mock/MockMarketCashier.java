@@ -3,6 +3,7 @@ package city.tests.mock;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
@@ -26,21 +27,21 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	@Override
 	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgNewDeliveryPerson from Market Manager"));		
+		System.out.println("Market Cashier received msgNewDeliveryPerson from Market Manager");		
 	}
 
 	@Override
 	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market Manager"));		
+		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market Manager");		
 	}
 	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c,
 			Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Market Manager"));		
+		System.out.println("Market Cashier received msgComputeBill from Market Manager");	
 	}
 
 	@Override

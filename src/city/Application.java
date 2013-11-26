@@ -2,7 +2,6 @@ package city;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -13,36 +12,18 @@ import java.util.TimerTask;
 
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
-import city.animations.RestaurantTimmsCashierAnimation;
-import city.animations.RestaurantTimmsCookAnimation;
-import city.animations.RestaurantTimmsHostAnimation;
-import city.animations.RestaurantTimmsTableAnimation;
-import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.BuildingCard;
 import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
 import city.gui.RestaurantZhangPanel;
-import city.gui.CityViewBuilding;
-import city.gui.CityViewRestaurant;
-import city.gui.MainFrame;
-import city.gui.RestaurantTimmsPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
-import city.roles.ResidentRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangCustomerRole;
 import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterRegularRole;
-import city.roles.RestaurantTimmsCashierRole;
-import city.roles.RestaurantTimmsCookRole;
-import city.roles.RestaurantTimmsHostRole;
-import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class Application {
@@ -53,7 +34,6 @@ public class Application {
 	private static Date date = new Date(0);
 
 	public static final int INTERVAL = 1000; // 10000; // One interval is the simulation's equivalent of a half-hour
-	public static final int RENT_DUE_INTERVAL = 0; // TODO set the global interval at which rent is expected/paid
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
@@ -61,6 +41,7 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
 	public static RestaurantZhangBuilding rzb1;
+	
 	/**
 	 * Main routine to start the program.
 	 * 
@@ -153,25 +134,24 @@ public class Application {
 		p4.setCar(c4);
 
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role", 0, 100); // TODO Change shift times
+		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role", 0, 100);
+		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role", 0, 100);
+		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole("Waiter Shared 1 Role", 0, 100);
+		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
-
 
 		// Start threads
 		c0.startThread();
@@ -188,6 +168,7 @@ public class Application {
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
+		
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -221,16 +202,19 @@ public class Application {
 		/**
 		 * Return the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, Person p) { // TODO
+		public static Building findClosestBuilding(BUILDING type, Person p) {
+			// TODO
 			Building b = new BusStopBuilding("placeholder");
 			return b;
 		}
+		
 		/**
 		 * Return the building of type closest to the destination building
 		 * 
 		 * @param b the destination you wish to reach
 		 */
-		public static Building findClosestBuilding(BUILDING type, Building b) { // TODO
+		public static Building findClosestBuilding(BUILDING type, Building b) {
+			// TODO
 			Building d = new BusStopBuilding("placeholder");
 			return d;
 		}

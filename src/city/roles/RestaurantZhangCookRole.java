@@ -16,12 +16,13 @@ import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantZhangCookAnimation;
 import city.buildings.MarketBuilding;
+import city.buildings.RestaurantBaseBuilding;
 import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangWaiter;
@@ -61,15 +62,15 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	private Semaphore atBase = new Semaphore(0, false);
 
-	public RestaurantZhangCookRole(String name, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
 		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCOOKSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 
 	public void msgHereIsAnOrder(RestaurantZhangWaiter w, String choice, RestaurantZhangTable t) {
@@ -149,7 +150,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 					removeFromPlating(o);
 					return true;
 				}
-			}
+			} 
 			for(RestaurantZhangOrder o : ordersToCook) {
 				if(o.status == RestaurantZhangOrder.OrderStatus.created) {
 					cookOrder(o);
@@ -222,7 +223,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			}
 			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).threshold - cookInventory.get(o.choice).amount, markets.get(0));
 			cookInvoiceList.add(tempInvoice);
-			marketCustomerDelivery = new MarketCustomerDeliveryRole(tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
+			marketCustomerDelivery = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBaseBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
 			marketCustomerDelivery.setActive();
 			stateChanged();
 			return;

@@ -7,14 +7,17 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import city.Application.FOOD_ITEMS;
 import city.Building;
+import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.BankCustomerRole;
 
 public class MarketBuilding extends Building {
 	public MarketManager manager;
 	public MarketCashier cashier;
+	public BankCustomer bankCustomer;
 	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
 	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
 	

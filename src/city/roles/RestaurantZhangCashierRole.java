@@ -1,20 +1,22 @@
 package city.roles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
+import city.Building;
 import city.Role;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangWaiter;
-import city.roles.RestaurantChungCashierRole.MarketTransaction;
-import city.roles.RestaurantChungCashierRole.MarketTransactionState;
 
 /**
  * Restaurant Cashier Agent
@@ -28,7 +30,6 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	public Map<RestaurantZhangCustomer, Double> tabCustomers = new HashMap<RestaurantZhangCustomer, Double>();
 	//public Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
 	
-	private RestaurantZhangBuilding restaurant;
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	
 	private String name;
@@ -39,16 +40,16 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	
 	private List<Role> roles = new ArrayList<Role>();
 
-	public RestaurantZhangCashierRole(String name, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangCashierRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
 		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 //		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 
 	public void msgComputeBill(RestaurantZhangWaiter waiter, RestaurantZhangCustomer customer, String choice) {

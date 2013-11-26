@@ -2,12 +2,13 @@ package city.roles;
 
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.interfaces.RestaurantZhangWaiterBase;
 
 public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBase {
 	
-	public RestaurantZhangWaiterSharedDataRole(String name, int shiftStart_, int shiftEnd_) {
-		super(name, shiftStart_, shiftEnd_);
+	public RestaurantZhangWaiterSharedDataRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
+		super(restaurantToWorkAt, shiftStart_, shiftEnd_);
 	}
 	
 	public void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {

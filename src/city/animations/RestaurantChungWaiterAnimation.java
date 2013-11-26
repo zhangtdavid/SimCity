@@ -10,10 +10,10 @@ import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungWaiterBase;
+import city.interfaces.RestaurantChungWaiter;
 
 public class RestaurantChungWaiterAnimation extends Animation implements RestaurantChungAnimatedWaiter {
-    private RestaurantChungWaiterBase agent = null;
+    private RestaurantChungWaiter agent = null;
 	
 	public enum WaiterState
 	{Working, AskedForBreak, OnBreak};
@@ -55,7 +55,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     private int tableNumX = 0;
     private int tableNumY = 0;
 
-    public RestaurantChungWaiterAnimation(RestaurantChungWaiterBase wa) {
+    public RestaurantChungWaiterAnimation(RestaurantChungWaiter wa) {
         agent = wa;
     }
 

@@ -7,6 +7,7 @@ import java.util.ConcurrentModificationException;
 import java.util.List;
 
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
@@ -24,15 +25,15 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	
 	private String name;
 
-	public RestaurantZhangHostRole(String name, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangHostRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
 		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGHOSTSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 	
 	// Messages
