@@ -12,11 +12,14 @@ import java.util.TimerTask;
 
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
+import city.animations.CarAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.BusStopPanel;
+import city.gui.CityViewBusStop;
 import city.gui.CityViewRestaurant;
 import city.gui.MainFrame;
 import city.gui.RestaurantZhangPanel;
@@ -42,6 +45,7 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
 	public static RestaurantZhangBuilding rzb1;
+	public static BusStopBuilding busStop2;
 	
 	/**
 	 * Main routine to start the program.
@@ -78,21 +82,58 @@ public class Application {
 		// FIRST add a panel
 		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(100, 50, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
 		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantZhang1);
+		mainFrame.cityView.addStatic(cityViewRestaurantZhang1);
 		// FOURTH create a new building, last argument is the panel in step ONE
-		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
+		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1, cityViewRestaurantZhang1);
 		rzp1.setTables(rzb1.tables);
 		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		mainFrame.buildingView.addView(rzp1, cityViewRestaurantZhang1.ID);
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rzb1);
 		// SEVENTH create all your roles after
-
+		
+		// Bus Stops!!!!!!!!
+		BusStopPanel bsp1 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(150, 50, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp1);
+		mainFrame.cityView.addStatic(cityViewBusStop1);
+		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
+		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.ID);
+		CityMap.addBuilding(BUILDING.busStop, busStop1);
+		
+		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp2);
+		mainFrame.cityView.addStatic(cityViewBusStop2);
+		busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
+		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.ID);
+		CityMap.addBuilding(BUILDING.busStop, busStop2); 
+		
+		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 400, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
+		mainFrame.cityView.addStatic(cityViewBusStop3);
+		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
+		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.ID);
+		CityMap.addBuilding(BUILDING.busStop, busStop3); 
+		
+		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(400, 150, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp4);
+		mainFrame.cityView.addStatic(cityViewBusStop4);
+		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
+		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.ID);
+		CityMap.addBuilding(BUILDING.busStop, busStop4 ); 
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding"));
+		
+		busStop1.setNextStop(busStop2);
+		busStop1.setPreviousStop(busStop4);
+		busStop2.setNextStop(busStop3);
+		busStop2.setPreviousStop(busStop1);
+		busStop3.setNextStop(busStop4);
+		busStop3.setPreviousStop(busStop2);
+		busStop4.setNextStop(busStop1);
+		busStop4.setPreviousStop(busStop3);
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -124,11 +165,26 @@ public class Application {
 		p4.setHome(h4);
 
 		// Give people cars
-		CarAgent c0 = new CarAgent();
-		CarAgent c1 = new CarAgent();
-		CarAgent c2 = new CarAgent();
-		CarAgent c3 = new CarAgent();
-		CarAgent c4 = new CarAgent();
+		CarAgent c0 = new CarAgent(busStop2);
+		CarAnimation c0Anim = new CarAnimation(c0, busStop2);
+		c0.setAnimation(c0Anim);
+		mainFrame.cityView.addAnimation(c0Anim);
+		CarAgent c1 = new CarAgent(busStop2);
+		CarAnimation c1Anim = new CarAnimation(c1, busStop2);
+		c1 .setAnimation(c1Anim);
+		mainFrame.cityView.addAnimation(c1Anim);
+		CarAgent c2 = new CarAgent(busStop2);
+		CarAnimation c2Anim = new CarAnimation(c2, busStop2);
+		c2.setAnimation(c2Anim);
+		mainFrame.cityView.addAnimation(c2Anim);
+		CarAgent c3 = new CarAgent(busStop2);
+		CarAnimation c3Anim = new CarAnimation(c3, busStop2);
+		c3.setAnimation(c3Anim);
+		mainFrame.cityView.addAnimation(c3Anim);
+		CarAgent c4 = new CarAgent(busStop2);
+		CarAnimation c4Anim = new CarAnimation(c4, busStop2);
+		c4.setAnimation(c4Anim);
+		mainFrame.cityView.addAnimation(c4Anim);
 		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
@@ -206,8 +262,7 @@ public class Application {
 		 */
 		public static Building findClosestBuilding(BUILDING type, Person p) {
 			// TODO
-			Building b = new BusStopBuilding("placeholder");
-			return b;
+			return busStop2;
 		}
 		
 		/**
@@ -217,8 +272,7 @@ public class Application {
 		 */
 		public static Building findClosestBuilding(BUILDING type, Building b) {
 			// TODO
-			Building d = new BusStopBuilding("placeholder");
-			return d;
+			return busStop2;
 		}
 
 	}

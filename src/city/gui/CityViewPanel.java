@@ -26,18 +26,14 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		this.setMaximumSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
 		this.setVisible(true);
 		background = new Color(128, 64, 0);
-		for(int i = 0; i < Math.min(CITY_WIDTH, CITY_HEIGHT); i += (Math.min(CITY_WIDTH, CITY_HEIGHT) * 3/ 10)) {
-			for(int j = CITY_WIDTH / 10; j < CITY_WIDTH; j+= CITY_WIDTH * 3 / 10) {
-				CityRoad road = new CityRoad(j, i, CITY_WIDTH / 5, CITY_WIDTH / 10, 1, 0, true, Color.black, Color.gray);
-				statics.add(road);
-				road.setPosition(new Point(j, i));
-			}
-			for(int j = CITY_WIDTH / 10; j < CITY_HEIGHT; j+= CITY_HEIGHT * 3 / 10) {
-				CityRoad road = new CityRoad(i, j, CITY_HEIGHT/ 10, CITY_HEIGHT / 5, 0, 1, false, Color.black, Color.gray);
-				statics.add(road);
-				road.setPosition(new Point(i, j));
-			}
-		}
+		CityRoad road1 = new CityRoad(100, 100, CITY_WIDTH - 200, CITY_HEIGHT / 10, -1, 0, true, Color.black, Color.gray);
+		movings.add(road1);
+		CityRoad road2 = new CityRoad(100, 100 + CITY_HEIGHT / 10, CITY_WIDTH / 10, CITY_HEIGHT - 300, 0, 1, false, Color.black, Color.gray);
+		movings.add(road2);
+		CityRoad road3 = new CityRoad(100, 350, CITY_WIDTH - 200, CITY_HEIGHT / 10, 1, 0, true, Color.black, Color.gray);
+		movings.add(road3);
+		CityRoad road4 = new CityRoad(350, 100 + CITY_HEIGHT / 10, CITY_WIDTH / 10, CITY_HEIGHT - 300, 0, -1, false, Color.black, Color.gray);
+		movings.add(road4);
 		addMouseListener(this);
 		addMouseMotionListener(this);
 	}

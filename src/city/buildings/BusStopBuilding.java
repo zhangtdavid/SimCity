@@ -5,6 +5,8 @@ import java.util.ArrayList;
 
 import city.Building;
 import city.Role;
+import city.gui.BusStopPanel;
+import city.gui.CityViewBusStop;
 import city.roles.BusPassengerRole;
 
 public class BusStopBuilding extends Building {
@@ -17,8 +19,10 @@ public class BusStopBuilding extends Building {
 	
 	// Constructor
 	
-	public BusStopBuilding(String name) {
+	public BusStopBuilding(String name, BusStopPanel panel, CityViewBusStop cityBuilding) {
 		super(name);
+		this.panel = panel;
+		this.cityBuilding = cityBuilding;
 	}
 	
 	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {

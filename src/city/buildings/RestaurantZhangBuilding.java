@@ -14,6 +14,7 @@ import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
 import city.buildings.RestaurantBaseBuilding.Food;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -52,15 +53,16 @@ public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 	public Vector<RestaurantZhangCustomer> customers = new Vector<RestaurantZhangCustomer>();
 	public Vector<RestaurantZhangWaiter> waiters = new Vector<RestaurantZhangWaiter>();
 
-	public RestaurantZhangPanel panel; //reference to main gui
 
 	// Constructor
 	
-	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel) {
+	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantZhangCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantZhangCustomerAnimation");
 		this.panel = panel;
+		this.cityBuilding = cityBuilding;
+		// Specific to my restaurant panel
 		tables = new ArrayList<RestaurantZhangTable>(nTables);
     	for (int ix = 0; ix < nTables; ix++) {
     		tables.add(new RestaurantZhangTable(ix, TABLEXSTART + ((ix % TABLEROW) * TABLEXSPACING), 

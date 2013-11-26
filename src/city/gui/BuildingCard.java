@@ -2,12 +2,23 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.swing.JPanel;
+
+import city.Animation;
+import city.animations.RestaurantZhangCustomerAnimation;
+import city.interfaces.AnimationInterface;
 
 public class BuildingCard extends JPanel {
 
 	private static final long serialVersionUID = -7047777507717435867L;
+	
+	public int panelX;
+	public int panelY;
+	public final int delayMS = 5;
+	public List<Animation> animations = new ArrayList<Animation>();
 	
 	Color background;
 	
@@ -28,8 +39,17 @@ public class BuildingCard extends JPanel {
 		this.setVisible(true);
 		background = c;
 	}
-	
+
 	public void animate() {
-		
+		// Update the position of each visible element
+		for(Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.updatePosition();
+			}
+		}
+	}
+
+	public void addVisualizationElement(Animation ve) {
+		animations.add(ve);
 	}
 }

@@ -9,7 +9,7 @@ public abstract class CityViewBuilding {
 	//Consider creating a rectangle for every Component for better universal collision detection
 
 	Rectangle rectangle;
-	int x, y;
+	public int x, y;
 	Color color;
 	public String ID;
 	public BuildingCard building;
