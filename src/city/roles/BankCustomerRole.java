@@ -6,12 +6,12 @@ import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
-import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
+	
 	BankBuilding building;
 	Building business;
 	Application.TRANSACTION_TYPE depositType;
@@ -24,16 +24,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int acctNum = -1;
 	int boothNumber;
 	
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		print("Customer has been set active");
-		super.setActive();
-		this.service = s;
-		this.depositType = t;
-		amount = money;
-		if(s != Application.BANK_SERVICE.atmDeposit)
-			st = state.entering;
-		this.setActivityBegun();
-	}
 	// Constructor
 	
 	public BankCustomerRole(Building b) {
@@ -46,6 +36,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Messages
+	
 	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
 		print("WhatDoYouWant message received");
 		t = tell;
@@ -116,17 +107,20 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Actions
+	
 	public void DirectDeposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
+	
 	public void AskForService(){
 		if(building == null)
 			print("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
+	
 	public void Deposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
@@ -153,6 +147,17 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Getters
 	
 	// Setters
+	
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
+		print("Customer has been set active");
+		super.setActive();
+		this.service = s;
+		this.depositType = t;
+		amount = money;
+		if(s != Application.BANK_SERVICE.atmDeposit)
+			st = state.entering;
+		this.setActivityBegun();
+	}
 	
 	// Utilities
 	

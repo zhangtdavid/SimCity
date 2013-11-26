@@ -2,6 +2,7 @@ package city.roles;
 
 import utilities.RestaurantChoiOrder;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiWaiterAbs;
 
 /**
@@ -16,6 +17,9 @@ public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 
 	public RestaurantChoiWaiter2Role() {
 		super();
+	}
+	public RestaurantChoiWaiter2Role(RestaurantChoiBuilding b, int t1, int t2){
+		super(b, t1, t2);
 	}
 
 	@Override

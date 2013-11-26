@@ -238,7 +238,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		System.out.println("Cashier # of checks after receiving check: " + cashier.checks.size());
 		assertTrue(cashier.runScheduler());
 		assertTrue("customer should have choice 2", customer.choice==2);
-		assertTrue("customer name is evil", customer.getName().equals("evil"));
+		assertTrue("customer name is evil", customer.getPerson().getName().equals("evil"));
 		//test msgHeresMyPayment; didn't pay enough
 		cashier.msgHeresMyPayment(customer,0);
 		assertEquals("should have one check", cashier.checks.size(), 1);

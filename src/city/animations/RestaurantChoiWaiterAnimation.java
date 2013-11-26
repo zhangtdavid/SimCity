@@ -59,12 +59,12 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	public void draw(Graphics2D g){
 		g.setColor(Color.GRAY);
 		g.setColor(Color.lightGray);
-		g.drawString(agent.getName(),restingCoordX, restingCoordY+Y+10);
+		g.drawString(agent.getPerson().getName(),restingCoordX, restingCoordY+Y+10);
 		g.setColor(Color.MAGENTA);
 		g.fillRect(xPos, yPos, WIDTH, WIDTH);
 		g.drawString(orderIcon, xPos, yPos);
 		g.setColor(Color.BLACK);
-		g.drawString(agent.getName(), xPos, yPos+10);
+		g.drawString(agent.getPerson().getName(), xPos, yPos+10);
 	}
 	
 	// Movement

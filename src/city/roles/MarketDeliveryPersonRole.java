@@ -5,14 +5,13 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.agents.CarAgent;
 import city.buildings.MarketBuilding;
 import city.interfaces.CarPassenger;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
-import city.Application.FOOD_ITEMS;
-import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
 
@@ -52,6 +51,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
     }
 	
 	public void setActive(){
+		super.setActive();
 		this.setActivityBegun();
 	}
 	
