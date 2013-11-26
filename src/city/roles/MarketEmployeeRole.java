@@ -21,7 +21,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	=====================================================================
 	public EventLog log = new EventLog();
 
-	public MarketBuilding market;
+	private MarketBuilding market;
 	
 	public enum WorkingState
 	{Working, GoingOffShift, NotWorking};
@@ -163,7 +163,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 			customer.msgWhatWouldYouLike(this, loc);
 		}
 		else {
-			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
+//			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
 //			try {
 //				atPhone.acquire();
 //			} catch (InterruptedException e) {
@@ -201,25 +201,24 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				e.printStackTrace();
 //			}
 
-        	// dependent on customer type
-        	if (customer != null)
-        		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
-        	else
-        		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
-//        	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
-//    		try {
-//				atCounter.acquire();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-        	market.manager.msgIAmAvailableToAssist(this);
-        	customer = null;
-        	customerDelivery = null;
-        	customerDeliveryPayment = null;
-    		state = MarketEmployeeState.None;
         }
-        	
+    	// dependent on customer type
+    	if (customer != null)
+    		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
+    	else
+    		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
+//    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
+//		try {
+//			atCounter.acquire();
+//		} catch (InterruptedException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+    	market.manager.msgIAmAvailableToAssist(this);
+    	customer = null;
+    	customerDelivery = null;
+    	customerDeliveryPayment = null;
+		state = MarketEmployeeState.None;
 	}
 
 

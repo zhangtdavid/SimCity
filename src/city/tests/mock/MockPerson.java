@@ -13,6 +13,8 @@ public class MockPerson extends MockAgent implements Person {
 	// Data
 	
 	private String name;
+	public ResidenceBaseBuilding home;
+	private int cash;
 	
 	// Constructor
 	
@@ -47,13 +49,12 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public int getCash() {
 		// TODO Auto-generated method stub
-		return 0;
+		return cash;
 	}
 
 	@Override
 	public ResidenceBaseBuilding getHome() {
-		// TODO Auto-generated method stub
-		return null;
+		return home;
 	}
 	
 	@Override
@@ -90,14 +91,13 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void setCash(int c) {
-		// TODO Auto-generated method stub
+		cash = c;
 		
 	}
 	
 	@Override
 	public void setHome(ResidenceBaseBuilding h) {
-		// TODO Auto-generated method stub
-		
+		home = h;		
 	}
 	
 	// Utilities

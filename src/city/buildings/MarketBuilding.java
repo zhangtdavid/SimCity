@@ -8,6 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
+import city.gui.MarketPanel;
 import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
@@ -17,7 +18,7 @@ import city.interfaces.MarketManager;
 public class MarketBuilding extends Building { 
 	
 	// Data
-	
+	public MarketPanel panel;	
 	public MarketManager manager;
 	public MarketCashier cashier;
 	public BankCustomer bankCustomer;
@@ -31,9 +32,9 @@ public class MarketBuilding extends Building {
 	
 	// Constructor
 	
-	public MarketBuilding(String name) {
+	public MarketBuilding(String name, MarketPanel panel) {
 		super(name);
-		
+		this.panel = panel;
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
 		inventory.put(FOOD_ITEMS.pizza, 50);
