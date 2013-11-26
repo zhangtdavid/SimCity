@@ -297,8 +297,8 @@ public class PersonAgent extends Agent implements Person {
 		// Use reflection to get a Restaurant<name>CustomerAnimation to use when dining at the restaurant
 		try {
 			Class<?> c0 = Class.forName(b.getCustomerRole());
-			Constructor<?> r0 = c0.getConstructor(String.class);
-			restaurantCustomerRole = (Role) r0.newInstance(name);
+			Constructor<?> r0 = c0.getConstructor();
+			restaurantCustomerRole = (Role) r0.newInstance();
 			b.addRole(restaurantCustomerRole);
 			addRole(restaurantCustomerRole);
 			

@@ -78,7 +78,9 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Setters
 	
 	// Utilities
-	
+	public void setActive() {
+		
+	}
 	// Classes
 
 }

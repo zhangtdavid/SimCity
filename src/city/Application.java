@@ -153,22 +153,22 @@ public class Application {
 		p4.setCar(c4);
 
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole("Cashier 1 Role", 0, 100); // TODO Change shift times
+		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole("Cook 1 Role", 0, 100);
+		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole("Host 1 Role", 0, 100);
+		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole("Waiter Shared 1 Role", 0, 100);
+		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
 		rzb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
 

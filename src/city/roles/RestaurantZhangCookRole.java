@@ -16,6 +16,7 @@ import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantZhangCookAnimation;
@@ -61,15 +62,15 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	private Semaphore atBase = new Semaphore(0, false);
 
-	public RestaurantZhangCookRole(String name, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
 		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCOOKSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 
 	public void msgHereIsAnOrder(RestaurantZhangWaiter w, String choice, RestaurantZhangTable t) {
@@ -149,7 +150,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 					removeFromPlating(o);
 					return true;
 				}
-			}
+			} 
 			for(RestaurantZhangOrder o : ordersToCook) {
 				if(o.status == RestaurantZhangOrder.OrderStatus.created) {
 					cookOrder(o);

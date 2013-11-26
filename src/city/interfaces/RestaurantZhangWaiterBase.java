@@ -6,6 +6,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Building;
 import city.Role;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 
@@ -40,15 +41,15 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	static final int BREAKTIME = 10000;
 	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
 	
-	public RestaurantZhangWaiterBase(String name, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangWaiterBase(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
-		this.name = name;
 		this.setShift(shiftStart_, shiftEnd_);
+		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 	}
 
 	public String getName() {
-		return name;
+		return super.getPerson().getName();
 	}
 
 	// Messages
