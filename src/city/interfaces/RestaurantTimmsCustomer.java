@@ -4,7 +4,8 @@ import city.Application;
 
 public interface RestaurantTimmsCustomer extends RoleInterface {
 	
-	public void msgGoToRestaurant();
+	// Messages
+	
 	public void msgRestaurantFull();
 	public void msgGoToTable(RestaurantTimmsWaiter w, int position);
 	public void msgOrderFromWaiter();
@@ -15,6 +16,8 @@ public interface RestaurantTimmsCustomer extends RoleInterface {
 	public void guiAtCashier();
 	public void guiAtExit();
 	
-	public void setHost(RestaurantTimmsHost h);
+	// Setters
+	
+	public void setActive();
 	
 }

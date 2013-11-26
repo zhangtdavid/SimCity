@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Role;
+import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -12,18 +13,17 @@ import city.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant cashier agent.
- * 
- * @author John Timms
  */
 public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
+	
 	// Data
 	
-	public int moneyCollected;
-	public int moneyOwed;
+	private int moneyCollected;
+	private int moneyOwed;
 	private RestaurantTimmsBuilding rtb; 
 	
-	public List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
-	public List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
+	private List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
+	private List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
 	
 	// Constructor
 	
@@ -41,7 +41,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		this.setShift(shiftStart, shiftEnd);
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
-		this.rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
+		this.rtb = b;
 	}
 	
 	// Messages
@@ -110,6 +110,34 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 //		stateChanged();
 //	}
 	
+	// Scheduler
+	
+	@Override
+	public boolean runScheduler() {
+		synchronized(checks) {
+			for (Check check : checks) {
+				if (check.state == Check.State.queue) {
+					actComputeCheck(check);
+					return true;
+				}
+				if (check.state == Check.State.paying) {
+					actAcceptPayment(check);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(bills) {
+			for (Bill bill : bills) {
+				if (bill.state == Bill.State.queue) {
+					// actPayMarket(bill); // TODO
+					return true;
+				}
+			}
+		}
+		return false;
+	}
+	
 	// Actions
 	
 	/**
@@ -170,42 +198,14 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 //		}
 //	}
 	
-	// Scheduler
+	// Getters
 	
-	@Override
-	public boolean runScheduler() {
-		synchronized(checks) {
-			for (Check check : checks) {
-				if (check.state == Check.State.queue) {
-					actComputeCheck(check);
-					return true;
-				}
-				if (check.state == Check.State.paying) {
-					actAcceptPayment(check);
-					return true;
-				}
-			}
-		}
-		
-		synchronized(bills) {
-			for (Bill bill : bills) {
-				if (bill.state == Bill.State.queue) {
-					// actPayMarket(bill); // TODO
-					return true;
-				}
-			}
-		}
-		return false;
-	}
-	
-	// Get
-	
-	// Set
+	// Setters
 	
 	@Override
 	public void setActive() {
-		rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
-		rtb.cashier = this;
+		rtb.setCashier(this);
+		this.getAnimation(RestaurantTimmsAnimatedCashier.class).setVisible(true);
 		super.setActive();
 		// TODO
 	}

@@ -11,31 +11,27 @@ import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.buildings.RestaurantTimmsBuilding;
-import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant customer agent.
  */
 public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimmsCustomer {
+	
 	// Data
 	
-	public enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
+	private enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
 	private State state = State.none;
 	
-	public int pickiness;
-	public int hunger;
+	private int pickiness;
+	private int hunger;
 	private int tableNumber;
 	private Application.FOOD_ITEMS eatingItem;
-	public Application.FOOD_ITEMS orderItem;
-	public int money;
-	private RestaurantTimmsCashier cashier;
-	private RestaurantTimmsHost host;
-	private RestaurantTimmsWaiter waiter;
+	private Application.FOOD_ITEMS orderItem;
+	private RestaurantTimmsWaiter waiter = null;
 	private Timer timer = new Timer();
-	private RestaurantTimmsAnimatedCustomer animation = null;
+	private RestaurantTimmsBuilding rtb;
 	
 	private List<Application.FOOD_ITEMS> failedItems = new ArrayList<Application.FOOD_ITEMS>();
 	
@@ -43,10 +39,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private Semaphore atTable = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
 	private Semaphore atExit = new Semaphore(0, true);
-	private Semaphore customerHover = new Semaphore(0, true); 
-	
-	private Integer MONEY_MIN = 5;
-	private Integer MONEY_MAX = 12;
+	private Semaphore customerHover = new Semaphore(0, true);
 	
 	// Constructor
 
@@ -56,23 +49,11 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		this.orderItem = null;
 		this.hunger = 5;
 		this.pickiness = 3;
-		this.host = b.host;
-		this.cashier = b.cashier;
-		this.money = 0;
 		this.state = State.none;
+		this.rtb = b;
 	}
 	
 	// Messages
-	
-	@Override
-	public void msgGoToRestaurant() {
-		print("msgGoToRestaurant");
-		money += (MONEY_MIN + (int)(Math.random() * ((MONEY_MAX - MONEY_MIN) + 1)));
-		eatingItem = null;
-		orderItem = null;
-		state = State.goToRestaurant;
-		stateChanged();
-	}
 	
 	@Override
 	public void msgRestaurantFull() {
@@ -115,7 +96,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	@Override
 	public void msgPaidCashier(int change) {
 		print("msgPaidCashier");
-		money = change;
+		this.getPerson().setCash(change);
 		customerHover.release();
 	}
 	
@@ -143,19 +124,59 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		atExit.release();
 	}
 	
+	// Scheduler
+	
+	@Override
+	public boolean runScheduler() {
+		switch (state) {
+			case goToRestaurant:
+				try {
+					actGoToRestaurant();
+				} catch (InterruptedException e) {}
+				break;
+			case goToTable:
+				try {
+					actGoToTable();
+					actReadMenu();
+				} catch (InterruptedException e) {}
+				break;
+			case orderFromWaiter:
+				try {
+					actOrderFromWaiter();
+				} catch (InterruptedException e) {}
+				break;
+			case hasOrdered:
+				try {
+					actOrderFromWaiter();
+				} catch (InterruptedException e) {}
+				break;
+			case waiterDeliveredFood:
+				actEatFood();
+				break;
+			case longLine:
+				try {
+					actLeaveRestaurant();
+				} catch (InterruptedException e) {}
+				break;
+			default:
+				break;
+		}
+		return false;
+	}
+	
 	// Actions
 	
 	private void actGoToRestaurant() throws InterruptedException {
 		print("actGoToRestaurant");
-		animation.goToRestaurant();
+		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToRestaurant();
 		atRestaurant.acquire();
-		host.msgWantSeat(this);
+		rtb.getHost().msgWantSeat(this);
 		state = State.waitingInLine;
 	}
 	
 	private void actGoToTable() throws InterruptedException {
 		print("actGoToTable");
-		animation.goToTable(tableNumber);
+		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToTable(tableNumber);
 		atTable.acquire();
 	}
 	
@@ -199,9 +220,9 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		} else {
 			waiter.msgOrderFood(this, orderItem);
 			if (reOrder) {
-				animation.setPlate("! ");
+				this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setPlate("! ");
 			} else {
-				animation.setPlate("? ");
+				this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setPlate("? ");
 				state = State.hasOrdered;
 			}
 		}
@@ -209,7 +230,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	private void actEatFood() {
 		print("actEatFood");
-		animation.setPlate(eatingItem.toString());
+		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setPlate(eatingItem.toString());
 		timer.schedule(new TimerTask() {
 			public void run() {
 				try {
@@ -224,80 +245,40 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		print("actLeaveRestaurant");
 		if (state == State.longLine) {
 			// Left because line was too long
-			host.msgDoNotWantSeat(this);
-			animation.goToExit();
+			rtb.getHost().msgDoNotWantSeat(this);
+			this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToExit();
 			atExit.acquire();
 		} else if (orderItem != null) {
 			// Food has been eaten, must pay cashier
-			host.msgLeaving(this, tableNumber);
-			animation.goToCashier(cashier.getAnimation(RestaurantTimmsAnimatedCashier.class));
+			rtb.getHost().msgLeaving(this, tableNumber);
+			this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToCashier(rtb.getCashier().getAnimation(RestaurantTimmsAnimatedCashier.class));
 			atCashier.acquire();
-			cashier.msgMakePayment(this, money);
+			rtb.getCashier().msgMakePayment(this, this.getPerson().getCash());
 			customerHover.acquire();
-			animation.goToExit();
+			this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToExit();
 			atExit.acquire();
 			state = State.none;
 		} else {
 			// Nothing was ordered because food was too expensive
-			host.msgLeaving(this, tableNumber);
-			animation.goToExit();
+			rtb.getHost().msgLeaving(this, tableNumber);
+			this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToExit();
 			atExit.acquire();
 		}
 	}
 	
-	// Scheduler
+	// Getters
 	
-	@Override
-	public boolean runScheduler() {
-		switch (state) {
-			case goToRestaurant:
-				try {
-					actGoToRestaurant();
-				} catch (InterruptedException e) {}
-				break;
-			case goToTable:
-				try {
-					actGoToTable();
-					actReadMenu();
-				} catch (InterruptedException e) {}
-				break;
-			case orderFromWaiter:
-				try {
-					actOrderFromWaiter();
-				} catch (InterruptedException e) {}
-				break;
-			case hasOrdered:
-				try {
-					actOrderFromWaiter();
-				} catch (InterruptedException e) {}
-				break;
-			case waiterDeliveredFood:
-				actEatFood();
-				break;
-			case longLine:
-				try {
-					actLeaveRestaurant();
-				} catch (InterruptedException e) {}
-				break;
-			default:
-				break;
-		}
-		return false;
-	}
-	
-	// Get
-	
-	// Set
-	
-	@Override
-	public void setHost(RestaurantTimmsHost h) {
-		this.host = h;
-	}
+	// Setters
 	
 	@Override
 	public void setActive() {
-		this.animation = this.getAnimation(RestaurantTimmsAnimatedCustomer.class);
+		// TODO
+		this.eatingItem = null;
+		this.orderItem = null;
+		this.state = State.goToRestaurant;
+		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setVisible(true);
 		super.setActive();
+		stateChanged();
 	}
 	
 }
