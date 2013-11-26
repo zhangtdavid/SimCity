@@ -3,6 +3,7 @@ package city.animations;
 import java.awt.*;
 
 import city.Animation;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.interfaces.RestaurantChoiCook;
 
@@ -96,24 +97,13 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 	 * Sets the string above the Cook to show what he's holding.
 	 * @param choice : what item is being ordered
 	 */
-	public void setOrderIcon(int choice){
-		switch(choice){
-		case 1:
-			orderIcon = "St";
-			break;
-		case 2:
-			orderIcon = "C";
-			break;
-		case 3:
-			orderIcon = "Sa";
-			break;
-		case 4:
-			orderIcon = "P";
-			break;
-		default:
-			orderIcon = "";
-			break;
-		}
+	@Override
+	public void setOrderIcon(FOOD_ITEMS choice){
+		if(choice == FOOD_ITEMS.steak) orderIcon = "St";
+		else if(choice == FOOD_ITEMS.chicken) orderIcon = "C";
+		else if(choice == FOOD_ITEMS.salad) orderIcon = "Sa";
+		else if(choice == FOOD_ITEMS.pizza) orderIcon = "P";
+		else orderIcon = "";
 	}
 
 	// Utilities

@@ -214,6 +214,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		if (restaurant.getCash() >= (t.payment-t.price)) t.c.msgHereIsChange(t.payment-t.price);
 //		t.c.msgHereIsChange(t.payment-t.price);
 		// else, what happens when cashier does not have enough money?
+		//TODO RYAN: don't worry about it; if he gives you extra cash you don't need money to give change; imagine debit?
 	}
 	
 	private void removeTransaction(Transaction t) {

@@ -1,5 +1,6 @@
 package city.animations.interfaces;
 
+import city.Application.FOOD_ITEMS;
 import city.interfaces.AnimationInterface;
 
 public interface RestaurantChoiAnimatedCook extends AnimationInterface {
@@ -30,7 +31,7 @@ public interface RestaurantChoiAnimatedCook extends AnimationInterface {
 	int getYPos();
 	
 	// Setters
-	void setOrderIcon(int choice);    
+	void setOrderIcon(FOOD_ITEMS food_ITEMS);    
 	void setAcquired();
 	
 	// Utilities

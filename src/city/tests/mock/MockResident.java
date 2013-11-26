@@ -4,14 +4,11 @@ import java.util.Calendar;
 import java.util.Date;
 
 import utilities.LoggedEvent;
-import city.Application;
 import city.MockRole;
-import city.buildings.AptBuilding;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
-import city.interfaces.Person;
 import city.interfaces.Resident;
-import city.interfaces.Resident.STATE;
+
 
 public class MockResident extends MockRole implements Resident{
 

@@ -2,11 +2,9 @@ package city.tests.mock;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Date;
 import java.util.List;
 
 import city.MockRole;
-import city.buildings.AptBuilding;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;

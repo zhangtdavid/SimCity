@@ -3,7 +3,6 @@ package city.buildings;
 import java.util.*;
 
 import city.Building;
-import city.Role;
 import city.Application.FOOD_ITEMS;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
@@ -32,8 +31,9 @@ public abstract class ResidenceBaseBuilding extends Building{
 	//setters abstract
 	public abstract void setRent(int i);
 	public abstract void setLandlord(Landlord landlord);
-	public abstract void setResidents(List<Resident> residents);
+	public abstract void addResident(Resident resident);
 	public abstract void setTotal_current_maintenance(int i);
+	public abstract void addFood(FOOD_ITEMS f, int toadd);
 
 	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
         for (FOOD_ITEMS s: receivedItems.keySet()) {

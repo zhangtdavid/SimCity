@@ -3,6 +3,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import city.Animation;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedWaiter;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
@@ -120,24 +121,12 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	}
 	
     // Setters
-	public void setOrderIcon(int choice){
-		switch(choice){
-		case 1:
-			orderIcon = "St";
-			break;
-		case 2:
-			orderIcon = "C";
-			break;
-		case 3:
-			orderIcon = "Sa";
-			break;
-		case 4:
-			orderIcon = "P";
-			break;
-		default:
-			orderIcon = "";
-			break;
-		}
+	public void setOrderIcon(FOOD_ITEMS choice){
+		if(choice == FOOD_ITEMS.steak) orderIcon = "St";
+		else if(choice == FOOD_ITEMS.chicken) orderIcon = "C";
+		else if(choice == FOOD_ITEMS.salad) orderIcon = "Sa";
+		else if(choice == FOOD_ITEMS.pizza) orderIcon = "P";
+		else orderIcon = "";
 	}
 	
 	public void setAcquired(){
