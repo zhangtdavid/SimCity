@@ -1,12 +1,11 @@
 package city.buildings;
 
-import city.Building;
 import city.Role;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPHostRole;
 
-public class RestaurantJPBuilding extends Building {
+public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 	
 	// Data
 	
@@ -14,6 +13,8 @@ public class RestaurantJPBuilding extends Building {
 	public RestaurantJPCashierRole cashier;
 	public RestaurantJPHostRole host;
 	public int seatedCustomers = 0;
+	public static final int WORKER_SALARY = 200;
+	
 	
 	// Constructor
 	
