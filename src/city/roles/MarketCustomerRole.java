@@ -20,23 +20,22 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public EventLog log = new EventLog();
 
 	private MarketBuilding market;
-	private MarketEmployee employee;
+	public MarketEmployee employee;
 	
 	private MarketOrder order;
-    private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
+    public Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	int loc; // stall number of employee
+	public int loc; // stall number of employee
 	
-	int money;
-	int bill;
+	public int bill;
 	
-	private enum MarketCustomerState
+	public enum MarketCustomerState
 	{None, WaitingForService, WaitingForOrder, Paying};
-	MarketCustomerState state;
+	public MarketCustomerState state;
 	
-	private enum MarketCustomerEvent
+	public enum MarketCustomerEvent
 	{ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
-	MarketCustomerEvent event;
+	public MarketCustomerEvent event;
 
 //	Gui
 //	---------------------------------------------------------------
@@ -48,15 +47,17 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	---------------------------------------------------------------
 	public MarketCustomerRole(MarketOrder o) {
 		super(); // TODO
-        for (FOOD_ITEMS s: order.orderItems.keySet()) {
+        for (FOOD_ITEMS s: o.orderItems.keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
+        order = o;
 		state = MarketCustomerState.None;
   }	
 	
 	public void setActive(){
 		event = MarketCustomerEvent.ArrivedAtMarket;
 		this.setActivityBegun();
+		stateChanged();
 	}
 	
 //  Messages
@@ -139,12 +140,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
 		market.manager.msgIWouldLikeToPlaceAnOrder(this);
-		marketCustomerGui.DoStandInWaitingForServiceLine();			
+//		marketCustomerGui.DoStandInWaitingForServiceLine();			
 	}
 	
 	private void giveOrder() {
 		state = MarketCustomerState.WaitingForOrder;
-		marketCustomerGui.DoGoToCounter(loc);
+//		marketCustomerGui.DoGoToCounter(loc);
 //		try {
 //			atCounter.acquire();
 	//	} catch (InterruptedException e) {
@@ -152,12 +153,12 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	//		e.printStackTrace();
 	//	}
 		employee.msgHereIsMyOrder(this, order.orderItems, order.orderId);
-		marketCustomerGui.DoStandInWaitingForServiceLine();		
+//		marketCustomerGui.DoStandInWaitingForServiceLine();		
 	}
 	
 	private void pickUpOrderAndPay() {
 		state = MarketCustomerState.Paying;
-		marketCustomerGui.DoGoToCashier();
+//		masrketCustomerGui.DoGoToCashier();
 //		try {
 //		atCashier.acquire();
 //	} catch (InterruptedException e) {
@@ -166,12 +167,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	}
 		int payment = checkBill();
 		if (payment != -1) 
-			market.cashier.msgHereIsPayment(order.orderId, payment);			
+			market.cashier.msgHereIsPayment(order.orderId, payment);
+			this.getPerson().setCash(this.getPerson().getCash() - payment);
 	}
 	
 	private void leaveMarket() {
 		state = MarketCustomerState.None;
-		marketCustomerGui.DoExitMarket();
+//		marketCustomerGui.DoExitMarket();
 	}
 	
 //  Getters and Setters
