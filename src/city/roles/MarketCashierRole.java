@@ -107,8 +107,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
-//		bankCustomer = new BankCustomerRole(); TODO Get a null point exception here
-
+		bankCustomer = b.bankCustomer;
 	}
 	
 	public void setActive(){
