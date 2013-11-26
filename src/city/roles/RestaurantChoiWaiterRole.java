@@ -14,8 +14,8 @@ public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 	 * @author ryanchoi
 	 *
 	 */
-	public RestaurantChoiWaiterRole(String name) {
-		super(name);
+	public RestaurantChoiWaiterRole() {
+		super();
 	}
 
 	@Override

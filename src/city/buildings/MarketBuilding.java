@@ -67,7 +67,6 @@ public class MarketBuilding extends Building {
 	public void addEmployee(MarketEmployee employee) {
 		employees.add(employee);
 		manager.msgNewEmployee(employee);
-		
 	}
 	
 	public void removeEmployee(MarketEmployee employee) {

@@ -1,8 +1,7 @@
 package city.roles;
 
-import java.util.List;
-
 import city.Role;
+import city.animations.interfaces.RestaurantTimmsAnimatedHost;
 import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
@@ -16,9 +15,6 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	// Data
 		
 	private RestaurantTimmsWaiter waiterWantingBreak;
-	private List<RestaurantTimmsCustomer> customers;
-	private List<RestaurantTimmsWaiter> waiters;
-	private int waiterIndex = 0;
 	private RestaurantTimmsBuilding rtb;
 	
 	// Constructor
@@ -36,9 +32,7 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.waiterWantingBreak = null;
-		this.rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
-		this.customers = rtb.restaurantCustomers;
-		this.waiters = rtb.restaurantWaiters;
+		this.rtb = b;
 	}
 
 	// Messages
@@ -46,20 +40,20 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	@Override
 	public void msgWantSeat(RestaurantTimmsCustomer c) {
 		print("msgWantSeat");
-		customers.add(c);
+		rtb.addCustomer(c, this);
 		stateChanged();
 	}
 	
 	@Override
-	public void msgDoNotWantSeat(RestaurantTimmsCustomer customer) {
+	public void msgDoNotWantSeat(RestaurantTimmsCustomer c) {
 		print("msgDoNotWantSeat");
-		customers.remove(customer);
+		rtb.removeCustomer(c);
 	}
 	
 	@Override
 	public void msgLeaving(RestaurantTimmsCustomer c, int tableNumber) {
 		print("msgLeaving");
-		for (RestaurantTimmsBuilding.Table table : rtb.restaurantTables) {
+		for (RestaurantTimmsBuilding.Table table : rtb.getTables()) {
 			if (table.getNumber() == tableNumber) {
 				table.setUnoccupied();
 			}
@@ -74,25 +68,6 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		stateChanged();
 	}
 	
-	// Actions
-	
-	private void actHandleBreakRequest() {
-		print("actHandleBreakRequest");
-		Integer waitersOnBreak = 0;
-		
-		for (RestaurantTimmsWaiter waiter : waiters) {
-			if (waiter.getWantsBreak())
-				waitersOnBreak += 1;
-		}
-		
-		if ((waitersOnBreak) >= waiters.size()) {
-			waiterWantingBreak.msgAllowBreak(false);
-		} else {
-			waiterWantingBreak.msgAllowBreak(true);
-		}
-		
-		waiterWantingBreak = null;
-	}
 	
 	// Scheduler
 	
@@ -101,36 +76,54 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		if (waiterWantingBreak != null) {
 			actHandleBreakRequest();
 		}
-		synchronized(customers) {
-			if (!customers.isEmpty() && !waiters.isEmpty()) {
-				// Try to seat a customer
-				for (RestaurantTimmsBuilding.Table table : rtb.restaurantTables) {
-					if (!table.getOccupied()) {
-						table.setOccupied();
-						waiters.get(waiterIndex).msgSeatCustomer(customers.get(0), table.getNumber());
-						waiterIndex = (waiterIndex + 1) % waiters.size();
-						customers.remove(0);
-						return true;
-					}
+		if (!rtb.getWaitingCustomers().isEmpty() && !rtb.getWaiters().isEmpty()) {
+			// Try to seat a customer
+			for (RestaurantTimmsBuilding.Table table : rtb.getTables()) {
+				if (!table.getOccupied()) {
+					table.setOccupied();
+					RestaurantTimmsWaiter w = rtb.getWaiter();
+					RestaurantTimmsCustomer c = rtb.getCustomer(this, w);
+					w.msgSeatCustomer(c, table.getNumber());
+					return true;
 				}
-				
-				for (RestaurantTimmsCustomer customer : customers) {
-					customer.msgRestaurantFull();
-				}
+			}
+			
+			for (RestaurantTimmsCustomer c : rtb.getWaitingCustomers()) {
+				c.msgRestaurantFull();
 			}
 		}
 		return false;
 	}
 	
-	// Get
 	
-	// Set
+	// Actions
+	
+	private void actHandleBreakRequest() {
+		print("actHandleBreakRequest");
+		Integer waitersOnBreak = 0;
+		
+		for (RestaurantTimmsWaiter w : rtb.getWaiters()) {
+			if (w.getWantsBreak())
+				waitersOnBreak += 1;
+		}
+		
+		if ((waitersOnBreak) >= rtb.getWaiters().size()) {
+			waiterWantingBreak.msgAllowBreak(false);
+		} else {
+			waiterWantingBreak.msgAllowBreak(true);
+		}
+		
+		waiterWantingBreak = null;
+	}
+
+	// Getters
+	
+	// Setters
 	
 	@Override
 	public void setActive() {
-		this.rtb = this.getWorkplace(RestaurantTimmsBuilding.class);
-		this.customers = rtb.restaurantCustomers;
-		this.waiters = rtb.restaurantWaiters;
+		rtb.setHost(this);
+		this.getAnimation(RestaurantTimmsAnimatedHost.class).setVisible(true);
 		super.setActive();
 		// TODO
 	}

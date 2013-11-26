@@ -1,85 +1,82 @@
 package city.interfaces;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
-import java.util.Timer;
-import java.util.concurrent.ConcurrentHashMap;
+
+import java.util.HashMap;
 
 import utilities.RestaurantChoiOrder;
+import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.buildings.MarketBuilding;
 public interface RestaurantChoiCook extends RoleInterface{
-
-	//Data
-	public List<RestaurantChoiOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChoiOrder>());
-	Timer timer = new Timer(); // for cooking!
-	public ConcurrentHashMap <Integer, Food> foods = new ConcurrentHashMap<Integer,Food>();
-	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>());
-	//RestaurantChoiRevolvingStand orderqueue = null; // this needs to be in the role specifically
-	
 	//Constructor
 	
 	//Messages
-	public void msgRelease();
-	public void msgHeresAnOrder(RestaurantChoiOrder or);
-	public void msgFoodsDone(RestaurantChoiOrder o);
-	//public void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
-	//public void msgFoodReceived(int choice, int amount, Market m);
+	public abstract void msgRelease();
+	public abstract void msgHeresAnOrder(RestaurantChoiOrder or);
+	public abstract void msgFoodsDone(RestaurantChoiOrder o);
+	//public abstract void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
+	//public abstract void msgFoodReceived(int choice, int amount, Market m);
 	//msgs from gui
-	public void msgAtRefrigerator();
-	public void msgAtGrills();
-	public void msgAtPlatingArea();
+	public abstract void msgAtRefrigerator();
+	public abstract void msgAtGrills();
+	public abstract void msgAtPlatingArea();
 	
 	//Scheduler
 	
 	//Actions
-	public void CheckBack();
-	public void MoveFoodToPlating(RestaurantChoiOrder o);
-	public boolean AnalyzeCookOrder(RestaurantChoiOrder o);
-	public boolean CookOrder(RestaurantChoiOrder o);
-	public void DoGoToRefrig();
-	public void DoGoToGrills();
-	public void DoGoToPlates();
+	public abstract void CheckBack();
+	public abstract void MoveFoodToPlating(RestaurantChoiOrder o);
+	public abstract boolean AnalyzeCookOrder(RestaurantChoiOrder o);
+	public abstract boolean CookOrder(RestaurantChoiOrder o);
+	public abstract void DoGoToRefrig();
+	public abstract void DoGoToGrills();
+	public abstract void DoGoToPlates();
 	
 	//Getters
-	public String getName();
-	public RestaurantChoiAnimatedCook getGui();
+	public abstract String getName();
+	public abstract RestaurantChoiAnimatedCook getGui();
 	
 	//Setters
-	public void setGui(RestaurantChoiAnimatedCook gui);
-	//public void setRevolvingStand(RestaurantChoiRevolvingStand r);
-	//public RestaurantChoiRevolvingStand getRevolvingStand();
-	//public void addMarket(Market m);
-	public void setInactive();
+	public abstract void setGui(RestaurantChoiAnimatedCook gui);
+	//public abstract void setRevolvingStand(RestaurantChoiRevolvingStand r);
+	//public abstract RestaurantChoiRevolvingStand getRevolvingStand();
+	public abstract void addMarket(MarketBuilding m);
+	public abstract void setInactive();
 
 	
 	//Utilities
-	public void hackNoFood();
+	public abstract void hackNoFood();
 	
 	class myMarket{
-		//Market market; TODO
-		public boolean[] outOf; // 4 foods, so 4 booleans
-
-		myMarket(/*Market m TODO*/){
-			//market = m; TODO
-			outOf = new boolean[4];
+		MarketBuilding market;
+		public HashMap<String, Boolean> outOf;
+		
+		public myMarket(MarketBuilding m){
+			market = m;
+			outOf.put("Chicken", false);
+			outOf.put("Pizza", false);
+			outOf.put("Salad", false);
+			outOf.put("Steak", false);
+		}
+		public MarketBuilding getMarket(){
+			return market;
 		}
 	}
 
-	public class Food{
-		public int choiceID;
+	public class FoodData{
+		public FOOD_ITEMS choiceID;
 		public int cookingTime; // how long it takes to cook choice
 		public int inventory; // how many to have
 		public int capacity; // amount to order to
 		public int threshold;
 		public int amountOrdered; // amount ordered that's being processed
-		public Food(int i){ 
+		public FoodData(FOOD_ITEMS i){ 
 			choiceID = i;
-			cookingTime = (i+2)*1000;
+			cookingTime = (int)Math.ceil(Math.random()*6)*1000;
 			inventory = 3+(int)Math.ceil(4*Math.random()); // starting inventory between 3-7
 			//inventory = 0; // to test out of food
-			threshold = (int)Math.floor(capacity*0.2); // when you ask market for restock.
 			capacity = 7+(int)Math.ceil(10*Math.random()); // capacity between 7-17
+			threshold = (int)Math.floor(capacity*0.2); // when you ask market for restock.
 			amountOrdered = 0;
 		}
 	}

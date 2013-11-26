@@ -44,9 +44,9 @@ public class LandlordRole extends Role implements Landlord {
 	// Setters
 	@Override
 	public void setActive(){
-		if(residence.total_current_maintenance != 0){
-			
-		}
+//		if(residence.total_current_maintenance != 0){
+//			
+//		}
 		super.setInactive();
 	}
 	

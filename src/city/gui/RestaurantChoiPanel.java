@@ -92,14 +92,6 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         graphics.fillRect(DISHES_X, DISHES_Y, WIDTH, WIDTH);
         
         
-        
-        
-        
-        
-        
-        
-        
-        
     }
     
     public void addVisualizationElement(Animation ve) {

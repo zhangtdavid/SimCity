@@ -1,26 +1,28 @@
 package city.tests;
 
+
 import junit.framework.TestCase;
-import city.agents.PersonAgent;
-import city.interfaces.RestaurantChoiCashier;
-import city.interfaces.RestaurantChoiCashier.Check;
+import city.Application.FOOD_ITEMS;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiCashierRole;
+import city.roles.RestaurantChoiCashierRole.Check;
+import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChoiCustomer;
 import city.tests.mock.MockRestaurantChoiWaiter;
 
 public class RestaurantChoiCashierTest extends TestCase{
 	//these are instantiated for each test separately via the setUp() method.
 	RestaurantChoiCashierRole cashier;
-	PersonAgent p;
+	MockPerson p;
 	MockRestaurantChoiWaiter waiter;
 	MockRestaurantChoiCustomer customer;
 	MockRestaurantChoiCustomer customer1;
+	RestaurantChoiBuilding building;
 	//MockMarket market;
 	//MockMarket market1;
 	//MockMarket market2;
-	//MockBanker banker;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -28,11 +30,13 @@ public class RestaurantChoiCashierTest extends TestCase{
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
-		p = new PersonAgent("person-cashier", null);
+		p = new MockPerson("person-cashier");
 		cashier = new RestaurantChoiCashierRole(); // cashier has no name		
 		customer = new MockRestaurantChoiCustomer("mockcustomer");
 		customer1 = new MockRestaurantChoiCustomer("mockcustomer1");
 		waiter = new MockRestaurantChoiWaiter("mockwaiter");
+		//building = new RestaurantChoiBuilding("restaurant1", null);
+		//building.addRole(cashier);
 		p.addRole(cashier);
 		cashier.setPerson(p);
 		/*market = new MockMarket("mockmarket");
@@ -169,12 +173,12 @@ public class RestaurantChoiCashierTest extends TestCase{
 		cashier.money = 100;
 		System.out.println("------------TESTING TWO CUSTOMER NORMAL SCENARIO");
 		//check preconditions
-		assertEquals("Cashier should have 0 bills in it. It doesn't.",RestaurantChoiCashier.checks.size(), 0);
+		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.checks.size(), 0);
 		assertEquals("CashierAgent should have an empty event log before the Cashier's HereIsBill is called. Instead, the Cashier's event log reads: "
 				+ cashier.log.toString(), 0, cashier.log.size());
 		//test msgCompute
-		cashier.msgCompute(2, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
-		cashier.msgCompute(3, (RestaurantChoiCustomer)customer1, (RestaurantChoiWaiter)waiter); // these happen almost simultaneously
+		cashier.msgCompute(FOOD_ITEMS.pizza, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
+		cashier.msgCompute(FOOD_ITEMS.chicken, (RestaurantChoiCustomer)customer1, (RestaurantChoiWaiter)waiter); // these happen almost simultaneously
 		//check postconditions for msgCompute
 		assertEquals(
 				"MockWaiter should have an empty event log before the Cashier's scheduler is called for the first time. Instead, the MockWaiter's event log reads: "
@@ -182,9 +186,9 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertEquals(
 				"MockCustomer should have an empty event log before the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
 						+ customer.log.toString(), 0, customer.log.size());
-		assertTrue("Cashier has one check request", RestaurantChoiCashier.checks.size() == 2);
+		assertTrue("Cashier has one check request", cashier.checks.size() == 2);
 		assertTrue("Cashier should go through scheduler twice", cashier.runScheduler());
-		assertTrue("Check should be marked as sent to waiter" , RestaurantChoiCashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
+		assertTrue("Check should be marked as sent to waiter" , cashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
 		assertTrue("Check's bill shouldn't be 0 dollars" , cashier.checks.get(0).bill > 0);
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
 				waiter.log.containsString("HeresCheck"));
@@ -228,9 +232,9 @@ public class RestaurantChoiCashierTest extends TestCase{
 		System.out.println("------------TESTING CUSTOMER UNABLE TO PAY SCENARIO");
 		cashier.money = 0;
 		customer.choice = 2;
-		customer.setName("evil");
+		customer.name = "evil";
 		assertTrue("should have no checks", cashier.checks.size() ==0);
-		cashier.msgCompute(2, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
+		cashier.msgCompute(FOOD_ITEMS.pizza, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
 		System.out.println("Cashier # of checks after receiving check: " + cashier.checks.size());
 		assertTrue(cashier.runScheduler());
 		assertTrue("customer should have choice 2", customer.choice==2);
@@ -251,7 +255,15 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertTrue("Cashier should have no money more than before", cashier.money==0);
 		System.out.println("Cashier # of checks after transaction: " + cashier.checks.size());
 	}
+	public void testDeposit(){
+		
+	}
+	public void testWithdraw(){
+		
+	}
 }
+
+
 /*
 	public void testMarketCashierBankerInteraction()
 	{

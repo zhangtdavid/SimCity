@@ -1,23 +1,34 @@
 package city.roles;
 
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import utilities.EventLog;
+import utilities.MarketOrder;
+import utilities.MarketTransaction;
+import city.Application;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
 	//Data    
 	public double money = 100;
     public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
-	public EventLog log = new EventLog(); // TODO import junit3
+	public EventLog log = new EventLog();
 	RestaurantChoiAnimatedCashier cashierGui;
 	private boolean wantsToLeave;
 	private RestaurantChoiBuilding building;
+    public ArrayList<Check> checks = new ArrayList<Check>();
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	private List<Role> roles = new ArrayList<Role>();
 	
     //Constructor
 	/**
@@ -29,20 +40,22 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     public RestaurantChoiCashierRole(RestaurantChoiBuilding b, int t1, int t2){
 		super();
 		building = b;
-		foodCost.put(1, 16);
-		foodCost.put(2, 10);
-		foodCost.put(3, 6);
-		foodCost.put(4, 8);
+		foodCost.put(FOOD_ITEMS.steak, 16);
+		foodCost.put(FOOD_ITEMS.pizza, 11);
+		foodCost.put(FOOD_ITEMS.chicken, 9);
+		foodCost.put(FOOD_ITEMS.salad, 6);
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
+		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
+		roles.add((Role) building.bankConnection); // TODO clean up
     }
     public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
-		foodCost.put(1, 16);
-		foodCost.put(2, 10);
-		foodCost.put(3, 6);
-		foodCost.put(4, 8);
+		foodCost.put(FOOD_ITEMS.steak, 16);
+		foodCost.put(FOOD_ITEMS.pizza, 11);
+		foodCost.put(FOOD_ITEMS.chicken, 9);
+		foodCost.put(FOOD_ITEMS.salad, 6);
     }
     
     //Messages
@@ -51,7 +64,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	/**
 	 * Computes check for waiter
 	 */
-	public void msgCompute(int choice, RestaurantChoiCustomer c,
+	public void msgCompute(FOOD_ITEMS choice, RestaurantChoiCustomer c,
 			RestaurantChoiWaiter w) {
 		checks.add(new Check(choice, c, w));
 		stateChanged();
@@ -76,6 +89,14 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				}
 				stateChanged();
 	}
+	
+	/**
+	 * When the cook requests an order from a market, he forwards the cashier a bill.
+	 */
+	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
+		marketTransactions.add(new MarketTransaction(m, o));	
+	}
+	
 	/*
  	public void msgHeresYourMarketBill(Market m, int type, int amount){
 		double owed = foodCost.get(type)*amount;
@@ -106,19 +127,29 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     //Scheduler
 	@Override
 	public boolean runScheduler() {
-		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0){
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			blocking  = true;
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
+			break;
+		}
+		
+		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
 			wantsToLeave = false;
 			super.setInactive();
 		}
 		//market interactions
-				/*synchronized(marketBills){
+			/*	synchronized(marketBills){
 					for(int i = 0; i < markets.size(); i++){
 						if(marketBills.get(markets.get(i)) > 0){  // double rounding problems? we'll see
 							System.out.println(marketBills.get(markets.get(i)));
 							//if we don't have enough money, get money from the bank
 							//assume the restaurant is successful and has unlimited money for the quarter
 							if(money < marketBills.get(markets.get(i)) && moneyIncoming == NOT_IN_TRANSIT){
-								getMoney(restaurantBanker);
+								getMoney();
 								moneyIncoming = IN_TRANSIT;
 								return true;
 							}else if(money > marketBills.get(markets.get(i))){ // if has to pay and can pay
@@ -150,42 +181,31 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 						return true;
 					}
 				}
-				return false;
+				
+				//Bank interactions lowest priority.
+				if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD) this.depositMoney();
+				if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+				return blocking;
 	}
     //Actions
-
-	@Override
 	public void returnCheck(Check c) {
 		c.getwa().msgHeresCheck(c.getBill(), c.getca());
 		c.setState(Check.GIVEN_TO_WAITER);		
 	}
 
-	@Override
 	public void sendToDishes(Check ch) {
 		ch.getca().msgDoTheDishes((int)(ch.getBill() - ch.getPayment())*3000);
 		ch.setState(Check.FULFILL_BY_DISHES); // the deed is done
-		
 	}
 
-	@Override
 	public void returnChange(Check ch) {
 		System.out.println("Received customer payment of " + ch.getPayment());
 		int change = ch.getPayment()-ch.getBill();
 		money+=ch.getBill();
 		ch.getca().msgHeresYourChange(change);
-		checks.remove(ch);
-		
+		checks.remove(ch);		
 	}
-
-	/*
- @Override
-	
-	public void getMoney(Banker b) {
-		b.msgMoneyPls(1000); // ask for 1000 dollars at a time
-		moneyIncoming = IN_TRANSIT;
-		
-	}
-
+/*
 	@Override
 	public void payMarketBill(Market m, double payment) {
 		m.msgHeresYourPayment(payment);
@@ -213,9 +233,12 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	 	marketBills.put(m,0.0);
 	}
    */ 
+	
     public void setGui(RestaurantChoiAnimatedCashier r){
     	this.cashierGui = r;
     }
+    
+    @Override
     public void setInactive(){
     	if(checks.isEmpty() && this.building.seatedCustomers == 0){ // if no checks and no seated customers
     		super.setInactive(); // end role and leave restaurant
@@ -224,4 +247,75 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
     		wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do
     }
     //Utilities
+
+    
+	@Override
+	public void getMoney() {
+		moneyIncoming = IN_TRANSIT;
+		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+	}
+	
+	@Override
+	public void depositMoney() {
+		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
+	}
+	
+	//Classes
+    public class Check{
+
+		public final static int RECEIVED = 0;
+		public final static int GIVEN_TO_WAITER = 1;
+		public final static int GET_PAID = 2;
+		public final static int NOT_FULFILLED = -5;
+		public final static int FULFILL_BY_DISHES = 3;
+		public int bill;
+		private int payment;
+		private int state;
+		private RestaurantChoiCustomer ca;
+		private RestaurantChoiWaiter wa;
+		
+		public Check(FOOD_ITEMS choice, RestaurantChoiCustomer c, RestaurantChoiWaiter w){
+			this.setwa(w);
+			setBill(foodCost.get(choice)); // takes choice, gives cost.
+			this.setca(c);
+			setState(RECEIVED);
+			setPayment(0);
+		}
+
+		public RestaurantChoiCustomer getca() {
+			return ca;
+		}
+		public void setca(RestaurantChoiCustomer ca) {
+			this.ca = ca;
+		}
+		public int getBill() {
+			return bill;
+		}
+		public void setBill(int bill) {
+			this.bill = bill;
+		}
+		public int getPayment() {
+			return payment;
+		}
+		public void setPayment(int payment) {
+			this.payment = payment;
+		}
+		public int getState() {
+			return state;
+		}
+		public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+			return (MarketCustomerDeliveryPayment) roles.get(0);
+		}
+		public void setState(int state) {
+			this.state = state;
+		}
+		public RestaurantChoiWaiter getwa() {
+			return wa;
+		}
+		public void setwa(RestaurantChoiWaiter wa) {
+			this.wa = wa;
+		}
+	
+	}
+
 }

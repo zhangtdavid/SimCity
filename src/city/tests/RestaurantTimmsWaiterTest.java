@@ -32,9 +32,9 @@
 //		this.customer = new MockRestaurantTimmsCustomer();
 //		this.host = new MockRestaurantTimmsHost();
 //		this.waiterPerson = new MockPerson("Waiter");
-//		this.waiter = new RestaurantTimmsWaiterRole(cook, host, cashier, 0);
+//		//this.waiter = new RestaurantTimmsWaiterRole(cook, host, cashier, 0);//TODO commented by ryan choi, error was bugging me
 //		this.animation = new MockRestaurantTimmsAnimatedWaiter(waiter);
-//		waiter.setAnimation(animation);
+//		//waiter.setAnimation(animation);//TODO commented by ryan choi, error was bugging me
 //		waiter.setPerson(waiterPerson);
 //	
 //		// TODO Required to set prices for menu items
@@ -59,47 +59,5 @@
 //		assertTrue("Customers should be seated.", customer.log.containsString("Received msgGoToTable. Position: 1"));
 //		assertEquals("InternalCustomer's table should be 1.", 1, waiter.customers.get(0).getTableNumber());
 //		assertFalse("Waiter's scheduler should return false.", waiter.runScheduler());
-////		
-////		// Release the waiterHover Semaphore so that each action will return before the next one is called.
-////		waiter.waiterHover.release();
-////		
-//		// Send a message from the customer to take an order. 
-//		waiter.msgWantFood(customer);
-//		waiter.waiterHover.release();
-//		
-//		assertTrue("Waiter's scheduler should return true.", waiter.runScheduler());
-//		assertEquals("Customer's log length should be 2.", 2, customer.log.size());
-//		assertTrue("Customer should be asked for order.", customer.log.containsString("Received msgOrderFromWaiter."));
-//		
-//		// Send a message from the customer to order Steak
-//		waiter.msgOrderFood(customer, Application.FOOD_ITEMS.steak);
-//		
-//		assertTrue("Waiter's scheduler should return true.", waiter.runScheduler());
-//		assertEquals("InternalCustomer's choice should be Steak.", Application.FOOD_ITEMS.steak, waiter.customers.get(0).getStockItem());
-//		assertEquals("Cook's log length should be 1.", 1, cook.log.size());
-//		assertTrue("Cook should receive request to make Steak.", cook.log.containsString("Received msgCookOrder from Waiter. Item: steak"));
-//		
-//		// Send a message from the Cook acknowledging that the order has been received 
-//		waiter.msgOrderPlaced(customer, true);
-//		
-//		assertFalse("Waiter's scheduler should return false.", waiter.runScheduler());
-//		assertEquals("InternalCustomer's state should be makingFood.", InternalCustomer.State.makingFood, waiter.customers.get(0).getState());
-//		
-//		// Send a message from the Cook indicating food is ready
-//		waiter.msgFoodReady(customer);
-//		
-//		assertTrue("Waiter's scheduler should return true.", waiter.runScheduler());
-//		assertEquals("Cook's log length should be 2.", 2, cook.log.size());
-//		assertTrue("Cook should receive request to pick up order.", cook.log.containsString("Received msgPickUpOrder from Waiter."));
-//		assertEquals("Customer's log length should be 3.", 3, customer.log.size());
-//		assertTrue("Customer should receive Steak.", customer.log.containsString("Received msgWaiterDeliveredFood. Item: steak"));
-//		assertEquals("Cashier's log length should be 1.", 1, cashier.log.size());
-//		assertTrue("Cashier should be asked to compute check.", cashier.log.containsString("Received msgComputeCheck from Waiter. Amount: " + steakPrice));
-//		
-//		// Send a message from the Cashier indicating the check is ready
-//		waiter.msgCheckReady();
-//		
-//		assertEquals("Waiter should receive check.", "msgCheckReady", waiter.lastMessage);
 //	}
-//
 //}

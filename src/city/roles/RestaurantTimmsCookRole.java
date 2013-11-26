@@ -9,6 +9,7 @@ import java.util.concurrent.Semaphore;
 
 import city.Application;
 import city.Role;
+import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -18,11 +19,13 @@ import city.interfaces.RestaurantTimmsWaiter;
  * Restaurant cook agent.
  */
 public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook {
+	
 	// Data
 	
 	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private static List<MenuItem> menuItems = Collections.synchronizedList(new ArrayList<MenuItem>());
 	// private List<MarketAgent> markets = new ArrayList<MarketAgent>(); // TODO
+	private RestaurantTimmsBuilding rtb; 
 	
 	private Integer speed;
 	private Timer timer = new Timer();
@@ -32,7 +35,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	private Integer MENU_PRICE_MIN = 5;
 	private Integer MENU_PRICE_MAX = 12;
 	
-	Semaphore marketResponse = new Semaphore(0, true);
+	private Semaphore marketResponse = new Semaphore(0, true);
 	
 	// Constructor
 	
@@ -43,12 +46,13 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
+	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.speed = 3;
+		this.rtb = b;
 		
 // TODO		
 //		// Create the menu. This does not order from the Market.
@@ -82,6 +86,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		orders.remove(order);
 	}
 
+	@Override
 	public void msgMarketOrderPlaced(Application.FOOD_ITEMS s, Boolean inStock) {
 		print("msgMarketOrderPlaced");
 		MenuItem menuItem = findMenuItem(s);
@@ -98,6 +103,45 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		menuItem.incrementQuantityOnHand(quantity);
 		menuItem.setState(MenuItem.State.inStock);
 		stateChanged();
+	}
+	
+	// Scheduler
+	
+	@Override
+	public boolean runScheduler() {
+		synchronized(orders) {
+			// High priority - respond to waiters placing orders
+			for (Order order : orders) {
+				if (order.getState() == Order.State.pending) {
+					if (!actConfirmOrder(order)) {
+						orders.remove(order);
+						return true;
+					}
+				}
+			}
+			
+			// Normal priority - cook food
+			for (Order order : orders) {
+				if (order.getState() == Order.State.queue) {
+					actCookOrder(order);
+					return true;
+				}
+			}
+		}
+		
+		synchronized(menuItems) {
+			// Low priority - order from market
+			for (MenuItem menuItem : menuItems) {
+				if (menuItem.getQuantityOnHand() <= 1 && menuItem.getState() == MenuItem.State.inStock) {
+					try {
+						actOrderFromMarket(menuItem);
+					} catch (InterruptedException e) {}
+				}
+			}
+		}
+		
+		// Fall through
+		return false;
 	}
 	
 	// Actions
@@ -147,46 +191,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 //		m.setState(MenuItem.State.offMenu);
 	}
 	
-	// Scheduler
-	
-	@Override
-	public boolean runScheduler() {
-		synchronized(orders) {
-			// High priority - respond to waiters placing orders
-			for (Order order : orders) {
-				if (order.getState() == Order.State.pending) {
-					if (!actConfirmOrder(order)) {
-						orders.remove(order);
-						return true;
-					}
-				}
-			}
-			
-			// Normal priority - cook food
-			for (Order order : orders) {
-				if (order.getState() == Order.State.queue) {
-					actCookOrder(order);
-					return true;
-				}
-			}
-		}
-		
-		synchronized(menuItems) {
-			// Low priority - order from market
-			for (MenuItem menuItem : menuItems) {
-				if (menuItem.getQuantityOnHand() <= 1 && menuItem.getState() == MenuItem.State.inStock) {
-					try {
-						actOrderFromMarket(menuItem);
-					} catch (InterruptedException e) {}
-				}
-			}
-		}
-		
-		// Fall through
-		return false;
-	}
-	
-	// Get
+	// Getters
 	
 	@Override
 	public int getMenuItemPrice(Application.FOOD_ITEMS s) {
@@ -194,12 +199,14 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		return menuItem.getPrice();
 	}
 	
-	// Set
+	// Setters
 
 	@Override
 	public void setActive() {
-		// TODO
+		rtb.setCook(this);
+		this.getAnimation(RestaurantTimmsAnimatedCook.class).setVisible(true);
 		super.setActive();
+		// TODO
 	}
 	
 	// Utilities 

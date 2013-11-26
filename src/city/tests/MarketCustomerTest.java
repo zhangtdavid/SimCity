@@ -9,6 +9,7 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
+import city.gui.HousePanel;
 import city.gui.MarketPanel;
 import city.roles.MarketCustomerRole;
 import city.roles.MarketCustomerRole.MarketCustomerEvent;
@@ -34,6 +35,7 @@ public class MarketCustomerTest extends TestCase {
 	MarketCustomerRole customer;
 //	MarketAnimatedCustomer marketCustomerGui;
 	MockLandlord landlord;
+	HousePanel housePanel;
 	HouseBuilding home;
 	
 	MockPerson customerDeliveryPerson;
@@ -94,7 +96,7 @@ public class MarketCustomerTest extends TestCase {
 		customer.setMarket(market);
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
-		home = new HouseBuilding("House", landlord);
+		home = new HouseBuilding("House", landlord, housePanel);
 		customerPerson.home = home;
 		customerPerson.setCash(500);
 		

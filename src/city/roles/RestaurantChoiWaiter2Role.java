@@ -14,8 +14,8 @@ import city.interfaces.RestaurantChoiWaiterAbs;
  */
 public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 
-	public RestaurantChoiWaiter2Role(String name) {
-		super(name);
+	public RestaurantChoiWaiter2Role() {
+		super();
 	}
 
 	@Override

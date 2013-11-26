@@ -3,10 +3,7 @@ package city.tests.mock;
 import utilities.LoggedEvent;
 import city.Application;
 import city.MockRole;
-import city.animations.RestaurantTimmsCustomerAnimation;
-import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
 public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantTimmsCustomer {
@@ -14,11 +11,6 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	public MockRestaurantTimmsCustomer() {
 		// TODO Auto-generated method stub
 		
-	}
-	
-	@Override
-	public void msgGoToRestaurant() { 
-		log.add(new LoggedEvent("Received msgGetHungry.")); 
 	}
 	
 	@Override
@@ -63,12 +55,6 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	@Override
 	public void guiAtExit() { 
 		log.add(new LoggedEvent("Received guiAtExit.")); 
-	}
-
-	@Override
-	public void setHost(RestaurantTimmsHost h) {
-		// TODO Auto-generated method stub
-		
 	}
 
 }

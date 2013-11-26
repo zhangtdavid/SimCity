@@ -17,7 +17,9 @@ import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
+import city.gui.HousePanel;
 import city.gui.MainFrame;
 import city.gui.RestaurantChungPanel;
 import city.gui.RestaurantZhangPanel;
@@ -114,27 +116,26 @@ public class Application {
 		
 		CityMap.addBuilding(BUILDING.restaurant, rcb1);
 		// SEVENTH create all your roles after
-
-		
-		
 		
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 
+		HousePanel rhp1 = new HousePanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
-		HouseBuilding h0 = new HouseBuilding("House 0", p0r1);
+		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
 		p0r1.setActive();
 		people.add(p0);
 
 		// Create houses
-		HouseBuilding h1 = new HouseBuilding("House 1", p0r1);
-		HouseBuilding h2 = new HouseBuilding("House 2", p0r1);
-		HouseBuilding h3 = new HouseBuilding("House 3", p0r1);
-		HouseBuilding h4 = new HouseBuilding("House 4", p0r1);
+		HouseBuilding h1 = new HouseBuilding("House 1", p0r1, rhp1);
+		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp1);
+		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp1);
+		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp1);
 
 		// Create people
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);

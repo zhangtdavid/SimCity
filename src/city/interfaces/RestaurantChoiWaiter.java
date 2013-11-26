@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.List;
 
+import city.Application.FOOD_ITEMS;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiTable;
 
@@ -11,11 +12,11 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 	public abstract void msgSeatCustomer(RestaurantChoiCustomer restaurantChoiCustomer,
 			RestaurantChoiTable restaurantChoiTable);
 	public abstract void msgReadyToOrder(RestaurantChoiCustomer c);
-	public abstract void msgHeresMyOrder(RestaurantChoiCustomer c, int choice);
+	public abstract void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice);
 	public abstract void msgOrderComplete(RestaurantChoiOrder o);
 	public abstract void msgImDone(RestaurantChoiCustomer c);
 	public abstract void msgOutOfThisFood(RestaurantChoiOrder o);
-    public abstract void msgCheckPlz(RestaurantChoiCustomer c, int choice);
+    public abstract void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice);
 	public abstract void msgHeresCheck(int total, RestaurantChoiCustomer ca);
 	//more logistics-related methods
 	public abstract void msgRelease();

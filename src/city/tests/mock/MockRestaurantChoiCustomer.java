@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiMenu;
+import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
@@ -133,10 +134,10 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public int pickRandom(int cash, ArrayList<Integer> mem,
+	public FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem,
 			boolean hasHitZero) {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -212,9 +213,9 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public int getChoice() {
+	public FOOD_ITEMS getChoice() {
 		// TODO Auto-generated method stub
-		return 0;
+		return null;
 	}
 
 	@Override
@@ -260,11 +261,6 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void setName(String n) {
-		name = n;		
-	}
-
-	@Override
 	public void setHungryNow() {
 		// TODO Auto-generated method stub
 		
@@ -286,6 +282,12 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	public void setGui(RestaurantChoiAnimatedCustomer anim) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public FOOD_ITEMS int2Food(int index) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 	
 }
