@@ -1,6 +1,5 @@
 package city.interfaces;
 
-import city.Animation;
 import city.Building;
 
 public interface RoleInterface {

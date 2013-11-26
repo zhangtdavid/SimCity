@@ -80,6 +80,9 @@ public abstract class Building implements BuildingInterface {
 	// Utilities 
 	
 	@Override
+	public abstract void addRole(Role r);
+	
+	@Override
 	public void addRole(Role r, Animation a) {
 		roles.put(r, a);
 	}

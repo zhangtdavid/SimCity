@@ -1,25 +1,24 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.List;
 
-import city.Application.FOOD_ITEMS;
-import java.util.*;
-
+import city.Role;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
+
 public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
 	
 	// Constructor
 	
-	public HouseBuilding(String name, Landlord landlord) { // why not Landlord landlord?
-
+	public HouseBuilding(String name, Landlord landlord) {
 		super(name);
-		this.landlord = landlord; // that'd eliminate the need for this cast
+		this.landlord = landlord;
 		this.landlord.setResidence(this);
 	}
+	
+	// Getters
 
 	public Landlord getLandlord() {
 		return landlord;
@@ -36,6 +35,8 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 	public int getTotal_current_maintenance() {
 		return total_current_maintenance;
 	}
+	
+	// Setters
 
 	public void setLandlord(Landlord landlord) {
 		this.landlord = landlord;
@@ -50,6 +51,14 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	public void setResidents(List<Resident> residents) {
 		this.residents = residents;
+	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
 	}
 
 }

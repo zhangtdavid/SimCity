@@ -5,6 +5,7 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Building;
+import city.Role;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -41,6 +42,14 @@ public class RestaurantTimmsBuilding extends Building {
 			restaurantTables.add(new Table(i));
 			i++;
 		}
+	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
 	}
 	
 	// Classes

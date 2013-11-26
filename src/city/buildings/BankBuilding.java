@@ -5,10 +5,13 @@ import java.util.Date;
 import java.util.List;
 
 import city.Building;
+import city.Role;
 import city.interfaces.BankManager;
 import city.roles.BankTellerRole;
 
 public class BankBuilding extends Building {
+	
+	// Data
 
 	public BankManager manager;
 	public List<Account> accounts = new ArrayList<Account>();
@@ -17,9 +20,13 @@ public class BankBuilding extends Building {
 	double funds;
 	public Date loanLastPaid;
 	
+	// Constructor
+	
 	public BankBuilding(String name) {
 		super(name);
 	}
+	
+	// Getters
 	
 	public List<Loan> getLoans(){
 		return loans;
@@ -31,11 +38,23 @@ public class BankBuilding extends Building {
 	
 	public BankManager getManager() {
 		return manager;
-}
+	}
 
+	// Setters
+	
 	public void setManager(BankManager b){
 		manager = b;
 	}
+	
+	// Utilities
+	
+	@Override
+	public void addRole(Role r) {
+		// TODO
+		return;
+	}
+	
+	// Classes
 
 	public static class Loan {
 		public double monthlyPayment;
@@ -55,5 +74,6 @@ public class BankBuilding extends Building {
 			balance = money;
 			acctNum = num;
 		}
-	}	
-};
+	}
+	
+}

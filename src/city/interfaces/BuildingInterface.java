@@ -31,6 +31,7 @@ public interface BuildingInterface {
 	
 	// Utilities 
 	
+	public abstract void addRole(Role r);
 	public void addRole(Role r, Animation a);
 	public void removeRole(Role r);
 	public boolean roleExists(Role r);

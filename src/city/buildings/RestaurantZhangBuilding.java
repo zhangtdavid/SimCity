@@ -2,17 +2,11 @@ package city.buildings;
 
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Vector;
-
-import javax.swing.JLabel;
-import javax.swing.JPanel;
 
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.Animation;
 import city.Building;
 import city.Role;
 import city.animations.RestaurantZhangCookAnimation;
@@ -32,6 +26,9 @@ import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class RestaurantZhangBuilding extends Building {
+	
+	// Data
+	
 	private int nTables = 3;
 	private static final int TABLEXSTART = 80;
 	private static final int TABLEXSPACING = 150;
@@ -41,7 +38,7 @@ public class RestaurantZhangBuilding extends Building {
 	private static final int TABLECOLUMN = 3;
 	private static final int TABLEW = 50;
 	private static final int TABLEH = 50;
-	private static int numberOfWaiters = 0;
+	// private static int numberOfWaiters = 0;
 
 	public Collection<RestaurantZhangTable> tables;
 	public RestaurantZhangMenu menu = new RestaurantZhangMenu();
@@ -55,6 +52,8 @@ public class RestaurantZhangBuilding extends Building {
 
 	public RestaurantZhangPanel panel; //reference to main gui
 
+	// Constructor
+	
 	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantZhangCustomerRole");
@@ -67,8 +66,11 @@ public class RestaurantZhangBuilding extends Building {
     				TABLEW, TABLEH));
     	}
 	}
+	
+	// Utilities
 
-	public Role addRole(Role r) {
+	@Override
+	public void addRole(Role r) {
 		if(r instanceof RestaurantZhangCustomerRole) {
 			RestaurantZhangCustomerRole c = (RestaurantZhangCustomerRole)r;
 			c.setCashier(cashier);
@@ -81,7 +83,6 @@ public class RestaurantZhangBuilding extends Building {
 				customers.add(c);
 				super.addRole(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantZhangWaiterRegularRole) {
 			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
@@ -98,7 +99,6 @@ public class RestaurantZhangBuilding extends Building {
 				waiters.add(w);
 				super.addRole(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantZhangWaiterSharedDataRole) {
 			RestaurantZhangWaiterSharedDataRole w = (RestaurantZhangWaiterSharedDataRole)r;
@@ -116,7 +116,6 @@ public class RestaurantZhangBuilding extends Building {
 				waiters.add(w);
 				super.addRole(w, anim);
 			}
-			return w;
 		}
 		if(r instanceof RestaurantZhangHostRole) {
 			RestaurantZhangHostRole h = (RestaurantZhangHostRole)r;
@@ -125,7 +124,6 @@ public class RestaurantZhangBuilding extends Building {
 				host = h;
 				super.addRole(h, null);
 			}
-			return h;
 		}
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
@@ -139,7 +137,6 @@ public class RestaurantZhangBuilding extends Building {
 				cook = c;
 				super.addRole(c, anim);
 			}
-			return c;
 		}
 		if(r instanceof RestaurantZhangCashierRole) {
 			RestaurantZhangCashierRole c = (RestaurantZhangCashierRole)r;
@@ -148,9 +145,7 @@ public class RestaurantZhangBuilding extends Building {
 				cashier = c;
 				super.addRole(c, null);
 			}
-			return c;
 		}
-		return null;
 	}
 
 }
