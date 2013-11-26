@@ -24,48 +24,22 @@ public class BankManagerTest extends TestCase {
 		this.teller = new MockBankTeller();
 		this.managerPerson = new MockPerson("Manager");
 		this.manager = new BankManagerRole(b, 0, 12);
-		teller.setPerson(managerPerson);
+		manager.setPerson(managerPerson);
 		b.setManager(manager);
 	}
 	
-	/*public void testDirectDepositScenario() {
+	public void testDirectDepositScenario() {
 
 		// Preconditions
 		assertEquals("Customers's log should be empty.", 0, customer.log.size());
-		assertEquals("Manger should have no tasks.", 0, manager.bankTasks.getSize());
+		assertEquals("Manger should have no tasks.", 0, manager.bankTasks.size());
 		
 		// Send a message from the host to seat a customer
-		manager.msgDirectDeposit(customer);
+		manager.msgDirectDeposit(-1, 50, customer);
 		
-		assertEquals("Teller should have a customer.", true, teller.currentCustomer != null);
-		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
+		assertEquals("Manager should have a bankTask.", true, manager.bankTasks.size() == 1);
+		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Customer's log length should be 1.", 1, customer.log.size());
-		assertTrue("Customer should be addressed.", customer.log.containsString("Received msgWhatDoYouWant"));
-		assertFalse("Teller's scheduler should return false.", teller.runScheduler());
-//		
-//		// Release the waiterHover Semaphore so that each action will return before the next one is called.
-//		waiter.waiterHover.release();
-//		
-		// Send a message from the customer to take an order. 
-		teller.msgDeposit(-1, 50);
-		
-		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
-		assertEquals("Manager's log length should be 1.", 1, manager.log.size());
-		assertTrue("Manager should be asked to try deposit.", manager.log.containsString("Received msgTryDeposit"));
-		
-		// Send a message from the customer to order Steak
-		teller.msgHereIsAccount(1);
-		
-		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
-		assertEquals("InternalCustomer's account number should be 1.", 1, teller.currentCustomer.acctNum);
-		assertEquals("Customer's log length should be 2.", 2, customer.log.size());
-		assertTrue("Customer should receive account number.", customer.log.containsString("Received msgAccountCreated 1"));
-		
-		teller.msgDoneAndLeaving();
-		
-		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
-		assertEquals("CurrentCustomer should equal null.", null, teller.currentCustomer);
-		assertEquals("Manager's log length should be 2.", 2, manager.log.size());
-		assertTrue("Manager should be notified that teller is available.", manager.log.containsString("Received msgAvailable"));
-	}*/
+		assertTrue("Customer should be informed of account creation.", customer.log.containsString("Received msgAccountCreated"));
+	}
 }
