@@ -25,7 +25,6 @@ import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungWaiter;
 
@@ -46,8 +45,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
 	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-	private RestaurantChungCashier restaurantChungCashier;     
-    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients       
+
+    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
+        
+//  Market Orders
+//  =====================================================================        
     public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
     private enum MarketOrderState {Pending, Ordered};
 
@@ -308,13 +310,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
-    	System.out.println(restaurant);
-    	System.out.println(o.order);
-    	System.out.println(restaurantChungCashier.getMarketCustomerDeliveryPayment());
-        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.cashier.getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
-        marketCustomerDelivery.setActive();
+        marketCustomerDelivery.setPerson(super.getPerson());
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
+    	restaurant.cashier.msgAddMarketOrder(selectedMarket, o.order);
+        marketCustomerDelivery.setActive();
         return;
     }
     
@@ -470,9 +471,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
     }
     
-    public void setRestaurantCashier(RestaurantChungCashier c) {
-    	restaurantChungCashier = c;
-    }
+//    public void setRestaurantCashier(RestaurantChungCashier c) {
+//    	restaurantChungCashier = c;
+//    }
     
 	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
 		orderStand = stand;

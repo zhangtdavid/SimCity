@@ -27,6 +27,7 @@ public class BankBuilding extends Building {
 	double funds;
 	public Date loanLastPaid;
 	public HashMap<Role, Animation> allRoles = new HashMap<Role, Animation>();
+	public static final int WORKER_SALARY = 300;
 
 	
 	// Constructor

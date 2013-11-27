@@ -587,19 +587,11 @@ public class Application {
 		p9Choi.setCar(c9Choi);
 		p10Choi.setCar(c10Choi);
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
-		// FIRST add a panel
-		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
-		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantChung1 = new CityViewRestaurant(400, 250, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, rcp1); 
-		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantChung1);
-		// FOURTH create a new building, last argument is the panel in step ONE
-		RestaurantChungBuilding rcb1 = new RestaurantChungBuilding("RestaurantChung1", rcp1, restaurantChung1);
-		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rcp1, restaurantChung1.ID);
-		// SIXTH add the new building to the map
-		CityMap.addBuilding(BUILDING.restaurant, rcb1);
-		// SEVENTH create all your roles after
+	
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding")); // Has to be created before restaurant, needed for bank customer
+
+		
+		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 
 		HousePanel rhp1Chung = new HousePanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 
@@ -661,26 +653,6 @@ public class Application {
 		p2Chung.setCar(c2Chung);
 		p3Chung.setCar(c3Chung);
 		p4Chung.setCar(c4Chung);
-
-		// Create cashier
-		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p1r1Chung);
-		p1Chung.setOccupation(p1r1Chung);
-
-		// Create cook
-		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p2r1Chung);
-		p2Chung.setOccupation(p2r1Chung);
-
-		// Create host
-		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p3r1Chung);
-		p3Chung.setOccupation(p3r1Chung);
-
-		// Create waiter
-		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p4r1Chung);
-		p4Chung.setOccupation(p4r1Chung);
 
 		// Start threads
 
@@ -821,6 +793,40 @@ public class Application {
 		rjpp1.addVisualizationElement(p5a1);
 		p5.addRole(p5r1);
 		people.add(p5);
+=======
+		MarketCashierRole p5r1 = new MarketCashierRole(mb1, 0, 12); // TODO Change shift times
+		p5r1.setPerson(p5);
+		rcb1.addRole(p5r1);
+		p5.setOccupation(p5r1);
+		mb1.setCashier(p5r1);
+
+		// Create manager
+		// had to move to before delivery person and employee for add functions to work
+		MarketManagerRole p8r1 = new MarketManagerRole(mb1, 0, 12); // TODO Change shift times
+		p8r1.setPerson(p8);
+		rcb1.addRole(p8r1);
+		p8.setOccupation(p8r1);
+		mb1.setManager(p8r1);
+		
+		// Create delivery person
+		MarketDeliveryPersonRole p6r1 = new MarketDeliveryPersonRole(mb1, 0, 12); // TODO Change shift times
+		p6r1.setPerson(p6);
+		rcb1.addRole(p6r1);
+		p6.setOccupation(p6r1);
+		mb1.addDeliveryPerson(p6r1);
+
+		// Create employee
+		MarketEmployeeRole p7r1 = new MarketEmployeeRole(mb1, 0, 12); // TODO Change shift times
+		p7r1.setPerson(p7);
+		rcb1.addRole(p7r1);
+		p7.setOccupation(p7r1);
+		mb1.addEmployee(p7r1);
+		
+		c5.startThread();
+		c6.startThread();
+		c7.startThread();
+		c8.startThread();
+>>>>>>> schung
 		p5.startThread();
 		p5r1.gotHungry();
 

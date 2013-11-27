@@ -378,4 +378,8 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	public void setGui(RestaurantJPWaiterAnimation gui) {
 		waiterGui = gui;
 	}
+	
+	public void setRevolvingOrderStand(RestaurantJPRevolvingStand orderStand){
+		revolvingStand = orderStand;
+	}
 }

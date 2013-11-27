@@ -311,6 +311,12 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		customerGui = gui;
 		
 	}
+
+	public void setCashier(RestaurantJPCashier csh) {
+		// TODO Auto-generated method stub
+		cashier = csh;
+	}
+
 	
 	@Override
 	public void print(String msg) {
