@@ -37,6 +37,8 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 	private List<RestaurantTimmsBuilding.Table> restaurantTables = Collections.synchronizedList(new ArrayList<RestaurantTimmsBuilding.Table>());
 	private List<MenuItem> restaurantMenu = Collections.synchronizedList(new ArrayList<MenuItem>());
 	private List<InternalMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<InternalMarketOrder>());
+	private List<Check> restaurantChecks = Collections.synchronizedList(new ArrayList<Check>());
+	private List<Order> restaurantOrders = Collections.synchronizedList(new ArrayList<Order>());
 	
 	private static final int START_CASH_MIN = 1000;
 	private static final int START_CASH_MAX = 5000;
@@ -146,15 +148,20 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 		return restaurantWaiters.indexOf(w);
 	}
 	
-	/**
-	 * Returns the list of tables.
-	 */
-	public List<RestaurantTimmsBuilding.Table> getTables() {
+	public List<Table> getTables() {
 		return restaurantTables;
 	}
 	
 	public List<MenuItem> getMenuItems() {
 		return restaurantMenu;
+	}
+	
+	public List<Check> getChecks() {
+		return restaurantChecks;
+	}
+	
+	public List<Order> getOrders() {
+		return restaurantOrders;
 	}
 	
 	//=========//
@@ -259,6 +266,18 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 	
 	public void addMarketOrder(InternalMarketOrder o) {
 		marketOrders.add(o);
+	}
+	
+	public void addCheck(Check c) {
+		restaurantChecks.add(c);
+	}
+	
+	public void addOrder(Order o) {
+		restaurantOrders.add(o);
+	}
+	
+	public void removeOrder(Order o) {
+		restaurantOrders.remove(o);
 	}
 	
 	/**
@@ -426,6 +445,96 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 
 		public void setUnoccupied() {
 			this.occupied = false;
+		}
+	}
+	
+	public static class Check {
+		private RestaurantTimmsWaiter waiter;
+		private RestaurantTimmsCustomer customer;
+		private int amount;
+		private int amountOffered;
+		
+		public enum State { queue, unpaid, paying, paid };
+		private State state;
+		
+		public Check(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int amount) {
+			this.waiter = w;
+			this.customer = c;
+			this.amount = amount;
+			this.amountOffered = 0;
+			this.state = State.queue;
+		}
+		
+		public int getAmount() {
+			return this.amount;
+		}
+		
+		public int getAmountOffered() {
+			return this.amountOffered;
+		}
+		
+		public RestaurantTimmsCustomer getCustomer() {
+			return this.customer;
+		}
+		
+		public State getState() {
+			return this.state;
+		}
+		
+		public RestaurantTimmsWaiter getWaiter() {
+			return this.waiter;
+		}
+		
+		public void setState(State s) {
+			this.state = s;
+		}
+		
+		public void setAmount(int i) {
+			this.amount = i;
+		}
+		
+		public void setAmountOffered(int i) {
+			this.amountOffered = i;
+		}
+		
+		public void setWaiter(RestaurantTimmsWaiter w) {
+			this.waiter = w;
+		}
+	}
+	
+	public static class Order {
+		private RestaurantTimmsWaiter waiter;
+		private RestaurantTimmsCustomer customer;
+		private Application.FOOD_ITEMS item;
+		
+		public enum State { pending, queue, cooking, ready };
+		private State state;
+
+		public Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
+			this.waiter = w;
+			this.customer = c;
+			this.item = s;
+			this.state = State.pending;
+		}
+		
+		public RestaurantTimmsWaiter getWaiter() {
+			return this.waiter;
+		}
+		
+		public RestaurantTimmsCustomer getCustomer() {
+			return this.customer;
+		}
+		
+		public Application.FOOD_ITEMS getItem() {
+			return this.item;
+		}
+		
+		public State getState() {
+			return this.state;
+		}
+		
+		public void setState(State s) {
+			this.state = s;
 		}
 	}
 

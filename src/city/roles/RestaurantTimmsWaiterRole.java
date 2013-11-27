@@ -29,6 +29,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	private int tiredness;
 	private Timer timer = new Timer();
 	private RestaurantTimmsBuilding rtb;
+	private boolean shiftOver;
 	
 	private List<InternalCustomer> customers = new ArrayList<InternalCustomer>();
 	
@@ -57,6 +58,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		this.wantsBreak = false;
 		this.tiredness = 15;
 		this.rtb = b;
+		this.shiftOver = false;
 	}
 	
 	// Messages
@@ -163,6 +165,22 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	@Override
 	public boolean runScheduler() {
 		InternalCustomer temp = null;
+		
+		if (shiftOver) {
+			boolean disposition = true;
+			for (InternalCustomer c : customers) {
+				if (c.getState() != InternalCustomer.State.foodDelivered) {
+					disposition = false;
+					break;
+				}
+			}
+			if (disposition) {
+				print("Leaving shift.");
+				customers.clear();
+				super.setInactive();
+				return false;
+			}
+		}
 		
 		// Handle break requests
 		if (wantsBreak) {
@@ -286,7 +304,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToTable(c.getTableNumber(), c.getStockItem().toString());
 		atTable.acquire();
 		customer.msgWaiterDeliveredFood(c.getStockItem());
-		c.setState(InternalCustomer.State.none);
+		c.setState(InternalCustomer.State.foodDelivered);
 		rtb.getCashier().msgComputeCheck(this, c.getCustomer(), rtb.getCook().getMenuItemPrice(c.getStockItem()));
 		waiterHover.acquire();
 	}
@@ -308,11 +326,23 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	@Override
 	public void setActive() {
 		rtb.addWaiter(this);
+		shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).setVisible(true);
 		super.setActive();
 	}
 	
+	@Override
+	public void setInactive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		shiftOver = true;
+	}
+	
 	// Utilities
+	
+	@Override
+	public void print(String msg) {
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsWaiterRole " + this.getPerson().getName(), msg);
+    }
 	
 	private InternalCustomer findCustomer(RestaurantTimmsCustomer c) {
 		InternalCustomer customer = null;
@@ -331,7 +361,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	// for the waiter, and the state is changed based on messages received.
 	
 	public static class InternalCustomer {
-		public enum State { none, seat, order, hasOrdered, makingFood, foodReady };
+		public enum State { none, seat, order, hasOrdered, makingFood, foodReady, foodDelivered };
 		
 		private RestaurantTimmsCustomer customer;
 		private State state;
@@ -373,10 +403,4 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 			this.stockItem = s;
 		}
 	}
-	
-	@Override
-	public void print(String msg) {
-        super.print(msg);
-        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsWaiterRole " + this.getPerson().getName(), msg);
-    }
 }

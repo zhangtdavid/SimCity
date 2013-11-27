@@ -1,14 +1,11 @@
 package city.tests.mock;
 
-import java.util.List;
-
 import utilities.LoggedEvent;
 import city.MockRole;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
-import city.roles.RestaurantTimmsCashierRole.Check;
 
 public class MockRestaurantTimmsCashier extends MockRole implements RestaurantTimmsCashier {
 	
@@ -44,11 +41,6 @@ public class MockRestaurantTimmsCashier extends MockRole implements RestaurantTi
 	@Override
 	public int getMoneyOwed() {
 		return 0;
-	}
-
-	@Override
-	public List<Check> getChecks() {
-		return null;
 	}
 
 }

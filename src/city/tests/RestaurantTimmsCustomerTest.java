@@ -30,7 +30,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		host = new MockRestaurantTimmsHost();
 		waiter = new MockRestaurantTimmsWaiter();
 		
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, null);
 		rtb.setCashier(cashier);
 		rtb.setHost(host);
 		

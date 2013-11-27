@@ -1,7 +1,6 @@
 package city.roles;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import trace.AlertLog;
@@ -10,6 +9,8 @@ import utilities.MarketTransaction;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.buildings.RestaurantTimmsBuilding;
+import city.buildings.RestaurantTimmsBuilding.Check;
+import city.buildings.RestaurantTimmsBuilding.Check.State;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -24,9 +25,9 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	
 	private int moneyCollected;
 	private int moneyOwed;
+	private boolean shiftOver;
 	private RestaurantTimmsBuilding rtb; 
 	
-	private List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
 	private List<Role> roles = new ArrayList<Role>(); // For market orders
 	
 	private MarketCustomerDeliveryPayment marketPaymentRole;
@@ -49,6 +50,8 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
 		this.rtb = b;
+		this.marketTransactions = new ArrayList<MarketTransaction>();
+		this.shiftOver = false;
 		
 		// The sub-role for paying the market is always part of the cashier. It's always active.
 		// Not giving the sub-role knowledge of the role's person. Hopefully this won't cause problems.
@@ -73,13 +76,13 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		if (check == null) {
 			// This is the first time the customer has been here
 			print("msgComputeCheck - new check balance of $" + money);
-			checks.add(new Check(w, c, money));
+			rtb.addCheck(new Check(w, c, money));
 		} else {
 			// The customer has not been here before, or the customer is paying an old check, plus today's check
-			print("msgComputeCheck - previous balance of $" + check.amount + " plus today's $" + money);
-			check.state = Check.State.queue;
-			check.waiter = w;
-			check.addAmount(money);
+			print("msgComputeCheck - previous balance of $" + check.getAmount() + " plus today's $" + money);
+			check.setState(State.queue);
+			check.setWaiter(w);
+			check.setAmount(check.getAmount() + money);
 		}
 		moneyOwed = (moneyOwed + money);
 		stateChanged();
@@ -95,9 +98,9 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	@Override
 	public void msgMakePayment(RestaurantTimmsCustomer c, int money) {
 		Check check = findCheck(c);
-		check.amountOffered = money;
-		print("msgMakePayment - offered $" + money + " for bill of $" + check.amount);
-		check.state = Check.State.paying;
+		check.setAmountOffered(money);
+		print("msgMakePayment - offered $" + money + " for bill of $" + check.getAmount());
+		check.setState(State.paying);
 		stateChanged();
 	}
 	
@@ -109,16 +112,20 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		// Primary Scheduler /
 		//-------------------/
 		
-		synchronized(checks) {
-			for (Check check : checks) {
-				if (check.state == Check.State.queue) {
-					actComputeCheck(check);
-					return true;
-				}
-				if (check.state == Check.State.paying) {
-					actAcceptPayment(check);
-					return true;
-				}
+		if (shiftOver && !rtb.getCashier().equals(this)) {
+			print("Leaving shift.");
+			super.setInactive();
+			return false;
+		}
+		
+		for (Check c : rtb.getChecks()) {
+			if (c.getState() == State.queue) {
+				actComputeCheck(c);
+				return true;
+			}
+			if (c.getState() == State.paying) {
+				actAcceptPayment(c);
+				return true;
 			}
 		}
 
@@ -148,9 +155,9 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c the queued Check object
 	 */
 	private void actComputeCheck(Check c) {
-		c.state = Check.State.unpaid;
-		print("actComputeCheck - $" + c.amount + " owed.");
-		c.waiter.msgCheckReady();	
+		c.setState(State.unpaid);
+		print("actComputeCheck - $" + c.getAmount() + " owed.");
+		c.getWaiter().msgCheckReady();	
 	}
 	
 	/**
@@ -163,21 +170,21 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param c the unpaid Check object
 	 */
 	private void actAcceptPayment(Check c) {
-		int change = (c.amountOffered - c.amount);
+		int change = (c.getAmountOffered() - c.getAmount());
 		if (change >= 0) {
-			print("actAcceptPayment - paid - " + c.amount);
-			rtb.setCash(rtb.getCash() + c.amount);
-			moneyCollected = (moneyCollected + c.amount);
-			moneyOwed = (moneyOwed - c.amount);
-			c.state = Check.State.paid;
-			c.amount = 0;
-			c.amountOffered = 0;
-			c.customer.msgPaidCashier(change);
+			print("actAcceptPayment - paid - " + c.getAmount());
+			rtb.setCash(rtb.getCash() + c.getAmount());
+			moneyCollected = (moneyCollected + c.getAmount());
+			moneyOwed = (moneyOwed - c.getAmount());
+			c.setState(State.paid);
+			c.setAmount(0);
+			c.setAmountOffered(0);
+			c.getCustomer().msgPaidCashier(change);
 		} else {
 			print("actAcceptPayment - unpaid");
-			c.state = Check.State.unpaid;
-			c.customer.msgPaidCashier(c.amountOffered);
-			c.amountOffered = 0;
+			c.setState(State.unpaid);
+			c.getCustomer().msgPaidCashier(c.getAmountOffered());
+			c.setAmountOffered(0);
 		}
 	}
 	
@@ -198,26 +205,28 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		return moneyOwed;
 	}
 	
-	@Override
-	public List<Check> getChecks() {
-		return checks;
-	}
-	
 	// Setters
 	
 	@Override
 	public void setActive() {
 		rtb.setCashier(this);
 		this.getAnimation(RestaurantTimmsAnimatedCashier.class).setVisible(true);
+		shiftOver = false;
 		super.setActive();
+	}
+	
+	@Override
+	public void setInactive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		shiftOver = true;
 	}
 	
 	// Utilities 
 	
 	private Check findCheck(RestaurantTimmsCustomer c) {
 		Check item = null;
-		for (Check check : checks) {
-			if (check.customer == c) {
+		for (Check check : rtb.getChecks()) {
+			if (check.getCustomer() == c) {
 				item = check;
 				break;
 			}
@@ -225,41 +234,8 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		return item;
 	}
 	
-	// Check Class
-	
-	public static class Check {
-		private RestaurantTimmsWaiter waiter;
-		private RestaurantTimmsCustomer customer;
-		private int amount;
-		private int amountOffered;
-		
-		public enum State { queue, unpaid, paying, paid };
-		private State state;
-		
-		public Check(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int amount) {
-			this.waiter = w;
-			this.customer = c;
-			this.amount = amount;
-			this.amountOffered = 0;
-			this.state = State.queue;
-		}
-		
-		public int getAmount() {
-			return this.amount;
-		}
-		
-		public Check.State getState() {
-			return this.state;
-		}
-		
-		public void addAmount(Integer i) {
-			this.amount = (this.amount + i);
-		}
-	}
-	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCashierRole " + this.getPerson().getName(), msg);
     }
 	

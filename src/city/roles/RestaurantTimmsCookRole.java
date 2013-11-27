@@ -1,7 +1,6 @@
 package city.roles;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
@@ -20,6 +19,7 @@ import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.InternalMarketOrder;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.buildings.RestaurantTimmsBuilding.Order;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -34,11 +34,11 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	private Integer speed;
 	private Timer timer = new Timer();
-	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
 	private RestaurantTimmsBuilding rtb; 
 	private List<Role> roles = new ArrayList<Role>(); // For market orders
 	private MarketCustomerDelivery marketCustomerDeliveryRole;
 	private static final int MARKET_ORDER_SIZE = 5;
+	private boolean shiftOver;
 	
 	// Constructor
 	
@@ -57,6 +57,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		this.speed = 3;
 		this.rtb = b;
 		this.marketCustomerDeliveryRole = null;
+		this.shiftOver = false;
 	}
 	
 	// Messages
@@ -64,7 +65,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	@Override
 	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
 		print("msgCookOrder");
-		orders.add(new Order(w, c, s));
+		rtb.addOrder(new Order(w, c, s));
 		stateChanged();
 	}
 	
@@ -72,13 +73,13 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	public void msgPickUpOrder(RestaurantTimmsCustomer c) {
 		print("msgPickUpOrder");
 		Order order = null;
-		for (Order o : orders) {
+		for (Order o : rtb.getOrders()) {
 			if (o.getCustomer() == c) {
 				order = o;
 				break;
 			}
 		}
-		orders.remove(order);
+		rtb.removeOrder(order);
 	}
 	
 	// Scheduler
@@ -89,23 +90,27 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		// Primary Scheduler /
 		//-------------------/
 		
-		synchronized(orders) {
-			// High priority - respond to waiters placing orders
-			for (Order order : orders) {
-				if (order.getState() == Order.State.pending) {
-					if (!actConfirmOrder(order)) {
-						orders.remove(order);
-						return true;
-					}
-				}
-			}
-			
-			// Normal priority - cook food
-			for (Order order : orders) {
-				if (order.getState() == Order.State.queue) {
-					actCookOrder(order);
+		if (shiftOver && !rtb.getCook().equals(this)) {
+			print("Leaving shift.");
+			super.setInactive();
+			return false;
+		}
+		
+		// High priority - respond to waiters placing orders
+		for (Order order : rtb.getOrders()) {
+			if (order.getState() == Order.State.pending) {
+				if (!actConfirmOrder(order)) {
+					rtb.removeOrder(order);
 					return true;
 				}
+			}
+		}
+		
+		// Normal priority - cook food
+		for (Order order : rtb.getOrders()) {
+			if (order.getState() == Order.State.queue) {
+				actCookOrder(order);
+				return true;
 			}
 		}
 		
@@ -146,8 +151,8 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	private Boolean actConfirmOrder(Order o) {
 		print("actConfirmOrder");
 		Order order = o;
-		if (checkStore(order.getStockItem())) {
-			decrementMenuItem(order.getStockItem(), 1);
+		if (checkStore(order.getItem())) {
+			decrementMenuItem(order.getItem(), 1);
 			order.setState(Order.State.queue);
 			order.getWaiter().msgOrderPlaced(order.getCustomer(), true);
 			return true;
@@ -158,7 +163,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	}
 	
 	private void actCookOrder(final Order o) {
-		print("actCookOrder - " + o.getStockItem().toString());
+		print("actCookOrder - " + o.getItem().toString());
 		o.setState(Order.State.cooking);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -207,8 +212,15 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	@Override
 	public void setActive() {
 		rtb.setCook(this);
+		shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedCook.class).setVisible(true);
 		super.setActive();
+	}
+	
+	@Override
+	public void setInactive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		shiftOver = true;
 	}
 	
 	// Utilities 
@@ -239,46 +251,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCookRole " + this.getPerson().getName(), msg);
     }
-	
-	// Order Class
-
-	private static class Order {
-		private RestaurantTimmsWaiter waiter;
-		private RestaurantTimmsCustomer customer;
-		private Application.FOOD_ITEMS stockItem;
-		
-		public enum State { pending, queue, cooking, ready };
-		private State state;
-
-		Order(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
-			this.waiter = w;
-			this.customer = c;
-			this.stockItem = s;
-			this.state = State.pending;
-		}
-		
-		private RestaurantTimmsWaiter getWaiter() {
-			return this.waiter;
-		}
-		
-		private RestaurantTimmsCustomer getCustomer() {
-			return this.customer;
-		}
-		
-		private Application.FOOD_ITEMS getStockItem() {
-			return this.stockItem;
-		}
-		
-		private State getState() {
-			return this.state;
-		}
-		
-		private void setState(State s) {
-			this.state = s;
-		}
-	}
 
 }
