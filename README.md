@@ -72,7 +72,7 @@ There is still work to be done in the animations. People do not walk in the stre
   - Restaurant testing is virtually non-existent, except for the Cashier
   - Loan payment functionality exists in local branch but was not done in time for integration (EDIT: may have gotten in)
   - Internal BankGui was not completed
-  - Ironically, personal restaurant was integrated with the market but not the bank
+  - Ironically, personal restaurant was not fully integrated with Bank (EDIT: might have gotten in)
   - All Bank interactions have ben tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration (EDIT: may have gotten in)
 
 ### Shirley Chung (19%)
