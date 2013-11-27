@@ -184,7 +184,7 @@ public class Application {
 		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
-		BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		//BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
 		// THIRD add it to the list of statics in the cityView
@@ -196,11 +196,8 @@ public class Application {
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
 		// SEVENTH create all your roles after
-
-		// Create buildings
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
-
-		// Create landlord
+		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
+		
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
 		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 12);
 		p1.setOccupation(p1r1);
@@ -283,7 +280,7 @@ public class Application {
 		 */
 		public static Building findRandomBuilding(BUILDING type) {
 			List<Building> list = map.get(type);
-			Collections.shuffle(list);
+			//Collections.shuffle(list);
 			return list.get(0);
 		}
 

@@ -48,7 +48,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		super();
 		building = b;
 		building.setCashier(this);
-		name = this.getPerson().getName();
+		//name = this.getPerson().getName();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
@@ -145,6 +145,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		}
 		}
 		return false;
+		
 	}
 
 // ACTIONS----------------------------------------------------------------------------------------
