@@ -47,13 +47,11 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
 		print("Direct Deposit message received");
-		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null, r));
 		if(acctNum == -1)
 			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, null, r));
 		else
 			bankTasks.add(new BankTask(acctNum, type.deposit, money, null, r));
 		stateChanged();
-		runScheduler();
 	}
 	//from teller
 	public void msgAvailable(BankTeller t){
@@ -183,11 +181,6 @@ public class BankManagerRole extends Role implements BankManager{
 		myT.teller.msgAddressCustomer(bc);
 	}
 	private void atmDeposit(BankTask bT){
-		if(bT.acctNum == -1){
-			bankTasks.remove(bT);
-			CreateAccount(bT);
-		}	
-		else{
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
 				a.balance += bT.money;
@@ -195,7 +188,6 @@ public class BankManagerRole extends Role implements BankManager{
 				bT.bc.msgDepositCompleted();
 				return;
 			}
-		}
 		}
 	}
 	private void Deposit(BankTask bT){
@@ -223,9 +215,9 @@ public class BankManagerRole extends Role implements BankManager{
 	private void CreateAccount(BankTask bT){
 		building.accounts.add(new Account(building.accounts.size() + 1, bT.money));
 		bankTasks.remove(bT);
-		if(bT.t == type.acctCreate)
+		if(bT.bc == null)
 			bT.teller.msgHereIsAccount(building.accounts.size());
-		else if(bT.t == type.atmDeposit){
+		else {
 			bT.bc.msgAccountCreated(building.accounts.size());
 		}
 	}
