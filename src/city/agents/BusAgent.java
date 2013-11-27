@@ -179,7 +179,6 @@ public class BusAgent extends Agent implements Bus {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.BUS, "BusAgent " + this.getName(), msg);
     }
 	

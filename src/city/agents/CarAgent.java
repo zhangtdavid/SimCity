@@ -94,7 +94,6 @@ public class CarAgent extends Agent implements Car {
 
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.CAR, "BusAgent " + this.getName(), msg);
     }
 	
