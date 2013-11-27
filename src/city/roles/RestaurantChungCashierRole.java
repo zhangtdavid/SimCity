@@ -16,53 +16,22 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
-/**
- * Restaurant Cook Agent
- */
-// A Cashier calculates and processes customers' bills
 
 public class RestaurantChungCashierRole extends Role implements RestaurantChungCashier {	
+	
+//	Data
+//	=====================================================================	
+	
 	public EventLog log = new EventLog();
-
 	Timer timer = new Timer();
 	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
-
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
-	
 	private List<Role> roles = new ArrayList<Role>();
-
-
-//	Transactions
-//	=====================================================================	
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public class Transaction {
-		RestaurantChungWaiter w;
-		RestaurantChungCustomer c;
-		String choice;
-		public int price;
-		public int payment;
-		public TransactionState s;
-		
-		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, String order, TransactionState state) {
-			w = w2;
-			c = customer;
-			choice = order;
-			price = restaurant.getFoods().get(choice).price;
-			payment = 0;
-			s = state;
-		}
-	}
-		
-	public enum TransactionState
-	{None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
-	
+	public enum TransactionState {None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
-	
-	// list market transactions
-
 		
 //	Constructor
 //	=====================================================================		
@@ -73,12 +42,12 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
-		roles.add((Role) restaurant.bankCustomer); // TODO clean up
+//		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		super.setActive();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;
@@ -189,7 +158,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		//and wait.
 	}
 
-	//  Actions
+//  Actions
 //	=====================================================================	
 	private void depositMoney() {
 		restaurant.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
@@ -231,6 +200,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 //	Utilities
 //	=====================================================================	
+	
 	public void setRestaurant(RestaurantChungBuilding restaurant) {
 		this.restaurant = restaurant;
 	}
@@ -280,5 +250,26 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
         	return t.bill;
         
 		return -1;
+	}
+	
+//	Classes
+//	=====================================================================	
+
+	public class Transaction {
+		RestaurantChungWaiter w;
+		RestaurantChungCustomer c;
+		String choice;
+		public int price;
+		public int payment;
+		public TransactionState s;
+		
+		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, String order, TransactionState state) {
+			w = w2;
+			c = customer;
+			choice = order;
+			price = restaurant.getFoods().get(choice).price;
+			payment = 0;
+			s = state;
+		}
 	}
 }

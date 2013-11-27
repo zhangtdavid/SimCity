@@ -3,41 +3,53 @@ package city.buildings;
 import java.util.ArrayList;
 import java.util.List;
 
+import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.animations.RestaurantChungCashierAnimation;
+import city.animations.RestaurantChungCookAnimation;
+import city.animations.RestaurantChungCustomerAnimation;
+import city.animations.RestaurantChungWaiterAnimation;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungCustomerRole;
+import city.roles.RestaurantChungHostRole;
+import city.roles.RestaurantChungWaiterMessageCookRole;
+import city.roles.RestaurantChungWaiterRevolvingStandRole;
 
 public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	
 	// Data
-	
-	public RestaurantChungPanel panel; //reference to main gui	
+	public RestaurantChungPanel panel;
 	public RestaurantChungHost host;
 	public RestaurantChungCashier cashier;
 	public RestaurantChungCook cook;
 	public List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
 	public List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();
 	
+	private RestaurantChungRevolvingStand orderStand;
+	
 	private static final int WORKER_SALARY = 500;
 	
 	// Constructor
-	
 	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
+		orderStand = new RestaurantChungRevolvingStand();
 		
         // Add items and their cooking times to a map
-		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 10, 5, 10, 16));
-		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 10, 5, 10, 12));
-		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 10, 5, 10, 6));
-		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 10, 5, 10, 10));
+		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
+		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));
+		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
+		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
         
         setCash(500);
 	}
@@ -49,93 +61,78 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	}
 
 	// Utilities
-	
 	public void addRole(Role r) {
-//		if(r instanceof RestaurantChungCustomerRole) {
-//			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
-//			c.setCashier(cashier);
-//			c.setHost(host);
-//			if(!allRoles.containsKey(c)) {
-//				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
-//				c.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				customers.add(c);
-//				allRoles.put(c, anim);
-//			}
-//			return c;
-//		}
-//		if(r instanceof RestaurantZhangWaiterRegularRole) {
-//			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
-//			w.setCashier(cashier);
-//			w.setCook(cook);
-//			w.setHost(host);
-//			w.setMenu(menu);
-//			host.addWaiter(w);
-//			if(!allRoles.containsKey(w)) {
-//				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
-//				w.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				waiters.add(w);
-//				allRoles.put(w, anim);
-//			}
-//			return w;
-//		}
-//		if(r instanceof RestaurantZhangWaiterSharedDataRole) {
-//			RestaurantZhangWaiterRegularRole w = (RestaurantZhangWaiterRegularRole)r;
-//			w.setCashier(cashier);
-//			w.setCook(cook);
-//			w.setHost(host);
-//			w.setMenu(menu);
-//			if(!allRoles.containsKey(w)) {
-//				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
-//				w.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				waiters.add(w);
-//				allRoles.put(w, anim);
-//			}
-//			return w;
-//		}
-//		if(r instanceof RestaurantZhangHostRole) {
-//			RestaurantZhangHostRole h = (RestaurantZhangHostRole)r;
-//			h.setTables(tables);
-//			if(!allRoles.containsKey(h)) { 
-//				host = h;
-//				allRoles.put(h, null);
-//			}
-//			return h;
-//		}
-//		if(r instanceof RestaurantZhangCookRole) {
-//			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
-//			c.setRevolvingStand(orderStand);
-//			c.setMenuTimes(menu);
-//			if(!allRoles.containsKey(c)) { 
-//				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
-//				c.setAnimation(anim);
-//				anim.isVisible = true;
-//				panel.addVisualizationElement(anim);
-//				cook = c;
-//				allRoles.put(c, anim);
-//			}
-//			return c;
-//		}
-//		if(r instanceof RestaurantZhangCashierRole) {
-//			RestaurantZhangCashierRole c = (RestaurantZhangCashierRole)r;
-//			c.setMenu(menu);
-//			if(!allRoles.containsKey(c)) { 
-//				cashier = c;
-//				allRoles.put(c, null);
-//			}
-//			return c;
-//		}
+		if(r instanceof RestaurantChungCustomerRole) {
+			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
+			if(!super.roleExists(c)) {
+				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
+				c.setAnimation(anim);
+				c.setRestaurant(this);
+				anim.setVisible(true); // TODO set this in setActive()
+				panel.addVisualizationElement(anim);
+				customers.add(c);
+				super.addRole(c, anim);
+				host.msgIWantToEat(c);
+			}
+		}
+		if(r instanceof RestaurantChungWaiterMessageCookRole) {
+			RestaurantChungWaiterMessageCookRole w = (RestaurantChungWaiterMessageCookRole)r;
+			if(!super.roleExists(w)) {
+				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
+				addWaiter(w, anim);
+				super.addRole(w, anim);
+			}
+		}
+		if(r instanceof RestaurantChungWaiterRevolvingStandRole) {
+			RestaurantChungWaiterRevolvingStandRole w = (RestaurantChungWaiterRevolvingStandRole)r;
+			if(!super.roleExists(w)) {
+				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
+				addWaiter(w, anim);
+				w.setRevolvingStand(orderStand);
+				super.addRole(w, anim);
+			}
+		}
+		if(r instanceof RestaurantChungHostRole) {
+			RestaurantChungHostRole h = (RestaurantChungHostRole)r;
+			if(!super.roleExists(h)) { 
+				host = h;
+				super.addRole(h, null);
+			}
+		}
+		if(r instanceof RestaurantChungCookRole) {
+			RestaurantChungCookRole c = (RestaurantChungCookRole)r;
+			if(!super.roleExists(c)) {
+				RestaurantChungCookAnimation anim = new RestaurantChungCookAnimation(c);
+				c.setAnimation(anim);
+				anim.setVisible(true); // TODO set this in setActive()
+				panel.addVisualizationElement(anim);
+				cook = c;
+				c.setRevolvingStand(orderStand);
+				super.addRole(c, anim);
+			}
+		}
+		if(r instanceof RestaurantChungCashierRole) {
+			RestaurantChungCashierRole c = (RestaurantChungCashierRole)r;
+			if(!super.roleExists(c)) {
+				RestaurantChungCashierAnimation anim = new RestaurantChungCashierAnimation(c); 
+				c.setAnimation(anim);
+				anim.setVisible(true); // TODO set this in setActive()
+				panel.addVisualizationElement(anim);
+				cashier = c;
+				super.addRole(c, anim);
+			}
+		}
 	}
 		
-	public void addWaiter(RestaurantChungWaiter waiter) {
-		waiters.add(waiter);
-		host.msgNewWaiter(waiter);
-		
+	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
+		waiters.add(w);
+		w.setAnimation(anim);
+		anim.setVisible(true); // TODO set this in setActive()
+		panel.addVisualizationElement(anim);
+    	for (int i = 0; i < 9; i++) {
+    		anim.addTable(RestaurantChungPanel.TABLEX+((i%3)*RestaurantChungPanel.TABLEGAP), RestaurantChungPanel.TABLEY+((i/3)*RestaurantChungPanel.TABLEGAP));
+    	}	
+		host.msgNewWaiter(w);
 	}
 	
 	public void removeWaiter(RestaurantChungWaiter waiter) {

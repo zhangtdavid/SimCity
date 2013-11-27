@@ -27,11 +27,7 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	public abstract void msgHereIsChange(int change);
 	public abstract void msgAnimationFinishedLeaveRestaurant();
 	public abstract void msgKickingYouOutAfterPaying(int debt);
-	public abstract void setGui(RestaurantChungCustomerAnimation g);
-	public abstract void setHost(RestaurantChungHost host);
-	public abstract void setCashier(RestaurantChungCashier cashier);
 	public abstract int getHungerLevel();
-	public abstract RestaurantChungCustomerAnimation getGui();
 	public abstract String getState();
 	public abstract String getOrder();
 

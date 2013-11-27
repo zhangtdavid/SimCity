@@ -84,11 +84,12 @@ public class MarketManagerRole extends Role implements MarketManager {
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
 	}
-	/*
-	@Override
-	public void setActive(){
-		this.setActivityBegun();
-	}*/
+	
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;

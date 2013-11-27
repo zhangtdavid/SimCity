@@ -37,9 +37,9 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 
 //  Activity Management
 //	=====================================================================	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 
 //  Messages
 //	=====================================================================	

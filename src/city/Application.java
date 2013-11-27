@@ -26,7 +26,7 @@ public class Application {
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
-	
+
 	/**
 	 * Main routine to start the program.
 	 * 

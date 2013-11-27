@@ -8,17 +8,16 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
-import city.animations.RestaurantChoiCustomerAnimation;
 import city.gui.MarketPanel;
 import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.BankCustomerRole;
 import city.roles.MarketCashierRole;
 import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
-import city.roles.RestaurantChoiCustomerRole;
 
 public class MarketBuilding extends Building { 
 	
@@ -53,6 +52,8 @@ public class MarketBuilding extends Building {
 		prices.put(FOOD_ITEMS.pizza, (10)/2);
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
+		
+		 bankCustomer = new BankCustomerRole();
 		
 		super.setCash(1000);
 	}

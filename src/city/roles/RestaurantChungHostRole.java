@@ -102,9 +102,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		}
 	}
 
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;

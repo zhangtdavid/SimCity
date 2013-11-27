@@ -6,7 +6,7 @@ import java.awt.Rectangle;
 public class CityViewMarket extends CityViewBuilding{
 
 	public CityViewMarket(int x, int y) {
-		super(x, y, Color.red, "Bank 1");
+		super(x, y, Color.BLUE, "Market 1");
 		rectangle = new Rectangle(x, y, 20, 20);
 	}
 	
@@ -14,11 +14,11 @@ public class CityViewMarket extends CityViewBuilding{
 		super(x, y, color, ID, b);
 		rectangle = new Rectangle(x, y, 20, 20);
 	}
+
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
 		
 	}
-	
 
 }
