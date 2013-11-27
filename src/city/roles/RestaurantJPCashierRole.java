@@ -11,7 +11,9 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
+import city.Application.BANK_SERVICE;
 import city.Role;
+import city.Application.TRANSACTION_TYPE;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantJPCashier;
@@ -26,6 +28,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	MarketCustomerDeliveryPayment marketPaymentRole;
 	private RestaurantJPBuilding building;
 	List<MarketTransaction> marketTransactions = new ArrayList<MarketTransaction>();
+	private List<Role> roles = new ArrayList<Role>();
 	public class MyBill{
 		public state s;
 		RestaurantJPWaiter w = null;
@@ -144,6 +147,21 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 				return true;
 			}
 		}
+		}
+		if(building.funds > 2000){
+			building.bankCustomer.setActive(BANK_SERVICE.atmDeposit, building.funds - 2000, TRANSACTION_TYPE.business);
+			roles.add(building.bankCustomer);
+			building.funds -= 2000;
+		}
+		
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			blocking  = true;
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
+			break;
 		}
 		return false;
 		

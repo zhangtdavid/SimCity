@@ -12,6 +12,7 @@ import city.animations.RestaurantJPWaiterAnimation;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
+import city.gui.CityViewRestaurant;
 import city.gui.RestaurantJPPanel;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantJPCashier;
@@ -19,6 +20,7 @@ import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangWaiter;
+import city.roles.BankCustomerRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
@@ -46,6 +48,7 @@ public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 	int waiterCounter = 0;
 	RestaurantJPPanel panel;
 	RestaurantJPRevolvingStand orderStand = new RestaurantJPRevolvingStand();
+	public BankCustomerRole bankCustomer;
 	
 	// Constructor
 	
@@ -61,11 +64,12 @@ public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 
 	// Constructor
 	
-	public RestaurantJPBuilding(String name, RestaurantJPPanel panel) {
+	public RestaurantJPBuilding(String name, RestaurantJPPanel panel, CityViewRestaurant cvr2) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
 		this.panel = panel;
+		bankCustomer = new BankCustomerRole(this);
 	}
 	
 	// Utilities
