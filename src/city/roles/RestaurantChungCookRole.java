@@ -47,8 +47,6 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	private Semaphore atPlating = new Semaphore(0, true);
 	
 	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-	
-	private RestaurantChungCashier restaurantChungCashier;
 
 //  Orders
 //  =====================================================================        
@@ -331,11 +329,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
-    	System.out.println(restaurant);
-    	System.out.println(o.order);
-    	System.out.println(restaurantChungCashier.getMarketCustomerDeliveryPayment());
-        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.cashier.getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
+//        System.out.println("COOK PERSON: " + this.getPerson());
+        marketCustomerDelivery.setPerson(this.getPerson());
+//        System.out.println("MARKET CUSTOMER DELIVERY PERSON: " + marketCustomerDelivery.getPerson());
         marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
         return;
@@ -493,9 +491,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
     }
     
-    public void setRestaurantCashier(RestaurantChungCashier c) {
-    	restaurantChungCashier = c;
-    }
+//    public void setRestaurantCashier(RestaurantChungCashier c) {
+//    	restaurantChungCashier = c;
+//    }
     
 	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
 		orderStand = stand;

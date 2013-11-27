@@ -55,12 +55,13 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //  Messages
 //	=====================================================================
 	public void gotHungry() {//from animation
-//		print("I'm hungry");
+		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
 
 	public void msgGetInLinePosition(int pos) {
+//		System.out.println("CUSTOMER PERSON: " + this.getPerson());
 		print("Customer received msgGetInLinePosition " + pos); // TODO
 		positionInLine = pos;
 		event = AgentEvent.getInLine;

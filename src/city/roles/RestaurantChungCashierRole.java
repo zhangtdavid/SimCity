@@ -73,6 +73,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+        roles.get(0).setPerson(this.getPerson());
+
 //		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
