@@ -63,20 +63,19 @@ public class ResidentRole extends Role implements Resident {
 	public Date getRentDueDate() {
 		Date dueDate = new Date(0);
 		dueDate.setTime(rentLastPaid.getTime() + RENT_DUE_INTERVAL);
-		System.out.println("within getRentDueDate: " + dueDate);
 		return dueDate;
 	}
+	
 	@Override
 	public boolean isLandlord() {
 		return (landlord != null);
 	}
 	// Setters
+	
 	// Utilities
 
 	/**
 	 * Returns true if today is the day that rent is due or rent is overdue 
-	 * 
-	 * @return
 	 */
 	@Override
 	public boolean rentIsDue() {
@@ -87,8 +86,6 @@ public class ResidentRole extends Role implements Resident {
 		Calendar d = Calendar.getInstance();
 		d.setTime(getRentDueDate());
 		long due = d.getTimeInMillis();
-		System.out.println("Time now: " + day);
-		System.out.println("Time due: " + due);
 		
 		return (day >= due);
 	}
