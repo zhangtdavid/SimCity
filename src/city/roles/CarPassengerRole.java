@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
@@ -78,7 +80,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	}
 	
 	// Utilities
-	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.CAR, "CarPassengerRole " + this.getPerson().getName(), msg);
+    }
 	// Classes
 
 }

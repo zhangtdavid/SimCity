@@ -1,17 +1,19 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
-import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
+	
 	BankBuilding building;
 	Building business;
 	Application.TRANSACTION_TYPE depositType;
@@ -23,19 +25,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	BankTellerRole t;
 	int acctNum = -1;
 	int boothNumber;
-	
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		print("Customer has been set active");
-		super.setActive();
-		System.out.println("Customer has been set active");
-		this.setActive();
-		this.service = s;
-		this.depositType = t;
-		amount = money;
-		if(s != Application.BANK_SERVICE.atmDeposit)
-			st = state.entering;
-		this.setActivityBegun();
-	}
+
 	// Constructor
 	
 	public BankCustomerRole(Building b) {
@@ -44,10 +34,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public BankCustomerRole() {
-		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
+		building = (BankBuilding) (Application.CityMap.findRandomBuilding(BUILDING.bank));
 	}
 	
 	// Messages
+	
 	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
 		print("WhatDoYouWant message received");
 		t = tell;
@@ -59,21 +50,21 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgDepositCompleted() {
 		print("DepositCompleted message received");
 		st = state.exit;
-	    stateChanged();
+	    //stateChanged();
 	}
 	
 	public void msgAccountCreated(int acct) {
 		print("AccountCreated message received");
 		acctNum = acct;
 		st = state.exit;
-		stateChanged();
+		//stateChanged();
 	}
 	
 	public void msgHereIsWithdrawal(int money) {
 		print("HereIsWithdrawal message received");
 		netTransaction += money;
 		st = state.exit;
-		stateChanged();
+		//stateChanged();
 	}
 	
 	public void msgLoanGranted(int loanMoney){
@@ -118,17 +109,20 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Actions
+	
 	public void DirectDeposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
+	
 	public void AskForService(){
 		if(building == null)
 			print("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
+	
 	public void Deposit(){
 		st = state.inProgress;
 		netTransaction -= amount;
@@ -156,7 +150,24 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Setters
 	
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
+		print("Customer has been set active");
+		super.setActive();
+		this.service = s;
+		this.depositType = t;
+		amount = money;
+		if(s != Application.BANK_SERVICE.atmDeposit)
+			st = state.entering;
+		this.setActivityBegun();
+	}
+	
 	// Utilities
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Classes 
 	

@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Agent;
 import city.Application.BANK_SERVICE;
@@ -16,6 +18,7 @@ import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
+import city.Application;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -68,7 +71,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		this.lastWentToSleep = startDate;
 		this.state = State.none;
-		this.cash = 30;
+		this.setCash(50); // If you have an error on startup, this might be it. Don't know why, but it is. 
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -266,7 +269,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToBank() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		BankBuilding b = (BankBuilding) CityMap.findClosestBuilding(BUILDING.bank, this);
+		BankBuilding b = (BankBuilding) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = State.goingToBank;
 	}
@@ -289,7 +292,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		Building building = CityMap.findRandomBuilding(BUILDING.restaurant);
+		Building building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
@@ -314,7 +317,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToMarket() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
+		MarketBuilding b = (MarketBuilding) Application.CityMap.findClosestBuilding(BUILDING.market, this);
 		processTransportationDeparture(b);
 		state = State.goingToMarket;
 		
@@ -455,11 +458,12 @@ public class PersonAgent extends Agent implements Person {
 		} else {
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
-			animation.goToBusStop(b);
-			atDestination.acquire();
+// TODO
+//			animation.goToBusStop(b);
+//			atDestination.acquire();
 			busPassengerRole = new BusPassengerRole(d, b);
-			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
+			busPassengerRole.setActive();
 			this.addRole(busPassengerRole);
 		}
 	}
@@ -475,14 +479,18 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		if (car != null && !carPassengerRole.getActive()) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-			return true;
-		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-			return true;
+		if (car != null && carPassengerRole != null) {
+			if(!carPassengerRole.getActive()) {
+				roles.remove(carPassengerRole);
+				carPassengerRole = null;
+				return true;
+			}
+		} else if (busPassengerRole != null && busPassengerRole != null) {
+			if(!busPassengerRole.getActive()) {
+				roles.remove(busPassengerRole);
+				busPassengerRole = null;
+				return true;
+			}
 		}
 		return false;
 	}
@@ -690,4 +698,9 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return disposition;
 	}
+	
+	@Override
+	public void print(String msg) {
+        AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
+    }
 }

@@ -7,6 +7,7 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
@@ -19,7 +20,7 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 	
 	private static final long serialVersionUID = 157865152829475516L;
 	
-	HashMap<String, BuildingCard> cards;
+	Map<String, BuildingCard> cards = Collections.synchronizedMap(new HashMap<String, BuildingCard>());
 	MainFrame mainframe;
 	public static final int VIEW_WIDTH = 500, VIEW_HEIGHT = 500;
 	CardLayout layout;
@@ -34,7 +35,6 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 		addMouseListener(this);
 		this.mainframe = mf;
 		
-		cards = new HashMap<String, BuildingCard>();
 		cards.put("null", new BuildingCard(Color.DARK_GRAY));
 
 		layout = new CardLayout();
@@ -65,13 +65,15 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 
 	
 	public void actionPerformed(ActionEvent arg0) {
-		Iterator<Entry<String, BuildingCard>> it = cards.entrySet().iterator();
-		while(it.hasNext()) {
-			Map.Entry<String, BuildingCard> temp = it.next();
-			if(temp.getValue().isVisible()) {
-				temp.getValue().repaint();
-			} else {
-				temp.getValue().animate();
+		synchronized(cards) {
+			Iterator<Entry<String, BuildingCard>> it = cards.entrySet().iterator();
+			while(it.hasNext()) {
+				Map.Entry<String, BuildingCard> temp = it.next();
+				if(temp.getValue().isVisible()) {
+					temp.getValue().repaint();
+				} else {
+					temp.getValue().animate();
+				}
 			}
 		}
 	}

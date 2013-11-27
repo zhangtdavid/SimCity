@@ -19,11 +19,6 @@ import city.tests.mock.MockRestaurantZhangCustomer;
 import city.tests.mock.MockRestaurantZhangHost;
 import junit.framework.TestCase;
 
-
-/**
- * Restaurant customer Agent
- */
-
 public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 	RestaurantZhangWaiterSharedDataRole waiter;
 	MockRestaurantZhangAnimatedWaiter anim;
@@ -37,7 +32,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension())), 0, 100);
+		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
 		anim = new MockRestaurantZhangAnimatedWaiter(waiter); 
 		host = new MockRestaurantZhangHost();
 		cook = new MockRestaurantZhangCook();

@@ -1,10 +1,14 @@
 package city.buildings;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.ArrayList;
 
 import city.Building;
 import city.Role;
+import city.gui.BusStopPanel;
+import city.gui.CityRoad;
+import city.gui.CityViewBusStop;
 import city.roles.BusPassengerRole;
 
 public class BusStopBuilding extends Building {
@@ -13,12 +17,15 @@ public class BusStopBuilding extends Building {
 	
 	public BusStopBuilding nextStop = null;
 	public BusStopBuilding previousStop = null;
-	public List<BusPassengerRole> waitingList = new ArrayList<BusPassengerRole>();
+	public List<BusPassengerRole> waitingList = Collections.synchronizedList(new ArrayList<BusPassengerRole>());
+	public CityRoad roadLocatedOn;
 	
 	// Constructor
 	
-	public BusStopBuilding(String name) {
+	public BusStopBuilding(String name, BusStopPanel panel, CityViewBusStop cityBuilding) {
 		super(name);
+		this.setPanel(panel);
+		this.setCityViewBuilding(cityBuilding);
 	}
 	
 	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {
@@ -31,6 +38,10 @@ public class BusStopBuilding extends Building {
 	
 	// Getters
 	
+	public BusStopBuilding(String name) {
+		super(name);
+	}
+
 	public BusStopBuilding getNextStop() {
 		return nextStop;
 	}
@@ -43,6 +54,10 @@ public class BusStopBuilding extends Building {
 	
 	public void setPreviousStop(BusStopBuilding b) {
 		previousStop = b;
+	}
+	
+	public void setRoad(CityRoad road) {
+		this.roadLocatedOn = road;
 	}
 	
 	// Utilities

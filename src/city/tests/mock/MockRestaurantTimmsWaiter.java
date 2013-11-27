@@ -1,18 +1,22 @@
 package city.tests.mock;
 
+import java.util.List;
+
 import utilities.LoggedEvent;
 import city.Application;
 import city.MockRole;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
+import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 
 public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTimmsWaiter {
 
-	public MockRestaurantTimmsWaiter() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Constructor
+	
+	public MockRestaurantTimmsWaiter() {}
 
+	// Messages
+	
 	@Override
 	public void msgWantBreak() {
 		log.add(new LoggedEvent("Received msgWantBreak."));
@@ -89,11 +93,18 @@ public class MockRestaurantTimmsWaiter extends MockRole implements RestaurantTim
 	public void guiAtHome() {
 		log.add(new LoggedEvent("Received guiAtHome"));
 	}
+	
+	// Getters
 
 	@Override
 	public Boolean getWantsBreak() {
 		// This may not be suitable in the future.
 		return false;
+	}
+
+	@Override
+	public List<InternalCustomer> getCustomers() {
+		return null;
 	}
 
 }

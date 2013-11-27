@@ -1,12 +1,13 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
-import city.interfaces.BankCustomer.state;
 
 public class BankTellerRole extends Role implements BankTeller {
 	
@@ -187,7 +188,12 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	// Utilities
-
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankTellerRole " + this.getPerson().getName(), msg);
+    }
+	
 	// Classes
 	public class MyCustomer{
 		public int acctNum;

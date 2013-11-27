@@ -4,11 +4,12 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
 import city.Role;
-import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
@@ -41,15 +42,15 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	
 	public RestaurantZhangCashier myCashier;
 	public RestaurantZhangCheck myCheck;
-	public double money;
-	public double myTab = 0.00;
+	public int money;
+	public int myTab = 0;
 	
 	public enum AgentState
 	{DoingNothing, AtEntrance, GoingToWaitingPosition, WaitingInRestaurant, ChoosingToLeave, DecidedToWait, BeingSeated, Deciding, Ordering, Ordered, Eating, WaitingForCheck, PayingForCheck, Leaving};
 	public AgentState state = AgentState.DoingNothing;
 
 	public enum AgentEvent 
-	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
+	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, restaurantClosed, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
 	public AgentEvent event = AgentEvent.none;
 
 	/**
@@ -60,8 +61,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 */
 	public RestaurantZhangCustomerRole(){
 		super();
-		money = new Random().nextDouble()*40 + 5; // TODO get rid of this and replace with the actual money
-		money = Math.round(money * 100) / 100;
+		money = Math.abs(new Random().nextInt()%40) + 5; // TODO get rid of this and replace with the actual money
 //		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
 //			money = 0.99;
 //		if(name.contains("thief"))
@@ -105,6 +105,12 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		}
 	}
 	
+	public void msgRestaurantClosed() {
+		print(state.name());
+		event = AgentEvent.restaurantClosed;
+		stateChanged();
+	}
+	
 	public void msgFollowMe(RestaurantZhangWaiter w, RestaurantZhangMenu menu, RestaurantZhangTable t) {
 		myWaiter = w;
 		event = AgentEvent.followWaiter;
@@ -134,15 +140,15 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		stateChanged();
 	}
 	
-	public void msgHereIsChange(double change) {
+	public void msgHereIsChange(int change) {
 		money = change;
 		event = AgentEvent.gotChange;
 		stateChanged();
 	}
 	
-	public void msgPayLater(double tab) {
+	public void msgPayLater(int tab) {
 		event = AgentEvent.gotTab;
-		money = 0.00;
+		money = 0;
 		myTab += tab;
 		stateChanged();
 	}
@@ -188,6 +194,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		if(state == AgentState.WaitingInRestaurant && event == AgentEvent.restaurantFull) {
 			state = AgentState.ChoosingToLeave;
 			chooseToLeave();
+			return true;
+		}
+		if(state == AgentState.AtEntrance && event == AgentEvent.restaurantClosed) {
+			state = AgentState.Leaving;
+			leaveRestaurant();
 			return true;
 		}
 		if ((state == AgentState.WaitingInRestaurant || state == AgentState.DecidedToWait) 
@@ -413,5 +424,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		super.setActive();
 		gotHungry();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

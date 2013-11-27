@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
@@ -30,12 +32,12 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	private List<InternalCustomer> customers = new ArrayList<InternalCustomer>();
 	
-	private Semaphore atCustomer = new Semaphore(0, true);
-	private Semaphore atTable = new Semaphore(0, true);
-	private Semaphore atKitchen = new Semaphore(0, true);
-	private Semaphore atHome = new Semaphore(0, true);
-	private Semaphore waiterBreak = new Semaphore(0, true);
-	private Semaphore waiterHover = new Semaphore(0, true);
+	public Semaphore atCustomer = new Semaphore(0, true);
+	public Semaphore atTable = new Semaphore(0, true);
+	public Semaphore atKitchen = new Semaphore(0, true);
+	public Semaphore atHome = new Semaphore(0, true);
+	public Semaphore waiterBreak = new Semaphore(0, true);
+	public Semaphore waiterHover = new Semaphore(0, true);
 	
 	// Constructor
 	
@@ -251,7 +253,9 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	
 	private void actGoToHome() throws InterruptedException {
 		print("actGoToHome");
-		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToHome(rtb.getWaiterIndex(this));
+		int homePosition = rtb.getWaiterIndex(this);
+		RestaurantTimmsAnimatedWaiter animation = this.getAnimation(RestaurantTimmsAnimatedWaiter.class);
+		animation.goToHome(homePosition);
 		atHome.acquire();
 	}
 	
@@ -294,13 +298,18 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 		return this.wantsBreak;
 	}
 	
+	@Override
+	public List<InternalCustomer> getCustomers() {
+		return customers;
+	}
+	
 	// Setters
 	
 	@Override
 	public void setActive() {
 		rtb.addWaiter(this);
+		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).setVisible(true);
 		super.setActive();
-		// TODO
 	}
 	
 	// Utilities
@@ -364,4 +373,10 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 			this.stockItem = s;
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsWaiterRole " + this.getPerson().getName(), msg);
+    }
 }

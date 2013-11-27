@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantJPRevolvingStand;
 import utilities.RestaurantJPTableClass;
@@ -16,13 +18,14 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantJPCookAnimation;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketManager;
 import city.interfaces.RestaurantJPCook;
 import city.interfaces.RestaurantJPWaiter;
-import city.interfaces.MarketCustomerDelivery;
 
 public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
-															//DATA	
+	
+	//DATA	
 	private RestaurantJPCookAnimation gui;
 	private RestaurantJPBuilding building;
 	public List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
@@ -321,10 +324,18 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		public Food(){
 		}
 	}
+
 	public void setRevolvingStand(RestaurantJPRevolvingStand orderStand) {
 		// TODO Auto-generated method stub
 		revolvingStand = orderStand;
 	}
+
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCookRole " + this.getPerson().getName(), msg);
+    }
 }
 
 

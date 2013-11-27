@@ -112,9 +112,6 @@ public abstract class Role implements RoleInterface {
 		this.active = true;
 		setActivityBegun();
 	}
-	public void setActive2(){
-		this.active = true; // for the cases where we have to override setActive.
-	}
 	
 	@Override
 	public void setInactive() {
@@ -139,12 +136,12 @@ public abstract class Role implements RoleInterface {
 		person.stateChanged();
 	}
 	
-    protected void print(String msg) {
+    public void print(String msg) {
         person.print(msg);
     }
 
-    protected void print(String msg, Throwable e) {
-        person.print(msg, e);
+    public void print(String msg, Throwable e) {
+    	person.print(msg, e);
     }
 
 }

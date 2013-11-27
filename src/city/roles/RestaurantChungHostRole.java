@@ -2,6 +2,8 @@ package city.roles;
 
 import java.util.*;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Role;
@@ -102,9 +104,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		}
 	}
 
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;
@@ -448,5 +450,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		}
 		return null;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungHostRole " + this.getPerson().getName(), msg);
+    }
 }
 

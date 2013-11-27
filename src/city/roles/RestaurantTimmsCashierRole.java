@@ -4,9 +4,13 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
+import utilities.MarketTransaction;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -23,7 +27,10 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	private RestaurantTimmsBuilding rtb; 
 	
 	private List<Check> checks = Collections.synchronizedList(new ArrayList<Check>());
-	private List<Bill> bills = Collections.synchronizedList(new ArrayList<Bill>());
+	private List<Role> roles = new ArrayList<Role>(); // For market orders
+	
+	private MarketCustomerDeliveryPayment marketPaymentRole;
+	private List<MarketTransaction> marketTransactions;
 	
 	// Constructor
 	
@@ -42,6 +49,12 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;
 		this.rtb = b;
+		
+		// The sub-role for paying the market is always part of the cashier. It's always active.
+		// Not giving the sub-role knowledge of the role's person. Hopefully this won't cause problems.
+		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(rtb, marketTransactions);
+		marketPaymentRole.setActive();
+		roles.add((Role) marketPaymentRole);
 	}
 	
 	// Messages
@@ -88,32 +101,14 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		stateChanged();
 	}
 	
-// TODO
-//	/**
-//	 * Receives a request from a Market to pay for StockItems ordered by the Cook.
-//	 * 
-//	 * @param m a Market interface
-//	 * @param money the amount billed by the Market
-//	 */
-//	public void msgPayMarket(Market m, int money) {
-//		Bill bill = findBill(m);
-//		if (bill == null) {
-//			// This is the first time this Market has sent a bill
-//			print("msgPayMarket - new bill balance of $" + money);
-//			bills.add(new Bill(m, money));
-//		} else {
-//			// This Market has sent a bill before, or Cashier was unable to pay last time
-//			print("msgPayMarket - previous balance of $" + bill.amount + " plus today's $" + money);
-//			bill.state = Bill.State.queue;
-//			bill.addAmount(money);
-//		}
-//		stateChanged();
-//	}
-	
 	// Scheduler
 	
 	@Override
 	public boolean runScheduler() {
+		//-------------------/
+		// Primary Scheduler /
+		//-------------------/
+		
 		synchronized(checks) {
 			for (Check check : checks) {
 				if (check.state == Check.State.queue) {
@@ -126,16 +121,23 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 				}
 			}
 		}
+
+		//------------------------------------/
+		// Role Scheduler (for market orders) /
+		//------------------------------------/
 		
-		synchronized(bills) {
-			for (Bill bill : bills) {
-				if (bill.state == Bill.State.queue) {
-					// actPayMarket(bill); // TODO
-					return true;
-				}
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			blocking  = true;
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
 			}
+			break;
 		}
-		return false;
+		
+		// Scheduler disposition
+		return blocking;
 	}
 	
 	// Actions
@@ -178,27 +180,28 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 			c.amountOffered = 0;
 		}
 	}
-
-// TODO	
-//	/**
-//	 * Pays a Bill from a Market.
-//	 * 
-//	 * @param b the unpaid Bill object
-//	 */
-//	private void actPayMarket(Bill b) {
-//		if (b.amount <= moneyOnHand) {
-//			print("actPayMarket - paid");
-//			moneyOnHand = (moneyOnHand - b.amount);
-//			b.market.msgAcceptPayment(b.amount);
-//			b.amount = 0;
-//			b.state = Bill.State.paid;
-//		} else {
-//			print("actPayMarket - unpaid - " + moneyOnHand);
-//			b.state = Bill.State.unpaid;
-//		}
-//	}
 	
 	// Getters
+	
+	@Override
+	public MarketCustomerDeliveryPayment getMarketPaymentRole() {
+		return marketPaymentRole;
+	}
+	
+	@Override
+	public int getMoneyCollected() {
+		return moneyCollected;
+	}
+
+	@Override
+	public int getMoneyOwed() {
+		return moneyOwed;
+	}
+	
+	@Override
+	public List<Check> getChecks() {
+		return checks;
+	}
 	
 	// Setters
 	
@@ -207,7 +210,6 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		rtb.setCashier(this);
 		this.getAnimation(RestaurantTimmsAnimatedCashier.class).setVisible(true);
 		super.setActive();
-		// TODO
 	}
 	
 	// Utilities 
@@ -222,18 +224,6 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		}
 		return item;
 	}
-
-// TODO
-//	private Bill findBill(Market m) {
-//		Bill item = null;
-//		for (Bill bill : bills) {
-//			if (bill.market == m) {
-//				item = bill;
-//				break;
-//			}
-//		}
-//		return item;
-//	}
 	
 	// Check Class
 	
@@ -267,37 +257,10 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		}
 	}
 	
-	// Bill Class
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCashierRole " + this.getPerson().getName(), msg);
+    }
 	
-	public static class Bill {
-		// private Market market;
-		private int amount;
-		
-		public enum State { queue, unpaid, paid };
-		private State state;
-		
-// TODO
-//		public Bill(Market m, Integer amount) {
-//			this.market = m;
-//			this.amount = amount;
-//			this.state = State.queue;
-//		}
-		
-		public Bill(int amount) {
-			this.amount = amount;
-			this.state = State.queue;
-		}
-		
-		public int getAmount() {
-			return this.amount;
-		}
-		
-		public Bill.State getState() {
-			return this.state;
-		}
-		
-		public void addAmount(Integer i) {
-			this.amount = (this.amount + i);
-		}
-	}
 }

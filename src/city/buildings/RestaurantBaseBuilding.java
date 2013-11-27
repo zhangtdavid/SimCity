@@ -6,16 +6,17 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.interfaces.BankCustomer;
+import city.interfaces.RestaurantBaseBuildingInterface;
 
 /**
- * The base restaurant class for all SimCity201 Restaurants.
+ * The base building class for all SimCity201 Restaurants.
  */
-public abstract class RestaurantBaseBuilding extends Building {
+public abstract class RestaurantBaseBuilding extends Building implements RestaurantBaseBuildingInterface {
 	
 	// Data
 	
 	public BankCustomer bankCustomer;
-	private HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	public HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
 	public enum FoodOrderState {None, Pending, Ordered};
 	
 	// Constructor
@@ -32,6 +33,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	
 	// Getters
 	
+	@Override
 	public HashMap<FOOD_ITEMS, Food> getFoods() {
 		return foods;
 	}
@@ -41,6 +43,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	/**
 	 * Add a new type of food to restaurant inventory (create)
 	 */
+	@Override
 	public void addFood(FOOD_ITEMS i, Food f) {
 		foods.put(i, f);
 	}
@@ -48,6 +51,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	/**
 	 * Add delivered food items to restaurant inventory (update)
 	 */
+	@Override
 	public void incrementFoodQuantity(Map<FOOD_ITEMS, Integer> receivedItems) {
         for (FOOD_ITEMS s: receivedItems.keySet()) {
         	foods.get(s).amount += receivedItems.get(s);
@@ -57,6 +61,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	/**
 	 * Set food item quantity explicitly (update)
 	 */
+	@Override
 	public void updateFoodQuantity(FOOD_ITEMS f, int i) {
 		foods.get(f).amount = i;
 	}
@@ -78,6 +83,7 @@ public abstract class RestaurantBaseBuilding extends Building {
             this.amount = amount;
             this.low = low;
             this.capacity = capacity;
+            this.price = price;
             s = FoodOrderState.None;
         }
     }

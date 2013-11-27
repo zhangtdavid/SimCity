@@ -7,8 +7,8 @@ import java.util.Vector;
 
 import utilities.StringUtil;
 import city.Animation;
-import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
+import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
 
@@ -22,15 +22,6 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 	private boolean delivering = false;
     private String food = null;
 
-//	Fixed Numbers
-//	=====================================================================
-	private static final int HRECTDIM = 20;
-    private static final int xEntrance = -20, yEntrance = -20;
-    private static final int xWaiterHome = 410, yWaiterHome = 40;
-    private static final int xCustomerLine = 70, yCustomerLine = 80;
-    private static final int xCook = 500-70, yCook = 60;
-    private static final int xCashier = 50, yCashier = 40+20;  
-    private static final int xBreak = 520, yBreak = 150; 
     
 //	Location Information
 //	=====================================================================
@@ -91,7 +82,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 
     public void draw(Graphics2D g) {
         g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, HRECTDIM, HRECTDIM);
+        g.fillRect(xPos, yPos, RestaurantChungPanel.RECTDIM, RestaurantChungPanel.RECTDIM);
 		g.setColor(Color.BLACK);
 		if (delivering) {
 			g.drawString(food, xPos+15, yPos+10);
@@ -103,14 +94,14 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     }
 
     public void DoReturnToWaiterHome() {
-        xDestination = xWaiterHome;
-        yDestination = yWaiterHome;
+        xDestination = RestaurantChungPanel.WAITERHOMEX;
+        yDestination = RestaurantChungPanel.WAITERHOMEY;
 		command = Command.GoToWaiterHome;
     }
     
 	public void DoGoToCustomerLine() {
-        xDestination = xCustomerLine;
-        yDestination = yCustomerLine;
+        xDestination = RestaurantChungPanel.CUSTOMERLINEX;
+        yDestination = RestaurantChungPanel.CUSTOMERLINEY;
 		command = Command.GoToLine;
 	}
     
@@ -125,7 +116,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     public void DoBringToTable(RestaurantChungCustomer customer, int table) {
     	DoGoToTable(table);
     	System.out.println("Waiter Gui bringing " + customer + " to table " + (table+1));
-    	customer.getGui().DoGoToSeat(findTableX(table), findTableY(table));
+    	customer.getAnimation(RestaurantChungCustomerAnimation.class).DoGoToSeat(findTableX(table), findTableY(table));
     }
 
     public void DoDeliverFood(int table, String choice) {
@@ -136,27 +127,27 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     }
     
     public void DoGoToCook() {
-        xDestination = xCook;
-        yDestination = yCook;
+        xDestination = RestaurantChungPanel.ORDERDROPX;
+        yDestination = RestaurantChungPanel.ORDERDROPY;
 		command = Command.GoToCook;
     }
     
     public void DoReturnToEntrance() {
-        xDestination = xEntrance;
-        yDestination = yEntrance;
+        xDestination = RestaurantChungPanel.ENTRANCEX;
+        yDestination = RestaurantChungPanel.ENTRANCEY;
 		command = Command.GoToEntrance;
     }
     
 	public void DoGoToCashier() {
-        xDestination = xCashier;
-        yDestination = yCashier;
+        xDestination = RestaurantChungPanel.CASHIERX;
+        yDestination = RestaurantChungPanel.CASHIERY;
 		command = Command.GoToCashier;		
 	}
     
     public void DoGoOnBreak() {
     	setOnBreak();
-        xDestination = xBreak;
-        yDestination = yBreak;
+        xDestination = RestaurantChungPanel.WAITERBREAKX;
+        yDestination = RestaurantChungPanel.WAITERBREAKY;
     }
     
     public void DoGoOffBreak() {

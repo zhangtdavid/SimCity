@@ -4,7 +4,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.MockRole;
 import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MockMarketCustomerDeliveryPayment extends MockRole implements MarketCustomerDeliveryPayment {

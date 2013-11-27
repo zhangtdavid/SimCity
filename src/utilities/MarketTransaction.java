@@ -1,9 +1,5 @@
 package utilities;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 
 /** 

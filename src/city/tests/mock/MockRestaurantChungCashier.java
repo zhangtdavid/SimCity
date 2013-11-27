@@ -1,15 +1,11 @@
 package city.tests.mock;
 
-
+import utilities.EventLog;
 import city.MockRole;
-import city.animations.RestaurantChungCustomerAnimation;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import utilities.EventLog;
-import utilities.RestaurantChungMenu;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.

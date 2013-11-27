@@ -1,79 +1,55 @@
 package city.roles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
-import utilities.RestaurantChungRevolvingStand;
 import utilities.RestaurantChungOrder.OrderState;
+import utilities.RestaurantChungRevolvingStand;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungWaiter;
 
-/**
- * Restaurant Cook Agent
- */
-// A Cook fulfills the customers' food orders as communicated by the waiters
-// and maintains the restaurant's food inventory
-public class RestaurantChungCookRole extends Role implements RestaurantChungCook {        
+public class RestaurantChungCookRole extends Role implements RestaurantChungCook {       
+	
+//  Data
+//  ===================================================================== 
 	RestaurantChungBuilding restaurant;
-	
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
-	
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
-    private RestaurantChungAnimatedCook cookGui = null;
-    
+	RestaurantChungRevolvingStand orderStand;
     private boolean cooking = false;
     private boolean plating = false;
-    
-	RestaurantChungRevolvingStand orderStand;
 	boolean waitingToCheckStand = false;
-    
 	private Semaphore atCookHome = new Semaphore(0, true);
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
-	
 	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-	
-	private RestaurantChungCashier restaurantChungCashier;
-
-//  Orders
-//  =====================================================================        
-    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
-    
-//  Markets
-//  =====================================================================
-    private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
-    int currentMarket = 0; // Index of market in the list to order from
-        
-//  Market Orders
-//  =====================================================================        
+	private RestaurantChungCashier restaurantChungCashier;     
+    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients       
     public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
-    
-    private class MyMarketOrder{
-    	MarketOrder order;
-        MarketOrderState s;
-        
-        public MyMarketOrder(MarketOrder o) {
-        	order = new MarketOrder(o);
-            s = MarketOrderState.Pending;
-        }
-    }
-    private enum MarketOrderState
-    {Pending, Ordered};
+    private enum MarketOrderState {Pending, Ordered};
 
 //  Constructor
 //  =====================================================================                
@@ -85,9 +61,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
     
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;
@@ -111,13 +87,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
-        print("DONE COOKING");
+        print("Done cooking");
         stateChanged();
     }
     
     public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
-        print("DONE PLATING");
+        print("Done plating");
        stateChanged();
     }
 
@@ -331,9 +307,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             print("Order: " + i + " " + o.order.orderItems.get(i));
         }
                 
-        MarketBuilding selectedMarket = markets.get((currentMarket++)%(markets.size()));  // TODO change this to a lookup of markets in city directory
-    	MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
-        marketCustomerDelivery.setMarket(selectedMarket);
+        MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
+    	System.out.println(restaurant);
+    	System.out.println(o.order);
+    	System.out.println(restaurantChungCashier.getMarketCustomerDeliveryPayment());
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurantChungCashier.getMarketCustomerDeliveryPayment());
+    	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
         return;
@@ -366,6 +345,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void cookIt(final RestaurantChungOrder o) {
         o.s = OrderState.Cooking;
+        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
         cookGui.DoGoToGrill(o.choice);
 //		try {
 //			atGrill.acquire();
@@ -379,7 +359,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             public void run() {
                 Food f = restaurant.getFoods().get(o.choice);
                 f.amount--;
-//              print(o.choice + " amount after cooking " + f.amount);
+                print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
                 msgSelfDoneCooking(o);
                 cookGui.DoReturnToCookHome();
@@ -396,6 +376,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     private void plateIt(final RestaurantChungOrder o) {
         o.s = OrderState.Plating;
+        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
         cookGui.DoGoToPlating(o.choice);
 //		try {
 //			atPlating.acquire();
@@ -445,15 +426,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     }
 
 //  Utilities
-//  =====================================================================        
-    public void setGui(RestaurantChungCookAnimation gui) {
-        cookGui = gui;
-    }
-    
-    public void addMarket(MarketBuilding m) {
-        markets.add(m);
-    }
-    
+//  =====================================================================               
     public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
         for(RestaurantChungOrder o : orders){
             if(o == order) {
@@ -501,10 +474,36 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     	restaurantChungCashier = c;
     }
     
+	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
+		orderStand = stand;
+	}
+	
+	public RestaurantChungRevolvingStand getRevolvingStand() {
+		return orderStand;
+	}
+
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCookRole " + this.getPerson().getName(), msg);
+    }
+    
     // HACK------------------------------------------------------------------
     public void depleteSalad() {
         Food f = findFood("Salad");
         f.amount = 0;
     }
     // END HACK------------------------------------------------------------------
+    
+//  Classes
+//  ===================================================================== 
+    private class MyMarketOrder{
+    	MarketOrder order;
+        MarketOrderState s;
+        
+        public MyMarketOrder(MarketOrder o) {
+        	order = new MarketOrder(o);
+            s = MarketOrderState.Pending;
+        }
+    }
 }

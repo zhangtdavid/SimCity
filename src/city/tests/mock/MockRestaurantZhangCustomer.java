@@ -18,11 +18,11 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 		log.add(new LoggedEvent("Received check from waiter."));
 	}
 	
-	public void msgHereIsChange(double change) {
+	public void msgHereIsChange(int change) {
 		log.add(new LoggedEvent("Got change " + change + " from cashier."));
 	}
 	
-	public void msgPayLater(double tab) {
+	public void msgPayLater(int tab) {
 		log.add(new LoggedEvent("Got tab " + tab + " from cashier."));
 	}
 
@@ -88,6 +88,12 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 
 	@Override
 	public void gotHungry() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgRestaurantClosed() {
 		// TODO Auto-generated method stub
 		
 	}

@@ -10,7 +10,8 @@ public interface Car extends AgentInterface {
 	
 	// Messages
 	
-	abstract void msgIWantToDrive(CarPassenger carPassenger, Building destination);
+	public void msgIWantToDrive(CarPassenger carPassenger, Building destination);
+	public void msgAtDestination();
 	
 	// Scheduler
 	

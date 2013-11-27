@@ -1,10 +1,7 @@
 package city.buildings;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
-
-import city.Animation;
+//import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.gui.HousePanel;
@@ -15,17 +12,14 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 	
 	// Data
 	
-	private HousePanel panel;
 	public final static int NUMBER_OF_BEDS = 1;
-	private Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
 	
 	// Constructor
 	
 	public HouseBuilding(String name, Landlord landlord, HousePanel p) {
 		super(name);
-		this.panel = p;
 		this.landlord = landlord; // THIS IS WHO YOU PAY RENT TO. HE MIGHT NOT LIVE HERE.
-		//this.landlord.setResidence(this); // relevant if landlord != resident 
+		//this.landlord.setResidence(this); // keep commented if landlord != resident is an option 
 	}
 	
 	// Getters
@@ -71,23 +65,6 @@ public class HouseBuilding extends ResidenceBaseBuilding {
 		// TODO
 		return;
 	}
-
-	/*
-	public Role addRole(Role r) {
-		if(r instanceof ResidentRole) {
-			ResidentRole c = (ResidentRole)r;
-			if(!allRoles.containsKey(c)) {
-				//TODO add personAnimation or something here for going around in the house.
-				c.setAnimation(anim);
-				anim.isVisible = true;
-				panel.addVisualizationElement(anim);
-				residents.add(c);
-				allRoles.put(c, anim);
-			}
-			return c;
-		}
-		return null;
-	}*/
 
 	@Override
 	public void addFood(FOOD_ITEMS f, int toadd) {
