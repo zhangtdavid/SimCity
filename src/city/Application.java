@@ -22,7 +22,6 @@ import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
@@ -38,7 +37,6 @@ import city.gui.HousePanel;
 import city.gui.MainFrame;
 import city.gui.MarketPanel;
 import city.gui.RestaurantChoiPanel;
-import city.gui.RestaurantChungPanel;
 import city.gui.RestaurantJPPanel;
 import city.gui.RestaurantTimmsPanel;
 import city.gui.RestaurantZhangPanel;
@@ -54,10 +52,6 @@ import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterRole;
-import city.roles.RestaurantChungCashierRole;
-import city.roles.RestaurantChungCookRole;
-import city.roles.RestaurantChungHostRole;
-import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPHostRole;
@@ -664,7 +658,7 @@ public class Application {
 		// THIRD add it to the list of statics in the cityView
 		mainFrame.cityView.addStatic(restaurantJP1);
 		// FOURTH create a new building, last argument is the panel in step ONE
-		RestaurantJPBuilding rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
+		RestaurantJPBuilding rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1, restaurantJP1);
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
 		// SIXTH add the new building to the map
