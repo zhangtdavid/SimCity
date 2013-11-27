@@ -6,6 +6,7 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.interfaces.BankCustomer;
+import city.roles.BankCustomerRole;
 
 /**
  * The base restaurant class for all SimCity201 Restaurants.

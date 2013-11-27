@@ -109,6 +109,9 @@ public class Application {
 //		// SIXTH add the new building to the map
 //		CityMap.addBuilding(BUILDING.restaurant, rzb1);
 		// SEVENTH create all your roles after
+	
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding")); // Has to be created before restaurant, needed for bank customer
+
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
@@ -128,7 +131,6 @@ public class Application {
 		// SEVENTH create all your roles after
 		
 		// Create buildings
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 
 		HousePanel rhp1 = new HousePanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		
@@ -201,6 +203,7 @@ public class Application {
 		RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
 		p1r1.setPerson(p1);
 		p1r1.setMarketCustomerDeliveryPaymentPerson();
+		p1r1.setBankCustomerPerson();
 		rcb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 

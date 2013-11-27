@@ -16,6 +16,7 @@ import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
+import city.roles.BankCustomerRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungCustomerRole;
@@ -44,6 +45,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
 		orderStand = new RestaurantChungRevolvingStand();
+		bankCustomer = new BankCustomerRole(this);
 		
         // Add items and their cooking times to a map
         foods.put(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
@@ -51,7 +53,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
         foods.put(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
         foods.put(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
         
-        setCash(500);
+        setCash(999);
 	}
 	
 	// Getters

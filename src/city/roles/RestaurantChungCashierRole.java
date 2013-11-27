@@ -74,7 +74,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
-//		roles.add((Role) restaurant.bankCustomer); // TODO clean up
+		roles.add((Role) restaurant.bankCustomer);
 	}
 	
 //	public void setActive(){
@@ -107,6 +107,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		Transaction t = findTransaction(c);
 		t.payment = money;
 		restaurant.setCash(restaurant.getCash() + money);
+		System.out.println("RESTAURANT CASH: " + restaurant.getCash());
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
@@ -270,6 +271,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 	public void setMarketCustomerDeliveryPaymentPerson() {
 		roles.get(0).setPerson(super.getPerson());
+	}
+
+	public void setBankCustomerPerson() {
+		restaurant.bankCustomer.setPerson(super.getPerson());
 	}
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {

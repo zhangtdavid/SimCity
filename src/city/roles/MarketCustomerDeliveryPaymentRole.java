@@ -104,9 +104,6 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
-        	System.out.println(market);
-        	System.out.println(market.prices);
-        	System.out.println(market.prices.get(item));
         	tempBill += mt.order.orderItems.get(item)*market.prices.get(item);
         }
 
