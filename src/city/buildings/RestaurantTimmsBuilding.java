@@ -15,6 +15,7 @@ import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantTimmsPanel;
 import city.interfaces.RestaurantBaseBuildingInterface;
 import city.interfaces.RestaurantTimmsCashier;
@@ -48,16 +49,15 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 
 	private int waiterRoundRobinIndex = 0;
 	
-	private RestaurantTimmsPanel panel;
-
 	// Constructor
 	
-	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p) {
+	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
 		this.setCustomerRoleName("city.roles.RestaurantTimmsCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantTimmsCustomerAnimation");
-		this.panel = p;
+		this.setPanel(p);
+		this.setCityViewBuilding(cityBuilding);
 		
 		// Create tables
 		int i = 0;
@@ -184,7 +184,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 			if (!super.roleExists(r)) {
 				RestaurantTimmsCashierAnimation a = new RestaurantTimmsCashierAnimation();
 				cashier.setAnimation(a);
-				panel.addVisualizationElement(a);
+				this.getPanel().addVisualizationElement(a);
 				super.addRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsCook) {
@@ -192,7 +192,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 			if (!super.roleExists(r)) {
 				RestaurantTimmsCookAnimation a = new RestaurantTimmsCookAnimation();
 				cook.setAnimation(a);
-				panel.addVisualizationElement(a);
+				this.getPanel().addVisualizationElement(a);
 				super.addRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsCustomer) {
@@ -201,7 +201,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 				customer.setRestaurantTimmsBuilding(this);
 				RestaurantTimmsCustomerAnimation a = new RestaurantTimmsCustomerAnimation(customer);
 				customer.setAnimation(a);
-				panel.addVisualizationElement(a);
+				this.getPanel().addVisualizationElement(a);
 				super.addRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsHost) {
@@ -209,7 +209,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 			if (!super.roleExists(r)) {
 				RestaurantTimmsHostAnimation a = new RestaurantTimmsHostAnimation();
 				host.setAnimation(a);
-				panel.addVisualizationElement(a);
+				this.getPanel().addVisualizationElement(a);
 				super.addRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsWaiter) {
@@ -217,7 +217,7 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 			if (!super.roleExists(r)) {
 				RestaurantTimmsWaiterAnimation a = new RestaurantTimmsWaiterAnimation(waiter);
 				waiter.setAnimation(a);
-				panel.addVisualizationElement(a);
+				this.getPanel().addVisualizationElement(a);
 				super.addRole(r, a);
 			}
 		}

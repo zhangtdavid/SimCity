@@ -15,10 +15,11 @@ import city.agents.CarAgent;
 import city.agents.PersonAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
+import city.animations.RestaurantTimmsTableAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
-import city.buildings.RestaurantZhangBuilding;
+import city.buildings.RestaurantTimmsBuilding;
 import city.gui.BusStopPanel;
 import city.gui.CityRoad;
 import city.gui.CityViewBusStop;
@@ -26,13 +27,13 @@ import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
 import city.gui.MainFrame;
-import city.gui.RestaurantZhangPanel;
+import city.gui.RestaurantTimmsPanel;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
-import city.roles.RestaurantZhangCashierRole;
-import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
+import city.roles.RestaurantTimmsCashierRole;
+import city.roles.RestaurantTimmsCookRole;
+import city.roles.RestaurantTimmsHostRole;
+import city.roles.RestaurantTimmsWaiterRole;
 
 public class Application {
 
@@ -158,16 +159,20 @@ public class Application {
 		CityMap.findClosestRoad(busStop2).vehicle = b1Anim; 
 		bus1.startThread();
 		
-		// Create RestaurantZhang
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, cityDimension);
-		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(100, 50, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
-		mainFrame.cityView.addStatic(cityViewRestaurantZhang1);
-		RestaurantZhangBuilding rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1, cityViewRestaurantZhang1);
-		mainFrame.buildingView.addView(rzp1, cityViewRestaurantZhang1.ID);
-		Application.CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		// Create RestaurantTimms
+		RestaurantTimmsPanel rtp = new RestaurantTimmsPanel(Color.DARK_GRAY, cityDimension);
+		CityViewRestaurant cvr = new CityViewRestaurant(100, 50, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rtp); 
+		mainFrame.cityView.addStatic(cvr);
+		RestaurantTimmsBuilding rtb = new RestaurantTimmsBuilding("RestaurantTimms", rtp, cvr);
+		mainFrame.buildingView.addView(rtp, cvr.ID);
+		Application.CityMap.addBuilding(BUILDING.restaurant, rtb);
 		
-		// Create RestaurantZhang tables
-		rzp1.setTables(rzb1.tables);
+		// Create RestaurantTimms tables
+		int i = 0;
+		while (i < 9) {
+			rtp.addVisualizationElement(new RestaurantTimmsTableAnimation(i));
+			i++;
+		}
 		
 		// Create Bank
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
@@ -176,25 +181,25 @@ public class Application {
 		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), cityDimension);
 
 		// Create landlord
-		PersonAgent p0 = new PersonAgent("Landlord Zhang", date);
+		PersonAgent p0 = new PersonAgent("Landlord", date);
 		LandlordRole p0r1 = new LandlordRole();
 		p0.addRole(p0r1);
-		HouseBuilding h0 = new HouseBuilding("House 0 Zhang", p0r1, rhp1);
+		HouseBuilding h0 = new HouseBuilding("House 0", p0r1, rhp1);
 		p0.setHome(h0);
 		p0r1.setActive();
 		people.add(p0);
 
 		// Create houses
-		HouseBuilding h1 = new HouseBuilding("House 1 Zhang", p0r1, rhp1);
-		HouseBuilding h2 = new HouseBuilding("House 2 Zhang", p0r1, rhp1);
-		HouseBuilding h3 = new HouseBuilding("House 3 Zhang", p0r1, rhp1);
-		HouseBuilding h4 = new HouseBuilding("House 4 Zhang", p0r1, rhp1);
+		HouseBuilding h1 = new HouseBuilding("House 1", p0r1, rhp1);
+		HouseBuilding h2 = new HouseBuilding("House 2", p0r1, rhp1);
+		HouseBuilding h3 = new HouseBuilding("House 3", p0r1, rhp1);
+		HouseBuilding h4 = new HouseBuilding("House 4", p0r1, rhp1);
 
 		// Create people
-		PersonAgent p1 = new PersonAgent("Cashier 1 Zhang", date);
-		PersonAgent p2 = new PersonAgent("Cook 1 Zhang", date);
-		PersonAgent p3 = new PersonAgent("Host 1 Zhang", date);
-		PersonAgent p4 = new PersonAgent("Waiter 1 Zhang", date);
+		PersonAgent p1 = new PersonAgent("Cashier 1", date);
+		PersonAgent p2 = new PersonAgent("Cook 1", date);
+		PersonAgent p3 = new PersonAgent("Host 1", date);
+		PersonAgent p4 = new PersonAgent("Waiter 1", date);
 		people.add(p1);
 		people.add(p2);
 		people.add(p3);
@@ -225,33 +230,33 @@ public class Application {
 		CarAnimation c4Anim = new CarAnimation(c4, busStop2);
 		c4.setAnimation(c4Anim);
 		mainFrame.cityView.addAnimation(c4Anim);
-		//p0.setCar(c0);
+		p0.setCar(c0);
 		p1.setCar(c1);
 		p2.setCar(c2);
 		p3.setCar(c3);
 		p4.setCar(c4);
 
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 23);
-		rzb1.addRole(p1r1);
+		RestaurantTimmsCashierRole p1r1 = new RestaurantTimmsCashierRole(rtb, 0, 23);
+		rtb.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 23);
-		rzb1.addRole(p2r1);
+		RestaurantTimmsCookRole p2r1 = new RestaurantTimmsCookRole(rtb, 0, 23);
+		rtb.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 23);
-		rzb1.addRole(p3r1);
+		RestaurantTimmsHostRole p3r1 = new RestaurantTimmsHostRole(rtb, 0, 23);
+		rtb.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 23);
-		rzb1.addRole(p4r1);
+		RestaurantTimmsWaiterRole p4r1 = new RestaurantTimmsWaiterRole(rtb, 0, 23);
+		rtb.addRole(p4r1);
 		p4.setOccupation(p4r1);
 
-		// Start threads for RestaurantZhang
+		// Start threads for RestaurantTimms
 		c0.startThread();
 		c1.startThread();
 		c2.startThread();
@@ -325,8 +330,8 @@ public class Application {
 		}
 
 		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
-			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
-			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
+			int x = 100;
+			int y = 100;
 			double closestDistance = 1000000;
 			Building returnBuilding = null;
 			for(Building b : map.get(type)) {
