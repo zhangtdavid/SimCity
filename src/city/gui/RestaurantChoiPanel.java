@@ -20,7 +20,6 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
 	private int panelX;
     private int panelY;
     private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
 	
 	// personal restaurant specifications (for drawing)
 	static final int TABLEX_INIT = 400; // table stuff
@@ -75,17 +74,13 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         graphics.setColor(Color.WHITE); // dishes
         graphics.fillRect(DISHES_X, DISHES_Y, WIDTH, WIDTH);
         
+        animate();
         // Update the position of each visible element
         for(Animation animation : animations) {
         	if (animation.getVisible()) {
                 animation.updatePosition();
                 animation.draw(graphics2D);
-                 
             }
         }
-	}
-	
-	public void addVisualizationElement(Animation ve) {
-		animations.add(ve);
 	}
 }

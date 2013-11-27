@@ -41,12 +41,12 @@ public class BankManagerRole extends Role implements BankManager{
 	// Messages
 	//from customer
 	public void msgNeedService(BankCustomer bc){
-		print("Need service message received");
+		System.out.println("Need service message received");
 		customers.add(bc);
 		stateChanged();
 	}
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
-		print("Direct Deposit message received");
+		System.out.println("Direct Deposit message received");
 		if(acctNum == -1)
 			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, null, r));
 		else
@@ -55,7 +55,7 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	//from teller
 	public void msgAvailable(BankTeller t){
-		print("Available message received");
+		System.out.println("Available message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
 				myT.s = state.available;
@@ -66,7 +66,7 @@ public class BankManagerRole extends Role implements BankManager{
 		stateChanged();
 	}
 	public void msgUnavailable(BankTeller t){
-		print("Unavailable message received");
+		System.out.println("Unavailable message received");
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
 				myT.s = state.gone;
@@ -77,12 +77,12 @@ public class BankManagerRole extends Role implements BankManager{
 		stateChanged();
 	}
 	public void msgWithdraw(int acctNum, int money, BankTeller t){
-		print("Withdraw message received from Teller");
+		System.out.println("Withdraw message received from Teller");
 		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t, null));
 		stateChanged();
 	}
 	public void msgTryDeposit(int money, int acctNum, BankTeller t){
-		print("Try deposit message received from teller");
+		System.out.println("Try deposit message received from teller");
 		if(acctNum == -1)
 			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t, null));
 		else
@@ -90,7 +90,7 @@ public class BankManagerRole extends Role implements BankManager{
 		stateChanged();
 	}
 	public void msgCreateLoan(int amt, int monthly, int acct){
-		print("Create Loan message received from Teller");
+		System.out.println("Create Loan message received from Teller");
 		building.loans.add(new Loan(amt, monthly, acct));
 		stateChanged();
 	}
@@ -145,7 +145,7 @@ public class BankManagerRole extends Role implements BankManager{
 							}
 						}
 					}
-					print("account not found");
+					System.out.println("account not found");
 				}	
 				if(bT.t == type.acctCreate){
 					CreateAccount(bT);
