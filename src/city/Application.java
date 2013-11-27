@@ -1,6 +1,7 @@
 package city;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -56,7 +57,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		
+
 	}
 
 	public static class CityMap {
@@ -89,7 +90,7 @@ public class Application {
 		 */
 		public static Building findRandomBuilding(BUILDING type) {
 			List<Building> list = map.get(type);
-			//Collections.shuffle(list);
+			Collections.shuffle(list);
 			return list.get(0);
 		}
 
@@ -121,8 +122,8 @@ public class Application {
 		}
 
 		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
-			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
-			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
+			int x = 100;
+			int y = 100;
 			double closestDistance = 1000000;
 			Building returnBuilding = null;
 			for(Building b : map.get(type)) {
