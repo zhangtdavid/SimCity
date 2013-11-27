@@ -42,34 +42,67 @@ For ease of organization, collaboration, and readability, the following conventi
 
 
 ## Project Status
-The project contains a city view alongside a building view. The city view includes roads and buildings, and the building view displays the internal structures of the buildings. People travel between buildings by car or bus and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents or a customer. The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition.
+ - The project contains a city view alongside a building view. The city view includes roads and buildings, and the building view displays the internal structures of the buildings. People travel between buildings by car or bus and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents or a customer. The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition.
+ - Banks and markets are not yet fully integrated. Markets work in one of our branches, but we didn't get a chance to merge it with master.
+ - Tests for gui have not been written. All roles and agents partially tested.
+ - There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the gui to influence behaviors in the city.
 
-There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the gui to influence behaviors in the city.
+## What Happens When You Run The Code
+ - People will get up at various times, and they will go in their cars to their respective places.
+ - Most people will go to the restaurant to work. Some take the cars which are pink, some take the lone bus.
+ - The people who aren't working are landlords. They prefer to go into restaurants to eat, and do just that.
+ - Some restaurants aren't working, we're working on it! They do work by themselves though for some reason, in their branches.
+ - There's a LOT of errors in the console that we're aware of - they're mostly NPE's from partially integrated markets.
+ - Everyone goes to restaurant, eats/works, and just stays there. It's kinda weird, but roles don't really do anything but go to restaurants.
 
 ## Project Contributions
-### John Timm (22%)
+### John Timms (22%)
 * Person 
+  - Laid out entire personagent and integrated with all roles
 * Project Structure
   - Designed project structure and provided team with a package to import
+  - Laid out base class and interface code, such as Agent, Roles, Animation, etc.
+  - Got time working for a day in the city. Not working, but lets people get up, do stuff, and go to restaurant to work/eat.
 * Git Management
   - Assisted team members with git issues and merge conflicts
+  - Managed all branches and got integration working smoothly on the last day
+* Restaurant
+  - Restaurant is integrated into the city and working. Only animates when you click on it. Not sure why about this last part - David
  
 ### David Zhang (21%)
 * City Animation
   - Designed base city gui interface and procedure for adding other components
+  - Put together animations, city view, building view, control panel, and trace panel
+  - Trace panels for some filters work very limited for some reason. Not sure why.
 * Transportation
-  - Implemented city transportation, including cars and buses
+  - Implemented city transportation, including cars and buses. Some cars are roaming around infinitely. Not sure why. Cars never collide :D
+  - Bus doesn't appear to stop at any stops, but it does - just filter the trace panel to "Bus"
+* New Waiter
+  - Created new shared data waiter. You can see this in the RestaurantZhang
+* Restaurant
+  - Integrated restaurant with new shared data waiter. It's in the upper left.
+* Integration
+  - Integrated everyone's roles and buildings and restaurants into the application so everything would run in the same city.
 
 ### John Francis (19%)
 * Bank
-  - Designed and implemented bank
+  - Designed and implemented bank. Bank is not yet fully functioning, you can see a small demo that interacts with RestaurantChoi
+* Restaurant
+  - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
 
 ### Shirley Chung (19%)
 * Market
   - Designed and implemented market
+  - Got it working in a branch, but didn't have time to fully integrate with master
+  - Created all roles associated with market, and integrated with bank.
 * Market and Restaurant Integration
   - Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
+* Restaurant
+  - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
 
 ### Ryan Choi (19%)
 * Housing
   - Designed and implemented housing components
+  - Designed all household roles
+* Restaurant
+  - Restaurant is integrated into the city and working
