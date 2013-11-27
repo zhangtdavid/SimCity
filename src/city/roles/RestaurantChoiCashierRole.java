@@ -138,6 +138,13 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				break;
 			}
 		}
+		//Bank interactions toppest priority.
+		if(building.getCashOnSite() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
+			System.out.println("before depositing: " + this.building.getCashOnSite());
+			this.depositMoney();
+			System.out.println("after depositing: " + this.building.getCashOnSite());
+		}
+		if(building.getCashOnSite() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
 		
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
 			wantsToLeave = false;
@@ -183,11 +190,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 						return true;
 					}
 				}
-				//Bank interactions toppest priority.
-				if(building.getCashOnSite() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
-					this.depositMoney();
-				}
-				if(building.getCashOnSite() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+				
 				return blocking;
 	}
     //Actions
@@ -260,7 +263,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	
 	@Override
 	public void depositMoney() {
-		//this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
+		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
 	}
 	
 	//Classes

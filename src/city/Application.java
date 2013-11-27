@@ -114,12 +114,7 @@ public class Application {
 		// Create buildings
 		bp1 = new BankPanel(Color.blue, new Dimension(500,500));
 		b1 = new BankBuilding("BankBuilding");
-		
-		// SIXTH add the new building to the map //THIS HAS TO COME BEFORE 4 BECAUSE RESTAURANT CALLS RANDOM BANK
-		CityMap.addBuilding(BUILDING.bank, b1);
-		CityMap.addBuilding(BUILDING.market, m1);
-		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
-		
+				
 		// FIRST add a panel
 		RestaurantChoiPanel rchoip1 = new RestaurantChoiPanel(Color.GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp0 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
@@ -139,16 +134,20 @@ public class Application {
 		mainFrame.cityView.addStatic(bank1);
 		mainFrame.cityView.addStatic(market1);
 		
-
-		
+		CityMap.addBuilding(BUILDING.market, m1);
+		CityMap.addBuilding(BUILDING.bank, b1);
 		// FOURTH create a new building, last argument is the panel in step ONE
 		rchoib1 = new RestaurantChoiBuilding("RestaurantChoi1", rchoip1);
-		//hb1 = new HouseBuilding("House1", rhp1);
+		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
 		
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rchoip1, restaurantChoi1.ID);
 		mainFrame.buildingView.addView(bp1, bank1.ID);
 		mainFrame.buildingView.addView(mp1, market1.ID);
+		
+
+		//hb1 = new HouseBuilding("House1", rhp1);
+		
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -225,13 +224,13 @@ public class Application {
 		//Create bank roles
 
 		BankManagerRole p9r1 = new BankManagerRole(b1, 0, 24);
-		b1.addRole(p9r1);
 		p9.setOccupation(p9r1);
 		p9r1.setPerson(p9);
 		BankTellerRole p10r1 = new BankTellerRole(b1, 0, 24);
-		b1.addRole(p10r1);
 		p10.setOccupation(p10r1);
 		p10r1.setPerson(p10);
+		b1.addRole(p9r1);
+		b1.addRole(p10r1);
 
 		//Create Market people
 		

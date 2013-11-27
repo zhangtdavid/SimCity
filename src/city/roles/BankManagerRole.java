@@ -185,7 +185,9 @@ public class BankManagerRole extends Role implements BankManager{
 		else{
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
+				System.out.println("Balance before deposit: " + bT.money);
 				a.balance += bT.money;
+				System.out.println("Balance after deposit: " + bT.money);
 				bankTasks.remove(bT);
 				directDepositer.msgDepositCompleted();
 				directDepositer = null;
