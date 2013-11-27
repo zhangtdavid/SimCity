@@ -45,7 +45,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	public RestaurantJPCookRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
-		name = this.getPerson().getName();
+		//name = this.getPerson().getName();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);

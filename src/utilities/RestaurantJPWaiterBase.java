@@ -29,7 +29,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	public RestaurantJPWaiterBase(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
-		name = this.getPerson().getName();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);

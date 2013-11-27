@@ -22,7 +22,6 @@ public class BankManagerRole extends Role implements BankManager {
 	List<MyTeller> myTellers = new ArrayList<MyTeller>();
 	List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
-	BankCustomer directDepositer = null;
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
 	
@@ -54,8 +53,7 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
 		print("Direct Deposit message received");
-		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null));
-		directDepositer = r;
+		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null, r));
 		stateChanged();
 		runScheduler();
 	}
@@ -88,16 +86,16 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	public void msgWithdraw(int acctNum, int money, BankTeller t){
 		print("Withdraw message received from Teller");
-		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t));
+		bankTasks.add(new BankTask(acctNum, type.withdrawal, money, t, null));
 		stateChanged();
 	}
 	
 	public void msgTryDeposit(int money, int acctNum, BankTeller t){
 		print("Try deposit message received from teller");
 		if(acctNum == -1)
-			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t));
+			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, t, null));
 		else
-			bankTasks.add(new BankTask(acctNum, type.deposit, money, t));
+			bankTasks.add(new BankTask(acctNum, type.deposit, money, t, null));
 		stateChanged();
 	}
 	
@@ -197,20 +195,38 @@ public class BankManagerRole extends Role implements BankManager {
 		myT.teller.msgAddressCustomer(bc);
 	}
 	
-	private void atmDeposit(BankTask bT){
-		if(bT.acctNum == -1) {
-			CreateAccount(bT);
-		} else {
-			for(Account a : building.accounts){
-				if(a.acctNum == bT.acctNum){
-					a.balance += bT.money;
-					bankTasks.remove(bT);
-					directDepositer.msgDepositCompleted();
-					directDepositer = null;
-					return;
-				}
-			}
-		}
+	private void atmDeposit(BankTask bT) {
+// TODO JP, which one is correct? 
+		
+// integration @ f7b86f4854
+//		                if(bT.acctNum == -1) {
+//		                        CreateAccount(bT);
+//		                } else {
+//		                        for(Account a : building.accounts){
+//		                                if(a.acctNum == bT.acctNum){
+//		                                        a.balance += bT.money;
+//		                                        bankTasks.remove(bT);
+//		                                        directDepositer.msgDepositCompleted();
+//		                                        directDepositer = null;
+//		                                        return;
+//		                                }
+//		                        }
+//		                }
+
+// master @ 080c04a4ccc0
+//		                if(bT.acctNum == -1){
+//		                        bankTasks.remove(bT);
+//		                        CreateAccount(bT);
+//		                }        
+//		                else{
+//		                for(Account a : building.accounts){
+//		                        if(a.acctNum == bT.acctNum){
+//		                                a.balance += bT.money;
+//		                                bankTasks.remove(bT);
+//		                                bT.bc.msgDepositCompleted();
+//		                                return;
+//		                        }
+//		                }
 	}
 	
 	private void Deposit(BankTask bT){
@@ -244,7 +260,7 @@ public class BankManagerRole extends Role implements BankManager {
 		if(bT.t == type.acctCreate)
 			bT.teller.msgHereIsAccount(building.accounts.size());
 		else if(bT.t == type.atmDeposit){
-			directDepositer.msgAccountCreated(building.accounts.size());
+			bT.bc.msgAccountCreated(building.accounts.size());
 		}
 	}
 	
@@ -285,12 +301,13 @@ public class BankManagerRole extends Role implements BankManager {
 		type t;
 		int money;
 		BankTeller teller;
-		BankCustomerRole bc;
-		public BankTask(int acct, type typ, int m, BankTeller tell){
+		BankCustomer bc;
+		public BankTask(int acct, type typ, int m, BankTeller tell, BankCustomer r){
 			acctNum = acct;
 			t = typ;
 			money = m;
 			teller = tell;
+			bc = r;
 		}
 	}
 }

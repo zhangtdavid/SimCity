@@ -1,7 +1,6 @@
 package city;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -57,7 +56,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		
+
 	}
 	
 	public static class CityMap {
@@ -90,7 +89,7 @@ public class Application {
 		 */
 		public static Building findRandomBuilding(BUILDING type) {
 			List<Building> list = map.get(type);
-			Collections.shuffle(list);
+			//Collections.shuffle(list);
 			return list.get(0);
 		}
 
