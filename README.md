@@ -117,6 +117,7 @@ For ease of organization, collaboration, and readability, the following conventi
 * Housing
   - Designed, implemented residential components. One-to-many landlord-to-home relations, rent, maintenance, etc.
   - The room designs are in the code but not implemented. John's activity on PersonAgent made ResidentRole very straightforward.
+  - See rchoi for JUnit tests.
   - This restaurant utilizes the bank for deposits.
   - This restaurant did not completely implement markets, though I believe it could have. The market receives the request for more food, but did not deliver. (complexities with v2.2 design and new delivery-truck mechanisms)
   - "Full disclosure" I'm inclined to believe this percentage should be a bit lower, excuses of exams or research aside. 
