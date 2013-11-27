@@ -16,6 +16,7 @@ import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.RestaurantChoiWaiterAnimation;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiterAbs;
@@ -51,7 +52,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 
 	// Constructor
 
-	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel) {
+	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		setCash(DAILY_CAPITAL); // initial launch
 		menu = new RestaurantChoiMenu();
@@ -59,7 +60,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
-
+		this.setCityViewBuilding(cityBuilding);
 		//this.setCashOnSite(cash_on_site);	
 		//set up tables
 		// Add items and their data times to a map

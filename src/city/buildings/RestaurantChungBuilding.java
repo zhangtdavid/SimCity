@@ -10,6 +10,7 @@ import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
@@ -38,13 +39,13 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	private static final int WORKER_SALARY = 500;
 	
 	// Constructor
-	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
+	public RestaurantChungBuilding(String name, RestaurantChungPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
 		orderStand = new RestaurantChungRevolvingStand();
-		
+		this.setCityViewBuilding(cityBuilding);
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
 		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));

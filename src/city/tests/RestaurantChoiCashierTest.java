@@ -7,6 +7,7 @@ import java.awt.Dimension;
 import junit.framework.TestCase;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantChoiBuilding;
+import city.gui.CityViewRestaurant;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
@@ -36,7 +37,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 	public void setUp() throws Exception{
 		super.setUp();		
 		rp = new RestaurantChoiPanel(Color.WHITE, new Dimension(0,0));
-		building = new RestaurantChoiBuilding("test restaurant choi building", rp); // no panel needed
+		building = new RestaurantChoiBuilding("test restaurant choi building", rp, new CityViewRestaurant(0, 0));
 		p = new MockPerson("person-cashier");
 		cashier = new RestaurantChoiCashierRole(); // cashier has no name		
 		customer = new MockRestaurantChoiCustomer("mockcustomer");

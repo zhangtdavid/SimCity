@@ -64,6 +64,9 @@ public abstract class CityViewBuilding {
 		if (isActive) {
 			g.setColor(color);
 			g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+			g.setColor(Color.red);
+			if(building != null)
+				g.drawString(building.getClass().getSimpleName(), rectangle.x, rectangle.y);
 		}
 	}
 	
