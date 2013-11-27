@@ -37,6 +37,7 @@ public class BankManagerRole extends Role implements BankManager {
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
 			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
 		}
 		else
 			wantsInactive = true;
@@ -115,28 +116,18 @@ public class BankManagerRole extends Role implements BankManager {
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
+			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			return false;
 		}
-		
-		if(LoanPaymentDue()) {
-			for(Loan l : building.loans){
-				if (l.remaining > 0) {
-					PayLoan(l);
-					return true;
-				} else {
-					building.loans.remove(l);
+		for(BankCustomer bc : customers){
+			for(MyTeller myT : myTellers){
+				if(myT.s == state.available){
+					AssignCustomer(bc, myT);
 					return true;
 				}
 			}
-		} else {
-			for(BankCustomer bc : customers){
-				for(MyTeller myT : myTellers){
-					if(myT.s == state.available){
-						AssignCustomer(bc, myT);
-						return true;
-					}
-				}
-			}	
-			for(BankTask bT : bankTasks){
+		}	
+		for(BankTask bT : bankTasks){
 				if(bT.t == type.atmDeposit){
 					atmDeposit(bT);
 					return true;
@@ -164,29 +155,10 @@ public class BankManagerRole extends Role implements BankManager {
 					return true;
 				}
 			}
-		}
 		return false;
 	}
 	
 	// Actions
-
-	private boolean LoanPaymentDue() {
-		return false;
-// TODO
-//		Calendar c = Calendar.getInstance();
-//		c.setTime(this.getPerson().getDate());
-//		int day = c.get(Calendar.DAY_OF_YEAR);
-//		c.setTime(LoanPayDate());
-//		int due = c.get(Calendar.DAY_OF_YEAR);
-//		return (day == due);
-	}
-
-//	private Date LoanPayDate() {
-//		long interval = (Application.INTERVAL * loanInterval);	
-//		Date dueDate = new Date(0);
-//		dueDate.setTime(building.loanLastPaid.getTime() + interval);
-//		return dueDate;
-//	}
 
 	private void AssignCustomer(BankCustomer bc, MyTeller myT){
 		myT.s = state.busy;
@@ -217,6 +189,14 @@ public class BankManagerRole extends Role implements BankManager {
 				bT.teller.msgTransactionSuccessful();
 			}
 		}
+		for(Loan l : building.loans){
+			if(l.acctNum == bT.acctNum){
+				if (l.remaining > 0) 
+					PayLoan(l);
+				else 
+					building.loans.remove(l);
+			}
+		}
 	}
 	
 	private void Withdraw(BankTask bT){
@@ -245,14 +225,12 @@ public class BankManagerRole extends Role implements BankManager {
 	}
 	
 	private void PayLoan(Loan l){
-		List<Account> temp = building.getAccounts();
-		for(Account a : temp){
+		for(Account a : building.getAccounts()){
 			if(a.acctNum == l.acctNum){
 				a.balance -= l.monthlyPayment;
 				l.remaining -= l.monthlyPayment;
 			}
 		}
-		building.loanLastPaid.setTime(building.loanLastPaid.getTime() + loanInterval);
 	}
 
 	// Getters
