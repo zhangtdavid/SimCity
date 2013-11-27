@@ -9,6 +9,7 @@ import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantBaseBuilding;
 import city.buildings.RestaurantChungBuilding;
@@ -62,6 +63,8 @@ public class MarketCustomerDeliveryTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
 		market = new MarketBuilding("Market1", marketPanel);
 

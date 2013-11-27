@@ -32,6 +32,7 @@ public class RestaurantTimmsWaiterTest extends TestCase {
 		customer = new MockRestaurantTimmsCustomer();
 		
 		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
+
 		rtb.setCashier(cashier);
 		rtb.setCook(cook);
 		

@@ -258,6 +258,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 			this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToExit();
 			atExit.acquire();
 		}
+		super.setInactive();
 	}
 	
 	// Getters
@@ -285,13 +286,17 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	@Override
+	public void setInactive() {
+		print("This should not happen.");
+	}
+	
+	@Override
 	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
 		this.rtb = b;
 	}
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCustomerRole " + this.getPerson().getName(), msg);
     }
 }

@@ -291,6 +291,8 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
+		// Thread.sleep(9000); // TODO testing - Delay the customer entering
+		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Building building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		
@@ -581,9 +583,9 @@ public class PersonAgent extends Agent implements Person {
 			disposition = true;
 		}
 		// TODO testing
-		if (this.name != "Landlord") {
-			disposition = false;
-		}
+//		if (this.name != "Landlord") {
+//			disposition = false;
+//		}
 		return disposition;
 	}
 	

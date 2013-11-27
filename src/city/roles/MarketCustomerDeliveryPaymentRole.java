@@ -51,7 +51,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.s = MarketTransactionState.Processing;
 		mt.bill = bill;
-		stateChanged();
+		runScheduler();
 	}
 
 	public void msgPaymentReceived(int id) {
