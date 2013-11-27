@@ -15,6 +15,7 @@ import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantTimmsPanel;
 import city.interfaces.RestaurantBaseBuildingInterface;
 import city.interfaces.RestaurantTimmsCashier;
@@ -52,12 +53,13 @@ public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements R
 
 	// Constructor
 	
-	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p) {
+	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
 		this.setCustomerRoleName("city.roles.RestaurantTimmsCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantTimmsCustomerAnimation");
 		this.panel = p;
+		this.setCityViewBuilding(cityBuilding);
 		
 		// Create tables
 		int i = 0;
