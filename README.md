@@ -50,26 +50,26 @@ There is still work to be done in the animations. People do not walk in the stre
 ### John Timm (22%)
 * Person 
 * Project Structure
-- Designed project structure and provided team with a package to import
+  - Designed project structure and provided team with a package to import
 * Git Management
-- Assisted team members with git issues and merge conflicts
+  - Assisted team members with git issues and merge conflicts
  
 ### David Zhang (21%)
 * City Animation
-- Designed base city gui interface and procedure for adding other components
+  - Designed base city gui interface and procedure for adding other components
 * Transportation
-- Implemented city transportation, including cars and buses
+  - Implemented city transportation, including cars and buses
 
 ### John Francis (19%)
 * Bank
-- Designed and implemented bank
+  - Designed and implemented bank
 
 ### Shirley Chung (19%)
 * Market
-- Designed and implemented market
+  - Designed and implemented market
 * Market and Restaurant Integration
-- Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
+  - Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
 
 ### Ryan Choi (19%)
 * Housing
-- Designed and implemented housing components
+  - Designed and implemented housing components
