@@ -701,7 +701,6 @@ public class PersonAgent extends Agent implements Person {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
     }
 }
