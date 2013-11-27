@@ -67,10 +67,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		state = MarketEmployeeState.None;
 		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
     }
-	
+	/*
 	public void setActive(){
 		this.setActivityBegun();
-	}
+	}*/
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;

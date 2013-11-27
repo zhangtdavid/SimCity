@@ -68,6 +68,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		this.lastWentToSleep = startDate;
 		this.state = State.none;
+		this.cash = 30;
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -292,6 +293,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
+
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (Role) r0.newInstance();

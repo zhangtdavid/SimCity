@@ -32,6 +32,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
+		this.setWorkplace(r);
     }
 
 //  Activity Management

@@ -9,6 +9,7 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
+import city.gui.HousePanel;
 import city.gui.MarketPanel;
 import city.roles.MarketCustomerRole;
 import city.roles.MarketCustomerRole.MarketCustomerEvent;
@@ -26,6 +27,8 @@ import junit.framework.TestCase;
 public class MarketCustomerTest extends TestCase {
 	MarketPanel marketPanel;	
 	MarketBuilding market;
+	
+	HousePanel housePanel;
 	
 	MockPerson cashierPerson;
 	MockMarketCashier cashier;
@@ -62,6 +65,9 @@ public class MarketCustomerTest extends TestCase {
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
 		market = new MarketBuilding("Market1", marketPanel);
 
+		
+		housePanel = new HousePanel(Color.black, new Dimension(500,500));
+		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
 		orderItems.put(FOOD_ITEMS.pizza, 5);
@@ -94,7 +100,7 @@ public class MarketCustomerTest extends TestCase {
 		customer.setMarket(market);
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
-		home = new HouseBuilding("House", landlord);
+		home = new HouseBuilding("House", landlord, housePanel);
 		customerPerson.home = home;
 		customerPerson.setCash(500);
 		

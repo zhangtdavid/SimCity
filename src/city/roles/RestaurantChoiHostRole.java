@@ -46,6 +46,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		tables = Collections.synchronizedList(new ArrayList<RestaurantChoiTable>(NTABLES));
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
+			System.out.println("made a table");
 		}
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
@@ -208,7 +209,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	public void assignTable(int i){
 		System.out.println("Host told "+leastActiveWaiter.getName()
-				+" to seat customer " + waitingCustomers.get(0).getName() 
+				+" to seat customer " + waitingCustomers.get(0).getPerson().getName() 
 				+  " at table " + tables.get(i).getTableNumber());
 		synchronized(tables){
 			leastActiveWaiter.msgSeatCustomer(

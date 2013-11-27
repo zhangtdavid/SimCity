@@ -48,7 +48,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-		roles.add((Role) building.bankConnection); // TODO clean up
+		//roles.add((Role) building.bankConnection); // TODO clean up
     }
     public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
@@ -128,13 +128,15 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	@Override
 	public boolean runScheduler() {
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
-			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
+		for (Role r : roles){
+			if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
 			}
-			break;
 		}
 		
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
@@ -181,10 +183,11 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 						return true;
 					}
 				}
-				
-				//Bank interactions lowest priority.
-				if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD) this.depositMoney();
-				if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+				//Bank interactions toppest priority.
+				if(building.getCashOnSite() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
+					this.depositMoney();
+				}
+				if(building.getCashOnSite() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
 				return blocking;
 	}
     //Actions
@@ -250,14 +253,14 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 
     
 	@Override
-	public void getMoney() {
-		moneyIncoming = IN_TRANSIT;
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+	public void getMoney() { //TODO bank needs to incorporate withdrawal
+		//moneyIncoming = IN_TRANSIT;
+		//this.building.bankConnection.setActive(TODO[something that makes withdraw work], RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
 	}
 	
 	@Override
 	public void depositMoney() {
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
+		//this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
 	}
 	
 	//Classes

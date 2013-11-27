@@ -52,6 +52,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
     }
 	
 	public void setActive(){
+		this.setActive2();
 		this.setActivityBegun();
 	}
 	

@@ -22,12 +22,14 @@ public class BankManagerRole extends Role implements BankManager{
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
+	
 // Constructor
 	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
+		setActivityBegun();
 	}
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
@@ -46,7 +48,12 @@ public class BankManagerRole extends Role implements BankManager{
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
 		print("Direct Deposit message received");
 		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null, r));
+		if(acctNum == -1)
+			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, null, r));
+		else
+			bankTasks.add(new BankTask(acctNum, type.deposit, money, null, r));
 		stateChanged();
+		runScheduler();
 	}
 	//from teller
 	public void msgAvailable(BankTeller t){
@@ -92,6 +99,7 @@ public class BankManagerRole extends Role implements BankManager{
 // Scheduler
 	@Override
 	public boolean runScheduler() {
+		System.out.println("IN THE SCHEDULER OF BANK MANAGER");
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
@@ -192,7 +200,7 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	private void Deposit(BankTask bT){
 		for(Account a : building.getAccounts()){
-			if(a.acctNum == bT.acctNum){
+			if(a.acctNum == bT.acctNum){		
 				a.balance += bT.money;
 				bankTasks.remove(bT);
 				bT.teller.msgTransactionSuccessful();
