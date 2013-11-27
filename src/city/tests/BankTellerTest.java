@@ -22,7 +22,7 @@ public class BankTellerTest extends TestCase {
 		this.manager = new MockBankManager();
 		b.setManager(manager);
 		this.tellerPerson = new MockPerson("Teller");
-		this.teller = new BankTellerRole(b);
+		this.teller = new BankTellerRole(b, 0, 12);
 		teller.setPerson(tellerPerson);
 	}
 	

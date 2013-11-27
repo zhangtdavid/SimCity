@@ -15,7 +15,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	// Data
 	
 	public BankCustomer bankCustomer;
-	public Map<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	private HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
 	public enum FoodOrderState {None, Pending, Ordered};
 	
 	// Constructor
@@ -32,12 +32,33 @@ public abstract class RestaurantBaseBuilding extends Building {
 	
 	// Getters
 	
+	public HashMap<FOOD_ITEMS, Food> getFoods() {
+		return foods;
+	}
+	
 	// Utilities 
 	
-	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
+	/**
+	 * Add a new type of food to restaurant inventory (create)
+	 */
+	public void addFood(FOOD_ITEMS i, Food f) {
+		foods.put(i, f);
+	}
+	
+	/**
+	 * Add delivered food items to restaurant inventory (update)
+	 */
+	public void incrementFoodQuantity(Map<FOOD_ITEMS, Integer> receivedItems) {
         for (FOOD_ITEMS s: receivedItems.keySet()) {
-        	foods.get(s).amount += receivedItems.get(s); // Add delivered food items to restaurant inventory
+        	foods.get(s).amount += receivedItems.get(s);
         }		
+	}
+	
+	/**
+	 * Set food item quantity explicitly (update)
+	 */
+	public void updateFoodQuantity(FOOD_ITEMS f, int i) {
+		foods.get(f).amount = i;
 	}
 	
 	// Classes

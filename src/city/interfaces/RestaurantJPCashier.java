@@ -1,12 +1,23 @@
 package city.interfaces;
 
+import utilities.MarketOrder;
+
 public interface RestaurantJPCashier extends RoleInterface {
 	/**
 	 * @param total The cost according to the cashier
 	 *
 	 * Sent by the cashier prompting the customer's money after the customer has approached the cashier.
 	 */
-	public abstract void msgPayment(RestaurantJPCustomer cust, Float bill);
+	public abstract void msgPayment(RestaurantJPCustomer cust, int bill);
+
+	public abstract MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
+
+	public abstract void msgComputeBill(
+			RestaurantJPWaiter restaurantJPWaiterBase,
+			RestaurantJPCustomer customer, String choice);
+
+	public abstract void msgFlaking(
+			RestaurantJPCustomer restaurantJPCustomerRole, int bill);
 
 	/**
 	 * @param total change (if any) due to the customer

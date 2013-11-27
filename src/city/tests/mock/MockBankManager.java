@@ -2,9 +2,9 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.MockRole;
+import city.interfaces.BankCustomer;
 import city.interfaces.BankManager;
-import city.roles.BankCustomerRole;
-import city.roles.BankTellerRole;
+import city.interfaces.BankTeller;
 
 public class MockBankManager extends MockRole implements BankManager {
 
@@ -14,21 +14,21 @@ public class MockBankManager extends MockRole implements BankManager {
 	}
 
 	@Override
-	public void msgNeedService(BankCustomerRole bc) {
+	public void msgNeedService(BankCustomer bc) {
 		log.add(new LoggedEvent("Received msgNeedService " + bc));
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgAvailable(BankTellerRole t) {
+	public void msgAvailable(BankTeller t) {
 		log.add(new LoggedEvent("Received msgAvailable " + t));
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgWithdraw(int acctNum, int money, BankTellerRole t) {
+	public void msgWithdraw(int acctNum, int money, BankTeller t) {
 		// TODO Auto-generated method stub
 		log.add(new LoggedEvent("Received msgWithdraw " + acctNum+ " " + money + " " + t));
 		
@@ -43,21 +43,21 @@ public class MockBankManager extends MockRole implements BankManager {
 	}
 
 	@Override
-	public void msgDirectDeposit(int acctNum, int money, BankCustomerRole r) {
+	public void msgDirectDeposit(int acctNum, int money, BankCustomer r) {
 		log.add(new LoggedEvent("Received msgDirectDeposit " + acctNum + " " + money + " " + r));
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgTryDeposit(int money, int acctNum, BankTellerRole t) {
+	public void msgTryDeposit(int money, int acctNum, BankTeller t) {
 		log.add(new LoggedEvent("Received msgTryDeposit " + money + " " + acctNum + " " + t));
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgUnavailable(BankTellerRole bankTellerRole) {
+	public void msgUnavailable(BankTeller bankTellerRole) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -28,9 +28,12 @@ public class RestaurantJPHostRole extends Role {
 	private String name;
 //	public HostGui hostGui = null;
 
-	public RestaurantJPHostRole(RestaurantJPBuilding b) {
+	public RestaurantJPHostRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
+		this.setWorkplace(b);
+		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setShift(shiftStart, shiftEnd);
 		// make some tables
 		tables = new ArrayList<RestaurantJPTableClass>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {

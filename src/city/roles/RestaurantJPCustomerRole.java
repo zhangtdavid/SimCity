@@ -2,6 +2,7 @@ package city.roles;
 
 
 import utilities.RestaurantJPMenuClass;
+import utilities.RestaurantJPWaiterBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +11,8 @@ import java.util.TimerTask;
 
 import city.Role;
 import city.animations.RestaurantJPCustomerAnimation;
+import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
 
@@ -20,10 +23,10 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private String name = new String();
 	private int hungerLevel = 5;        // determines length of meal
 	int currentTable;
+	RestaurantJPBuilding building;
 	Timer timer = new Timer();
 	private RestaurantJPWaiter waiter;    
 	private RestaurantJPCustomerAnimation customerGui;
-	private RestaurantJPHostRole host;
 	//    private boolean isHungry = false; //hack for gui
 	public enum AgentState
 	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Choosing, PlacingOrder, Eating, DoneEating, Paying, Leaving};
@@ -33,32 +36,23 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	AgentEvent event = AgentEvent.none;
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
-	
-	Float cash = (float) 20;
-	Float bill = (float) 0;
-	
-	RestaurantJPCashierRole cashier;
+	int bill = 0;
+	RestaurantJPCashier cashier;
 	
 	public RestaurantJPCustomerRole(String n){
 		super();
-		name = n;
-		if(name.equals("Flake"))
-			cash = (float) 0;
+		name = this.getPerson().getName();
 		myMenu = new RestaurantJPMenuClass();
 	}
 
-	public RestaurantJPCustomerRole(RestaurantJPHostRole h, RestaurantJPCashierRole c) {
-		host = h;
-		cashier = c;
+	public RestaurantJPCustomerRole(RestaurantJPBuilding b) {
+		building = b;
 		// TODO Auto-generated constructor stub
 	}
 
 	/**
 	 * hack to establish connection to Host agent.
 	 */
-	public void setHost(RestaurantJPHostRole h) {
-		host = h;
-	}
     public void setWaiter(RestaurantJPWaiter w)
     {
     	waiter = w;
@@ -110,9 +104,9 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(Float check, RestaurantJPCashierRole csh){
+	public void msgHereIsCheck(int check, RestaurantJPCashier csh){
 		//Do("Check received");
-		bill = new Float(check);
+		bill = check;
 		cashier = csh;
 		event = AgentEvent.readyToPay;
 		stateChanged();
@@ -199,7 +193,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 //-----------------------------------------------------------------------------------------------------------Actions
 
 	public void goToRestaurant() {
-		host.msgIWantToEat(this);//send our instance, so he can respond to us
+		building.host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
@@ -215,7 +209,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		//Do("inside decide order");
 		List<String> cannotAfford = new ArrayList<String>();
 		for(String food : myMenu.foods){
-			if(cash < myMenu.Prices.get(food) && !name.equals("Flake"))
+			if(this.getPerson().getCash() < myMenu.Prices.get(food) && !name.equals("Flake"))
 				cannotAfford.add(food);
 		}
 		for(String food : cannotAfford){
@@ -254,13 +248,11 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	}
 
 	private void Pay(){
-		cash -= bill;
-		if(cash > 0)
+		this.getPerson().setCash(this.getPerson().getCash() - bill);
+		if(this.getPerson().getCash() > 0)
 			cashier.msgPayment(this, bill);
 		else
 			cashier.msgFlaking(this, bill);
-		if(name.equals("Flake"))
-			cash = (float) 50;
 		event = AgentEvent.donePaying;
 	}
 	
@@ -273,7 +265,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private void DecideToLeave(){
 		int leave = (int) (Math.random() * 2);
 		if(leave == 1){
-			host.msgLeaving(this);
+			building.host.msgLeaving(this);
 			customerGui.DoExitRestaurant();
 			state = AgentState.DoingNothing;
 			event = AgentEvent.none;

@@ -2,10 +2,12 @@ package city.roles;
 
 import city.Application;
 import city.Application.BANK_SERVICE;
+import city.Application.CityMap;
 import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
@@ -24,8 +26,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int boothNumber;
 	
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		System.out.println("Customer has been set active");
-		this.setActive();
+		print("Customer has been set active");
+		super.setActive();
 		this.service = s;
 		this.depositType = t;
 		amount = money;
@@ -41,7 +43,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public BankCustomerRole() {
-		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
+		building = (BankBuilding) (Application.CityMap.findRandomBuilding(BUILDING.bank));
 	}
 	
 	// Messages

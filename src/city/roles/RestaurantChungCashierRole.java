@@ -50,7 +50,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			w = w2;
 			c = customer;
 			choice = order;
-			price = restaurant.foods.get(choice).price;
+			price = restaurant.getFoods().get(choice).price;
 			payment = 0;
 			s = state;
 		}

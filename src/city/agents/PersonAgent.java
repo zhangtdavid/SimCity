@@ -16,6 +16,7 @@ import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
+import city.Application;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -266,7 +267,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToBank() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		BankBuilding b = (BankBuilding) CityMap.findClosestBuilding(BUILDING.bank, this);
+		BankBuilding b = (BankBuilding) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = State.goingToBank;
 	}
@@ -289,7 +290,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		Building building = CityMap.findRandomBuilding(BUILDING.restaurant);
+		Building building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
@@ -314,7 +315,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToMarket() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		MarketBuilding b = (MarketBuilding) CityMap.findClosestBuilding(BUILDING.market, this);
+		MarketBuilding b = (MarketBuilding) Application.CityMap.findClosestBuilding(BUILDING.market, this);
 		processTransportationDeparture(b);
 		state = State.goingToMarket;
 		
@@ -453,8 +454,8 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole.setPerson(this);
 			this.addRole(carPassengerRole);
 		} else {
-			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
-			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+			BusStopBuilding b = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, this);
+			BusStopBuilding d = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, destination);
 			animation.goToBusStop(b);
 			atDestination.acquire();
 			busPassengerRole = new BusPassengerRole(d, b);

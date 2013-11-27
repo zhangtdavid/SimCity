@@ -1,6 +1,8 @@
 package city.tests;
 
 import junit.framework.TestCase;
+import city.buildings.RestaurantJPBuilding;
+import city.gui.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantJPCook;
@@ -24,15 +26,14 @@ public class RestaurantJPCashierTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();
 		MockPerson person = new MockPerson("JP's Cashier");
-		cashier = new RestaurantJPCashierRole(null);
+		RestaurantJPBuilding b = new RestaurantJPBuilding("JP's restaurant", new RestaurantJPPanel(null, null));
+		cashier = new RestaurantJPCashierRole(b, 0, 12);
 		cashier.setPerson(person);
 		customer = new MockRestaurantJPCustomer("mockcustomer");		
 		waiter = new MockRestaurantJPWaiter("mockwaiter");
 		cook = new MockRestaurantJPCook("mockcook");
 		//market1 = new MockMarket("mockmarket1");
 		//market2 = new MockMarket("mockmarket2");
-		
-		cashier.setFunds(100);
 	}	
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
