@@ -8,6 +8,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.agents.PersonAgent;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.buildings.MarketBuilding;
 import city.interfaces.BankCustomer;

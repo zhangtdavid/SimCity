@@ -3,12 +3,14 @@ package city.tests.mock;
 
 import city.MockRole;
 import city.animations.RestaurantChungCustomerAnimation;
+import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
+import utilities.MarketOrder;
 import utilities.RestaurantChungMenu;
 
 /**
@@ -37,5 +39,11 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void msgAddMarketOrder(MarketBuilding selectedMarket, MarketOrder o) {
+		// TODO Auto-generated method stub
+		
 	}
 }

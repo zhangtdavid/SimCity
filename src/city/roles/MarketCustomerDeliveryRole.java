@@ -50,7 +50,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	public void setActive(){
 //		this.setActivityBegun();
         state = MarketCustomerState.Ordering;
-        stateChanged();
+        runScheduler();
 	}
 	
 //  Messages

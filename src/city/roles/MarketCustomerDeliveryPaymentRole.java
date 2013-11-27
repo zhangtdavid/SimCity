@@ -50,7 +50,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.s = MarketTransactionState.Processing;
 		mt.bill = bill;
-		stateChanged();
+		runScheduler();
 	}
 
 	public void msgPaymentReceived(int id) {
@@ -104,6 +104,9 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
+        	System.out.println(market);
+        	System.out.println(market.prices);
+        	System.out.println(market.prices.get(item));
         	tempBill += mt.order.orderItems.get(item)*market.prices.get(item);
         }
 

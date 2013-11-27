@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import utilities.MarketOrder;
 import city.buildings.MarketBuilding;
 import city.roles.MarketCustomerDeliveryPaymentRole;
 
@@ -14,4 +15,5 @@ public interface RestaurantChungCashier extends RoleInterface {
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order);
 	public abstract void msgHereIsPayment(RestaurantChungCustomer c, int bill);
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
+	public void msgAddMarketOrder(MarketBuilding selectedMarket, MarketOrder o);
 }

@@ -332,9 +332,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.cashier.getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
 //        System.out.println("COOK PERSON: " + this.getPerson());
-        marketCustomerDelivery.setPerson(this.getPerson());
+        marketCustomerDelivery.setPerson(super.getPerson());
 //        System.out.println("MARKET CUSTOMER DELIVERY PERSON: " + marketCustomerDelivery.getPerson());
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
+    	restaurant.cashier.msgAddMarketOrder(selectedMarket, o.order);
         marketCustomerDelivery.setActive();
         return;
     }

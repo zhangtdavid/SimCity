@@ -5,6 +5,7 @@ import java.util.*;
 import city.Application;
 import city.Role;
 import city.Application.FOOD_ITEMS;
+import city.agents.PersonAgent;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -73,8 +74,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
-        roles.get(0).setPerson(this.getPerson());
-
 //		roles.add((Role) restaurant.bankCustomer); // TODO clean up
 	}
 	
@@ -115,7 +114,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	Cook
 //	---------------------------------------------------------------
 	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
-		marketTransactions.add(new MarketTransaction(m, o));	
+		marketTransactions.add(new MarketTransaction(m, o));
+		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
 	}
 	
 //  Scheduler
@@ -266,6 +266,10 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 				return;
 			}
 		}
+	}
+	
+	public void setMarketCustomerDeliveryPaymentPerson() {
+		roles.get(0).setPerson(super.getPerson());
 	}
 	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {

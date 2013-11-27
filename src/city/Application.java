@@ -199,21 +199,26 @@ public class Application {
 
 		// Create cashier
 		RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		p1r1.setPerson(p1);
+		p1r1.setMarketCustomerDeliveryPaymentPerson();
 		rcb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
 		RestaurantChungCookRole p2r1 = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		p2r1.setPerson(p2);
 		rcb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
 		RestaurantChungHostRole p3r1 = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		p3r1.setPerson(p3);
 		rcb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
 		RestaurantChungWaiterMessageCookRole p4r1 = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		p4r1.setPerson(p4);
 		rcb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
 		
@@ -270,23 +275,32 @@ public class Application {
 		
 		// Create cashier
 		MarketCashierRole p5r1 = new MarketCashierRole(mb1, 0, 12); // TODO Change shift times
+		p5r1.setPerson(p5);
 		rcb1.addRole(p5r1);
 		p5.setOccupation(p5r1);
+		mb1.setCashier(p5r1);
 
-		// Create cook
-		MarketDeliveryPersonRole p6r1 = new MarketDeliveryPersonRole(mb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p6r1);
-		p6.setOccupation(p6r1);
-
-		// Create host
-		MarketEmployeeRole p7r1 = new MarketEmployeeRole(mb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p7r1);
-		p7.setOccupation(p7r1);
-
-		// Create waiter
+		// Create manager
+		// had to move to before delivery person and employee for add functions to work
 		MarketManagerRole p8r1 = new MarketManagerRole(mb1, 0, 12); // TODO Change shift times
+		p8r1.setPerson(p8);
 		rcb1.addRole(p8r1);
 		p8.setOccupation(p8r1);
+		mb1.setManager(p8r1);
+		
+		// Create delivery person
+		MarketDeliveryPersonRole p6r1 = new MarketDeliveryPersonRole(mb1, 0, 12); // TODO Change shift times
+		p6r1.setPerson(p6);
+		rcb1.addRole(p6r1);
+		p6.setOccupation(p6r1);
+		mb1.addDeliveryPerson(p6r1);
+
+		// Create employee
+		MarketEmployeeRole p7r1 = new MarketEmployeeRole(mb1, 0, 12); // TODO Change shift times
+		p7r1.setPerson(p7);
+		rcb1.addRole(p7r1);
+		p7.setOccupation(p7r1);
+		mb1.addEmployee(p7r1);
 		
 		c5.startThread();
 		c6.startThread();
