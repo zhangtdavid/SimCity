@@ -40,3 +40,30 @@ For ease of organization, collaboration, and readability, the following conventi
 * No conventions have yet been established for the organization of methods in `Animation` or their interfaces.
 * The overall design of the project is still in flux. So far, there has been very little discussion of how animations will work. In particular, while we are used to animating multiple agents, there is the new consideration of animating the inside of buildings which agents can enter and exit. Once this issue is decided, the structure of the project will most likely be partially modified.
 
+
+## Project Status
+The 
+
+## Project Contributions
+# John Timm 
+* Person 
+* Project Structure
+- Designed project structure and provided team with a package to import
+* Git Management
+- Assisted team members with git issues and merge conflicts
+ 
+# David Zhang
+* City Animation
+- Designed base city gui interface and procedure for adding other components
+* Transportation
+- 
+
+# John Francis
+* Bank
+
+# Shirley Chung
+* Market
+* Market and Restaurant Integration
+
+# Ryan Choi
+* Housing
