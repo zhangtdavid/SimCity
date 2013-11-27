@@ -63,14 +63,16 @@ There is still work to be done in the animations. People do not walk in the stre
 ### John Francis (19%)
 * Bank
   - Designed and implemented bank
+  - Provided methodology to allow integration with Restaurants and Markets
 * Buildings
-  - Wrote cash handling methods in the building class to allow directDeposits by businesses
+  - Wrote cash handling methods in the building and person class to allow directDeposits by businesses
 
 * Disclosure
   - Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
   - Restaurant testing is virtually non-existent, except for the Cashier
   - Loan payment functionality exists in local branch but was not done in time for integration
   - Internal BankGui was not completed
+  - Ironically, personal restaurant was integrated with the market but not the bank
   - All Bank interactions have ben tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration
 
 ### Shirley Chung (19%)
