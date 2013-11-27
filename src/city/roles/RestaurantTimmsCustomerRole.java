@@ -6,6 +6,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
@@ -281,5 +283,10 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		stateChanged();
 	}
 	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

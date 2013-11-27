@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
 
@@ -23,4 +25,10 @@ public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 		myC.s = state.waitingForFood;
 		revolvingStand.addOrder(building.cook.new Order(this, myC.choice, myC.table));
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPWaiterSharedDataRole " + this.getPerson().getName(), msg);
+    }
 }

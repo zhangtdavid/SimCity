@@ -1,6 +1,8 @@
 package city.roles;
 
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPMenuClass;
 
 import java.util.ArrayList;
@@ -317,6 +319,11 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		customerGui = gui;
 		
 	}
-
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

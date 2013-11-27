@@ -1,5 +1,8 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
+
 /**
  * Restaurant Waiter Agent
  */
@@ -25,5 +28,11 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		
 		waiterGui.DoReturnToWaiterHome();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterMessageCookRole " + this.getPerson().getName(), msg);
+    }
 }
 

@@ -46,16 +46,16 @@ public class MainFrame extends JFrame {
 		buildingView.setPreferredSize(new Dimension(BUILDINGVIEWX, BUILDINGVIEWY));
 		buildingView.setMaximumSize(new Dimension(BUILDINGVIEWX, BUILDINGVIEWY));
 		buildingView.setMinimumSize(new Dimension(BUILDINGVIEWX, BUILDINGVIEWY));
-		// Set up the city control panel
-		CP = new CityControlPanel(this);
-		CP.setPreferredSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
-		CP.setMaximumSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
-		CP.setMinimumSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
 		// Set up the trace panel
 		tracePanel = new TracePanel();
 		tracePanel.showAlertsForAllLevels();
 		tracePanel.showAlertsForAllTags();
 		tracePanel.setDimension(new Dimension(TRACEPANELX, TRACEPANELY));
+		// Set up the city control panel
+		CP = new CityControlPanel(this);
+		CP.setPreferredSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
+		CP.setMaximumSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
+		CP.setMinimumSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
 
 		// Layout for gridbaglayout
 		this.setLayout(new GridBagLayout());

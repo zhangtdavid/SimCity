@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Role;
@@ -176,6 +178,12 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 			}
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCashierRole " + this.getPerson().getName(), msg);
+    }
 	
 }
 

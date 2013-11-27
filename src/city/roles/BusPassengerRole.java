@@ -2,6 +2,8 @@ package city.roles;
 
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.interfaces.BusPassenger;
 import city.interfaces.Bus;
@@ -93,6 +95,12 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		super.setActive();
 		msgAtWaitingStop();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BUS, "BusPassengerRole " + this.getPerson().getName(), msg);
+    }
 	// Classes
 
 }

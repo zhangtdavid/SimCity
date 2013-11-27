@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedHost;
 import city.buildings.RestaurantTimmsBuilding;
@@ -127,6 +129,12 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		super.setActive();
 		// TODO
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsHostRole " + this.getPerson().getName(), msg);
+    }
 
 }
 

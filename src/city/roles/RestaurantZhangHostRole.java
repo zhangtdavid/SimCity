@@ -6,6 +6,8 @@ import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantZhangTable;
 import city.Building;
 import city.Role;
@@ -227,5 +229,10 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 		else
 			closingRestaurant = true;
 	}
+	
+	public void print(String msg) {
+//        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangHostRole " + this.getPerson().getName(), msg);
+    }
 }
 

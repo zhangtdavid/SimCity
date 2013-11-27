@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
@@ -423,5 +425,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		super.setActive();
 		gotHungry();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

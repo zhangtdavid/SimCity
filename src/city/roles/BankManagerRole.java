@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -238,6 +240,11 @@ public class BankManagerRole extends Role implements BankManager{
 // Setters
 	
 // Utilities
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankManagerRole " + this.getPerson().getName(), msg);
+    }
 	
 // Classes
 	public class MyTeller {

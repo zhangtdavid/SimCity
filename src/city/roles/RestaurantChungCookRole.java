@@ -3,6 +3,8 @@ package city.roles;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungRevolvingStand;
@@ -499,6 +501,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
     public void setRestaurantCashier(RestaurantChungCashier c) {
     	restaurantChungCashier = c;
+    }
+    
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCookRole " + this.getPerson().getName(), msg);
     }
     
     // HACK------------------------------------------------------------------

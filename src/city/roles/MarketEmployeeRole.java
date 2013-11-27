@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
@@ -234,5 +236,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 	
 //  Utilities
-//	=====================================================================	
+//	=====================================================================
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketEmployeeRole " + this.getPerson().getName(), msg);
+    }
 }

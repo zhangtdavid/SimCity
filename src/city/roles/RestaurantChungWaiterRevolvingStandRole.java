@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 
@@ -30,5 +32,11 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		
 		waiterGui.DoReturnToWaiterHome();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterRevolvingStandRole " + this.getPerson().getName(), msg);
+    }
 }
 

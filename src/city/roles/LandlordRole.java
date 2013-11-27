@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
@@ -81,7 +83,11 @@ public class LandlordRole extends Role implements Landlord {
 	}
 
 	// Utilities
-
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.HOUSE, "LandlordRole " + this.getPerson().getName(), msg);
+    }
 	// Classes
 
 }

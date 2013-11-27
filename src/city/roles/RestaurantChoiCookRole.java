@@ -8,6 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
@@ -430,6 +432,12 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
             }
         }
         return null;
+    }
+    
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCookRole " + this.getPerson().getName(), msg);
     }
 	//Classes
 	   private class MyMarketOrder{

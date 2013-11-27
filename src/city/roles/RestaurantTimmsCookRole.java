@@ -7,6 +7,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
@@ -234,6 +236,12 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.decrementQuantityOnHand(i);
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCookRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Order Class
 

@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
@@ -259,6 +261,12 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	public void depositMoney() {
 		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCashierRole " + this.getPerson().getName(), msg);
+    }
 	
 	//Classes
     public class Check{

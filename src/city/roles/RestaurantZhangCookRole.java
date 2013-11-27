@@ -11,7 +11,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import sun.security.krb5.internal.HostAddress;
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
@@ -382,6 +383,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 		super.setInactive();
 	}
+	
+	
+	public void print(String msg) {
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
+		super.print(msg);
+    }
 
 	enum CookInvoiceStatus {created, processing, changedMarket, completed};
 	private class CookInvoice {

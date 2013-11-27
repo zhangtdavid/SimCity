@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.animations.interfaces.MarketAnimatedCashier;
@@ -328,5 +330,11 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		}
 		return null;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCashierRole " + this.getPerson().getName(), msg);
+    }
 	// Classes
 }

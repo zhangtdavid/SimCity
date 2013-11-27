@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChungMenu;
 import utilities.RestaurantChungRevolvingStand;
 
@@ -519,5 +521,11 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 			}
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterBaseRole " + this.getPerson().getName(), msg);
+    }
 }
 

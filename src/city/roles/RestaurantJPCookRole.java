@@ -9,6 +9,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPRevolvingStand;
 import utilities.RestaurantJPTableClass;
 import city.Role;
@@ -328,6 +330,12 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		public Food(){
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCookRole " + this.getPerson().getName(), msg);
+    }
 }
 
 

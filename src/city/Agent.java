@@ -61,7 +61,7 @@ public abstract class Agent implements AgentInterface {
      * Print message.
      */
     @Override
-    public void print(String msg) {
+	public void print(String msg) {
         print(msg, null);
     }
 

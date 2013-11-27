@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.buildings.RestaurantTimmsBuilding;
@@ -266,6 +268,12 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 			this.amount = (this.amount + i);
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCashierRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Bill Class
 	

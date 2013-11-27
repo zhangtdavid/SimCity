@@ -3,6 +3,8 @@ package city.roles;
 import java.util.*;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungCustomerAnimation;
@@ -580,6 +582,12 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public String getOrder() {
 		return order;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 
 

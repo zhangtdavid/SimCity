@@ -3,6 +3,8 @@ package city.roles;
 import java.util.Calendar;
 import java.util.Date;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Landlord;
@@ -101,6 +103,12 @@ public class ResidentRole extends Role implements Resident {
 		landlord = l;
 		
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.HOUSE, "ResidentRole " + this.getPerson().getName(), msg);
+    }
 
 	// Classes
 }

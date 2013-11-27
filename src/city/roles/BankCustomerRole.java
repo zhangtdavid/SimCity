@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
@@ -155,6 +157,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Setters
 	
 	// Utilities
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Classes 
 	

@@ -10,6 +10,8 @@ import java.util.Map;
 
 import javax.swing.Timer;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
@@ -195,6 +197,12 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		}
 		super.setInactive();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCashierRole " + this.getPerson().getName(), msg);
+    }
 
 	public enum MarketTransactionState
 	{Pending, Processing, WaitingForConfirmation};

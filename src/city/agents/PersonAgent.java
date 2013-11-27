@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Agent;
 import city.Application.BANK_SERVICE;
@@ -693,4 +695,10 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return disposition;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
+    }
 }
