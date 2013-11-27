@@ -14,6 +14,10 @@ import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
+import city.roles.BankCustomerRole;
+import city.roles.MarketCashierRole;
+import city.roles.MarketEmployeeRole;
+import city.roles.MarketManagerRole;
 
 public class MarketBuilding extends Building { 
 	
@@ -34,6 +38,8 @@ public class MarketBuilding extends Building {
 	
 	public MarketBuilding(String name, MarketPanel panel) {
 		super(name);
+		this.setCustomerRoleName("city.roles.MarketCustomerRole");
+		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
 		this.panel = panel;
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
@@ -47,6 +53,8 @@ public class MarketBuilding extends Building {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
+		 bankCustomer = new BankCustomerRole();
+		
 		super.setCash(1000);
 	}
 	
@@ -56,8 +64,48 @@ public class MarketBuilding extends Building {
 	
 	@Override
 	public void addRole(Role r) {
-		// TODO
-		return;
+		if(r instanceof MarketManagerRole) {
+			MarketManagerRole m = (MarketManagerRole)r;
+			
+			if(!super.roleExists(m)) {
+				//MarketManagerAnimation anim = new MarketManagerAnimation(m); 
+				//c.setGui(anim);	
+//				c.setAnimation(anim);
+				//anim.setVisible(true);
+				//panel.addVisualizationElement(anim);
+				this.manager = m;
+				m.setActive();
+				super.addRole(m, null); // null --> anim
+			}
+		}
+		if(r instanceof MarketCashierRole) {
+			MarketCashierRole m = (MarketCashierRole)r;
+			
+			if(!super.roleExists(m)) {
+				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
+				//c.setGui(anim);	
+//				c.setAnimation(anim);
+				//anim.setVisible(true);
+				//panel.addVisualizationElement(anim);
+				this.cashier = m;
+				m.setActive();
+				super.addRole(m, null); // null --> anim
+			}
+		}
+		if(r instanceof MarketEmployeeRole) {
+			MarketEmployeeRole m = (MarketEmployeeRole)r;
+			
+			if(!super.roleExists(m)) {
+				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
+				//c.setGui(anim);	
+//				c.setAnimation(anim);
+				//anim.setVisible(true);
+				//panel.addVisualizationElement(anim);
+				this.addEmployee(m);
+				m.setActive();
+				super.addRole(m, null); // null --> anim
+			}
+		}
 	}
 	
 	// Employee

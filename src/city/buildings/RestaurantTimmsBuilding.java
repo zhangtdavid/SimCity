@@ -3,22 +3,28 @@ package city.buildings;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 
-import city.Building;
+import utilities.MarketOrder;
+import city.Application;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
+import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantTimmsPanel;
+import city.interfaces.RestaurantBaseBuildingInterface;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
-public class RestaurantTimmsBuilding extends Building {
+public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements RestaurantBaseBuildingInterface {
 	
 	// Data
 	
@@ -29,9 +35,15 @@ public class RestaurantTimmsBuilding extends Building {
 	private List<InternalCustomer> restaurantCustomers = Collections.synchronizedList(new ArrayList<InternalCustomer>());
 	private List<RestaurantTimmsWaiter> restaurantWaiters = Collections.synchronizedList(new ArrayList<RestaurantTimmsWaiter>());
 	private List<RestaurantTimmsBuilding.Table> restaurantTables = Collections.synchronizedList(new ArrayList<RestaurantTimmsBuilding.Table>());
+	private List<MenuItem> restaurantMenu = Collections.synchronizedList(new ArrayList<MenuItem>());
+	private List<InternalMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<InternalMarketOrder>());
 	
 	private static final int START_CASH_MIN = 1000;
 	private static final int START_CASH_MAX = 5000;
+	private static final int KITCHEN_STORE_MIN = 2;
+	private static final int KITCHEN_STORE_MAX = 2;
+	private static final int MENU_PRICE_MIN = 5;
+	private static final int MENU_PRICE_MAX = 12;
 	
 	public static final int WORKER_SALARY = 200;
 
@@ -41,21 +53,34 @@ public class RestaurantTimmsBuilding extends Building {
 
 	// Constructor
 	
-	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p) {
+	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
 		this.setCustomerRoleName("city.roles.RestaurantTimmsCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantTimmsCustomerAnimation");
 		this.panel = p;
+		this.setCityViewBuilding(cityBuilding);
 		
+		// Create tables
 		int i = 0;
 		while (i < 9) {
 			restaurantTables.add(new Table(i));
 			i++;
 		}
+		
+		// Create menu - food materializes at creation
+		for (Application.FOOD_ITEMS f : Application.FOOD_ITEMS.values()) {
+			int randomAmount = KITCHEN_STORE_MIN + (int)(Math.random() * ((KITCHEN_STORE_MAX - KITCHEN_STORE_MIN) + 1));
+			int randomPrice = MENU_PRICE_MIN + (int)(Math.random() * ((MENU_PRICE_MAX - MENU_PRICE_MIN) + 1));
+			MenuItem item = new MenuItem(f, randomAmount, randomPrice);
+			item.setState(State.inStock);
+			restaurantMenu.add(item);
+		}
 	}
 	
-	// Getters
+	//=========//
+	// Getters //
+	//=========//
 	
 	public RestaurantTimmsCashier getCashier() {
 		return cashier;
@@ -130,7 +155,13 @@ public class RestaurantTimmsBuilding extends Building {
 		return restaurantTables;
 	}
 	
-	// Setters
+	public List<MenuItem> getMenuItems() {
+		return restaurantMenu;
+	}
+	
+	//=========//
+	// Setters //
+	//=========//
 	
 	public void setCashier(RestaurantTimmsCashier c) {
 		this.cashier = c;
@@ -144,7 +175,9 @@ public class RestaurantTimmsBuilding extends Building {
 		this.host = h;
 	}
 	
-	// Utilities
+	//===========//
+	// Utilities //
+	//===========//
 	
 	@Override
 	public void addRole(Role r) {
@@ -167,6 +200,7 @@ public class RestaurantTimmsBuilding extends Building {
 		} else if (r instanceof RestaurantTimmsCustomer) {
 			RestaurantTimmsCustomer customer = (RestaurantTimmsCustomer) r;
 			if (!super.roleExists(r)) {
+				customer.setRestaurantTimmsBuilding(this);
 				RestaurantTimmsCustomerAnimation a = new RestaurantTimmsCustomerAnimation(customer);
 				customer.setAnimation(a);
 				panel.addVisualizationElement(a);
@@ -225,7 +259,34 @@ public class RestaurantTimmsBuilding extends Building {
 		restaurantWaiters.add(w);
 	}
 	
-	// Classes
+	public void addMarketOrder(InternalMarketOrder o) {
+		marketOrders.add(o);
+	}
+	
+	/**
+	 * Overrides RestaurantBaseBuilding.
+	 * 
+	 * RestaurantTimms does not use the "foods" like the other restaurants do. This method
+	 * intercepts calls from Shirley's market to accept deliveries into our own restaurantMenu
+	 * 
+	 * Because we set the food as being "in stock" here, there are no market-related messages in
+	 * the cook role.
+	 */
+	@Override
+	public void incrementFoodQuantity(Map<FOOD_ITEMS, Integer> receivedItems) {
+        for (FOOD_ITEMS f: receivedItems.keySet()) {
+        	for (MenuItem i : restaurantMenu) {
+        		if (i.getItem() == f) {
+        			i.incrementQuantity(receivedItems.get(f));
+        			i.setState(MenuItem.State.inStock);
+        		}
+        	}
+        }
+	}
+	
+	//=========//
+	// Classes //
+	//=========//
 	
 	public static class InternalCustomer {
 		private RestaurantTimmsCustomer customer;
@@ -274,7 +335,75 @@ public class RestaurantTimmsBuilding extends Building {
 			this.waiter = waiter;
 		}
 		
-	}
+	} 
+    
+    public static class InternalMarketOrder {
+    	// None of the state code is used right now
+    	
+        private enum State {pending, ordered};
+        private MarketOrder order;
+        private State state;
+        
+		public InternalMarketOrder(MarketOrder o) {
+			order = new MarketOrder(o);
+			state = State.pending;
+		}
+		
+		public MarketOrder getOrder() {
+			return order;
+		}
+		
+		public boolean isPending() {
+			return (state == State.pending);
+		}
+    }
+    
+    public static class MenuItem {
+    	private Application.FOOD_ITEMS item;
+    	private int quantity;
+    	private int price;
+    	public static enum State { none, inStock, onOrder, offMenu };
+    	private State state;
+    	
+		public MenuItem(Application.FOOD_ITEMS item, int quantity, int price) {
+			this.item = item;
+			this.quantity = quantity;
+			this.price = price;
+			this.state = State.none;
+		}
+		
+		public Application.FOOD_ITEMS getItem() {
+			return item;
+		}
+		
+		public Integer getQuantity() {
+			return quantity;
+		}
+		
+		public int getPrice() {
+			return price;
+		}
+		
+		public State getState() {
+			return state;
+		}
+		
+		public void setState(State s) {
+			this.state = s;
+		}
+
+		public boolean isInStock() {
+			return (state == State.inStock);
+		}
+		
+		public void incrementQuantity(int q) {
+			this.quantity = (this.quantity + q);
+		}
+		
+		public void decrementQuantity(int q) {
+			this.quantity = (this.quantity - q);
+		}
+    }
 
 	public static class Table {
 		private boolean occupied;

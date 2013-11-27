@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
@@ -11,33 +13,32 @@ import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
-import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
 	//Data    
-	public double money = 100;
-    public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
+	public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
 	public EventLog log = new EventLog();
 	RestaurantChoiAnimatedCashier cashierGui;
 	private boolean wantsToLeave;
 	private RestaurantChoiBuilding building;
-    public ArrayList<Check> checks = new ArrayList<Check>();
+	public ArrayList<Check> checks = new ArrayList<Check>();
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	private List<Role> roles = new ArrayList<Role>();
-	
-    //Constructor
+
+	//Constructor
 	/**
 	 * Initializes Cashier for RestaurantChoi
 	 * @param b : for RestaurantChoiBuilding
 	 * @param t1 : Start of shift
 	 * @param t2 : End of shift
 	 */
-    public RestaurantChoiCashierRole(RestaurantChoiBuilding b, int t1, int t2){
+	public RestaurantChoiCashierRole(RestaurantChoiBuilding b, int t1, int t2){
 		super();
 		building = b;
 		foodCost.put(FOOD_ITEMS.steak, 16);
@@ -49,16 +50,16 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
 		roles.add((Role) building.bankConnection); // TODO clean up
-    }
-    public RestaurantChoiCashierRole(){ // for testing mechanics
+	}
+	public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
 		foodCost.put(FOOD_ITEMS.steak, 16);
 		foodCost.put(FOOD_ITEMS.pizza, 11);
 		foodCost.put(FOOD_ITEMS.chicken, 9);
 		foodCost.put(FOOD_ITEMS.salad, 6);
-    }
-    
-    //Messages
+	}
+
+	//Messages
 
 	@Override
 	/**
@@ -68,35 +69,35 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 			RestaurantChoiWaiter w) {
 		checks.add(new Check(choice, c, w));
 		stateChanged();
-		
+
 	}
 	public void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash){
 		//find the customer's check as you get a payment
-				synchronized(checks){
-					for(int i = 0; i < checks.size(); i++){
-						if(c.equals(checks.get(i).getca())){
-							if(allHisCash < checks.get(i).getBill()){ // if not enough money, SEND TO DISHES
-								checks.get(i).setPayment(allHisCash); // first take all his money
-								checks.get(i).setState(Check.NOT_FULFILLED); // then mark as needing to work
-								break;
-							}else{ // else proceed as normal
-								checks.get(i).setState(Check.GET_PAID);
-								checks.get(i).setPayment(allHisCash);
-								break;
-							}
-						}
+		synchronized(checks){
+			for(int i = 0; i < checks.size(); i++){
+				if(c.equals(checks.get(i).getca())){
+					if(allHisCash < checks.get(i).getBill()){ // if not enough money, SEND TO DISHES
+						checks.get(i).setPayment(allHisCash); // first take all his money
+						checks.get(i).setState(Check.NOT_FULFILLED); // then mark as needing to work
+						break;
+					}else{ // else proceed as normal
+						checks.get(i).setState(Check.GET_PAID);
+						checks.get(i).setPayment(allHisCash);
+						break;
 					}
 				}
-				stateChanged();
+			}
+		}
+		stateChanged();
 	}
-	
+
 	/**
 	 * When the cook requests an order from a market, he forwards the cashier a bill.
 	 */
 	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
 		marketTransactions.add(new MarketTransaction(m, o));	
 	}
-	
+
 	/*
  	public void msgHeresYourMarketBill(Market m, int type, int amount){
 		double owed = foodCost.get(type)*amount;
@@ -105,10 +106,10 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		}
 		stateChanged();
 	}
-	*/
+	 */
 	@Override
 	public void msgHeresYourMoney(int withdrawal) {
-		money+=withdrawal;
+		building.setCash(building.getCash()+withdrawal);
 		moneyIncoming = NOT_IN_TRANSIT;
 		stateChanged();
 	}
@@ -123,26 +124,27 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 			}	
 		}
 	}
-	
-    //Scheduler
+
+	//Scheduler
 	@Override
 	public boolean runScheduler() {
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
-			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
+		for (Role r : roles){
+			if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
 			}
-			break;
 		}
-		
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
 			wantsToLeave = false;
 			super.setInactive();
 		}
 		//market interactions
-			/*	synchronized(marketBills){
+		/*	synchronized(marketBills){
 					for(int i = 0; i < markets.size(); i++){
 						if(marketBills.get(markets.get(i)) > 0){  // double rounding problems? we'll see
 							System.out.println(marketBills.get(markets.get(i)));
@@ -161,33 +163,35 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 					}
 				}*/
 
-				//customer interactions
-				for(int i = 0; i < checks.size(); i++){
-					if(checks.get(i).getState() == Check.NOT_FULFILLED){
-						sendToDishes(checks.get(i));
-						return true;
-					}
-				}
-				for(int i = 0; i < checks.size(); i++){
-					//if there are any bills that haven't been calculated, calculate and notify waiter.
-					if(checks.get(i).getState() == Check.RECEIVED){
-						returnCheck(checks.get(i));
-						return true;
-					}
-				}
-				for(int i = 0; i < checks.size(); i++){
-					if(checks.get(i).getState() == Check.GET_PAID){
-						returnChange(checks.get(i));
-						return true;
-					}
-				}
-				
-				//Bank interactions lowest priority.
-				if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD) this.depositMoney();
-				if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
-				return blocking;
+		//customer interactions
+		for(int i = 0; i < checks.size(); i++){
+			if(checks.get(i).getState() == Check.NOT_FULFILLED){
+				sendToDishes(checks.get(i));
+				return true;
+			}
+		}
+		for(int i = 0; i < checks.size(); i++){
+			//if there are any bills that haven't been calculated, calculate and notify waiter.
+			if(checks.get(i).getState() == Check.RECEIVED){
+				returnCheck(checks.get(i));
+				return true;
+			}
+		}
+		for(int i = 0; i < checks.size(); i++){
+			if(checks.get(i).getState() == Check.GET_PAID){
+				returnChange(checks.get(i));
+				return true;
+			}
+		}
+		if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
+			System.out.println("before depositing: " + building.getCash());
+			this.depositMoney();
+			System.out.println("after depositing: " + building.getCash());
+		}
+		if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+		return blocking;
 	}
-    //Actions
+	//Actions
 	public void returnCheck(Check c) {
 		c.getwa().msgHeresCheck(c.getBill(), c.getca());
 		c.setState(Check.GIVEN_TO_WAITER);		
@@ -201,11 +205,11 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	public void returnChange(Check ch) {
 		System.out.println("Received customer payment of " + ch.getPayment());
 		int change = ch.getPayment()-ch.getBill();
-		money+=ch.getBill();
+		building.setCash(building.getCash()+ch.getBill());
 		ch.getca().msgHeresYourChange(change);
 		checks.remove(ch);		
 	}
-/*
+	/*
 	@Override
 	public void payMarketBill(Market m, double payment) {
 		m.msgHeresYourPayment(payment);
@@ -213,55 +217,63 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		synchronized(marketBills){
 			marketBills.put(m, 0.0); // set bill to 0
 		}
-		
-	}
-*/
 
-    //Getters
+	}
+	 */
+
+	//Getters
 	@Override
 	public RestaurantChoiAnimatedCashier getAnimation() {
 		return this.cashierGui;
 	}
-    
-    //Setters
- /*   public void setBanker(Banker b){
+
+	//Setters
+	/*   public void setBanker(Banker b){
 		restaurantBanker = b; // only one banker (we can trust...) TODO fix so that this matches with bank in simcity201
     }
-    
+
     public void addMarket(Market m){
      	markets.add(m); // TODO fix so that this matches with market in simcity201
 	 	marketBills.put(m,0.0);
 	}
-   */ 
-	
-    public void setGui(RestaurantChoiAnimatedCashier r){
-    	this.cashierGui = r;
-    }
-    
-    @Override
-    public void setInactive(){
-    	if(checks.isEmpty() && this.building.seatedCustomers == 0){ // if no checks and no seated customers
-    		super.setInactive(); // end role and leave restaurant
-    	}
-    	else
-    		wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do
-    }
-    //Utilities
+	 */ 
 
-    
-	@Override
-	public void getMoney() {
-		moneyIncoming = IN_TRANSIT;
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+	public void setGui(RestaurantChoiAnimatedCashier r){
+		this.cashierGui = r;
 	}
-	
+
+	@Override
+	public void setInactive(){
+		if(checks.isEmpty() && this.building.seatedCustomers == 0){ // if no checks and no seated customers
+			super.setInactive(); // end role and leave restaurant
+		}
+		else
+			wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do
+	}
+	//Utilities
+
+
+	@Override
+	public void getMoney() { //TODO bank needs to incorporate withdrawal
+		//moneyIncoming = IN_TRANSIT;
+		//this.building.bankConnection.setActive(TODO[something that makes withdraw work], RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+	}
+
 	@Override
 	public void depositMoney() {
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, building.getCash()-RestaurantChoiBuilding.DEPOSIT_THRESHOLD, Application.TRANSACTION_TYPE.business);
+		int toDep=building.getCash()-RestaurantChoiBuilding.DAILY_CAPITAL;
+		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
+		building.setCash(building.getCash()-toDep);
 	}
-	
+
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCashierRole " + this.getPerson().getName(), msg);
+    }
+
 	//Classes
-    public class Check{
+	public class Check{
 
 		public final static int RECEIVED = 0;
 		public final static int GIVEN_TO_WAITER = 1;
@@ -273,7 +285,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		private int state;
 		private RestaurantChoiCustomer ca;
 		private RestaurantChoiWaiter wa;
-		
+
 		public Check(FOOD_ITEMS choice, RestaurantChoiCustomer c, RestaurantChoiWaiter w){
 			this.setwa(w);
 			setBill(foodCost.get(choice)); // takes choice, gives cost.
@@ -315,7 +327,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		public void setwa(RestaurantChoiWaiter wa) {
 			this.wa = wa;
 		}
-	
+
 	}
 
 }

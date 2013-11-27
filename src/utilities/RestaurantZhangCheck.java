@@ -6,12 +6,12 @@ import city.interfaces.RestaurantZhangWaiter;
 public class RestaurantZhangCheck {
 	public RestaurantZhangWaiter waiter;
 	public RestaurantZhangCustomer cust;
-	public double payment;
-	public double price;
+	public int payment;
+	public int price;
 	public enum CheckStatus{created, atWaiter, atCustomer};
 	public CheckStatus status = CheckStatus.created;
 	
-	public RestaurantZhangCheck(RestaurantZhangWaiter w, RestaurantZhangCustomer c, double p) {
+	public RestaurantZhangCheck(RestaurantZhangWaiter w, RestaurantZhangCustomer c, int p) {
 		waiter = w;
 		cust = c;
 		price = p;

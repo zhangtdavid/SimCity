@@ -2,13 +2,13 @@ package city.roles;
 
 import java.util.HashMap;
 import java.util.Map;
-import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.Role;
-import city.animations.interfaces.MarketAnimatedEmployee;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -23,8 +23,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 	private MarketBuilding market;
 	
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	WorkingState workingState = WorkingState.Working;
 	
 	private int loc; // location at front counter
@@ -33,12 +32,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	public MarketCustomerDelivery customerDelivery;
 	public MarketCustomerDeliveryPayment customerDeliveryPayment;
 	
-	public enum MarketEmployeeState
-	{None, AskedForOrder};
+	public enum MarketEmployeeState {None, AskedForOrder};
 	public MarketEmployeeState state;
 
-	public enum MarketEmployeeEvent
-	{AskedToAssistCustomer, OrderReceived};
+	public enum MarketEmployeeEvent {AskedToAssistCustomer, OrderReceived};
 	public MarketEmployeeEvent event;
 	
     public Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
@@ -48,10 +45,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 //	Gui
 //	---------------------------------------------------------------
-	private Semaphore atPhone = new Semaphore(0, true);
-	private Semaphore finishedCollectingItems = new Semaphore(0, true);
-	private Semaphore atCashier = new Semaphore(0, true);
-	private Semaphore atCounter = new Semaphore(0, true);
+//		TODO schung 99c0f4da25
+//	private Semaphore atPhone = new Semaphore(0, true);
+//	private Semaphore finishedCollectingItems = new Semaphore(0, true);
+//	private Semaphore atCashier = new Semaphore(0, true);
+//	private Semaphore atCounter = new Semaphore(0, true);
 	
 //	Constructor
 //	---------------------------------------------------------------
@@ -67,10 +65,12 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		state = MarketEmployeeState.None;
 		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
     }
-	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -163,6 +163,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 			customer.msgWhatWouldYouLike(this, loc);
 		}
 		else {
+// 			TODO schung 99c0f4da25
 //			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
 //			try {
 //				atPhone.acquire();
@@ -183,6 +184,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	else if (market.inventory.get(item) >= order.get(item)) {
         		market.inventory.put(item, market.inventory.get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
+//     			TODO schung 99c0f4da25
 //        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
 //        		try {
 //    			finishedCollectingItems.acquire();
@@ -193,6 +195,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         	}
         	if (market.inventory.get(item) < 10)
         		market.manager.msgItemLow();
+// 			TODO schung 99c0f4da25
 //        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
 //    		try {
 //				atCashier.acquire();
@@ -207,6 +210,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
     		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
     	else
     		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
+//			TODO schung 99c0f4da25
 //    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
 //		try {
 //			atCounter.acquire();
@@ -234,5 +238,10 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 	
 //  Utilities
-//	=====================================================================	
+//	=====================================================================
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketEmployeeRole " + this.getPerson().getName(), msg);
+    }
 }

@@ -1,7 +1,5 @@
 package city.interfaces;
 
-import utilities.MarketOrder;
-
 public interface RestaurantJPCashier extends RoleInterface {
 	/**
 	 * @param total The cost according to the cashier

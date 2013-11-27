@@ -1,7 +1,12 @@
 package city.agents;
 
+import java.util.concurrent.Semaphore;
+
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Agent;
 import city.Building;
+import city.animations.interfaces.AnimatedCar;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
 
@@ -14,13 +19,15 @@ public class CarAgent extends Agent implements Car {
 	public CarEvent myEvent = CarEvent.NONE; // Event for car
 	public CarPassenger carPassenger; // Current passenger
 	public Building destination; // Destination to go to
-	//CarGui myGui; // GUI for animations
+	public AnimatedCar animation; // GUI for animations
+	
+	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
-	public CarAgent() { // Sets all variables to null
+	public CarAgent(Building currentLocation) { // Sets all variables to null
 		super();
 		carPassenger = null;
-		destination = null;
+		destination = currentLocation;
 	}
 	
 	// Messages
@@ -56,8 +63,12 @@ public class CarAgent extends Agent implements Car {
 	
 	// Actions
 	void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
-		print("Going to destination " + destination.getName());
-//		myGui.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
+		animation.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		msgImAtCarDestination();
 	}
 
@@ -71,11 +82,21 @@ public class CarAgent extends Agent implements Car {
 	
 	
 	// Setters
-//	void setGui(CarGui gui) {
-//		myGui = gui;
-//	}
+	public void setAnimation(AnimatedCar anim) {
+		animation = anim;
+	}
 	
 	// Utilities
+	@Override
+	public void msgAtDestination() {
+		atDestination.release();
+	}
+
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.CAR, "BusAgent " + this.getName(), msg);
+    }
 	
 	// Classes
 

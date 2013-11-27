@@ -1,7 +1,10 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiWaiterAbs;
 
 public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
@@ -16,6 +19,9 @@ public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 	 */
 	public RestaurantChoiWaiterRole() {
 		super();
+	}
+	public RestaurantChoiWaiterRole(RestaurantChoiBuilding b, int t1, int t2){
+		super(b, t1, t2);
 	}
 
 	@Override
@@ -33,4 +39,10 @@ public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 	public void setRevolvingStand(RestaurantChoiRevolvingStand rs) {
 		orderqueue = rs;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiWaiterRole " + this.getPerson().getName(), msg);
+    }
 }

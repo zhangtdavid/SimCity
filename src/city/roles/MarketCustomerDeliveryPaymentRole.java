@@ -2,17 +2,17 @@ package city.roles;
 
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import utilities.MarketTransaction.MarketTransactionState;
-import city.Building;
-import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
+import city.Building;
 import city.Role;
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
 
@@ -32,13 +32,14 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
+		this.setWorkplace(r);
     }
 
 //  Activity Management
 //	=====================================================================	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	public void setActive(){
+//		this.setActivityBegun();
+//	}
 
 //  Messages
 //	=====================================================================	
@@ -130,4 +131,10 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 			}
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryPaymentRole " + this.getPerson().getName(), msg);
+    }
 }

@@ -6,6 +6,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
@@ -85,9 +87,11 @@ public class MarketManagerRole extends Role implements MarketManager {
 		this.setSalary(MarketBuilding.getWorkerSalary());
 	}
 	
-	public void setActive(){
-		this.setActivityBegun();
-	}
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
 	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;
@@ -250,4 +254,10 @@ public class MarketManagerRole extends Role implements MarketManager {
 		}
 		return null;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketManagerRole " + this.getPerson().getName(), msg);
+    }
 }

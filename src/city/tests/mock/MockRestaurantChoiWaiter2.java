@@ -55,7 +55,7 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 
 	@Override
 	public void msgHeresCheck(int total, RestaurantChoiCustomer ca) {
- 		log.add(new LoggedEvent("Received HeresCheck from waiter. Amount, Customer = "+ total + ", " + ca.getName()));
+ 		log.add(new LoggedEvent("Received HeresCheck from waiter. Amount, Customer = "+ total + ", " + ca.getPerson().getName()));
 		
 	}
 

@@ -2,13 +2,14 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-import utilities.MarketOrder;
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
@@ -19,7 +20,6 @@ import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
@@ -35,13 +35,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	boolean wantsToLeave;
 	public List<RestaurantChoiOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChoiOrder>());
 	Timer timer = new Timer(); // for cooking!
-	//public ConcurrentHashMap <FOOD_ITEMS, FoodData> foods = new ConcurrentHashMap<FOOD_ITEMS, FoodData>(); // how much of each food cook has
-	//^ must replace this with the one provided in the base class;;;
-	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>()); // myMarket has a MarketBuilding AND some stuff.
+	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>()); // myMarket has a MarketBuilding AND goodies.
     private MarketCustomerDelivery marketCustomerDelivery;
-    private RestaurantChoiCashier cashier;
-    //private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>()); // might be able to delete this
-    public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
+    //private RestaurantChoiCashier cashier; // THIS IS REQUIRED FOR MARKETS.
+    // public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
 
     
 	//Constructor
@@ -54,24 +51,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public RestaurantChoiCookRole(RestaurantChoiBuilding b, int t1, int t2) {
 		super();
 		building = b;
-		/*
-		foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
-		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
-		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad)); // declarations have been moved to building
-		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak));*/
-		//String name, int cookingTime, int amount (amount), int low (low), int capacity, int price
-		//ordering on initialization if needed
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 	
 	public RestaurantChoiCookRole(){ // to just test mechanics
-		super();
-		/*foods.put(FOOD_ITEMS.chicken, new FoodData(FOOD_ITEMS.chicken)); // foods = what the cook has
-		foods.put(FOOD_ITEMS.pizza, new FoodData(FOOD_ITEMS.pizza));
-		foods.put(FOOD_ITEMS.salad, new FoodData(FOOD_ITEMS.salad));
-		foods.put(FOOD_ITEMS.steak, new FoodData(FOOD_ITEMS.steak));*/ 
+		super(); 
 	}
 	//Messages
 	@Override
@@ -107,10 +93,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	}
 
 */
-	public void msgFoodReceived(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-        print("Cook received msgOrderIsReady");
-        MyMarketOrder mo = findMarketOrder(id);
-        removeMarketOrderFromList(mo);
+	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id) {
+        print("Cook received msgFoodReceived");
+        //MyMarketOrder mo = findMarketOrder(id); //TODO THIS IS FOR MARKET INTEGRATION
+        //removeMarketOrderFromList(mo);
         
         for (FOOD_ITEMS i: marketOrder.keySet()) {
             Food f = findFood(i.toString());
@@ -220,7 +206,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
 	@Override
 	public void CheckBack() { // check every 5000 seconds
-		System.out.println("checkback (REVOLVING STAND per 5000ticks)");
+		//System.out.println("checkback (REVOLVING STAND per 5000ticks)");
 		if(orderqueue != null){
 			timer.schedule(new TimerTask() {
 				public void run() {
@@ -252,7 +238,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				//ask for food; use marketIndex, but it goes to infinity so take mod of markets.size();
 				//and we ask for the difference between the low and the capacity.
 				int outOfcounter = 0;
-				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.item) == true){
+				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.item) == true){ // true = Out of that food
 					marketIndex++;
 					outOfcounter++;
 					if(outOfcounter == markets.size()){
@@ -263,11 +249,11 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				int t = tempFood.capacity-tempFood.low;
 				synchronized(markets){
 					//markets.get(marketIndex%markets.size()).getMarket().msgHeresAnOrder(tempFood.item, tempFood.capacity-tempFood.low);
-					//give a MarketOrder to a MarketBuilding
-					
-					Map<FOOD_ITEMS, Integer> forOrder = null;
+					//give a MarketOrder to a MarketBuilding // THIS IS A NON NORM (V2)
+					//markets.get(marketIndex%markets.size()).getMarket().getCashier().msg  (tempFood.item, tempFood.capacity-tempFood.low);
+					HashMap<FOOD_ITEMS, Integer> forOrder = new HashMap<FOOD_ITEMS, Integer>();
 					forOrder.put(o.getChoice(), t);
-					MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
+					//MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
 				}
 				tempFood.s = FoodOrderState.Pending;
 				System.out.println("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.item);
@@ -399,6 +385,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		myMarket mm = new myMarket(m);
 		synchronized(markets){
 			markets.add(mm);            
+			mm.outOf.put("Steak", false);
+			mm.outOf.put("Pizza", false);
+			mm.outOf.put("Chicken", false);
+			mm.outOf.put("Salad", false);
 		}		
 	}
 	//Utilities
@@ -408,6 +398,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		building.updateFoodQuantity(FOOD_ITEMS.salad, 0);
 		building.updateFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
+	/* TODO THIS IS FOR MARKET INTEGRATION
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
             if(o.order.orderId == id) {
@@ -422,7 +413,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
                 marketOrders.remove(order);
             }
         }
-    }
+    }*/
     public Food findFood(String choice) {
         for(Food f: building.getFoods().values()){
             if(f.item.equals(choice)) {
@@ -431,7 +422,15 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
         }
         return null;
     }
+    
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCookRole " + this.getPerson().getName(), msg);
+    }
+    
 	//Classes
+    /*     // TODO THIS IS FOR MARKET INTEGRATION
 	   private class MyMarketOrder{
 	    	MarketOrder order;
 	        MarketOrderState s;
@@ -443,5 +442,5 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	    }
 	    private enum MarketOrderState
 	    {Pending, Ordered};
-
+*/
 }

@@ -1,16 +1,11 @@
 package city.tests;
 
 import junit.framework.TestCase;
-import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
-import city.animations.RestaurantZhangCustomerAnimation;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
 import city.roles.RestaurantZhangCustomerRole;
 import city.tests.animations.mock.MockRestaurantZhangAnimatedCustomer;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangCashier;
-import city.tests.mock.MockRestaurantZhangCustomer;
 import city.tests.mock.MockRestaurantZhangHost;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
 
@@ -39,6 +34,7 @@ public class RestaurantZhangCustomerTest extends TestCase {
 		customer.setHost(host);
 		customer.setCashier(cashier);
 		customer.setAnimation(anim);
+		customer.money = 30;
 	}
 
 	public void testOneNormalCustomerScenario() { // Tests when customer has more than enough money to pay

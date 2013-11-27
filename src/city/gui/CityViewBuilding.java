@@ -9,7 +9,7 @@ public abstract class CityViewBuilding {
 	//Consider creating a rectangle for every Component for better universal collision detection
 
 	Rectangle rectangle;
-	int x, y;
+	public int x, y;
 	Color color;
 	public String ID;
 	public BuildingCard building;
@@ -64,6 +64,9 @@ public abstract class CityViewBuilding {
 		if (isActive) {
 			g.setColor(color);
 			g.fillRect(rectangle.x, rectangle.y, rectangle.width, rectangle.height);
+			g.setColor(Color.red);
+			if(building != null)
+				g.drawString(building.getClass().getSimpleName(), rectangle.x, rectangle.y);
 		}
 	}
 	

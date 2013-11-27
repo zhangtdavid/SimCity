@@ -1,44 +1,52 @@
 package city.roles;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Timer;
+
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.Building;
 import city.Role;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantZhangBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 /**
  * Restaurant Cashier Agent
  */
 
-public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier {
+public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier, ActionListener {
 	private static final int CASHIERX = 0;
 	private static final int CASHIERY = 200;
 	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
-	public double balance = 10000;
-	public Map<RestaurantZhangCustomer, Double> tabCustomers = new HashMap<RestaurantZhangCustomer, Double>();
+	public int balance = 10000;
+	public Map<RestaurantZhangCustomer, Integer> tabCustomers = new HashMap<RestaurantZhangCustomer, Integer>();
 	//public Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
-	
-	private String name;
 
-	public Map<String, Double> menu;
+	public Map<String, Integer> menu;
 
 	public List<RestaurantZhangCheck> pendingChecks = Collections.synchronizedList(new ArrayList<RestaurantZhangCheck>());
 	
 	private List<Role> roles = new ArrayList<Role>();
+	
+	public RestaurantZhangHost host;
+	private boolean restaurantClosing = false;
+	protected Timer timer;
 
 	public RestaurantZhangCashierRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -46,6 +54,9 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 //		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		
+		timer = new Timer(5000, this);
+		timer.start();
 	}
 
 	public String getName() {
@@ -57,7 +68,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		stateChanged();
 	}
 
-	public void msgHereIsPayment(RestaurantZhangCheck c, double cash) {
+	public void msgHereIsPayment(RestaurantZhangCheck c, int cash) {
 		pendingChecks.add(c);
 		c.status = RestaurantZhangCheck.CheckStatus.atCustomer;
 		c.payment = cash;
@@ -73,6 +84,13 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
+		if(restaurantClosing) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant <= 0) {
+				super.setInactive();
+				restaurantClosing = false;
+				return true;
+			}
+		}
 		synchronized(pendingChecks) {
 			for(RestaurantZhangCheck c : pendingChecks) {
 				if(c.status == RestaurantZhangCheck.CheckStatus.created) {
@@ -114,12 +132,11 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		if(tabCustomers.containsKey(c.cust)) { //
 			print("Tab needs to be paid, added to check: " + tabCustomers.get(c.cust));
 			c.price += tabCustomers.get(c.cust);
-			c.price =  Math.floor(c.price * 100) / 100;
 			tabCustomers.remove(c.cust);
 		}
-		double change = c.payment - c.price;//Math.round((c.payment - c.price) * 100) / 100; // Calculate the change
+		int change = c.payment - c.price;//Math.round((c.payment - c.price) * 100) / 100; // Calculate the change
 		if(change < 0) {
-			double tab = Math.abs(change);
+			int tab = Math.abs(change);
 			balance += c.payment;
 			print("Adding customer " + c.cust.getName() + " to tabs list, tab of " + tab);
 			tabCustomers.put(c.cust, tab);
@@ -136,7 +153,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	//		Do("Paying Market " + m.getName() + " bill of " + bill);
 	//		marketBills.remove(m);
 	//		m.msgPayBill(bill);
-	//		balance -= (double)bill;
+	//		balance -= (int)bill;
 	//		Do("Cashier balance after paying Market " + m.getName() + ": " + balance);
 	//	}
 	
@@ -156,8 +173,33 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	}
 
 	public void setMenu(RestaurantZhangMenu m) {
-		menu = new HashMap<String, Double>(m.getMenu());
+		menu = new HashMap<String, Integer>(m.getMenu());
 	}
+	
+	public void setHost(RestaurantZhangHost h) {
+		host = h;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		runScheduler();
+	}
+	
+	public void setInactive() {
+		if(host != null) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant !=0) {
+				restaurantClosing = true;
+				return;
+			}
+		}
+		super.setInactive();
+	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCashierRole " + this.getPerson().getName(), msg);
+    }
 
 	public enum MarketTransactionState
 	{Pending, Processing, WaitingForConfirmation};

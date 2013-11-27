@@ -2,6 +2,8 @@ package city;
 
 import java.util.HashMap;
 
+import city.gui.BuildingCard;
+import city.gui.CityViewBuilding;
 import city.interfaces.AnimationInterface;
 import city.interfaces.BuildingInterface;
 
@@ -19,7 +21,9 @@ public abstract class Building implements BuildingInterface {
 	private String customerAnimationInterfaceName; // The interface name of the animation that interacts with this building as a customer
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
 	private HashMap<Role, Animation> roles = new HashMap<Role, Animation>(); // Stores all roles currently inside the building, along with their animations
-
+	private CityViewBuilding cityViewBuilding;
+	private BuildingCard panel;
+	
 	// Constructor
 
 	public Building(String name) {
@@ -60,6 +64,16 @@ public abstract class Building implements BuildingInterface {
 		return type.cast(roles.get(r));
 	}
 	
+	@Override
+	public CityViewBuilding getCityViewBuilding() {
+		return cityViewBuilding;
+	}
+	
+	@Override
+	public BuildingCard getPanel() {
+		return panel;
+	}
+	
 	// Setters
 	
 	@Override
@@ -75,6 +89,16 @@ public abstract class Building implements BuildingInterface {
 	@Override
 	public void setCustomerAnimationName(String c) {
 		this.customerAnimationInterfaceName = c;
+	}
+	
+	@Override
+	public void setCityViewBuilding(CityViewBuilding b) {
+		this.cityViewBuilding = b;
+	}
+	
+	@Override
+	public void setPanel(BuildingCard b) {
+		this.panel = b;
 	}
 	
 	// Utilities 

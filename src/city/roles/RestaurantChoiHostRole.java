@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiTable;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
@@ -46,6 +48,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		tables = Collections.synchronizedList(new ArrayList<RestaurantChoiTable>(NTABLES));
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
+			System.out.println("made a table");
 		}
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
@@ -208,7 +211,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	public void assignTable(int i){
 		System.out.println("Host told "+leastActiveWaiter.getName()
-				+" to seat customer " + waitingCustomers.get(0).getName() 
+				+" to seat customer " + waitingCustomers.get(0).getPerson().getName() 
 				+  " at table " + tables.get(i).getTableNumber());
 		synchronized(tables){
 			leastActiveWaiter.msgSeatCustomer(
@@ -249,4 +252,10 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public void minus1Workload(RestaurantChoiWaiterAbs w){
 		waiterBalance.put(w, waiterBalance.get(w)-1); // replace old with new
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiHostRole " + this.getPerson().getName(), msg);
+    }
 }

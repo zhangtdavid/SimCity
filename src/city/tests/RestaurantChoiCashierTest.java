@@ -1,9 +1,14 @@
 package city.tests;
 
 
+import java.awt.Color;
+import java.awt.Dimension;
+
 import junit.framework.TestCase;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantChoiBuilding;
+import city.gui.CityViewRestaurant;
+import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiCashierRole;
@@ -20,6 +25,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 	MockRestaurantChoiCustomer customer;
 	MockRestaurantChoiCustomer customer1;
 	RestaurantChoiBuilding building;
+	RestaurantChoiPanel rp;
 	//MockMarket market;
 	//MockMarket market1;
 	//MockMarket market2;
@@ -30,6 +36,8 @@ public class RestaurantChoiCashierTest extends TestCase{
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+		rp = new RestaurantChoiPanel(Color.WHITE, new Dimension(0,0));
+		building = new RestaurantChoiBuilding("test restaurant choi building", rp, new CityViewRestaurant(0, 0));
 		p = new MockPerson("person-cashier");
 		cashier = new RestaurantChoiCashierRole(); // cashier has no name		
 		customer = new MockRestaurantChoiCustomer("mockcustomer");
@@ -169,8 +177,8 @@ public class RestaurantChoiCashierTest extends TestCase{
 	}*/
 	
 	public void testTwoNormalCustomersScenario()
-	{	//setUp() runs first before this test!			
-		cashier.money = 100;
+	{	//setUp() runs first before this test!	
+		building.setCash(100);
 		System.out.println("------------TESTING TWO CUSTOMER NORMAL SCENARIO");
 		//check preconditions
 		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.checks.size(), 0);
@@ -187,7 +195,6 @@ public class RestaurantChoiCashierTest extends TestCase{
 				"MockCustomer should have an empty event log before the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
 						+ customer.log.toString(), 0, customer.log.size());
 		assertTrue("Cashier has one check request", cashier.checks.size() == 2);
-		assertTrue("Cashier should go through scheduler twice", cashier.runScheduler());
 		assertTrue("Check should be marked as sent to waiter" , cashier.checks.get(0).getState() == Check.GIVEN_TO_WAITER);
 		assertTrue("Check's bill shouldn't be 0 dollars" , cashier.checks.get(0).bill > 0);
 		assertTrue("MockWaiter's log should have HeresCheck in it. But it has this instead: ",
@@ -209,28 +216,29 @@ public class RestaurantChoiCashierTest extends TestCase{
 		cashier.msgHeresMyPayment(customer1, 500); //loadsamone!
 		assertEquals("state of the check should be GET_PAID but isn't", cashier.checks.get(0).getState(),Check.GET_PAID);
 		
-		assertTrue("Cashier should = 100 dollars! (what he started with)", cashier.money==100);
+		assertTrue("Cashier should = 100 dollars! (what he started with)", building.getCash()==100);
 		assertTrue("should go through scheduler twice", cashier.runScheduler());
 		assertTrue("MockCustomer's log should have HeresYourChange in it. But it has this instead: ",
 				customer.log.toString().contains("HeresYourChange"));		
 		assertEquals("Should have one checks after payment is complete", cashier.checks.size(), 1);
-		assertTrue("Cashier should > 100 dollars! (what he started with)", cashier.money>100);
-		double temp = cashier.money;
-		System.out.println("Cashier money post payment1: " + cashier.money);
+		assertTrue("Cashier should > 100 dollars! (what he started with)", building.getCash()>100);
+		int temp = building.getCash();
+		System.out.println("Cashier money post payment1: " + building.getCash());
 		assertTrue("should go through scheduler twice", cashier.runScheduler());
 		assertTrue("MockCustomer's log should have HeresYourChange in it. But it has this instead: ",
 				customer1.log.toString().contains("HeresYourChange"));
-		System.out.println("Cashier money post payment2: " + cashier.money);
+		System.out.println("Cashier money post payment2: " + building.getCash());
 		assertEquals("Should have 0 checks after payment is complete", cashier.checks.size(), 0);
-		assertTrue("should have more money than after first person paid", cashier.money > temp);
-		assertTrue("Cashier should have more than 100 dollars! (what he started with)", cashier.money>100);
-		System.out.println("money after payment " +  cashier.money);
+		assertTrue("should have more money than after first person paid", building.getCash() > temp);
+		assertTrue("Cashier should have more than 100 dollars! (what he started with)", building.getCash()>100);
+		System.out.println("money after payment " +  building.getCash());
 		//done with customer interactions
 	}
 	public void testCustomerDishesScenario(){
 		//set up for another test of heresMyPayment, where the customer doesn't pay enough
 		System.out.println("------------TESTING CUSTOMER UNABLE TO PAY SCENARIO");
-		cashier.money = 0;
+		cashier.checks.clear();
+		building.setCash(0);
 		customer.choice = 2;
 		customer.name = "evil";
 		assertTrue("should have no checks", cashier.checks.size() ==0);
@@ -238,7 +246,7 @@ public class RestaurantChoiCashierTest extends TestCase{
 		System.out.println("Cashier # of checks after receiving check: " + cashier.checks.size());
 		assertTrue(cashier.runScheduler());
 		assertTrue("customer should have choice 2", customer.choice==2);
-		assertTrue("customer name is evil", customer.getName().equals("evil"));
+		assertTrue("customer name is evil", customer.getPerson().getName().equals("evil"));
 		//test msgHeresMyPayment; didn't pay enough
 		cashier.msgHeresMyPayment(customer,0);
 		assertEquals("should have one check", cashier.checks.size(), 1);
@@ -248,17 +256,15 @@ public class RestaurantChoiCashierTest extends TestCase{
 				customer.log.toString().contains("msgDoTheDishes"));
 		System.out.println("Customer sent to dishes");
 		assertEquals("state of the check should be FULFILL_BY_DISHES but isn't", cashier.checks.get(0).getState(), Check.FULFILL_BY_DISHES);
-		assertTrue("Cashier should have no money more than before", cashier.money==0);
+		assertTrue("Cashier should have no money more than before", building.getCash()==0);
 		assertEquals("should have one check still; customer still doing dishes", cashier.checks.size(), 1);
 		cashier.msgDoneWithDishes(customer);
 		assertEquals("should have no checks after customer done with dishes", cashier.checks.size(), 0);
-		assertTrue("Cashier should have no money more than before", cashier.money==0);
+		assertTrue("Cashier should have no money more than before", building.getCash()==0);
 		System.out.println("Cashier # of checks after transaction: " + cashier.checks.size());
 	}
+	
 	public void testDeposit(){
-		
-	}
-	public void testWithdraw(){
 		
 	}
 }

@@ -1,7 +1,10 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiWaiterAbs;
 
 /**
@@ -16,6 +19,9 @@ public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 
 	public RestaurantChoiWaiter2Role() {
 		super();
+	}
+	public RestaurantChoiWaiter2Role(RestaurantChoiBuilding b, int t1, int t2){
+		super(b, t1, t2);
 	}
 
 	@Override
@@ -40,4 +46,10 @@ public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 		waiterGui.DoLeave();
 		stateChanged();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiWaiter2Role " + this.getPerson().getName(), msg);
+    }
 }

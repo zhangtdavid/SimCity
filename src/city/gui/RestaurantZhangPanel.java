@@ -8,7 +8,6 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.List;
 
 import javax.swing.Timer;
 
@@ -19,10 +18,6 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 
 	private static final long serialVersionUID = 1255285244678935863L;
 
-	private int panelX;
-	private int panelY;
-	private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
 	private Collection<RestaurantZhangTable> tables = new ArrayList<RestaurantZhangTable>();
 
 	public RestaurantZhangPanel(Color color, Dimension panelDimension) {
@@ -72,19 +67,6 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 				animation.draw(graphics2D);
 			}
 		}
-	}
-
-	public void animate() {
-		// Update the position of each visible element
-		for(Animation animation : animations) {
-			if (animation.getVisible()) {
-				animation.updatePosition();
-			}
-		}
-	}
-
-	public void addVisualizationElement(Animation ve) {
-		animations.add(ve);
 	}
 
 	public void setTables(Collection<RestaurantZhangTable> t) {

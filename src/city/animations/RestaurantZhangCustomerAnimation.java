@@ -7,8 +7,6 @@ import utilities.RestaurantZhangTable;
 import city.Animation;
 import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.interfaces.RestaurantZhangCustomer;
-import city.roles.RestaurantZhangCustomerRole;
-import city.roles.RestaurantZhangHostRole;
 
 public class RestaurantZhangCustomerAnimation extends Animation implements RestaurantZhangAnimatedCustomer {
 
@@ -29,8 +27,6 @@ public class RestaurantZhangCustomerAnimation extends Animation implements Resta
 	private RestaurantZhangCustomer role = null;
 	private boolean isPresent = false;
 	private boolean isHungry = false;
-
-	private RestaurantZhangHostRole host;
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;

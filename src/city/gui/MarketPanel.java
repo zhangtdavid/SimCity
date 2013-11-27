@@ -9,19 +9,15 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import city.Animation;
-import city.roles.RestaurantChungHostRole;
 
 public class MarketPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1355285244678935863L;
-
-	private Timer timer = new Timer(5, this );
 	
-//	Fixed Numbers
+//	Data
 //	=====================================================================
     public static final int COUNTERX = 0, COUNTERY = 350;
     public static final int COUNTERW = 500, COUNTERH = 25;
@@ -34,7 +30,8 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 	
-	
+//	Constructor
+//	=====================================================================
 	public MarketPanel(Color color, Dimension panelDimension) {
 		super(color);
 		panelX = panelDimension.width;
@@ -57,9 +54,14 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 		g2.setColor(background);
 		g2.fillRect(0, 0, panelX, panelY);
 
-        // kitchen area
+      g2.setColor(Color.DARK_GRAY);
+      for (int i = 0; i < 5; i ++) {
+        g2.fillRect(SHELFX, SHELFY, SHELFW + (SHELFW*i), SHELFH);
+      }
+
+// TODO schung 99c0f4da25
+// kitchen area
 //        g2.setColor(Color.YELLOW);
-//        g2.fillRect(KITCHEN1X, KITCHEN1Y, KITCHEN1W, KITCHEN1L);
 //        g2.fillRect(KITCHEN1X, KITCHEN2Y, KITCHEN2W, KITCHEN2L);
 //        
 //        g2.setColor(Color.GRAY);

@@ -136,12 +136,12 @@ public abstract class Role implements RoleInterface {
 		person.stateChanged();
 	}
 	
-    protected void print(String msg) {
+    public void print(String msg) {
         person.print(msg);
     }
 
-    protected void print(String msg, Throwable e) {
-        person.print(msg, e);
+    public void print(String msg, Throwable e) {
+    	person.print(msg, e);
     }
 
 }
