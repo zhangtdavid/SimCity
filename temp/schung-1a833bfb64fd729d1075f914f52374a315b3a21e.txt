@@ -1,0 +1,59 @@
+		RestaurantChungCashierRole p1r1 = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		p1r1.setPerson(p1);
+		p1r1.setMarketCustomerDeliveryPaymentPerson();
+		p1r1.setBankCustomerPerson();
+		rcb1.addRole(p1r1);
+		p1.setOccupation(p1r1);
+
+		// Create cook
+		RestaurantChungCookRole p2r1 = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		p2r1.setPerson(p2);
+		rcb1.addRole(p2r1);
+		p2.setOccupation(p2r1);
+
+		// Create host
+		RestaurantChungHostRole p3r1 = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		p3r1.setPerson(p3);
+		rcb1.addRole(p3r1);
+		p3.setOccupation(p3r1);
+
+		// Create waiter
+		RestaurantChungWaiterMessageCookRole p4r1 = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		p4r1.setPerson(p4);
+		rcb1.addRole(p4r1);
+		p4.setOccupation(p4r1);
+		
+		
+				// FIRST add a panel
+		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantChung1 = new CityViewRestaurant(400, 250, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, rcp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantChung1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		RestaurantChungBuilding rcb1 = new RestaurantChungBuilding("RestaurantChung1", rcp1, restaurantChung1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rcp1, restaurantChung1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rcb1);
+		// SEVENTH create all your roles after
+		
+				// Create cashier
+		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p1r1Chung);
+		p1Chung.setOccupation(p1r1Chung);
+
+		// Create cook
+		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p2r1Chung);
+		p2Chung.setOccupation(p2r1Chung);
+
+		// Create host
+		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p3r1Chung);
+		p3Chung.setOccupation(p3r1Chung);
+
+		// Create waiter
+		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		rcb1.addRole(p4r1Chung);
+		p4Chung.setOccupation(p4r1Chung);
