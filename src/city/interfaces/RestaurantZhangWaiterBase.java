@@ -9,6 +9,7 @@ import utilities.RestaurantZhangTable;
 import city.Building;
 import city.Role;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
+import city.roles.RestaurantZhangHostRole;
 
 public abstract class RestaurantZhangWaiterBase extends Role implements RestaurantZhangWaiter {
 	// Customers
@@ -35,6 +36,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	Timer timer = new Timer(); // Timer for waiting actions
 	Semaphore atTable = new Semaphore(0, false);
+	private boolean restaurantClosing = false;
 	
 	static final int BREAKX = 600;
 	static final int BREAKY = 600;
@@ -277,6 +279,12 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		print("Notifying host that customer " + mc.customer.getName() + " has left");
 		myCustomerList.remove(mc);
 		myHost.msgTableOpen(mc.table);
+		if(restaurantClosing) {
+			if(myCustomerList.isEmpty()) {
+				super.setInactive();
+				restaurantClosing = false;
+			}
+		}
 	}
 	
 	void DoingNothing() {
@@ -370,6 +378,16 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
+	}
+	
+	public void setInactive() {
+		if(myHost != null) {
+			if(((RestaurantZhangHostRole)myHost).numberOfCustomersInRestaurant !=0) {
+				restaurantClosing = true;
+				return;
+			}
+		}
+		super.setInactive();
 	}
 
 	public enum mcState {waiting, seating, deciding, readyToOrder, ordering, ordered, 

@@ -33,7 +33,7 @@ import city.tests.mock.MockRestaurantZhangWaiterRegular;
  */
 
 public class RestaurantZhangCookTest extends TestCase {
-	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension())), 0, 100);
+	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
 	RestaurantZhangMenu menu = new RestaurantZhangMenu();
 	RestaurantZhangRevolvingStand stand = new RestaurantZhangRevolvingStand();
 	MockRestaurantZhangAnimatedCook anim = new MockRestaurantZhangAnimatedCook(cook);

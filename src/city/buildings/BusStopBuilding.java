@@ -38,6 +38,10 @@ public class BusStopBuilding extends Building {
 	
 	// Getters
 	
+	public BusStopBuilding(String name) {
+		super(name);
+	}
+
 	public BusStopBuilding getNextStop() {
 		return nextStop;
 	}

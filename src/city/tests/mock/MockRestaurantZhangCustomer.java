@@ -91,4 +91,10 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void msgRestaurantClosed() {
+		// TODO Auto-generated method stub
+		
+	}
 }

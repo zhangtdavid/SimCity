@@ -22,8 +22,10 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	private List<RestaurantZhangCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<MyWaiter> myWaiterList = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	private Collection<RestaurantZhangTable> tables;
-	
+	public int numberOfCustomersInRestaurant = 0;
+
 	private String name;
+	private boolean closingRestaurant = false;
 
 	public RestaurantZhangHostRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -35,21 +37,23 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	public String getName() {
 		return super.getPerson().getName();
 	}
-	
+
 	// Messages
-	
+
 	public void msgImEntering(RestaurantZhangCustomer cust) {
 		enteringCustomers.add(cust);
+		numberOfCustomersInRestaurant++;
 		stateChanged();
 	}
-	
+
 	public void msgIWantFood(RestaurantZhangCustomer cust) {
 		waitingCustomers.add(cust);
 		stateChanged();
 	}
-	
+
 	public void msgImLeaving(RestaurantZhangCustomer cust) {
 		waitingCustomers.remove(cust);
+		numberOfCustomersInRestaurant--;
 		stateChanged();
 	}
 
@@ -63,7 +67,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 			}
 		}
 	}
-	
+
 	public void msgWaiterRequestBreak(RestaurantZhangWaiter w) {
 		for(MyWaiter temp : myWaiterList) {
 			if(temp.w.equals(w)) {
@@ -75,7 +79,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 			}
 		}
 	}
-	
+
 	public void msgOffBreak(RestaurantZhangWaiter w) {
 		for(MyWaiter mw : myWaiterList) {
 			if(mw.w.equals(w)) {
@@ -87,16 +91,26 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	
+
 	@Override
 	public boolean runScheduler() {
 		try {
+			if(closingRestaurant && numberOfCustomersInRestaurant == 0) {
+				super.setInactive();
+				closingRestaurant = false;
+			}
 			if(!enteringCustomers.isEmpty()) {
+				if(closingRestaurant == true) {
+					print("Telling customer restaurant is closed");
+					enteringCustomers.get(0).msgRestaurantClosed();
+					enteringCustomers.remove(enteringCustomers.get(0));
+					return true;
+				}
 				giveCustomerWaitingPosition(enteringCustomers.get(0));
 				enteringCustomers.remove(enteringCustomers.get(0));
 				return true;
 			}
-			
+
 			if(!waitingCustomers.isEmpty()) {
 				for (RestaurantZhangTable table : tables) {
 					if (!table.isOccupied()) {
@@ -134,7 +148,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	}
 
 	// Actions
-	
+
 	void giveCustomerWaitingPosition(RestaurantZhangCustomer c) {
 		int pos = 0;
 		synchronized(waitingCustomers) {
@@ -148,7 +162,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 		print("Giving customer " + c.getName() + " waiting position " + pos);
 		c.msgHereIsYourWaitingPosition(pos);
 	}
-	
+
 	void notifyWaiter(RestaurantZhangTable t, RestaurantZhangCustomer c) {
 		if(myWaiterList.size() > 0) {
 			t.setOccupant(c);
@@ -159,9 +173,9 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 					break;
 				}
 			}
-//			Chooses appropriate waiter
-//			Checks which waiter has the least amount of customers currently assigned to them
-//			If there is a tie, choose the waiter with the least amount of total customers served
+			//			Chooses appropriate waiter
+			//			Checks which waiter has the least amount of customers currently assigned to them
+			//			If there is a tie, choose the waiter with the least amount of total customers served
 			for(int i = 1; i < myWaiterList.size(); i++) {
 				if(myWaiterList.get(i).mwBreakStatus == MWBreakStatus.notOnBreak) {
 					if((myWaiterList.get(i).w.getNumberCustomers() <= currentWaiter.w.getNumberCustomers())
@@ -176,7 +190,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 			waitingCustomers.remove(c);
 		}
 	}
-	
+
 	void notifyWaiterBreak(MyWaiter mw, boolean canGoOnBreak) {
 		if(canGoOnBreak) {
 			mw.mwBreakStatus = MWBreakStatus.onBreak;
@@ -188,16 +202,16 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 		}
 	}
 	//utilities
-	
+
 	public void addWaiter(RestaurantZhangWaiter wa) {
 		myWaiterList.add(new MyWaiter(wa));
 		stateChanged();
 	}
-	
+
 	public void setTables(Collection<RestaurantZhangTable> t) {
 		tables = t;
 	}
-	
+
 	enum MWBreakStatus {notOnBreak, wantToBreak, onBreak};
 	private class MyWaiter {
 		RestaurantZhangWaiter w;
@@ -205,6 +219,13 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 		public MyWaiter(RestaurantZhangWaiter w_) {
 			w = w_;
 		}
+	}
+
+	public void setInactive() {
+		if(numberOfCustomersInRestaurant == 0)
+			super.setInactive();
+		else
+			closingRestaurant = true;
 	}
 }
 

@@ -11,6 +11,7 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import sun.security.krb5.internal.HostAddress;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
@@ -26,6 +27,7 @@ import city.buildings.RestaurantBaseBuilding.Food;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 /**
@@ -55,9 +57,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	public RestaurantZhangAnimatedCook thisGui;
 
+	public RestaurantZhangHost host;
+
 	Timer timer = new Timer();
 
 	private Semaphore atBase = new Semaphore(0, false);
+	private boolean restaurantClosing = false;
 
 	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -133,6 +138,13 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	 */
 	public boolean runScheduler() {
 		try {
+			if(restaurantClosing) {
+				if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant <= 0) {
+					super.setInactive();
+					restaurantClosing = false;
+					return true;
+				}
+			}
 			// Role Scheduler
 			boolean blocking = false;
 			if (marketCustomerDeliveryList.isEmpty() != true) {
@@ -351,10 +363,24 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
 	}
-	
+
 	public void setActive() {
 		super.setActive();
 		runScheduler();
+	}
+	
+	public void setHost(RestaurantZhangHost h) {
+		host = h;
+	}
+	
+	public void setInactive() {
+		if(host != null) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant !=0) {
+				restaurantClosing = true;
+				return;
+			}
+		}
+		super.setInactive();
 	}
 
 	enum CookInvoiceStatus {created, processing, changedMarket, completed};
