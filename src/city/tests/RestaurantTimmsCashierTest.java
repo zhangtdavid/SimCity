@@ -1,8 +1,8 @@
 package city.tests;
 
 import junit.framework.TestCase;
-
 import city.buildings.RestaurantTimmsBuilding;
+import city.gui.CityViewRestaurant;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCashierRole.Check;
 import city.tests.mock.MockPerson;
@@ -25,7 +25,7 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		customer = new MockRestaurantTimmsCustomer();
 		waiter = new MockRestaurantTimmsWaiter();
 		
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
 		
 		cashierPerson = new MockPerson("Cashier");
 		cashier = new RestaurantTimmsCashierRole(rtb, 0, 23);

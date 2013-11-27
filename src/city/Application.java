@@ -932,7 +932,7 @@ public class Application {
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
-
+		private static int restaurantNumber = 0;
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -958,6 +958,18 @@ public class Application {
 		 * Returns a random building of type
 		 */
 		public static Building findRandomBuilding(BUILDING type) {
+			if(type == BUILDING.restaurant) {
+				List<Building> list = map.get(type);
+				if(restaurantNumber > list.size()) {
+					restaurantNumber = 0;
+				}
+				Building buildingToReturn = list.get(restaurantNumber);
+				if(++restaurantNumber > list.size()) {
+					restaurantNumber = 0;
+				}
+				return buildingToReturn;
+			}
+			
 			List<Building> list = map.get(type);
 			Collections.shuffle(list);
 			return list.get(0);

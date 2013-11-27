@@ -74,6 +74,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	public void draw(Graphics2D g) {
 		g.setColor(Color.PINK);
 		g.fillRect(xPos, yPos, SIZE, SIZE);
+		g.setColor(Color.red);
+		if(car != null)
+			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
 	}
 
 	public int getXPos() {
