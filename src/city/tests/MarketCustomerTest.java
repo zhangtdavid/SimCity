@@ -37,7 +37,6 @@ public class MarketCustomerTest extends TestCase {
 	MarketCustomerRole customer;
 //	MarketAnimatedCustomer marketCustomerGui;
 	MockLandlord landlord;
-	HousePanel housePanel;
 	HouseBuilding home;
 	
 	MockPerson customerDeliveryPerson;
