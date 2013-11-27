@@ -25,7 +25,7 @@ public class Application {
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
-
+	
 	/**
 	 * Main routine to start the program.
 	 * 
@@ -38,7 +38,7 @@ public class Application {
 
 		// Load a scenario
 		parseConfig();
-		
+
 		// Start the simulation
 		TimerTask tt = new TimerTask() {
 			public void run() {
@@ -56,13 +56,13 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-
+		
 	}
-	
+
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		private static List<CityRoad> roads = new ArrayList<CityRoad>();
-		
+
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -99,7 +99,7 @@ public class Application {
 		public static Building findClosestBuilding() {
 			return null;
 		}
-		
+
 		/**
 		 * Return the building of type closest to the destination building
 		 * 
@@ -119,7 +119,7 @@ public class Application {
 			}
 			return returnBuilding;
 		}
-		
+
 		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
 			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
 			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
@@ -134,7 +134,7 @@ public class Application {
 			}
 			return returnBuilding;
 		}
-		
+
 		public static CityRoad findClosestRoad(Building b) {
 			int x = b.getCityViewBuilding().x;
 			int y = b.getCityViewBuilding().y;
