@@ -15,20 +15,21 @@ import city.interfaces.BankManager;
 import city.interfaces.BankTeller;
 
 public class BankManagerRole extends Role implements BankManager{
-// Data
+	// Data
 	BankBuilding building;
 	List<MyTeller> myTellers = new ArrayList<MyTeller>();
 	List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private static final int loanInterval = 50;
 	private boolean wantsInactive = false;
-	
-// Constructor
+
+	// Constructor
 	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
+		setActivityBegun();
 	}
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
@@ -37,7 +38,7 @@ public class BankManagerRole extends Role implements BankManager{
 		else
 			wantsInactive = true;
 	}
-// Messages
+	// Messages
 	//from customer
 	public void msgNeedService(BankCustomer bc){
 		print("Need service message received");
@@ -46,9 +47,11 @@ public class BankManagerRole extends Role implements BankManager{
 	}
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r){
 		print("Direct Deposit message received");
-		bankTasks.add(new BankTask(acctNum, type.atmDeposit, money, null, r));
+		if(acctNum == -1)
+			bankTasks.add(new BankTask(acctNum, type.acctCreate, money, null, r));
+		else
+			bankTasks.add(new BankTask(acctNum, type.deposit, money, null, r));
 		stateChanged();
-		runScheduler();
 	}
 	//from teller
 	public void msgAvailable(BankTeller t){
@@ -91,7 +94,7 @@ public class BankManagerRole extends Role implements BankManager{
 		building.loans.add(new Loan(amt, monthly, acct));
 		stateChanged();
 	}
-// Scheduler
+	// Scheduler
 	@Override
 	public boolean runScheduler() {
 		System.out.println("IN THE SCHEDULER OF BANK MANAGER");
@@ -112,49 +115,49 @@ public class BankManagerRole extends Role implements BankManager{
 			}
 		}
 		else {
-		for(BankCustomer bc : customers){
-			for(MyTeller myT : myTellers){
-				if(myT.s == state.available){
-					AssignCustomer(bc, myT);
+			for(BankCustomer bc : customers){
+				for(MyTeller myT : myTellers){
+					if(myT.s == state.available){
+						AssignCustomer(bc, myT);
+						return true;
+					}
+				}
+			}	
+			for(BankTask bT : bankTasks){
+				if(bT.t == type.atmDeposit){
+					atmDeposit(bT);
 					return true;
 				}
-			}
-		}	
-		for(BankTask bT : bankTasks){
-			if(bT.t == type.atmDeposit){
-				atmDeposit(bT);
-				return true;
-			}
-			if(bT.t == type.deposit){
-				Deposit(bT);
-				return true;
-			}
-			if(bT.t == type.withdrawal){
-				for(Account a : building.accounts){
-					if(a.acctNum == bT.acctNum){
-						if(a.balance >= bT.money){
+				if(bT.t == type.deposit){
+					Deposit(bT);
+					return true;
+				}
+				if(bT.t == type.withdrawal){
+					for(Account a : building.accounts){
+						if(a.acctNum == bT.acctNum){
+							if(a.balance >= bT.money){
 								Withdraw(bT);
 								return true;
 							}
-						else{
-							WithdrawalFailed(bT);
-							return true;
+							else{
+								WithdrawalFailed(bT);
+								return true;
+							}
 						}
 					}
+					print("account not found");
+				}	
+				if(bT.t == type.acctCreate){
+					CreateAccount(bT);
+					return true;
 				}
-				print("account not found");
-			}	
-			if(bT.t == type.acctCreate){
-				CreateAccount(bT);
-				return true;
 			}
-		}
-		// TODO Auto-generated method stub
+			// TODO Auto-generated method stub
 		}
 		return false;
 	}
-	
-// Actions
+
+	// Actions
 	private boolean LoanPaymentDue() {
 		return false;
 		/*Calendar c = Calendar.getInstance();
@@ -164,25 +167,21 @@ public class BankManagerRole extends Role implements BankManager{
 		int due = c.get(Calendar.DAY_OF_YEAR);
 		return (day == due);*/	
 	}
-	
+
 	private Date LoanPayDate() {
 		long interval = (Application.INTERVAL * loanInterval);	
 		Date dueDate = new Date(0);
 		dueDate.setTime(building.loanLastPaid.getTime() + interval);
 		return dueDate;
 	}
-	
+
 	private void AssignCustomer(BankCustomer bc, MyTeller myT){
 		myT.s = state.busy;
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
 	}
 	private void atmDeposit(BankTask bT){
-		if(bT.acctNum == -1){
-			bankTasks.remove(bT);
-			CreateAccount(bT);
-		}	
-		else{
+		System.out.println("ATM Deposit");
 		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){
 				System.out.println("Balance before deposit: " + bT.money);
@@ -193,9 +192,9 @@ public class BankManagerRole extends Role implements BankManager{
 				return;
 			}
 		}
-		}
 	}
 	private void Deposit(BankTask bT){
+		System.out.println("Deposit");
 		for(Account a : building.getAccounts()){
 			if(a.acctNum == bT.acctNum){		
 				a.balance += bT.money;
@@ -220,9 +219,9 @@ public class BankManagerRole extends Role implements BankManager{
 	private void CreateAccount(BankTask bT){
 		building.accounts.add(new Account(building.accounts.size() + 1, bT.money));
 		bankTasks.remove(bT);
-		if(bT.t == type.acctCreate)
+		if(bT.bc == null)
 			bT.teller.msgHereIsAccount(building.accounts.size());
-		else if(bT.t == type.atmDeposit){
+		else {
 			bT.bc.msgAccountCreated(building.accounts.size());
 		}
 	}
@@ -236,13 +235,13 @@ public class BankManagerRole extends Role implements BankManager{
 		}
 		building.loanLastPaid.setTime(building.loanLastPaid.getTime() + loanInterval);
 	}
-// Getters
-	
-// Setters
-	
-// Utilities
-	
-// Classes
+	// Getters
+
+	// Setters
+
+	// Utilities
+
+	// Classes
 	public class MyTeller {
 		BankTeller teller;
 		int salary;

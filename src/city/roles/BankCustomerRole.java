@@ -26,8 +26,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int boothNumber;
 	
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		System.out.println("Customer has been set active");
 		super.setActive();
+		System.out.println("Customer has been set active");
+		this.setActive();
 		this.service = s;
 		this.depositType = t;
 		amount = money;

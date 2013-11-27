@@ -3,19 +3,14 @@ package city;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.Application.BUILDING;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
-import city.animations.RestaurantJPCookAnimation;
-import city.animations.RestaurantJPCustomerAnimation;
-import city.animations.RestaurantJPWaiterAnimation;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
@@ -24,7 +19,6 @@ import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.AptPanel;
 import city.gui.BankPanel;
 import city.gui.CityViewBank;
 import city.gui.CityViewMarket;
@@ -47,11 +41,6 @@ import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterRole;
-import city.roles.RestaurantJPCashierRole;
-import city.roles.RestaurantJPCookRole;
-import city.roles.RestaurantJPCustomerRole;
-import city.roles.RestaurantJPHostRole;
-import city.roles.RestaurantJPWaiterRole;
 
 public class Application {
 
@@ -67,15 +56,14 @@ public class Application {
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
+	public static RestaurantZhangBuilding rzb1;
+	public static RestaurantJPBuilding rjpb1;
 	public static RestaurantChoiBuilding rchoib1;
 	public static HouseBuilding hb1;
 	public static MarketBuilding m1;
 	public static MarketPanel mp1;
 	public static BankBuilding b1;
 	public static BankPanel bp1;
-	//public static RestaurantZhangBuilding rzb1;
-	public static RestaurantZhangBuilding rzb1;
-	public static RestaurantJPBuilding rjpb1;
 	
 	/**
 	 * Main routine to start the program.
@@ -110,6 +98,29 @@ public class Application {
 	private static void parseConfig() {
 
 		// RYAN TESTING GUI
+		/*
+		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
+		// FIRST add a panel
+		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		//BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantJP1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
+		// SEVENTH create all your roles after
+		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
+		
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+		 
+		 */
 		mp1 = new MarketPanel(Color.black, new Dimension(500,500));
 		m1 = new MarketBuilding("MarketBuilding", mp1);
 		// Create buildings
@@ -145,9 +156,7 @@ public class Application {
 		mainFrame.buildingView.addView(rchoip1, restaurantChoi1.ID);
 		mainFrame.buildingView.addView(bp1, bank1.ID);
 		mainFrame.buildingView.addView(mp1, market1.ID);
-		
-
-		//hb1 = new HouseBuilding("House1", rhp1);
+	
 		
 /*
 		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
@@ -167,10 +176,14 @@ public class Application {
 		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
 		// SEVENTH create all your roles after
 		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
-*/
 		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding", mp1));
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 		Application.CityMap.addBuilding(BUILDING.restaurant, new RestaurantChoiBuilding("RestaurantChoi1", rchoip1));
+		// SIXTH add the new building to the map
+		*/
+		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
+		CityMap.addBuilding(BUILDING.bank, b1);
+		CityMap.addBuilding(BUILDING.market, m1);
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -305,25 +318,30 @@ public class Application {
 
 		/*
 		// Create cashier
-		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
+		RestaurantJPCashierRole p1r2 = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
 		rjpb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantJPCookRole p2r1 = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
+		RestaurantJPCookRole p2r2 = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
 		rjpb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantJPHostRole p3r1 = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
+		RestaurantJPHostRole p3r2 = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
 		rjpb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantJPWaiterSharedDataRole p4r1 = new RestaurantJPWaiterSharedDataRole(rjpb1, 0, 100); // TODO Change shift times
+		RestaurantJPWaiterSharedDataRole p4r2 = new RestaurantJPWaiterSharedDataRole(rjpb1, 0, 100); // TODO Change shift times
 		rjpb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
 	*/
+/*
+		p5.setCar(c5);
+		p6.setCar(c6);
+		p7.setCar(c7);
+		p8.setCar(c8);*/
 
 		// Start threads
 		c0.startThread();
