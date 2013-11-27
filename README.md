@@ -42,28 +42,34 @@ For ease of organization, collaboration, and readability, the following conventi
 
 
 ## Project Status
-The 
+The project contains a city view alongside a building view. The city view includes roads and buildings, and the building view displays the internal structures of the buildings. People travel between buildings by car or bus and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents or a customer. The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition.
+
+There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the gui to influence behaviors in the city.
 
 ## Project Contributions
-# John Timm 
+### John Timm (22%)
 * Person 
 * Project Structure
 - Designed project structure and provided team with a package to import
 * Git Management
 - Assisted team members with git issues and merge conflicts
  
-# David Zhang
+### David Zhang (21%)
 * City Animation
 - Designed base city gui interface and procedure for adding other components
 * Transportation
-- 
+- Implemented city transportation, including cars and buses
 
-# John Francis
+### John Francis (19%)
 * Bank
+- Designed and implemented bank
 
-# Shirley Chung
+### Shirley Chung (19%)
 * Market
+- Designed and implemented market
 * Market and Restaurant Integration
+- Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
 
-# Ryan Choi
+### Ryan Choi (19%)
 * Housing
+- Designed and implemented housing components
