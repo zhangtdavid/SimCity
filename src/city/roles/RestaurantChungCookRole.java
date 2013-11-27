@@ -334,8 +334,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //        System.out.println("COOK PERSON: " + this.getPerson());
         marketCustomerDelivery.setPerson(this.getPerson());
 //        System.out.println("MARKET CUSTOMER DELIVERY PERSON: " + marketCustomerDelivery.getPerson());
-        marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
+        marketCustomerDelivery.setActive();
         return;
     }
     
