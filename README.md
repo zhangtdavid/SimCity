@@ -42,9 +42,9 @@ For ease of organization, collaboration, and readability, the following conventi
 
 
 ## Project Status
-The project contains a city view alongside a building view. The city view includes roads and buildings, and the building view displays the internal structures of the buildings. People travel between buildings by car or bus and assume roles appropriate to each building. Individuals can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents, or a customer. The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers, at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition. People can take on multiple roles. Most of the time, they only act in one role. In some cases, their job requires them to take on multiple. For example, a restaurant cook may also be a market customer.
+The project contains a city view alongside a building view. The city view includes roads and buildings, and the building view displays the internal structures of the buildings. People travel between buildings by car or bus and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents or a customer. The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition.
 
-There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the gui to influence behaviors in the city. Shift and occupation changes have been designed, but not tested.
+There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the gui to influence behaviors in the city.
 
 ## Project Contributions
 ### John Timm (22%)
@@ -63,12 +63,21 @@ There is still work to be done in the animations. People do not walk in the stre
 ### John Francis (19%)
 * Bank
   - Designed and implemented bank
+* Buildings
+  - Wrote cash handling methods in the building class to allow directDeposits by businesses
+
+*Disclosure
+  -Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
+  -Restaurant testing is virtually non-existent, except for the Cashier
+  -Loan payment functionality exists in local branch but was not done in time for integration
+  -Internal BankGui was not completed
+  -All Bank interactions have ben tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration
 
 ### Shirley Chung (19%)
 * Market
   - Designed and implemented market
 * Market and Restaurant Integration
-  - Integrated market interactions with personal market. Attempted to assist with market integrations of other restaurants.
+  - Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
 
 ### Ryan Choi (19%)
 * Housing
