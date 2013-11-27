@@ -48,7 +48,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Messages
 	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
-		print("WhatDoYouWant message received");
+		System.out.println("WhatDoYouWant message received");
 		t = tell;
 		boothNumber = booth;
 		st = state.requestService;
@@ -56,33 +56,33 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public void msgDepositCompleted() {
-		print("DepositCompleted message received");
+		System.out.println("DepositCompleted message received");
 		st = state.exit;
 	    stateChanged();
 	}
 	
 	public void msgAccountCreated(int acct) {
-		print("AccountCreated message received");
+		System.out.println("AccountCreated message received");
 		acctNum = acct;
 		st = state.exit;
 		stateChanged();
 	}
 	
 	public void msgHereIsWithdrawal(int money) {
-		print("HereIsWithdrawal message received");
+		System.out.println("HereIsWithdrawal message received");
 		netTransaction += money;
 		st = state.exit;
 		stateChanged();
 	}
 	
 	public void msgLoanGranted(int loanMoney){
-		print("LoanGranted message received");
+		System.out.println("LoanGranted message received");
 		netTransaction += loanMoney;
 		stateChanged();
 	}
 	
 	public void msgTransactionDenied(){
-		print("TransactionDenied message received");
+		System.out.println("TransactionDenied message received");
 		stateChanged();
 		//more to come...
 	}
@@ -124,7 +124,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	public void AskForService(){
 		if(building == null)
-			print("Null building. what the fuck");
+			System.out.println("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
