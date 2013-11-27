@@ -47,20 +47,23 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public static final int DAILY_CAPITAL = 1000;
 	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
 	public static final int WITHDRAW_THRESHOLD = 200;
-	private int cash_on_site = 1200;
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor
 
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel) {
 		super(name);
+		setCash(DAILY_CAPITAL); // initial launch
 		menu = new RestaurantChoiMenu();
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
-		this.setCashOnSite(cash_on_site);	
-		// Add items and their data to a map
+
+		//this.setCashOnSite(cash_on_site);	
+		//set up tables
+		// Add items and their data times to a map
+
 		int rand = 7+(int)Math.ceil(10*Math.random());
 		super.addFood(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 16));
@@ -79,14 +82,6 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;
-	}
-
-	public int getCashOnSite() {
-		return cash_on_site;
-	}
-	
-	private void setCashOnSite(int in){
-		cash_on_site = in;
 	}
 
 	// Utilities

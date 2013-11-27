@@ -262,9 +262,8 @@ public class Application {
 		rzb1.addRole(p4r1Zhang);
 		p4Zhang.setOccupation(p4r1Zhang);
 
-
-
-		// RESTAURANTJP------------------------------------------------------------------------
+		/*
+		//RESTAURANTJP------------------------------------------------------------------------
 		// FIRST add a panel
 		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
@@ -277,6 +276,82 @@ public class Application {
 		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
+		// SEVENTH add roles
+		PersonAgent p0JP1 = new PersonAgent("Landlord JP", date);
+		LandlordRole p0r1JP1 = new LandlordRole();
+		p0JP1.addRole(p0r1JP1);
+		HouseBuilding h0JP = new HouseBuilding("House 0 JP", p0r1JP1, rhp1);
+		p0JP1.setHome(h0JP);
+		p0r1JP1.setActive();
+		people.add(p0JP1);
+
+		// Create houses
+		HouseBuilding h1JP = new HouseBuilding("House 1 JP", p0r1JP1, rhp1);
+		HouseBuilding h2JP = new HouseBuilding("House 2 JP", p0r1JP1, rhp1);
+		HouseBuilding h3JP = new HouseBuilding("House 3 JP", p0r1JP1, rhp1);
+		HouseBuilding h4JP = new HouseBuilding("House 4 JP", p0r1JP1, rhp1);
+
+		// Create people
+		PersonAgent p1JP = new PersonAgent("Cashier 1 JP", date);
+		PersonAgent p2JP = new PersonAgent("Cook 1 JP", date);
+		PersonAgent p3JP = new PersonAgent("Host 1 JP", date);
+		PersonAgent p4JP = new PersonAgent("Waiter 1 JP", date);
+		people.add(p1JP);
+		people.add(p2JP);
+		people.add(p3JP);
+		people.add(p4JP);
+		p1JP.setHome(h1JP);
+		p2JP.setHome(h2JP);
+		p3JP.setHome(h3JP);
+		p4JP.setHome(h4JP);
+
+		// Give people cars
+		CarAgent c0JP = new CarAgent(busStop3);
+		CarAnimation c0AnimJP = new CarAnimation(c0JP, busStop3);
+		c0JP.setAnimation(c0AnimJP);
+		mainFrame.cityView.addAnimation(c0AnimJP);
+		CarAgent c1JP = new CarAgent(busStop3);
+		CarAnimation c1AnimJP = new CarAnimation(c1JP, busStop3);
+		c1JP .setAnimation(c1AnimJP);
+		mainFrame.cityView.addAnimation(c1AnimJP);
+		CarAgent c2JP = new CarAgent(busStop3);
+		CarAnimation c2AnimJP = new CarAnimation(c2JP, busStop3);
+		c2JP.setAnimation(c2AnimJP);
+		mainFrame.cityView.addAnimation(c2AnimJP);
+		CarAgent c3JP = new CarAgent(busStop3);
+		CarAnimation c3AnimJP = new CarAnimation(c3JP, busStop3);
+		c3JP.setAnimation(c3AnimJP);
+		mainFrame.cityView.addAnimation(c3AnimJP);
+		CarAgent c4JP = new CarAgent(busStop2);
+		CarAnimation c4AnimJP = new CarAnimation(c4JP, busStop3);
+		c4JP.setAnimation(c4AnimJP);
+		mainFrame.cityView.addAnimation(c4AnimJP);
+		//p0.setCar(c0);
+		p1JP.setCar(c1JP);
+		p2JP.setCar(c2JP);
+		p3JP.setCar(c3JP);
+		p4JP.setCar(c4JP);
+
+		// Create cashier
+		RestaurantJPCashierRole p1r1JP = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p1r1JP);
+		p1JP.setOccupation(p1r1JP);
+
+		// Create cook
+		RestaurantJPCookRole p2r1JP = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p2r1JP);
+		p2JP.setOccupation(p2r1JP);
+
+		// Create host
+		RestaurantJPHostRole p3r1JP = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p3r1JP);
+		p3JP.setOccupation(p3r1JP);
+
+		// Create waiter
+		RestaurantJPWaiterRole p4r1JP = new RestaurantJPWaiterRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p4r1JP);
+		p4JP.setOccupation(p4r1JP);
+
 		/*
 		// Create landlord
 		PersonAgent p1 = new PersonAgent("Cashier 1", date);
@@ -349,7 +424,7 @@ public class Application {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		
+
 		// Start threads for RestaurantZhang
 		c0Zhang.startThread();
 		c1Zhang.startThread();
