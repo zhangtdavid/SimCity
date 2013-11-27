@@ -58,21 +58,21 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgDepositCompleted() {
 		System.out.println("DepositCompleted message received");
 		st = state.exit;
-	    stateChanged();
+	    //stateChanged();
 	}
 	
 	public void msgAccountCreated(int acct) {
 		System.out.println("AccountCreated message received");
 		acctNum = acct;
 		st = state.exit;
-		stateChanged();
+		//stateChanged();
 	}
 	
 	public void msgHereIsWithdrawal(int money) {
 		System.out.println("HereIsWithdrawal message received");
 		netTransaction += money;
 		st = state.exit;
-		stateChanged();
+		//stateChanged();
 	}
 	
 	public void msgLoanGranted(int loanMoney){

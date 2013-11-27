@@ -23,6 +23,7 @@ public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 	
 	public RestaurantJPBuilding(String name, RestaurantJPPanel rjpp1){
 		super(name);
+		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 	}
 	
 	// Utilities

@@ -108,6 +108,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
+
 		// RYAN TESTING GUI
 		mp1 = new MarketPanel(Color.black, new Dimension(500,500));
 		m1 = new MarketBuilding("MarketBuilding", mp1);
@@ -148,6 +149,28 @@ public class Application {
 
 		//hb1 = new HouseBuilding("House1", rhp1);
 		
+/*
+		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
+		// FIRST add a panel
+		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		//BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantJP1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
+		// SEVENTH create all your roles after
+		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
+*/
+		Application.CityMap.addBuilding(BUILDING.market, new MarketBuilding("MarketBuilding", mp1));
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		Application.CityMap.addBuilding(BUILDING.restaurant, new RestaurantChoiBuilding("RestaurantChoi1", rchoip1));
 
 		// Create landlord
 		PersonAgent p0 = new PersonAgent("Landlord", date);
@@ -280,6 +303,28 @@ public class Application {
 		p9.setCar(c9);
 		p10.setCar(c10);
 
+		/*
+		// Create cashier
+		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p1r1);
+		p1.setOccupation(p1r1);
+
+		// Create cook
+		RestaurantJPCookRole p2r1 = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p2r1);
+		p2.setOccupation(p2r1);
+
+		// Create host
+		RestaurantJPHostRole p3r1 = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p3r1);
+		p3.setOccupation(p3r1);
+
+		// Create waiter
+		RestaurantJPWaiterSharedDataRole p4r1 = new RestaurantJPWaiterSharedDataRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p4r1);
+		p4.setOccupation(p4r1);
+	*/
+
 		// Start threads
 		c0.startThread();
 		c1.startThread();
@@ -306,7 +351,7 @@ public class Application {
 
 	}
 
-		/*		
+	/*
 		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
 		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
