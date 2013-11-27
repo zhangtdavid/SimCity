@@ -20,7 +20,6 @@ import city.interfaces.RestaurantJPWaiter;
  * Restaurant customer agent.
  */
 public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustomer {
-	private String name = new String();
 	private int hungerLevel = 5;        // determines length of meal
 	int currentTable;
 	RestaurantJPBuilding building;
@@ -38,18 +37,21 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	String myOrder = new String();
 	int bill = 0;
 	RestaurantJPCashier cashier;
-	
-	public RestaurantJPCustomerRole(String n){
-		super();
-		name = this.getPerson().getName();
-		myMenu = new RestaurantJPMenuClass();
-	}
 
-	public RestaurantJPCustomerRole(RestaurantJPBuilding b) {
-		building = b;
-		gotHungry();
+	public RestaurantJPCustomerRole() {
+		super();
+		myMenu = new RestaurantJPMenuClass();
 		// TODO Auto-generated constructor stub
 	}
+	
+	public void setActive(){
+		gotHungry();
+	}
+	
+	public void setBuilding(RestaurantJPBuilding b){
+		building = b;
+	}
+	
 
 	/**
 	 * hack to establish connection to Host agent.
@@ -59,7 +61,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
     	waiter = w;
     }
 	public String getCustomerName() {
-		return name;
+		return this.getName();
 	}
 	
 //------------------------------------------------------------------------ Messages
@@ -210,7 +212,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		//Do("inside decide order");
 		List<String> cannotAfford = new ArrayList<String>();
 		for(String food : myMenu.foods){
-			if(this.getPerson().getCash() < myMenu.Prices.get(food) && !name.equals("Flake"))
+			if(this.getPerson().getCash() < myMenu.Prices.get(food))
 				cannotAfford.add(food);
 		}
 		for(String food : cannotAfford){
@@ -222,8 +224,8 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 			//state = state.DoingNothing;
 			return;
 		}
-		else if(myMenu.find(name))
-			myOrder = name;
+		else if(myMenu.find(this.getPerson().getName()))
+			myOrder = this.getPerson().getName();
 		else
 			myOrder = myMenu.randomSelect();
 		this.msgGotOrder(myOrder); 			
@@ -281,7 +283,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	// Accessors, etc.
 
 	public String getName() {
-		return name;
+		return this.getPerson().getName();
 	}
 	
 	public int getHungerLevel() {

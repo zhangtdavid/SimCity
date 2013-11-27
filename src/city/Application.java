@@ -34,6 +34,7 @@ import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
+import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
@@ -87,24 +88,24 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		// RESTAURANTZHANGTESTING FOR ANIMATION IN GUI
+		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
 		// FIRST add a panel
-		/*RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		//BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
+		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
 		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantZhang1);
+		mainFrame.cityView.addStatic(restaurantJP1);
 		// FOURTH create a new building, last argument is the panel in step ONE
-		rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", rzp1);
-		rzp1.setTables(rzb1.tables);
+		rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
 		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rzp1, restaurantZhang1.ID);
+		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
 		// SIXTH add the new building to the map
-		CityMap.addBuilding(BUILDING.restaurant, rzb1);
+		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
 		// SEVENTH create all your roles after
-
-		// Create buildings
+		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
+		
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 
 		// Create landlord
@@ -149,23 +150,23 @@ public class Application {
 		p4.setCar(c4);
 
 		// Create cashier
-		RestaurantZhangCashierRole p1r1 = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p1r1);
+		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p1r1);
 		p1.setOccupation(p1r1);
 
 		// Create cook
-		RestaurantZhangCookRole p2r1 = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p2r1);
+		RestaurantJPCookRole p2r1 = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p2r1);
 		p2.setOccupation(p2r1);
 
 		// Create host
-		RestaurantZhangHostRole p3r1 = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p3r1);
+		RestaurantJPHostRole p3r1 = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p3r1);
 		p3.setOccupation(p3r1);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1 = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p4r1);
+		RestaurantJPWaiterSharedDataRole p4r1 = new RestaurantJPWaiterSharedDataRole(rjpb1, 0, 100); // TODO Change shift times
+		rjpb1.addRole(p4r1);
 		p4.setOccupation(p4r1);
 
 		// Start threads
@@ -179,77 +180,6 @@ public class Application {
 		p2.startThread();
 		p3.startThread();
 		p4.startThread();
-		*/
-		
-		// RESTAURANTJPTESTING FOR ANIMATION IN GUI
-		// FIRST add a panel
-		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
-		//BankPanel rbp1 = new BankPanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
-		// SECOND create a city view restaurant, the above panel is the last argument
-		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
-		// THIRD add it to the list of statics in the cityView
-		mainFrame.cityView.addStatic(restaurantJP1);
-		// FOURTH create a new building, last argument is the panel in step ONE
-		rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
-		// FIFTH add the new building to the buildingView
-		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
-		// SIXTH add the new building to the map
-		CityMap.addBuilding(BUILDING.restaurant, rjpb1);
-		// SEVENTH create all your roles after
-		CityMap.addBuilding(BUILDING.bank, new BankBuilding("Bank1"));
-		
-		PersonAgent p1 = new PersonAgent("Cashier 1", date);
-		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 12);
-		p1.setOccupation(p1r1);
-		people.add(p1);
-		p1.startThread();         
-		
-		PersonAgent p2 = new PersonAgent("Cook 1", date);
-		RestaurantJPCookRole p2r1 = new RestaurantJPCookRole(rjpb1, 0, 12);
-		RestaurantJPCookAnimation p2a1 = new RestaurantJPCookAnimation(p2r1);
-		p2r1.setAnimation(p2a1);
-		rjpp1.addVisualizationElement(p2a1);
-		p2.setOccupation(p2r1);
-		people.add(p2);
-		p2.startThread();
-		          
-		PersonAgent p3 = new PersonAgent("Host 1", date);
-		RestaurantJPHostRole p3r1 = new RestaurantJPHostRole(rjpb1, 0, 12);
-		p3.setOccupation(p3r1);
-		people.add(p3);
-		p3.startThread();
-		          
-		PersonAgent p4 = new PersonAgent("Waiter 1", date);
-		RestaurantJPWaiterRole p4r1 = new RestaurantJPWaiterRole(rjpb1, 0, 12);
-		RestaurantJPWaiterAnimation p4a1 = new RestaurantJPWaiterAnimation(p4r1, 0);
-		p4r1.setAnimation(p4a1);
-		p3r1.addWaiter(p4r1, "W1");
-		rjpp1.addVisualizationElement(p4a1);
-		p4.setOccupation(p4r1);
-		people.add(p4);
-		p4.startThread();
-		          
-		          // Set up the table
-		          
-		          // Wait for things to get in position
-		          try {
-		                  Thread.sleep(4000);
-		          } catch (InterruptedException e) {}
-		          
-		          // Send in a customer
-		PersonAgent p5 = new PersonAgent("Customer 1", date);
-		RestaurantJPCustomerRole p5r1 = new RestaurantJPCustomerRole(rjpb1);
-		RestaurantJPCustomerAnimation p5a1 = new RestaurantJPCustomerAnimation(p5r1, 0);
-		p5r1.setAnimation(p5a1);
-		rjpp1.addVisualizationElement(p5a1);
-		p5.addRole(p5r1);
-		people.add(p5);
-		p5.startThread();
-		p5r1.gotHungry();
-		          
-		          // TODO these shouldn't be necessary, figure out why they're needed
-		p5r1.setActive();
-		p5.stateChanged();
 	}
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
