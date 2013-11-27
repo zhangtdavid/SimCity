@@ -2,6 +2,7 @@ package city.roles;
 
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.RestaurantJPCustomer;
 import utilities.RestaurantJPWaiterBase;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
@@ -25,5 +26,12 @@ public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 		building.cook.msgHereIsAnOrder(this, myC.choice, myC.table);
 	}
 		// TODO Auto-generated constructor stub
+
+	@Override
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh,
+			RestaurantJPCustomer c) {
+		// TODO Auto-generated method stub
+		
+	}
 }
 

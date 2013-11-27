@@ -2,6 +2,7 @@ package city.roles;
 
 import utilities.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 	 
@@ -22,5 +23,12 @@ public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 		}
 		myC.s = state.waitingForFood;
 		revolvingStand.addOrder(building.cook.new Order(this, myC.choice, myC.table));
+	}
+
+	@Override
+	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh,
+			RestaurantJPCustomer c) {
+		// TODO Auto-generated method stub
+		
 	}
 }

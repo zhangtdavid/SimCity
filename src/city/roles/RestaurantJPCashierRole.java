@@ -9,6 +9,7 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
+import utilities.RestaurantJPWaiterBase;
 import city.Role;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;

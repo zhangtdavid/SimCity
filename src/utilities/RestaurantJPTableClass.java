@@ -1,24 +1,25 @@
 package utilities;
 
+import city.interfaces.RestaurantJPCustomer;
 import city.roles.RestaurantJPCustomerRole;
 
 public class RestaurantJPTableClass {
-	public RestaurantJPCustomerRole occupiedBy;
+	public RestaurantJPCustomer occupiedBy;
 	public int tableNumber;
 
 	public RestaurantJPTableClass(int tableNumber) {
 		this.tableNumber = tableNumber;
 	}
 
-	public void setOccupant(RestaurantJPCustomerRole cust) {
-		occupiedBy = cust;
+	public void setOccupant(RestaurantJPCustomer customer) {
+		occupiedBy = customer;
 	}
 
 	public void setUnoccupied() {
 		occupiedBy = null;
 	}
 
-	RestaurantJPCustomerRole getOccupant() {
+	RestaurantJPCustomer getOccupant() {
 		return occupiedBy;
 	}
 

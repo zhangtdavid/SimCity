@@ -8,10 +8,9 @@ import java.util.concurrent.Semaphore;
 import city.Role;
 import city.animations.RestaurantJPWaiterAnimation;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
-import city.roles.RestaurantJPCashierRole;
-import city.roles.RestaurantJPCustomerRole;
 
 public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJPWaiter{
 	public RestaurantJPBuilding building;
@@ -47,7 +46,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 
 //MSGS---------------------------------------------------------------------------------
 	
-	public void msgSitAtTable(RestaurantJPCustomerRole cust, RestaurantJPTableClass t) {
+	public void msgSitAtTable(RestaurantJPCustomer cust, RestaurantJPTableClass t) {
 		print("SeatCustomer message received from Host");
 		MyCustomer myC = new MyCustomer();
 	    myC.customer = cust;
@@ -101,7 +100,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh, RestaurantJPCustomer c){
+	public void msgHereIsCheck(int check, RestaurantJPCashier csh, RestaurantJPCustomer c){
 		//Do("Check received from cashier");
 		for(MyCustomer myC : myCustomers){
 			if(myC.customer == c){
@@ -346,20 +345,20 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	
 	public class MyCustomer
 	{
-		RestaurantJPCustomerRole customer;
+		RestaurantJPCustomer customer;
 		public String choice;
 		public state s;
 		public RestaurantJPTableClass table;
 		int check;
 		
-		RestaurantJPCustomerRole getCustomer(){
+		RestaurantJPCustomer getCustomer(){
 			return customer;
 		}
 		RestaurantJPTableClass getTable(){
 			return table;
 		}
 		public void myCustomer(){
-			customer = new RestaurantJPCustomerRole("NULL");
+			customer = null;
 			choice = new String();
 			table = new RestaurantJPTableClass(0);
 		}

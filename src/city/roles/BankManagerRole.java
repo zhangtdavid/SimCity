@@ -220,7 +220,6 @@ public class BankManagerRole extends Role implements BankManager{
 			bT.teller.msgHereIsAccount(building.accounts.size());
 		else if(bT.t == type.atmDeposit){
 			directDepositer.msgAccountCreated(building.accounts.size());
-			directDepositer = null;
 		}
 	}
 	private void PayLoan(Loan l){

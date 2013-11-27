@@ -1,8 +1,11 @@
 package city.tests.mock;
 
 import utilities.LoggedEvent;
+import utilities.RestaurantJPMenuClass;
 import city.MockRole;
+import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
+import city.interfaces.RestaurantJPWaiter;
 import city.roles.RestaurantJPCashierRole;
 
 public class MockRestaurantJPCustomer extends MockRole implements RestaurantJPCustomer {
@@ -18,7 +21,7 @@ public class MockRestaurantJPCustomer extends MockRole implements RestaurantJPCu
 	}
 
 	@Override
-	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh) {
+	public void msgHereIsCheck(int check, RestaurantJPCashier csh) {
 		log.add(new LoggedEvent("Received check."));
 
 		if(check == 10){
@@ -28,6 +31,31 @@ public class MockRestaurantJPCustomer extends MockRole implements RestaurantJPCu
 			
 		int bill = check;
 		cashier.msgPayment(this, bill);
+	}
+
+	@Override
+	public void msgFollowMeToTable(RestaurantJPMenuClass menu, int tableNumber,
+			RestaurantJPWaiter restaurantJPWaiterBase) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgWhatWouldYouLike() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgOutOfChoice(RestaurantJPMenuClass menu) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgHereIsYourFood() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

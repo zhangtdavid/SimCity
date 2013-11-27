@@ -12,6 +12,13 @@ public interface RestaurantJPCashier extends RoleInterface {
 
 	public abstract MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
 
+	public abstract void msgComputeBill(
+			RestaurantJPWaiter restaurantJPWaiterBase,
+			RestaurantJPCustomer customer, String choice);
+
+	public abstract void msgFlaking(
+			RestaurantJPCustomer restaurantJPCustomerRole, int bill);
+
 	/**
 	 * @param total change (if any) due to the customer
 	 *

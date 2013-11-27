@@ -1,6 +1,7 @@
 package city.buildings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 
@@ -14,8 +15,8 @@ public class BankBuilding extends Building {
 	// Data
 
 	public BankManager manager;
-	public List<Account> accounts = new ArrayList<Account>();
-	public List<Loan> loans = new ArrayList<Loan>();	
+	public List<Account> accounts = Collections.synchronizedList(new ArrayList<Account>());
+	public List<Loan> loans = Collections.synchronizedList(new ArrayList<Loan>());	
 	public List<BankTellerRole> employees = new ArrayList<BankTellerRole>();
 	double funds;
 	public Date loanLastPaid;

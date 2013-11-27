@@ -2,6 +2,7 @@ package city.roles;
 
 
 import utilities.RestaurantJPMenuClass;
+import utilities.RestaurantJPWaiterBase;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -11,6 +12,7 @@ import java.util.TimerTask;
 import city.Role;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
 
@@ -35,7 +37,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
 	int bill = 0;
-	RestaurantJPCashierRole cashier;
+	RestaurantJPCashier cashier;
 	
 	public RestaurantJPCustomerRole(String n){
 		super();
@@ -102,7 +104,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		stateChanged();
 	}
 	
-	public void msgHereIsCheck(int check, RestaurantJPCashierRole csh){
+	public void msgHereIsCheck(int check, RestaurantJPCashier csh){
 		//Do("Check received");
 		bill = check;
 		cashier = csh;
