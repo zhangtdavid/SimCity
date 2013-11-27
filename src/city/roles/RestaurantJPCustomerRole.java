@@ -313,5 +313,10 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		
 	}
 
+	public void setCashier(RestaurantJPCashier csh) {
+		// TODO Auto-generated method stub
+		cashier = csh;
+	}
+
 }
 

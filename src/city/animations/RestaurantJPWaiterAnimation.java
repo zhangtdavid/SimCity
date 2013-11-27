@@ -4,12 +4,13 @@ import java.awt.*;
 import java.util.HashMap;
 import java.util.Map;
 
+import utilities.RestaurantJPWaiterBase;
 import city.Animation;
 import city.roles.RestaurantJPWaiterRole;
 
 public class RestaurantJPWaiterAnimation extends Animation{
 
-    private RestaurantJPWaiterRole agent = null;
+    private RestaurantJPWaiterBase agent = null;
     private boolean onBreak = false;
     
     private int xPos = 0, yPos = 0;//default waiter position
@@ -31,7 +32,7 @@ public class RestaurantJPWaiterAnimation extends Animation{
     
     public Map <Integer, Dimension> TableLocations = new HashMap<Integer, Dimension>(); 
 
-    public RestaurantJPWaiterAnimation(RestaurantJPWaiterRole w, int place) {
+    public RestaurantJPWaiterAnimation(RestaurantJPWaiterBase w, int place) {
         agent = w;
 		xPos = 400;
 		yPos = 50 + place*50;

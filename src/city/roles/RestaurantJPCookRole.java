@@ -321,6 +321,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		public Food(){
 		}
 	}
+	public void setRevolvingStand(RestaurantJPRevolvingStand orderStand) {
+		// TODO Auto-generated method stub
+		revolvingStand = orderStand;
+	}
 }
 
 
