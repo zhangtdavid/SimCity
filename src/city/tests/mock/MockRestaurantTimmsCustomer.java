@@ -3,15 +3,18 @@ package city.tests.mock;
 import utilities.LoggedEvent;
 import city.Application;
 import city.MockRole;
+import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
+import city.roles.RestaurantTimmsCustomerRole.State;
 
 public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantTimmsCustomer {
 	
-	public MockRestaurantTimmsCustomer() {
-		// TODO Auto-generated method stub
-		
-	}
+	// Constructor
+	
+	public MockRestaurantTimmsCustomer() {}
+	
+	// Messages
 	
 	@Override
 	public void msgRestaurantFull() { 
@@ -35,7 +38,8 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 
 	@Override
 	public void msgPaidCashier(int change) { 
-		log.add(new LoggedEvent("Received msgPaidCashier. Change: " + change)); }
+		log.add(new LoggedEvent("Received msgPaidCashier. Change: " + change)); 
+	}
 	
 	@Override
 	public void guiAtTable() { 
@@ -55,6 +59,25 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	@Override
 	public void guiAtExit() { 
 		log.add(new LoggedEvent("Received guiAtExit.")); 
+	}
+	
+	// Getters
+	
+	@Override
+	public State getState() {
+		return null;
+	}
+
+	@Override
+	public Application.FOOD_ITEMS getOrderItem() {
+		return null;
+	}
+
+	// Setters
+	
+	@Override
+	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+		return;
 	}
 
 }

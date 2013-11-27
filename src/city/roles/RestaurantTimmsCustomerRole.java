@@ -11,6 +11,7 @@ import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.buildings.RestaurantTimmsBuilding;
+import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 
@@ -21,19 +22,17 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Data
 	
-	private enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
+	public enum State { none, goToRestaurant, waitingInLine, longLine, goToTable, orderFromWaiter, hasOrdered, waiterDeliveredFood };
 	private State state = State.none;
 	
-	private int pickiness;
-	private int hunger;
 	private int tableNumber;
 	private Application.FOOD_ITEMS eatingItem;
-	private Application.FOOD_ITEMS orderItem;
+	private MenuItem orderItem;
 	private RestaurantTimmsWaiter waiter = null;
 	private Timer timer = new Timer();
 	private RestaurantTimmsBuilding rtb;
 	
-	private List<Application.FOOD_ITEMS> failedItems = new ArrayList<Application.FOOD_ITEMS>();
+	private List<MenuItem> failedItems = new ArrayList<MenuItem>();
 	
 	private Semaphore atRestaurant = new Semaphore(0, true);
 	private Semaphore atTable = new Semaphore(0, true);
@@ -43,14 +42,12 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Constructor
 
-	public RestaurantTimmsCustomerRole(RestaurantTimmsBuilding b){
+	public RestaurantTimmsCustomerRole(){
 		super();
 		this.eatingItem = null;
 		this.orderItem = null;
-		this.hunger = 5;
-		this.pickiness = 3;
 		this.state = State.none;
-		this.rtb = b;
+		this.rtb = null;
 	}
 	
 	// Messages
@@ -187,7 +184,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 				waiter.msgWantFood(RestaurantTimmsCustomerRole.this);
 			}
 		},
-		(pickiness * 1000));
+		(PICKINESS * 1000));
 	}
 	
 	private void actOrderFromWaiter() throws InterruptedException {
@@ -201,24 +198,19 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 			reOrder = true;
 		} 
 		
-// TODO
-//		// Customer will order any item that is UP TO $2 more than he has
-//		for (Application.MARKET_ITEMS stockItem : MarketAgent.stockItems) {
-//			int price = CookAgent.getMenuItemPrice(stockItem);
-//			if ((money - price) >= -2 && !failedItems.contains(stockItem)) {
-//				orderItem = stockItem;
-//			}
-//		}
-		
-		// TODO temporary replacement for market
-		orderItem = Application.FOOD_ITEMS.steak;
+		for (MenuItem i : rtb.getMenuItems()) {
+			int price = i.getPrice();
+			if ((this.getPerson().getCash() - price)  >= -2 && !failedItems.contains(i)) {
+				orderItem = i;
+			}
+		}
 
 		// Otherwise, he will leave
 		if (orderItem == null) {
 			waiter.msgDoNotWantFood(this);
 			actLeaveRestaurant();
 		} else {
-			waiter.msgOrderFood(this, orderItem);
+			waiter.msgOrderFood(this, orderItem.getItem());
 			if (reOrder) {
 				this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setPlate("! ");
 			} else {
@@ -238,7 +230,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 				} catch (InterruptedException e) {}
 			}
 		},
-		(hunger * 1000));
+		(HUNGER * 1000));
 	}
 	
 	private void actLeaveRestaurant() throws InterruptedException {
@@ -268,17 +260,31 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	// Getters
 	
+	@Override
+	public State getState() {
+		return state;
+	}
+	
+	@Override
+	public Application.FOOD_ITEMS getOrderItem() {
+		return orderItem.getItem();
+	}
+	
 	// Setters
 	
 	@Override
 	public void setActive() {
-		// TODO
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.state = State.goToRestaurant;
 		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setVisible(true);
 		super.setActive();
 		stateChanged();
+	}
+	
+	@Override
+	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+		this.rtb = b;
 	}
 	
 }

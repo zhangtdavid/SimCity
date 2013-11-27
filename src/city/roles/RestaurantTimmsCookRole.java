@@ -2,15 +2,23 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
-import java.util.concurrent.Semaphore;
 
+import utilities.MarketOrder;
 import city.Application;
+import city.Application.BUILDING;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantTimmsBuilding;
+import city.buildings.RestaurantTimmsBuilding.InternalMarketOrder;
+import city.buildings.RestaurantTimmsBuilding.MenuItem;
+import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -22,20 +30,13 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	// Data
 	
-	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
-	private static List<MenuItem> menuItems = Collections.synchronizedList(new ArrayList<MenuItem>());
-	// private List<MarketAgent> markets = new ArrayList<MarketAgent>(); // TODO
-	private RestaurantTimmsBuilding rtb; 
-	
 	private Integer speed;
 	private Timer timer = new Timer();
-	
-	private Integer KITCHEN_STORE_MIN = 2;
-	private Integer KITCHEN_STORE_MAX = 2;
-	private Integer MENU_PRICE_MIN = 5;
-	private Integer MENU_PRICE_MAX = 12;
-	
-	private Semaphore marketResponse = new Semaphore(0, true);
+	private List<Order> orders = Collections.synchronizedList(new ArrayList<Order>());
+	private RestaurantTimmsBuilding rtb; 
+	private List<Role> roles = new ArrayList<Role>(); // For market orders
+	private MarketCustomerDelivery marketCustomerDeliveryRole;
+	private static final int MARKET_ORDER_SIZE = 5;
 	
 	// Constructor
 	
@@ -53,15 +54,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		this.setShift(shiftStart, shiftEnd);
 		this.speed = 3;
 		this.rtb = b;
-		
-// TODO		
-//		// Create the menu. This does not order from the Market.
-//		for (MarketAgent.StockItem stockItem : MarketAgent.stockItems) {
-//			Integer randomAmount = KITCHEN_STORE_MIN + (int)(Math.random() * ((KITCHEN_STORE_MAX - KITCHEN_STORE_MIN) + 1));
-//			Integer randomPrice = MENU_PRICE_MIN + (int)(Math.random() * ((MENU_PRICE_MAX - MENU_PRICE_MIN) + 1));
-//			menuItems.add(new MenuItem(stockItem, randomAmount, randomPrice));
-//			print("Tonight's menu - " + stockItem.toString() + " - " + randomAmount + "x - $" + randomPrice);
-//		}
+		this.marketCustomerDeliveryRole = null;
 	}
 	
 	// Messages
@@ -85,30 +78,15 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		}
 		orders.remove(order);
 	}
-
-	@Override
-	public void msgMarketOrderPlaced(Application.FOOD_ITEMS s, Boolean inStock) {
-		print("msgMarketOrderPlaced");
-		MenuItem menuItem = findMenuItem(s);
-		if (inStock) {
-			menuItem.setState(MenuItem.State.onOrder);
-		}
-		marketResponse.release();
-	}
-	
-	@Override
-	public void msgMarketOrderDelivered(Application.FOOD_ITEMS s, int quantity) {
-		print("msgMarketOrderDelivered");
-		MenuItem menuItem = findMenuItem(s);
-		menuItem.incrementQuantityOnHand(quantity);
-		menuItem.setState(MenuItem.State.inStock);
-		stateChanged();
-	}
 	
 	// Scheduler
 	
 	@Override
 	public boolean runScheduler() {
+		//-------------------/
+		// Primary Scheduler /
+		//-------------------/
+		
 		synchronized(orders) {
 			// High priority - respond to waiters placing orders
 			for (Order order : orders) {
@@ -129,19 +107,36 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 			}
 		}
 		
-		synchronized(menuItems) {
-			// Low priority - order from market
-			for (MenuItem menuItem : menuItems) {
-				if (menuItem.getQuantityOnHand() <= 1 && menuItem.getState() == MenuItem.State.inStock) {
-					try {
-						actOrderFromMarket(menuItem);
-					} catch (InterruptedException e) {}
-				}
+		// Low priority - order from market
+		HashMap<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+		for (MenuItem m : rtb.getMenuItems()) {
+			if (m.getQuantity() <= 1 && m.isInStock()) {
+				order.put(m.getItem(), MARKET_ORDER_SIZE);
 			}
 		}
+		if (order.size() > 0) { actOrderFromMarket(order); }
 		
-		// Fall through
-		return false;
+		//------------------------------------/
+		// Role Scheduler (for market orders) /
+		//------------------------------------/
+		
+		if (marketCustomerDeliveryRole != null && !marketCustomerDeliveryRole.getActive()) {
+			roles.remove(marketCustomerDeliveryRole);
+			marketCustomerDeliveryRole = null;
+		}
+		
+		boolean blocking = false;
+		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+			blocking  = true;
+			boolean activity = r.runScheduler();
+			if (!activity) {
+				r.setActivityFinished();
+			}
+			break;
+		}
+		
+		// Scheduler disposition
+		return blocking;
 	}
 	
 	// Actions
@@ -172,25 +167,31 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		(this.speed * 1000));
 	}
 	
-	private void actOrderFromMarket(MenuItem m) throws InterruptedException {
+	private void actOrderFromMarket(HashMap<FOOD_ITEMS, Integer> order) {
 		print("actOrderFromMarket");
-// TODO
-//		m.setState(MenuItem.State.ordering);
-//		Integer randomAmount = KITCHEN_STORE_MIN + (int)(Math.random() * ((KITCHEN_STORE_MAX - KITCHEN_STORE_MIN) + 1));
-//		
-//		// Try ordering from all markets
-//		for (MarketAgent market : markets) {
-//			market.msgPlaceOrder(this, cashier, m.getStockItem(), randomAmount);
-//			marketResponse.acquire();
-//			if (m.getState() == MenuItem.State.onOrder) {
-//				return;
-//			}
-//		}
-//		
-//		// If no markets have it, remove it from the menu
-//		m.setState(MenuItem.State.offMenu);
+		
+		// Add the order to the restaurant's list
+		MarketOrder marketOrder = new MarketOrder(order);
+		InternalMarketOrder internalMarketOrder = new InternalMarketOrder(marketOrder);
+		rtb.addMarketOrder(internalMarketOrder);
+		
+		// Say that we're ordering the food
+		for (FOOD_ITEMS i : marketOrder.orderItems.keySet()) {
+			for (MenuItem m : rtb.getMenuItems()) {
+				if (m.getItem() == i) {
+					m.setState(State.onOrder);
+				}
+			}
+		}
+		
+		// Set up a role which will place the order
+		MarketBuilding market = (MarketBuilding) Application.CityMap.findRandomBuilding(BUILDING.market);
+		marketCustomerDeliveryRole = new MarketCustomerDeliveryRole(rtb, marketOrder, rtb.getCashier().getMarketPaymentRole());
+		marketCustomerDeliveryRole.setMarket(market);
+		marketCustomerDeliveryRole.setActive();
+		roles.add((Role) marketCustomerDeliveryRole);
 	}
-	
+
 	// Getters
 	
 	@Override
@@ -206,16 +207,15 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		rtb.setCook(this);
 		this.getAnimation(RestaurantTimmsAnimatedCook.class).setVisible(true);
 		super.setActive();
-		// TODO
 	}
 	
 	// Utilities 
 	
-	private static MenuItem findMenuItem(Application.FOOD_ITEMS s) {
+	private MenuItem findMenuItem(Application.FOOD_ITEMS s) {
 		MenuItem item = null;
-		for (MenuItem menuItem : menuItems) {
-			if (menuItem.getStockItem() == s) {
-				item = menuItem;
+		for (MenuItem m : rtb.getMenuItems()) {
+			if (m.getItem() == s) {
+				item = m;
 				break;
 			}
 		}
@@ -224,7 +224,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	private Boolean checkStore(Application.FOOD_ITEMS s) {
 		MenuItem menuItem = findMenuItem(s);
-		if (menuItem.getQuantityOnHand() > 0) {
+		if (menuItem.getQuantity() > 0) {
 			return true;
 		}
 		return false;
@@ -232,7 +232,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	
 	private void decrementMenuItem(Application.FOOD_ITEMS s, Integer i) {
 		MenuItem menuItem = findMenuItem(s);
-		menuItem.decrementQuantityOnHand(i);
+		menuItem.decrementQuantity(i);
 	}
 	
 	// Order Class
@@ -270,52 +270,6 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		
 		private void setState(State s) {
 			this.state = s;
-		}
-	}
-	
-	// MenuItem Class
-	
-	public static class MenuItem {
-		private Application.FOOD_ITEMS stockItem;
-		private Integer quantityOnHand;
-		private Integer price;
-		
-		private static enum State { inStock, ordering, onOrder, offMenu };
-		private State state;
-		
-		public MenuItem(Application.FOOD_ITEMS s, Integer quantityOnHand, Integer price) {
-			this.stockItem = s;
-			this.quantityOnHand = quantityOnHand;
-			this.price = price;
-			this.state = State.inStock;
-		}
-		
-		public Application.FOOD_ITEMS getStockItem() {
-			return stockItem;
-		}
-		
-		public Integer getQuantityOnHand() {
-			return quantityOnHand;
-		}
-		
-		public Integer getPrice() {
-			return price;
-		}
-		
-		public State getState() {
-			return state;
-		}
-		
-		public void setState(State s) {
-			this.state = s;
-		}
-		
-		public void incrementQuantityOnHand(Integer q) {
-			this.quantityOnHand = (this.quantityOnHand + q);
-		}
-		
-		public void decrementQuantityOnHand(Integer q) {
-			this.quantityOnHand = (this.quantityOnHand - q);
 		}
 	}
 
