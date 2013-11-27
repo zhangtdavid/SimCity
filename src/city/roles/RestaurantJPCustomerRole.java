@@ -47,6 +47,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 
 	public RestaurantJPCustomerRole(RestaurantJPBuilding b) {
 		building = b;
+		gotHungry();
 		// TODO Auto-generated constructor stub
 	}
 
