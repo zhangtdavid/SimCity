@@ -3,6 +3,8 @@ package city.roles;
 import java.util.ArrayList;
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
@@ -259,11 +261,13 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	// Getters
 	
-	// Setters
-		
 	// Utilities
 	
-	// Classes
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankManagerRole " + this.getPerson().getName(), msg);
+    }
 	
 	public class MyTeller {
 		BankTeller teller;

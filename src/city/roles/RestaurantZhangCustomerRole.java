@@ -4,6 +4,8 @@ import java.util.Random;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
@@ -48,7 +50,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	public AgentState state = AgentState.DoingNothing;
 
 	public enum AgentEvent 
-	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
+	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, restaurantClosed, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
 	public AgentEvent event = AgentEvent.none;
 
 	/**
@@ -101,6 +103,12 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 			event = AgentEvent.restaurantFull;
 			stateChanged();
 		}
+	}
+	
+	public void msgRestaurantClosed() {
+		print(state.name());
+		event = AgentEvent.restaurantClosed;
+		stateChanged();
 	}
 	
 	public void msgFollowMe(RestaurantZhangWaiter w, RestaurantZhangMenu menu, RestaurantZhangTable t) {
@@ -186,6 +194,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		if(state == AgentState.WaitingInRestaurant && event == AgentEvent.restaurantFull) {
 			state = AgentState.ChoosingToLeave;
 			chooseToLeave();
+			return true;
+		}
+		if(state == AgentState.AtEntrance && event == AgentEvent.restaurantClosed) {
+			state = AgentState.Leaving;
+			leaveRestaurant();
 			return true;
 		}
 		if ((state == AgentState.WaitingInRestaurant || state == AgentState.DecidedToWait) 
@@ -411,5 +424,11 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		super.setActive();
 		gotHungry();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

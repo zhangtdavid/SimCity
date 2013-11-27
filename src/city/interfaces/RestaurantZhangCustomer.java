@@ -26,4 +26,5 @@ public interface RestaurantZhangCustomer extends RoleInterface {
 	public abstract void msgAnimationFinishedGoToSeat();
 	public abstract void msgAnimationFinishedLeaveRestaurant();
 	public abstract void gotHungry();
+	public abstract void msgRestaurantClosed();
 }

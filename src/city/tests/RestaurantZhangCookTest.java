@@ -2,34 +2,21 @@ package city.tests;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.Timer;
-import java.util.concurrent.Semaphore;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import utilities.RestaurantZhangOrder.OrderStatus;
-import city.animations.RestaurantZhangCookAnimation;
-import city.buildings.MarketBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.RestaurantZhangPanel;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantZhangCashier;
-import city.interfaces.RestaurantZhangWaiter;
 import city.roles.RestaurantZhangCookRole;
 import city.tests.animations.mock.MockRestaurantZhangAnimatedCook;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
 
 public class RestaurantZhangCookTest extends TestCase {
-	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension())), 0, 100);
+	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
 	RestaurantZhangMenu menu = new RestaurantZhangMenu();
 	RestaurantZhangRevolvingStand stand = new RestaurantZhangRevolvingStand();
 	MockRestaurantZhangAnimatedCook anim = new MockRestaurantZhangAnimatedCook(cook);

@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPTableClass;
 import utilities.RestaurantJPWaiterBase;
 
@@ -222,6 +224,12 @@ public class RestaurantJPHostRole extends Role {
 		//Do("Telling " + w.name + " to seat customer");
 		w.w.msgSitAtTable(c, t);														//Fix w.w
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPHostRole " + this.getPerson().getName(), msg);
+    }
 	
 /*	private void ReassignCustomers(MyWaiter myW){
 		Do("Reassigning " + myW.name + "'s Customers");

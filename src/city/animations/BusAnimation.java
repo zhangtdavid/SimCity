@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import city.Animation;
+import city.Application;
 import city.Building;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
@@ -16,30 +17,19 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
 
-	private boolean atDestination = true;
-
-	private boolean isPresent = true;
+	public boolean atDestination = true;
 
 	public static final int SIZE = 25;
 
 	public BusAnimation(Bus b, Building startingBuilding) {
 		bus = b;
-		xDestination = xPos = startingBuilding.getCityViewBuilding().x;
-		yDestination = yPos = startingBuilding.getCityViewBuilding().y;
+		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).x;
+		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).y;
 	}
 
 	public void updatePosition() {
-		if (xPos < xDestination)
-			xPos++;
-		else if (xPos > xDestination)
-			xPos--;
-
-		if (yPos < yDestination)
-			yPos++;
-		else if (yPos > yDestination)
-			yPos--;
-
-		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
+		if(xPos <= xDestination + 1 && xPos >= xDestination - 1
+				&& yPos <= yDestination + 1 && yPos >= yDestination - 1 && atDestination == false) {
 			atDestination = true;
 			bus.msgAtDestination();
 		}
@@ -50,14 +40,6 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		g.fillRect(xPos, yPos, SIZE, SIZE);
 		g.setColor(Color.black);
 		g.drawString("Bus", xPos, yPos + 10);
-	}
-
-	public boolean isPresent() {
-		return isPresent;
-	}
-	
-	public void setPresent(boolean isPresent) {
-		this.isPresent = isPresent;
 	}
 
 	public int getXPos() {
@@ -77,8 +59,8 @@ public class BusAnimation extends Animation implements AnimatedBus {
 
 	@Override
 	public void DoGoToNextStop(BusStopBuilding nextStop) {
-		xDestination = nextStop.getCityViewBuilding().x;
-		yDestination = nextStop.getCityViewBuilding().y;
+		xDestination = Application.CityMap.findClosestRoad(nextStop).x;
+		yDestination = Application.CityMap.findClosestRoad(nextStop).y;
 		atDestination = false;
 	}
 

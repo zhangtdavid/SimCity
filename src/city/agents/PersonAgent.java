@@ -9,6 +9,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Agent;
 import city.Application.BANK_SERVICE;
@@ -454,18 +456,11 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole.setPerson(this);
 			this.addRole(carPassengerRole);
 		} else {
-<<<<<<< HEAD
-			BusStopBuilding b = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, this);
-			BusStopBuilding d = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, destination);
-			animation.goToBusStop(b);
-			atDestination.acquire();
-=======
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
-// TODO RestaurantZhang 92f655cfd5
+// TODO
 //			animation.goToBusStop(b);
 //			atDestination.acquire();
->>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 			busPassengerRole = new BusPassengerRole(d, b);
 			busPassengerRole.setPerson(this);
 			busPassengerRole.setActive();
@@ -703,4 +698,10 @@ public class PersonAgent extends Agent implements Person {
 		}
 		return disposition;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
+    }
 }

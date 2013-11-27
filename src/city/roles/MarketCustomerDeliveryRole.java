@@ -3,6 +3,8 @@ package city.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
@@ -109,5 +111,9 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //  Utilities
 //	=====================================================================
-
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryRole " + this.getPerson().getName(), msg);
+    }
 }

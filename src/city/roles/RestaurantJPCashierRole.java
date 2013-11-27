@@ -6,10 +6,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
-import utilities.RestaurantJPWaiterBase;
 import city.Role;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -179,10 +180,17 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 			}
 		}
 	}
-	
+
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment(){
 		return marketPaymentRole;
 	}
+
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCashierRole " + this.getPerson().getName(), msg);
+    }
+
 }
 
 

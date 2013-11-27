@@ -1,8 +1,9 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
-import city.Application.CityMap;
 import city.Application.BUILDING;
 import city.Building;
 import city.Role;
@@ -24,20 +25,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	BankTellerRole t;
 	int acctNum = -1;
 	int boothNumber;
-	
-<<<<<<< HEAD
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		print("Customer has been set active");
-		super.setActive();
-		this.service = s;
-		this.depositType = t;
-		amount = money;
-		if(s != Application.BANK_SERVICE.atmDeposit)
-			st = state.entering;
-		this.setActivityBegun();
-	}
-=======
->>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
+
 	// Constructor
 	
 	public BankCustomerRole(Building b) {
@@ -174,6 +162,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	// Utilities
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Classes 
 	

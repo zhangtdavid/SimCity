@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiMenu;
 import city.Application.FOOD_ITEMS;
 import city.Role;
@@ -575,5 +577,11 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 			return null;
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCustomerRole " + this.getPerson().getName(), msg);
+    }
 
 }

@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangTable;
 import city.Building;
@@ -21,4 +23,10 @@ public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBa
 		mc.state = mcState.orderCooking;
 		thisGui.setFoodLabel("", true); // Removes food ordered in animation
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangWaiterSharedDataRole " + this.getPerson().getName(), msg);
+    }
 }

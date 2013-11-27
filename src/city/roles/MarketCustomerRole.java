@@ -4,6 +4,8 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
@@ -198,4 +200,10 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         
 		return -1;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerRole " + this.getPerson().getName(), msg);
+    }
 }

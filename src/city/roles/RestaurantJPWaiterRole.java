@@ -1,13 +1,10 @@
 package city.roles;
 
-<<<<<<< HEAD
-import city.buildings.RestaurantJPBuilding;
-import city.buildings.RestaurantTimmsBuilding;
-import city.interfaces.RestaurantJPCustomer;
-=======
->>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	
@@ -37,5 +34,11 @@ public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPWaiterRole " + this.getPerson().getName(), msg);
+    }
 }
 

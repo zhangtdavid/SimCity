@@ -1,21 +1,29 @@
 package city.roles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
-import utilities.RestaurantChungRevolvingStand;
 import utilities.RestaurantChungOrder.OrderState;
+import utilities.RestaurantChungRevolvingStand;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantChungCookAnimation;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
@@ -473,6 +481,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	public RestaurantChungRevolvingStand getRevolvingStand() {
 		return orderStand;
 	}
+
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCookRole " + this.getPerson().getName(), msg);
+    }
     
     // HACK------------------------------------------------------------------
     public void depleteSalad() {

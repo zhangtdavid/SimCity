@@ -1,14 +1,13 @@
 package city.roles;
 
-
-import utilities.RestaurantJPMenuClass;
-import utilities.RestaurantJPWaiterBase;
-
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
+import utilities.RestaurantJPMenuClass;
 import city.Role;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.buildings.RestaurantJPBuilding;
@@ -309,6 +308,11 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		customerGui = gui;
 		
 	}
-
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCustomerRole " + this.getPerson().getName(), msg);
+    }
 }
 

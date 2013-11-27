@@ -1,7 +1,7 @@
 package city.roles;
 
-import java.util.concurrent.Semaphore;
-
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Role;
 import city.buildings.BusStopBuilding;
 import city.interfaces.Bus;
@@ -19,7 +19,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public BusStopBuilding destination;
 //	public AnimatedBus animation;
 	
-	private Semaphore atDestination = new Semaphore(0, true);
+//	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	public BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
@@ -92,6 +92,12 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		super.setActive();
 		msgAtWaitingStop();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BUS, "BusPassengerRole " + this.getPerson().getName(), msg);
+    }
 	// Classes
 
 }

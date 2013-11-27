@@ -7,6 +7,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
@@ -234,6 +236,12 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 		MenuItem menuItem = findMenuItem(s);
 		menuItem.decrementQuantity(i);
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCookRole " + this.getPerson().getName(), msg);
+    }
 	
 	// Order Class
 

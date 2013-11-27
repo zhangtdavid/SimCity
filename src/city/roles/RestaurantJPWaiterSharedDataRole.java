@@ -1,5 +1,7 @@
 package city.roles;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.RestaurantJPCustomer;
@@ -31,4 +33,10 @@ public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 		// TODO Auto-generated method stub
 		
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPWaiterSharedDataRole " + this.getPerson().getName(), msg);
+    }
 }

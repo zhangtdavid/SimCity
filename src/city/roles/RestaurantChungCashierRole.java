@@ -1,10 +1,19 @@
 package city.roles;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Timer;
 
+import trace.AlertLog;
+import trace.AlertTag;
+import utilities.EventLog;
+import utilities.LoggedEvent;
+import utilities.MarketOrder;
+import utilities.MarketTransaction;
 import city.Application;
-import city.Role;
 import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -12,10 +21,6 @@ import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import utilities.EventLog;
-import utilities.LoggedEvent;
-import utilities.MarketOrder;
-import utilities.MarketTransaction;
 
 public class RestaurantChungCashierRole extends Role implements RestaurantChungCashier {	
 	
@@ -252,6 +257,12 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		return -1;
 	}
 	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCashierRole " + this.getPerson().getName(), msg);
+    }
+
 //	Classes
 //	=====================================================================	
 
@@ -272,4 +283,5 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			s = state;
 		}
 	}
+
 }

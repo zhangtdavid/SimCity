@@ -5,6 +5,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungCustomerAnimation;
@@ -578,6 +580,13 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public void setRestaurant(RestaurantChungBuilding r) {
 		restaurant = r;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCustomerRole " + this.getPerson().getName(), msg);
+    }
+
 }
 
 

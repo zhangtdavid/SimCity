@@ -8,7 +8,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
-//import utilities.MarketOrder;
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
@@ -19,7 +20,6 @@ import city.buildings.RestaurantBaseBuilding.Food;
 import city.buildings.RestaurantBaseBuilding.FoodOrderState;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.MarketCustomerDelivery;
-//import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
@@ -422,6 +422,13 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
         }
         return null;
     }
+    
+    @Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCookRole " + this.getPerson().getName(), msg);
+    }
+    
 	//Classes
     /*     // TODO THIS IS FOR MARKET INTEGRATION
 	   private class MyMarketOrder{

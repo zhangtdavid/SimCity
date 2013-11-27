@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Agent;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
@@ -174,6 +176,12 @@ public class BusAgent extends Agent implements Bus {
 	public void msgAtDestination() {
 		atDestination.release();
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.BUS, "BusAgent " + this.getName(), msg);
+    }
 	
 	// Classes
 	enum PassengerState {GETTINGONBUS, ONBUS, GETTINGOFFBUS, OFFBUS};

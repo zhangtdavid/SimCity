@@ -1,6 +1,5 @@
 package city.animations.interfaces;
 
-import utilities.RestaurantZhangTable;
 import city.Building;
 import city.interfaces.AnimationInterface;
 

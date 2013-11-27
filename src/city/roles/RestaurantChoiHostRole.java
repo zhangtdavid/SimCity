@@ -5,6 +5,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.RestaurantChoiTable;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
@@ -250,4 +252,10 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	public void minus1Workload(RestaurantChoiWaiterAbs w){
 		waiterBalance.put(w, waiterBalance.get(w)-1); // replace old with new
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiHostRole " + this.getPerson().getName(), msg);
+    }
 }

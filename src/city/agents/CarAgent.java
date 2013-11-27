@@ -2,6 +2,8 @@ package city.agents;
 
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import city.Agent;
 import city.Building;
 import city.animations.interfaces.AnimatedCar;
@@ -89,6 +91,12 @@ public class CarAgent extends Agent implements Car {
 	public void msgAtDestination() {
 		atDestination.release();
 	}
+
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.CAR, "BusAgent " + this.getName(), msg);
+    }
 	
 	// Classes
 

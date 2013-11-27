@@ -22,8 +22,7 @@ public class MockCar extends MockAgent implements Car {
 
 	@Override
 	public void msgAtDestination() {
-		// TODO Auto-generated method stub RestaurantZhang 92f655cfd5
-		
+		// TODO
 	}
 
 }

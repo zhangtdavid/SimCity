@@ -2,6 +2,8 @@ package city.roles;
 
 import java.util.List;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
@@ -129,4 +131,10 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 			}
 		}
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryPaymentRole " + this.getPerson().getName(), msg);
+    }
 }

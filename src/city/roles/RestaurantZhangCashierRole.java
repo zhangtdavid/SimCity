@@ -1,11 +1,17 @@
 package city.roles;
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.swing.Timer;
+
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
@@ -15,13 +21,14 @@ import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 /**
  * Restaurant Cashier Agent
  */
 
-public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier {
+public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier, ActionListener {
 	private static final int CASHIERX = 0;
 	private static final int CASHIERY = 200;
 	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
@@ -36,6 +43,10 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	public List<RestaurantZhangCheck> pendingChecks = Collections.synchronizedList(new ArrayList<RestaurantZhangCheck>());
 	
 	private List<Role> roles = new ArrayList<Role>();
+	
+	public RestaurantZhangHost host;
+	private boolean restaurantClosing = false;
+	protected Timer timer;
 
 	public RestaurantZhangCashierRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -43,6 +54,9 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 //		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		
+		timer = new Timer(5000, this);
+		timer.start();
 	}
 
 	public String getName() {
@@ -70,6 +84,13 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
+		if(restaurantClosing) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant <= 0) {
+				super.setInactive();
+				restaurantClosing = false;
+				return true;
+			}
+		}
 		synchronized(pendingChecks) {
 			for(RestaurantZhangCheck c : pendingChecks) {
 				if(c.status == RestaurantZhangCheck.CheckStatus.created) {
@@ -154,6 +175,31 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	public void setMenu(RestaurantZhangMenu m) {
 		menu = new HashMap<String, Integer>(m.getMenu());
 	}
+	
+	public void setHost(RestaurantZhangHost h) {
+		host = h;
+	}
+	
+	@Override
+	public void actionPerformed(ActionEvent arg0) {
+		runScheduler();
+	}
+	
+	public void setInactive() {
+		if(host != null) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant !=0) {
+				restaurantClosing = true;
+				return;
+			}
+		}
+		super.setInactive();
+	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCashierRole " + this.getPerson().getName(), msg);
+    }
 
 	public enum MarketTransactionState
 	{Pending, Processing, WaitingForConfirmation};

@@ -11,6 +11,8 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import trace.AlertLog;
+import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
@@ -26,6 +28,7 @@ import city.buildings.RestaurantBaseBuilding.Food;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 /**
@@ -55,9 +58,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	public RestaurantZhangAnimatedCook thisGui;
 
+	public RestaurantZhangHost host;
+
 	Timer timer = new Timer();
 
 	private Semaphore atBase = new Semaphore(0, false);
+	private boolean restaurantClosing = false;
 
 	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -133,6 +139,13 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	 */
 	public boolean runScheduler() {
 		try {
+			if(restaurantClosing) {
+				if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant <= 0) {
+					super.setInactive();
+					restaurantClosing = false;
+					return true;
+				}
+			}
 			// Role Scheduler
 			boolean blocking = false;
 			if (marketCustomerDeliveryList.isEmpty() != true) {
@@ -351,23 +364,43 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
 	}
-	
+
 	public void setActive() {
 		super.setActive();
 		runScheduler();
 	}
+	
+	public void setHost(RestaurantZhangHost h) {
+		host = h;
+	}
+	
+	public void setInactive() {
+		if(host != null) {
+			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant !=0) {
+				restaurantClosing = true;
+				return;
+			}
+		}
+		super.setInactive();
+	}
+	
+	
+	public void print(String msg) {
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
+		super.print(msg);
+    }
 
-	enum CookInvoiceStatus {created, processing, changedMarket, completed};
-	private class CookInvoice {
-		MarketBuilding assignedMarket;
+	private static class CookInvoice {
+		// MarketBuilding assignedMarket;
 		MarketOrder marketorder;
-		CookInvoiceStatus status;
+		// CookInvoiceStatus status;
 		String food;
-		int amount;
+		// int amount;
+		// static enum CookInvoiceStatus {created, processing, changedMarket, completed};
 
 		CookInvoice(String food_, int amount_, MarketBuilding market_) {
 			food = food_;
-			amount = amount_;
+			// amount = amount_;
 			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();
 			switch(food_) {
 			case "Steak":
@@ -381,8 +414,8 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 				break;
 			}
 			marketorder = new MarketOrder(invoice);
-			assignedMarket = market_;
-			status = CookInvoiceStatus.created;
+			// assignedMarket = market_;
+			// status = CookInvoiceStatus.created;
 		}
 	}
 }
