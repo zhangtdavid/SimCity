@@ -9,15 +9,17 @@ import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
+import utilities.MarketOrder;
 import utilities.RestaurantJPRevolvingStand;
 import utilities.RestaurantJPTableClass;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantJPCookAnimation;
-import city.animations.RestaurantJPHostAnimation;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketManager;
 import city.interfaces.RestaurantJPCook;
 import city.interfaces.RestaurantJPWaiter;
+import city.interfaces.MarketCustomerDelivery;
 
 public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 															//DATA	
@@ -35,7 +37,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	Timer timer = new Timer();
 	Map<String, Food> Foods = new HashMap<String, Food>();
 	int low = 2;
-	int marketCount = 0;
+	MarketCustomerDelivery deliveryRole;
 
 	public RestaurantJPCookRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
@@ -44,10 +46,10 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
-		Foods.put("Steak", new Food(5000, 5, "Steak"));
-		Foods.put("Chicken", new Food(4000, 5, "Chicken"));
-		Foods.put("Salad", new Food(3000, 5, "Salad"));
-		Foods.put("Pizza", new Food(2000, 5, "Pizza"));					//HACKHACKHACK
+		Foods.put("Steak", new Food(5000, 5, FOOD_ITEMS.steak));
+		Foods.put("Chicken", new Food(4000, 5, FOOD_ITEMS.chicken));
+		Foods.put("Salad", new Food(3000, 5, FOOD_ITEMS.salad));
+		Foods.put("Pizza", new Food(2000, 5, FOOD_ITEMS.pizza));					//HACKHACKHACK
 	}
 	public void setInactive(){
 		if(orders.size() == 0 && building.seatedCustomers == 0)
@@ -133,22 +135,13 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 			wantsInactive = false;
 		}
 		if(!ordering){
+			Map<FOOD_ITEMS, Integer> neededFoods = new HashMap<FOOD_ITEMS, Integer>();
 			for (Map.Entry<String, Food> entry : Foods.entrySet())
 			{
-				if(entry.getValue().inventory <= low){
-					List<String> neededFoods = new ArrayList<String>();
-					neededFoods.add(entry.getValue().type);
-					for(MyMarket m : Markets){
-						for(String food : neededFoods){
-							if(m.isStocked(food)){
-								//m.m.msgNeedFood(food, this);
-								ordering = true;
-								return true;
-							}
-						}
-					}
-				}
+				if(entry.getValue().inventory <= low)
+					neededFoods.put(entry.getValue().type, 5);
 			}
+			deliveryRole = new MarketCustomerDeliveryRole(building, new MarketOrder(neededFoods), building.cashier.getMarketCustomerDeliveryPayment());
 		}
 		
 		synchronized(orders){
@@ -319,8 +312,8 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	public class Food {
 		int cookingTime;
 		int inventory;
-		String type;
-		public Food(int cTime, int count, String t){
+		FOOD_ITEMS type;
+		public Food(int cTime, int count, FOOD_ITEMS t){
 			cookingTime = cTime;
 			inventory = count;
 			type = t;

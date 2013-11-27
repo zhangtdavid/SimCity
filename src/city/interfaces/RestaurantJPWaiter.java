@@ -9,7 +9,7 @@ public interface RestaurantJPWaiter extends RoleInterface {
 	 *
 	 * Sent by the cashier giving the waiter a check to pass on to the cashier.
 	 */
-	public abstract void msgHereIsCheck(Float check, RestaurantJPCashierRole csh, RestaurantJPCustomer c);
+	public abstract void msgHereIsCheck(int check, RestaurantJPCashierRole csh, RestaurantJPCustomer c);
 
 	public abstract void msgImReadyToOrder(RestaurantJPCustomer customer);
 

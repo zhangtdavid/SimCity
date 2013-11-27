@@ -2,7 +2,6 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Dimension;
-import java.awt.Point;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
@@ -80,7 +79,8 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
 		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
 		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red, new Dimension(500, 500))); break;
-		case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(500, 500))); break;
+		// TODO BankBranch c0e51d580a4
+		// case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(500, 500))); break;
 		default: return;
 		}
 		addStatic(temp);

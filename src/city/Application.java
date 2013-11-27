@@ -59,7 +59,7 @@ public class Application {
 	private static void parseConfig() {
 
 	}
-
+	
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
 		private static List<CityRoad> roads = new ArrayList<CityRoad>();
