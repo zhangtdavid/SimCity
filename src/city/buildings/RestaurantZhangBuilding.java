@@ -7,11 +7,12 @@ import java.util.Vector;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.Building;
+import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -25,7 +26,7 @@ import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-public class RestaurantZhangBuilding extends Building {
+public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
 	
 	// Data
 	
@@ -50,21 +51,25 @@ public class RestaurantZhangBuilding extends Building {
 	public Vector<RestaurantZhangCustomer> customers = new Vector<RestaurantZhangCustomer>();
 	public Vector<RestaurantZhangWaiter> waiters = new Vector<RestaurantZhangWaiter>();
 
-	public RestaurantZhangPanel panel; //reference to main gui
 
 	// Constructor
 	
-	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel) {
+	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantZhangCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantZhangCustomerAnimation");
-		this.panel = panel;
+		this.setPanel(panel);
+		this.setCityViewBuilding(cityBuilding);
+		// Specific to my restaurant panel
 		tables = new ArrayList<RestaurantZhangTable>(nTables);
     	for (int ix = 0; ix < nTables; ix++) {
     		tables.add(new RestaurantZhangTable(ix, TABLEXSTART + ((ix % TABLEROW) * TABLEXSPACING), 
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
+    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
+        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
+        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak")));
 	}
 	
 	// Utilities
@@ -79,7 +84,7 @@ public class RestaurantZhangBuilding extends Building {
 				RestaurantZhangCustomerAnimation anim = new RestaurantZhangCustomerAnimation(c); 
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addRole(c, anim);
 			}
@@ -95,7 +100,7 @@ public class RestaurantZhangBuilding extends Building {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addRole(w, anim);
 			}
@@ -112,7 +117,7 @@ public class RestaurantZhangBuilding extends Building {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addRole(w, anim);
 			}
@@ -128,12 +133,13 @@ public class RestaurantZhangBuilding extends Building {
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
-			c.setMenuTimes(menu);
+			c.setMenuTimes(menu, foods);
+//			c.addMarket(new MarketBuilding("Market"));
 			if(!super.roleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addRole(c, anim);
 			}

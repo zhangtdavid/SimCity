@@ -19,11 +19,6 @@ import city.tests.mock.MockRestaurantZhangCustomer;
 import city.tests.mock.MockRestaurantZhangHost;
 import junit.framework.TestCase;
 
-
-/**
- * Restaurant customer Agent
- */
-
 public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 	RestaurantZhangWaiterSharedDataRole waiter;
 	MockRestaurantZhangAnimatedWaiter anim;

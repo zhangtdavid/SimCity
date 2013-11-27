@@ -21,7 +21,7 @@ public class MockRestaurantZhangCashier extends MockRole implements RestaurantZh
 	}
 
 	@Override
-	public void msgHereIsPayment(RestaurantZhangCheck c, double cash) {
+	public void msgHereIsPayment(RestaurantZhangCheck c, int cash) {
 		log.add(new LoggedEvent("Got check from " + c.cust.getName() + " with payment " + cash));
 	}
 

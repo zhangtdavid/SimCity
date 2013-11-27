@@ -4,14 +4,14 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Rectangle;
 
-public class CityViewRestaurant extends CityViewBuilding {
+public class CityViewBusStop extends CityViewBuilding {
 	
-	public CityViewRestaurant(int x, int y) {
-		super(x, y, Color.red, "Restaurant 1");
+	public CityViewBusStop(int x, int y) {
+		super(x, y, Color.white, "Restaurant 1");
 		rectangle = new Rectangle(x, y, 50, 50);
 	}
 	
-	public CityViewRestaurant(int x, int y, String ID, Color color, BuildingCard b) {
+	public CityViewBusStop(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		rectangle = new Rectangle(x, y, 50, 50);
 	}

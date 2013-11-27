@@ -15,7 +15,7 @@ public abstract class RestaurantBaseBuilding extends Building {
 	// Data
 	
 	public BankCustomer bankCustomer;
-	private HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	public HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
 	public enum FoodOrderState {None, Pending, Ordered};
 	
 	// Constructor
@@ -78,6 +78,7 @@ public abstract class RestaurantBaseBuilding extends Building {
             this.amount = amount;
             this.low = low;
             this.capacity = capacity;
+            this.price = price;
             s = FoodOrderState.None;
         }
     }

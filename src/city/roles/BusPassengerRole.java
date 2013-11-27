@@ -1,8 +1,11 @@
 package city.roles;
 
+import java.util.concurrent.Semaphore;
+
 import city.Role;
 import city.interfaces.BusPassenger;
 import city.interfaces.Bus;
+import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
 
 public class BusPassengerRole extends Role implements BusPassenger {
@@ -15,7 +18,9 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public Bus myBus;
 	public BusStopBuilding busStopToWaitAt;
 	public BusStopBuilding destination;
-	// CarPassengerGui myGui;
+//	public AnimatedBus animation;
+	
+	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	public BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
@@ -63,15 +68,17 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Actions
 	
 	void getOnBus() {
+		print("Getting on bus " + myBus.getName() + " at stop " + destination.getName() + " to go to " + destination.getName());
 //		myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
-//		myPerson.money -= myBus.busFare;
+		this.getPerson().setCash(this.getPerson().getCash() - Bus.busFare);
 		busStopToWaitAt.waitingList.remove(this);
 		myState = BusPassengerState.ONBUS;
 		myBus.msgImOnBus(this, destination);
 	}
 	
 	void getOffBus() {
-//		myGui.doGetOffBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
+		print("Getting off bus " + myBus.getName() + " at stop " + destination.getName());
+//		animation.doGetOffBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 		myBus.msgImOffBus(this);
 		myState = BusPassengerState.NOTBUSSING;
 		myEvent = BusPassengerEvent.NONE;

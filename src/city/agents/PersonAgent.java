@@ -455,11 +455,12 @@ public class PersonAgent extends Agent implements Person {
 		} else {
 			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
-			animation.goToBusStop(b);
-			atDestination.acquire();
+// TODO RestaurantZhang 92f655cfd5
+//			animation.goToBusStop(b);
+//			atDestination.acquire();
 			busPassengerRole = new BusPassengerRole(d, b);
-			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
+			busPassengerRole.setActive();
 			this.addRole(busPassengerRole);
 		}
 	}
@@ -475,14 +476,18 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		if (car != null && !carPassengerRole.getActive()) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-			return true;
-		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-			return true;
+		if (car != null && carPassengerRole != null) {
+			if(!carPassengerRole.getActive()) {
+				roles.remove(carPassengerRole);
+				carPassengerRole = null;
+				return true;
+			}
+		} else if (busPassengerRole != null && busPassengerRole != null) {
+			if(!busPassengerRole.getActive()) {
+				roles.remove(busPassengerRole);
+				busPassengerRole = null;
+				return true;
+			}
 		}
 		return false;
 	}

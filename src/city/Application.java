@@ -8,7 +8,8 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.buildings.BusStopBuilding;
+import city.agents.PersonAgent;
+import city.gui.CityRoad;
 import city.gui.MainFrame;
 import city.interfaces.Person;
 
@@ -56,11 +57,12 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		
+
 	}
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
+		private static List<CityRoad> roads = new ArrayList<CityRoad>();
 		
 		/**
 		 * Adds a new building to the HashMap
@@ -95,10 +97,8 @@ public class Application {
 		/**
 		 * Return the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, Person p) {
-			// TODO
-			Building b = new BusStopBuilding("placeholder");
-			return b;
+		public static Building findClosestBuilding() {
+			return null; // TODO RestaurantZhang 92f655cfd5
 		}
 		
 		/**
@@ -107,11 +107,49 @@ public class Application {
 		 * @param b the destination you wish to reach
 		 */
 		public static Building findClosestBuilding(BUILDING type, Building b) {
-			// TODO
-			Building d = new BusStopBuilding("placeholder");
-			return d;
+			int x = b.getCityViewBuilding().x;
+			int y = b.getCityViewBuilding().y;
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building tempBuilding : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().x - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = tempBuilding;
+				}
+			}
+			return returnBuilding;
 		}
-
+		
+		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
+			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building b : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().x - x, 2) + Math.pow(b.getCityViewBuilding().y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = b;
+				}
+			}
+			return returnBuilding;
+		}
+		
+		public static CityRoad findClosestRoad(Building b) {
+			int x = b.getCityViewBuilding().x;
+			int y = b.getCityViewBuilding().y;
+			double closestDistance = 1000000;
+			CityRoad returnRoad = null;
+			for(CityRoad r : roads) {
+				double distance = Math.sqrt((double)(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnRoad = r;
+				}
+			}
+			return returnRoad;
+		}
 	}
 
 }
