@@ -37,23 +37,3 @@
 		// SIXTH add the new building to the map
 		CityMap.addBuilding(BUILDING.restaurant, rcb1);
 		// SEVENTH create all your roles after
-		
-				// Create cashier
-		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p1r1Chung);
-		p1Chung.setOccupation(p1r1Chung);
-
-		// Create cook
-		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p2r1Chung);
-		p2Chung.setOccupation(p2r1Chung);
-
-		// Create host
-		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p3r1Chung);
-		p3Chung.setOccupation(p3r1Chung);
-
-		// Create waiter
-		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
-		rcb1.addRole(p4r1Chung);
-		p4Chung.setOccupation(p4r1Chung);

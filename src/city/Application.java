@@ -22,6 +22,7 @@ import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
+import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
@@ -37,6 +38,7 @@ import city.gui.HousePanel;
 import city.gui.MainFrame;
 import city.gui.MarketPanel;
 import city.gui.RestaurantChoiPanel;
+import city.gui.RestaurantChungPanel;
 import city.gui.RestaurantJPPanel;
 import city.gui.RestaurantTimmsPanel;
 import city.gui.RestaurantZhangPanel;
@@ -52,6 +54,10 @@ import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterRole;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungHostRole;
+import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPHostRole;
@@ -581,12 +587,21 @@ public class Application {
 		p9Choi.setCar(c9Choi);
 		p10Choi.setCar(c10Choi);
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
-	
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding")); // Has to be created before restaurant, needed for bank customer
-
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
-
+		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantChung1 = new CityViewRestaurant(400, 250, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, rcp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantChung1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		RestaurantChungBuilding rcb1 = new RestaurantChungBuilding("RestaurantChung1", rcp1, restaurantChung1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rcp1, restaurantChung1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rcb1);
+		// SEVENTH create all your roles after
+		
 		HousePanel rhp1Chung = new HousePanel(Color.black, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
 
 		// Create landlord
@@ -648,6 +663,32 @@ public class Application {
 		p3Chung.setCar(c3Chung);
 		p4Chung.setCar(c4Chung);
 
+		// Create cashier
+		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		p1r1Chung.setPerson(p1Chung);
+		p1r1Chung.setMarketCustomerDeliveryPaymentPerson();
+		p1r1Chung.setBankCustomerPerson();
+		rcb1.addRole(p1r1Chung);
+		p1Chung.setOccupation(p1r1Chung);
+		
+		// Create cook
+		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		p2r1Chung.setPerson(p2Chung);		
+		rcb1.addRole(p2r1Chung);
+		p2Chung.setOccupation(p2r1Chung);
+		
+		// Create host
+		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		p3r1Chung.setPerson(p3Chung);		
+		rcb1.addRole(p3r1Chung);
+		p3Chung.setOccupation(p3r1Chung);
+		
+		// Create waiter
+		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		p4r1Chung.setPerson(p4Chung);		
+		rcb1.addRole(p4r1Chung);
+		p4Chung.setOccupation(p4r1Chung);
+		
 		// Start threads
 
 		//RESTAURANTJP------------------------------------------------------------------------
