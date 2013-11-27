@@ -86,9 +86,21 @@ For ease of organization, collaboration, and readability, the following conventi
 
 ### John Francis (19%)
 * Bank
-  - Designed and implemented bank. Bank is not yet fully functioning, you can see a small demo that interacts with RestaurantChoi
+  - Designed and implemented bank. Bank is not yet fully functioning in the city, but works by itself in a branch. You can see a small demo that interacts with RestaurantChoi
+  - Provided methodology to allow integration with Restaurants and Markets
+* Buildings
+  - Wrote cash handling methods in the building and person class to allow directDeposits by businesses
 * Restaurant
   - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
+
+* Disclosure
+  - Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
+  - Restaurant testing is virtually non-existent, except for the Cashier
+  - Loan payment functionality exists in local branch but was not done in time for integration (EDIT: may have gotten in)
+  - Internal BankGui was not completed
+  - Ironically, personal restaurant was not fully integrated with Bank (EDIT: may have gotten in)
+  - All Bank interactions have been tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration (EDIT: may have gotten in)
+  - Restaurant stopped working during final integation due to errors in RestaurantPanel. Was implemented and working correctly in commit 1bf454f98b70f3377da416038285c1d7d2bfabe2
 
 ### Shirley Chung (19%)
 * Market
