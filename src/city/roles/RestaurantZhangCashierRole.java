@@ -12,7 +12,6 @@ import utilities.RestaurantZhangMenu;
 import city.Building;
 import city.Role;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantZhangBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
@@ -31,8 +30,6 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	//public Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
 	
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
-	
-	private String name;
 
 	public Map<String, Integer> menu;
 

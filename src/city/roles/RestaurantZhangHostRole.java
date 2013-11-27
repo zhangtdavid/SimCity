@@ -22,8 +22,6 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	private List<RestaurantZhangCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantZhangCustomer>());
 	private List<MyWaiter> myWaiterList = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	private Collection<RestaurantZhangTable> tables;
-	
-	private String name;
 
 	public RestaurantZhangHostRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();

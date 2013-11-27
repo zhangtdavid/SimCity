@@ -1,22 +1,13 @@
 package city.tests.mock;
 
-
-import city.MockRole;
-import city.animations.RestaurantChungCustomerAnimation;
-import city.interfaces.RestaurantChungCashier;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
+import city.MockRole;
+import city.interfaces.RestaurantChungCashier;
+import city.interfaces.RestaurantChungCustomer;
+import city.interfaces.RestaurantChungWaiter;
 
-/**
- * A sample MockCustomer built to unit test a CashierAgent.
- *
- * @author Monroe Ekilah
- *
- */
 public class MockRestaurantChungCustomer extends MockRole implements RestaurantChungCustomer {
 	public EventLog log = new EventLog();
 	/**

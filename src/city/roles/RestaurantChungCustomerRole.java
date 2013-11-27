@@ -1,15 +1,15 @@
 package city.roles;
 
-import java.util.*;
+import java.util.Random;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 
 /**

@@ -1,14 +1,5 @@
 package city.interfaces;
 
-import city.animations.RestaurantChungWaiterAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedWaiter;
-
-/**
- * A Waiter interface built to unit test a CashierAgent.
- *
- * @author Monroe Ekilah
- *
- */
 public interface RestaurantChungWaiter extends RoleInterface {
 
 	public abstract void msgAnimationAskedForBreak();

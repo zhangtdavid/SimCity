@@ -2,12 +2,9 @@ package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
-import utilities.RestaurantZhangTable;
 import city.MockAnimation;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
-import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.interfaces.RestaurantZhangCook;
-import city.interfaces.RestaurantZhangCustomer;
 
 public class MockRestaurantZhangAnimatedCook extends MockAnimation implements RestaurantZhangAnimatedCook {
 

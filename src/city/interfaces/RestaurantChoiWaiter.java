@@ -2,9 +2,9 @@ package city.interfaces;
 
 import java.util.List;
 
-import city.Application.FOOD_ITEMS;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiTable;
+import city.Application.FOOD_ITEMS;
 
 public interface RestaurantChoiWaiter extends RoleInterface{
 

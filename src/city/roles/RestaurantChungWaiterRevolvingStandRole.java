@@ -1,11 +1,10 @@
 package city.roles;
 
-import city.animations.RestaurantChungWaiterAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedWaiter;
-import city.buildings.RestaurantChungBuilding;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 import utilities.RestaurantChungRevolvingStand;
+import city.animations.RestaurantChungWaiterAnimation;
+import city.buildings.RestaurantChungBuilding;
 
 /**
  * Restaurant Waiter Agent

@@ -1,14 +1,7 @@
 package city.interfaces;
 
 import utilities.RestaurantChungMenu;
-import city.animations.RestaurantChungCustomerAnimation;
 
-/**
- * A sample Customer interface built to unit test a CashierAgent.
- *
- * @author Monroe Ekilah
- *
- */
 public interface RestaurantChungCustomer extends RoleInterface {
 
 	public abstract void gotHungry();

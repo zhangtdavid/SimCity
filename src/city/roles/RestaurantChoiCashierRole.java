@@ -7,16 +7,15 @@ import java.util.List;
 import utilities.EventLog;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
-import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
-import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChoiBuilding;
 
 public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier{
 	//Data    

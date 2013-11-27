@@ -7,12 +7,11 @@ import java.util.concurrent.Semaphore;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
-import city.animations.interfaces.MarketAnimatedCustomer;
+import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
-import city.Application.FOOD_ITEMS;
-import city.Role;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
 //  Data
@@ -39,7 +38,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 
 //	Gui
 //	---------------------------------------------------------------
-	private MarketAnimatedCustomer marketCustomerGui;
 	private Semaphore atCounter = new Semaphore(0, true);	
 	private Semaphore atCashier = new Semaphore(0, true);
 

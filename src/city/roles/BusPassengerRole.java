@@ -3,10 +3,9 @@ package city.roles;
 import java.util.concurrent.Semaphore;
 
 import city.Role;
-import city.interfaces.BusPassenger;
-import city.interfaces.Bus;
-import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
+import city.interfaces.Bus;
+import city.interfaces.BusPassenger;
 
 public class BusPassengerRole extends Role implements BusPassenger {
 	

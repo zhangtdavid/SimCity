@@ -80,9 +80,9 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	}
 
 	public void msgPayment(RestaurantJPCustomer c, int cash){
-		//log.add(new LoggedEvent("Payment received"));
-		RestaurantJPCustomer temp = c;
-		//Do("Payment received from " + temp.toString());
+		// log.add(new LoggedEvent("Payment received"));
+		// RestaurantJPCustomer temp = c;
+		// Do("Payment received from " + temp.toString());
 		
 		synchronized(Bills){
 		for(MyBill b : Bills){

@@ -1,21 +1,12 @@
 package city.tests.mock;
 
-
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.MockRole;
-import city.animations.RestaurantChungWaiterAnimation;
-import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
-import utilities.EventLog;
-import utilities.LoggedEvent;
 
-/**
- * A sample MockCustomer built to unit test a CashierAgent.
- *
- * @author Monroe Ekilah
- *
- */
 public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements RestaurantChungWaiter {
 	public EventLog log = new EventLog();
 

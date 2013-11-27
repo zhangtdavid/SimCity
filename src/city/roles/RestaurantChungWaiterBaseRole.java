@@ -1,11 +1,10 @@
 package city.roles;
 
-import utilities.RestaurantChungMenu;
-import utilities.RestaurantChungRevolvingStand;
-
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.concurrent.Semaphore;
 
+import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;

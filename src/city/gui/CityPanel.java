@@ -11,7 +11,6 @@ import java.util.ArrayList;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
-import city.Animation;
 import city.interfaces.AnimationInterface;
 
 public abstract class CityPanel extends JPanel implements ActionListener, MouseListener {

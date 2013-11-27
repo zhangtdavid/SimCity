@@ -6,13 +6,11 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import utilities.MarketTransaction.MarketTransactionState;
-import city.Building;
-import city.buildings.MarketBuilding;
-import city.interfaces.MarketCashier;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.MarketManager;
 import city.Application.FOOD_ITEMS;
+import city.Building;
 import city.Role;
+import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
 

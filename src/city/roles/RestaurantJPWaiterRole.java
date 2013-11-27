@@ -1,8 +1,7 @@
 package city.roles;
 
-import city.buildings.RestaurantJPBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import utilities.RestaurantJPWaiterBase;
+import city.buildings.RestaurantJPBuilding;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	

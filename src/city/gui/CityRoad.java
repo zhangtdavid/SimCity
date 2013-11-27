@@ -1,16 +1,15 @@
 package city.gui;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
-import city.Agent;
 import city.Animation;
-import city.agents.BusAgent;
-import city.agents.CarAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-
 
 public class CityRoad extends CityViewBuilding {
 	ArrayList<Line2D.Double> sides;

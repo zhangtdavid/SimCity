@@ -16,8 +16,6 @@ import city.Animation;
 public class RestaurantChungPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1355285244678935863L;
-
-	private Timer timer = new Timer(5, this );
 	
 //	Fixed Numbers
 //	=====================================================================
