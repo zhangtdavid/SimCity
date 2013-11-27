@@ -66,12 +66,12 @@ There is still work to be done in the animations. People do not walk in the stre
 * Buildings
   - Wrote cash handling methods in the building class to allow directDeposits by businesses
 
-*Disclosure
-  -Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
-  -Restaurant testing is virtually non-existent, except for the Cashier
-  -Loan payment functionality exists in local branch but was not done in time for integration
-  -Internal BankGui was not completed
-  -All Bank interactions have ben tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration
+* Disclosure
+  - Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
+  - Restaurant testing is virtually non-existent, except for the Cashier
+  - Loan payment functionality exists in local branch but was not done in time for integration
+  - Internal BankGui was not completed
+  - All Bank interactions have ben tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration
 
 ### Shirley Chung (19%)
 * Market
