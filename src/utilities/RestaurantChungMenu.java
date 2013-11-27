@@ -19,10 +19,10 @@ public class RestaurantChungMenu {
 	}
 	
 	public RestaurantChungMenu() {
-		items.add(new Item("Steak", 15.99));
-		items.add(new Item("Chicken", 10.99));
-		items.add(new Item("Salad", 5.99));
-		items.add(new Item("Pizza", 8.99));
+		items.add(new Item("steak", 15.99));
+		items.add(new Item("chicken", 10.99));
+		items.add(new Item("salad", 5.99));
+		items.add(new Item("pizza", 8.99));
 	}
 	
 //	Copy constructor, called by the customer

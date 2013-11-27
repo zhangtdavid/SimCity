@@ -1,9 +1,15 @@
 package city.gui;
 
-import java.awt.*;
-import java.awt.geom.*;
-import java.util.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
+import java.awt.Rectangle;
+import java.awt.geom.Line2D;
+import java.util.ArrayList;
 
+import city.Animation;
+import city.animations.BusAnimation;
+import city.animations.CarAnimation;
 
 public class CityRoad extends CityViewBuilding {
 	ArrayList<Line2D.Double> sides;
@@ -14,13 +20,13 @@ public class CityRoad extends CityViewBuilding {
 	int yOrigin;
 	int width;
 	int height;
-	boolean isHorizontal;
+	public boolean isHorizontal;
 	boolean startAtOrigin;
 	Color laneColor;
-	Color sideColor;
-	ArrayList<Vehicle> vehicles;
-	
-	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc, Color sc ) {
+	public Animation vehicle = null;
+	public CityRoad nextRoad;
+
+	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc) {
 		super(xo, yo, lc);
 		redLight = false;
 		width = w;
@@ -31,91 +37,85 @@ public class CityRoad extends CityViewBuilding {
 		yOrigin = yo;
 		isHorizontal = ish;
 		laneColor = lc;
-		sideColor = sc;
-		
+
 		//Make the lane surface
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
-		
-		//Make the edges to the lane surface
-		sides = new ArrayList<Line2D.Double>();
-		if ( isHorizontal ) {
-			sides.add( new Line2D.Double( xOrigin, yOrigin, xOrigin+width, yOrigin ) );
-			sides.add( new Line2D.Double( xOrigin, yOrigin+height, xOrigin+width, yOrigin+height ) );
-		} else {
-			sides.add( new Line2D.Double( xOrigin, yOrigin, xOrigin, yOrigin+height ) );
-			sides.add( new Line2D.Double( xOrigin+width, yOrigin, xOrigin+width, yOrigin+height ) );
-		}
-		
-		vehicles = new ArrayList<Vehicle>();
 	}
-	
-	public void addVehicle( Vehicle v ) {
-		//We need to set the proper origin for this new vehicle, given the lane starting geometry constraints
-		//The +2 is due to my lanes being 20 pixels "wide" and vehicles being 16 pixels "wide". 
-		if ( xVelocity > 0 ) {
-			v.setRect( xOrigin, yOrigin+2, v.getWidth(), v.getHeight() ); 
-		} else if ( yVelocity > 0 ) {
-			v.setRect( xOrigin+2, yOrigin, v.getWidth(), v.getHeight() ); 
-		} else {
-			if ( isHorizontal ) {
-				v.setRect( xOrigin + width - v.getWidth(), yOrigin + 2, v.getWidth(), v.getHeight() );
-			} else {
-				v.setRect( xOrigin + 2, yOrigin + height - v.getHeight(), v.getWidth(), v.getHeight() ) ;
-			}
-		}
-		
-		vehicles.add( v );
-	}
-	
-	public void draw( Graphics2D g2 ) {
-		g2.setColor( laneColor );
-		g2.fill( rectangle );
-		
-		for ( int i=0; i<sides.size(); i++ ) {
-			g2.setColor( sideColor );
-			g2.draw( sides.get(i) );
-		}
-		
-		for ( int i=vehicles.size()-1; i >= 0; i-- ) {
-			Vehicle v = vehicles.get(i);
-			if ( !redLight ) {
-				v.move( xVelocity, yVelocity );
-			}
-			
-			double x = v.getX();
-			double y = v.getY();
 
-			//Remove the vehicle from the list if it is at the end of the lane
-			if ( isHorizontal ) {
-				//End of lane is xOrigin + width - vehicle width
-				double endOfLane = xOrigin + width - v.getWidth();
-				if ( xVelocity > 0 && x >= endOfLane ) {
-					vehicles.remove(i);					
-				} else if ( x <= xOrigin ) {
-					vehicles.remove(i);
-				}
-			} else {
-				//End of lane is xOrigin + height - vehicle height
-				double endOfLane = yOrigin + height - v.getHeight();
-				if ( yVelocity > 0 && y >= endOfLane ) {
-					vehicles.remove(i);					
-				} else if ( y <= yOrigin ) {
-					vehicles.remove(i);
-				}
+	public boolean addVehicle( Animation v ) {
+		if(vehicle == null) {
+			vehicle = v;
+			return true;
+		}
+		return false;
+	}
+
+	@Override
+	public void paint( Graphics g2 ) {
+		g2.setColor( laneColor );
+		((Graphics2D) g2).fill( rectangle );
+		
+		if(vehicle == null) 
+			return;
+		double x = 0;
+		double y = 0;
+		double vWidth = 0;
+		double vHeight = 0;
+		if(vehicle instanceof CarAnimation) {
+			vehicle = (CarAnimation)vehicle;
+			if(((CarAnimation) vehicle).endRoad == this) {
+				((CarAnimation) vehicle).atDestinationRoad = true;
+				vehicle = null;
+				return;
+			}
+			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).startingRoad == null) {
+				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+			}
+			x = vehicle.getXPos();
+			y = vehicle.getYPos();
+			vWidth = CarAnimation.SIZE;
+			vHeight = CarAnimation.SIZE;
+		}
+		if(vehicle instanceof BusAnimation) {
+			vehicle = (BusAnimation)vehicle;
+			if(nextRoad.vehicle == null) {
+				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+			}
+			x = vehicle.getXPos();
+			y = vehicle.getYPos();
+			vWidth = CarAnimation.SIZE;
+			vHeight = CarAnimation.SIZE;
+		}
+		//Remove the vehicle from the list if it is at the end of the lane
+		if ( isHorizontal ) {
+			//End of lane is xOrigin + width - vehicle width
+			if ( xVelocity > 0 && x >= xOrigin + vWidth) {
+				nextRoad.vehicle = vehicle;
+				vehicle = null;
+			} else if ( xVelocity < 0 && x <= xOrigin - vWidth ) {
+				nextRoad.vehicle = vehicle;
+				vehicle = null;
+			}
+		} else {
+			if ( yVelocity > 0 && y >= yOrigin + vHeight ) {
+				nextRoad.vehicle = vehicle;
+				vehicle = null;
+			} else if ( yVelocity < 0 && y <= yOrigin - vHeight ) {
+				nextRoad.vehicle = vehicle;
+				vehicle = null;
 			}
 		}
-		
-		for ( int i=0; i<vehicles.size(); i++ ) {
-			Vehicle v = vehicles.get(i);
-			g2.setColor( v.getColor() );
-			g2.fill( v );
-		}
+
+//		if(vehicle != null)
+//			vehicle.draw((Graphics2D) g2);
 	}
-	
+
 	public void redLight() {
 		redLight = true;
 	}
-	
+
 	public void greenLight() {
 		redLight = false;
 	}
@@ -123,6 +123,6 @@ public class CityRoad extends CityViewBuilding {
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

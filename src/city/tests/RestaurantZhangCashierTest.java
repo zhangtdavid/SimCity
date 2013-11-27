@@ -13,10 +13,6 @@ import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangCustomer;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
 
-/**
- * Restaurant Cashier Agent
- */
-
 public class RestaurantZhangCashierTest extends TestCase {
 	RestaurantZhangCashierRole cashier;
 	MockRestaurantZhangWaiterRegular waiter;
@@ -75,8 +71,8 @@ public class RestaurantZhangCashierTest extends TestCase {
 				cashier.runScheduler());
 		assertTrue("Cashier's list of checks should be empty. It isn't.", cashier.pendingChecks.isEmpty());
 		assertTrue("Cashier should have 0 customers with tabs. It doesn't.", cashier.tabCustomers.isEmpty());
-		assertTrue("Customer log should have read \"Got change 11.01 from cashier.\" It says instead: " + customer.log.getLastLoggedEvent(), customer.log.containsString("Got change 11.01 from cashier."));
-		assertEquals("Cashier should have 10000 balance. It instead has " + cashier.balance, 10008.99, cashier.balance);
+		assertTrue("Customer log should have read \"Got change 11 from cashier.\" It says instead: " + customer.log.getLastLoggedEvent(), customer.log.containsString("Got change 11 from cashier."));
+		assertEquals("Cashier should have 10009 balance. It instead has " + cashier.balance, 10009, cashier.balance);
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 	}
 
@@ -117,7 +113,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 				cashier.runScheduler());
 		assertTrue("Cashier's list of checks should be empty. It isn't.", cashier.pendingChecks.isEmpty());
 		assertEquals("Cashier should have 1 customers with tabs. It doesn't.", cashier.tabCustomers.size(), 1);
-		assertTrue("Customer log should have read \"Got tab 6.99 from cashier.\" It didn't.", customer.log.containsString("Got tab 6.99 from cashier."));
+		assertTrue("Customer log should have read \"Got tab 7 from cashier.\" It didn't.", customer.log.containsString("Got tab 7 from cashier."));
 		assertEquals("Cashier should have 10002 balance. It doesn't.", 10002, Math.round(cashier.balance));
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 
@@ -148,8 +144,8 @@ public class RestaurantZhangCashierTest extends TestCase {
 				cashier.runScheduler());
 		assertTrue("Cashier's list of checks should be empty. It isn't.", cashier.pendingChecks.isEmpty());
 		assertEquals("Cashier should have 0 customers with tabs. It doesn't.", cashier.tabCustomers.size(), 0);
-		assertTrue("Customer log should have read \"Got change 4.02 from cashier.\" It didn't." + customer.log.toString(), customer.log.containsString("Got change 4.02 from cashier."));
-		assertEquals("Cashier should have 10017.98 balance. It doesn't." + customer.log.getLastLoggedEvent(), 10017.98, cashier.balance);
+		assertTrue("Customer log should have read \"Got change 4 from cashier.\" It reads instead " + customer.log.getLastLoggedEvent(), customer.log.containsString("Got change 4 from cashier."));
+		assertEquals("Cashier should have 10018 balance. It doesn't." + customer.log.getLastLoggedEvent(), 10018, cashier.balance);
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 	}
 
@@ -265,7 +261,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 				cashier.runScheduler());
 		assertTrue("Cashier's list of checks should be empty. It isn't.", cashier.pendingChecks.isEmpty());
 		assertEquals("Cashier should have 1 customers with tabs. It doesn't.", cashier.tabCustomers.size(), 1);
-		assertTrue("Customer log should have read \"Got tab 6.99 from cashier.\" It didn't.", customer.log.containsString("Got tab 6.99 from cashier."));
+		assertTrue("Customer log should have read \"Got tab 7 from cashier.\" It didn't.", customer.log.containsString("Got tab 7 from cashier."));
 		assertEquals("Cashier should have 10002 balance. It doesn't.", 10002, Math.round(cashier.balance));
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 	}

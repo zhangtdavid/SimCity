@@ -28,10 +28,6 @@ import city.tests.animations.mock.MockRestaurantZhangAnimatedCook;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
 
-/**
- * Restaurant Cashier Agent
- */
-
 public class RestaurantZhangCookTest extends TestCase {
 	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension())), 0, 100);
 	RestaurantZhangMenu menu = new RestaurantZhangMenu();
@@ -45,7 +41,7 @@ public class RestaurantZhangCookTest extends TestCase {
 		cook.setPerson(new MockPerson("Cook"));
 		cook.setRevolvingStand(stand);
 		cook.setAnimation(anim);
-		cook.setMenuTimes(menu);
+		cook.setMenuTimes(menu, cook.getWorkplace(RestaurantZhangBuilding.class).foods);
 	}
 
 	public void testOneNormalCustomerOrderScenario() {

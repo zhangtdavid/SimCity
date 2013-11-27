@@ -4,21 +4,14 @@ import java.awt.*;
 
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
+import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCustomer;
 
 public class RestaurantChungCustomerAnimation extends Animation implements RestaurantChungAnimatedCustomer {
 	private RestaurantChungCustomer agent = null;
-//	private RestaurantGui gui;
 
 	private boolean isPresent = false;
 	private boolean isHungry = false;
-	
-//	Fixed Numbers
-//	=====================================================================
-	private static final int CRECTDIM = 20;
-    private static final int xEntrance = -40, yEntrance = -40;
-    private static final int xWaitingArea = 50, yWaitingArea = 100;
-    private static final int xCashier= 50, yCashier = 40+20;  
 
 //	Location Information
 //	=====================================================================
@@ -37,13 +30,12 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 
 //	Constructor
 //	=====================================================================
-	public RestaurantChungCustomerAnimation(RestaurantChungCustomer c) {//, RestaurantGui gui) {
+	public RestaurantChungCustomerAnimation(RestaurantChungCustomer c) {
 		agent = c;
 		xPos = -40;
 		yPos = -40;
 		xDestination = -40;
 		yDestination = -40;
-//		this.gui = gui;
 	}
 
 //	Gui Updater
@@ -76,7 +68,7 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 	public void draw(Graphics2D g) {
 		// Paints Customer Square
 		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, RestaurantChungPanel.RECTDIM, RestaurantChungPanel.RECTDIM);
 		
 		// Paints Customer's order
 		g.setColor(Color.RED);
@@ -124,8 +116,8 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 	}
 
 	public void DoGoToWaitingArea(int waitingPosition) {
-		xDestination = xWaitingArea;
-		yDestination = yWaitingArea+(waitingPosition*30);
+		xDestination = RestaurantChungPanel.WAITINGAREAX;
+		yDestination = RestaurantChungPanel.WAITINGAREAY+(waitingPosition*30);
 	}
 	
 	public void DoGoToSeat(int x, int y) {
@@ -136,14 +128,14 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 	}
 	
 	public void DoExitRestaurant() {
-		xDestination = xEntrance;
-		yDestination = yEntrance;
+		xDestination = RestaurantChungPanel.EXITX;
+		yDestination = RestaurantChungPanel.EXITY;
 		command = Command.LeaveRestaurant;
 	}
 
 	public void DoGoToCashier() {
-		xDestination = xCashier;
-		yDestination = yCashier;
+		xDestination = RestaurantChungPanel.CASHIERINTERACTIONX;
+		yDestination = RestaurantChungPanel.CASHIERINTERACTIONY;
 		command = Command.GoToCashier;
 	}
 }

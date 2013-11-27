@@ -6,7 +6,6 @@ import city.buildings.BankBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
-import city.interfaces.BankCustomer.state;
 
 public class BankTellerRole extends Role implements BankTeller {
 	

@@ -6,7 +6,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
+import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.gui.MarketPanel;
 import city.roles.MarketCashierRole;
@@ -23,6 +26,8 @@ import junit.framework.TestCase;
 public class MarketCashierTest extends TestCase {
 	MarketPanel marketPanel;
 	MarketBuilding market;
+	
+	BankBuilding bank;
 	
 	MockPerson cashierPerson;
 	MarketCashierRole cashier;
@@ -53,9 +58,12 @@ public class MarketCashierTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		bank = new BankBuilding("Bank");
+		CityMap.addBuilding(BUILDING.bank, bank);
+		
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
 		market = new MarketBuilding("Market1", marketPanel);
-		
+
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
 		cashier.setPerson(cashierPerson);
@@ -110,11 +118,6 @@ public class MarketCashierTest extends TestCase {
 		collectedItemsPartial.put(FOOD_ITEMS.pizza, 3);
 		collectedItemsPartial.put(FOOD_ITEMS.salad, 3);
 		collectedItemsPartial.put(FOOD_ITEMS.steak, 3);
-		
-//		prices.put("Steak", (16/2);
-//		prices.put("Chicken", (12/2);
-//		prices.put("Salad", (6/2);
-//		prices.put("Pizza", (10/2);		
 	}
 	
 	public void testNormCustomerScenario() {
@@ -133,7 +136,7 @@ public class MarketCashierTest extends TestCase {
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction.", cashier.transactions.size(), 1);
 		assertTrue("Cashier transactions should contain a transaction with state == Pending.", cashier.transactions.get(0).s == TransactionState.Pending);
-		
+				
 		cashier.runScheduler();
 		assertTrue("Cashier transactions should contain a transaction with state == Calculating.", cashier.transactions.get(0).s == TransactionState.Calculating);
 		assertEquals("Cashier transactions should contain a transaction with bill for 110", cashier.transactions.get(0).bill, 110);
@@ -148,7 +151,7 @@ public class MarketCashierTest extends TestCase {
 		
 		cashier.runScheduler();
 		assertEquals("Customer log should have 2 entries.", customer.log.size(), 2);
-		assertTrue("Customer log should have \"Customer received msgPaymentReceived from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgPaymentReceived from cashier"));
+		assertTrue("Customer log should have \"Customer received msgPaymentReceived from Market Cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgPaymentReceived from Market Cashier"));
 		assertEquals("Market money should be 1110.00. It's " + market.getCash() + "instead", market.getCash(), 1110);
 		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);		
 	}
@@ -210,7 +213,7 @@ public class MarketCashierTest extends TestCase {
 		assertTrue("Cashier deliveryPeople should contain a Delivery Person with available == true.", cashier.deliveryPeople.get(0).available);
 	}
 	
-	public void testNonNormCustomerDeliveryScenarioDeliveryPersonUnavailable() {
+//	public void testNonNormCustomerDeliveryScenarioDeliveryPersonUnavailable() {
 		// set delivery person state to unavailable
 		// set delivery person state to available
 		// run scheduler
@@ -276,13 +279,13 @@ public class MarketCashierTest extends TestCase {
 //		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
 //		assertEquals("Cashier should have 0 transactions.", cashier.transactions.size(), 0);
 //		assertTrue("Cashier deliveryPeople should contain a Delivery Person with available == true.", cashier.deliveryPeople.get(0).available);
-	}
+//	}
 	
-	public void testNonNormCustomerCollectedItemsPartialScenario() {
-		
-	}
-	
-	public void testNonNormCustomerNotEnoughMoneyScenario() {
-		
-	}
+//	public void testNonNormCustomerCollectedItemsPartialScenario() {
+//		
+//	}
+//	
+//	public void testNonNormCustomerNotEnoughMoneyScenario() {
+//		
+//	}
 }

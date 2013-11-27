@@ -69,7 +69,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		this.lastWentToSleep = startDate;
 		this.state = State.none;
-		this.cash = 30;
+		this.setCash(50); // If you have an error on startup, this might be it. Don't know why, but it is. 
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -454,13 +454,21 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole.setPerson(this);
 			this.addRole(carPassengerRole);
 		} else {
+<<<<<<< HEAD
 			BusStopBuilding b = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, this);
 			BusStopBuilding d = (BusStopBuilding) Application.CityMap.findClosestBuilding(BUILDING.busStop, destination);
 			animation.goToBusStop(b);
 			atDestination.acquire();
+=======
+			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
+			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+// TODO RestaurantZhang 92f655cfd5
+//			animation.goToBusStop(b);
+//			atDestination.acquire();
+>>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 			busPassengerRole = new BusPassengerRole(d, b);
-			busPassengerRole.setActive();
 			busPassengerRole.setPerson(this);
+			busPassengerRole.setActive();
 			this.addRole(busPassengerRole);
 		}
 	}
@@ -476,14 +484,18 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		if (car != null && !carPassengerRole.getActive()) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-			return true;
-		} else if (busPassengerRole != null && !busPassengerRole.getActive()) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-			return true;
+		if (car != null && carPassengerRole != null) {
+			if(!carPassengerRole.getActive()) {
+				roles.remove(carPassengerRole);
+				carPassengerRole = null;
+				return true;
+			}
+		} else if (busPassengerRole != null && busPassengerRole != null) {
+			if(!busPassengerRole.getActive()) {
+				roles.remove(busPassengerRole);
+				busPassengerRole = null;
+				return true;
+			}
 		}
 		return false;
 	}

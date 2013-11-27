@@ -1,10 +1,12 @@
 package city.gui;
 
-import java.awt.*;
-import java.awt.geom.*;
-
+import java.awt.Color;
+import java.awt.geom.Rectangle2D;
 
 public class Vehicle extends Rectangle2D.Double {
+
+	private static final long serialVersionUID = 9171576656515889762L;
+	
 	Color vehicleColor;
 	
 	public Vehicle( int x, int y, int width, int height ) {

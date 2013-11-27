@@ -4,7 +4,6 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
 import city.buildings.MarketBuilding;

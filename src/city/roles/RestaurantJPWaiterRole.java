@@ -1,9 +1,13 @@
 package city.roles;
 
+<<<<<<< HEAD
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantJPCustomer;
+=======
+>>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 import utilities.RestaurantJPWaiterBase;
+import city.buildings.RestaurantJPBuilding;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	

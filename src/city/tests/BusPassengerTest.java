@@ -36,7 +36,7 @@ public class BusPassengerTest extends TestCase {
 		assertTrue("Bus should have no passengers. It doesn't", bus.passengerList.isEmpty());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 0.00 for earned money. It instead is " + bus.earnedMoney, 0.00, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -57,7 +57,7 @@ public class BusPassengerTest extends TestCase {
 		assertTrue("Bus should have no passengers. It doesn't", bus.passengerList.isEmpty());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 0.00 for earned money. It instead is " + bus.earnedMoney, 0.00, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -78,7 +78,7 @@ public class BusPassengerTest extends TestCase {
 		assertTrue("Bus should have no passengers. It doesn't", bus.passengerList.isEmpty());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 0.00 for earned money. It instead is " + bus.earnedMoney, 0.00, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -100,7 +100,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 0.00 for earned money. It instead is " + bus.earnedMoney, 0.00, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -122,7 +122,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 1.35 for earned money. It instead is " + bus.earnedMoney, 1.5, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -144,7 +144,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), destination, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), start, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 1.50 for earned money. It instead is " + bus.earnedMoney, 1.5, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -165,7 +165,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), destination, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), start, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 1.50 for earned money. It instead is " + bus.earnedMoney, 1.5, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -187,7 +187,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), destination, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), start, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 1.50 for earned money. It instead is " + bus.earnedMoney, 1.5, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);
@@ -210,7 +210,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Bus should have 0 passengers. It doesn't", 0, bus.passengerList.size());
 		assertEquals("Bus has the wrong current stop. It is " + bus.currentStop.getName(), start, bus.currentStop);
 		assertEquals("Bus has the wrong next stop. It is " + bus.nextStop.getName(), destination, bus.nextStop);
-		assertEquals("Bus should have 1.50 for bus fare. It instead is " + bus.busFare, 1.50, bus.busFare);
+		assertEquals("Bus should have 1.50 for bus fare. It instead is " + BusAgent.busFare, 1.50, BusAgent.busFare);
 		assertEquals("Bus should have 1.50 for earned money. It instead is " + bus.earnedMoney, 1.5, bus.earnedMoney);
 		assertEquals("Starting bus stop has the wrong next bus stop " + start.nextStop.getName(), destination, start.nextStop);
 		assertEquals("Starting bus stop has the wrong prev bus stop " + start.previousStop.getName(), destination, start.previousStop);

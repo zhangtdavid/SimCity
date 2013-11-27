@@ -2,9 +2,9 @@ package city.interfaces;
 
 import java.util.List;
 
-import city.Application.FOOD_ITEMS;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiTable;
+import city.Application.FOOD_ITEMS;
 
 public interface RestaurantChoiWaiter extends RoleInterface{
 
@@ -55,10 +55,10 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 		private RestaurantChoiCustomer c;
 		private RestaurantChoiTable t;
 		private RestaurantChoiOrder or;
-		private boolean inWaitingZone;
+		//private boolean inWaitingZone; GUI-related things not matter now
 		private int checkValue;
 		private int customerState;
-		private int Y;
+		//	private int Y;
 		public static final int WAITING = 0;
 		public static final int WAITING_IN_LINE = 999;
 		public static final int SEATED = 1;
@@ -83,10 +83,10 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 		public RestaurantChoiCustomer getC() {
 			return c;
 		}
-
+/*
 		public void setWaitingLocation(boolean in){
 			inWaitingZone = in;
-		}
+		}*/
 
 		public void setC(RestaurantChoiCustomer c) {
 			this.c = c;

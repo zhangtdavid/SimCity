@@ -1,22 +1,13 @@
 package city.tests.mock;
 
-
-import city.MockRole;
-import city.animations.RestaurantChungCustomerAnimation;
-import city.interfaces.RestaurantChungCashier;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiter;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
+import city.MockRole;
+import city.interfaces.RestaurantChungCashier;
+import city.interfaces.RestaurantChungCustomer;
+import city.interfaces.RestaurantChungWaiter;
 
-/**
- * A sample MockCustomer built to unit test a CashierAgent.
- *
- * @author Monroe Ekilah
- *
- */
 public class MockRestaurantChungCustomer extends MockRole implements RestaurantChungCustomer {
 	public EventLog log = new EventLog();
 	/**
@@ -120,33 +111,9 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void setGui(RestaurantChungCustomerAnimation g) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setHost(RestaurantChungHost host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setCashier(RestaurantChungCashier cashier) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public int getHungerLevel() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public RestaurantChungCustomerAnimation getGui() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

@@ -20,4 +20,10 @@ public class MockCar extends MockAgent implements Car {
 		log.add(new LoggedEvent("CarPassenger " + carPassenger.getPerson().getName() + " is going to " + destination.getName()));
 	}
 
+	@Override
+	public void msgAtDestination() {
+		// TODO Auto-generated method stub RestaurantZhang 92f655cfd5
+		
+	}
+
 }

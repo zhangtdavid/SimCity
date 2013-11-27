@@ -5,14 +5,13 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.agents.CarAgent;
 import city.buildings.MarketBuilding;
 import city.interfaces.CarPassenger;
-import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
-import city.Application.FOOD_ITEMS;
-import city.Role;
 
 public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
 
@@ -48,13 +47,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
-		car = new CarAgent();
+		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
-	public void setActive(){
-		this.setActive2();
-		this.setActivityBegun();
-	}
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
 	
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -117,15 +117,14 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		carPassenger.setActive();
 		market.cashier.msgDeliveringItems(this);
 
+//		// TODO schung 99c0f4da25
 //      deliveryTruckGui.doGoToAddress();
-        // notify customer if there is a difference between order and collected items
-		// switch into CarPassenger;
-		
+// 		notify customer if there is a difference between order and collected items
+// 		switch into CarPassenger;
 //		while (carPassenger.getActive() && carPassenger.getActivity()) {
 //			// do nothing
 //		}
-
-		// TODO how does all this car stuff work??
+//		// TODO how does all this car stuff work??
 		
 		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
 		market.cashier.msgFinishedDeliveringItems(this, orderId);

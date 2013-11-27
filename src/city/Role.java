@@ -112,9 +112,6 @@ public abstract class Role implements RoleInterface {
 		this.active = true;
 		setActivityBegun();
 	}
-	public void setActive2(){
-		this.active = true; // for the cases where we have to override setActive.
-	}
 	
 	@Override
 	public void setInactive() {

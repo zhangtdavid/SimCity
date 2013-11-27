@@ -1,7 +1,5 @@
 package city;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -10,6 +8,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+<<<<<<< HEAD
 import city.Application.BUILDING;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
@@ -52,6 +51,12 @@ import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
+=======
+import city.agents.PersonAgent;
+import city.gui.CityRoad;
+import city.gui.MainFrame;
+import city.interfaces.Person;
+>>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 
 public class Application {
 
@@ -67,6 +72,7 @@ public class Application {
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
+<<<<<<< HEAD
 	public static RestaurantChoiBuilding rchoib1;
 	public static HouseBuilding hb1;
 	public static MarketBuilding m1;
@@ -77,13 +83,13 @@ public class Application {
 	public static RestaurantZhangBuilding rzb1;
 	public static RestaurantJPBuilding rjpb1;
 	
+=======
+>>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 	/**
 	 * Main routine to start the program.
 	 * 
 	 * When the program is started, this is the first call. It opens the GUI window, loads
 	 * configuration files, and causes the program to run.
-	 *
-	 * @param args no input required
 	 */
 	public static void main(String[] args) {
 		// Open the animation GUI
@@ -91,6 +97,7 @@ public class Application {
 
 		// Load a scenario
 		parseConfig();
+		
 		// Start the simulation
 		TimerTask tt = new TimerTask() {
 			public void run() {
@@ -108,6 +115,7 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
+<<<<<<< HEAD
 		// RYAN TESTING GUI
 		mp1 = new MarketPanel(Color.black, new Dimension(500,500));
 		m1 = new MarketBuilding("MarketBuilding", mp1);
@@ -381,9 +389,14 @@ public class Application {
 		p5r1.setActive();
 		p5.stateChanged();*/
 	
+=======
+
+	}
+>>>>>>> 8993abf619a69bfeaafc1089a03f4acfae2d73fc
 	
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
+		private static List<CityRoad> roads = new ArrayList<CityRoad>();
 		
 		/**
 		 * Adds a new building to the HashMap
@@ -418,10 +431,8 @@ public class Application {
 		/**
 		 * Return the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, Person p) {
-			// TODO
-			Building b = new BusStopBuilding("placeholder");
-			return b;
+		public static Building findClosestBuilding() {
+			return null; // TODO RestaurantZhang 92f655cfd5
 		}
 		
 		/**
@@ -430,11 +441,49 @@ public class Application {
 		 * @param b the destination you wish to reach
 		 */
 		public static Building findClosestBuilding(BUILDING type, Building b) {
-			// TODO
-			Building d = new BusStopBuilding("placeholder");
-			return d;
+			int x = b.getCityViewBuilding().x;
+			int y = b.getCityViewBuilding().y;
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building tempBuilding : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().x - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = tempBuilding;
+				}
+			}
+			return returnBuilding;
 		}
-
+		
+		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
+			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
+			double closestDistance = 1000000;
+			Building returnBuilding = null;
+			for(Building b : map.get(type)) {
+				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().x - x, 2) + Math.pow(b.getCityViewBuilding().y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnBuilding = b;
+				}
+			}
+			return returnBuilding;
+		}
+		
+		public static CityRoad findClosestRoad(Building b) {
+			int x = b.getCityViewBuilding().x;
+			int y = b.getCityViewBuilding().y;
+			double closestDistance = 1000000;
+			CityRoad returnRoad = null;
+			for(CityRoad r : roads) {
+				double distance = Math.sqrt((double)(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2)));
+				if( distance < closestDistance) {
+					closestDistance = distance;
+					returnRoad = r;
+				}
+			}
+			return returnRoad;
+		}
 	}
 
 }

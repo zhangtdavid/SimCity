@@ -1,6 +1,9 @@
 package city.interfaces;
 
+import java.util.List;
+
 import city.Application;
+import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 
 public interface RestaurantTimmsWaiter extends RoleInterface {
 	
@@ -23,6 +26,7 @@ public interface RestaurantTimmsWaiter extends RoleInterface {
 	// Getters
 
 	public Boolean getWantsBreak();
+	public List<InternalCustomer> getCustomers();
 	
 	// Setters
 	
