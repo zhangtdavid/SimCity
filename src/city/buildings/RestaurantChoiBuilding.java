@@ -44,9 +44,9 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public BankBuilding bank;
 	public BankCustomerRole bankConnection; 
 	public static final int DAILY_CAPITAL = 1000;
-	public static final int DEPOSIT_THRESHOLD = 1005; // low enough so that I can see depositing behavior
+	public static final int DEPOSIT_THRESHOLD = 1006; // low enough so that I can see depositing behavior
 	public static final int WITHDRAW_THRESHOLD = 200;
-	private int cash_on_site = 1200;
+	public int cash_on_site = 1000;
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor
