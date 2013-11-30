@@ -105,10 +105,12 @@ For ease of organization, collaboration, and readability, the following conventi
 ### Shirley Chung (19%)
 * Market
   - Designed and implemented market
-  - Got it working in a branch, but didn't have time to fully integrate with master
   - Created all roles associated with market, and integrated with bank.
+  - Did JUnit testing for all roles in schung branch
+  - Created the panel for the gui, but did not have time to complete
+  - Started creating guis for market roles
 * Market and Restaurant Integration
-  - Integrated market interactions with personal market. Attempted to assist with market integrations with other restaurants.
+  - Integrated with personal restaurant in schung branch, but did not have time to fully integrate with master
 * Restaurant
   - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
 
