@@ -10,8 +10,6 @@ import javax.swing.JButton;
 import javax.swing.JPanel;
 import javax.swing.JRadioButton;
 
-import trace.AlertLevel;
-import trace.AlertLog;
 import trace.AlertTag;
 
 public class CityControlPanel extends JPanel implements ActionListener{

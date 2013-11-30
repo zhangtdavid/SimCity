@@ -1,10 +1,10 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCashier;
-import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 

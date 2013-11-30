@@ -1,25 +1,17 @@
 package city.buildings;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
 import utilities.RestaurantJPRevolvingStand;
-import utilities.RestaurantZhangTable;
 import city.Role;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
-import city.animations.RestaurantZhangCookAnimation;
-import city.animations.RestaurantZhangCustomerAnimation;
-import city.animations.RestaurantZhangWaiterAnimation;
 import city.gui.CityViewRestaurant;
 import city.gui.RestaurantJPPanel;
-import city.gui.RestaurantZhangPanel;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangWaiter;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
@@ -28,11 +20,6 @@ import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
-import city.roles.RestaurantZhangCookRole;
-import city.roles.RestaurantZhangCustomerRole;
-import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterRegularRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class RestaurantJPBuilding extends RestaurantBaseBuilding {
 	

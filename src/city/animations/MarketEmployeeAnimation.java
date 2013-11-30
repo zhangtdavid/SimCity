@@ -1,10 +1,9 @@
 package city.animations;
 
-import java.awt.*;
-import java.util.Map;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import city.Animation;
-import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.MarketAnimatedEmployee;
 import city.interfaces.MarketEmployee;
 

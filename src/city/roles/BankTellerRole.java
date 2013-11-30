@@ -32,7 +32,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	public void setInactive(){
 		if(currentCustomer == null){
 			super.setInactive();
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
 		}	
 		else{
 			building.manager.msgUnavailable(this);
@@ -100,7 +100,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		if(wantsInactive && currentCustomer == null){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
 			return false;
 		}
 		if(currentCustomer != null){

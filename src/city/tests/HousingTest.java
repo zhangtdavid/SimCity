@@ -3,13 +3,11 @@ package city.tests;
 import java.util.Date;
 
 import junit.framework.TestCase;
-import city.buildings.AptBuilding;
 import city.buildings.HouseBuilding;
 import city.roles.ResidentRole;
 import city.tests.mock.MockLandlord;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockResident;
-
 
 public class HousingTest extends TestCase{
 	MockPerson person = new MockPerson("PersonName"); 

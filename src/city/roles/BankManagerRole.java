@@ -37,7 +37,7 @@ public class BankManagerRole extends Role implements BankManager {
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
 			super.setInactive();
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
 		}
 		else
 			wantsInactive = true;
@@ -116,7 +116,7 @@ public class BankManagerRole extends Role implements BankManager {
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
 			return false;
 		}
 		for(BankCustomer bc : customers){

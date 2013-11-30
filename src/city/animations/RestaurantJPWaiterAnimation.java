@@ -1,12 +1,13 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import utilities.RestaurantJPWaiterBase;
 import city.Animation;
-import city.roles.RestaurantJPWaiterRole;
 
 public class RestaurantJPWaiterAnimation extends Animation{
 

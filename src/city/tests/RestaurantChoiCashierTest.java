@@ -1,10 +1,5 @@
 package city.tests;
 
-
-import java.awt.Color;
-import java.awt.Dimension;
-
-import utilities.RestaurantZhangCheck.CheckStatus;
 import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
