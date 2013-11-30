@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
+import city.buildings.MarketBuilding;
 
 public interface MarketDeliveryPerson extends RoleInterface {
 
@@ -12,7 +13,7 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<FOOD_ITEMS, Integer> i, int id);
+	public void msgDeliverOrder(MarketCustomerDelivery customerDelivery, Map<FOOD_ITEMS, Integer> i, int id);
 	
 	// Scheduler
 	
@@ -20,7 +21,11 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	
 	// Getters
 	
+	public MarketBuilding getMarket();
+	
 	// Setters
+
+	public void setMarket(MarketBuilding market);
 	
 	// Utilities
 	

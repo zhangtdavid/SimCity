@@ -26,15 +26,18 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
 	private MarketBuilding market;
+	private WorkingState workingState = WorkingState.Working;
+	// private MarketAnimatedCashier marketCashierGui; // TODO schung 99c0f4da25
+	
+	// TODO Change these to private and add getters/setters
+	public EventLog log = new EventLog();
 	public BankCustomer bankCustomer;
 	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	public enum TransactionState {Pending, Calculating, ReceivedPayment, PendingDelivery, Delivering};
 	public List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
-	// private MarketAnimatedCashier marketCashierGui; // TODO schung 99c0f4da25
+	
 
 //	Constructor
 //	=====================================================================
@@ -52,6 +55,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 //	Market
 //	---------------------------------------------------------------
+	@Override
 	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgNewDeliveryPerson from Market."));
 		System.out.println("Market Cashier received msgNewDeliveryPerson from Market.");
@@ -59,6 +63,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		stateChanged();
 	}
 	
+	@Override
 	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market."));
 		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market.");
@@ -69,6 +74,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 //	Employee
 //	---------------------------------------------------------------
+	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
 		System.out.println("Market Cashier received msgComputeBill from Employee.");
@@ -79,6 +85,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		// TODO inform sender of inactivity
 	}
 	
+	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
 		System.out.println("Market Cashier received msgComputeBill from Employee");
@@ -91,6 +98,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //	Customer
 //	---------------------------------------------------------------	
+	@Override
 	public void msgHereIsPayment(int id, int money) {
 		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Payment for " + money));
 		System.out.println("Market Cashier received msgHereIsPayment from Customer Payment for " + money);
@@ -102,6 +110,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //	Delivery Truck
 //	---------------------------------------------------------------
+	@Override
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Delivery Person."));
 		System.out.println("Market Cashier received msgDeliveringItems from Delivery Person.");
@@ -109,6 +118,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		dp.available = false;
 	}
 	
+	@Override
 	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Delivery Person."));
 		System.out.println("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
@@ -230,10 +240,12 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //  Getters and Setters
 //	=====================================================================
 
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
@@ -244,6 +256,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //		super.setActive();
 //	}
 	
+	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
 	}
@@ -267,6 +280,12 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		}
 		return null;
 	}
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCashierRole " + this.getPerson().getName(), msg);
+    }
 	
 //  Classes 
 //	=====================================================================	
@@ -326,12 +345,5 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        s = TransactionState.Pending;
 	    }
 	}
-
-	@Override
-	public void print(String msg) {
-        super.print(msg);
-        AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCashierRole " + this.getPerson().getName(), msg);
-    }
-	// Classes
 
 }

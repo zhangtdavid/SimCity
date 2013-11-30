@@ -18,32 +18,32 @@ import city.interfaces.RestaurantChoiWaiter;
 
 public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCustomer{
 
-	//Data
-	int amt;  
-	int punishment;
-	private int hungerLevel = 5;        // determines length of meal
-	Timer timer = new Timer();
+	// Data
+	
+	private int amt;  
+	private int punishment;
+	private int hungerLevel = 5; // determines length of meal
+	private Timer timer = new Timer();
 	private RestaurantChoiAnimatedCustomer customerGui;  
 	private boolean currentlyHungry;
-	RestaurantChoiMenu menu;
-	FOOD_ITEMS choice;
-	int line;
-	int waitingCoordX;
-	int waitingCoordY;
+	private RestaurantChoiMenu menu;
+	private FOOD_ITEMS choice;
+	private int line;
+	private int waitingCoordX;
+	private int waitingCoordY;
 	private int xTableDestination, yTableDestination;
-	ArrayList<FOOD_ITEMS> previousCanAfford = new ArrayList<FOOD_ITEMS>();
-	boolean hasHitZero;
-	boolean consideredLeaving;
-	ArrayList<FOOD_ITEMS> previousChoices = new ArrayList<FOOD_ITEMS>();
-
-	// agent correspondents
+	private ArrayList<FOOD_ITEMS> previousCanAfford = new ArrayList<FOOD_ITEMS>();
+	private boolean hasHitZero;
+	private boolean consideredLeaving;
+	private ArrayList<FOOD_ITEMS> previousChoices = new ArrayList<FOOD_ITEMS>();
 	private RestaurantChoiHost host;
 	private RestaurantChoiWaiter waiter;
 	private RestaurantChoiCashier cashier;
-	AgentEvent event = AgentEvent.none;	
-	AgentState state = AgentState.DoingNothing; //The start state
+	private EVENT event = EVENT.none;	
+	private STATE state = STATE.DoingNothing; // The start state
 
-	//Constructor
+	// Constructor
+	
 	public RestaurantChoiCustomerRole(){
 		super();
 		customerGui = new RestaurantChoiCustomerAnimation(this);
@@ -55,60 +55,59 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 
 		//this is because whenever I set a customer hungry, I give him 3~5 more dollars.
 	}
-	public void setActive(){
-		super.setActive();
-		gotHungry();
-	}
-	//Messages
+	
+	// Messages
+	
 	@Override
 	public void msgNotifyFull(int i) {
-		event = AgentEvent.notifiedFull;
+		event = EVENT.notifiedFull;
 		this.line = i;
 		stateChanged();
 	}
+	
 	@Override
 	public void msgFollowMe(RestaurantChoiWaiter w,	int xd, int yd) {
 		this.setWaiter(w);
 		xTableDestination = xd; // now we know where we're going
 		yTableDestination = yd;
 		print("is following the waiter");
-		event = AgentEvent.followWaiter;
+		event = EVENT.followWaiter;
 		stateChanged();
 	}
 
 	@Override
 	public void msgHeresYourSeat(RestaurantChoiMenu m) {
 		this.menu = m;
-		event = AgentEvent.seated;
+		event = EVENT.seated;
 		stateChanged();
 	}
 
 	@Override
 	public void msgWhatWouldYouLike() {
 		print("Asked to order");
-		event = AgentEvent.askedForOrder;
+		event = EVENT.askedForOrder;
 		stateChanged();
 
 	}
 
 	@Override
 	public void msgHeresYourNewMenu(RestaurantChoiMenu m) {
-		state = AgentState.BeingSeated;
-		event = AgentEvent.seated; // set states and events so that customer looks at menu
+		state = STATE.BeingSeated;
+		event = EVENT.seated; // set states and events so that customer looks at menu
 		stateChanged();
 	}
 
 	@Override
 	public void msgOrderArrived() {
 		print("Received food");
-		event = AgentEvent.gotFood;
+		event = EVENT.gotFood;
 		stateChanged();
 
 	}
 
 	@Override
 	public void msgHeresYourCheck(int checkValue) {
-		event = AgentEvent.gotCheck;
+		event = EVENT.gotCheck;
 		stateChanged();
 
 	}
@@ -117,20 +116,20 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void msgHeresYourChange(int amt) {
 		print("Received change");
 		this.getPerson().setCash(amt); // no state to change - just do it on the way out
-		event = AgentEvent.gotChange;
+		event = EVENT.gotChange;
 	}
 
 	@Override
 	public void msgDoTheDishes(int length) {
-		event = AgentEvent.assignedDishes;
-		System.out.println("Dishes time: " + length);
+		event = EVENT.assignedDishes;
+		print("Dishes time: " + length);
 		punishment = length;
 	}
 
 	@Override
 	public void msgAnimationFinishedGoToSeat() {
 		//from animation
-		event = AgentEvent.seated;
+		event = EVENT.seated;
 		stateChanged();
 	}
 
@@ -138,15 +137,15 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void msgAnimationFinishedLeaveRestaurant() {
 		//from animation
 		setFullNow();
-		event = AgentEvent.doneLeaving;
+		event = EVENT.doneLeaving;
 		stateChanged();
 
 	}
 
 	@Override
 	public void msgAnimationFinishedGoToCashier() {
-		System.out.println(state);
-		event = AgentEvent.talkToCashier;
+		print(state.toString());
+		event = EVENT.talkToCashier;
 		stateChanged();
 	}
 
@@ -154,124 +153,120 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void msgAnimationFinishedGoToDishes() {
 		//from animation
 		startDishes();
-		event = AgentEvent.startDishes;
+		event = EVENT.startDishes;
 		stateChanged();
 	}
 
 	//Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		//		CustomerAgent is a finite state machine
-		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
+		if (state == STATE.DoingNothing && event == EVENT.gotHungry) {
 			print("I'm hungry");
 			goToRestaurant();
 			return true;
 		}
-		if(state == AgentState.WaitingInRestaurant && event == AgentEvent.notifiedFull && !consideredLeaving){
+		if(state == STATE.WaitingInRestaurant && event == EVENT.notifiedFull && !consideredLeaving){
 			ConsiderLeaving();
 			return true;
 		}
 		//this deals if we're in the consideration state, still waiting to decide whether or not to leave
 		//while the customer is seated.
-		if (state == AgentState.WaitingInRestaurant && event == AgentEvent.followWaiter) {
-			state = AgentState.BeingSeated;
+		if (state == STATE.WaitingInRestaurant && event == EVENT.followWaiter) {
+			state = STATE.BeingSeated;
 			goToTable();
 			return true;
 		}
-		if (state == AgentState.BeingSeated && event == AgentEvent.seated) {
-			state = AgentState.LookingAtMenu; 
+		if (state == STATE.BeingSeated && event == EVENT.seated) {
+			state = STATE.LookingAtMenu; 
 			LookAtMenu();
 			return true;
 		}
-		if(state == AgentState.ReadyToOrder && event == AgentEvent.seated){
+		if(state == STATE.ReadyToOrder && event == EVENT.seated){
 			waiter.msgReadyToOrder(this); // don't need to update state; just alert waiter
 		}
-		if (state == AgentState.ReadyToOrder && event == AgentEvent.askedForOrder) {
+		if (state == STATE.ReadyToOrder && event == EVENT.askedForOrder) {
 			giveOrder();
-			state = AgentState.WaitingForFood; 
+			state = STATE.WaitingForFood; 
 			return true;
 		}
-		if (state == AgentState.WaitingForFood && event == AgentEvent.gotFood) {
-			state = AgentState.Eating; 
+		if (state == STATE.WaitingForFood && event == EVENT.gotFood) {
+			state = STATE.Eating; 
 			EatFood();
 			return true;
 		}
-		if (state == AgentState.Eating && event == AgentEvent.doneEating) {
-			state = AgentState.AskForCheck;
+		if (state == STATE.Eating && event == EVENT.doneEating) {
+			state = STATE.AskForCheck;
 			Checkplz();
 			return true;
 		}
-		if(state == AgentState.AskForCheck && event == AgentEvent.gotCheck){
-			state = AgentState.Leaving;
+		if(state == STATE.AskForCheck && event == EVENT.gotCheck){
+			state = STATE.Leaving;
 			ImLeaving();
 			return true;
 		}
-		if(state == AgentState.Leaving && event == AgentEvent.talkToCashier){
+		if(state == STATE.Leaving && event == EVENT.talkToCashier){
 			Pay();
 			return true;
 		}
-		if (state == AgentState.Leaving && event == AgentEvent.doneLeaving) {
-			state = AgentState.DoingNothing;
-			event = AgentEvent.none;
+		if (state == STATE.Leaving && event == EVENT.doneLeaving) {
+			state = STATE.DoingNothing;
+			event = EVENT.none;
 			return true;
 		}
-		if (state == AgentState.Leaving && event == AgentEvent.gotChange) {
+		if (state == STATE.Leaving && event == EVENT.gotChange) {
 			gotChange();
 			return true;
 		}
 
-		if(state == AgentState.Leaving && event == AgentEvent.assignedDishes){
+		if(state == STATE.Leaving && event == EVENT.assignedDishes){
 			goToDishes();
 		}
-		if(state == AgentState.GoingToDishes && event == AgentEvent.startDishes){
+		if(state == STATE.GoingToDishes && event == EVENT.startDishes){
 			startDishes();
 		}
-		if(state == AgentState.DoingDishes && event == AgentEvent.doneWithDishes){
+		if(state == STATE.DoingDishes && event == EVENT.doneWithDishes){
 			leaveAfterDishes();
 		}
 		return false;
 	}
 
-
-	//Actions
-	@Override
-	public void goToRestaurant() {
-		System.out.println("Going to restaurant");
+	// Actions
+	
+	private void goToRestaurant() {
+		print("Going to restaurant");
 		host.msgImHungry(this);//send our instance, so he can respond to us
-		state = AgentState.WaitingInRestaurant;
+		state = STATE.WaitingInRestaurant;
 		stateChanged();
 	}
 
-	@Override
-	public void goToTable() {
-		System.out.println("Being seated. Going to table");
-		state = AgentState.BeingSeated;
+	private void goToTable() {
+		print("Being seated. Going to table");
+		state = STATE.BeingSeated;
 		customerGui.DoGoToSeat(xTableDestination, yTableDestination);
 		stateChanged();
 	}
 
-	@Override
-	public void goToDishes() {
-		state = AgentState.GoingToDishes;
+	private void goToDishes() {
+		state = STATE.GoingToDishes;
 		customerGui.DoGoToDishes();
 		stateChanged();
 	}
 
-	@Override
-	public void LookAtMenu() {
-		System.out.println("Looking at menu for 2s");
+	private void LookAtMenu() {
+		print("Looking at menu for 2s");
 		//looking at the menu takes just 2 seconds! then customer is ready to order.
 		timer.schedule(new TimerTask(){
 			public void run(){
-				System.out.println("Done looking at menu");
-				state = AgentState.ReadyToOrder;
+				print("Done looking at menu");
+				state = STATE.ReadyToOrder;
 				stateChanged();
 			}
 		},2000);
 	}
 
-	@Override
-	public void giveOrder() {
+	private void giveOrder() {
 		int naughtyOrNice = (int)(10*Math.random()); // 6/10 chance of honesty. people are bad
 		if(getPerson().getName().contains("evil")){ // grading hack: if name is "evil", he will random guess from anything
 			naughtyOrNice = 8; // guaranteed to lie. but this doesn't guarantee invalid order! 
@@ -279,7 +274,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		//grading hack: salad only. if can't order salad, leaves.
 		if(getPerson().getName().contains("salad")){
 			if(hasHitZero){
-				System.out.println("has hit zero things available to buy");
+				print("has hit zero things available to buy");
 				choice = null;
 			}else{
 				int rand = (int)(Math.floor(Math.random()*4));
@@ -301,7 +296,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 				
 			}
 			if(previousCanAfford.isEmpty()) hasHitZero = true;
-			System.out.println("Picked order " + choice + " with cash: " + this.getPerson().getCash());
+			print("Picked order " + choice + " with cash: " + this.getPerson().getCash());
 			previousChoices.add(choice); // it's memory of what he ordered previously.
 			if(choice == null){
 				//leave restaurant
@@ -316,7 +311,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		else if(naughtyOrNice < 7){ // HONEST CASE
 			choice = pickRandom(this.getPerson().getCash(),this.previousCanAfford, hasHitZero);
 			if(previousCanAfford.isEmpty()) hasHitZero = true;
-			System.out.println("Picked order " + choice + " with cash: " + this.getPerson().getCash() + " (this is for ease of grading; only Customer knows his cash)");
+			print("Picked order " + choice + " with cash: " + this.getPerson().getCash() + " (this is for ease of grading; only Customer knows his cash)");
 			previousChoices.add(choice); // it's memory of what he ordered previously.
 			if(choice == null){
 				//leave restaurant
@@ -331,9 +326,9 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		else if(naughtyOrNice >= 7){ // MAYBE DISHONEST CASE
 			choice = int2Food((int)(Math.ceil(4*Math.random()))); // pick any of the four!
 			if(choice != null)
-				System.out.println("Picked order " + choice.name() + " (with cash: " + this.getPerson().getCash()+")");
+				print("Picked order " + choice.name() + " (with cash: " + this.getPerson().getCash()+")");
 			else
-				System.out.println("Picked no order (with cash: " + this.getPerson().getCash()+")");
+				print("Picked no order (with cash: " + this.getPerson().getCash()+")");
 			waiter.msgHeresMyOrder(this, choice);
 			customerGui.setOrderIcon(choice, false);
 			//i mean you could pick one of the four things you COULD afford anyways.
@@ -347,33 +342,8 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		stateChanged();
 	}
 
-	@Override
-	public FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem,
-			boolean hasHitZero) {
-		//GOTTA BE AN OPTION THAT HE CAN AFFORD. If he can't afford anything, he has to leave.
-		if(mem.isEmpty() && !hasHitZero){ // only do this if mem is empty; i.e. if this is the first time. 
-			//this is because it's impossible for someone to order a 2nd time legitimately otherwise
-			for(int i = 0; i<=menu.getNumberOfItems()-1; i++){ // 1 thru 4 because our items go from 1 to 4...
-				if(cash >= menu.foodPrice.get(int2Food(i))){
-					if(menu.isAvailable(int2Food(i)))
-						mem.add(int2Food(i)); // add the food ID to list of things we can order
-				}
-			}
-		}
-		if(mem.isEmpty()) hasHitZero = true; // first check if it's empty here
-		if(mem.size() == 0 && hasHitZero) return null;
-
-		int x = (int)Math.ceil(mem.size()*Math.random());
-		if(x == mem.size()) x--; // can't be .size() since it's going to access mem...
-		FOOD_ITEMS y = mem.get(x);
-		mem.remove(mem.get(x)); // remove from list of things we can order. then we can use it as memory.
-		if(mem.isEmpty()) hasHitZero = true; //and check again if it's empty here
-		return y; 	
-	}
-
-	@Override
-	public void EatFood() {
-		System.out.println("Eating Food");
+	private void EatFood() {
+		print("Eating Food");
 		//This next complicated line creates and starts a timer thread.
 		//We schedule a deadline of getHungerLevel()*1000 milliseconds.
 		//When that time elapses, it will call back to the run routine
@@ -387,7 +357,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 
 			public void run() {
 				print("Done eating, cookie=" + cookie);
-				event = AgentEvent.doneEating;
+				event = EVENT.doneEating;
 				//-1 sets icon to "". True eliminates "?".
 				customerGui.setOrderIcon(null,true);
 				stateChanged();
@@ -396,80 +366,73 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		getHungerLevel()*1000);
 	}
 
-	@Override
-	public void Checkplz() {
-		System.out.println("Check please");
+	private void Checkplz() {
+		print("Check please");
 		waiter.msgCheckPlz(this, choice);
 	}
 
-	@Override
-	public void ImLeaving() {
-		System.out.println("Got check, leaving table");
+	private void ImLeaving() {
+		print("Got check, leaving table");
 		waiter.msgImDone(this); // tell waiter about departure
 		customerGui.DoGoToCashier();
 	}
 
-	@Override
-	public void Pay() {
+	private void Pay() {
 		cashier.msgHeresMyPayment(this, this.getPerson().getCash()); // give cashier all cash, will get change.
 	}
 
-	@Override
-	public void LeaveNow() {
+	private void LeaveNow() {
 		waiter.msgImDone(this);
-		System.out.println("Can't buy anything, leaving table");
+		print("Can't buy anything, leaving table");
 		customerGui.DoExitRestaurant();
 	}
 
-	@Override
-	public void gotChange() {
+	private void gotChange() {
 		customerGui.DoExitRestaurant();
 	}
 
-	@Override
-	public void startDishes() {
-		System.out.println("Doing dishes");
-		state = AgentState.DoingDishes;
+	private void startDishes() {
+		print("Doing dishes");
+		state = STATE.DoingDishes;
 		timer.schedule(new TimerTask() {
 			public void run() {
-				event = AgentEvent.doneWithDishes;
+				event = EVENT.doneWithDishes;
 				stateChanged();
 			}
 		},
 		punishment); 
 	}
 
-	@Override
-	public void leaveAfterDishes() {
-		System.out.println("Leaving now, after doing dishes");
-		state = AgentState.Leaving;
+	private void leaveAfterDishes() {
+		print("Leaving now, after doing dishes");
+		state = STATE.Leaving;
 		cashier.msgDoneWithDishes(this);
 		customerGui.DoExitRestaurant(); 
 	}
 
-	@Override
-	public void ConsiderLeaving() {
+	private void ConsiderLeaving() {
 		//notified restaurant was full. what now?
-		if(state == AgentState.WaitingInRestaurant && event != AgentEvent.followWaiter){
+		if(state == STATE.WaitingInRestaurant && event != EVENT.followWaiter){
 			if(Math.random() < .5){ //50% chance of staying
 				//and then don't do anything, just stay in line
-				state = AgentState.WaitingInRestaurant;
-				event = AgentEvent.gotHungry;
+				state = STATE.WaitingInRestaurant;
+				event = EVENT.gotHungry;
 				customerGui.DoGoToWaiting(line);
 			}else{
 				//else leave the restaurant immediately
 				//so host has to remove this customer from his list
-				System.out.println("Leaving now");
+				print("Leaving now");
 				host.msgNotWaiting(this);
-				System.out.println("Leaving restaurant; don't want to want in line");
-				state = AgentState.Leaving;
+				print("Leaving restaurant; don't want to want in line");
+				state = STATE.Leaving;
 				customerGui.DoExitRestaurant();
 			}
 			stateChanged();
 		}
 		consideredLeaving = true;
 	}
-	//Getters
+	
+	// Getters
 
 	@Override
 	public boolean isHungryNow() {
@@ -480,7 +443,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void gotHungry() {
 		setHungryNow();
 		//giveCashOnHungry(); // TODO still free money problems in simcity201, remove?
-		event = AgentEvent.gotHungry;
+		event = EVENT.gotHungry;
 		stateChanged();
 		//choice = null; TODO check if this causes the person to leave automatically
 		consideredLeaving = false;
@@ -512,10 +475,12 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	}
 
 	@Override
-	public AgentState getState() {
+	public STATE getState() {
 		return state;
 	}
-	//Setters
+	
+	// Setters
+	
 	@Override
 	public void setWaiter(RestaurantChoiWaiter w) {
 		waiter = w;
@@ -531,14 +496,13 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		cashier = c;
 	}
 
-
 	@Override
 	public void setHungryNow() {
 		//basically reset all the fields that need to be reset right here
 		customerGui.resetLocation();
 		currentlyHungry = true;
-		state = AgentState.DoingNothing;
-		event = AgentEvent.none;
+		state = STATE.DoingNothing;
+		event = EVENT.none;
 		previousCanAfford.clear();
 		hasHitZero = false;
 		customerGui.setOrderIcon(null,true); // reset order icon
@@ -560,10 +524,16 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	public void setGui(RestaurantChoiAnimatedCustomer anim) {
 		customerGui = anim;
 	}
+	
+	@Override
+	public void setActive() {
+		super.setActive();
+		gotHungry();
+	}
 
-
-	//Utilities
-	public FOOD_ITEMS int2Food(int index){
+	// Utilities 
+	
+	private FOOD_ITEMS int2Food(int index) {
 		switch(index){
 		case 0:
 			return FOOD_ITEMS.steak;
@@ -576,6 +546,28 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		default: 
 			return null;
 		}
+	}
+	
+	private FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem, boolean hasHitZero) {
+		//GOTTA BE AN OPTION THAT HE CAN AFFORD. If he can't afford anything, he has to leave.
+		if(mem.isEmpty() && !hasHitZero){ // only do this if mem is empty; i.e. if this is the first time. 
+			//this is because it's impossible for someone to order a 2nd time legitimately otherwise
+			for(int i = 0; i<=menu.getNumberOfItems()-1; i++){ // 1 thru 4 because our items go from 1 to 4...
+				if(cash >= menu.foodPrice.get(int2Food(i))){
+					if(menu.isAvailable(int2Food(i)))
+						mem.add(int2Food(i)); // add the food ID to list of things we can order
+				}
+			}
+		}
+		if(mem.isEmpty()) hasHitZero = true; // first check if it's empty here
+		if(mem.size() == 0 && hasHitZero) return null;
+
+		int x = (int)Math.ceil(mem.size()*Math.random());
+		if(x == mem.size()) x--; // can't be .size() since it's going to access mem...
+		FOOD_ITEMS y = mem.get(x);
+		mem.remove(mem.get(x)); // remove from list of things we can order. then we can use it as memory.
+		if(mem.isEmpty()) hasHitZero = true; //and check again if it's empty here
+		return y; 	
 	}
 	
 	@Override

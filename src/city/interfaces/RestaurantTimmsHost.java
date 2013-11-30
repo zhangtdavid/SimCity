@@ -9,8 +9,4 @@ public interface RestaurantTimmsHost extends RoleInterface {
 	public void msgLeaving(RestaurantTimmsCustomer customer, int tableNumber);
 	public void msgAskForBreak(RestaurantTimmsWaiter w);
 	
-	// Setters
-	
-	public void setActive();
-	
 }

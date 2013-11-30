@@ -20,7 +20,7 @@ import city.interfaces.RestaurantChungWaiter;
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
-public abstract class RestaurantChungWaiterBaseRole extends Role implements RestaurantChungWaiter {
+public abstract class RestaurantChungWaiterBase extends Role implements RestaurantChungWaiter {
 	RestaurantChungBuilding restaurant;
 	protected RestaurantChungHost host;
 	protected RestaurantChungCook cook;
@@ -71,7 +71,7 @@ public abstract class RestaurantChungWaiterBaseRole extends Role implements Rest
 	protected enum OrderStatus
 	{None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 		
-	public RestaurantChungWaiterBaseRole() {
+	public RestaurantChungWaiterBase() {
 		super();
 	}
 	

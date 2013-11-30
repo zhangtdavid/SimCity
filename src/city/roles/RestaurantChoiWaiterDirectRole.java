@@ -3,26 +3,34 @@ package city.roles;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.RestaurantChoiWaiterAbs;
 
 /**
- * The key difference between Waiter2Role vs WaiterRole is
- * WaiterRole puts the orders on plating (adds to queue), whereas
- * Waiter2Role hands the orders directly to the cook (via msgHeresAnOrder)
- *  
- * @author ryanchoi
- *
+ * The key difference between WaiterDirectRole vs. WaiterQueueRole is
+ * WaiterQueueRole puts the orders on plating (adds to queue), whereas
+ * WaiterDirectRole hands the orders directly to the cook (via msgHeresAnOrder)
  */
-public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
+public class RestaurantChoiWaiterDirectRole extends RestaurantChoiWaiterBase {
 
-	public RestaurantChoiWaiter2Role() {
+	// Data
+	
+	// Constructor
+	
+	public RestaurantChoiWaiterDirectRole() {
 		super();
 	}
-	public RestaurantChoiWaiter2Role(RestaurantChoiBuilding b, int t1, int t2){
+	
+	public RestaurantChoiWaiterDirectRole(RestaurantChoiBuilding b, int t1, int t2){
 		super(b, t1, t2);
 	}
+	
+	// Messages
+	
+	// Scheduler
+	
+	// Actions
 
 	@Override
 	public void sendOrderToCook(int i, RestaurantChoiOrder o) {
@@ -32,6 +40,7 @@ public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 		cook.msgHeresAnOrder(myCustomers.get(i).getOr()); // and message him the order once you get there
 
 	}
+	
 	private void DoGoToCookDirectly() {
 		//while this is not going directly to the cook, this is very close to the real deal; otherwise i'd
 		//have to be constantly asking every animation step whether I'm next to the cook or not...
@@ -47,9 +56,21 @@ public class RestaurantChoiWaiter2Role extends RestaurantChoiWaiterAbs{
 		stateChanged();
 	}
 	
+	// Getters
+	
+	// Setters
+	
+	@Override
+	public void setRevolvingStand(RestaurantChoiRevolvingStand rs) {
+		return;
+	}
+	
+	// Utilities
+	
 	@Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiWaiter2Role " + this.getPerson().getName(), msg);
     }
+	
 }

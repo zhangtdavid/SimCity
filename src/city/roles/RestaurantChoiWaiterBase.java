@@ -1,4 +1,4 @@
-package city.interfaces;
+package city.roles;
 
 import java.util.ArrayList;
 import java.util.ConcurrentModificationException;
@@ -22,12 +22,10 @@ import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
 
-public abstract class RestaurantChoiWaiterAbs extends Role implements RestaurantChoiWaiter{
+public abstract class RestaurantChoiWaiterBase extends Role implements RestaurantChoiWaiter {
 
-	//Data
-	static final int NTABLES = 4; // a global for the number of tables.
-	static int xstart = 50;
-	static int ystart = 50;
+	// Data
+	
 	protected List<myCustomer> myCustomers = new ArrayList<myCustomer>();
 	private List<RestaurantChoiTable> tables;
 	private RestaurantChoiHost host;
@@ -35,7 +33,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	private RestaurantChoiCashier cashier;
 	private String name;
 	protected Semaphore inProgress = new Semaphore(0, true);
-	public RestaurantChoiAnimatedWaiter waiterGui;
+	protected RestaurantChoiAnimatedWaiter waiterGui;
 	private ArrayList<FOOD_ITEMS> outOf = new ArrayList<FOOD_ITEMS>();
 	private boolean breakRequested;
 	private boolean onBreak;
@@ -43,45 +41,55 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	private boolean wantsToLeave;
 	private RestaurantChoiBuilding building;
 	
-	//Constructor
+	// Constructor
+	
 	/**
 	 * Initializes both types of waiters for RestaurantChoi
+	 * 
 	 * @param b : for RestaurantChoiBuilding
 	 * @param t1 : Start of shift
 	 * @param t2 : End of shift
 	 */
-	public RestaurantChoiWaiterAbs(RestaurantChoiBuilding b, int t1, int t2) {		
+	public RestaurantChoiWaiterBase(RestaurantChoiBuilding b, int t1, int t2) {		
 		super();
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building = b;
+		
 		// make some tables
 		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
-			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
+			tables.add(new RestaurantChoiTable(ix)); // how you add to a collection
 		}
 	}	
 
-	public RestaurantChoiWaiterAbs() { // secondary constructor for mechanics testing
+	/**
+	 * Initializes both types of waiters for RestaurantChoi
+	 * 
+	 * Secondary constructor for mechanics testing
+	 */
+	public RestaurantChoiWaiterBase() {
 		tables = new ArrayList<RestaurantChoiTable>(NTABLES);
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
 		}
 	}
 
-	//Messages
+	// Messages
+	
+	@Override
 	public void msgRelease() {
-		inProgress.release();// = true;
+		inProgress.release();
 		stateChanged();
 	}
+	
+	@Override
 	public void msgBreakOK(boolean in) {
-		//this.waiterGui.setCheckboxEnabled();
 		onBreak = in;
 		if (in)
 			System.out.println("now on break!");
 		if (!in) {
-			//waiterGui.setCheckboxUnchecked();
 			breakRequested = false;
 		}	
 	}
@@ -123,7 +131,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 					}
 				}
 			} else {
-				if (c.getState() == RestaurantChoiCustomer.AgentState.ReadyToOrder) {
+				if (c.getState() == RestaurantChoiCustomer.STATE.ReadyToOrder) {
 					// Order received, so mark that in myCustomers.
 					for (int i = 0; i < myCustomers.size(); i++) {
 						if (c.equals(myCustomers.get(i).getC())
@@ -199,6 +207,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		// the scheduler is so clean now!!
@@ -234,27 +243,22 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	// Actions
-	@Override
-	public void offBreak() {
+	
+	private void offBreak() {
 		onBreak = false;
 		breakRequested = false;
 		host.msgImBack(this);
-		System.out.println("No longer on break");
+		print("No longer on break");
 	}
 
-	@Override
-	public void requestBreak() {
-		//this.waiterGui.setCheckboxDisabled(); // shouldn't need this anymore
+	private void requestBreak() {
 		host.msgIWantABreak(this);
 		breakRequested = true;
-		System.out.println("Requested a break");
-
+		print("Requested a break");
 	}
 
-	@Override
-	public void seatCustomer(myCustomer customer) {
-		customer.getC().msgFollowMe(this, customer.getT().getxCoord(),
-				customer.getT().getyCoord());
+	private void seatCustomer(myCustomer customer) {
+		customer.getC().msgFollowMe(this, customer.getT().getxCoord(), customer.getT().getyCoord());
 		DoSeatCustomer(customer.getC(), customer.getT());
 		try {
 			inProgress.acquire();
@@ -269,8 +273,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		waiterGui.DoLeave(); // head back to 50,50
 	}
 
-	@Override
-	public void GiveFood(myCustomer mc, RestaurantChoiOrder or) {
+	private void GiveFood(myCustomer mc, RestaurantChoiOrder or) {
 		// for loop for all myCustomers
 		// if your customer matches order or's customer then give it to that
 		// person
@@ -284,18 +287,13 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 	}
 
-	@Override
-	public void DoSeatCustomer(RestaurantChoiCustomer customer,
-			RestaurantChoiTable table) {
-		print("Seating " + customer + " at " + table + " @ ("
-				+ table.getxCoord() + ", " + table.getyCoord() + ")");
+	private void DoSeatCustomer(RestaurantChoiCustomer customer, RestaurantChoiTable table) {
+		print("Seating " + customer + " at " + table + " @ (" + table.getxCoord() + ", " + table.getyCoord() + ")");
 		waiterGui.setAcquired();
-		waiterGui
-		.DoBringToTable(customer, table.getxCoord(), table.getyCoord());
+		waiterGui.DoBringToTable(customer, table.getxCoord(), table.getyCoord());
 	}
 
-	@Override
-	public void DoGoToTable(RestaurantChoiTable table) {
+	private void DoGoToTable(RestaurantChoiTable table) {
 		waiterGui.setAcquired();
 		waiterGui.GoTo(table.getxCoord(), table.getyCoord());
 		try {
@@ -306,7 +304,8 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 		stateChanged();
 	}
-	public void DoGoToCook() {
+	
+	protected void DoGoToCook() {
 		waiterGui.setAcquired();
 		waiterGui.GoTo(RestaurantChoiAnimatedFurniture.CPX, RestaurantChoiAnimatedFurniture.CPY);
 		try {
@@ -319,10 +318,9 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		stateChanged();
 	}
 	
-	public abstract void sendOrderToCook(int i, RestaurantChoiOrder o);
-	
-	@Override
-	public void DoGoToCashier() {
+	protected abstract void sendOrderToCook(int i, RestaurantChoiOrder o);
+
+	private void DoGoToCashier() {
 		waiterGui.setAcquired();
 		waiterGui.GoTo(RestaurantChoiAnimatedCashier.CASHIER_X, RestaurantChoiAnimatedCashier.CASHIER_Y);
 		try {
@@ -337,6 +335,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 	}
 
 	// Getters
+	
 	@Override
 	public String getName() {
 		return name;
@@ -352,15 +351,18 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return tables;
 	}
 
+	@Override
 	public boolean askedForBreak() {
 		return breakRequested;
 	}
 
+	@Override
 	public boolean isOnBreak() {
 		return onBreak;
 	}
 
 	// Setters
+	
 	@Override
 	public void setHost(RestaurantChoiHost h) {
 		host = h;
@@ -378,11 +380,13 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		cashier = ca;
 	}
 	
-	public void setGui(RestaurantChoiAnimatedWaiter w){
-		waiterGui = w;
+	@Override
+	public void setAnimation(RestaurantChoiWaiterAnimation r) {
+		waiterGui = r;
 	}
 
-	public void setInactive(){ 
+	@Override
+	public void setInactive() { 
 		if(myCustomers.size() == 0){
 			super.setInactive();
 			building.host.msgSetUnavailable(this);
@@ -392,10 +396,13 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 			building.host.msgSetUnavailable(this); // tell boss i'm done
 		}
 	}
+	
+	@Override
+	public abstract void setRevolvingStand(RestaurantChoiRevolvingStand rs);
+	
 	// Utilities
 
-	@Override
-	public boolean needToSeatCustomer() {
+	private boolean needToSeatCustomer() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WAITING || myCustomers.get(i).getCustomerState() == myCustomer.WAITING_IN_LINE) {
 				// if there are any empty tables
@@ -423,8 +430,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
-	@Override
-	public boolean needToTakeOrder() {
+	private boolean needToTakeOrder() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			/*if (myCustomers.get(i).getC().getChoice() == null) {
 				return false;
@@ -442,8 +448,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
-	@Override
-	public boolean needToSendOrderToCook() {
+	private boolean needToSendOrderToCook() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getOr().getState() == RestaurantChoiOrder.ORDERED) {
 				// go to the cook
@@ -457,8 +462,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
-	@Override
-	public boolean needToGetOrderFromCook() {
+	private boolean needToGetOrderFromCook() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WAITING_FOR_FOOD) {
 				if (myCustomers.get(i).getOr().getState() == RestaurantChoiOrder.READY_AND_NOTIFIED) {
@@ -477,8 +481,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}	
 
-	@Override
-	public boolean needToNotifyHost() {
+	private boolean needToNotifyHost() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.LEAVING) {
 				print("notify Host of empty table "
@@ -495,8 +498,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
-	@Override
-	public boolean needToDeliverFood() {
+	private boolean needToDeliverFood() {
 		synchronized (myCustomers) {
 			for (int i = 0; i < myCustomers.size(); i++) {
 				// if state of a customer's order is GIVEN TO WAITER,
@@ -520,8 +522,7 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		return false;
 	}
 
-	@Override
-	public boolean needToRetakeOrder() {
+	private boolean needToRetakeOrder() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.ORDERED_BUT_OUT) {
 				DoGoToTable(myCustomers.get(i).getT()); // acquire is inside method;
@@ -541,10 +542,10 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 				return true;
 			}
 		}
-		return false;	}
+		return false;	
+	}
 
-	@Override
-	public boolean needToGetCheck() {
+	private boolean needToGetCheck() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WANTS_CHECK) {
 				System.out.println("need to get check");
@@ -559,13 +560,8 @@ public abstract class RestaurantChoiWaiterAbs extends Role implements Restaurant
 		}
 		return false;
 	}
-
-	public void setAnimation(RestaurantChoiWaiterAnimation r){
-		waiterGui = r;
-	}
 	
-	@Override
-	public boolean needToGiveCheck() {
+	private boolean needToGiveCheck() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WAITER_HAS_CHECK) {
 				System.out.println("need to give check");

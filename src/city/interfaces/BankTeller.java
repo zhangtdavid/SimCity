@@ -1,11 +1,13 @@
 package city.interfaces;
 
+import city.Application;
+
 public interface BankTeller extends RoleInterface {
 
 	// Data
 	
-	public enum serviceState {needsService, pending, inProgress, confirmed, newAccount, finished, done, failed};
-	public enum serviceType {withdrawal, deposit};
+	public static enum SERVICE_STATE {needsService, pending, inProgress, confirmed, newAccount, finished, done, failed};
+	public static enum SERVICE_TYPE {withdrawal, deposit};
 	
 	// Constructor
 	
@@ -15,8 +17,6 @@ public interface BankTeller extends RoleInterface {
 	public void msgHereIsAccount(int acctNum);
 	public void msgWithdrawalFailed();
 	public void msgTransactionSuccessful();
-	
-	//From BankCustomer
 	public void msgWithdraw(int acctNum, int money, int salary);
 	public void msgDeposit(int money, int acctNum);
 	public void msgDoneAndLeaving();
@@ -28,6 +28,8 @@ public interface BankTeller extends RoleInterface {
 	// Getters
 	
 	// Setters
+	
+	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t);
 	
 	// Utilities
 	

@@ -1,6 +1,8 @@
 package city.interfaces;
 
 public interface RestaurantChungWaiter extends RoleInterface {
+	
+	// Messages
 
 	public abstract void msgAnimationAskedForBreak();
 	public abstract void msgApprovedForBreak();

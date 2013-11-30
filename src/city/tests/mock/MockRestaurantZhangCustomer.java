@@ -38,7 +38,7 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 
 	@Override
 	public void msgFollowMe(RestaurantZhangWaiter w, RestaurantZhangMenu waiterMenu, RestaurantZhangTable table) {
-		log.add(new LoggedEvent("Waiter " + w.getName() + " seated me at table " + table.tableNumber));
+		log.add(new LoggedEvent("Waiter " + w.getPerson().getName() + " seated me at table " + table.tableNumber));
 	}
 
 	@Override
@@ -60,12 +60,6 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 	public int getPos() {
 		// TODO Auto-generated method stub
 		return 0;
-	}
-
-	@Override
-	public String getName() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

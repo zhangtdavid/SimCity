@@ -2,6 +2,7 @@ package city.tests.mock;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketTransaction;
 import city.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -26,5 +27,29 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("CustomerDeliveryPayment received msgPaymentReceived from cashier."));		
 		System.out.println("CustomerDeliveryPayment received msgPaymentReceived from cashier.");		
+	}
+
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int checkBill(MarketTransaction mt) {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void removeMarketTransactionFromList(MarketTransaction transaction) {
+		// TODO Auto-generated method stub
+		
 	}
 }

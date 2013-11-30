@@ -1,10 +1,13 @@
 package city.tests.mock;
 
+import java.util.List;
+
 import utilities.LoggedEvent;
 import city.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankManager;
 import city.interfaces.BankTeller;
+import city.roles.BankManagerRole.BankTask;
 
 public class MockBankManager extends MockRole implements BankManager {
 
@@ -60,6 +63,12 @@ public class MockBankManager extends MockRole implements BankManager {
 	public void msgUnavailable(BankTeller bankTellerRole) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<BankTask> getBankTasks() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

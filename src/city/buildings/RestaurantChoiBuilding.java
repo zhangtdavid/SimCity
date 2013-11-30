@@ -19,14 +19,14 @@ import city.animations.RestaurantChoiWaiterAnimation;
 import city.gui.CityViewBuilding;
 import city.gui.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiWaiterAbs;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiCustomerRole;
 import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiWaiter2Role;
-import city.roles.RestaurantChoiWaiterRole;
+import city.roles.RestaurantChoiWaiterBase;
+import city.roles.RestaurantChoiWaiterDirectRole;
+import city.roles.RestaurantChoiWaiterQueueRole;
 
 public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 
@@ -40,7 +40,7 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 	public RestaurantChoiPanel panel; //reference to main gui
 	public Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
 	public List<RestaurantChoiCustomer> customers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
-	public List<RestaurantChoiWaiterAbs> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterAbs>());
+	public List<RestaurantChoiWaiterBase> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterBase>());
 	public RestaurantChoiRevolvingStand rs;
 	public RestaurantChoiTable t;
 	public BankBuilding bank;
@@ -101,8 +101,8 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				super.addRole(c, anim);
 			}
 		}
-		if(r instanceof RestaurantChoiWaiter2Role) {
-			RestaurantChoiWaiter2Role w = (RestaurantChoiWaiter2Role)r;
+		if(r instanceof RestaurantChoiWaiterDirectRole) {
+			RestaurantChoiWaiterDirectRole w = (RestaurantChoiWaiterDirectRole)r;
 			w.setCashier(cashier);
 			w.setCook(cook);
 			w.setHost(host);
@@ -116,8 +116,8 @@ public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
 				super.addRole(w, anim);
 			}
 		}
-		if(r instanceof RestaurantChoiWaiterRole) {
-			RestaurantChoiWaiterRole w = (RestaurantChoiWaiterRole)r;
+		if(r instanceof RestaurantChoiWaiterQueueRole) {
+			RestaurantChoiWaiterQueueRole w = (RestaurantChoiWaiterQueueRole)r;
 			w.setCashier(cashier);
 			w.setCook(cook);
 			w.setHost(host);

@@ -45,4 +45,16 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Manager.");		
 	}
 
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

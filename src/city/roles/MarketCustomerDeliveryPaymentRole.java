@@ -18,16 +18,13 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
-
+	private EventLog log = new EventLog();
 	private Building restaurant;
-	
 	private MarketBuilding market;
-	
-	public List<MarketTransaction> marketTransactions; // list shared with the restaurant cashier
+	private List<MarketTransaction> marketTransactions; // list shared with the restaurant cashier
 	
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================
 	public MarketCustomerDeliveryPaymentRole(Building r, List<MarketTransaction> marketTransactions) {
 		super();
 		restaurant = r;
@@ -35,16 +32,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		this.setWorkplace(r);
     }
 
-//  Activity Management
-//	=====================================================================	
-//	public void setActive(){
-//		this.setActivityBegun();
-//	}
-
 //  Messages
 //	=====================================================================	
 //	Market Cashier
 //	---------------------------------------------------------------
+	@Override
 	public void msgHereIsBill(int bill, int id) {
 		log.add(new LoggedEvent("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
 		System.out.println("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
@@ -54,11 +46,12 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		runScheduler();
 	}
 
+	@Override
 	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
-//		MarketTransaction mt = findMarketTransaction(id);
-//		removeMarketTransactionFromList(mt); TODO this might have cause when cashier is adding to the list
+		//	MarketTransaction mt = findMarketTransaction(id);
+		//	removeMarketTransactionFromList(mt); TODO this might have cause when cashier is adding to the list
 	}
 	
 //  Scheduler
@@ -92,16 +85,19 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //  Getters and Setters
 //	=====================================================================
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
 	
 //  Utilities
 //	=====================================================================
+	@Override
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
@@ -123,6 +119,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		return null;
 	}
 	
+	@Override
 	public void removeMarketTransactionFromList(MarketTransaction transaction) {
 		for(MarketTransaction mt: marketTransactions) {
 			if(mt == transaction) {

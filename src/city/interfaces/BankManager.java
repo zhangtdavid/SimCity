@@ -1,26 +1,26 @@
 package city.interfaces;
 
+import java.util.List;
+
+import city.roles.BankManagerRole.BankTask;
+
 public interface BankManager extends RoleInterface {
 
 	// Data
-	public enum state {available, busy, gone};
-	public enum type {deposit, atmDeposit, withdrawal, loanPayment, acctCreate};
-	static final int LoanInterval = 50;
+	
+	public static enum STATE {available, busy, gone};
+	public static enum TYPE {deposit, atmDeposit, withdrawal, loanPayment, acctCreate};
+	
 	// Constructor
 	
 	// Messages
+	
 	public void msgNeedService(BankCustomer bc);
-	
 	public void msgDirectDeposit(int acctNum, int money, BankCustomer r);
-
 	public void msgAvailable(BankTeller t);
-	
 	public void msgWithdraw(int acctNum, int money, BankTeller t);
-
 	public void msgTryDeposit(int money, int acctNum, BankTeller t);
-
 	public void msgCreateLoan(int amt, int monthly, int acct);
-
 	public void msgUnavailable(BankTeller bankTellerRole);
 	
 	// Scheduler
@@ -28,6 +28,8 @@ public interface BankManager extends RoleInterface {
 	// Actions
 	
 	// Getters
+	
+	public List<BankTask> getBankTasks();
 	
 	// Setters
 	

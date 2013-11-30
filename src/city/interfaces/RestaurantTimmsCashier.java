@@ -13,8 +13,4 @@ public interface RestaurantTimmsCashier extends RoleInterface {
 	public int getMoneyCollected();
 	public int getMoneyOwed();
 	
-	// Setters
-	
-	public void setActive();
-	
 }

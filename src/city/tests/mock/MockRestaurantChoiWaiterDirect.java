@@ -5,20 +5,22 @@ import java.util.List;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Application.FOOD_ITEMS;
 import city.MockRole;
+import city.animations.RestaurantChoiWaiterAnimation;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
 import city.interfaces.RestaurantChoiWaiter;
 
-public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantChoiWaiter  {
+public class MockRestaurantChoiWaiterDirect extends MockRole implements RestaurantChoiWaiter  {
 	String name;
 	public EventLog log = new EventLog();
 	
-	public MockRestaurantChoiWaiter2(String name){
+	public MockRestaurantChoiWaiterDirect(String name){
 	this.name = name;	
 	}
 	@Override
@@ -78,12 +80,6 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 	}
 
 	@Override
-	public void offBreak() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<myCustomer> getMyCustomers() {
 		// TODO Auto-generated method stub
 		return null;
@@ -96,12 +92,6 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 	}
 
 	@Override
-	public void requestBreak() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean askedForBreak() {
 		// TODO Auto-generated method stub
 		return false;
@@ -109,97 +99,6 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 
 	@Override
 	public boolean isOnBreak() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public void seatCustomer(myCustomer customer) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void GiveFood(myCustomer mc, RestaurantChoiOrder or) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void DoSeatCustomer(RestaurantChoiCustomer customer,
-			RestaurantChoiTable table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void DoGoToTable(RestaurantChoiTable table) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void DoGoToCashier() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void DoGoToCook() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public boolean needToSeatCustomer() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToTakeOrder() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToSendOrderToCook() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToGetOrderFromCook() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToNotifyHost() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToDeliverFood() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToRetakeOrder() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToGetCheck() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public boolean needToGiveCheck() {
 		// TODO Auto-generated method stub
 		return false;
 	}
@@ -228,6 +127,16 @@ public class MockRestaurantChoiWaiter2 extends MockRole implements RestaurantCho
 	}
 	@Override
 	public void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setAnimation(RestaurantChoiWaiterAnimation r) {
+		// TODO Auto-generated method stub
+		
+	}
+	@Override
+	public void setRevolvingStand(RestaurantChoiRevolvingStand rs) {
 		// TODO Auto-generated method stub
 		
 	}

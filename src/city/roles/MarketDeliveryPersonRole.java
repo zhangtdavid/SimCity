@@ -19,28 +19,18 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
-
 	private MarketBuilding market;
-	
-	public MarketCustomerDelivery customerDelivery;
-	
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
-	
+	private WorkingState workingState = WorkingState.Working;
 	private CarAgent car;
 	private CarPassenger carPassenger;
 	
-	public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	// TODO Change these to private and add getters/setters
 	public int orderId;
-	
-//	CityMap
-	
-//	Gui
-//	---------------------------------------------------------------
-//	private MarketDeliveryPersonGui marketDeliveryPersonGui; // is this necessary?	
-	
+	public MarketCustomerDelivery customerDelivery;
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
+	public EventLog log = new EventLog();
+	public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+
 //	Constructor
 //	---------------------------------------------------------------
 	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
@@ -52,20 +42,12 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
-	}
 	
 //  Messages
 //	=====================================================================	
 //	Cashier
 //	---------------------------------------------------------------
+	@Override
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 		log.add(new LoggedEvent("Market DeliveryPerson received msgDeliverOrder from Market Cashier."));
 		System.out.println("Market DeliveryPerson received msgDeliverOrder from Market Cashier.");
@@ -136,12 +118,26 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //  Getters and Setters
 //	=====================================================================
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
+	}
+	
+//	// TODO schung 99c0f4da25
+//	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Utilities

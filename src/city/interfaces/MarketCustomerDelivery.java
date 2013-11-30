@@ -5,6 +5,7 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.buildings.MarketBuilding;
+import city.buildings.RestaurantBaseBuilding;
 
 public interface MarketCustomerDelivery extends RoleInterface {
 	
@@ -14,11 +15,7 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int orderId);
-
-	public abstract Building getRestaurant();
-
-	public abstract void setMarket(MarketBuilding selectedMarket);
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int orderId);
 	
 	// Scheduler
 	
@@ -26,7 +23,13 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Getters
 	
+	public MarketBuilding getMarket();
+	public Building getRestaurant();
+	
 	// Setters
+	
+	public void setRestaurant(RestaurantBaseBuilding restaurant);
+	public void setMarket(MarketBuilding selectedMarket);
 	
 	// Utilities
 	

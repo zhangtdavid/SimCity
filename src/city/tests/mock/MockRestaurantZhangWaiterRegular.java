@@ -2,9 +2,15 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
+import utilities.RestaurantZhangMenu;
+import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.MockRole;
+import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
+import city.interfaces.RestaurantZhangCashier;
+import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 public class MockRestaurantZhangWaiterRegular extends MockRole implements RestaurantZhangWaiter {
@@ -83,13 +89,43 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	}
 
 	@Override
-	public String getName() {
+	public void msgAtDestination() {
 		// TODO Auto-generated method stub
-		return null;
+		
 	}
 
 	@Override
-	public void msgAtDestination() {
+	public void setAnimation(RestaurantZhangAnimatedWaiter gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCook(RestaurantZhangCook c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHost(RestaurantZhangHost h) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCashier(RestaurantZhangCashier c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMenu(RestaurantZhangMenu m) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -56,4 +56,22 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 		System.out.println("Customer received msgAnimationAtCashier from Market Customer Animation.");				
 	}
 
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int checkBill() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
 }

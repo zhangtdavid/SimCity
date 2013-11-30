@@ -3,25 +3,30 @@ package city.interfaces;
 import utilities.RestaurantChungMenu;
 
 public interface RestaurantChungCustomer extends RoleInterface {
+	
+	// Messages
 
-	public abstract void gotHungry();
-	public abstract void msgGetInLinePosition(int positionInLine);
-	public abstract void msgNoTablesAvailable();
-	public abstract void msgSelfDecidedToLeave();
-	public abstract void msgFollowMeToTable(RestaurantChungWaiter w, RestaurantChungMenu menu);
-	public abstract void msgAnimationAtSeat();
-	public abstract void msgSelfReadyToOrder();
-	public abstract void msgWhatWouldYouLike();
-	public abstract void msgOutOfItem(String choice, RestaurantChungMenu menu);
-	public abstract void msgHereIsYourFood();
-	public abstract void msgSelfDoneEating();
-	public abstract void msgHereIsCheck(int price);
-	public abstract void msgAnimationAtCashier();
-	public abstract void msgHereIsChange(int change);
-	public abstract void msgAnimationFinishedLeaveRestaurant();
-	public abstract void msgKickingYouOutAfterPaying(int debt);
-	public abstract int getHungerLevel();
-	public abstract String getState();
-	public abstract String getOrder();
+	public void gotHungry();
+	public void msgGetInLinePosition(int positionInLine);
+	public void msgNoTablesAvailable();
+	public void msgSelfDecidedToLeave();
+	public void msgFollowMeToTable(RestaurantChungWaiter w, RestaurantChungMenu menu);
+	public void msgAnimationAtSeat();
+	public void msgSelfReadyToOrder();
+	public void msgWhatWouldYouLike();
+	public void msgOutOfItem(String choice, RestaurantChungMenu menu);
+	public void msgHereIsYourFood();
+	public void msgSelfDoneEating();
+	public void msgHereIsCheck(int price);
+	public void msgAnimationAtCashier();
+	public void msgHereIsChange(int change);
+	public void msgAnimationFinishedLeaveRestaurant();
+	public void msgKickingYouOutAfterPaying(int debt);
+	
+	// Getters
+	
+	public int getHungerLevel();
+	public String getState();
+	public String getOrder();
 
 }

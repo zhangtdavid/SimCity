@@ -22,60 +22,15 @@ import city.Role;
 public class MarketManagerRole extends Role implements MarketManager {
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
-
 	private MarketBuilding market;
+	private WorkingState workingState = WorkingState.Working;
+	private boolean itemsLow;
 	
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
-	
-	boolean itemsLow;
-	
-//	Employees
-//	---------------------------------------------------------------
+	// TODO Change these to private and add getters/setters
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
+	public EventLog log = new EventLog();
 	public List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
-	public class MyMarketEmployee {
-		MarketEmployee employee;
-		public MarketCustomerDelivery customerDelivery;
-		public MarketEmployeeState s;
-		
-		public MyMarketEmployee(MarketEmployee employee) {
-			this.employee = employee;
-			customerDelivery = null;
-			s = MarketEmployeeState.Available;
-		}
-	}
-	public enum MarketEmployeeState
-	{Available, GoingToPhone, GettingOrder, CollectingItems};
-
-//	Customers
-//	---------------------------------------------------------------
 	public List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
-	private class MyMarketCustomer {
-		MarketCustomer customer;
-		MarketCustomerDelivery customerDelivery;
-		MarketCustomerDeliveryPayment customerDeliveryPayment;
-		
-	    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
-	    int orderId;
-		
-		public MyMarketCustomer(MarketCustomer customer) {
-			this.customer = customer;
-			customerDelivery = null;
-			customerDeliveryPayment = null;
-		}
-		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
-			this.customer = null;
-			customerDelivery = c;
-			customerDeliveryPayment = cPay;
-			
-            for (FOOD_ITEMS item: o.keySet()) {
-                order.put(item, o.get(item)); // Create a deep copy of the order map
-            }
-            orderId = id;
-		}
-	}
 
 //	Constructor
 //	---------------------------------------------------------------
@@ -87,20 +42,11 @@ public class MarketManagerRole extends Role implements MarketManager {
 		this.setSalary(MarketBuilding.getWorkerSalary());
 	}
 	
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
-	public void setInActive(){
-		workingState = WorkingState.GoingOffShift;
-	}
-	
 //  Messages
 //	=====================================================================
 //	Market
 //	---------------------------------------------------------------
+	@Override
 	public void msgNewEmployee(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgNewEmployee from Market."));
 		System.out.println("Market Manager received msgNewEmployee from Market.");
@@ -108,6 +54,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		stateChanged();
 	}
 	
+	@Override
 	public void msgRemoveEmployee(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgRemoveEmployee from Market."));
 		System.out.println("Market Manager received msgRemoveEmployee from Market.");
@@ -118,6 +65,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Customer (In Person)
 //	---------------------------------------------------------------
+	@Override
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
@@ -129,6 +77,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Customer (Delivery)
 //	---------------------------------------------------------------
+	@Override
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
@@ -140,22 +89,25 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Employee
 //	---------------------------------------------------------------
+	@Override
 	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee."));
 		System.out.println("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
 		MyMarketEmployee tempEmployee = findEmployee(e);
-		tempEmployee.s = MarketEmployeeState.GettingOrder;
+		tempEmployee.s = MyMarketEmployee.MarketEmployeeState.GettingOrder;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
 		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
 		MyMarketEmployee tempEmployee = findEmployee(e);
-		tempEmployee.s = MarketEmployeeState.Available;
+		tempEmployee.s = MyMarketEmployee.MarketEmployeeState.Available;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgItemLow() {
 		log.add(new LoggedEvent("Market Manager received msgItemLow from Market Employee."));
 		System.out.println("Market Manager received msgItemLow from Market Employee.");
@@ -174,7 +126,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 		
 		synchronized(employees) {
 			for (MyMarketEmployee employee : employees) {
-				if (employee.s == MarketEmployeeState.GettingOrder) {
+				if (employee.s == MyMarketEmployee.MarketEmployeeState.GettingOrder) {
 					giveCustomerDeliveryOrder(employee);
 					return true;
 				}
@@ -184,7 +136,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 			if (customers.size() > 0 && employees.size() > 0) {
 				synchronized(employees) {
 					for (MyMarketEmployee employee : employees) {
-						if (employee.s == MarketEmployeeState.Available) {
+						if (employee.s == MyMarketEmployee.MarketEmployeeState.Available) {
 							assistCustomer(customers.get(0), employee);
 							return true;
 						}
@@ -207,19 +159,19 @@ public class MarketManagerRole extends Role implements MarketManager {
 		if (c.customer != null) {
 			e.employee.msgAssistCustomer(c.customer);
 			customers.remove(c);
-			e.s = MarketEmployeeState.CollectingItems;			
+			e.s = MyMarketEmployee.MarketEmployeeState.CollectingItems;			
 		}
 		else {
 			e.customerDelivery = c.customerDelivery;
 			e.employee.msgAssistCustomerDelivery(c.customerDelivery, c.customerDeliveryPayment);
-			e.s = MarketEmployeeState.GoingToPhone;
+			e.s = MyMarketEmployee.MarketEmployeeState.GoingToPhone;
 		}
 	}
 	
 	private void giveCustomerDeliveryOrder(MyMarketEmployee e) {
 		MyMarketCustomer cd = findCustomerDelivery(e.customerDelivery);
 		e.employee.msgHereIsCustomerDeliveryOrder(cd.order, cd.orderId);
-		e.s = MarketEmployeeState.CollectingItems;
+		e.s = MyMarketEmployee.MarketEmployeeState.CollectingItems;
 		customers.remove(cd);
 	}
 	
@@ -227,12 +179,26 @@ public class MarketManagerRole extends Role implements MarketManager {
 //  Getters and Setters
 //	=====================================================================
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
+	}
+	
+//	// TODO schung 99c0f4da25
+// 	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //	Utilities
@@ -260,4 +226,46 @@ public class MarketManagerRole extends Role implements MarketManager {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketManagerRole " + this.getPerson().getName(), msg);
     }
+	
+//	Classes
+//=====================================================================
+	
+	public static class MyMarketEmployee {
+		public enum MarketEmployeeState {Available, GoingToPhone, GettingOrder, CollectingItems};
+		public MarketEmployee employee;
+		public MarketCustomerDelivery customerDelivery;
+		public MarketEmployeeState s;
+		
+		public MyMarketEmployee(MarketEmployee employee) {
+			this.employee = employee;
+			customerDelivery = null;
+			s = MarketEmployeeState.Available;
+		}
+	}
+	
+	private class MyMarketCustomer {
+		private MarketCustomer customer;
+		private MarketCustomerDelivery customerDelivery;
+		private MarketCustomerDeliveryPayment customerDeliveryPayment;
+	    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+	    private int orderId;
+		
+		public MyMarketCustomer(MarketCustomer customer) {
+			this.customer = customer;
+			customerDelivery = null;
+			customerDeliveryPayment = null;
+		}
+		
+		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
+			this.customer = null;
+			customerDelivery = c;
+			customerDeliveryPayment = cPay;
+			
+            for (FOOD_ITEMS item: o.keySet()) {
+                order.put(item, o.get(item)); // Create a deep copy of the order map
+            }
+            orderId = id;
+		}
+	}
+	
 }

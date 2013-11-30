@@ -5,27 +5,34 @@ import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.RestaurantChoiWaiterAbs;
 
-public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
+/**
+ * The key difference between WaiterDirectRole vs. WaiterQueueRole is
+ * WaiterQueueRole puts the orders on plating (adds to queue), whereas
+ * WaiterDirectRole hands the orders directly to the cook (via msgHeresAnOrder)
+ */
+public class RestaurantChoiWaiterQueueRole extends RestaurantChoiWaiterBase {
 
-	/**
-	 * The key difference between Waiter2Role vs WaiterRole is
-	 * WaiterRole puts the orders on plating (adds to queue), whereas
-	 * Waiter2Role hands the orders directly to the cook (via msgHeresAnOrder)
-	 *  
-	 * @author ryanchoi
-	 *
-	 */
-	public RestaurantChoiWaiterRole() {
+	// Data
+	
+	// Constructor
+	
+	public RestaurantChoiWaiterQueueRole() {
 		super();
 	}
-	public RestaurantChoiWaiterRole(RestaurantChoiBuilding b, int t1, int t2){
+	
+	public RestaurantChoiWaiterQueueRole(RestaurantChoiBuilding b, int t1, int t2){
 		super(b, t1, t2);
 	}
+	
+	// Messages
+	
+	// Scheduler
+	
+	// Actions
 
 	@Override
-	public void sendOrderToCook(int i, RestaurantChoiOrder o) {
+	protected void sendOrderToCook(int i, RestaurantChoiOrder o) {
 		DoGoToCook(); // acquire is in method; this goes to cook plating
 		myCustomers.get(i).getOr().setTableNumber(myCustomers.get(i).getT()
 				.getTableNumber());
@@ -36,9 +43,16 @@ public class RestaurantChoiWaiterRole extends RestaurantChoiWaiterAbs{
 		//}
 	}
 
+	// Getters
+	
+	// Setters
+	
+	@Override
 	public void setRevolvingStand(RestaurantChoiRevolvingStand rs) {
 		orderqueue = rs;
 	}
+	
+	// Utilities
 	
 	@Override
 	public void print(String msg) {

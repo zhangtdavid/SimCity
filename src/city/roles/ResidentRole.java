@@ -29,6 +29,7 @@ public class ResidentRole extends Role implements Resident {
 	// Messages
 	
 	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		if(rstate == STATE.needToPayRent){
@@ -41,6 +42,7 @@ public class ResidentRole extends Role implements Resident {
 
 	// Actions
 
+	@Override
 	public void payRent() {
 		landlord.msgHeresRent(house.rent); // pay rent
 		this.getPerson().setCash((int)(this.getPerson().getCash()-house.rent)); // lose $ for rent
@@ -70,6 +72,7 @@ public class ResidentRole extends Role implements Resident {
 	public boolean isLandlord() {
 		return (landlord != null);
 	}
+	
 	// Setters
 	
 	// Utilities

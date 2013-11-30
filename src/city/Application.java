@@ -53,7 +53,7 @@ import city.roles.MarketManagerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiWaiterRole;
+import city.roles.RestaurantChoiWaiterQueueRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungHostRole;
@@ -489,7 +489,7 @@ public class Application {
 		p3Choi.setOccupation(p3r1Choi);
 
 		// Create waiter
-		RestaurantChoiWaiterRole p4r1Choi = new RestaurantChoiWaiterRole(rchoib1, 0, 24);
+		RestaurantChoiWaiterQueueRole p4r1Choi = new RestaurantChoiWaiterQueueRole(rchoib1, 0, 24);
 		rchoib1.addRole(p4r1Choi);
 		p4Choi.setOccupation(p4r1Choi);
 

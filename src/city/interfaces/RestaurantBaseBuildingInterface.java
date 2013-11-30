@@ -6,7 +6,7 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantBaseBuilding.Food;
 
-public interface RestaurantBaseBuildingInterface {
+public interface RestaurantBaseBuildingInterface extends BuildingInterface {
 
     // Messages
     

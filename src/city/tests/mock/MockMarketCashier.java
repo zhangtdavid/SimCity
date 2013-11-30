@@ -65,4 +65,16 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person"));		
 		System.out.println("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person");			
 	}
+
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
 }

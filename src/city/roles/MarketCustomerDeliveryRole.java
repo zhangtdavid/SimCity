@@ -19,20 +19,16 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
-
 	private RestaurantBaseBuilding restaurant;
-	
 	private MarketBuilding market;
-	
 	private MarketCustomerDeliveryPayment restaurantCashier;
-	
 	private MarketOrder order;
 	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	public enum MarketCustomerState
-	{None, Ordering};
+	// TODO Change these to private and add getters/setters
+	public EventLog log = new EventLog();
 	public MarketCustomerState state;
+	public enum MarketCustomerState {None, Ordering};
 	
 //	Constructor
 //	---------------------------------------------------------------
@@ -47,16 +43,9 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
         state = MarketCustomerState.None;
     }
 
-//  Activity Management
-//	=====================================================================
-	public void setActive(){
-//		this.setActivityBegun();
-        state = MarketCustomerState.Ordering;
-        runScheduler();
-	}
-	
 //  Messages
 //	=====================================================================	
+	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
 		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
@@ -92,21 +81,32 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //  Getters and Setters
 //	=====================================================================
 	// Restaurant
+	@Override
 	public RestaurantBaseBuilding getRestaurant() {
 		return restaurant;
 	}
 	
+	@Override
 	public void setRestaurant(RestaurantBaseBuilding restaurant) {
 		this.restaurant = restaurant;
 	}
 	
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
+	}
+	
+	@Override
+	public void setActive(){
+		// this.setActivityBegun();
+        state = MarketCustomerState.Ordering;
+        runScheduler();
 	}
 	
 //  Utilities

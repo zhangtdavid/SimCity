@@ -11,16 +11,16 @@ import city.buildings.RestaurantChoiBuilding;
 import city.gui.RestaurantChoiPanel;
 import city.roles.RestaurantChoiCookRole;
 import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChoiWaiter;
-import city.tests.mock.MockRestaurantChoiWaiter2;
+import city.tests.mock.MockRestaurantChoiWaiterQueue;
+import city.tests.mock.MockRestaurantChoiWaiterDirect;
 import junit.framework.TestCase;
 
 public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	RestaurantChoiCookRole cook;
 	RestaurantChoiRevolvingStand rs;
 	PersonAgent p;
-	MockRestaurantChoiWaiter waiter1; 
-	MockRestaurantChoiWaiter2 waiter2;
+	MockRestaurantChoiWaiterQueue waiter1; 
+	MockRestaurantChoiWaiterDirect waiter2;
 	RestaurantChoiBuilding b;
 	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white, new Dimension(0,0));
 	
@@ -28,15 +28,15 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	public void setUp() throws Exception{
 		//b = new RestaurantChoiBuilding("ff", panel);
 		rs = new RestaurantChoiRevolvingStand();
-		waiter1 = new MockRestaurantChoiWaiter("mockw");
+		waiter1 = new MockRestaurantChoiWaiterQueue("mockw");
 		waiter1.setRevolvingStand(rs);
-		waiter2 = new MockRestaurantChoiWaiter2("Mockw");
+		waiter2 = new MockRestaurantChoiWaiterDirect("Mockw");
 		MockPerson p = new MockPerson("Cook"); 
 		cook = new RestaurantChoiCookRole();
 		cook.setRevolvingStand(rs);
 		p.addRole(cook);
 		cook.setPerson(p);
-		cook.orders.clear();
+		cook.getOrders().clear();
 		super.setUp();		
 	}
 	
@@ -47,17 +47,17 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	public void testWaiter2() throws InterruptedException{
 		//create the order
 		RestaurantChoiOrder o = new RestaurantChoiOrder(FOOD_ITEMS.steak,4,waiter2); // choice, table#, waiter
-		assertTrue("List of orders should initially be empty", cook.orders.isEmpty());
+		assertTrue("List of orders should initially be empty", cook.getOrders().isEmpty());
 		assertTrue("Order should be state ",  o.getState()==RestaurantChoiOrder.ORDERED);
 		assertTrue("Order should be just like how I set it", o.getChoice() == FOOD_ITEMS.steak);
 		assertTrue("Order should be just like how I set it", o.getTableNumber() == 4);
 		assertTrue("Order should be just like how I set it", o.getWaiter().equals(waiter2));
 		//introduce the order to the cook directly 
 		cook.msgHeresAnOrder(o);
-		assertTrue("Cook should have exactly 1 order", cook.orders.size() == 1);
-		assertTrue("this order should have state RECOGNIZED", cook.orders.get(0).getState() == RestaurantChoiOrder.RECOGNIZED);
-		assertTrue("this order should have same choice as before", cook.orders.get(0).getChoice() == FOOD_ITEMS.steak);
-		assertTrue("this order should have same table# as before", cook.orders.get(0).getTableNumber() == 4);
+		assertTrue("Cook should have exactly 1 order", cook.getOrders().size() == 1);
+		assertTrue("this order should have state RECOGNIZED", cook.getOrders().get(0).getState() == RestaurantChoiOrder.RECOGNIZED);
+		assertTrue("this order should have same choice as before", cook.getOrders().get(0).getChoice() == FOOD_ITEMS.steak);
+		assertTrue("this order should have same table# as before", cook.getOrders().get(0).getTableNumber() == 4);
 		//analyzing the order. skip gui since haven't initialized it
 		//assertTrue("analyzeOrder should return true", cook.AnalyzeCookOrder(o));
 		//assertTrue("After analyzeOrder returns true, order should have state TO_COOK", o.getState() == RestaurantChoiOrder.TO_COOK);
@@ -72,8 +72,7 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	 * @throws InterruptedException 
 	 */
 	public void testWaiter1() throws InterruptedException{
-		cook.orders.clear();
-		assertTrue("List of orders should initially be empty", cook.orders.isEmpty());
+		assertTrue("List of orders should initially be empty", cook.getOrders().isEmpty());
 		RestaurantChoiOrder o = new RestaurantChoiOrder(FOOD_ITEMS.chicken,4,waiter2);
 		assertTrue("Order should be state ",  o.getState()==RestaurantChoiOrder.ORDERED);
 		assertTrue("Order should be just like how I set it", o.getChoice() == FOOD_ITEMS.chicken);
@@ -88,16 +87,16 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 		//cook.CheckBack(); //checkback relies on a timer event, so i'll just pretend the timer's up and the cook takes the action inside.
 		RestaurantChoiOrder oo = rs.poll();
 		assertTrue("definitely should be the same as before", oo.getTableNumber()==4);
-		assertTrue("cook should have 0 order, but really has " + cook.orders.size(), cook.orders.size() == 0);
-		cook.orders.add(oo); 
+		assertTrue("cook should have 0 order, but really has " + cook.getOrders().size(), cook.getOrders().size() == 0);
+		cook.getOrders().add(oo); 
 		assertTrue("state of oo should be in queue", oo.getState() == RestaurantChoiOrder.IN_QUEUE);
 		//cook.AnalyzeCookOrder(oo); // since i can't test a whole building (it's finely weaved into the architecture and requires
 		//an entire city map, bankers, components, etc... recent changes exploded all my tests.
 		//
 		assertTrue("After cook checks, rs should be empty", rs.isEmpty());
-		assertTrue("Cook should have one order after checking", cook.orders.size() == 1);
+		assertTrue("Cook should have one order after checking", cook.getOrders().size() == 1);
 		//since unable to test AnalyzeCookOrder (immensely frustrating)
 		//the end result is actually still just in the queue.
-		assertTrue("The one order should be able to be cooked, because initialization starts with >0 of all foods", cook.orders.get(0).getState() == RestaurantChoiOrder.IN_QUEUE); 
+		assertTrue("The one order should be able to be cooked, because initialization starts with >0 of all foods", cook.getOrders().get(0).getState() == RestaurantChoiOrder.IN_QUEUE); 
 	} 
 }

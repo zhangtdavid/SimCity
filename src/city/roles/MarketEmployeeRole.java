@@ -19,37 +19,28 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //  Data
 //	=====================================================================
-	public EventLog log = new EventLog();
-
 	private MarketBuilding market;
-	
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
-	
+	private WorkingState workingState = WorkingState.Working;
 	private int loc; // location at front counter
-	
+	//	TODO schung 99c0f4da25
+	//	private Semaphore atPhone = new Semaphore(0, true);
+	//	private Semaphore finishedCollectingItems = new Semaphore(0, true);
+	//	private Semaphore atCashier = new Semaphore(0, true);
+	//	private Semaphore atCounter = new Semaphore(0, true);
+    
+    // TODO Change these to private and add getters/setters
+	public EventLog log = new EventLog();
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	public MarketCustomer customer;
 	public MarketCustomerDelivery customerDelivery;
 	public MarketCustomerDeliveryPayment customerDeliveryPayment;
-	
 	public enum MarketEmployeeState {None, AskedForOrder};
 	public MarketEmployeeState state;
-
 	public enum MarketEmployeeEvent {AskedToAssistCustomer, OrderReceived};
 	public MarketEmployeeEvent event;
-	
     public Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
     public int orderId;
-    
     public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
-	
-//	Gui
-//	---------------------------------------------------------------
-//		TODO schung 99c0f4da25
-//	private Semaphore atPhone = new Semaphore(0, true);
-//	private Semaphore finishedCollectingItems = new Semaphore(0, true);
-//	private Semaphore atCashier = new Semaphore(0, true);
-//	private Semaphore atCounter = new Semaphore(0, true);
 	
 //	Constructor
 //	---------------------------------------------------------------
@@ -65,21 +56,12 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		state = MarketEmployeeState.None;
 		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
     }
-
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
-	}
 	
 //  Messages
 //	=====================================================================
 //	Manager
 //	---------------------------------------------------------------
+	@Override
 	public void msgAssistCustomer(MarketCustomer c) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomer from Market Manager.");
@@ -92,6 +74,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		}
 	}
 	
+	@Override
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
 		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
@@ -104,6 +87,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		}
 	}
 	
+	@Override
 	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager."));
 		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager.");
@@ -117,6 +101,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	
 //	Customer
 //	---------------------------------------------------------------
+	@Override
 	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Employee received msgHereIsMyOrder from Market Customer."));
 		System.out.println("Market Employee received msgHereIsMyOrder from Market Customer.");
@@ -229,12 +214,26 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //  Getters and Setters
 //	=====================================================================
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
+	}
+	
+//	// TODO schung 99c0f4da25
+//	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Utilities

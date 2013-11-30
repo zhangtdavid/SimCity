@@ -1,7 +1,5 @@
 package city.tests.mock;
 
-import java.util.ArrayList;
-
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiMenu;
 import city.Application.FOOD_ITEMS;
@@ -103,98 +101,6 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void goToRestaurant() {
-		// TODO Auto-generated method stub
-		log.add(new LoggedEvent("Received msgGetHungry (in goToRestaurant).")); 
-
-	}
-
-	@Override
-	public void goToTable() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void goToDishes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void LookAtMenu() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void giveOrder() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public FOOD_ITEMS pickRandom(int cash, ArrayList<FOOD_ITEMS> mem,
-			boolean hasHitZero) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void EatFood() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void Checkplz() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void ImLeaving() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void Pay() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void LeaveNow() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void gotChange() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void startDishes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void leaveAfterDishes() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void ConsiderLeaving() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public boolean isHungryNow() {
 		// TODO Auto-generated method stub
 		return false;
@@ -219,7 +125,7 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public AgentState getState() {
+	public STATE getState() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -278,10 +184,4 @@ public class MockRestaurantChoiCustomer extends MockRole implements RestaurantCh
 		
 	}
 
-	@Override
-	public FOOD_ITEMS int2Food(int index) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-	
 }
