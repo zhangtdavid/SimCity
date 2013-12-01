@@ -925,7 +925,7 @@ public class Application {
 		/**
 		 * Find the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+		public static Building findClosestBuilding(BUILDING type, Person p) {
 			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
 			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
 			double closestDistance = 1000000;

@@ -16,13 +16,12 @@ import city.gui.BuildingCard;
 import city.interfaces.Apartment;
 
 /**
- * A House contains:
+ * An apartment contains:
  * - Refrigerator
  * - Stove
  * - Table
- * - Bed
- * One person lives in a house.
- * Some people own their own houses. (One person one house?)
+ * - 5 Beds
+ * Up to five people can live in an apartment.
  */
 public class AptPanel extends BuildingCard implements ActionListener{
 	
@@ -42,6 +41,8 @@ public class AptPanel extends BuildingCard implements ActionListener{
 	static final int ATY = 400;
 	static final int ABXi = 490; // initial apt bed
 	static final int ABYi = 50;
+	static final int ADX = 250;
+	static final int ADY = 490;
 	static final int ABYint = 100; // y-Interval for apt beds
 	// every apt has 5 beds regardless of how many people there are; already furnished!
 	static final int NUMBER_OF_BEDS = 5; // could also refer to AptBuilding.NUMBER_OF_BEDS if desired
@@ -74,7 +75,9 @@ public class AptPanel extends BuildingCard implements ActionListener{
 	        graphics.fillRect(ASX,ASY,WIDTH,WIDTH);
 	        graphics.setColor(Color.DARK_GRAY); // Table
 	        graphics.fillRect(ATX,ATY,WIDTH,WIDTH);
-	        graphics.setColor(Color.BLACK); 
+	        graphics.setColor(Color.BLACK);
+	        graphics.fillRect(ADX,ADY,WIDTH,WIDTH);
+	        graphics.setColor(Color.ORANGE); 
 	        for(int i = 0; i < Apartment.NUMBER_OF_BEDS; i++){
 		        graphics.fillRect(ABXi,ABYi+ABYint,WIDTH,WIDTH);
 	        }// Bed (5 for apts)

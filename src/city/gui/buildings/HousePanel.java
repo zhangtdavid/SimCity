@@ -44,10 +44,9 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	static final int HTY = 400;
 	static final int HBXi = 490; // initial house bed
 	static final int HBYi = 50;
-	static final int HBYint = 100; // y-Interval for house beds
-	// every house has 1 bed regardless of how many people there are; already furnished!
+	static final int HDX = 250;
+	static final int HDY = 490;
 	static final int NUMBER_OF_BEDS = 1;
-	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
 	
 	//Constructor
 	public HousePanel(Color color, Dimension panelDimension){
@@ -77,6 +76,8 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	        graphics.fillRect(HTX,HTY,WIDTH,WIDTH);
 	        graphics.setColor(Color.BLACK); // Bed (1 for houses)
 	        graphics.fillRect(HBXi,HBYi,WIDTH,WIDTH);
+	        graphics.setColor(Color.orange); // Bed (1 for houses)
+	        graphics.fillRect(HDX,HDY,WIDTH,WIDTH);
 	        
 	        // Update the position of each visible element
 	        for(Animation animation : animations) {
