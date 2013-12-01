@@ -954,6 +954,10 @@ public class Application {
 			}
 			return returnRoad;
 		}
+		
+		public static void clearMap() {
+			map.clear();
+		}
 	}
 
 }

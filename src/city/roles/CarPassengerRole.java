@@ -77,6 +77,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Getters
 	
+	@Override
+	public BuildingInterface getDestination() {
+		return destination;
+	}
+	
 	// Setters
 	
 	@Override
@@ -90,7 +95,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.CAR, "CarPassengerRole " + this.getPerson().getName(), msg);
     }
 	

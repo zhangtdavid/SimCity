@@ -61,4 +61,10 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 		
 	}
 
+	@Override
+	public BANK_SERVICE getService() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

@@ -24,6 +24,10 @@ public abstract class MockAgent implements AgentInterface {
 	
 	// Scheduler
 	
+	public boolean runScheduler() throws InterruptedException {
+		return false;
+	}
+	
 	// Actions
 	
 	// Getters

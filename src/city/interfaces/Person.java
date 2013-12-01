@@ -7,6 +7,7 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
+import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
@@ -48,6 +49,7 @@ public interface Person extends AgentInterface {
 	public MarketCustomerRole getMarketCustomerRole();
 	public RoleInterface getRestaurantCustomerRole();
 	public STATE getState();
+	public BankCustomerRole getBankCustomerRole();
 	
 	// Setters
 	

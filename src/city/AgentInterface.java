@@ -19,7 +19,9 @@ public interface AgentInterface {
 	
 	// Messages
 	
-	// Scheduler	
+	// Scheduler
+	
+	public boolean runScheduler() throws InterruptedException;
 	
 	// Actions
 	

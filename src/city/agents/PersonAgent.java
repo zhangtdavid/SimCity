@@ -27,6 +27,7 @@ import city.abstracts.ResidenceBuildingInterface;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.MarketBuilding;
+import city.interfaces.Bank;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -73,7 +74,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastAteAtRestaurant = startDate;
 		this.lastWentToSleep = startDate;
 		this.state = STATE.none;
-		this.setCash(50); // If you have an error on startup, this might be it. Don't know why, but it is. 
+		this.cash = 0;
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -260,7 +261,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToWork() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(occupation.getWorkplace(Building.class));
+		processTransportationDeparture(occupation.getWorkplace(BuildingInterface.class));
 		state = STATE.goingToWork;
 	}
 	
@@ -271,7 +272,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToBank() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		BankBuilding b = (BankBuilding) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
+		Bank b = (Bank) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = STATE.goingToBank;
 	}
@@ -300,7 +301,6 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
-
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (Role) r0.newInstance();
@@ -413,6 +413,11 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public BusPassengerRole getBusPassengerRole() {
 		return busPassengerRole;
+	}
+
+	@Override
+	public BankCustomerRole getBankCustomerRole() {
+		return bankCustomerRole;
 	}
 
 	@Override
@@ -729,14 +734,25 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the current time is at or within their working hours
 	 */
 	private boolean inShiftRange() {
+		// TODO do we need to give the person enough time to get to work?
+		
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
-		int time = c.get(Calendar.HOUR_OF_DAY);
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int minute = c.get(Calendar.MINUTE);
 		
 		boolean disposition = false;
-		// TODO do we need to give the person enough time to get to work?
-		if (time >= occupation.getShiftStart() && time <= occupation.getShiftEnd()) {
+		// Covers any range starting at 0 or above and going to 23
+		if (hour >= occupation.getShiftStart() && hour <= occupation.getShiftEnd()) {
 			disposition = true;
+		}
+		// Covers any range starting at 0 or above and ending at 0
+		if (hour >= occupation.getShiftStart() && occupation.getShiftEnd() == 0 && hour != 0) {
+			disposition = true;
+		}
+		// Shifts end at exactly shiftEnd
+		if (hour == occupation.getShiftEnd() && minute >= 0) {
+			disposition = false;
 		}
 		return disposition;
 	}
