@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
 import city.AnimationInterface;
-import city.buildings.BusStopBuilding;
+import city.interfaces.BusStop;
 
 public interface AnimatedPerson extends AnimationInterface {
 	
@@ -13,7 +13,7 @@ public interface AnimatedPerson extends AnimationInterface {
 	
 	// Movement
 	
-	public void goToBusStop(BusStopBuilding b);
+	public void goToBusStop(BusStop b);
 	public void goToSleep();
 	public void cookAndEatFood();
     

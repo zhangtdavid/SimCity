@@ -12,8 +12,8 @@ import city.Application;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 
@@ -32,7 +32,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	private MenuItem orderItem;
 	private RestaurantTimmsWaiter waiter = null;
 	private Timer timer = new Timer();
-	private RestaurantTimmsBuilding rtb;
+	private RestaurantTimms rtb;
 	
 	private List<MenuItem> failedItems = new ArrayList<MenuItem>();
 	
@@ -291,7 +291,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	@Override
-	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+	public void setRestaurantTimmsBuilding(RestaurantTimms b) {
 		this.rtb = b;
 	}
 	

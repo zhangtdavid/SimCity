@@ -3,7 +3,7 @@ package city.tests.mock;
 import utilities.LoggedEvent;
 import city.Application;
 import city.abstracts.MockRole;
-import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 import city.roles.RestaurantTimmsCustomerRole.State;
@@ -76,7 +76,7 @@ public class MockRestaurantTimmsCustomer extends MockRole implements RestaurantT
 	// Setters
 	
 	@Override
-	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b) {
+	public void setRestaurantTimmsBuilding(RestaurantTimms b) {
 		return;
 	}
 

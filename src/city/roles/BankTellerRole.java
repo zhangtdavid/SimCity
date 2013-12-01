@@ -5,7 +5,7 @@ import trace.AlertTag;
 import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
-import city.buildings.RestaurantJPBuilding;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 
@@ -26,7 +26,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
 	
@@ -105,7 +105,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		if(wantsInactive && currentCustomer == null){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 			return false;
 		}
 		if(currentCustomer != null){
@@ -215,7 +215,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	public void setInactive(){
 		if(currentCustomer == null){
 			super.setInactive();
-			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}	
 		else{
 			building.manager.msgUnavailable(this);

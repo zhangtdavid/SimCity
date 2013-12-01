@@ -21,7 +21,7 @@ public interface BuildingInterface {
 	public int getCash();
 	public String getCustomerRoleName();
 	public String getCustomerAnimationName();
-	public <T extends AnimationInterface> T getOccupyingRoleAnimation(Role r, Class<T> type);
+	public <T extends AnimationInterface> T getOccupyingRoleAnimation(RoleInterface r, Class<T> type);
 	public CityViewBuilding getCityViewBuilding();
 	public BuildingCard getPanel();
 	
@@ -35,9 +35,9 @@ public interface BuildingInterface {
 	
 	// Utilities 
 	
-	public abstract void addRole(Role r);
-	public void addRole(Role r, Animation a);
-	public void removeRole(Role r);
-	public boolean roleExists(Role r);
+	public void addOccupyingRole(RoleInterface r);
+	public void addOccupyingRole(RoleInterface r, Animation a);
+	public void removeOccupyingRole(RoleInterface r);
+	public boolean occupyingRoleExists(RoleInterface r);
 
 }

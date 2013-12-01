@@ -1,19 +1,23 @@
 package city.tests.mock;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.MockAgent;
-import city.abstracts.ResidenceBuildingBase;
+import city.abstracts.ResidenceBuildingInterface;
 import city.interfaces.Car;
 import city.interfaces.Person;
+import city.roles.BusPassengerRole;
+import city.roles.CarPassengerRole;
+import city.roles.MarketCustomerRole;
 
 public class MockPerson extends MockAgent implements Person {
 	
 	// Data
 	
 	private String name;
-	public ResidenceBuildingBase home;
+	public ResidenceBuildingInterface home;
 	private int cash;
 	
 	// Constructor
@@ -52,12 +56,48 @@ public class MockPerson extends MockAgent implements Person {
 	}
 
 	@Override
-	public ResidenceBuildingBase getHome() {
+	public ResidenceBuildingInterface getHome() {
 		return home;
 	}
 	
 	@Override
-	public Role getOccupation() {
+	public RoleInterface getOccupation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public ArrayList<RoleInterface> getRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Car getCar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CarPassengerRole getCarPassengerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BusPassengerRole getBusPassengerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketCustomerRole getMarketCustomerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public RoleInterface getRestaurantCustomerRole() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -83,7 +123,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(Role r) {
+	public void setOccupation(RoleInterface r) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -94,14 +134,14 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBuildingBase h) {
+	public void setHome(ResidenceBuildingInterface h) {
 		home = h;		
 	}
 	
 	// Utilities
 
 	@Override
-	public void addRole(Role r) {
+	public void addRole(RoleInterface r) {
 		// TODO Auto-generated method stub
 		
 	}

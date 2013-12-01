@@ -16,7 +16,7 @@ import city.agents.PersonAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
-import city.buildings.AptBuilding;
+import city.buildings.ApartmentBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
@@ -270,22 +270,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p1r1Zhang);
+		rzb1.addOccupyingRole(p1r1Zhang);
 		p1Zhang.setOccupation(p1r1Zhang);
 
 		// Create cook
 		RestaurantZhangCookRole p2r1Zhang = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p2r1Zhang);
+		rzb1.addOccupyingRole(p2r1Zhang);
 		p2Zhang.setOccupation(p2r1Zhang);
 
 		// Create host
 		RestaurantZhangHostRole p3r1Zhang = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p3r1Zhang);
+		rzb1.addOccupyingRole(p3r1Zhang);
 		p3Zhang.setOccupation(p3r1Zhang);
 
 		// Create waiter
 		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p4r1Zhang);
+		rzb1.addOccupyingRole(p4r1Zhang);
 		p4Zhang.setOccupation(p4r1Zhang);
 
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
@@ -368,22 +368,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantTimmsCashierRole p1r1Timms = new RestaurantTimmsCashierRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p1r1Timms);
+		rtb.addOccupyingRole(p1r1Timms);
 		p1Timms.setOccupation(p1r1Timms);
 
 		// Create cook
 		RestaurantTimmsCookRole p2r1Timms = new RestaurantTimmsCookRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p2r1Timms);
+		rtb.addOccupyingRole(p2r1Timms);
 		p2Timms.setOccupation(p2r1Timms);
 
 		// Create host
 		RestaurantTimmsHostRole p3r1Timms = new RestaurantTimmsHostRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p3r1Timms);
+		rtb.addOccupyingRole(p3r1Timms);
 		p3Timms.setOccupation(p3r1Timms);
 
 		// Create waiter
 		RestaurantTimmsWaiterRole p4r1Timms = new RestaurantTimmsWaiterRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p4r1Timms);
+		rtb.addOccupyingRole(p4r1Timms);
 		p4Timms.setOccupation(p4r1Timms);
 
 		// RESTAURANTCHOI----------------------------------------------------------------------------
@@ -435,8 +435,8 @@ public class Application {
 		HouseBuilding h2Choi = new HouseBuilding("House 2 Choi", p0r1Choi, rhp2Choi);
 		HouseBuilding h3Choi = new HouseBuilding("House 3 Choi", p0r1Choi, rhp3Choi);
 		HouseBuilding h4Choi = new HouseBuilding("House 4 Choi", p0r1Choi, rhp4Choi);
-		AptBuilding app0Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
-		AptBuilding app1Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+		ApartmentBuilding app0Choi = new ApartmentBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+		ApartmentBuilding app1Choi = new ApartmentBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
 
 		// Create people
 		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date);
@@ -474,23 +474,23 @@ public class Application {
 
 		// Landlord
 		RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(rchoib1, 0, 24);
-		rchoib1.addRole(p1r1Choi);
+		rchoib1.addOccupyingRole(p1r1Choi);
 		p1Choi.setOccupation(p1r1Choi);
 
 		// Create cook
 		RestaurantChoiCookRole p2r1Choi = new RestaurantChoiCookRole(rchoib1, 0, 24);
-		rchoib1.addRole(p2r1Choi);
+		rchoib1.addOccupyingRole(p2r1Choi);
 		p2Choi.setOccupation(p2r1Choi);
 		p2r1Choi.addMarket(m1);
 
 		// Create host
 		RestaurantChoiHostRole p3r1Choi = new RestaurantChoiHostRole(rchoib1, 0, 24);
-		rchoib1.addRole(p3r1Choi);
+		rchoib1.addOccupyingRole(p3r1Choi);
 		p3Choi.setOccupation(p3r1Choi);
 
 		// Create waiter
 		RestaurantChoiWaiterQueueRole p4r1Choi = new RestaurantChoiWaiterQueueRole(rchoib1, 0, 24);
-		rchoib1.addRole(p4r1Choi);
+		rchoib1.addOccupyingRole(p4r1Choi);
 		p4Choi.setOccupation(p4r1Choi);
 
 		//Create bank roles
@@ -501,8 +501,8 @@ public class Application {
 		BankTellerRole p10r1Choi = new BankTellerRole(b1, 0, 24);
 		p10Choi.setOccupation(p10r1Choi);
 		p10r1Choi.setPerson(p10Choi);
-		b1.addRole(p9r1Choi);
-		b1.addRole(p10r1Choi);
+		b1.addOccupyingRole(p9r1Choi);
+		b1.addOccupyingRole(p10r1Choi);
 
 		//Create Market people
 		MarketManagerRole p5r1Choi = new MarketManagerRole(m1, 0, 24);
@@ -517,10 +517,10 @@ public class Application {
 		p7r1Choi.setPerson(p7Choi);
 		p8r1Choi.setPerson(p8Choi);
 		p8Choi.setOccupation(p8r1Choi);
-		m1.addRole(p5r1Choi);
-		m1.addRole(p6r1Choi);
-		m1.addRole(p7r1Choi);
-		m1.addRole(p8r1Choi);
+		m1.addOccupyingRole(p5r1Choi);
+		m1.addOccupyingRole(p6r1Choi);
+		m1.addOccupyingRole(p7r1Choi);
+		m1.addOccupyingRole(p8r1Choi);
 		m1.manager = p5r1Choi;
 		m1.cashier = p6r1Choi;
 		m1.addEmployee(p7r1Choi);
@@ -665,25 +665,25 @@ public class Application {
 		p1r1Chung.setPerson(p1Chung);
 		p1r1Chung.setMarketCustomerDeliveryPaymentPerson();
 		p1r1Chung.setBankCustomerPerson();
-		rcb1.addRole(p1r1Chung);
+		rcb1.addOccupyingRole(p1r1Chung);
 		p1Chung.setOccupation(p1r1Chung);
 		
 		// Create cook
 		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
 		p2r1Chung.setPerson(p2Chung);		
-		rcb1.addRole(p2r1Chung);
+		rcb1.addOccupyingRole(p2r1Chung);
 		p2Chung.setOccupation(p2r1Chung);
 		
 		// Create host
 		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
 		p3r1Chung.setPerson(p3Chung);		
-		rcb1.addRole(p3r1Chung);
+		rcb1.addOccupyingRole(p3r1Chung);
 		p3Chung.setOccupation(p3r1Chung);
 		
 		// Create waiter
 		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
 		p4r1Chung.setPerson(p4Chung);		
-		rcb1.addRole(p4r1Chung);
+		rcb1.addOccupyingRole(p4r1Chung);
 		p4Chung.setOccupation(p4r1Chung);
 		
 		// Start threads
@@ -759,22 +759,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantJPCashierRole p1r1JP = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p1r1JP);
+		rjpb1.addOccupyingRole(p1r1JP);
 		p1JP.setOccupation(p1r1JP);
 
 		// Create cook
 		RestaurantJPCookRole p2r1JP = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p2r1JP);
+		rjpb1.addOccupyingRole(p2r1JP);
 		p2JP.setOccupation(p2r1JP);
 
 		// Create host
 		RestaurantJPHostRole p3r1JP = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p3r1JP);
+		rjpb1.addOccupyingRole(p3r1JP);
 		p3JP.setOccupation(p3r1JP);
 
 		// Create waiter
 		RestaurantJPWaiterRole p4r1JP = new RestaurantJPWaiterRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p4r1JP);
+		rjpb1.addOccupyingRole(p4r1JP);
 		p4JP.setOccupation(p4r1JP);
 
 		// Wait for stuff to get set up

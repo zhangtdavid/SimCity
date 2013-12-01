@@ -22,7 +22,7 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	
 	// Getters
 	
-	public MarketBuilding getMarket();
+	public Market getMarket();
 	
 	// Setters
 

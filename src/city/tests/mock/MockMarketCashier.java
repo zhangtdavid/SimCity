@@ -7,6 +7,7 @@ import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -17,7 +18,7 @@ import city.interfaces.MarketEmployee;
 public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	public EventLog log = new EventLog();
-	public MarketBuilding market;
+	public Market market;
 	
 	public MockMarketCashier() {
 		// TODO Auto-generated method stub
@@ -67,7 +68,7 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		// TODO Auto-generated method stub
 		return null;
 	}

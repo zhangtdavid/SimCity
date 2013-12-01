@@ -1,12 +1,13 @@
 package city.buildings;
 
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.ResidenceBuildingBase;
 import city.gui.buildings.HousePanel;
+import city.interfaces.House;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
-public class HouseBuilding extends ResidenceBuildingBase {
+public class HouseBuilding extends ResidenceBuildingBase implements House {
 	
 	// Data
 	
@@ -35,7 +36,7 @@ public class HouseBuilding extends ResidenceBuildingBase {
 	// Utilities
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		// TODO
 		return;
 	}

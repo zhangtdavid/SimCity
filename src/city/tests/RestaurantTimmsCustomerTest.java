@@ -4,6 +4,7 @@ import junit.framework.TestCase;
 import city.Application;
 import city.buildings.RestaurantTimmsBuilding;
 import city.gui.views.CityViewRestaurant;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.roles.RestaurantTimmsCustomerRole;
 import city.tests.animations.mock.MockRestaurantTimmsAnimatedCustomer;
@@ -18,7 +19,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 	MockRestaurantTimmsHost host;
 	MockRestaurantTimmsWaiter waiter;
 	
-	RestaurantTimmsBuilding rtb;
+	RestaurantTimms rtb;
 	
 	MockPerson customerPerson;
 	RestaurantTimmsCustomerRole customer;

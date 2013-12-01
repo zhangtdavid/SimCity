@@ -1,19 +1,18 @@
 package city.buildings;
 
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.ResidenceBuildingBase;
+import city.interfaces.Apartment;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
-public class AptBuilding extends ResidenceBuildingBase{
+public class ApartmentBuilding extends ResidenceBuildingBase implements Apartment {
 	
 	// Data
-
-	public final static int NUMBER_OF_BEDS = 5;
 	
 	// Constructor
 
-	public AptBuilding(String name, Landlord l) { 
+	public ApartmentBuilding(String name, Landlord l) { 
 		super(name);
 		this.setLandlord(l);
 		// this.landlord.setResidence(this); // landlord != any of the residents
@@ -25,7 +24,7 @@ public class AptBuilding extends ResidenceBuildingBase{
 
 	@Override
 	public void addResident(Resident r) {
-		if(residents.size() < AptBuilding.NUMBER_OF_BEDS) {
+		if(residents.size() < Apartment.NUMBER_OF_BEDS) {
 			residents.add(r);
 		}
 	}
@@ -33,7 +32,7 @@ public class AptBuilding extends ResidenceBuildingBase{
 	// Utilities
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		// TODO
 		return;
 	}

@@ -17,7 +17,7 @@ public abstract class Role implements RoleInterface {
 	private int shiftEnd; // FOR OCCUPATIONS - when the role can leave work
 	private boolean active;
 	private boolean activity;
-	private Building workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
+	private BuildingInterface workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
 	private AnimationInterface animation;
 	
 	// Constructor
@@ -53,7 +53,7 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
-	public  <T extends Building> T getWorkplace(Class<T> type) {
+	public  <T extends BuildingInterface> T getWorkplace(Class<T> type) {
 		return type.cast(workplace);
 	}
 	
@@ -95,7 +95,7 @@ public abstract class Role implements RoleInterface {
 	}
 	
 	@Override
-	public void setWorkplace(Building b) {
+	public void setWorkplace(BuildingInterface b) {
 		this.workplace = b;
 	}
 	

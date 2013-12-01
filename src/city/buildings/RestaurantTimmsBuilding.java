@@ -8,9 +8,8 @@ import java.util.Map;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.FOOD_ITEMS;
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
-import city.abstracts.RestaurantBuildingInterface;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.RestaurantTimmsCustomerAnimation;
@@ -19,13 +18,14 @@ import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
 import city.gui.buildings.RestaurantTimmsPanel;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
-public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements RestaurantBuildingInterface {
+public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements RestaurantTimms {
 	
 	// Data
 	
@@ -48,8 +48,6 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	private static final int MENU_PRICE_MIN = 5;
 	private static final int MENU_PRICE_MAX = 12;
 	
-	public static final int WORKER_SALARY = 200;
-
 	private int waiterRoundRobinIndex = 0;
 	
 	// Constructor
@@ -83,10 +81,12 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	// Getters //
 	//=========//
 	
+	@Override
 	public RestaurantTimmsCashier getCashier() {
 		return cashier;
 	}
 	
+	@Override
 	public RestaurantTimmsCook getCook() {
 		return cook;
 	}
@@ -94,6 +94,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	/**
 	 * Returns the list of waiting customers from the list of customers.
 	 */
+	@Override
 	public List<RestaurantTimmsCustomer> getWaitingCustomers() {
 		List<RestaurantTimmsCustomer> list = new ArrayList<RestaurantTimmsCustomer>();
 		for (InternalCustomer c : restaurantCustomers) {
@@ -108,6 +109,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	 * Returns a waiting customer from the list of customers. Sets the customer's host
 	 * and waiter to the specified values and marks the customer as no longer waiting.
 	 */
+	@Override
 	public RestaurantTimmsCustomer getCustomer(RestaurantTimmsHost h, RestaurantTimmsWaiter w) {
 		InternalCustomer i = null;
 		for (InternalCustomer temp : restaurantCustomers) {
@@ -122,6 +124,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 		return i.getCustomer();
 	}
 	
+	@Override
 	public RestaurantTimmsHost getHost() {
 		return host;
 	}
@@ -129,6 +132,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	/**
 	 * Returns the list of waiters.
 	 */
+	@Override
 	public List<RestaurantTimmsWaiter> getWaiters() {
 		return restaurantWaiters;
 	}
@@ -136,6 +140,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	/**
 	 * Returns a waiter from the list of waiters. Waiter to return is chosen round-robin style.
 	 */
+	@Override
 	public RestaurantTimmsWaiter getWaiter() {
 		RestaurantTimmsWaiter w = restaurantWaiters.get(waiterRoundRobinIndex);
 		waiterRoundRobinIndex = (waiterRoundRobinIndex + 1) % restaurantWaiters.size();
@@ -145,22 +150,27 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	/**
 	 * Returns the index of a waiter from the list of waiters. This tells the waiter where his home position is.
 	 */
+	@Override
 	public int getWaiterIndex(RestaurantTimmsWaiter w) {
 		return restaurantWaiters.indexOf(w);
 	}
 	
+	@Override
 	public List<Table> getTables() {
 		return restaurantTables;
 	}
 	
+	@Override
 	public List<MenuItem> getMenuItems() {
 		return restaurantMenu;
 	}
 	
+	@Override
 	public List<Check> getChecks() {
 		return restaurantChecks;
 	}
 	
+	@Override
 	public List<Order> getOrders() {
 		return restaurantOrders;
 	}
@@ -169,14 +179,17 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	// Setters //
 	//=========//
 	
+	@Override
 	public void setCashier(RestaurantTimmsCashier c) {
 		this.cashier = c;
 	}
 	
+	@Override
 	public void setCook(RestaurantTimmsCook c) {
 		this.cook = c;
 	}
 	
+	@Override
 	public void setHost(RestaurantTimmsHost h) {
 		this.host = h;
 	}
@@ -186,51 +199,52 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	//===========//
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		if (r instanceof RestaurantTimmsCashier) {
 			RestaurantTimmsCashier cashier = (RestaurantTimmsCashier) r; 
-			if (!super.roleExists(r)) {
+			if (!super.occupyingRoleExists(r)) {
 				RestaurantTimmsCashierAnimation a = new RestaurantTimmsCashierAnimation();
 				cashier.setAnimation(a);
 				this.getPanel().addVisualizationElement(a);
-				super.addRole(r, a);
+				super.addOccupyingRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsCook) {
 			RestaurantTimmsCook cook = (RestaurantTimmsCook) r;
-			if (!super.roleExists(r)) {
+			if (!super.occupyingRoleExists(r)) {
 				RestaurantTimmsCookAnimation a = new RestaurantTimmsCookAnimation();
 				cook.setAnimation(a);
 				this.getPanel().addVisualizationElement(a);
-				super.addRole(r, a);
+				super.addOccupyingRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsCustomer) {
 			RestaurantTimmsCustomer customer = (RestaurantTimmsCustomer) r;
-			if (!super.roleExists(r)) {
+			if (!super.occupyingRoleExists(r)) {
 				customer.setRestaurantTimmsBuilding(this);
 				RestaurantTimmsCustomerAnimation a = new RestaurantTimmsCustomerAnimation(customer);
 				customer.setAnimation(a);
 				this.getPanel().addVisualizationElement(a);
-				super.addRole(r, a);
+				super.addOccupyingRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsHost) {
 			RestaurantTimmsHost host = (RestaurantTimmsHost) r;
-			if (!super.roleExists(r)) {
+			if (!super.occupyingRoleExists(r)) {
 				RestaurantTimmsHostAnimation a = new RestaurantTimmsHostAnimation();
 				host.setAnimation(a);
 				this.getPanel().addVisualizationElement(a);
-				super.addRole(r, a);
+				super.addOccupyingRole(r, a);
 			}
 		} else if (r instanceof RestaurantTimmsWaiter) {
 			RestaurantTimmsWaiter waiter = (RestaurantTimmsWaiter) r;
-			if (!super.roleExists(r)) {
+			if (!super.occupyingRoleExists(r)) {
 				RestaurantTimmsWaiterAnimation a = new RestaurantTimmsWaiterAnimation(waiter);
 				waiter.setAnimation(a);
 				this.getPanel().addVisualizationElement(a);
-				super.addRole(r, a);
+				super.addOccupyingRole(r, a);
 			}
 		}
 	}
 	
+	@Override
 	public void addCustomer(RestaurantTimmsCustomer c, RestaurantTimmsHost h) {
 		InternalCustomer i = new InternalCustomer();
 		i.setCustomer(c);
@@ -238,6 +252,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 		restaurantCustomers.add(i);
 	}
 	
+	@Override
 	public void updateCustomer(RestaurantTimmsCustomer c, RestaurantTimmsHost h, RestaurantTimmsWaiter w) {
 		InternalCustomer i = null;
 		for (InternalCustomer temp : restaurantCustomers) {
@@ -250,6 +265,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 		i.setWaiter(w);
 	}
 	
+	@Override
 	public void removeCustomer(RestaurantTimmsCustomer c) {
 		InternalCustomer i = null;
 		for (InternalCustomer temp : restaurantCustomers) {
@@ -261,22 +277,27 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 		restaurantCustomers.remove(i);
 	}
 	
+	@Override
 	public void addWaiter(RestaurantTimmsWaiter w) {
 		restaurantWaiters.add(w);
 	}
 	
+	@Override
 	public void addMarketOrder(InternalMarketOrder o) {
 		marketOrders.add(o);
 	}
 	
+	@Override
 	public void addCheck(Check c) {
 		restaurantChecks.add(c);
 	}
 	
+	@Override
 	public void addOrder(Order o) {
 		restaurantOrders.add(o);
 	}
 	
+	@Override
 	public void removeOrder(Order o) {
 		restaurantOrders.remove(o);
 	}

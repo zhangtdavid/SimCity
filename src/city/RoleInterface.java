@@ -21,7 +21,7 @@ public interface RoleInterface {
 	public Person getPerson();
 	public <T extends AnimationInterface> T getAnimation(Class<T> type);
 	public int getSalary();
-	public <T extends Building> T getWorkplace(Class<T> type);
+	public <T extends BuildingInterface> T getWorkplace(Class<T> type);
 	public int getShiftStart();
 	public int getShiftEnd();
 	public boolean getActive();
@@ -32,7 +32,7 @@ public interface RoleInterface {
 	public void setPerson(Person p);
 	public void setAnimation(AnimationInterface a);
 	public void setSalary(int s);
-	public void setWorkplace(Building b);
+	public void setWorkplace(BuildingInterface b);
 	public void setShift(int shiftStart, int shiftEnd);
 	public void setActive();
 	public void setInactive();

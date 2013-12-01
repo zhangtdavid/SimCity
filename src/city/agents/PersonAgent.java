@@ -6,22 +6,22 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Agent;
+import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
-import city.Application;
 import city.Building;
 import city.Role;
-import city.abstracts.ResidenceBuildingBase;
+import city.RoleInterface;
+import city.abstracts.ResidenceBuildingInterface;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.MarketBuilding;
@@ -38,19 +38,19 @@ public class PersonAgent extends Agent implements Person {
 	// Data
 	
 	private Date date;
-	private Role occupation;
-	private ResidenceBuildingBase home;
+	private RoleInterface occupation;
+	private ResidenceBuildingInterface home;
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
 	private BankCustomerRole bankCustomerRole; // retained
 	private ResidentRole residentRole; // retained
-	private Role restaurantCustomerRole; // not retained
+	private RoleInterface restaurantCustomerRole; // not retained
 	private MarketCustomerRole marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
 	private Date lastWentToSleep;
 	private String name;
-	private List<Role> roles = new ArrayList<Role>();
+	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
 	private city.animations.interfaces.AnimatedPerson animation;
 	private STATE state; 
@@ -94,7 +94,7 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	
 	@Override
-	protected boolean runScheduler() throws InterruptedException {
+	public boolean runScheduler() throws InterruptedException {
 		//-------------------/
 		// Central Scheduler /
 		//-------------------/
@@ -234,7 +234,7 @@ public class PersonAgent extends Agent implements Person {
 		//----------------/
 		
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+		for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
 			boolean activity = r.runScheduler();
 			if (!activity) {
@@ -281,7 +281,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToPayRent() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		processTransportationDeparture((Building) home);
 		state = STATE.goingToPayRent;
 	}
 	
@@ -302,7 +302,7 @@ public class PersonAgent extends Agent implements Person {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (Role) r0.newInstance();
-			building.addRole(restaurantCustomerRole);
+			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -335,7 +335,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToCook() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		processTransportationDeparture((Building) home);
 		state = STATE.goingToCook;
 	}
 	
@@ -360,7 +360,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToSleep() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		processTransportationDeparture((Building) home);
 		state = STATE.goingToSleep;
 	}
 	
@@ -384,13 +384,43 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public ResidenceBuildingBase getHome() {
+	public ResidenceBuildingInterface getHome() {
 		return home;
 	}
 	
 	@Override
-	public Role getOccupation() {
+	public Car getCar() {
+		return car;
+	}
+	
+	@Override
+	public RoleInterface getOccupation() {
 		return occupation;
+	}
+	
+	@Override
+	public CarPassengerRole getCarPassengerRole() {
+		return carPassengerRole;
+	}
+
+	@Override
+	public BusPassengerRole getBusPassengerRole() {
+		return busPassengerRole;
+	}
+
+	@Override
+	public MarketCustomerRole getMarketCustomerRole() {
+		return marketCustomerRole;
+	}
+
+	@Override
+	public RoleInterface getRestaurantCustomerRole() {
+		return restaurantCustomerRole;
+	}
+
+	@Override
+	public ArrayList<RoleInterface> getRoles() {
+		return roles;
 	}
 	
 	//=========//
@@ -404,7 +434,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(Role r) {
+	public void setOccupation(RoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
 		addRole(r);
@@ -429,7 +459,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBuildingBase h) {
+	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		home = h;
 	}
@@ -439,7 +469,7 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	
 	@Override
-	public void addRole(Role r) {
+	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 		roles.add(r);
 	}

@@ -8,7 +8,6 @@ import utilities.RestaurantChoiRevolvingStand;
 import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.buildings.MarketBuilding;
 
 public interface RestaurantChoiCook extends RoleInterface {
 	
@@ -40,7 +39,7 @@ public interface RestaurantChoiCook extends RoleInterface {
 	public void setGui(RestaurantChoiAnimatedCook gui);
 	// public void setRevolvingStand(RestaurantChoiRevolvingStand r);
 	// public RestaurantChoiRevolvingStand getRevolvingStand();
-	public void addMarket(MarketBuilding m);
+	public void addMarket(Market m);
 	public void setRevolvingStand(RestaurantChoiRevolvingStand in);
 
 	// Utilities
@@ -51,15 +50,15 @@ public interface RestaurantChoiCook extends RoleInterface {
 	// Classes
 	
 	class myMarket{
-		public MarketBuilding market;
+		public Market market;
 		public HashMap<String, Boolean> outOf;
 		
-		public myMarket(MarketBuilding m){
+		public myMarket(Market m){
 			market = m;
 			outOf = new HashMap<String, Boolean>();
 		}
 		
-		public MarketBuilding getMarket(){
+		public Market getMarket(){
 			return market;
 		}
 	}

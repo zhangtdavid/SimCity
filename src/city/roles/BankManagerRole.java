@@ -9,7 +9,7 @@ import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
-import city.buildings.RestaurantJPBuilding;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankManager;
 import city.interfaces.BankTeller;
@@ -29,7 +29,7 @@ public class BankManagerRole extends Role implements BankManager {
 	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		setActivityBegun();
 	}
@@ -114,7 +114,7 @@ public class BankManagerRole extends Role implements BankManager {
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 			return false;
 		}
 		for(BankCustomer bc : customers){
@@ -244,7 +244,7 @@ public class BankManagerRole extends Role implements BankManager {
 	public void setInactive(){
 		if(building.manager != this && customers.size() == 0){
 			super.setInactive();
-			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}
 		else
 			wantsInactive = true;

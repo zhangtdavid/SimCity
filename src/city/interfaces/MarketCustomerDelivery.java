@@ -24,7 +24,7 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Getters
 	
-	public MarketBuilding getMarket();
+	public Market getMarket();
 	public Building getRestaurant();
 	
 	// Setters

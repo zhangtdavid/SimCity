@@ -20,6 +20,7 @@ import city.animations.RestaurantJPCookAnimation;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketManager;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCook;
 import city.interfaces.RestaurantJPWaiter;
 
@@ -47,7 +48,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		building = b;
 		//name = this.getPerson().getName();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		Foods.put("Steak", new Food(5000, 5, FOOD_ITEMS.steak));
 		Foods.put("Chicken", new Food(4000, 5, FOOD_ITEMS.chicken));

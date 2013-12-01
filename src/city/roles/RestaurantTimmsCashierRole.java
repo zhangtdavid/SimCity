@@ -12,6 +12,7 @@ import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.buildings.RestaurantTimmsBuilding.Check.State;
 import city.interfaces.MarketCustomerDeliveryPayment;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -45,7 +46,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	public RestaurantTimmsCashierRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
 		super();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantTimms.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.moneyCollected = 0;
 		this.moneyOwed = 0;

@@ -12,8 +12,8 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.Animation;
-import city.buildings.AptBuilding;
 import city.gui.BuildingCard;
+import city.interfaces.Apartment;
 
 /**
  * A House contains:
@@ -75,7 +75,7 @@ public class AptPanel extends BuildingCard implements ActionListener{
 	        graphics.setColor(Color.DARK_GRAY); // Table
 	        graphics.fillRect(ATX,ATY,WIDTH,WIDTH);
 	        graphics.setColor(Color.BLACK); 
-	        for(int i = 0; i < AptBuilding.NUMBER_OF_BEDS; i++){
+	        for(int i = 0; i < Apartment.NUMBER_OF_BEDS; i++){
 		        graphics.fillRect(ABXi,ABYi+ABYint,WIDTH,WIDTH);
 	        }// Bed (5 for apts)
 	        

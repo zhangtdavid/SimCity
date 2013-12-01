@@ -13,7 +13,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.Building;
 import city.Role;
-import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
@@ -189,12 +189,12 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	
 	public static class MarketTransaction {
 		public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
-		public MarketBuilding market;
+		public Market market;
 		public MarketOrder order;
 		public int bill;
 		public MarketTransactionState s;
 
-		public MarketTransaction (MarketBuilding m, MarketOrder o) {
+		public MarketTransaction (Market m, MarketOrder o) {
 			market = m;
 			order = new MarketOrder(o);
 			bill = 0;

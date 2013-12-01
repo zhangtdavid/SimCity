@@ -7,8 +7,8 @@ import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
-import city.buildings.RestaurantChoiBuilding;
 import city.gui.buildings.RestaurantChoiPanel;
+import city.interfaces.RestaurantChoi;
 import city.roles.RestaurantChoiCookRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChoiWaiterQueue;
@@ -21,7 +21,7 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	PersonAgent p;
 	MockRestaurantChoiWaiterQueue waiter1; 
 	MockRestaurantChoiWaiterDirect waiter2;
-	RestaurantChoiBuilding b;
+	RestaurantChoi b;
 	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white, new Dimension(0,0));
 	
 	

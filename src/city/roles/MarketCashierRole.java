@@ -15,6 +15,7 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.BankCustomer;
+import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -241,7 +242,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	=====================================================================
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 	

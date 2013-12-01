@@ -10,6 +10,7 @@ import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -215,7 +216,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //	=====================================================================
 	// Market
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 	

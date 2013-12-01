@@ -1,17 +1,18 @@
 package city.buildings;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
 import city.Building;
-import city.Role;
+import city.RoleInterface;
 import city.gui.CityRoad;
 import city.gui.buildings.BusStopPanel;
 import city.gui.views.CityViewBusStop;
+import city.interfaces.BusStop;
 import city.roles.BusPassengerRole;
 
-public class BusStopBuilding extends Building {
+public class BusStopBuilding extends Building implements BusStop {
 	
 	// Data
 	
@@ -42,20 +43,24 @@ public class BusStopBuilding extends Building {
 		super(name);
 	}
 
+	@Override
 	public BusStopBuilding getNextStop() {
 		return nextStop;
 	}
 	
 	// Setters
 	
+	@Override
 	public void setNextStop(BusStopBuilding b) {
 		nextStop = b;
 	}
 	
+	@Override
 	public void setPreviousStop(BusStopBuilding b) {
 		previousStop = b;
 	}
 	
+	@Override
 	public void setRoad(CityRoad road) {
 		this.roadLocatedOn = road;
 	}
@@ -63,7 +68,7 @@ public class BusStopBuilding extends Building {
 	// Utilities
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		// TODO
 		return;
 	}

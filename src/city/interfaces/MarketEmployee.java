@@ -25,7 +25,7 @@ public interface MarketEmployee extends RoleInterface {
 	
 	// Getters
 	
-	public MarketBuilding getMarket();
+	public Market getMarket();
 	
 	// Setters
 	

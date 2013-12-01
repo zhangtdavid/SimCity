@@ -9,6 +9,7 @@ import java.util.*;
 import city.Role;
 import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJP;
 
 public class RestaurantJPHostRole extends Role {
 	static final int NTABLES = 3;
@@ -34,7 +35,7 @@ public class RestaurantJPHostRole extends Role {
 		super();
 		building = b;
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		// make some tables
 		tables = new ArrayList<RestaurantJPTableClass>(NTABLES);

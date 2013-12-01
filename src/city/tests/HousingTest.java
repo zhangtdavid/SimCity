@@ -49,7 +49,7 @@ public class HousingTest extends TestCase {
 		p2rL.addResident(p1r1);
 		hb.addResident(p1r1);
 		hb.addResident(p2r1);
-		hb.setTotal_current_maintenance(20);
+		hb.setTotalCurrentMaintenance(20);
 		hb.setRent(50);
 	}	
 	

@@ -4,6 +4,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
@@ -11,7 +12,7 @@ public class RestaurantJPWaiterSharedDataRole extends RestaurantJPWaiterBase {
 	public RestaurantJPWaiterSharedDataRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
          super(b, shiftStart, shiftEnd);
          this.setWorkplace(b);
- 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+ 		this.setSalary(RestaurantJP.WORKER_SALARY);
  		this.setShift(shiftStart, shiftEnd);
 	}
 	

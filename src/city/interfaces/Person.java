@@ -1,11 +1,15 @@
 package city.interfaces;
 
+import java.util.ArrayList;
 import java.util.Date;
 
 import city.AgentInterface;
 import city.Application;
-import city.Role;
-import city.abstracts.ResidenceBuildingBase;
+import city.RoleInterface;
+import city.abstracts.ResidenceBuildingInterface;
+import city.roles.BusPassengerRole;
+import city.roles.CarPassengerRole;
+import city.roles.MarketCustomerRole;
 
 public interface Person extends AgentInterface {
 
@@ -35,21 +39,27 @@ public interface Person extends AgentInterface {
 	public String getName();
 	public Date getDate();
 	public int getCash();
-	public ResidenceBuildingBase getHome();
-	public Role getOccupation();
+	public ResidenceBuildingInterface getHome();
+	public RoleInterface getOccupation();
+	public ArrayList<RoleInterface> getRoles();
+	public Car getCar();
+	public CarPassengerRole getCarPassengerRole();
+	public BusPassengerRole getBusPassengerRole();
+	public MarketCustomerRole getMarketCustomerRole();
+	public RoleInterface getRestaurantCustomerRole();
 	
 	// Setters
 	
 	public void setAnimation(city.animations.interfaces.AnimatedPerson p);
 	public void setCar(Car c);
 	public void setDate(Date d);
-	public void setOccupation(Role r);
+	public void setOccupation(RoleInterface r);
 	public void setCash(int c);
-	public void setHome(ResidenceBuildingBase h);
+	public void setHome(ResidenceBuildingInterface h);
 	
 	// Utilities
 	
-	public void addRole(Role r);
+	public void addRole(RoleInterface r);
 	
 	// Classes
 	

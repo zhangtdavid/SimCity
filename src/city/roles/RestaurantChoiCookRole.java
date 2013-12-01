@@ -17,8 +17,8 @@ import city.Role;
 import city.abstracts.RestaurantBuildingBase.FoodOrderState;
 import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChoiCook;
 
@@ -365,7 +365,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	}
 
 	@Override
-	public void addMarket(MarketBuilding m) {
+	public void addMarket(Market m) {
 		myMarket mm = new myMarket(m);
 		synchronized(markets){
 			markets.add(mm);            

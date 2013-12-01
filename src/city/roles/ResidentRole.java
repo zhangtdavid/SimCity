@@ -46,9 +46,9 @@ public class ResidentRole extends Role implements Resident {
 	public void payRent() {
 		landlord.msgHeresRent(house.getRent()); // pay rent
 		this.getPerson().setCash((int)(this.getPerson().getCash()-house.getRent())); // lose $ for rent
-		if(house.getTotal_current_maintenance() != 0) {
+		if(house.getTotalCurrentMaintenance() != 0) {
 			// pay maintenance if needed
-			this.getPerson().setCash( (this.getPerson().getCash() - (house.getTotal_current_maintenance() / house.getResidents().size())) ); // lose $ for maintenance;
+			this.getPerson().setCash( (this.getPerson().getCash() - (house.getTotalCurrentMaintenance() / house.getResidents().size())) ); // lose $ for maintenance;
 		}
 		System.out.println(rentLastPaid.getTime());
 		rentLastPaid = this.getPerson().getDate();

@@ -5,7 +5,7 @@ import java.util.List;
 
 import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
@@ -13,6 +13,7 @@ import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.gui.buildings.RestaurantChungPanel;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
@@ -26,7 +27,7 @@ import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantChungWaiterRevolvingStandRole;
 
-public class RestaurantChungBuilding extends RestaurantBuildingBase {
+public class RestaurantChungBuilding extends RestaurantBuildingBase implements RestaurantChung {
 	
 	// Data
 	public RestaurantChungPanel panel;
@@ -66,69 +67,72 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase {
 	}
 
 	// Utilities
-	public void addRole(Role r) {
+	
+	@Override
+	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof RestaurantChungCustomerRole) {
 			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
-			if(!super.roleExists(c)) {
+			if(!super.occupyingRoleExists(c)) {
 				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
 				c.setAnimation(anim);
 				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				customers.add(c);
-				super.addRole(c, anim);
+				super.addOccupyingRole(c, anim);
 				host.msgIWantToEat(c);
 			}
 		}
 		if(r instanceof RestaurantChungWaiterMessageCookRole) {
 			RestaurantChungWaiterMessageCookRole w = (RestaurantChungWaiterMessageCookRole)r;
-			if(!super.roleExists(w)) {
+			if(!super.occupyingRoleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w); 
 				addWaiter(w, anim);
-				super.addRole(w, anim);
+				super.addOccupyingRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantChungWaiterRevolvingStandRole) {
 			RestaurantChungWaiterRevolvingStandRole w = (RestaurantChungWaiterRevolvingStandRole)r;
-			if(!super.roleExists(w)) {
+			if(!super.occupyingRoleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
 				addWaiter(w, anim);
 				w.setRevolvingStand(orderStand);
-				super.addRole(w, anim);
+				super.addOccupyingRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantChungHostRole) {
 			RestaurantChungHostRole h = (RestaurantChungHostRole)r;
-			if(!super.roleExists(h)) { 
+			if(!super.occupyingRoleExists(h)) { 
 				host = h;
-				super.addRole(h, null);
+				super.addOccupyingRole(h, null);
 			}
 		}
 		if(r instanceof RestaurantChungCookRole) {
 			RestaurantChungCookRole c = (RestaurantChungCookRole)r;
-			if(!super.roleExists(c)) {
+			if(!super.occupyingRoleExists(c)) {
 				RestaurantChungCookAnimation anim = new RestaurantChungCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cook = c;
 				c.setRevolvingStand(orderStand);
-				super.addRole(c, anim);
+				super.addOccupyingRole(c, anim);
 			}
 		}
 		if(r instanceof RestaurantChungCashierRole) {
 			RestaurantChungCashierRole c = (RestaurantChungCashierRole)r;
-			if(!super.roleExists(c)) {
+			if(!super.occupyingRoleExists(c)) {
 				RestaurantChungCashierAnimation anim = new RestaurantChungCashierAnimation(c); 
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cashier = c;
-				super.addRole(c, anim);
+				super.addOccupyingRole(c, anim);
 			}
 		}
 	}
 		
+	@Override
 	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
 		waiters.add(w);
 		w.setAnimation(anim);
@@ -140,6 +144,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase {
 		host.msgNewWaiter(w);
 	}
 	
+	@Override
 	public void removeWaiter(RestaurantChungWaiter waiter) {
 		waiters.remove(waiter);
 		host.msgRemoveWaiter(waiter);		

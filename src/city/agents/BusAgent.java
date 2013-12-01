@@ -10,6 +10,7 @@ import trace.AlertTag;
 import city.Agent;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
+import city.interfaces.BusStop;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
 
@@ -53,7 +54,7 @@ public class BusAgent extends Agent implements Bus {
 		stateChanged();
 	}
 
-	public void msgImOnBus(BusPassenger bp, BusStopBuilding dest) { // From BusPassengerRole, role has gotten on bus
+	public void msgImOnBus(BusPassenger bp, BusStop dest) { // From BusPassengerRole, role has gotten on bus
 		earnedMoney += busFare; // Add fare to money
 		synchronized(passengerList) {
 			for(MyBusPassenger mbp : passengerList) { // Set this role's state to ONBUS and its destination
@@ -187,7 +188,7 @@ public class BusAgent extends Agent implements Bus {
 	class MyBusPassenger {
 		PassengerState myPassengerState = PassengerState.GETTINGONBUS;
 		BusPassenger bp;
-		BusStopBuilding destination;
+		BusStop destination;
 		
 		MyBusPassenger(BusPassenger bp_) {
 			bp = bp_;

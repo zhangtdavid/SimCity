@@ -4,7 +4,7 @@ import java.awt.Graphics2D;
 
 import city.abstracts.MockAnimation;
 import city.animations.interfaces.AnimatedPerson;
-import city.buildings.BusStopBuilding;
+import city.interfaces.BusStop;
 
 public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson {
 
@@ -26,7 +26,7 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 	}
 
 	@Override
-	public void goToBusStop(BusStopBuilding b) {
+	public void goToBusStop(BusStop b) {
 		// TODO Auto-generated method stub
 		
 	}

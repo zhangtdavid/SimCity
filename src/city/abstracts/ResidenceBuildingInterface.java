@@ -14,7 +14,7 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 	
 	public Landlord getLandlord();
 	public List<Resident> getResidents();
-	public int getTotal_current_maintenance();
+	public int getTotalCurrentMaintenance();
 	public int getRent();
 	public Map<FOOD_ITEMS, Integer> getFoodItems();
 
@@ -23,11 +23,11 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 	public void setRent(int r);
 	public void setLandlord(Landlord l);
 	public void addResident(Resident r);
-	public void setTotal_current_maintenance(int m);
-	public void addFood(FOOD_ITEMS f, int i);
+	public void setTotalCurrentMaintenance(int m);
 
 	// Utilities
 
+	public void addFood(FOOD_ITEMS f, int i);
 	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems);
 
 }

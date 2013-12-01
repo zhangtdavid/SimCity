@@ -11,6 +11,7 @@ import utilities.RestaurantJPTableClass;
 import city.Role;
 import city.animations.RestaurantJPWaiterAnimation;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -38,7 +39,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		super();
 		building = b;
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
 

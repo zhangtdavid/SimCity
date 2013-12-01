@@ -16,6 +16,7 @@ import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
+import city.interfaces.RestaurantChoi;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
@@ -189,12 +190,12 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 				return true;
 			}
 		}
-		if(building.getCash() > RestaurantChoiBuilding.DEPOSIT_THRESHOLD){
+		if(building.getCash() > RestaurantChoi.DEPOSIT_THRESHOLD){
 			System.out.println("before depositing: " + building.getCash());
 			this.depositMoney();
 			System.out.println("after depositing: " + building.getCash());
 		}
-		if(building.getCash() < RestaurantChoiBuilding.WITHDRAW_THRESHOLD) this.getMoney();
+		if(building.getCash() < RestaurantChoi.WITHDRAW_THRESHOLD) this.getMoney();
 		return blocking;
 	}
 	
@@ -288,7 +289,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	}
 
 	private void depositMoney() {
-		int toDep=building.getCash()-RestaurantChoiBuilding.DAILY_CAPITAL;
+		int toDep=building.getCash()-RestaurantChoi.DAILY_CAPITAL;
 		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
 		building.setCash(building.getCash()-toDep);
 	}

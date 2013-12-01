@@ -3,13 +3,14 @@ package city.buildings;
 import java.util.Vector;
 
 import utilities.RestaurantJPRevolvingStand;
-import city.Role;
+import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
 import city.gui.buildings.RestaurantJPPanel;
 import city.gui.views.CityViewRestaurant;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -22,7 +23,7 @@ import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
 
-public class RestaurantJPBuilding extends RestaurantBuildingBase {
+public class RestaurantJPBuilding extends RestaurantBuildingBase implements RestaurantJP {
 	
 	// Data
 	
@@ -31,7 +32,6 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase {
 	public RestaurantJPHostRole host;
 	public int seatedCustomers = 0;
 	public int funds = 2000;
-	public static final int WORKER_SALARY = 200;
 	int customerCounter = 0;
 	int waiterCounter = 0;
 	RestaurantJPPanel panel;
@@ -42,6 +42,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase {
 	
 	// Utilities
 	
+	@Override
 	public void setCashier(RestaurantJPCashier c){
 		this.cashier = c;
 	}
@@ -63,68 +64,68 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase {
 	// Utilities
 
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof RestaurantJPCustomerRole) {
 			RestaurantJPCustomerRole c = (RestaurantJPCustomerRole)r;
 			c.setCashier(cashier);
-			if(!super.roleExists(c)) {
+			if(!super.occupyingRoleExists(c)) {
 				RestaurantJPCustomerAnimation anim = new RestaurantJPCustomerAnimation(c, customerCounter);
 				customerCounter++;
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				customers.add(c);
-				super.addRole(c, anim);
+				super.addOccupyingRole(c, anim);
 			}
 		}
 		if(r instanceof RestaurantJPWaiterRole) {
 			RestaurantJPWaiterRole w = (RestaurantJPWaiterRole)r;
-			if(!super.roleExists(w)) {
+			if(!super.occupyingRoleExists(w)) {
 				RestaurantJPWaiterAnimation anim = new RestaurantJPWaiterAnimation(w, waiterCounter);
 				waiterCounter++;
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				super.addRole(w, anim);
+				super.addOccupyingRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantJPWaiterSharedDataRole) {
 			RestaurantJPWaiterSharedDataRole w = (RestaurantJPWaiterSharedDataRole)r;
 			w.setRevolvingStand(orderStand);
-			if(!super.roleExists(w)) {
+			if(!super.occupyingRoleExists(w)) {
 				RestaurantJPWaiterAnimation anim = new RestaurantJPWaiterAnimation(w, waiterCounter); 
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				waiters.add(w);
-				super.addRole(w, anim);
+				super.addOccupyingRole(w, anim);
 			}
 		}
 		if(r instanceof RestaurantJPHostRole) {
 			RestaurantJPHostRole h = (RestaurantJPHostRole)r;
-			if(!super.roleExists(h)) { 
+			if(!super.occupyingRoleExists(h)) { 
 				host = h;
-				super.addRole(h, null);
+				super.addOccupyingRole(h, null);
 			}
 		}
 		if(r instanceof RestaurantJPCookRole) {
 			RestaurantJPCookRole c = (RestaurantJPCookRole)r;
 			c.setRevolvingStand(orderStand);
-			if(!super.roleExists(c)) { 
+			if(!super.occupyingRoleExists(c)) { 
 				RestaurantJPCookAnimation anim = new RestaurantJPCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				panel.addVisualizationElement(anim);
 				cook = c;
-				super.addRole(c, anim);
+				super.addOccupyingRole(c, anim);
 			}
 		}
 		if(r instanceof RestaurantZhangCashierRole) {
 			RestaurantJPCashierRole c = (RestaurantJPCashierRole)r;
-			if(!super.roleExists(c)) { 
+			if(!super.occupyingRoleExists(c)) { 
 				cashier = c;
-				super.addRole(c, null);
+				super.addOccupyingRole(c, null);
 			}
 		}
 	}

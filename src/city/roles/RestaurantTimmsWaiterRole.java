@@ -15,6 +15,7 @@ import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
 import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 
@@ -28,7 +29,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	private Boolean wantsBreak;
 	private int tiredness;
 	private Timer timer = new Timer();
-	private RestaurantTimmsBuilding rtb;
+	private RestaurantTimms rtb;
 	private boolean shiftOver;
 	
 	private List<InternalCustomer> customers = new ArrayList<InternalCustomer>();
@@ -53,7 +54,7 @@ public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWa
 	public RestaurantTimmsWaiterRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantTimms.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.wantsBreak = false;
 		this.tiredness = 15;

@@ -38,8 +38,8 @@ public class MockResident extends MockRole implements Resident{
 		log.add(new LoggedEvent("Before paying rent, money is " + this.getPerson().getCash()));
 		 this.getPerson().setCash( this.getPerson().getCash()-residence.getRent()); // lose $ for rent
 		log.add(new LoggedEvent("After paying rent, money is " + this.getPerson().getCash()));
-		if(residence.getTotal_current_maintenance() != 0) // pay maintenance if needed
-			this.getPerson().setCash( this.getPerson().getCash()-residence.getTotal_current_maintenance()/residence.getResidents().size()); 
+		if(residence.getTotalCurrentMaintenance() != 0) // pay maintenance if needed
+			this.getPerson().setCash( this.getPerson().getCash()-residence.getTotalCurrentMaintenance()/residence.getResidents().size()); 
 		// lose $ for maintenance;
 		
 		this.setInactive();		

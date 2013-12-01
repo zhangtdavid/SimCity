@@ -25,6 +25,7 @@ import city.abstracts.RestaurantBuildingBase;
 import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -405,7 +406,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		// int amount;
 		// static enum CookInvoiceStatus {created, processing, changedMarket, completed};
 
-		CookInvoice(String food_, int amount_, MarketBuilding market_) {
+		CookInvoice(String food_, int amount_, Market market_) {
 			food = food_;
 			// amount = amount_;
 			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();

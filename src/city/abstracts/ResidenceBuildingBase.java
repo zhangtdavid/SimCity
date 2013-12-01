@@ -21,8 +21,10 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	
 	public ResidenceBuildingBase(String name) {
 		super(name);
+		
+		// TODO should we really be giving every home one of every food item upon instantiation?
         for (FOOD_ITEMS s: FOOD_ITEMS.values()) {
-        	foodItems.put(s, 1); // Add delivered food items to restaurant inventory
+        	foodItems.put(s, 1); // Add delivered food items to inventory
         }	
     }
 
@@ -39,7 +41,7 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	}
 	
 	@Override
-	public int getTotal_current_maintenance() {
+	public int getTotalCurrentMaintenance() {
 		return totalCurrentMaintenance;
 	}
 	
@@ -69,7 +71,7 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	public abstract void addResident(Resident r);
 	
 	@Override
-	public void setTotal_current_maintenance(int m) {
+	public void setTotalCurrentMaintenance(int m) {
 		this.totalCurrentMaintenance = m;
 	}
 	

@@ -7,9 +7,10 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import city.Application.FOOD_ITEMS;
 import city.Building;
-import city.Role;
+import city.RoleInterface;
 import city.gui.buildings.MarketPanel;
 import city.interfaces.BankCustomer;
+import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
@@ -19,7 +20,7 @@ import city.roles.MarketCashierRole;
 import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
 
-public class MarketBuilding extends Building { 
+public class MarketBuilding extends Building implements Market { 
 	
 	// Data
 	public MarketPanel panel;	
@@ -63,11 +64,11 @@ public class MarketBuilding extends Building {
 //	=====================================================================	
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof MarketManagerRole) {
 			MarketManagerRole m = (MarketManagerRole)r;
 			
-			if(!super.roleExists(m)) {
+			if(!super.occupyingRoleExists(m)) {
 				//MarketManagerAnimation anim = new MarketManagerAnimation(m); 
 				//c.setGui(anim);	
 //				c.setAnimation(anim);
@@ -75,13 +76,13 @@ public class MarketBuilding extends Building {
 				//panel.addVisualizationElement(anim);
 				this.manager = m;
 				m.setActive();
-				super.addRole(m, null); // null --> anim
+				super.addOccupyingRole(m, null); // null --> anim
 			}
 		}
 		if(r instanceof MarketCashierRole) {
 			MarketCashierRole m = (MarketCashierRole)r;
 			
-			if(!super.roleExists(m)) {
+			if(!super.occupyingRoleExists(m)) {
 				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				//c.setGui(anim);	
 //				c.setAnimation(anim);
@@ -89,13 +90,13 @@ public class MarketBuilding extends Building {
 				//panel.addVisualizationElement(anim);
 				this.cashier = m;
 				m.setActive();
-				super.addRole(m, null); // null --> anim
+				super.addOccupyingRole(m, null); // null --> anim
 			}
 		}
 		if(r instanceof MarketEmployeeRole) {
 			MarketEmployeeRole m = (MarketEmployeeRole)r;
 			
-			if(!super.roleExists(m)) {
+			if(!super.occupyingRoleExists(m)) {
 				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				//c.setGui(anim);	
 //				c.setAnimation(anim);
@@ -103,28 +104,32 @@ public class MarketBuilding extends Building {
 				//panel.addVisualizationElement(anim);
 				this.addEmployee(m);
 				m.setActive();
-				super.addRole(m, null); // null --> anim
+				super.addOccupyingRole(m, null); // null --> anim
 			}
 		}
 	}
 	
 	// Employee
+	@Override
 	public void addEmployee(MarketEmployee employee) {
 		employees.add(employee);
 		manager.msgNewEmployee(employee);
 	}
 	
+	@Override
 	public void removeEmployee(MarketEmployee employee) {
 		employees.remove(employee);
 		manager.msgRemoveEmployee(employee);		
 	}
 	
 	// Delivery Person
+	@Override
 	public void addDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
 		deliveryPeople.add(deliveryPerson);
 		cashier.msgNewDeliveryPerson(deliveryPerson);
 	}
 	
+	@Override
 	public void removeDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
 		deliveryPeople.remove(deliveryPerson);
 		cashier.msgRemoveDeliveryPerson(deliveryPerson);		
@@ -133,19 +138,23 @@ public class MarketBuilding extends Building {
 //  Getters and Setters
 //	=====================================================================	
 	// Manager
+	@Override
 	public MarketManager getManager() {
 		return manager;
 	}
 	
+	@Override
 	public void setManager(MarketManager manager) {
 		this.manager = manager;
 	}
 	
 	// Cashier
+	@Override
 	public MarketCashier getCashier() {
 		return cashier;
 	}
 	
+	@Override
 	public void setCashier(MarketCashier cashier) {
 		this.cashier = cashier;
 	}
