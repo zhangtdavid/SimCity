@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.TimeZone;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
@@ -375,6 +376,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
+	public STATE getState() {
+		return this.state;
+	}
+	
+	@Override
 	public Date getDate() {
 		return this.date;
 	}
@@ -655,7 +661,7 @@ public class PersonAgent extends Agent implements Person {
 		// Calculations
 		Date thresholdDate = new Date(0);
 		thresholdDate.setTime(lastAteAtRestaurant.getTime() + RESTAURANT_DINING_INTERVAL);
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
 		int today = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(thresholdDate);
@@ -723,7 +729,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the current time is at or within their working hours
 	 */
 	private boolean inShiftRange() {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
 		int time = c.get(Calendar.HOUR_OF_DAY);
 		

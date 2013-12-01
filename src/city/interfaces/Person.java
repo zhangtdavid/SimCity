@@ -47,6 +47,7 @@ public interface Person extends AgentInterface {
 	public BusPassengerRole getBusPassengerRole();
 	public MarketCustomerRole getMarketCustomerRole();
 	public RoleInterface getRestaurantCustomerRole();
+	public STATE getState();
 	
 	// Setters
 	
