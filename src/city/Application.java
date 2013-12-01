@@ -859,7 +859,7 @@ public class Application {
 	}
 
 	public static class CityMap {
-		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
+		private static HashMap<BUILDING, List<BuildingInterface>> map = new HashMap<BUILDING, List<BuildingInterface>>();
 		private static int restaurantNumber = 0;
 		
 		/**
@@ -872,11 +872,11 @@ public class Application {
 		 * @param type the type of building from the BUILDING enumeration
 		 * @param b the building to add
 		 */
-		public static Building addBuilding(BUILDING type, Building b) {
+		public static BuildingInterface addBuilding(BUILDING type, BuildingInterface b) {
 			if(map.containsKey(type)) {
 				map.get(type).add(b);
 			} else {
-				List<Building> list = new ArrayList<Building>();
+				List<BuildingInterface> list = new ArrayList<BuildingInterface>();
 				list.add(b);
 				map.put(type, list);
 			}
@@ -886,20 +886,20 @@ public class Application {
 		/**
 		 * Returns a random building of type
 		 */
-		public static Building findRandomBuilding(BUILDING type) {
+		public static BuildingInterface findRandomBuilding(BUILDING type) {
 			if(type == BUILDING.restaurant) {
-				List<Building> list = map.get(type);
+				List<BuildingInterface> list = map.get(type);
 				if(restaurantNumber > list.size()) {
 					restaurantNumber = 0;
 				}
-				Building buildingToReturn = list.get(restaurantNumber);
+				BuildingInterface buildingToReturn = list.get(restaurantNumber);
 				if(++restaurantNumber > list.size()) {
 					restaurantNumber = 0;
 				}
 				return buildingToReturn;
 			}
 			
-			List<Building> list = map.get(type);
+			List<BuildingInterface> list = map.get(type);
 			Collections.shuffle(list);
 			return list.get(0);
 		}
@@ -907,12 +907,12 @@ public class Application {
 		/**
 		 * Find the building of type closest to the destination building
 		 */
-		public static Building findClosestBuilding(BUILDING type, Building b) {
+		public static BuildingInterface findClosestBuilding(BUILDING type, BuildingInterface b) {
 			int x = b.getCityViewBuilding().x;
 			int y = b.getCityViewBuilding().y;
 			double closestDistance = 1000000;
-			Building returnBuilding = null;
-			for(Building tempBuilding : map.get(type)) {
+			BuildingInterface returnBuilding = null;
+			for(BuildingInterface tempBuilding : map.get(type)) {
 				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().x - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().y - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
@@ -925,12 +925,12 @@ public class Application {
 		/**
 		 * Find the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
 			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
 			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
 			double closestDistance = 1000000;
-			Building returnBuilding = null;
-			for(Building b : map.get(type)) {
+			BuildingInterface returnBuilding = null;
+			for(BuildingInterface b : map.get(type)) {
 				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().x - x, 2) + Math.pow(b.getCityViewBuilding().y - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
@@ -940,7 +940,7 @@ public class Application {
 			return returnBuilding;
 		}
 
-		public static CityRoad findClosestRoad(Building b) {
+		public static CityRoad findClosestRoad(BuildingInterface b) {
 			int x = b.getCityViewBuilding().x;
 			int y = b.getCityViewBuilding().y;
 			double closestDistance = 1000000;

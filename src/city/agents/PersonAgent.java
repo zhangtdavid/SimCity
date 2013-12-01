@@ -19,6 +19,7 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.Building;
+import city.BuildingInterface;
 import city.Role;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
@@ -294,7 +295,7 @@ public class PersonAgent extends Agent implements Person {
 		// Thread.sleep(9000); // TODO testing - Delay the customer entering
 		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		Building building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
+		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
@@ -480,7 +481,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 * @param destination the building to travel to
 	 */
-	private void processTransportationDeparture(Building destination) throws InterruptedException {
+	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (car != null) {
 			carPassengerRole = new CarPassengerRole(car, destination);

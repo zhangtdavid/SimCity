@@ -2,7 +2,7 @@ package city.tests.mock;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.Building;
+import city.BuildingInterface;
 import city.abstracts.MockAgent;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
@@ -16,7 +16,7 @@ public class MockCar extends MockAgent implements Car {
 	}
 
 	@Override
-	public void msgIWantToDrive(CarPassenger carPassenger, Building destination) {
+	public void msgIWantToDrive(CarPassenger carPassenger, BuildingInterface destination) {
 		log.add(new LoggedEvent("CarPassenger " + carPassenger.getPerson().getName() + " is going to " + destination.getName()));
 	}
 

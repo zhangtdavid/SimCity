@@ -6,6 +6,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Agent;
 import city.Building;
+import city.BuildingInterface;
 import city.animations.interfaces.AnimatedCar;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
@@ -18,7 +19,7 @@ public class CarAgent extends Agent implements Car {
 	public enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
 	public CarEvent myEvent = CarEvent.NONE; // Event for car
 	public CarPassenger carPassenger; // Current passenger
-	public Building destination; // Destination to go to
+	public BuildingInterface destination; // Destination to go to
 	public AnimatedCar animation; // GUI for animations
 	
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -31,7 +32,7 @@ public class CarAgent extends Agent implements Car {
 	}
 	
 	// Messages
-	public void msgIWantToDrive(CarPassenger cp, Building dest) { // From CarPassengerRole, tells car to go somewhere
+	public void msgIWantToDrive(CarPassenger cp, BuildingInterface dest) { // From CarPassengerRole, tells car to go somewhere
 		carPassenger = cp;
 		destination = dest;
 		myEvent = CarEvent.PASSENGERENTERED;
