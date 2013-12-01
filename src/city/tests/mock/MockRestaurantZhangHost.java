@@ -4,7 +4,7 @@ import java.util.Collection;
 
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangTable;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;

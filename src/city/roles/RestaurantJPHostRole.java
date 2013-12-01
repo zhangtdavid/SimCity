@@ -3,11 +3,11 @@ package city.roles;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantJPTableClass;
-import utilities.RestaurantJPWaiterBase;
 
 import java.util.*;
 
 import city.Role;
+import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
 
 public class RestaurantJPHostRole extends Role {

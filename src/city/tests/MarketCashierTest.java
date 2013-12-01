@@ -11,7 +11,7 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.MarketPanel;
+import city.gui.buildings.MarketPanel;
 import city.roles.MarketCashierRole;
 import city.roles.MarketCashierRole.TransactionState;
 import city.tests.mock.MockMarketCustomer;

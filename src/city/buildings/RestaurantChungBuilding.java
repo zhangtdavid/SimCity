@@ -6,12 +6,13 @@ import java.util.List;
 import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
-import city.gui.CityViewBuilding;
-import city.gui.RestaurantChungPanel;
+import city.gui.buildings.RestaurantChungPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
@@ -25,7 +26,7 @@ import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantChungWaiterRevolvingStandRole;
 
-public class RestaurantChungBuilding extends RestaurantBaseBuilding {
+public class RestaurantChungBuilding extends RestaurantBuildingBase {
 	
 	// Data
 	public RestaurantChungPanel panel;

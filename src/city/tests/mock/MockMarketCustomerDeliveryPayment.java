@@ -3,7 +3,7 @@ package city.tests.mock;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
 

@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.Map;
 
+import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 

@@ -3,7 +3,8 @@ package city.interfaces;
 import java.util.Date;
 
 import city.Application;
-import city.buildings.ResidenceBaseBuilding;
+import city.RoleInterface;
+import city.abstracts.ResidenceBuildingBase;
 
 public interface Resident extends RoleInterface {
 	
@@ -30,7 +31,7 @@ public interface Resident extends RoleInterface {
 	// Setters
 	
 	public void setActive();
-	public void setResidence(ResidenceBaseBuilding b);
+	public void setResidence(ResidenceBuildingBase b);
 	public void setLandlord(Landlord l);
 	
 	// Utilities

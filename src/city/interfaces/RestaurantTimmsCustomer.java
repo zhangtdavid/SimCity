@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import city.Application;
+import city.RoleInterface;
 import city.buildings.RestaurantTimmsBuilding;
 import city.roles.RestaurantTimmsCustomerRole.State;
 

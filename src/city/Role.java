@@ -1,8 +1,6 @@
 package city;
 
-import city.interfaces.AnimationInterface;
 import city.interfaces.Person;
-import city.interfaces.RoleInterface;
 
 /**
  * The base class for all SimCity201 roles.

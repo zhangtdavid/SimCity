@@ -9,22 +9,23 @@ import utilities.MarketOrder;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantBuildingInterface;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
-import city.gui.CityViewBuilding;
-import city.gui.RestaurantTimmsPanel;
-import city.interfaces.RestaurantBaseBuildingInterface;
+import city.gui.buildings.RestaurantTimmsPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
 
-public class RestaurantTimmsBuilding extends RestaurantBaseBuilding implements RestaurantBaseBuildingInterface {
+public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements RestaurantBuildingInterface {
 	
 	// Data
 	

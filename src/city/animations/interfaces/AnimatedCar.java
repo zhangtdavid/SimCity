@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
+import city.AnimationInterface;
 import city.Building;
-import city.interfaces.AnimationInterface;
 
 public interface AnimatedCar extends AnimationInterface {
 	

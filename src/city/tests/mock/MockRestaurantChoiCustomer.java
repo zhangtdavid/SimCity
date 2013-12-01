@@ -3,7 +3,7 @@ package city.tests.mock;
 import utilities.LoggedEvent;
 import utilities.RestaurantChoiMenu;
 import city.Application.FOOD_ITEMS;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCustomer;

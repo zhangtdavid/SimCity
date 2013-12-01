@@ -5,7 +5,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;

@@ -2,7 +2,7 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import utilities.RestaurantJPWaiterBase;
+import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.RestaurantJPCustomer;
 

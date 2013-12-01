@@ -8,7 +8,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
-import city.gui.MarketPanel;
+import city.gui.buildings.MarketPanel;
 import city.interfaces.BankCustomer;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketDeliveryPerson;

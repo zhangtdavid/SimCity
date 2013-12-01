@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
+import city.AnimationInterface;
 import city.Application.FOOD_ITEMS;
-import city.interfaces.AnimationInterface;
 import city.interfaces.RestaurantChoiCustomer;
 
 public interface RestaurantChoiAnimatedWaiter extends AnimationInterface{

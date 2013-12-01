@@ -5,6 +5,7 @@ import java.util.HashMap;
 
 import utilities.EventLog;
 import utilities.MarketOrder;
+import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.buildings.MarketBuilding;

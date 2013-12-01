@@ -5,6 +5,7 @@ import java.util.List;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
+import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChoiWaiterAnimation;
 

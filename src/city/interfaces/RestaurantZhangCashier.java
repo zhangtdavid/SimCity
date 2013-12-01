@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.List;
 
+import city.RoleInterface;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 

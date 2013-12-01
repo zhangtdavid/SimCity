@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.Collection;
 
+import city.RoleInterface;
 import utilities.RestaurantZhangTable;
 
 public interface RestaurantZhangHost extends RoleInterface {

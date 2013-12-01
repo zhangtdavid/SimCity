@@ -4,6 +4,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
+import city.abstracts.RestaurantChoiWaiterBase;
 import city.buildings.RestaurantChoiBuilding;
 
 /**

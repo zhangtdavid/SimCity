@@ -3,9 +3,7 @@ package city;
 import java.util.HashMap;
 
 import city.gui.BuildingCard;
-import city.gui.CityViewBuilding;
-import city.interfaces.AnimationInterface;
-import city.interfaces.BuildingInterface;
+import city.gui.views.CityViewBuilding;
 
 /**
  * The base class for all SimCity201 Buildings.
@@ -20,7 +18,7 @@ public abstract class Building implements BuildingInterface {
 	private String customerRoleInterfaceName; // The interface name of the role that interacts with this building as a customer
 	private String customerAnimationInterfaceName; // The interface name of the animation that interacts with this building as a customer
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
-	private HashMap<Role, Animation> roles = new HashMap<Role, Animation>(); // Stores all roles currently inside the building, along with their animations
+	private HashMap<Role, Animation> occupyingRoles = new HashMap<Role, Animation>(); // Stores all roles currently inside the building, along with their animations
 	private CityViewBuilding cityViewBuilding;
 	private BuildingCard panel;
 	
@@ -60,8 +58,8 @@ public abstract class Building implements BuildingInterface {
 	}
 	
 	@Override
-	public <T extends AnimationInterface> T getRoleAnimation(Role r, Class<T> type) {
-		return type.cast(roles.get(r));
+	public <T extends AnimationInterface> T getOccupyingRoleAnimation(Role r, Class<T> type) {
+		return type.cast(occupyingRoles.get(r));
 	}
 	
 	@Override
@@ -108,7 +106,7 @@ public abstract class Building implements BuildingInterface {
 	
 	@Override
 	public void addRole(Role r, Animation a) {
-		roles.put(r, a);
+		occupyingRoles.put(r, a);
 	}
 	
 	@Override
@@ -118,7 +116,7 @@ public abstract class Building implements BuildingInterface {
 	
 	@Override
 	public boolean roleExists(Role r) {
-		return roles.containsKey(r);
+		return occupyingRoles.containsKey(r);
 	}
 
 }

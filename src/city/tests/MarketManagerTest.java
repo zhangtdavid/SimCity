@@ -12,7 +12,7 @@ import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.MarketPanel;
+import city.gui.buildings.MarketPanel;
 import city.roles.MarketManagerRole;
 import city.roles.MarketManagerRole.MyMarketEmployee.MarketEmployeeState;
 import city.tests.mock.MockMarketCashier;

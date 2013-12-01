@@ -3,7 +3,6 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import utilities.StringUtil;
-import city.interfaces.AgentInterface;
 
 /**
  * The base class for all SimCity201 agents.

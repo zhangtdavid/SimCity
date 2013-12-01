@@ -9,13 +9,13 @@ import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.abstracts.RestaurantBuildingBase;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.gui.CityViewRestaurant;
-import city.gui.MarketPanel;
-import city.gui.RestaurantChungPanel;
+import city.gui.buildings.MarketPanel;
+import city.gui.buildings.RestaurantChungPanel;
+import city.gui.views.CityViewRestaurant;
 import city.roles.MarketCustomerDeliveryRole;
 import city.roles.MarketCustomerDeliveryRole.MarketCustomerState;
 import city.tests.mock.MockMarketCashier;
@@ -32,7 +32,7 @@ public class MarketCustomerDeliveryTest extends TestCase {
 	MarketBuilding market;
 	
 	RestaurantChungPanel restaurantChungPanel;	
-	RestaurantBaseBuilding restaurant;
+	RestaurantBuildingBase restaurant;
 	
 	MockPerson cashierPerson;
 	MockMarketCashier cashier;

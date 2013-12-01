@@ -12,23 +12,24 @@ import utilities.RestaurantChoiTable;
 import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantChoiWaiterBase;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.RestaurantChoiWaiterAnimation;
-import city.gui.CityViewBuilding;
-import city.gui.RestaurantChoiPanel;
+import city.gui.buildings.RestaurantChoiPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.RestaurantChoiCustomer;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiCustomerRole;
 import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiWaiterBase;
 import city.roles.RestaurantChoiWaiterDirectRole;
 import city.roles.RestaurantChoiWaiterQueueRole;
 
-public class RestaurantChoiBuilding extends RestaurantBaseBuilding{
+public class RestaurantChoiBuilding extends RestaurantBuildingBase{
 
 	// Data
 	

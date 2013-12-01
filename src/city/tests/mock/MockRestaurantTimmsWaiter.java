@@ -4,7 +4,7 @@ import java.util.List;
 
 import utilities.LoggedEvent;
 import city.Application;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
 import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;

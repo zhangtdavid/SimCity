@@ -2,9 +2,9 @@ package city.tests.mock;
 
 import java.util.Date;
 
-import city.MockAgent;
 import city.Role;
-import city.buildings.ResidenceBaseBuilding;
+import city.abstracts.MockAgent;
+import city.abstracts.ResidenceBuildingBase;
 import city.interfaces.Car;
 import city.interfaces.Person;
 
@@ -13,7 +13,7 @@ public class MockPerson extends MockAgent implements Person {
 	// Data
 	
 	private String name;
-	public ResidenceBaseBuilding home;
+	public ResidenceBuildingBase home;
 	private int cash;
 	
 	// Constructor
@@ -52,7 +52,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 
 	@Override
-	public ResidenceBaseBuilding getHome() {
+	public ResidenceBuildingBase getHome() {
 		return home;
 	}
 	
@@ -94,7 +94,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBaseBuilding h) {
+	public void setHome(ResidenceBuildingBase h) {
 		home = h;		
 	}
 	

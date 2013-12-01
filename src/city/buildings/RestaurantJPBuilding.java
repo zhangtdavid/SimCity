@@ -4,11 +4,12 @@ import java.util.Vector;
 
 import utilities.RestaurantJPRevolvingStand;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
-import city.gui.CityViewRestaurant;
-import city.gui.RestaurantJPPanel;
+import city.gui.buildings.RestaurantJPPanel;
+import city.gui.views.CityViewRestaurant;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -21,7 +22,7 @@ import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
 
-public class RestaurantJPBuilding extends RestaurantBaseBuilding {
+public class RestaurantJPBuilding extends RestaurantBuildingBase {
 	
 	// Data
 	

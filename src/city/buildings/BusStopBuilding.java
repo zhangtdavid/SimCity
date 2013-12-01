@@ -6,9 +6,9 @@ import java.util.ArrayList;
 
 import city.Building;
 import city.Role;
-import city.gui.BusStopPanel;
 import city.gui.CityRoad;
-import city.gui.CityViewBusStop;
+import city.gui.buildings.BusStopPanel;
+import city.gui.views.CityViewBusStop;
 import city.roles.BusPassengerRole;
 
 public class BusStopBuilding extends Building {

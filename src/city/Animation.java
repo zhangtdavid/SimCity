@@ -2,8 +2,6 @@ package city;
 
 import java.awt.Graphics2D;
 
-import city.interfaces.AnimationInterface;
-
 /**
  * The base class for all SimCity201 agent animations.
  */

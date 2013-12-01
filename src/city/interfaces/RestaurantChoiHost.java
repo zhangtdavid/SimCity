@@ -1,8 +1,9 @@
 package city.interfaces;
 
 import utilities.RestaurantChoiTable;
+import city.RoleInterface;
+import city.abstracts.RestaurantChoiWaiterBase;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
-import city.roles.RestaurantChoiWaiterBase;
 
 public interface RestaurantChoiHost extends RoleInterface{
 	

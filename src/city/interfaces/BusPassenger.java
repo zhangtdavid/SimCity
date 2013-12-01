@@ -1,5 +1,7 @@
 package city.interfaces;
 
+import city.RoleInterface;
+
 public interface BusPassenger extends RoleInterface {
 
 	// Data

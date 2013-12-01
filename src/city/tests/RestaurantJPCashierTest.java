@@ -2,7 +2,7 @@ package city.tests;
 
 import junit.framework.TestCase;
 import city.buildings.RestaurantJPBuilding;
-import city.gui.RestaurantJPPanel;
+import city.gui.buildings.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantJPCook;

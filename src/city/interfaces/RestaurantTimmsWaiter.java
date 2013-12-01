@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.List;
 
 import city.Application;
+import city.RoleInterface;
 import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 
 public interface RestaurantTimmsWaiter extends RoleInterface {

@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.AgentInterface;
 import city.Building;
 
 public interface Car extends AgentInterface {

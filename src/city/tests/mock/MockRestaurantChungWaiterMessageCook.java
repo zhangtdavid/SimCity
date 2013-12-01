@@ -2,7 +2,7 @@ package city.tests.mock;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;

@@ -9,11 +9,12 @@ import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Application.FOOD_ITEMS;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
-import city.gui.CityViewBuilding;
-import city.gui.RestaurantZhangPanel;
+import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangCustomer;
@@ -26,7 +27,7 @@ import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-public class RestaurantZhangBuilding extends RestaurantBaseBuilding {
+public class RestaurantZhangBuilding extends RestaurantBuildingBase {
 	
 	// Data
 	

@@ -21,10 +21,10 @@ import utilities.RestaurantZhangTable;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
+import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding;
-import city.buildings.RestaurantBaseBuilding.Food;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -231,7 +231,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			}
 			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).capacity - cookInventory.get(o.choice).amount, markets.get(0));
 			cookInvoiceList.add(tempInvoice);
-			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBaseBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
+			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBuildingBase.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
 			marketCustomerDeliveryList.add(tempDeliveryRole);
 			tempDeliveryRole.setActive();
 			stateChanged();

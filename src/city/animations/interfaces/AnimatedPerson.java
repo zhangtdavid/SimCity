@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
+import city.AnimationInterface;
 import city.buildings.BusStopBuilding;
-import city.interfaces.AnimationInterface;
 
 public interface AnimatedPerson extends AnimationInterface {
 	

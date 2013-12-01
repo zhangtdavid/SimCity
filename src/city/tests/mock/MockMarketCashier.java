@@ -5,7 +5,7 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;

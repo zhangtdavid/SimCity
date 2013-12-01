@@ -3,7 +3,7 @@ package city.tests.mock;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Building;
-import city.MockAgent;
+import city.abstracts.MockAgent;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
 

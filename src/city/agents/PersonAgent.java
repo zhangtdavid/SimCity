@@ -21,10 +21,10 @@ import city.Application.TRANSACTION_TYPE;
 import city.Application;
 import city.Building;
 import city.Role;
+import city.abstracts.ResidenceBuildingBase;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.MarketBuilding;
-import city.buildings.ResidenceBaseBuilding;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -39,7 +39,7 @@ public class PersonAgent extends Agent implements Person {
 	
 	private Date date;
 	private Role occupation;
-	private ResidenceBaseBuilding home;
+	private ResidenceBuildingBase home;
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
@@ -384,7 +384,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public ResidenceBaseBuilding getHome() {
+	public ResidenceBuildingBase getHome() {
 		return home;
 	}
 	
@@ -429,7 +429,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBaseBuilding h) {
+	public void setHome(ResidenceBuildingBase h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		home = h;
 	}
@@ -647,10 +647,13 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		int items = 0;
-		for (FOOD_ITEMS i : home.foodItems.keySet()) {
-			items = items + home.foodItems.get(i);
+		for (FOOD_ITEMS i : home.getFoodItems().keySet()) {
+			items = items + home.getFoodItems().get(i);
+			if (items <= 3) { 
+				disposition = true;
+				break;
+			}
 		}
-		if (items <= 3) { disposition = true; }
 		return disposition;
 	}
 	

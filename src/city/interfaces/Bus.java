@@ -1,4 +1,5 @@
 package city.interfaces;
+import city.AgentInterface;
 import city.buildings.BusStopBuilding;
 
 public interface Bus extends AgentInterface {

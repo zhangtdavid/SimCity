@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import utilities.MarketOrder;
+import city.RoleInterface;
 import city.buildings.MarketBuilding;
 
 public interface RestaurantChungCashier extends RoleInterface {

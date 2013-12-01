@@ -8,7 +8,7 @@ import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.buildings.RestaurantChoiBuilding;
-import city.gui.RestaurantChoiPanel;
+import city.gui.buildings.RestaurantChoiPanel;
 import city.roles.RestaurantChoiCookRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChoiWaiterQueue;

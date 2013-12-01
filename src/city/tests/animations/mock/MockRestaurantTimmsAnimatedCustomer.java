@@ -2,7 +2,7 @@ package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
-import city.MockAnimation;
+import city.abstracts.MockAnimation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.interfaces.RestaurantTimmsCustomer;

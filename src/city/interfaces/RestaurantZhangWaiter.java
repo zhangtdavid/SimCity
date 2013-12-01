@@ -4,6 +4,7 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.RoleInterface;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 
 public interface RestaurantZhangWaiter extends RoleInterface {

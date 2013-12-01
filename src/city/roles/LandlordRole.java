@@ -7,7 +7,7 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Role;
-import city.buildings.ResidenceBaseBuilding;
+import city.abstracts.ResidenceBuildingBase;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -16,7 +16,7 @@ public class LandlordRole extends Role implements Landlord {
 	// Data
 	
 	private Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
-	private ResidenceBaseBuilding residence; // the landlord is the landlord of this building
+	private ResidenceBuildingBase residence; // the landlord is the landlord of this building
 	private List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	
 	// Constructor
@@ -56,9 +56,9 @@ public class LandlordRole extends Role implements Landlord {
 	}
 	
 	@Override
-	public void setResidence(ResidenceBaseBuilding b) {
+	public void setResidence(ResidenceBuildingBase b) {
 		residence = b; // landlord knows where he lives
-		b.landlord = this; // building knows who the landlord is
+		b.setLandlord(this);
 	}
 	
 	// Utilities

@@ -4,7 +4,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;

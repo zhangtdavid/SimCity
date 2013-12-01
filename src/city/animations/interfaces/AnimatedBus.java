@@ -1,8 +1,8 @@
 package city.animations.interfaces;
 
+import city.AnimationInterface;
 import city.Building;
 import city.buildings.BusStopBuilding;
-import city.interfaces.AnimationInterface;
 
 public interface AnimatedBus extends AnimationInterface {
 	

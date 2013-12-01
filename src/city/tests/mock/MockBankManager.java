@@ -3,7 +3,7 @@ package city.tests.mock;
 import java.util.List;
 
 import utilities.LoggedEvent;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankManager;
 import city.interfaces.BankTeller;

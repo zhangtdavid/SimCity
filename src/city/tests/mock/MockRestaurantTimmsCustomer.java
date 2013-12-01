@@ -2,7 +2,7 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.Application;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.RestaurantTimmsBuilding;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
