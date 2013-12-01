@@ -2,6 +2,7 @@ package city.tests.mock;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
@@ -51,13 +52,15 @@ public class MockResident extends MockRole implements Resident{
 		dueDate.setTime(rentLastPaid.getTime() + RENT_DUE_INTERVAL);
 		return dueDate;
 	}
+	
 	@Override
 	public boolean isLandlord() {
 		return (landlord != null);
 	}
+	
 	@Override
 	public boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(this.getPerson().getDate());
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(getRentDueDate());
