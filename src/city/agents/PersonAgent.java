@@ -21,14 +21,12 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.Building;
 import city.BuildingInterface;
-import city.Role;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
-import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
-import city.buildings.MarketBuilding;
 import city.interfaces.Bank;
 import city.interfaces.Car;
+import city.interfaces.Market;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
@@ -58,6 +56,7 @@ public class PersonAgent extends Agent implements Person {
 	private city.animations.interfaces.AnimatedPerson animation;
 	private STATE state; 
 	private int cash;
+	private boolean hasEaten;
 	
 	// Constructor
 	
@@ -75,6 +74,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastWentToSleep = startDate;
 		this.state = STATE.none;
 		this.cash = 0;
+		this.hasEaten = false;
 		
 		residentRole = new ResidentRole(startDate);
 		bankCustomerRole = new BankCustomerRole();
@@ -298,12 +298,14 @@ public class PersonAgent extends Agent implements Person {
 		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
+		this.lastAteAtRestaurant = this.date;
+		this.hasEaten = true;
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
-			restaurantCustomerRole = (Role) r0.newInstance();
+			restaurantCustomerRole = (RoleInterface) r0.newInstance();
 			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
@@ -321,8 +323,8 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToMarket() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		MarketBuilding b = (MarketBuilding) Application.CityMap.findClosestBuilding(BUILDING.market, this);
-		processTransportationDeparture(b);
+		Market m = (Market) Application.CityMap.findClosestBuilding(BUILDING.market, this);
+		processTransportationDeparture(m);
 		state = STATE.goingToMarket;
 		
 		// TODO construct an actual order
@@ -348,6 +350,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		this.hasEaten = true;
 		animation.cookAndEatFood();
 		atDestination.acquire();
 		state = pickDailyTask();
@@ -358,11 +361,14 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Takes the person home and allows them to "sleep" until awakened for work.
 	 * 
+	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
+	 * 
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture((Building) home);
+		this.hasEaten = false;
+		processTransportationDeparture((BuildingInterface) home);
 		state = STATE.goingToSleep;
 	}
 	
@@ -433,6 +439,11 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public ArrayList<RoleInterface> getRoles() {
 		return roles;
+	}
+	
+	@Override
+	public boolean getHasEaten() {
+		return hasEaten;
 	}
 	
 	//=========//
@@ -676,6 +687,7 @@ public class PersonAgent extends Agent implements Person {
 		boolean disposition = false;
 		if (cash >= RESTAURANT_DINING_THRESHOLD) { disposition = true; }
 		if (today >= threshold) { disposition = true; }
+		if (this.hasEaten) { disposition = false; }
 		
 		return disposition;
 	}
@@ -687,12 +699,12 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean shouldGoToMarket() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		boolean disposition = false;
+		boolean disposition = true;
 		int items = 0;
 		for (FOOD_ITEMS i : home.getFoodItems().keySet()) {
 			items = items + home.getFoodItems().get(i);
-			if (items <= 3) { 
-				disposition = true;
+			if (items > 3) { 
+				disposition = false;
 				break;
 			}
 		}
@@ -704,6 +716,9 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 * Should be called only after visiting a market, and will only go to cook
 	 * if a market has just been visited.
+	 * 
+	 * Does not care if the person has, somehow, already eaten, though that
+	 * condition shouldn't occur.
 	 */
 	private boolean shouldGoToCook() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());

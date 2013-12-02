@@ -50,6 +50,7 @@ public interface Person extends AgentInterface {
 	public RoleInterface getRestaurantCustomerRole();
 	public STATE getState();
 	public BankCustomerRole getBankCustomerRole();
+	public boolean getHasEaten();
 	
 	// Setters
 	
