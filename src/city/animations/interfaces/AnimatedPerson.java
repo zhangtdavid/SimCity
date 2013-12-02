@@ -25,7 +25,10 @@ public interface AnimatedPerson extends AnimationInterface {
 	
 	public void goToBusStop(BusStop b);
 	public void goToSleep();
+	public void verifyFood();
 	public void cookAndEatFood();
+	public void cookAndEatFoodPart2();
+	
     
     // Getters
     

@@ -53,10 +53,10 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 		}
 	}
 
-	@Override
 	/**
 	 * Draws person and a string symbolizing the food he is making/eating at the time. 
 	 */
+	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, AnimatedPerson.WIDTH, AnimatedPerson.WIDTH);
@@ -65,11 +65,12 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	} 
 
 	
-	//Msging
-	@Override
+	//Msg (from agent)
+	
 	/**
 	 * Moves the person to a bus stop (already determined which is closest) 
 	 */
+	@Override
 	public void goToBusStop(BusStop b) {
 		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().x;
 		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().y;
@@ -90,18 +91,19 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	 * What if his room mate ate all the food in there without person knowing? Too real. Thus, we check.
 	 * This is before actually checking the food; it moves the Person to the refrigerator.
 	 */
+	@Override
 	public void verifyFood(){
 		//Send agent to the refrigerator
 		xDestination = AnimatedPerson.RES_REFRIGERATOR[0];
 		yDestination = AnimatedPerson.RES_REFRIGERATOR[1];
 	}
 	
-	@Override
 	/**
 	 * Moves the person to stove to cook food.
 	 * After verifyFood().
 	 * This animation takes Person to the stove with item, (then timer - cook)
 	 */
+	@Override
 	public void cookAndEatFood() {
 		xDestination = AnimatedPerson.RES_STOVE[0];
 		xDestination = AnimatedPerson.RES_STOVE[1];
@@ -112,6 +114,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	 * After cookAndEatFood().
 	 * This animation takes Person to the table with item (then timer - eat).
 	 */
+	@Override
 	public void cookAndEatFoodPart2(){
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[0];
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[1];

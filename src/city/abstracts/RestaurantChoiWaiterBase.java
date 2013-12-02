@@ -66,7 +66,6 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 
 	/**
 	 * Initializes both types of waiters for RestaurantChoi
-	 * 
 	 * Secondary constructor for mechanics testing
 	 */
 	public RestaurantChoiWaiterBase() {

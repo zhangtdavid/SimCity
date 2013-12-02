@@ -68,24 +68,27 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	}
 	
 	@Override
-	public abstract void addResident(Resident r);
-	
-	@Override
 	public void setTotalCurrentMaintenance(int m) {
 		this.totalCurrentMaintenance = m;
 	}
+	
+	
+	// Utilities
 	
 	@Override
 	public void addFood(FOOD_ITEMS f, int i) {
 		this.foodItems.put(f, (foodItems.get(f) + i));
 	}
 
-	// Utilities
-	
 	@Override
 	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
         for (FOOD_ITEMS s: receivedItems.keySet()) {
         	foodItems.put(s, foodItems.get(s)+receivedItems.get(s)); // Add delivered food items to restaurant inventory
         }		
 	}
+	
+	@Override
+	public abstract void addResident(Resident r);
+	
+	
 }

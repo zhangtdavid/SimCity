@@ -65,16 +65,16 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 		this.landlord = l;
 	}
 	
-	// Utilities
-
 	@Override
-	public void addResident(Resident r) {
+	public void setTotalCurrentMaintenance(int m) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	// Utilities
+	
 	@Override
-	public void setTotalCurrentMaintenance(int m) {
+	public void addResident(Resident r) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -90,5 +90,4 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 		// TODO Auto-generated method stub
 		
 	}
-
 }

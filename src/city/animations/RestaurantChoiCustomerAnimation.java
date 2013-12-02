@@ -84,7 +84,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 
 	//Movements
 	
-
 	public void DoGoToSeat(int x, int y) {
 		xDestination = x;
 		yDestination = y;

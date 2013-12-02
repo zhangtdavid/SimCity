@@ -46,7 +46,7 @@ public class RestaurantChoiWaiterDirectRole extends RestaurantChoiWaiterBase {
 		//while this is not going directly to the cook, this is very close to the real deal; otherwise i'd
 		//have to be constantly asking every animation step whether I'm next to the cook or not...
 		waiterGui.setAcquired();
-		waiterGui.GoTo(RestaurantChoiAnimatedCook.restingCoordX, RestaurantChoiAnimatedCook.restingCoordY);
+		waiterGui.GoTo(RestaurantChoiAnimatedCook.RESTX, RestaurantChoiAnimatedCook.RESTY);
 		try {
 			inProgress.acquire();
 		} catch (InterruptedException e) {
