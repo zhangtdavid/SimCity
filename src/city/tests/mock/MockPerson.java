@@ -159,4 +159,10 @@ public class MockPerson extends MockAgent implements Person {
 		return null;
 	}
 
+	@Override
+	public boolean getHasEaten() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

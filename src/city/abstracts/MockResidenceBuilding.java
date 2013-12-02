@@ -65,6 +65,11 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 		this.landlord = l;
 	}
 	
+	@Override
+	public void setFood(Map<FOOD_ITEMS, Integer> items) {
+		this.foodItems = items;
+	}
+	
 	// Utilities
 
 	@Override

@@ -76,11 +76,16 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	}
 	
 	@Override
-	public void addFood(FOOD_ITEMS f, int i) {
-		this.foodItems.put(f, (foodItems.get(f) + i));
+	public void setFood(Map<FOOD_ITEMS, Integer> items) {
+		this.foodItems = items;
 	}
 
 	// Utilities
+	
+	@Override
+	public void addFood(FOOD_ITEMS f, int i) {
+		this.foodItems.put(f, (foodItems.get(f) + i));
+	}
 	
 	@Override
 	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {

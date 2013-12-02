@@ -1,5 +1,7 @@
 package city;
 
+import java.util.HashMap;
+
 import city.gui.BuildingCard;
 import city.gui.views.CityViewBuilding;
 
@@ -24,6 +26,7 @@ public interface BuildingInterface {
 	public <T extends AnimationInterface> T getOccupyingRoleAnimation(RoleInterface r, Class<T> type);
 	public CityViewBuilding getCityViewBuilding();
 	public BuildingCard getPanel();
+	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles(); 
 	
 	// Setters
 	
