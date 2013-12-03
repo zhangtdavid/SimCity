@@ -19,6 +19,7 @@ import city.interfaces.RestaurantChungWaiter;
  */
 public class RestaurantChungCustomerRole extends Role implements RestaurantChungCustomer {
 	private int hungerLevel = 10; // determines length of meal
+	
 	RestaurantChungBuilding restaurant;
 	private RestaurantChungWaiter waiter;
 	int positionInLine;
@@ -29,23 +30,11 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	RestaurantChungMenu menu;
 	private String order;
 
-
-	public enum AgentState
-	{DoingNothing, GoingToRestaurant, WaitingInRestaurant, DecidedToStay, BeingSeated, DecideLeaving, Deciding, CallingWaiter, WaitingForFood, Eating, WaitingForCheck, GoingToCashier, Paying, WaitingForChange, Leaving};
 	private AgentState state = AgentState.DoingNothing; //The start state
-	
-	public enum AgentEvent
-	{none, gotHungry, getInLine, standInLine, followWaiter, noTables, decidedToLeave, seated, readyToOrder, askedForOrder, receivedFood, doneEating, receivedCheck, atCashier, receivedChange, doneLeaving, kickedOut};
 	private AgentEvent event = AgentEvent.none;
-	
 
 //	Constructor
 //	====================================================================
-	/**
-	 * Constructor for CustomerAgent class
-	 *
-	 * @param name name of the customer
-	 */
 	public RestaurantChungCustomerRole(){
 		super();
 	}
@@ -63,7 +52,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 
 	public void msgGetInLinePosition(int pos) {
-//		System.out.println("CUSTOMER PERSON: " + this.getPerson());
 		print("Customer received msgGetInLinePosition " + pos); // TODO
 		positionInLine = pos;
 		event = AgentEvent.getInLine;
@@ -166,19 +154,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
-	public boolean runScheduler() {
-		//	CustomerAgent is a finite state machine
-
-//		if (state == AgentState.DoingNothing && event == AgentEvent.gotHungry) {
-//			goToRestaurant();
-//			return true;
-//		}
-		
-//		if (state == AgentState.GoingToRestaurant && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
-//			getInLine();
-//			return true;
-//		}
-		
+	public boolean runScheduler() {		
 		if (state == AgentState.DoingNothing && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
 			getInLine();
 			return true;
@@ -268,14 +244,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 
 //  Actions
-//	=====================================================================
-	private void goToRestaurant() {
-		print("Going to restaurant");
-		state = AgentState.GoingToRestaurant;
-		restaurant.host.msgIWantToEat(this);//send our instance, so he can respond to us
-	}
-
-	
+//	=====================================================================	
 	private void getInLine() {
 		print("Getting in position " + positionInLine + " of the line at restaurant");
 		state = AgentState.WaitingInRestaurant;
@@ -301,150 +270,24 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		// Randomly select food from the menu
 		final int money = this.getPerson().getCash(); // Need to do this to get access to money in the timer task
 		timer.schedule(new TimerTask() {
-			public void run() {
-				// HACK------------------------------------------------------------------
-//				
-//				double nameDouble = -1;
-//				
-//				try {
-//					nameDouble = Double.parseDouble(name);
-//				} catch (NumberFormatException nfe){
-//				
-//					
-//				}
-//				
-//				if (nameDouble == 8.99) {
-//					money = nameDouble; // TODO Remove hacks
-//					
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						if (menu.items.get(i).item.equals("Salad")) {
-//							order = "Salad";
-//							print("Finished deciding food, customer wants " + order);
-//							msgSelfReadyToOrder();
-//							return;
-//						}
-//					}
-//					order = "Pizza";
-//					print("Finished deciding food, customer wants " + order);
-//					msgSelfReadyToOrder();
-//					return;	
-//				}
-//				
-//				if (nameDouble == 5.99) {
-//					money = nameDouble;
-//				}
-//				
-//				if (nameDouble == 5) {
-//					money = nameDouble;
-//				}
-//				
-//				if (name.equals("Steak")) {
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						if (menu.items.get(i).item.equals("Steak"))
-//							if (menu.items.get(i).price > money) {
-//								msgSelfDecidedToLeave();
-//								return;
-//							}
-//							else {
-//								order = "Steak";
-//								print("Finished deciding food, customer wants " + order);
-//								msgSelfReadyToOrder();
-//								return;
-//							}
-//					}
-//					msgSelfDecidedToLeave();
-//					return;
-//				}
-//				
-//				else if (name.equals("Chicken")) {
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						if (menu.items.get(i).item.equals("Chicken"))
-//							if (menu.items.get(i).price > money) {
-//								msgSelfDecidedToLeave();
-//								return;
-//							}
-//							else {
-//								order = "Chicken";
-//								print("Finished deciding food, customer wants " + order);
-//								msgSelfReadyToOrder();
-//								return;
-//							}
-//					}
-//					msgSelfDecidedToLeave();
-//					return;
-//				}
-//				
-//				else if (name.equals("Salad")) {
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						if (menu.items.get(i).item.equals("Salad"))
-//							if (menu.items.get(i).price > money) {
-//								msgSelfDecidedToLeave();
-//								return;
-//							}
-//							else {
-//								order = "Salad";
-//								print("Finished deciding food, customer wants " + order);
-//								msgSelfReadyToOrder();
-//								return;
-//							}
-//					}
-//					msgSelfDecidedToLeave();
-//					return;
-//				}
-//				
-//				else if (name.equals("Pizza")) {
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						if (menu.items.get(i).item.equals("Pizza"))
-//							if (menu.items.get(i).price > money) {
-//								msgSelfDecidedToLeave();
-//								return;
-//							}
-//							else {
-//								order = "Pizza";
-//								print("Finished deciding food, customer wants " + order);
-//								msgSelfReadyToOrder();
-//								return;
-//							}
-//					}
-//					msgSelfDecidedToLeave();
-//					return;
-//				}
-//				
-//				else if (name.equals("Flake")) {
-//					money = 5.00;
-//					for(int i = 0; i < menu.items.size(); i++)  {
-//						// Deliberately orders something too expensive
-//						if (menu.items.get(i).price > money) {
-//							order = menu.items.get(i).item;
-//							print("Finished deciding food, customer wants " + order);
-//							msgSelfReadyToOrder();
-//							return;
-//						}
-//					}
-//					msgSelfDecidedToLeave();
-//					return;
-//				}
-				// END HACK------------------------------------------------------------------
-				
-//				else {
-					Random rand = new Random();
-					while (order == null) {
-						if (menu.items.size() == 0) {
-							msgSelfDecidedToLeave();
-							return;
-						}
-						int randInt = rand.nextInt(menu.items.size());
-						if (menu.items.get(randInt).price > money) {
-							menu.items.remove(randInt);						
-						}
-						else {
-							order = menu.items.get(randInt).item;
-							print("Finished deciding food, customer wants " + order);
-							msgSelfReadyToOrder();	
-						}
+		public void run() {
+				Random rand = new Random();
+				while (order == null) {
+					if (menu.items.size() == 0) {
+						msgSelfDecidedToLeave();
+						return;
+					}
+					int randInt = rand.nextInt(menu.items.size());
+					if (menu.items.get(randInt).price > money) {
+						menu.items.remove(randInt);						
+					}
+					else {
+						order = menu.items.get(randInt).item;
+						print("Finished deciding food, customer wants " + order);
+						msgSelfReadyToOrder();	
 					}
 				}
-//			}
+			}
 		},
 		1000);
 	}
@@ -522,11 +365,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		Random rand = new Random();
 		int leaving = rand.nextInt(2);
 
-// HACK------------------------------------------------------------------
-//		if (name.equals("Leave")) leaving = 0;
-//		else if (name.equals("Stay")) leaving = 1;
-// END HACK------------------------------------------------------------------
-
 		if (leaving == 0) {
 			print("Decided to leave");
 			msgSelfDecidedToLeave();
@@ -554,21 +392,9 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //		//need to eat until hunger lever is > 5?
 //	}
 	
-//	public void setGui(RestaurantChungCustomerAnimation g) {
-//		customerGui = g;
-//	}
-	
-	/**
-	 * hack to establish connection to Host agent.
-	 */	
-	
 	public int getHungerLevel() {
 		return hungerLevel;
 	}
-	
-//	public RestaurantChungCustomerAnimation getGui() {
-//		return customerGui;
-//	}
 	
 	public String getState() {
 		return state.toString();
