@@ -22,12 +22,11 @@ import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
-import city.Building;
 import city.BuildingInterface;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
-import city.buildings.BusStopBuilding;
 import city.interfaces.Bank;
+import city.interfaces.BusStop;
 import city.interfaces.Car;
 import city.interfaces.Market;
 import city.interfaces.Person;
@@ -72,14 +71,14 @@ public class PersonAgent extends Agent implements Person {
 	public PersonAgent(String name, Date startDate) {
 		super();
 		this.name = name;
-		this.date = startDate;
-		this.lastAteAtRestaurant = startDate;
-		this.lastWentToSleep = startDate;
+		this.date = new Date(startDate.getTime());
+		this.lastAteAtRestaurant = new Date(startDate.getTime());
+		this.lastWentToSleep = new Date(startDate.getTime());
 		this.state = STATE.none;
 		this.cash = 0;
 		this.hasEaten = false;
 		
-		residentRole = new ResidentRole(startDate);
+		residentRole = new ResidentRole(new Date(startDate.getTime()));
 		bankCustomerRole = new BankCustomerRole();
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
@@ -141,7 +140,8 @@ public class PersonAgent extends Agent implements Person {
 				if (cash >= BANK_DEPOSIT_THRESHOLD) { 
 					choice = BANK_SERVICE.atmDeposit; 
 					money = BANK_DEPOSIT_SUM;
-				} else if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { 
+				} 
+				if (residentRole.rentIsDue()) { 
 					choice = BANK_SERVICE.moneyWithdraw; 
 					money = RENT_MIN_THRESHOLD;
 				}
@@ -209,11 +209,16 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (state == STATE.goingToCook) {
 			if (processTransportationArrival()) {
-				// actCookAndEatFood() will run the daily task scheduler
 				state = STATE.atCooking;
 				actCookAndEatFood();
 				return true;
 			}
+		}
+		if (state == STATE.atCooking) {
+			atDestination.acquire();
+			state = pickDailyTask();
+			performDailyTaskAction();
+			return true;
 		}
 		if (state == STATE.goingToSleep) {
 			if (processTransportationArrival()) {
@@ -222,7 +227,7 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
-		if (state == STATE.atSleep || state == STATE.none) { // TODO needs testing. 
+		if (state == STATE.atSleep) {
 			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
@@ -233,6 +238,14 @@ public class PersonAgent extends Agent implements Person {
 				}
 			}
 			return false;
+		}
+		if (state == STATE.none) {
+			// If state == STATE.none (the condition at PersonAgent creation) we don't want anything special to 
+			// happen. The person either has a first-shift job and will go to work, or the person has a
+			// second-shift job and will begin daily tasks.	
+			state = pickDailyTask();
+			performDailyTaskAction();
+			return true;
 		}
 		
 		//----------------/
@@ -287,7 +300,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToPayRent() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture((Building) home);
+		processTransportationDeparture((ResidenceBuildingInterface) home);
 		state = STATE.goingToPayRent;
 	}
 	
@@ -365,10 +378,7 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = true;
 		animation.cookAndEatFood();
-		atDestination.acquire();
-		state = pickDailyTask();
-		performDailyTaskAction();
-		// Expected to go to sleep next
+		// The scheduler will pick up the atDestination and continue the program
 	}
 	
 	/**
@@ -383,6 +393,7 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
 		processTransportationDeparture((BuildingInterface) home);
+		lastWentToSleep = this.getDate();
 		state = STATE.goingToSleep;
 	}
 	
@@ -460,6 +471,11 @@ public class PersonAgent extends Agent implements Person {
 		return hasEaten;
 	}
 	
+	@Override
+	public ResidentRole getResidentRole() {
+		return residentRole;
+	}
+	
 	//=========//
 	// Setters //
 	//=========//
@@ -474,7 +490,7 @@ public class PersonAgent extends Agent implements Person {
 	public void setOccupation(RoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
-		addRole(r);
+		if (r != null) { addRole(r); }
 	}
 	
 	@Override
@@ -525,8 +541,8 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole.setPerson(this);
 			this.addRole(carPassengerRole);
 		} else {
-			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
-			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+			BusStop b = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, this);
+			BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
 // TODO
 //			animation.goToBusStop(b);
 //			atDestination.acquire();
@@ -667,8 +683,8 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (cash >= BANK_DEPOSIT_THRESHOLD) { disposition = true; }
-		if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
-		if (residentRole.rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
+		if (residentRole.rentIsDue() && cash < RENT_MIN_THRESHOLD) { disposition = true; }
+		if (residentRole.rentIsDue() && cash >= RENT_MIN_THRESHOLD) { disposition = false; }
 		return disposition;
 	}
 	
@@ -728,16 +744,16 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Returns true if the person should go home to cook their food.
 	 * 
-	 * Should be called only after visiting a market, and will only go to cook
-	 * if a market has just been visited.
+	 * Since eating at home is lower in priority in the task picker than going 
+	 * to a restaurant, the person will automatically go home to cook if 
+	 * shouldGoToCook() is called and the person has not eaten.
 	 * 
 	 * Though the person can go to the market after going to a restaurant, the 
 	 * person will not go home to cook.
 	 */
 	private boolean shouldGoToCook() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		boolean disposition = false;
-		if (state == STATE.atMarket) { disposition = true; }
+		boolean disposition = true;
 		if (hasEaten) { disposition = false; }
 		return disposition;
 	}
@@ -753,7 +769,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Decision
 		boolean disposition = false;
-		if (thresholdDate.getTime() >= date.getTime()) { disposition = true; }
+		if (date.getTime() >= thresholdDate.getTime()) { disposition = true; }
 		return disposition;
 	}
 	

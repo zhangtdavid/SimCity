@@ -11,6 +11,7 @@ import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
+import city.roles.ResidentRole;
 
 public interface Person extends AgentInterface {
 
@@ -23,7 +24,6 @@ public interface Person extends AgentInterface {
 	public static long RESTAURANT_DINING_INTERVAL = (Application.HALF_HOUR * 144); // 3 days
 	public static long WAKE_UP_THRESHOLD = (Application.HALF_HOUR * 24); // 12 hours
 	public static final int RENT_MIN_THRESHOLD = 200;
-	public static final int RENT_MAX_THRESHOLD = 500;
 	
 	// Constructor
 	
@@ -48,6 +48,7 @@ public interface Person extends AgentInterface {
 	public BusPassengerRole getBusPassengerRole();
 	public MarketCustomerRole getMarketCustomerRole();
 	public RoleInterface getRestaurantCustomerRole();
+	public ResidentRole getResidentRole();
 	public STATE getState();
 	public BankCustomerRole getBankCustomerRole();
 	public boolean getHasEaten();

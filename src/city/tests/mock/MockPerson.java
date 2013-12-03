@@ -12,6 +12,7 @@ import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
+import city.roles.ResidentRole;
 
 public class MockPerson extends MockAgent implements Person {
 	
@@ -163,6 +164,12 @@ public class MockPerson extends MockAgent implements Person {
 	public boolean getHasEaten() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public ResidentRole getResidentRole() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }
