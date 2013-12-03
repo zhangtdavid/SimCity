@@ -8,16 +8,18 @@ import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	
-	private BankBuilding building;
+	private Bank building;
 	private Building business;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
+
 	private BankManagerRole b;
 	private int netTransaction = 0;
 	private STATE st;
@@ -34,7 +36,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public BankCustomerRole() {
-		building = (BankBuilding) (Application.CityMap.findRandomBuilding(BUILDING.bank));
+		building = (Bank) (Application.CityMap.findRandomBuilding(BUILDING.bank));
 	}
 	
 	// Messages
@@ -126,7 +128,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		if(building == null)
 			print("Null building. what the fuck");
 		st = STATE.inProgress;
-		building.manager.msgNeedService(this);
+		building.getManager().msgNeedService(this);
 	}
 	
 	private void Deposit(){
@@ -154,6 +156,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Getters
 	
+	@Override
+	public Application.BANK_SERVICE getService() {
+		return service;
+	}
+	
 	// Setters
 	
 	@Override
@@ -172,7 +179,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
     }
 	

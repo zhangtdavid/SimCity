@@ -2,6 +2,7 @@ package city.roles;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -77,6 +78,11 @@ public class ResidentRole extends Role implements Resident {
 	
 	// Setters
 	
+	@Override
+	public void setRentLastPaid(Date d) {
+		this.rentLastPaid = new Date(d.getTime());
+	}
+	
 	// Utilities
 
 	/**
@@ -84,7 +90,7 @@ public class ResidentRole extends Role implements Resident {
 	 */
 	@Override
 	public boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(this.getPerson().getDate()); 
 		long day = c.getTimeInMillis();// this is the time and date RIGHT NOW
 		

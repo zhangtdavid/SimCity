@@ -28,7 +28,7 @@ public abstract class Agent implements AgentInterface {
      * @throws InterruptedException 
      * @return true iff some action was executed that might have changed the state.
      */
-    protected abstract boolean runScheduler() throws InterruptedException;
+   public abstract boolean runScheduler() throws InterruptedException;
     
     // Actions
     

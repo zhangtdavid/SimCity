@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.BuildingInterface;
 import city.RoleInterface;
 
 public interface CarPassenger extends RoleInterface {
@@ -10,14 +11,16 @@ public interface CarPassenger extends RoleInterface {
 	
 	// Messages
 	
-	abstract void msgImAtCar();
-	abstract void msgImAtDestination();
+	public void msgImAtCar();
+	public void msgImAtDestination();
 
 	// Scheduler
 	
 	// Actions
 	
 	// Getters
+	
+	public BuildingInterface getDestination(); 
 	
 	// Setters
 	

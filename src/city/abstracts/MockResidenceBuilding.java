@@ -24,6 +24,11 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 
 	public MockResidenceBuilding(String name) {
 		super(name);
+		
+		// We need some zero quantity of every food item to prevent null pointers when adding food
+        for (FOOD_ITEMS f: FOOD_ITEMS.values()) {
+        	foodItems.put(f, 0); 
+        }	
 	}
 	
 	// Getters
@@ -66,6 +71,11 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	}
 	
 	@Override
+	public void setFood(Map<FOOD_ITEMS, Integer> items) {
+		this.foodItems = items;
+	}
+
+	@Override
 	public void setTotalCurrentMaintenance(int m) {
 		// TODO Auto-generated method stub
 		
@@ -81,8 +91,7 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 
 	@Override
 	public void addFood(FOOD_ITEMS f, int i) {
-		// TODO Auto-generated method stub
-		
+		this.foodItems.put(f, (foodItems.get(f) + i));
 	}
 
 	@Override

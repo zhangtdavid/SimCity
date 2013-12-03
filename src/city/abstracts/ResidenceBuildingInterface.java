@@ -24,6 +24,7 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 	public void setLandlord(Landlord l);
 	public void addResident(Resident r);
 	public void setTotalCurrentMaintenance(int m);
+	public void setFood(Map<FOOD_ITEMS, Integer> items);
 
 	// Utilities
 

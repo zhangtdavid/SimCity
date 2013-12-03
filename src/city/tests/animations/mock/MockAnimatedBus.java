@@ -5,8 +5,8 @@ import java.awt.Graphics2D;
 import city.Building;
 import city.abstracts.MockAnimation;
 import city.animations.interfaces.AnimatedBus;
-import city.buildings.BusStopBuilding;
 import city.interfaces.Bus;
+import city.interfaces.BusStop;
 
 public class MockAnimatedBus extends MockAnimation implements AnimatedBus {
 
@@ -34,7 +34,7 @@ public class MockAnimatedBus extends MockAnimation implements AnimatedBus {
 	}
 
 	@Override
-	public void DoGoToNextStop(BusStopBuilding nextStop) {
+	public void DoGoToNextStop(BusStop nextStop) {
 		bus.msgAtDestination();
 	}
 }

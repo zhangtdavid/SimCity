@@ -2,10 +2,10 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import city.BuildingInterface;
 import city.Role;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
-import city.Building;
 
 public class CarPassengerRole extends Role implements CarPassenger {
 	
@@ -19,11 +19,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	public enum CarPassengerEvent {NONE, ATCAR, ATDESTINATION};
 	public CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
 	public Car myCar; // Car this person is getting into
-	public Building destination; // Building this car is going to
+	public BuildingInterface destination; // Building this car is going to
 	
 	// Constructor
 	
-	public CarPassengerRole(Car c, Building dest_) { // Pass in the person and car this role is assigned to
+	public CarPassengerRole(Car c, BuildingInterface dest_) { // Pass in the person and car this role is assigned to
 		myCar = c;
 		destination = dest_;
 	}
@@ -77,6 +77,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Getters
 	
+	@Override
+	public BuildingInterface getDestination() {
+		return destination;
+	}
+	
 	// Setters
 	
 	@Override
@@ -90,7 +95,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.CAR, "CarPassengerRole " + this.getPerson().getName(), msg);
     }
 	

@@ -26,7 +26,7 @@ public abstract class MockBuilding implements BuildingInterface {
 	private String customerRoleInterfaceName; // The interface name of the role that interacts with this building as a customer
 	private String customerAnimationInterfaceName; // The interface name of the animation that interacts with this building as a customer
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
-	private HashMap<RoleInterface, Animation> occupyingRoles = new HashMap<RoleInterface, Animation>(); // Stores all roles currently inside the building, along with their animations
+	private HashMap<RoleInterface, AnimationInterface> occupyingRoles = new HashMap<RoleInterface, AnimationInterface>(); // Stores all roles currently inside the building, along with their animations
 	private CityViewBuilding cityViewBuilding; // The representation of this building in the GUI's map
 	private BuildingCard panel; // The representation of this building's interior
 	
@@ -83,6 +83,11 @@ public abstract class MockBuilding implements BuildingInterface {
 		return panel;
 	}
 	
+	@Override
+	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles() {
+		return occupyingRoles;
+	}
+	
 	// Setters
 	
 	@Override
@@ -114,14 +119,13 @@ public abstract class MockBuilding implements BuildingInterface {
 	
 	@Override
 	public void addOccupyingRole(RoleInterface r) {
-		// TODO Auto-generated method stub
-		
+		// In ordinary buildings this overridden method would actually create the animation
+		occupyingRoles.put(r, null);
 	}
 
 	@Override
 	public void addOccupyingRole(RoleInterface r, Animation a) {
-		// TODO Auto-generated method stub
-		
+		occupyingRoles.put(r, a);
 	}
 
 	@Override

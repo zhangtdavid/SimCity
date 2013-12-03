@@ -2,10 +2,11 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import city.BuildingInterface;
 import city.Role;
-import city.buildings.BusStopBuilding;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
+import city.interfaces.BusStop;
 
 public class BusPassengerRole extends Role implements BusPassenger {
 	
@@ -19,13 +20,13 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public enum BusPassengerEvent {NONE, ATSTOP, BUSISHERE, ATDESTINATION};
 	public BusPassengerEvent myEvent = BusPassengerEvent.NONE;
 	public Bus myBus;
-	public BusStopBuilding busStopToWaitAt;
-	public BusStopBuilding destination;
+	public BusStop busStopToWaitAt;
+	public BusStop destination;
 	// public AnimatedBus animation;
 	
 	// Constructor
 	
-	public BusPassengerRole(BusStopBuilding dest, BusStopBuilding stopToWaitAt) {
+	public BusPassengerRole(BusStop dest, BusStop stopToWaitAt) {
 		destination = dest;
 		busStopToWaitAt = stopToWaitAt;
 	}
@@ -34,7 +35,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	@Override
 	public void msgAtWaitingStop() {
-		busStopToWaitAt.waitingList.add(this);
+		busStopToWaitAt.addToWaitingList(this);
 		myEvent = BusPassengerEvent.ATSTOP;
 		stateChanged();
 	}
@@ -79,7 +80,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		print("Getting on bus " + myBus.getName() + " at stop " + destination.getName() + " to go to " + destination.getName());
 		// myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 		this.getPerson().setCash(this.getPerson().getCash() - Bus.BUS_FARE);
-		busStopToWaitAt.waitingList.remove(this);
+		busStopToWaitAt.removeFromWaitingList(this);
 		myState = BusPassengerState.ONBUS;
 		myBus.msgImOnBus(this, destination);
 	}
@@ -95,6 +96,16 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Getters
 	
+	@Override
+	public BuildingInterface getDestination() {
+		return destination;
+	}
+	
+	@Override
+	public BuildingInterface getBusStopToWaitAt() {
+		return busStopToWaitAt;
+	}
+	
 	// Setters
 	
 	@Override
@@ -103,12 +114,10 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		msgAtWaitingStop();
 	}
 	
-	
 	// Utilities
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.BUS, "BusPassengerRole " + this.getPerson().getName(), msg);
     }
 	
