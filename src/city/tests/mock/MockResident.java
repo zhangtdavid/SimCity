@@ -76,4 +76,9 @@ public class MockResident extends MockRole implements Resident{
 	public void setResidence(ResidenceBuildingBase b) {
 		residence = b;		
 	}
+	@Override
+	public void setRentLastPaid(Date d) {
+		// TODO Auto-generated method stub
+		
+	}
 }

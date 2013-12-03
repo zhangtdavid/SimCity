@@ -78,6 +78,11 @@ public class ResidentRole extends Role implements Resident {
 	
 	// Setters
 	
+	@Override
+	public void setRentLastPaid(Date d) {
+		this.rentLastPaid = new Date(d.getTime());
+	}
+	
 	// Utilities
 
 	/**
