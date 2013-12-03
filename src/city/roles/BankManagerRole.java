@@ -18,7 +18,7 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	// Data
 
-	BankBuilding building;
+	public BankBuilding building;
 	List<MyTeller> myTellers = new ArrayList<MyTeller>();
 	List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
@@ -111,7 +111,6 @@ public class BankManagerRole extends Role implements BankManager {
 
 	@Override
 	public boolean runScheduler() {
-		print("IN THE SCHEDULER OF BANK MANAGER");
 		
 		if(wantsInactive && building.manager != this && customers.size() == 0){
 			super.setInactive();

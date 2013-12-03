@@ -32,6 +32,10 @@ public class BankTellerTest extends TestCase {
 		assertEquals("Customers's log should be empty.", 0, customer.log.size());
 		assertEquals("Teller should have no customer.", null, teller.currentCustomer);
 		
+		teller.setActive();
+		
+		assertEquals("Manager's log length should be 1.", 1, manager.log.size());
+		assertTrue("Manager should be notified of available teller.", manager.log.containsString("Received msgAvailable " + teller));
 		// Send a message from the host to seat a customer
 		teller.msgAddressCustomer(customer);
 		
@@ -48,7 +52,7 @@ public class BankTellerTest extends TestCase {
 		teller.msgDeposit(-1, 50);
 		
 		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
-		assertEquals("Manager's log length should be 1.", 1, manager.log.size());
+		assertEquals("Manager's log length should be 2.", 2, manager.log.size());
 		assertTrue("Manager should be asked to try deposit.", manager.log.containsString("Received msgTryDeposit"));
 		
 		// Send a message from the customer to order Steak
@@ -63,7 +67,7 @@ public class BankTellerTest extends TestCase {
 		
 		assertTrue("Teller's scheduler should return true.", teller.runScheduler());
 		assertEquals("CurrentCustomer should equal null.", null, teller.currentCustomer);
-		assertEquals("Manager's log length should be 2.", 2, manager.log.size());
+		assertEquals("Manager's log length should be 3.", 3, manager.log.size());
 		assertTrue("Manager should be notified that teller is available.", manager.log.containsString("Received msgAvailable"));
 	}
 	

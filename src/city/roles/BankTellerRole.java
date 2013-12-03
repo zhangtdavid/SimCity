@@ -2,7 +2,6 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.buildings.RestaurantJPBuilding;
@@ -24,10 +23,10 @@ public class BankTellerRole extends Role implements BankTeller {
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		print("Customer has been set active");
+	public void setActive(){
+		print("Teller has been set active");
+		super.setActive();
 		building.manager.msgAvailable(this);
-		this.setActivityBegun();
 	}
 	public void setInactive(){
 		if(currentCustomer == null){

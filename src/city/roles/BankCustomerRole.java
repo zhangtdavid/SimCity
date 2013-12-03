@@ -9,6 +9,7 @@ import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.BankCustomer;
+import city.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
@@ -22,8 +23,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	int netTransaction = 0;
 	state st;
 	int amount;
-	BankTellerRole t;
-	int acctNum = -1;
+	BankTeller t;
+	public int acctNum = -1;
 	int boothNumber;
 
 	// Constructor
@@ -37,9 +38,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building = (BankBuilding) (Application.CityMap.findRandomBuilding(BUILDING.bank));
 	}
 	
+	
 	// Messages
 	
-	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
+	public void msgWhatDoYouWant(int booth, BankTeller tell) {
 		print("WhatDoYouWant message received");
 		t = tell;
 		boothNumber = booth;
@@ -84,8 +86,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	@Override
 	public boolean runScheduler() {
 		if(service == BANK_SERVICE.atmDeposit){
-			DirectDeposit();
-			return true;
+			if(st == state.entering){
+				DirectDeposit();
+				return true;
+			}
 		}
 		if (st == state.entering){
 			AskForService();
@@ -117,8 +121,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public void AskForService(){
-		if(building == null)
-			print("Null building. what the fuck");
 		st = state.inProgress;
 		building.manager.msgNeedService(this);
 	}
@@ -152,13 +154,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
 		print("Customer has been set active");
-		super.setActive();
 		this.service = s;
 		this.depositType = t;
 		amount = money;
-		if(s != Application.BANK_SERVICE.atmDeposit)
-			st = state.entering;
-		this.setActivityBegun();
+		st = state.entering;
+		super.setActive();
+		stateChanged();
 	}
 	
 	// Utilities

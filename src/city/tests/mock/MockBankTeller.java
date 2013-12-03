@@ -39,7 +39,7 @@ public class MockBankTeller extends MockRole implements BankTeller {
 
 	@Override
 	public void msgTransactionSuccessful() {
-		log.add(new LoggedEvent("Received msgTransactionFailed"));
+		log.add(new LoggedEvent("Received msgTransactionSuccessful"));
 		// TODO Auto-generated method stub
 		
 	}

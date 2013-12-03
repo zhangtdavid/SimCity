@@ -5,16 +5,13 @@ import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import city.Animation;
 import city.Building;
 import city.Role;
-import city.animations.RestaurantChoiCustomerAnimation;
 import city.interfaces.BankManager;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
-import city.roles.RestaurantChoiCustomerRole;
 
 public class BankBuilding extends Building {
 	

@@ -27,7 +27,6 @@ public class BankManagerTest extends TestCase {
 	}
 	
 	public void testDirectDepositScenario() {
-
 		// Preconditions
 		assertEquals("Customers's log should be empty.", 0, customer.log.size());
 		assertEquals("Manger should have no tasks.", 0, manager.bankTasks.size());
@@ -39,5 +38,27 @@ public class BankManagerTest extends TestCase {
 		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Customer's log length should be 1.", 1, customer.log.size());
 		assertTrue("Customer should be informed of account creation.", customer.log.containsString("Received msgAccountCreated"));
+		assertTrue("New account should exist in building accounts.", manager.building.accounts.get(0).balance == 50);
+	}
+	
+	public void testNormativeDepositThenWithdrawalScenario(){
+		assertEquals("Customers's log should be empty.", 0, customer.log.size());
+		assertEquals("Manger should have no tasks.", 0, manager.bankTasks.size());
+		
+		// Send a message from the host to seat a customer
+		manager.msgTryDeposit(50, -1, teller);
+		
+		assertEquals("Manager should have a bankTask.", true, manager.bankTasks.size() == 1);
+		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
+		assertEquals("Teller's log length should be 1.", 1, teller.log.size());
+		assertTrue("Teller should be informed of account creation. His log reads instead: " + teller.log.getLastLoggedEvent().toString(), teller.log.containsString("Received msgHereIsAccount 1"));
+		
+		manager.msgWithdraw(1, 50, teller);
+		
+		assertEquals("Manager should have a bankTask.", true, manager.bankTasks.size() == 1);
+		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
+		assertEquals("Teller's log length should be 2.", 2, teller.log.size());
+		assertTrue("Teller should be allowed to give withdrawal. His log reads instead: " + teller.log.getLastLoggedEvent().toString(), teller.log.containsString("Received msgTransactionSuccessful"));
+		assertTrue("Account funds should be depleted.", manager.building.accounts.get(0).balance == 0);
 	}
 }

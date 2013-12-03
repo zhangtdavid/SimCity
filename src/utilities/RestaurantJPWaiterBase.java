@@ -367,6 +367,10 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		return name;
 	}
 	
+	public int getSalary(){
+		return RestaurantJPBuilding.WORKER_SALARY;
+	}
+	
 	public List<MyCustomer> getCustomers(){
 		return myCustomers;
 	}

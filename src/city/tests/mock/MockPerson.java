@@ -15,7 +15,7 @@ public class MockPerson extends MockAgent implements Person {
 	private String name;
 	public ResidenceBaseBuilding home;
 	private int cash;
-	
+	private Role occupation = null;
 	// Constructor
 	
 	public MockPerson(String name) {
@@ -59,7 +59,7 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public Role getOccupation() {
 		// TODO Auto-generated method stub
-		return null;
+		return occupation;
 	}
 	
 	// Setters
@@ -85,7 +85,7 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public void setOccupation(Role r) {
 		// TODO Auto-generated method stub
-		
+		occupation = r;
 	}
 
 	@Override
