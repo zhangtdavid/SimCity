@@ -18,9 +18,11 @@ import city.interfaces.RestaurantChungWaiter;
  * Restaurant Customer agent.
  */
 public class RestaurantChungCustomerRole extends Role implements RestaurantChungCustomer {
+//	Data
+//	=====================================================================	
+	Timer timer = new Timer();
 	RestaurantChungBuilding restaurant;
 	private RestaurantChungWaiter waiter;
-	Timer timer = new Timer();
 	private Semaphore atSeat = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
 	

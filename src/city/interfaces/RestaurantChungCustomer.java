@@ -5,7 +5,6 @@ import city.buildings.RestaurantChungBuilding;
 import utilities.RestaurantChungMenu;
 
 public interface RestaurantChungCustomer extends RoleInterface {
-	
 	public enum AgentState
 	{DoingNothing, GoingToRestaurant, WaitingInRestaurant, DecidedToStay, BeingSeated, DecideLeaving, Deciding, CallingWaiter, WaitingForFood, Eating, WaitingForCheck, GoingToCashier, Paying, WaitingForChange, Leaving};
 	public enum AgentEvent
@@ -37,8 +36,5 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	// Setters
 	public void setHungerLevel(int hungerLevel);
 	public void setRestaurant(RestaurantChungBuilding r);
-	
-	// Utilities
-	public void print(String msg);
 	
 }

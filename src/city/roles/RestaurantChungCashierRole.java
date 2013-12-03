@@ -22,20 +22,17 @@ import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 
-public class RestaurantChungCashierRole extends Role implements RestaurantChungCashier {	
-	
+public class RestaurantChungCashierRole extends Role implements RestaurantChungCashier {
 //	Data
 //	=====================================================================	
-	
 	public EventLog log = new EventLog();
 	Timer timer = new Timer();
 	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
+	
 	private List<Role> roles = new ArrayList<Role>();
+	WorkingState workingState = WorkingState.Working;
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public enum TransactionState {None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 		
 //	Constructor
@@ -50,10 +47,6 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		roles.add((Role) restaurant.bankCustomer);
 	}
 	
-//	public void setActive(){
-//		super.setActive();
-//	}
-	
 	public void setInActive(){
 		workingState = WorkingState.GoingOffShift;
 	}
@@ -62,6 +55,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	=====================================================================
 //	Waiter
 //	---------------------------------------------------------------
+	@Override
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
@@ -74,6 +68,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 //	Restaurant Customer
 //	---------------------------------------------------------------
+	@Override
 	public void msgHereIsPayment(RestaurantChungCustomer c, int money) {
 		print("Cashier received msgHereIsPayment");
 		log.add(new LoggedEvent("Cashier received msgHereIsPayment. For amount of " + money));
@@ -87,6 +82,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 //	Cook
 //	---------------------------------------------------------------
+	@Override
 	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
@@ -204,57 +200,38 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		host.msgFlakeAlert(t.c, t.price-t.payment);
 		
 	}
-
-//	Utilities
+	
+//	Getters
 //	=====================================================================	
-	
-	public void setRestaurant(RestaurantChungBuilding restaurant) {
-		this.restaurant = restaurant;
-	}
-	
-	public void setHost(RestaurantChungHost host) {
-		this.host = host;
-	}
-	
-	public Transaction findTransaction(RestaurantChungCustomer c) {
-		for(Transaction t: transactions) {
-			if(t.c == c) {
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	public MarketTransaction findMarketTransaction(int id) {
-		for(MarketTransaction t: marketTransactions) {
-			if(t.order.orderId == id) {
-				return t;
-			}
-		}
-		return null;
-	}
-	
-	public void removeOrderFromList(Transaction transaction) {
-		for(Transaction t: transactions) {
-			if(t == transaction) {
-				transactions.remove(t);
-				return;
-			}
-		}
-	}
-	
-	public void setMarketCustomerDeliveryPaymentPerson() {
-		roles.get(0).setPerson(super.getPerson());
-	}
-
-	public void setBankCustomerPerson() {
-		restaurant.bankCustomer.setPerson(super.getPerson());
-	}
-	
+	@Override
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
 	}
 	
+//	Setters
+//	=====================================================================		
+	@Override
+	public void setRestaurant(RestaurantChungBuilding restaurant) {
+		this.restaurant = restaurant;
+	}
+	
+	@Override
+	public void setHost(RestaurantChungHost host) {
+		this.host = host;
+	}
+	
+	@Override
+	public void setMarketCustomerDeliveryPaymentPerson() {
+		roles.get(0).setPerson(super.getPerson());
+	}
+
+	@Override
+	public void setBankCustomerPerson() {
+		restaurant.bankCustomer.setPerson(super.getPerson());
+	}	
+//	Utilities
+//	=====================================================================
+	@Override
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: t.order.orderItems.keySet()) {
@@ -268,21 +245,50 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	}
 	
 	@Override
+	public Transaction findTransaction(RestaurantChungCustomer c) {
+		for(Transaction t: transactions) {
+			if(t.c == c) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public MarketTransaction findMarketTransaction(int id) {
+		for(MarketTransaction t: marketTransactions) {
+			if(t.order.orderId == id) {
+				return t;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public void removeOrderFromList(Transaction transaction) {
+		for(Transaction t: transactions) {
+			if(t == transaction) {
+				transactions.remove(t);
+				return;
+			}
+		}
+	}
+	
+	@Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCashierRole " + this.getPerson().getName(), msg);
     }
 
 //	Classes
-//	=====================================================================	
-
+//	=====================================================================
 	public class Transaction {
 		RestaurantChungWaiter w;
 		RestaurantChungCustomer c;
 		String choice;
-		public int price;
-		public int payment;
-		public TransactionState s;
+		private int price;
+		private int payment;
+		private TransactionState s;
 		
 		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, String order, TransactionState state) {
 			w = w2;
@@ -292,6 +298,27 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 			payment = 0;
 			s = state;
 		}
+		
+		// Getters
+		public int getPrice() {
+			return price;
+		}
+		
+		public int getPayment() {
+			return payment;
+		}
+		
+		public TransactionState getTransactionState() {
+			return s;
+		}
+		
+		// Setters
+		public void setPrice(int price) {
+			this.price = price;
+		}
+		
+		public void setPayment(int payment) {
+			this.payment = payment;
+		}		
 	}
-
 }
