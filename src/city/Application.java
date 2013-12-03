@@ -78,6 +78,7 @@ public class Application {
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
 
+	public static final int HALF_HOUR = 1800000; // A half hour in milliseconds
 	public static final int INTERVAL = 1000; // One interval is the simulation's equivalent of a half-hour
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
@@ -103,7 +104,7 @@ public class Application {
 		// Start the simulation
 		TimerTask tt = new TimerTask() {
 			public void run() {
-				date.setTime(date.getTime() + 1800000);
+				date.setTime(date.getTime() + HALF_HOUR);
 				for (Person p : people) {
 					p.setDate(date);
 				}

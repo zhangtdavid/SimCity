@@ -20,8 +20,8 @@ public interface Person extends AgentInterface {
 	public static final int BANK_DEPOSIT_THRESHOLD = 100;
 	public static final int BANK_DEPOSIT_SUM = 50;
 	public static final int RESTAURANT_DINING_THRESHOLD = 80;
-	public static long RESTAURANT_DINING_INTERVAL = (Application.INTERVAL * 144); // 3 days
-	public static long WAKE_UP_THRESHOLD = (Application.INTERVAL * 24); // 12 hours
+	public static long RESTAURANT_DINING_INTERVAL = (Application.HALF_HOUR * 144); // 3 days
+	public static long WAKE_UP_THRESHOLD = (Application.HALF_HOUR * 24); // 12 hours
 	public static final int RENT_MIN_THRESHOLD = 200;
 	public static final int RENT_MAX_THRESHOLD = 500;
 	
