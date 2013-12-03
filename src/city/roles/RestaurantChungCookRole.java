@@ -28,31 +28,30 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungWaiter;
 
-public class RestaurantChungCookRole extends Role implements RestaurantChungCook {       
-	
+public class RestaurantChungCookRole extends Role implements RestaurantChungCook {
 //  Data
 //  ===================================================================== 
-	RestaurantChungBuilding restaurant;
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
-	RestaurantChungRevolvingStand orderStand;
-    private boolean cooking = false;
-    private boolean plating = false;
-	boolean waitingToCheckStand = false;
+    
 	private Semaphore atCookHome = new Semaphore(0, true);
 	private Semaphore atGrill = new Semaphore(0, true);
 	private Semaphore atPlating = new Semaphore(0, true);
+
+	private boolean cooking = false;
+    private boolean plating = false;
+	boolean waitingToCheckStand = false;
+	
+	RestaurantChungBuilding restaurant;
+
+	RestaurantChungRevolvingStand orderStand;
+
 	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-
     public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
-        
-//  Market Orders
-//  =====================================================================        
     public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
-    private enum MarketOrderState {Pending, Ordered};
 
+	WorkingState workingState = WorkingState.Working;
+            
 //  Constructor
 //  =====================================================================                
     public RestaurantChungCookRole(RestaurantChungBuilding b, int t1, int t2) {
@@ -62,12 +61,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
-    
-//	public void setActive(){
-//		this.setActivityBegun();
-//	}
 	
-	public void setInActive(){
+	@Override
+	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
 	}
 	
@@ -75,6 +71,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //	=====================================================================
 //  Waiter
 //  ---------------------------------------------------------------
+	@Override
     public void msgHereIsAnOrder(RestaurantChungWaiter w, String choice, int table) {
         print("Cook received msgHereIsAnOrder");
         orders.add(new RestaurantChungOrder(w, choice, table, OrderState.Pending));
@@ -83,16 +80,19 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         
 //  Self
 //  ---------------------------------------------------------------        
+	@Override
     public void msgSelfLowFoodsIdentified() {
         stateChanged();
     }
     
+	@Override
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
         print("Done cooking");
         stateChanged();
     }
     
+	@Override
     public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
         print("Done plating");
@@ -101,6 +101,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 //  Market Delivery Person
 //  ---------------------------------------------------------------
+	@Override
     public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
         print("Cook received msgOrderIsReady");
         MyMarketOrder mo = findMarketOrder(id);
@@ -135,18 +136,21 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 //	Animation
 //	---------------------------------------------------------------
+	@Override
 	public void msgAnimationAtCookHome() {
 		print("Cook at Cook Home");
 		atCookHome.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtGrill() {
 		print("Cook at Grill");
 		atGrill.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtPlating() {
 		print("Cook at Plating");
 		atPlating.release();
@@ -426,8 +430,23 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         print("Plating");
     }
 
+//  Getters
+//  =====================================================================   
+	@Override
+	public RestaurantChungRevolvingStand getRevolvingStand() {
+		return orderStand;
+	}
+	
+//  Setters
+//  =====================================================================       
+	@Override
+	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
+		orderStand = stand;
+	}
+	
 //  Utilities
 //  =====================================================================               
+	@Override
     public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
         for(RestaurantChungOrder o : orders){
             if(o == order) {
@@ -437,6 +456,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         return null;
     }
     
+	@Override
     public Food findFood(String choice) {
         for(Food f: restaurant.getFoods().values()){
             if(f.item.equals(choice)) {
@@ -446,6 +466,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         return null;
     }
     
+	@Override
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
             if(o.order.orderId == id) {
@@ -455,6 +476,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         return null;
     }
     
+	@Override
     public void removeOrderFromList(RestaurantChungOrder order) {
         for(int i = 0; i < orders.size(); i++) {
             if(orders.get(i) == order) {
@@ -463,6 +485,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
     }
         
+	@Override
     public void removeMarketOrderFromList(MyMarketOrder order) {
         for(int i = 0; i < marketOrders.size(); i++) {
             if(marketOrders.get(i) == order) {
@@ -470,35 +493,16 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
         }
     }
-    
-//    public void setRestaurantCashier(RestaurantChungCashier c) {
-//    	restaurantChungCashier = c;
-//    }
-    
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
-		orderStand = stand;
-	}
-	
-	public RestaurantChungRevolvingStand getRevolvingStand() {
-		return orderStand;
-	}
 
-    @Override
+	@Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCookRole " + this.getPerson().getName(), msg);
     }
     
-    // HACK------------------------------------------------------------------
-    public void depleteSalad() {
-        Food f = findFood("Salad");
-        f.amount = 0;
-    }
-    // END HACK------------------------------------------------------------------
-    
 //  Classes
 //  ===================================================================== 
-    private class MyMarketOrder{
+    public class MyMarketOrder{
     	MarketOrder order;
         MarketOrderState s;
         

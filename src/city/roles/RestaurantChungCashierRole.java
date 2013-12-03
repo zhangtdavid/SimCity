@@ -27,14 +27,16 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	=====================================================================	
 	public EventLog log = new EventLog();
 	Timer timer = new Timer();
+	
 	private RestaurantChungBuilding restaurant;
 	private RestaurantChungHost host;
 	
 	private List<Role> roles = new ArrayList<Role>();
-	WorkingState workingState = WorkingState.Working;
 	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
-		
+
+	WorkingState workingState = WorkingState.Working;
+	
 //	Constructor
 //	=====================================================================		
 	public RestaurantChungCashierRole(RestaurantChungBuilding b, int t1, int t2) {
@@ -46,8 +48,9 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
 		roles.add((Role) restaurant.bankCustomer);
 	}
-	
-	public void setInActive(){
+
+	@Override
+	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
 	}
 	

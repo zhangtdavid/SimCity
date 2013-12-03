@@ -21,10 +21,11 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //	Data
 //	=====================================================================	
 	Timer timer = new Timer();
-	RestaurantChungBuilding restaurant;
-	private RestaurantChungWaiter waiter;
 	private Semaphore atSeat = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
+	
+	RestaurantChungBuilding restaurant;
+	private RestaurantChungWaiter waiter;
 	
 	private int hungerLevel = 10; // determines length of meal
 	int positionInLine;
@@ -40,10 +41,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public RestaurantChungCustomerRole(){
 		super();
 	}
-
-//	public void setActive(){
-//		this.setActivityBegun();
-//	}
 	
 //  Messages
 //	=====================================================================
