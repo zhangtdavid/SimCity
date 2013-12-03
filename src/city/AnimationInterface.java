@@ -23,10 +23,12 @@ public interface AnimationInterface {
 	public boolean getVisible();
     public int getXPos();
     public int getYPos();
+    public Agent getAgent();
     
     // Setters
     
     public void setVisible(boolean b);
+    public void setAgent(Agent a);
     
     // Utilities
 

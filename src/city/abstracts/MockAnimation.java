@@ -1,6 +1,7 @@
 package city.abstracts;
 
 import utilities.EventLog;
+import city.Agent;
 import city.AnimationInterface;
 
 /**
@@ -17,6 +18,7 @@ public abstract class MockAnimation implements AnimationInterface {
 	
 	private boolean isVisible = false;
 	private int xPos, yPos;
+	private Agent agent;
 	
 	public EventLog log = new EventLog();
 	
@@ -45,7 +47,17 @@ public abstract class MockAnimation implements AnimationInterface {
     	return yPos;
     }
 	
+	@Override
+	public Agent getAgent() {
+		return agent;
+	}
+	
 	// Setters
+	
+	@Override
+	public void setAgent(Agent a) {
+		this.agent = a;
+	}
 	
 	@Override
 	public void setVisible(boolean b) {

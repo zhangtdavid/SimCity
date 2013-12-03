@@ -7,8 +7,8 @@ import city.Animation;
 import city.Application;
 import city.Building;
 import city.animations.interfaces.AnimatedBus;
-import city.buildings.BusStopBuilding;
 import city.interfaces.Bus;
+import city.interfaces.BusStop;
 
 public class BusAnimation extends Animation implements AnimatedBus {
 
@@ -58,7 +58,7 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	}
 
 	@Override
-	public void DoGoToNextStop(BusStopBuilding nextStop) {
+	public void DoGoToNextStop(BusStop nextStop) {
 		xDestination = Application.CityMap.findClosestRoad(nextStop).x;
 		yDestination = Application.CityMap.findClosestRoad(nextStop).y;
 		atDestination = false;
