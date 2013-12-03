@@ -860,7 +860,7 @@ public class Application {
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<BuildingInterface>> map = new HashMap<BUILDING, List<BuildingInterface>>();
-		private static int restaurantNumber = 0;
+		public static int restaurantNumber = 0;
 		
 		/**
 		 * Adds a new building to the HashMap
