@@ -1,8 +1,6 @@
 package city.tests;
 
 import java.util.Date;
-import java.util.HashMap;
-import java.util.Map;
 
 import junit.framework.TestCase;
 import city.Application;
@@ -11,8 +9,10 @@ import city.Application.FOOD_ITEMS;
 import city.RoleInterface;
 import city.agents.PersonAgent;
 import city.interfaces.Person;
+import city.interfaces.Person.STATE;
 import city.roles.BankCustomerRole;
 import city.roles.ResidentRole;
+import city.tests.animations.mock.MockAnimatedPerson;
 import city.tests.mock.MockBank;
 import city.tests.mock.MockCar;
 import city.tests.mock.MockCityViewBuilding;
@@ -35,6 +35,7 @@ public class PersonTest extends TestCase {
 	
 	// Test
 	private PersonAgent person;
+	private MockAnimatedPerson animation;
 	private MockWorkplace workplace;
 	private MockOccupation occupation;
 	private MockHouse house;
@@ -63,6 +64,7 @@ public class PersonTest extends TestCase {
 		
 		// Set up test environment
 		person = new PersonAgent("Person", date);
+		animation = new MockAnimatedPerson();
 		workplace = new MockWorkplace("MockWorkplace");
 		house = new MockHouse("MockHouse");
 		car = new MockCar("MockCar");
@@ -72,6 +74,9 @@ public class PersonTest extends TestCase {
 	 * The person has a first-shift job, a house, and a car.
 	 * The person has enough money to deposit at the bank. The person's rent is not due. 
 	 * The person will eat at a restaurant. The person has little food at home and will go to the market.
+	 * The person will not eat at home, even though they went to the market, because they ate at the restaurant.
+	 * 
+	 * Assumes nothing about whether other tests pass or not
 	 */
 	public void testNormativeScenario() throws InterruptedException {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
@@ -80,12 +85,11 @@ public class PersonTest extends TestCase {
 		
 		// Further setup
 		occupation = new MockOccupation(workplace, 0, 12);
-		// Map<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
-		// house.setFood(items); // With no items, the person will go to the market
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.BANK_DEPOSIT_THRESHOLD);
+		person.setAnimation(animation);
 		
 		// Preconditions
 		assertEquals("Person should have a job", occupation, person.getOccupation());
@@ -228,16 +232,116 @@ public class PersonTest extends TestCase {
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
 		assertEquals("Person's CarPassengerRole should be headed to the restaurant", market, person.getCarPassengerRole().getDestination());
 		assertEquals("Person should not have a RestaurantCustomerRole", null, person.getRestaurantCustomerRole());
-		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
+		// TODO (and do this everywhere) assertEquals("The RestaurantBuilding should know that the person's RestaurantCustomer is gone", 0, restaurant.getOccupyingRoles().size());
+		assertEquals("Person should have exactly five roles", 5, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassenger, MarketCustomer
+		assertEquals("The MarketBuilding should be aware of the soon-to-arrive person's MarketCustomer", 1, market.getOccupyingRoles().size()); // TODO and do this for bank, house, occupation, etc.
+		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().orderItems.size());
 		
+		// Run the scheduler for person.
+		// - The car should leave
+		// - The car should arrive
+		// - The person should see the car has arrived and start shopping. MarketCustomerRole's scheduler has not yet been run
+		outcome = person.runScheduler();
+		outcome = person.runScheduler();
+		outcome = person.runScheduler();
+		
+		// Person should have arrived at market
+		assertTrue("Person scheduler should continue running", outcome);
+		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
+		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, MarketCustomer
+		assertEquals("Person should be at the market", Person.STATE.atMarket, person.getState());
+		assertTrue("Person's MarketCustomerRole should be active", person.getMarketCustomerRole().getActive());
+		
+		// Force the market interaction to end. Simulate the addition of food. Run the scheduler for person.
+		// - The person should see that shopping is done and leave
+		person.getMarketCustomerRole().setInactive();
+		person.getHome().addFood(FOOD_ITEMS.chicken, 4); // Not a realistic order, but enough to prevent us from going to the market again
+		outcome = person.runScheduler();
+		
+		// Test that the person has properly left the market and is going home to sleep
+		assertEquals("Person should not still have MarketCustomerRole", null, person.getMarketCustomerRole());
+		assertEquals("Person should be going home to sleep", STATE.goingToSleep, person.getState());
+		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassengerRole
+
+		// Run the scheduler for person.
+		// - The car should leave
+		// - The car should arrive
+		// - The person should see the car has arrived and go to sleep.
+		outcome = person.runScheduler();
+		outcome = person.runScheduler();
+		outcome = person.runScheduler();
+		
+		// Person should have arrived at home and be sleeping
+		assertTrue("Person scheduler should not continue running", !outcome);
+		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
+		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
+		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should not have eaten", false, person.getHasEaten());
+		
+		// The time now should be 12, or when the person's shift is over
+		// Run the clock forward so that it is still in the person's off hours
+		incrementDateHelper(12); // It's 6 hours past shiftEnd
+		outcome = person.runScheduler();
+		
+		// Person should do nothing and still be sleeping
+		assertTrue("Person scheduler should not continue running", !outcome);
+		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
+		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should not have eaten", false, person.getHasEaten());
+		
+		// Fast-forward the time and verify the person wakes up and starts the cycle again
+		incrementDateHelper(12); // It's 6 hours forward again, or exactly ShiftStart
+		outcome = person.runScheduler();
+		
+		// Person should be going to work
+		assertTrue("Person scheduler should continue running", outcome);
+		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		
+		// That's one full day's cycle.
+	}
+	
+	/**
+	 * The person has a second-shift job, a house, and a car.
+	 * 
+	 * Assumes all other tests pass
+	 */
+	public void testSecondShiftJob() throws InterruptedException {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		assertTrue("", true);
+	}
+	
+	/**
+	 * The person has no job, a house, and a car.
+	 * Will send the person to the bank to withdraw money for rent as well.
+	 * 
+	 * Assumes all other tests pass
+	 */
+	public void testPayingRentAndJoblessPeople() throws InterruptedException {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		assertTrue("", true);
+	}
+	
+	/**
+	 * The person has a first-shift job, a house, and a car.
+	 * 
+	 * Assumes all other tests pass
+	 */
+	public void testPersonEatsAtHome() throws InterruptedException {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		assertTrue("", true);
 	}
 	
 	/**
 	 * In case the person is created when the time is in the middle of their shift, they should still go to work.
-	 * Assumes testNormativeScenario() passes.
+	 * Assumes all other tests pass
 	 */
 	public void testPersonGoesToWorkInMiddleOfShift() throws InterruptedException {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		boolean outcome;
 		
 		// Further setup
 		occupation = new MockOccupation(workplace, 0, 12);
@@ -247,14 +351,16 @@ public class PersonTest extends TestCase {
 		
 		// Run the scheduler. It is past the person's shiftStart time.
 		incrementDateHelper(6); // It's 3 hours past shiftStart
-		person.runScheduler();
+		outcome = person.runScheduler();
 		
-		assertTrue("", true); // TODO
+		// Person should be going to work
+		assertTrue("Person scheduler should continue running", outcome);
+		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
 	}
 	
 	/**
 	 * Sends the person to work via bus and tests that it works
-	 * Assumes testNormativeScenario() and testPersonGoesToWorkInMiddleOfShift() passes.
+	 * Assumes all other tests pass
 	 */
 	public void testPersonGoesToWorkByBus() throws InterruptedException {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
