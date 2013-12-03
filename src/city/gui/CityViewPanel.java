@@ -54,20 +54,20 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			for (CityViewBuilding c: statics) {
 				if (c.equals(temp))
 					continue;
-				if (c.rectangle.intersects(temp.rectangle)) {
+				if (c.getRectangle().intersects(temp.getRectangle())) {
 					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
 					return;
 				}
 			}
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-			mainframe.buildingView.addView(temp.building, temp.ID);
+			mainframe.buildingView.addView(temp.getBuilding(), temp.getID());
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
 			if (c.contains(arg0.getX(), arg0.getY())) {
-				mainframe.buildingView.setView(c.ID);
-				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.ID);
+				mainframe.buildingView.setView(c.getID());
+				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.getID());
 			}
 		}
 	}
@@ -76,7 +76,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		
 	}
 	
-	public void addObject(CityViewBuilding.BuildingType type) {
+	public void addObject(CityViewBuilding.BUILDINGTYPE type) {
 		if (addingObject)
 			return;
 		addingObject = true;

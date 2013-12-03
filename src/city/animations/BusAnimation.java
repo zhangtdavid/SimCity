@@ -23,8 +23,8 @@ public class BusAnimation extends Animation implements AnimatedBus {
 
 	public BusAnimation(Bus b, Building startingBuilding) {
 		bus = b;
-		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).x;
-		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).y;
+		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).getX();
+		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).getY();
 	}
 
 	public void updatePosition() {
@@ -52,15 +52,15 @@ public class BusAnimation extends Animation implements AnimatedBus {
 
 	@Override
 	public void goToDestination(Building destination) {
-		xDestination = destination.getCityViewBuilding().x;
-		yDestination = destination.getCityViewBuilding().y;
+		xDestination = destination.getCityViewBuilding().getX();
+		yDestination = destination.getCityViewBuilding().getY();
 		atDestination = false;
 	}
 
 	@Override
 	public void DoGoToNextStop(BusStop nextStop) {
-		xDestination = Application.CityMap.findClosestRoad(nextStop).x;
-		yDestination = Application.CityMap.findClosestRoad(nextStop).y;
+		xDestination = Application.CityMap.findClosestRoad(nextStop).getX();
+		yDestination = Application.CityMap.findClosestRoad(nextStop).getY();
 		atDestination = false;
 	}
 

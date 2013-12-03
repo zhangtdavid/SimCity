@@ -108,10 +108,10 @@ public class Application {
 		}
 		for(int i = 0; i < roads.size(); i++) { // Connect all roads
 			if(i == roads.size() - 1) {
-				roads.get(i).nextRoad = roads.get(0);
+				roads.get(i).setNextRoad(roads.get(0));
 				continue;
 			}
-			roads.get(i).nextRoad = roads.get(i+1);
+			roads.get(i).setNextRoad(roads.get(i+1));
 		}
 
 		// Bus Stops!!!!!!!!
@@ -119,28 +119,28 @@ public class Application {
 		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(250, 50, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp1);
 		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
-		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.ID);
+		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
 
 		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp2);
 		mainFrame.cityView.addStatic(cityViewBusStop2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
-		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.ID);
+		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 375, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
-		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.ID);
+		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(400, 150, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp4);
 		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
-		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.ID);
+		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop4 ); 
 
 		// Create buildings
@@ -160,7 +160,7 @@ public class Application {
 		BusAnimation b1Anim = new BusAnimation(bus1, busStop2);
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
-		CityMap.findClosestRoad(busStop2).vehicle = b1Anim; 
+		CityMap.findClosestRoad(busStop2).setVehicle(b1Anim); 
 		bus1.startThread();
 
 		// RESTAURANTZHANG------------------------------------------------------------
@@ -268,7 +268,7 @@ public class Application {
 	
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
-		mainFrame.buildingView.addView(panel, cityView.ID);
+		mainFrame.buildingView.addView(panel, cityView.getID());
 		CityMap.addBuilding(BUILDING.restaurant, building);
 	}
 
@@ -309,12 +309,12 @@ public class Application {
 		 * Find the building of type closest to the destination building
 		 */
 		public static BuildingInterface findClosestBuilding(BUILDING type, BuildingInterface b) {
-			int x = b.getCityViewBuilding().x;
-			int y = b.getCityViewBuilding().y;
+			int x = b.getCityViewBuilding().getX();
+			int y = b.getCityViewBuilding().getY();
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface tempBuilding : map.get(type)) {
-				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().x - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().y - y, 2)));
+				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().getX() - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().getY() - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
 					returnBuilding = tempBuilding;
@@ -332,7 +332,7 @@ public class Application {
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface b : map.get(type)) {
-				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().x - x, 2) + Math.pow(b.getCityViewBuilding().y - y, 2)));
+				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().getX() - x, 2) + Math.pow(b.getCityViewBuilding().getY() - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
 					returnBuilding = b;
@@ -342,12 +342,12 @@ public class Application {
 		}
 
 		public static CityRoad findClosestRoad(BuildingInterface b) {
-			int x = b.getCityViewBuilding().x;
-			int y = b.getCityViewBuilding().y;
+			int x = b.getCityViewBuilding().getX();
+			int y = b.getCityViewBuilding().getY();
 			double closestDistance = 1000000;
 			CityRoad returnRoad = null;
 			for(CityRoad r : roads) {
-				double distance = Math.sqrt((double)(Math.pow(r.x - x, 2) + Math.pow(r.y - y, 2)));
+				double distance = Math.sqrt((double)(Math.pow(r.getX() - x, 2) + Math.pow(r.getY() - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
 					returnRoad = r;
