@@ -14,17 +14,16 @@ import city.interfaces.CarPassenger;
 public class CarAgent extends Agent implements Car {
 
 	// Data
-	public enum CarState {NOTDRIVING, DRIVING};
-	public CarState myState = CarState.NOTDRIVING; // State of car
-	public enum CarEvent {NONE, PASSENGERENTERED, ATDESTINATION};
-	public CarEvent myEvent = CarEvent.NONE; // Event for car
-	public CarPassenger carPassenger; // Current passenger
-	public BuildingInterface destination; // Destination to go to
-	public AnimatedCar animation; // GUI for animations
+	private CARSTATE myState = CARSTATE.NOTDRIVING; // State of car
+	private CAREVENT myEvent = CAREVENT.NONE; // Event for car
+	private CarPassenger carPassenger; // Current passenger
+	private BuildingInterface destination; // Destination to go to
+	private AnimatedCar animation; // GUI for animations
 	
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
+	
 	public CarAgent(Building currentLocation) { // Sets all variables to null
 		super();
 		carPassenger = null;
@@ -32,30 +31,39 @@ public class CarAgent extends Agent implements Car {
 	}
 	
 	// Messages
+	
+	@Override
 	public void msgIWantToDrive(CarPassenger cp, BuildingInterface dest) { // From CarPassengerRole, tells car to go somewhere
 		carPassenger = cp;
 		destination = dest;
-		myEvent = CarEvent.PASSENGERENTERED;
-		stateChanged();
-	}
-
-	void msgImAtCarDestination() { // From myGui, tells car it is at destination
-		destination = null;
-		myEvent = CarEvent.ATDESTINATION;
+		myEvent = CAREVENT.PASSENGERENTERED;
 		stateChanged();
 	}
 	
+	@Override
+	public void msgImAtCarDestination() { // From myGui, tells car it is at destination
+		destination = null;
+		myEvent = CAREVENT.ATDESTINATION;
+		stateChanged();
+	}
+	
+	@Override
+	public void msgAtDestination() {
+		atDestination.release();
+	}
+	
 	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
-		if(myState == CarState.NOTDRIVING && myEvent == CarEvent.PASSENGERENTERED) { // Passenger got in car, go to destination
-			myState = CarState.DRIVING;
+		if(myState == CARSTATE.NOTDRIVING && myEvent == CAREVENT.PASSENGERENTERED) { // Passenger got in car, go to destination
+			myState = CARSTATE.DRIVING;
 			goToDestination();
 			return true;
 		}
-		if(myState == CarState.DRIVING && myEvent == CarEvent.ATDESTINATION) { // Car arrived at destination, stop and notify passenger
-			myState = CarState.NOTDRIVING;
-			myEvent = CarEvent.NONE;
+		if(myState == CARSTATE.DRIVING && myEvent == CAREVENT.ATDESTINATION) { // Car arrived at destination, stop and notify passenger
+			myState = CARSTATE.NOTDRIVING;
+			myEvent = CAREVENT.NONE;
 			stopDriving();
 			return true;
 		}
@@ -63,7 +71,8 @@ public class CarAgent extends Agent implements Car {
 	}
 	
 	// Actions
-	void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
+	
+	private void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
 		animation.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
 		try {
 			atDestination.acquire();
@@ -73,7 +82,7 @@ public class CarAgent extends Agent implements Car {
 		msgImAtCarDestination();
 	}
 
-	void stopDriving() { // Call to passenger at destination, set this car inactive
+	private void stopDriving() { // Call to passenger at destination, set this car inactive
 		print("Stopping driving");
 		carPassenger.msgImAtDestination();
 		carPassenger = null;
@@ -81,17 +90,33 @@ public class CarAgent extends Agent implements Car {
 	
 	// Getters
 	
+	@Override
+	public CARSTATE getState() {
+		return myState;
+	}
+	
+	@Override
+	public CAREVENT getEvent() {
+		return myEvent;
+	}
+	
+	@Override
+	public CarPassenger getPassenger() {
+		return carPassenger;
+	}
+	
+	@Override
+	public BuildingInterface getDestination() {
+		return destination;
+	}
 	
 	// Setters
+	
 	public void setAnimation(AnimatedCar anim) {
 		animation = anim;
 	}
 	
 	// Utilities
-	@Override
-	public void msgAtDestination() {
-		atDestination.release();
-	}
 
 	@Override
 	public void print(String msg) {
