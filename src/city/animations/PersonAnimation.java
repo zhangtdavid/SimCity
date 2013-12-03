@@ -64,7 +64,8 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	 * After cookAndEatFood().
 	 * This animation takes Person to the table with item (then timer - eat).
 	 */
+	/*
 	@Override
 	public void cookAndEatFoodPart2(){
-	}
+	}*/
 }

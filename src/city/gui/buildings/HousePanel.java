@@ -18,7 +18,7 @@ import city.gui.BuildingCard;
  * A House contains: - Refrigerator - Stove - Table - Bed One person lives in a
  * house. Some people own their own houses. (One person one house?)
  */
-public class HousePanel extends BuildingCard implements ActionListener {
+public class HousePanel extends ResidenceBasePanel{
 
 	/**
 	 * what does this do?
@@ -31,33 +31,21 @@ public class HousePanel extends BuildingCard implements ActionListener {
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-	static final int HRX = -10; // house refrigerator
-	static final int HRY = 100;
-	static final int HSX = -10; // house stove
-	static final int HSY = 250;
-	static final int HTX = -10; // house table
-	static final int HTY = 400;
-	static final int HBXi = 490; // initial house bed
-	static final int HBYi = 50;
-	static final int HDX = 250;
-	static final int HDY = 490;
-	static final int NUMBER_OF_BEDS = 1;
+	public static final int HRX = -10; // house refrigerator
+	public static final int HRY = 100;
+	public static final int HSX = -10; // house stove
+	public static final int HSY = 250;
+	public static final int HTX = -10; // house table
+	public static final int HTY = 400;
+	public static final int HBXi = 490; // initial house bed
+	public static final int HBYi = 50;
+	public static final int HDX = 250;
+	public static final int HDY = 490;
+	public static final int NUMBER_OF_BEDS = 1;
 
 	// Constructor
 	public HousePanel(Color color, Dimension panelDimension) {
-		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
-
-		setVisible(true);
-
-		Timer timer = new Timer(delayMS, this);
-		timer.start();
-	}
-
-	@Override
-	public void actionPerformed(ActionEvent arg0) {
-		repaint();
+		super(color, panelDimension);
 	}
 
 	public void paintComponent(Graphics graphics) {
@@ -96,6 +84,7 @@ public class HousePanel extends BuildingCard implements ActionListener {
 		}
 	}
 
+	@Override // from BuildingCard?
 	public void addVisualizationElement(Animation ve) {
 		animations.add(ve);
 	}

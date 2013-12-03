@@ -49,11 +49,11 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		// TODO Auto-generated method stub
 		
 	}
-
+/*
 	@Override
 	public void cookAndEatFoodPart2() {
 		// TODO Auto-generated method stub
 		
-	}
+	}*/
 
 }

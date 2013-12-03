@@ -34,13 +34,13 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	// Abstract
 	public void updatePosition() {
 		if (xPos < xDestination)
-			xPos+=2;
+			xPos+=1;
 		else if (xPos > xDestination)
-			xPos-=2;
+			xPos-=1;
 		if (yPos < yDestination)
-			yPos+=2;
+			yPos+=1;
 		else if (yPos > yDestination)
-			yPos-=2;
+			yPos-=1;
 		if (xPos == xDestination && yPos == yDestination && currentlyAcquired) {
 			agent.msgRelease();
 			currentlyAcquired = false;

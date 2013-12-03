@@ -11,7 +11,9 @@ import city.interfaces.BusStop;
 import city.interfaces.Person;
 
 public class HouseResidentAnimation extends Animation implements AnimatedPerson{
-
+	//Q: why does this implement AnimatedPerson?
+	//A: convenience? If needed it could also implement a ResidenceAnimation but that would be sort of a pain since these could persist 
+	
 	//Data
 	private int xDestination, yDestination;
 	private Person person = null;
@@ -119,9 +121,9 @@ public class HouseResidentAnimation extends Animation implements AnimatedPerson{
 	 * After cookAndEatFood().
 	 * This animation takes Person to the table with item (then timer - eat).
 	 */
-	@Override
+	/*@Override
 	public void cookAndEatFoodPart2(){
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[0];
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[1];
-	}
+	}*/
 }

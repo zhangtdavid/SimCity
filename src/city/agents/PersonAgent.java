@@ -43,6 +43,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date date;
 	private RoleInterface occupation;
 	private ResidenceBuildingInterface home;
+	private int roomNumber; // relevant for apartments only. retained (for homes: 0; for apartments, 1~5)
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
@@ -476,6 +477,11 @@ public class PersonAgent extends Agent implements Person {
 		return residentRole;
 	}
 	
+	@Override
+	public int getRoomNumber(){
+		return roomNumber;
+	}
+	
 	//=========//
 	// Setters //
 	//=========//
@@ -515,6 +521,11 @@ public class PersonAgent extends Agent implements Person {
 	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		home = h;
+	}
+	
+	@Override
+	public void setRoomNumber(int i){
+		roomNumber = i;
 	}
 	
 	//===========//

@@ -172,4 +172,16 @@ public class MockPerson extends MockAgent implements Person {
 		return null;
 	}
 
+	@Override
+	public int getRoomNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setRoomNumber(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

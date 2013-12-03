@@ -52,6 +52,7 @@ public interface Person extends AgentInterface {
 	public STATE getState();
 	public BankCustomerRole getBankCustomerRole();
 	public boolean getHasEaten();
+	public int getRoomNumber();
 	
 	// Setters
 	
@@ -61,10 +62,12 @@ public interface Person extends AgentInterface {
 	public void setOccupation(RoleInterface r);
 	public void setCash(int c);
 	public void setHome(ResidenceBuildingInterface h);
+	public void setRoomNumber(int i);
 	
 	// Utilities
 	
 	public void addRole(RoleInterface r);
+
 	
 	// Classes
 	
