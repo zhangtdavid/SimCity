@@ -11,6 +11,8 @@ import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
+import city.interfaces.RestaurantChungHost.CustomerState;
+import city.interfaces.RestaurantChungHost.WaiterState;
 /**
  * Restaurant Host Agent
  */
@@ -23,70 +25,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	private int nTables = 4;
 	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
 	
-	public enum WorkingState
-	{Working, GoingOffShift, NotWorking};
-	WorkingState workingState = WorkingState.Working;
-	
-//	Waiters
-//	=====================================================================	
 	private List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
-	private class MyWaiter {
-		RestaurantChungWaiter w;
-		WaiterState s;
-		int numCustomers;
-		
-		public MyWaiter(RestaurantChungWaiter w2) {
-			w = w2;
-			s = WaiterState.Working;
-			numCustomers = 0;
-		}
-	}
-	private enum WaiterState
-	{Working, WantBreak, Rejected, OnBreak};
-	
-//	Customers
-//	=====================================================================
 	private List<HCustomer> customers = Collections.synchronizedList(new ArrayList<HCustomer>());
-	private class HCustomer {
-		RestaurantChungCustomer c;
-		CustomerState s;
-		int positionInLine;
-		int debt;
-		
-		public HCustomer(RestaurantChungCustomer customer, CustomerState state, int pos) {
-			c = customer;
-			s = state;
-			positionInLine = pos;
-			debt = 0;
-		}
-	}
-	
-	private enum CustomerState
-	{InRestaurant, WaitingInLine, WaitingToBeSeated, GettingSeated, DecidingToLeave, Seated, Done};
-	
-//	Tables
-//	=====================================================================
 	private Collection<Table> tables;
-	//note that tables is typed with Collection semantics.
-	//Later we will see how it is implemented	
-	private class Table {
-		RestaurantChungCustomer c;
-		int tableNumber;
-		
-		public Table(int table) {
-			c = null;
-			tableNumber = table;
-		}
-		public void setOccupant(RestaurantChungCustomer customer) {
-			c = customer;
-		}
-		public void setUnoccupied() {
-			c = null;
-		}
-		public String toString() {
-			return "table " + tableNumber;
-		}
-	}
+
+	WorkingState workingState = WorkingState.Working;
 
 //	Constructor
 //	====================================================================
@@ -103,12 +46,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 			tables.add(new Table(i));
 		}
 	}
-
-//	public void setActive(){
-//		this.setActivityBegun();
-//	}
 	
-	public void setInActive(){
+	@Override
+	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
 	}
 	
@@ -116,6 +56,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //	=====================================================================
 //	Restaurant
 //	---------------------------------------------------------------
+	@Override
 	public void msgNewWaiter(RestaurantChungWaiter w) {
 		log.add(new LoggedEvent("Market Manager received msgNewEmployee from Market."));
 		System.out.println("Market Manager received msgNewEmployee from Market.");
@@ -123,14 +64,18 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
+	@Override
 	public void msgRemoveWaiter(RestaurantChungWaiter w) {
 		log.add(new LoggedEvent("Market Manager received msgRemoveEmployee from Market."));
 		System.out.println("Market Manager received msgRemoveEmployee from Market.");
 		MyWaiter mw = findWaiter(w);
 		waiters.remove(mw);
 		stateChanged();
-	}//	Customer
+	}
+	
+//	Customer
 //	---------------------------------------------------------------
+	@Override
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
 		if (workingState != WorkingState.NotWorking) {
@@ -149,6 +94,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		// TODO inform sender of inactivity
 	}
 	
+	@Override
 	public void msgDecidedToStay(RestaurantChungCustomer c) {
 		print("Host received msgDecidedToStay");
 		HCustomer hc = findCustomer(c);
@@ -156,6 +102,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
+	@Override
 	public void msgLeaving(RestaurantChungCustomer c) {
 		print("Host received msgLeaving");
 		HCustomer hc = findCustomer(c);
@@ -165,6 +112,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	
 //	Waiter
 //	---------------------------------------------------------------
+	@Override
 	public void msgTakingCustomerToTable(RestaurantChungCustomer c) {
 		print("Host received msgTakingCustomerToTable");
 		HCustomer hc = findCustomer(c);
@@ -172,12 +120,14 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
+	@Override
 	public void msgWaiterAvailable(RestaurantChungWaiter w) {
 		print("Host received msgWaiterAvailable");
 		waiters.add(new MyWaiter(w));
 		stateChanged();
 	}
 	
+	@Override
 	public void msgIWantToGoOnBreak(RestaurantChungWaiter w) {
 		print("Host received msgIWantToGoOnBreak");
 		MyWaiter wa = findWaiter(w);
@@ -185,6 +135,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();		
 	}
 	
+	@Override
 	public void msgIAmReturningToWork(RestaurantChungWaiter w) {
 		print("Host received msgIAmReturningToWork");
 		MyWaiter wa = findWaiter(w);
@@ -192,6 +143,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		stateChanged();
 	}
 	
+	@Override
 	public void msgTableIsFree(RestaurantChungWaiter waiter, int t, RestaurantChungCustomer c) {
 		print("Host received msgTableIsFree");
 		HCustomer hc = findCustomer(c);
@@ -204,11 +156,11 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //	Cashier
 //	---------------------------------------------------------------
+	@Override
 	public void msgFlakeAlert(RestaurantChungCustomer c, int d) {
 		print("Host received msgFlakeAlert");
 		HCustomer hc = findCustomer(c);
 		hc.debt = d;
-//		System.out.println(hc.debt);
 	}
 	
 //  Scheduler
@@ -390,32 +342,31 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //	}
 	
 
-//  Utilities
+//  Getters
 //	=====================================================================
-//	public String getName() {
-//		return name;
-//	}
-
+	@Override
 	public List<HCustomer> getCustomers() {
 		return customers;
 	}
 
+	@Override
 	public Collection<Table> getTables() {
 		return tables;
 	}
 	
-//	public int getNumWaiters(){
-//		return waiters.size();
-//	}
-	
-	public void addTable(){
-		tables.add(new Table(++nTables));//how you add to a collections
-	}
-	
+	@Override
 	public int getNumTables(){
 		return nTables;
 	}
 	
+//  Utilities
+//	=====================================================================	
+	@Override
+	public void addTable(){
+		tables.add(new Table(++nTables));//how you add to a collections
+	}
+	
+	@Override
 	public Table findTable(int t) {
 		for (Table table : tables) {
 			if (table.tableNumber == t) {
@@ -425,6 +376,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 		return null;
 	}
 	
+	@Override
 	public HCustomer findCustomer(RestaurantChungCustomer ca) {
 		for(HCustomer customer : customers ){
 			if(customer.c == ca) {
@@ -442,6 +394,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //		}
 //	}
 	
+	@Override
 	public MyWaiter findWaiter(RestaurantChungWaiter w) {
 		for(MyWaiter waiter : waiters ){
 			if(waiter.w == w) {
@@ -456,5 +409,56 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungHostRole " + this.getPerson().getName(), msg);
     }
+	
+//  Classes
+//	=====================================================================
+	public class MyWaiter {
+		RestaurantChungWaiter w;
+		WaiterState s;
+		int numCustomers;
+		
+		public MyWaiter(RestaurantChungWaiter w2) {
+			w = w2;
+			s = WaiterState.Working;
+			numCustomers = 0;
+		}
+	}
+	
+	public class HCustomer {
+		RestaurantChungCustomer c;
+		CustomerState s;
+		int positionInLine;
+		int debt;
+		
+		public HCustomer(RestaurantChungCustomer customer, CustomerState state, int pos) {
+			c = customer;
+			s = state;
+			positionInLine = pos;
+			debt = 0;
+		}
+	}
+	
+	public class Table {
+		RestaurantChungCustomer c;
+		int tableNumber;
+		
+		public Table(int table) {
+			c = null;
+			tableNumber = table;
+		}
+		
+		// Setters
+		public void setOccupant(RestaurantChungCustomer customer) {
+			c = customer;
+		}
+		public void setUnoccupied() {
+			c = null;
+		}
+		
+		// Utilities
+		public String toString() {
+			return "table " + tableNumber;
+		}
+	}
 }
 
