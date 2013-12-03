@@ -18,18 +18,18 @@ import city.interfaces.RestaurantChungWaiter;
  * Restaurant Customer agent.
  */
 public class RestaurantChungCustomerRole extends Role implements RestaurantChungCustomer {
-	private int hungerLevel = 10; // determines length of meal
-	
 	RestaurantChungBuilding restaurant;
 	private RestaurantChungWaiter waiter;
-	int positionInLine;
 	Timer timer = new Timer();
 	private Semaphore atSeat = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
+	
+	private int hungerLevel = 10; // determines length of meal
+	int positionInLine;
 	int bill;
 	RestaurantChungMenu menu;
 	private String order;
-
+	
 	private AgentState state = AgentState.DoingNothing; //The start state
 	private AgentEvent event = AgentEvent.none;
 
@@ -45,12 +45,14 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	
 //  Messages
 //	=====================================================================
+	@Override
 	public void gotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
 		stateChanged();
 	}
 
+	@Override
 	public void msgGetInLinePosition(int pos) {
 		print("Customer received msgGetInLinePosition " + pos); // TODO
 		positionInLine = pos;
@@ -58,17 +60,20 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
+	@Override
 	public void msgNoTablesAvailable() {
 		print("Customer received msgNoTablesAvailable");
 		event = AgentEvent.noTables;		
 		stateChanged();
 	}
 	
+	@Override
 	public void msgSelfDecidedToLeave() {
 		event = AgentEvent.decidedToLeave;		
 		stateChanged();
 	}
 	
+	@Override
 	public void msgFollowMeToTable(RestaurantChungWaiter waiter, RestaurantChungMenu menu) {
 		print("Customer received msgFollowMeToTable");
 		this.waiter = waiter;
@@ -77,6 +82,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtSeat() {
 		print("Customer received msgAnimationAtSeat");
 		event = AgentEvent.seated;
@@ -85,17 +91,20 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
+	@Override
 	public void msgSelfReadyToOrder() {
 		event = AgentEvent.readyToOrder;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgWhatWouldYouLike() {
 		print("Customer received msgWhatWouldYouLike");
 		event = AgentEvent.askedForOrder;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOutOfItem(String choice, RestaurantChungMenu menu) {
 		print("Customer received msgOutOfItem " + choice);
 		this.menu = new RestaurantChungMenu(menu);
@@ -103,23 +112,27 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsYourFood() {
 		print("Customer received msgHereIsYourFood");
 		event = AgentEvent.receivedFood;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgSelfDoneEating() {
 		event = AgentEvent.doneEating;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsCheck(int price) {
 		event = AgentEvent.receivedCheck;
 		bill = price;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtCashier() {
 		print("Customer received msgAnimationAtCashier");
 		event = AgentEvent.atCashier;
@@ -128,21 +141,23 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		stateChanged();	
 	}
 	
+	@Override
 	public void msgHereIsChange(int change) {
 		this.getPerson().setCash(this.getPerson().getCash() + change);
 		event = AgentEvent.receivedChange;
 		stateChanged();		
 	}
 	
+	@Override
 	public void msgAnimationFinishedLeaveRestaurant() {
 		print("Customer received msgAnimationFinishedLeaveRestaurant");
 		event = AgentEvent.doneLeaving;
 		super.setInactive();
 	}
 	
+	@Override
 	public void msgKickingYouOutAfterPaying(int debt) {
 		print("Customer received msgKickingYouOutAfterPaying");
-//		money += 20;
 		bill = debt;
 		state = AgentState.WaitingForCheck;
 		event = AgentEvent.receivedCheck;
@@ -383,31 +398,37 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		this.getAnimation(RestaurantChungCustomerAnimation.class).DoExitRestaurant();
 	}
 	
-	
-//  Utilities
-//	=====================================================================
-//	public void setHungerLevel(int hungerLevel) {
-//		this.hungerLevel = hungerLevel;
-//		//could be a state change. Maybe you don't
-//		//need to eat until hunger lever is > 5?
-//	}
-	
+//	Getters
+//	=====================================================================	
+	@Override
 	public int getHungerLevel() {
 		return hungerLevel;
 	}
 	
+	@Override
 	public String getState() {
 		return state.toString();
 	}
-
+	
+	@Override
 	public String getOrder() {
 		return order;
 	}
-
+	
+//	Setters
+//	=====================================================================	
+	@Override
+	public void setHungerLevel(int hungerLevel) {
+		this.hungerLevel = hungerLevel;
+	}	
+	
+	@Override
 	public void setRestaurant(RestaurantChungBuilding r) {
 		restaurant = r;
 	}
 	
+//  Utilities
+//	=====================================================================
 	@Override
 	public void print(String msg) {
         super.print(msg);
@@ -415,5 +436,3 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
     }
 
 }
-
-
