@@ -119,6 +119,7 @@ public abstract class MockBuilding implements BuildingInterface {
 	
 	@Override
 	public void addOccupyingRole(RoleInterface r) {
+		// In ordinary buildings this overridden method would actually create the animation
 		occupyingRoles.put(r, null);
 	}
 

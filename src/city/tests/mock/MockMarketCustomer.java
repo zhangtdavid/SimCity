@@ -4,6 +4,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
@@ -73,6 +74,12 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	public int checkBill() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public MarketOrder getOrder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

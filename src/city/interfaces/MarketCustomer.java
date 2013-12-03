@@ -2,8 +2,9 @@ package city.interfaces;
 
 import java.util.Map;
 
-import city.RoleInterface;
+import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
+import city.RoleInterface;
 import city.buildings.MarketBuilding;
 
 public interface MarketCustomer extends RoleInterface {
@@ -28,6 +29,7 @@ public interface MarketCustomer extends RoleInterface {
 	// Getters
 	
 	public Market getMarket();
+	public MarketOrder getOrder();
 	
 	// Setters
 	

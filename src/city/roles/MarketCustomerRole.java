@@ -176,6 +176,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	@Override
+	public MarketOrder getOrder() {
+		return order;
+	}
+	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
@@ -183,6 +188,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public void setActive(){
 		event = MarketCustomerEvent.ArrivedAtMarket;
+		super.setActive();
 		this.setActivityBegun();
 		stateChanged();
 	}

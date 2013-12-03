@@ -3,9 +3,12 @@ package city.agents;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.TimeZone;
 import java.util.concurrent.Semaphore;
 
@@ -327,10 +330,20 @@ public class PersonAgent extends Agent implements Person {
 		processTransportationDeparture(m);
 		state = STATE.goingToMarket;
 		
-		// TODO construct an actual order
-		HashMap<FOOD_ITEMS, Integer> items = null;
+		// Orders one of each of four random food items
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
+		LinkedList<FOOD_ITEMS> list = new LinkedList<FOOD_ITEMS>(Arrays.asList(FOOD_ITEMS.values()));
+		Collections.shuffle(list);
+		int i = 0;
+		do {
+			FOOD_ITEMS f = list.get(0);
+			list.remove(0);
+			items.put(f, 1);
+			i += 1;
+		} while (i < 4);
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(order);
+		m.addOccupyingRole(marketCustomerRole);
 		this.addRole(marketCustomerRole);
 	}
 	
@@ -339,7 +352,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToCook() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture((Building) home);
+		processTransportationDeparture((BuildingInterface) home);
 		state = STATE.goingToCook;
 	}
 	
@@ -366,6 +379,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
+		// TODO this shouldn't transport them home if they're already at home
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
 		processTransportationDeparture((BuildingInterface) home);
@@ -717,13 +731,14 @@ public class PersonAgent extends Agent implements Person {
 	 * Should be called only after visiting a market, and will only go to cook
 	 * if a market has just been visited.
 	 * 
-	 * Does not care if the person has, somehow, already eaten, though that
-	 * condition shouldn't occur.
+	 * Though the person can go to the market after going to a restaurant, the 
+	 * person will not go home to cook.
 	 */
 	private boolean shouldGoToCook() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (state == STATE.atMarket) { disposition = true; }
+		if (hasEaten) { disposition = false; }
 		return disposition;
 	}
 	
