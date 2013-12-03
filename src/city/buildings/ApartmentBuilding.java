@@ -2,14 +2,17 @@ package city.buildings;
 
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingBase;
+import city.gui.buildings.AptPanel;
 import city.interfaces.Apartment;
 import city.interfaces.Landlord;
+import city.interfaces.Person;
 import city.interfaces.Resident;
 
 public class ApartmentBuilding extends ResidenceBuildingBase implements Apartment {
 	
 	// Data
-	
+	public AptPanel panel; //reference to main gui
+
 	// Constructor
 
 	public ApartmentBuilding(String name, Landlord l) { 
@@ -33,8 +36,16 @@ public class ApartmentBuilding extends ResidenceBuildingBase implements Apartmen
 	
 	@Override
 	public void addOccupyingRole(RoleInterface r) {
-		// TODO
-		return;
+		// NOTHING TO BE DONE HERE
+	}
+
+	@Override
+	public void addOccupyingRole(Person p) {
+		//TODO AptResidentAnimation anim = new AptResidentAnimation(p);
+		//p.setAnimation(anim);
+		//anim.setVisible(true);
+		//panel.addVisualizationElement(anim);
+		
 	}
 	
 }

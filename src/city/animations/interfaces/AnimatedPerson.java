@@ -15,7 +15,7 @@ public interface AnimatedPerson extends AnimationInterface {
 	public static final int RES_DOOR[] = {250,490};
 	public static enum Command {noCommand, rToBed, rToRef, rToStove, rToTable, rToDoor, wToBuilding, wToBusStop};
 	public static enum OrderIcon {Steak, Chicken, Pizza, Salad}; // could use strings or something on Person's side instead
-    public static final int WIDTH = 20; // Person is a 20x20 rect
+    public static final int WIDTH = 20; // Person is a 20x20 rect, standard.
 	
 	// Constructor
 	

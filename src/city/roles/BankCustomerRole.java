@@ -158,7 +158,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		print("Customer has been set active");
+		//print("Customer has been set active"); // uncomment for null pointer exception~
 		super.setActive();
 		this.service = s;
 		this.depositType = t;

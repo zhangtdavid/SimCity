@@ -87,7 +87,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 	public void msgBreakOK(boolean in) {
 		onBreak = in;
 		if (in)
-			System.out.println("now on break!");
+			print("now on break!");
 		if (!in) {
 			breakRequested = false;
 		}	
@@ -111,7 +111,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (c.getPerson().getName().equals(myCustomers.get(i).getC().getPerson().getName())) {
 				myCustomers.get(i).setCustomerState(myCustomer.READY_TO_ORDER);
-				System.out.println("need to take an order from " + c.getPerson().getName());
+				print("need to take an order from " + c.getPerson().getName());
 				stateChanged();
 			}
 		}
@@ -136,7 +136,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 						if (c.equals(myCustomers.get(i).getC())
 								&& myCustomers.get(i).getCustomerState() == myCustomer.ORDERING) {
 							myCustomers.get(i).setCustomerState(myCustomer.ORDERED);
-							System.out.println("Took order from customer " + c.getPerson().getName());
+							print("Took order from customer " + c.getPerson().getName());
 							myCustomers.get(i).setOr(new RestaurantChoiOrder(choice,
 									myCustomers.get(i).getT().getTableNumber(), this));
 						}
@@ -157,7 +157,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 	public void msgImDone(RestaurantChoiCustomer c) {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (c.equals(myCustomers.get(i).getC())) {
-				// System.out.println("marked as leaving " + c.getName());
+				// print("marked as leaving " + c.getName());
 				myCustomers.get(i).setCustomerState(myCustomer.LEAVING);
 			}
 		}
@@ -166,7 +166,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 
 	@Override
 	public void msgOutOfThisFood(RestaurantChoiOrder o) {
-		System.out.println("received msg from cook: out of food "
+		print("received msg from cook: out of food "
 				+ o.getChoice());
 		outOf.add(o.getChoice()); // add this choice to list of foods I don't
 		// have
@@ -194,7 +194,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 
 	@Override
 	public void msgHeresCheck(int amt, RestaurantChoiCustomer c) {
-		System.out.println("Received check from cashier");
+		print("Received check from cashier");
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getC().equals(c)) {
 				myCustomers.get(i).setCheckValue(amt);
@@ -234,7 +234,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 			if (needToGetOrderFromCook())
 				return true;
 		}catch(ConcurrentModificationException ce){ // as per instructions...
-			System.out.println("Caught concurrent modification exception by try catch and returning false");
+			print("Caught concurrent modification exception by try catch and returning false");
 			return false;
 		}
 		return false;
@@ -243,6 +243,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 
 	// Actions
 	
+	/*
 	private void offBreak() {
 		onBreak = false;
 		breakRequested = false;
@@ -255,6 +256,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 		breakRequested = true;
 		print("Requested a break");
 	}
+	*/
 
 	private void seatCustomer(myCustomer customer) {
 		customer.getC().msgFollowMe(this, customer.getT().getxCoord(), customer.getT().getyCoord());
@@ -452,7 +454,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 			if (myCustomers.get(i).getOr().getState() == RestaurantChoiOrder.ORDERED) {
 				// go to the cook
 				myCustomers.get(i).setCustomerState(myCustomer.WAITING_FOR_FOOD);
-				System.out.println("Now taking order to cook");
+				print("Now taking order to cook");
 				sendOrderToCook(i, myCustomers.get(i).getOr());
 				waiterGui.DoLeave();
 				return true;
@@ -489,7 +491,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 				// table
 				myCustomers.remove(myCustomers.get(i)); // remove customer from
 				// list
-				System.out.println("removed the customer");
+				print("removed the customer");
 				// host will set the table to unoccupied.
 				return true;
 			}
@@ -533,7 +535,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 					// ...if cook gets the food between this customer and the
 					// next
 				}
-				System.out.println("Giving revised menu");
+				print("Giving revised menu");
 				myCustomers.get(i).getC().msgHeresYourNewMenu(m); 
 				// now customer does LookAtMenu() again
 				waiterGui.DoLeave();
@@ -547,7 +549,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 	private boolean needToGetCheck() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WANTS_CHECK) {
-				System.out.println("need to get check");
+				print("need to get check");
 				DoGoToTable(myCustomers.get(i).getT()); // first go to table to
 				// recognize
 				DoGoToCashier(); // then go to waiter
@@ -563,7 +565,7 @@ public abstract class RestaurantChoiWaiterBase extends Role implements Restauran
 	private boolean needToGiveCheck() {
 		for (int i = 0; i < myCustomers.size(); i++) {
 			if (myCustomers.get(i).getCustomerState() == myCustomer.WAITER_HAS_CHECK) {
-				System.out.println("need to give check");
+				print("need to give check");
 				DoGoToTable(myCustomers.get(i).getT()); // first go to table
 				// then give customer the check
 				myCustomers.get(i).getC()

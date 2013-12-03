@@ -66,7 +66,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 				choicustomer.msgAnimationFinishedGoToSeat();
 			} else if (command == Command.LeaveRestaurant) {
 				choicustomer.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("Enabling customer again");
 				isHungry = false;
 				//gui.setCustomerEnabled(agent); TODO deal with this somehow; we shouldn't need to enable customer, we just set customer as not hungry now (he's a person)
 			}
@@ -96,7 +95,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 		command = Command.GoToDishes;
 	}
 	public void DoGoToWaiting(int offset){
-		System.out.println("Received DoGoToWaiting");
 		xDestination = waitCoordX;
 		waitY = waitCoordY+offset*10;
 		yDestination = waitY;

@@ -5,6 +5,7 @@ import java.util.*;
 import city.Building;
 import city.Application.FOOD_ITEMS;
 import city.interfaces.Landlord;
+import city.interfaces.Person;
 import city.interfaces.Resident;
 
 public abstract class ResidenceBuildingBase extends Building implements ResidenceBuildingInterface {
@@ -89,6 +90,12 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	
 	@Override
 	public abstract void addResident(Resident r);
+
+	/**
+	 * This doesn't override anything because it's unique to just residence buildings, not all buildings need this. (Maybe the bus stop building)
+	 * @param p Person
+	 */
+	public abstract void addOccupyingRole(Person p);
 	
 	
 }
