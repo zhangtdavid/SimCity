@@ -156,6 +156,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		// From animation
 		event = AGENTEVENT.DoneEating;
 		stateChanged();
+		super.setInactive();
 	}
 
 	// Scheduler

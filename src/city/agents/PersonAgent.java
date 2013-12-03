@@ -311,7 +311,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
 		// Thread.sleep(9000); // TODO testing - Delay the customer entering
-		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		this.lastAteAtRestaurant = this.date;
@@ -719,7 +718,8 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 		
-		return disposition;
+		return true; // TODO hack to test
+		//return disposition;
 	}
 	
 	/**

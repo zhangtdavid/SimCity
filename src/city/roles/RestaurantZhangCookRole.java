@@ -187,7 +187,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			//			}
 			//			// Timer to check the stand
 			if(!waitingToCheckStand) {
-				print("Waiting 5 seconds to check the stand");
 				waitingToCheckStand = true;
 				timer.schedule(new TimerTask() {
 					public void run() {
