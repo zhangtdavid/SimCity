@@ -26,4 +26,16 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 		System.out.println("Delivery Person received msgDeliverOrder from Cashier.");		
 	}
 
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

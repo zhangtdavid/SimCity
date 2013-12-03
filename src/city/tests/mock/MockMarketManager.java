@@ -63,4 +63,16 @@ public class MockMarketManager extends MockRole implements MarketManager {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));		
 		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");				
 	}
+
+	@Override
+	public MarketBuilding getMarket() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setMarket(MarketBuilding market) {
+		// TODO Auto-generated method stub
+		
+	}
 }

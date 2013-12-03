@@ -13,28 +13,30 @@ import city.animations.interfaces.RestaurantChoiAnimatedHost;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiHost;
-import city.interfaces.RestaurantChoiWaiterAbs;
 
 public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
-	/**
-	 * Restaurant Host Role
-	 */
-	public static final int NTABLES = 4; // a global for the number of tables.
-	static int xstart = 50;
-	static int ystart = 50;
-	public List<RestaurantChoiTable> tables;
-	List<RestaurantChoiCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
-	public List<RestaurantChoiWaiterAbs> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterAbs>());
-	public ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer> waiterBalance = new ConcurrentHashMap<RestaurantChoiWaiterAbs, Integer>();
-	int waitersOnBreak;
-	private RestaurantChoiWaiterAbs leastActiveWaiter;
-	//private int leastActiveWaiterIndex; //TODO Bad impact on functionality? lines 167, 176
-	//public WaiterGUI hostGui = null;
-	RestaurantChoiAnimatedHost animation;
-	RestaurantChoiBuilding building;
-	private boolean wantsToLeave;
+	// Data
 
+	private static int xstart = 50;
+	private static int ystart = 50;
+	private List<RestaurantChoiCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
+	private int waitersOnBreak;
+	private RestaurantChoiWaiterBase leastActiveWaiter;
+	// private int leastActiveWaiterIndex; //TODO Bad impact on functionality? lines 167, 176
+	private RestaurantChoiAnimatedHost animation;
+	private RestaurantChoiBuilding building;
+	private boolean wantsToLeave;
+	
+	// TODO Change these to private and add getters/setters
+	public List<RestaurantChoiTable> tables;
+	public List<RestaurantChoiWaiterBase> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterBase>());
+	public ConcurrentHashMap<RestaurantChoiWaiterBase, Integer> waiterBalance = new ConcurrentHashMap<RestaurantChoiWaiterBase, Integer>();
+	// public WaiterGUI hostGui = null;
+	public static final int NTABLES = 4; // a global for the number of tables.
+	
+	// Constructor
+	
 	/**
 	 * Initializes Host for RestaurantChoi
 	 * @param b : for RestaurantChoiBuilding
@@ -55,10 +57,9 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 	}
 
-	/**
-	 * msgs
-	 */
+	// Messages
 
+	@Override
 	public void msgImHungry(RestaurantChoiCustomer c) {
 		synchronized(waitingCustomers){
 			System.out.println("received msgimhungry;added to queue");
@@ -67,7 +68,8 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		stateChanged();
 	}
 	
-	public void msgImBack(RestaurantChoiWaiterAbs w){
+	@Override
+	public void msgImBack(RestaurantChoiWaiterBase w){
 		synchronized(waiters){
 			waitersOnBreak--;
 			addWaiter(w);
@@ -76,17 +78,20 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		stateChanged();
 	}
 	
-	public void msgIWantABreak(RestaurantChoiWaiterAbs w){
+	@Override
+	public void msgIWantABreak(RestaurantChoiWaiterBase w){
 		stateChanged();
 	}
 
+	@Override
 	public void msgNotWaiting(RestaurantChoiCustomer c){
 		synchronized(waitingCustomers){
 			waitingCustomers.remove(c); //simple as that! no need to state change.
 		}
 	}
 
-	public void msgTablesClear(RestaurantChoiWaiterAbs w, RestaurantChoiTable table) {
+	@Override
+	public void msgTablesClear(RestaurantChoiWaiterBase w, RestaurantChoiTable table) {
 		//set the table to null.
 		synchronized(tables){
 			table.setOccupant(null);
@@ -101,16 +106,17 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		building.seatedCustomers--;
 		stateChanged(); // look for waiting customers now
 	}
-	public void msgSetUnavailable(RestaurantChoiWaiterAbs waiter){
-		     for(RestaurantChoiWaiterAbs w : waiters){
-		       if(w == waiter)
-		    	   waiters.remove(w); // waiter wants to leave? remove him from queue just like you do for waiters on break.
-		     }
-		   }
+	
+	@Override
+	public void msgSetUnavailable(RestaurantChoiWaiterBase waiter){
+		for(RestaurantChoiWaiterBase w : waiters) {
+			if(w == waiter)waiters.remove(w); // waiter wants to leave? remove him from queue just like you do for waiters on break.
+		}
+	}
 
-	/**
-	 * Scheduler. Determine what action is called for, and do it.
-	 */
+	// Scheduler
+	
+	@Override
 	public boolean runScheduler() {
 		if(wantsToLeave && building.host != this && waitingCustomers.isEmpty()){
 			wantsToLeave = false;
@@ -164,7 +170,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 
 	// Actions
 
-	public void findLeastActiveWaiter(){
+	private void findLeastActiveWaiter(){
 		synchronized(waiters){
 			leastActiveWaiter = null;
 			//leastActiveWaiterIndex = -1;
@@ -184,21 +190,13 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		}
 	}
 
-	public void addWaiter(RestaurantChoiWaiterAbs w) {
-		synchronized(waiters){
-			waiters.add(w); 
-		}
-		waiterBalance.put(w, 0); // add w, set workload to 0
-		stateChanged(); // in case we have customers waiting, then a waiter comes in}
-	}
-
 	private void updateTable(RestaurantChoiTable t, RestaurantChoiCustomer c){
 		synchronized(tables){
 			t.setOccupant(c);
 		}
 	}
 
-	public void waiterBreak(int i){
+	private void waiterBreak(int i){
 		synchronized(waiters){
 			waitersOnBreak++;
 			waiters.get(i).msgBreakOK(true);
@@ -209,7 +207,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		System.out.println("Removed waiter; on break. Uncheck his checkbox to return from break");
 	}
 
-	public void assignTable(int i){
+	private void assignTable(int i){
 		System.out.println("Host told "+leastActiveWaiter.getName()
 				+" to seat customer " + waitingCustomers.get(0).getPerson().getName() 
 				+  " at table " + tables.get(i).getTableNumber());
@@ -227,15 +225,21 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		}
 	}
 
-	//Getters
+	// Getters
+	
+	@Override
 	public RestaurantChoiAnimatedHost getAnimation(){
 		return animation;
 	}
 
-	//Setters
+	// Setters
+	
+	@Override
 	public void setAnimation(RestaurantChoiAnimatedHost in){
 		animation = in;
 	}
+	
+	@Override
 	public void setInactive(){
 		if(building.host != this && waitingCustomers.isEmpty()){
 			super.setInactive();
@@ -244,12 +248,22 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		}
 	}
 	
-	//Utility
-	public void plus1Workload(RestaurantChoiWaiterAbs w){
+	// Utility
+	
+	@Override
+	public void addWaiter(RestaurantChoiWaiterBase w) {
+		synchronized(waiters){
+			waiters.add(w); 
+		}
+		waiterBalance.put(w, 0); // add w, set workload to 0
+		stateChanged(); // in case we have customers waiting, then a waiter comes in}
+	}
+	
+	private void plus1Workload(RestaurantChoiWaiterBase w){
 		waiterBalance.put(w, waiterBalance.get(w)+1); // replace old with new
 	}
 
-	public void minus1Workload(RestaurantChoiWaiterAbs w){
+	private void minus1Workload(RestaurantChoiWaiterBase w){
 		waiterBalance.put(w, waiterBalance.get(w)-1); // replace old with new
 	}
 	

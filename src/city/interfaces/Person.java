@@ -10,14 +10,14 @@ public interface Person extends AgentInterface {
 
 	// Data
 	
-	enum State {none, goingToWork, goingToBank, goingToPayRent, goingToRestaurant, goingToMarket, goingToCook, goingToSleep, atWork, atBank, atRentPayment, atRestaurant, atMarket, atCooking, atSleep, leavingWork };
-	static final int BANK_DEPOSIT_THRESHOLD = 100;
-	static final int BANK_DEPOSIT_SUM = 50;
-	static final int RESTAURANT_DINING_THRESHOLD = 80;
-	static long RESTAURANT_DINING_INTERVAL = (Application.INTERVAL * 144); // 3 days
-	static long WAKE_UP_THRESHOLD = (Application.INTERVAL * 24); // 12 hours
-	static final int RENT_MIN_THRESHOLD = 200;
-	static final int RENT_MAX_THRESHOLD = 500;
+	public static enum STATE {none, goingToWork, goingToBank, goingToPayRent, goingToRestaurant, goingToMarket, goingToCook, goingToSleep, atWork, atBank, atRentPayment, atRestaurant, atMarket, atCooking, atSleep, leavingWork };
+	public static final int BANK_DEPOSIT_THRESHOLD = 100;
+	public static final int BANK_DEPOSIT_SUM = 50;
+	public static final int RESTAURANT_DINING_THRESHOLD = 80;
+	public static long RESTAURANT_DINING_INTERVAL = (Application.INTERVAL * 144); // 3 days
+	public static long WAKE_UP_THRESHOLD = (Application.INTERVAL * 24); // 12 hours
+	public static final int RENT_MIN_THRESHOLD = 200;
+	public static final int RENT_MAX_THRESHOLD = 500;
 	
 	// Constructor
 	

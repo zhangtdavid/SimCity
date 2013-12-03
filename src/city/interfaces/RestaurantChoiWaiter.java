@@ -3,62 +3,63 @@ package city.interfaces;
 import java.util.List;
 
 import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Application.FOOD_ITEMS;
+import city.animations.RestaurantChoiWaiterAnimation;
 
-public interface RestaurantChoiWaiter extends RoleInterface{
+public interface RestaurantChoiWaiter extends RoleInterface {
 
-	//true messages
-	public abstract void msgSeatCustomer(RestaurantChoiCustomer restaurantChoiCustomer,
-			RestaurantChoiTable restaurantChoiTable);
-	public abstract void msgReadyToOrder(RestaurantChoiCustomer c);
-	public abstract void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice);
-	public abstract void msgOrderComplete(RestaurantChoiOrder o);
-	public abstract void msgImDone(RestaurantChoiCustomer c);
-	public abstract void msgOutOfThisFood(RestaurantChoiOrder o);
-    public abstract void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice);
-	public abstract void msgHeresCheck(int total, RestaurantChoiCustomer ca);
-	//more logistics-related methods
-	public abstract void msgRelease();
-	public abstract String getName();
-	public abstract void msgBreakOK(boolean b);
-	public abstract void offBreak();
-	public abstract List<myCustomer> getMyCustomers();
-	public abstract List<RestaurantChoiTable> getTables();
-	public abstract void requestBreak();
-	public abstract boolean askedForBreak();
-	public abstract boolean isOnBreak();
-	//really gui-related activities
-	public abstract void seatCustomer(myCustomer customer);
-	public abstract void GiveFood(myCustomer mc, RestaurantChoiOrder or);
-	public abstract void DoSeatCustomer(RestaurantChoiCustomer customer, RestaurantChoiTable table);
-	public abstract void DoGoToTable(RestaurantChoiTable table);
-	public abstract void DoGoToCashier();
-	public abstract void DoGoToCook();
-	//shorthand methods
-	public abstract boolean needToSeatCustomer();
-	public abstract boolean needToTakeOrder();
-	public abstract boolean needToSendOrderToCook();
-	public abstract boolean needToGetOrderFromCook();
-	public abstract boolean needToNotifyHost();
-	public abstract boolean needToDeliverFood();
-	public abstract boolean needToRetakeOrder();
-	public abstract boolean needToGetCheck();
-	public abstract boolean needToGiveCheck();
-	//setters
-	public abstract void setHost(RestaurantChoiHost h);
-	public abstract void setCook(RestaurantChoiCook c);
-	public abstract void setCashier(RestaurantChoiCashier ca);
-	public abstract void setInactive();
+	// Data
+	
+	public static final int NTABLES = 4; // a global for the number of tables.
+	public static final int xstart = 50;
+	public static final int ystart = 50;
+	
+	// Messages
+	
+	public void msgSeatCustomer(RestaurantChoiCustomer c, RestaurantChoiTable t);
+	public void msgReadyToOrder(RestaurantChoiCustomer c);
+	public void msgHeresMyOrder(RestaurantChoiCustomer c, FOOD_ITEMS choice);
+	public void msgOrderComplete(RestaurantChoiOrder o);
+	public void msgImDone(RestaurantChoiCustomer c);
+	public void msgOutOfThisFood(RestaurantChoiOrder o);
+    public void msgCheckPlz(RestaurantChoiCustomer c, FOOD_ITEMS choice);
+	public void msgHeresCheck(int total, RestaurantChoiCustomer ca);
+	public void msgRelease();
+	public void msgBreakOK(boolean in);
+
+	// Scheduler
+	
+	// Actions
+	
+	// Getters
+	
+	public String getName();
+	public List<myCustomer> getMyCustomers();
+	public List<RestaurantChoiTable> getTables();
+	public boolean askedForBreak();
+	public boolean isOnBreak();
+
+	// Setters
+	
+	public void setHost(RestaurantChoiHost h);
+	public void setCook(RestaurantChoiCook c);
+	public void setCashier(RestaurantChoiCashier ca);
+	public void setAnimation(RestaurantChoiWaiterAnimation r);
+	public void setRevolvingStand(RestaurantChoiRevolvingStand rs);
+	
+	// Utilities
+	
+	// Classes
 	
 	public class myCustomer {
 		private RestaurantChoiCustomer c;
 		private RestaurantChoiTable t;
 		private RestaurantChoiOrder or;
-		//private boolean inWaitingZone; GUI-related things not matter now
 		private int checkValue;
 		private int customerState;
-		//	private int Y;
+		
 		public static final int WAITING = 0;
 		public static final int WAITING_IN_LINE = 999;
 		public static final int SEATED = 1;
@@ -83,10 +84,6 @@ public interface RestaurantChoiWaiter extends RoleInterface{
 		public RestaurantChoiCustomer getC() {
 			return c;
 		}
-/*
-		public void setWaitingLocation(boolean in){
-			inWaitingZone = in;
-		}*/
 
 		public void setC(RestaurantChoiCustomer c) {
 			this.c = c;

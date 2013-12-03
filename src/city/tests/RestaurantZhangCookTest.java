@@ -80,7 +80,7 @@ public class RestaurantZhangCookTest extends TestCase {
 		assertFalse("Cook's scheduler should not have ran, but it did", cook.runScheduler());
 
 		// Step four, call orderIsReady, which should be called from a timer. I don't want to wait for the timer
-		cook.orderIsReady(cook.ordersToCook.get(0));
+		cook.hackOrderIsReady(cook.ordersToCook.get(0));
 		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
 		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
 		assertEquals("Order status should be doneCooking. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.doneCooking, cook.ordersToCook.get(0).status);

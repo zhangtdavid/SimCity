@@ -30,7 +30,6 @@ public interface RestaurantTimmsCustomer extends RoleInterface {
 	
 	// Setters
 	
-	public void setActive();
 	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b);
 	
 }

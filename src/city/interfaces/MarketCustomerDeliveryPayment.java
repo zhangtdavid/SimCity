@@ -1,5 +1,8 @@
 package city.interfaces;
 
+import utilities.MarketTransaction;
+import city.buildings.MarketBuilding;
+
 public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Data
@@ -8,8 +11,8 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgHereIsBill(int bill, int id);
-	public abstract void msgPaymentReceived(int id);
+	public void msgHereIsBill(int bill, int id);
+	public void msgPaymentReceived(int id);
 	
 	// Scheduler
 	
@@ -17,9 +20,16 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Getters
 	
+	public MarketBuilding getMarket();
+	
 	// Setters
 	
+	public void setMarket(MarketBuilding market);
+	
 	// Utilities
+
+	public int checkBill(MarketTransaction mt);
+	public void removeMarketTransactionFromList(MarketTransaction transaction);
 	
 	// Classes
 	

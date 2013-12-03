@@ -16,35 +16,27 @@ import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
+	
 //  Data
 //	=====================================================================	
-	public EventLog log = new EventLog();
-
 	private MarketBuilding market;
-	public MarketEmployee employee;
-	
 	private MarketOrder order;
-    public Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
-	
-	public int loc; // stall number of employee
-	
-	public int bill;
-	
-	public enum MarketCustomerState
-	{None, WaitingForService, WaitingForOrder, Paying};
-	public MarketCustomerState state;
-	
-	public enum MarketCustomerEvent
-	{ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
-	public MarketCustomerEvent event;
-
-//	Gui
-//	---------------------------------------------------------------
 	private Semaphore atCounter = new Semaphore(0, true);	
 	private Semaphore atCashier = new Semaphore(0, true);
-
+	
+	// TODO Change these to private and add getters/setters
+	public MarketCustomerEvent event;
+    public Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
+	public int loc; // stall number of employee
+	public int bill;
+	public enum MarketCustomerState {None, WaitingForService, WaitingForOrder, Paying};
+	public MarketCustomerState state;
+	public enum MarketCustomerEvent {ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
+	public MarketEmployee employee;
+	public EventLog log = new EventLog();
+	
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================
 	public MarketCustomerRole(MarketOrder o) {
 		super(); // TODO
         for (FOOD_ITEMS s: o.orderItems.keySet()) {
@@ -54,14 +46,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		state = MarketCustomerState.None;
   }	
 	
-	public void setActive(){
-		event = MarketCustomerEvent.ArrivedAtMarket;
-		this.setActivityBegun();
-		stateChanged();
-	}
-	
 //  Messages
 //	=====================================================================
+	@Override
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
 		log.add(new LoggedEvent("Market Customer received msgWhatWouldYouLike from Market Employee."));
 		System.out.println("Market Customer received msgWhatWouldYouLike from Market Employee.");
@@ -71,6 +58,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
 		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
@@ -83,6 +71,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		stateChanged();
 	}
 	
+	@Override
 	public void msgPaymentReceived() {
 		log.add(new LoggedEvent("Market Customer received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market Customer received msgPaymentReceived from Market Cashier.");
@@ -92,18 +81,21 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //	Gui
 //	---------------------------------------------------------------
+	@Override
 	public void msgAnimationAtCounter() {
 		print("Market Customer received msgAnimationAtCounter");
 		atCounter.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtCashier() {
 		print("Market Customer received msgAnimationAtCounter");
 		atCashier.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationFinishedLeaveMarket() {
 		print("Market Customer received msgAnimationFinishedLeaveMarket");
 		super.setActive();
@@ -133,8 +125,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		return false;
 	}
 
-
-	
 //  Actions
 //	=====================================================================	
 	private void requestService() {
@@ -179,16 +169,26 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //  Getters and Setters
 //	=====================================================================
 	// Market
+	@Override
 	public MarketBuilding getMarket() {
 		return market;
 	}
 	
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
 	
+	@Override
+	public void setActive(){
+		event = MarketCustomerEvent.ArrivedAtMarket;
+		this.setActivityBegun();
+		stateChanged();
+	}
+	
 //  Utilities
-//	=====================================================================	
+//	=====================================================================
+	@Override
 	public int checkBill() {
 		int tempBill = 0;
         for (FOOD_ITEMS item: order.orderItems.keySet()) {

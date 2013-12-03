@@ -16,22 +16,52 @@ import city.agents.PersonAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
+import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
+import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChoiBuilding;
+import city.buildings.RestaurantChungBuilding;
+import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.BankPanel;
 import city.gui.BusStopPanel;
 import city.gui.CityRoad;
+import city.gui.CityViewBank;
 import city.gui.CityViewBusStop;
+import city.gui.CityViewMarket;
 import city.gui.CityViewPanel;
 import city.gui.CityViewRestaurant;
 import city.gui.HousePanel;
 import city.gui.MainFrame;
+import city.gui.MarketPanel;
+import city.gui.RestaurantChoiPanel;
+import city.gui.RestaurantChungPanel;
+import city.gui.RestaurantJPPanel;
 import city.gui.RestaurantTimmsPanel;
 import city.gui.RestaurantZhangPanel;
 import city.interfaces.Person;
+import city.roles.BankManagerRole;
+import city.roles.BankTellerRole;
 import city.roles.LandlordRole;
+import city.roles.MarketCashierRole;
+import city.roles.MarketDeliveryPersonRole;
+import city.roles.MarketEmployeeRole;
+import city.roles.MarketManagerRole;
+import city.roles.RestaurantChoiCashierRole;
+import city.roles.RestaurantChoiCookRole;
+import city.roles.RestaurantChoiHostRole;
+import city.roles.RestaurantChoiWaiterQueueRole;
+import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.RestaurantChungHostRole;
+import city.roles.RestaurantChungWaiterMessageCookRole;
+import city.roles.RestaurantJPCashierRole;
+import city.roles.RestaurantJPCookRole;
+import city.roles.RestaurantJPHostRole;
+import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCookRole;
 import city.roles.RestaurantTimmsHostRole;
@@ -48,7 +78,7 @@ public class Application {
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
 
-	public static final int INTERVAL = 1000; // 10000; // One interval is the simulation's equivalent of a half-hour
+	public static final int INTERVAL = 1000; // One interval is the simulation's equivalent of a half-hour
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
@@ -117,28 +147,28 @@ public class Application {
 		}
 
 		// Bus Stops!!!!!!!!
-		BusStopPanel bsp1 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
-		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(150, 50, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp1);
+		BusStopPanel bsp1 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(250, 50, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp1);
 		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.ID);
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
 
-		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp2);
 		mainFrame.cityView.addStatic(cityViewBusStop2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.ID);
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
-		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 375, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.ID);
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
 
-		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(400, 150, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp4);
 		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
@@ -167,7 +197,7 @@ public class Application {
 
 		// RESTAURANTZHANG------------------------------------------------------------
 		// FIRST add a panel
-		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantZhangPanel rzp1 = new RestaurantZhangPanel(Color.DARK_GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(100, 50, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, rzp1); 
@@ -266,7 +296,7 @@ public class Application {
 		// Skipping creating a bank panel
 		HousePanel rhp1Timms = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// Create buildings
-		RestaurantTimmsBuilding rtb = (RestaurantTimmsBuilding) Application.CityMap.addBuilding(BUILDING.restaurant, new RestaurantTimmsBuilding("RestaurantTimms", rtp1, cvr1));
+		RestaurantTimmsBuilding rtb = new RestaurantTimmsBuilding("RestaurantTimms", rtp1, cvr1);
 		mainFrame.buildingView.addView(rtp1, cvr1.ID);
 		CityMap.addBuilding(BUILDING.restaurant, rtb);
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
@@ -356,16 +386,317 @@ public class Application {
 		rtb.addRole(p4r1Timms);
 		p4Timms.setOccupation(p4r1Timms);
 
-		/*
+		// RESTAURANTCHOI----------------------------------------------------------------------------
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		MarketPanel mp1 = new MarketPanel(Color.black, new Dimension(500,500));
+		MarketBuilding m1 = new MarketBuilding("MarketBuilding", mp1);
+		// Create buildings
+		BankPanel bp1 = new BankPanel(Color.blue, new Dimension(500,500));
+		BankBuilding b1 = new BankBuilding("BankBuilding");
+
+		// FIRST add a panel
+		RestaurantChoiPanel rchoip1 = new RestaurantChoiPanel(Color.GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp0Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp1Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp2Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp3Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		HousePanel rhp4Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantChoi1 = new CityViewRestaurant(200, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, rchoip1);
+		CityViewBank bank1 = new CityViewBank(300,250,"Bank " + (mainFrame.cityView.getStaticsSize()), Color.green, bp1);
+		CityViewMarket market1 = new CityViewMarket(400,400,"Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, mp1);
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantChoi1);
+		//mainFrame.cityView.addStatic(house1);
+		mainFrame.cityView.addStatic(bank1);
+		mainFrame.cityView.addStatic(market1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		RestaurantChoiBuilding rchoib1 = new RestaurantChoiBuilding("RestaurantChoi1", rchoip1, restaurantChoi1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rchoip1, restaurantChoi1.ID);
+		mainFrame.buildingView.addView(bp1, bank1.ID);
+		mainFrame.buildingView.addView(mp1, market1.ID);
+		// SIXTH map stuff
+		CityMap.addBuilding(BUILDING.restaurant, rchoib1);
+		CityMap.addBuilding(BUILDING.bank, b1);
+		CityMap.addBuilding(BUILDING.market, m1);
+
+		// Create landlord
+		PersonAgent p0Choi = new PersonAgent("Landlord Choi", date);
+		LandlordRole p0r1Choi = new LandlordRole();
+		p0Choi.addRole(p0r1Choi);
+		HouseBuilding h0Choi = new HouseBuilding("House 0 Choi", p0r1Choi, rhp0Choi);
+		p0Choi.setHome(h0Choi);
+		p0r1Choi.setActive();
+		people.add(p0Choi);
+
+		// Create houses
+		HouseBuilding h1Choi = new HouseBuilding("House 1 Choi", p0r1Choi, rhp1Choi); // name, landlord, panel.
+		HouseBuilding h2Choi = new HouseBuilding("House 2 Choi", p0r1Choi, rhp2Choi);
+		HouseBuilding h3Choi = new HouseBuilding("House 3 Choi", p0r1Choi, rhp3Choi);
+		HouseBuilding h4Choi = new HouseBuilding("House 4 Choi", p0r1Choi, rhp4Choi);
+		AptBuilding app0Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+		AptBuilding app1Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+
+		// Create people
+		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date);
+		PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date);
+		PersonAgent p3Choi = new PersonAgent("Host 1 Choi", date);
+		PersonAgent p4Choi = new PersonAgent("Waiter 1 Choi", date);
+		PersonAgent p5Choi = new PersonAgent("Market Mgr Choi", date);
+		PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date);
+		PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date);
+		PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date);
+		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date);
+		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date);
+
+		people.add(p1Choi);
+		people.add(p2Choi);
+		people.add(p3Choi);
+		people.add(p4Choi);
+		people.add(p5Choi);
+		people.add(p6Choi);
+		people.add(p7Choi);
+		people.add(p8Choi);
+		people.add(p9Choi);
+		people.add(p10Choi);
+
+		p1Choi.setHome(h1Choi);
+		p2Choi.setHome(h2Choi);
+		p3Choi.setHome(h3Choi);
+		p4Choi.setHome(h4Choi);
+		p5Choi.setHome(app0Choi);
+		p6Choi.setHome(app0Choi);
+		p7Choi.setHome(app0Choi);
+		p8Choi.setHome(app0Choi);
+		p9Choi.setHome(app1Choi);
+		p10Choi.setHome(app1Choi);
+
+		// Landlord
+		RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(rchoib1, 0, 24);
+		rchoib1.addRole(p1r1Choi);
+		p1Choi.setOccupation(p1r1Choi);
+
+		// Create cook
+		RestaurantChoiCookRole p2r1Choi = new RestaurantChoiCookRole(rchoib1, 0, 24);
+		rchoib1.addRole(p2r1Choi);
+		p2Choi.setOccupation(p2r1Choi);
+		p2r1Choi.addMarket(m1);
+
+		// Create host
+		RestaurantChoiHostRole p3r1Choi = new RestaurantChoiHostRole(rchoib1, 0, 24);
+		rchoib1.addRole(p3r1Choi);
+		p3Choi.setOccupation(p3r1Choi);
+
+		// Create waiter
+		RestaurantChoiWaiterQueueRole p4r1Choi = new RestaurantChoiWaiterQueueRole(rchoib1, 0, 24);
+		rchoib1.addRole(p4r1Choi);
+		p4Choi.setOccupation(p4r1Choi);
+
+		//Create bank roles
+
+		BankManagerRole p9r1Choi = new BankManagerRole(b1, 0, 24);
+		p9Choi.setOccupation(p9r1Choi);
+		p9r1Choi.setPerson(p9Choi);
+		BankTellerRole p10r1Choi = new BankTellerRole(b1, 0, 24);
+		p10Choi.setOccupation(p10r1Choi);
+		p10r1Choi.setPerson(p10Choi);
+		b1.addRole(p9r1Choi);
+		b1.addRole(p10r1Choi);
+
+		//Create Market people
+		MarketManagerRole p5r1Choi = new MarketManagerRole(m1, 0, 24);
+		MarketCashierRole p6r1Choi = new MarketCashierRole(m1, 0, 24);
+		MarketEmployeeRole p7r1Choi = new MarketEmployeeRole(m1, 0, 24);
+		MarketDeliveryPersonRole p8r1Choi = new MarketDeliveryPersonRole(m1, 0, 24);
+		p5Choi.setOccupation(p5r1Choi);
+		p5r1Choi.setPerson(p5Choi);
+		p6Choi.setOccupation(p6r1Choi);
+		p6r1Choi.setPerson(p6Choi);
+		p7Choi.setOccupation(p7r1Choi);
+		p7r1Choi.setPerson(p7Choi);
+		p8r1Choi.setPerson(p8Choi);
+		p8Choi.setOccupation(p8r1Choi);
+		m1.addRole(p5r1Choi);
+		m1.addRole(p6r1Choi);
+		m1.addRole(p7r1Choi);
+		m1.addRole(p8r1Choi);
+		m1.manager = p5r1Choi;
+		m1.cashier = p6r1Choi;
+		m1.addEmployee(p7r1Choi);
+		m1.addDeliveryPerson(p8r1Choi);
+
+		// Give people cars
+		CarAgent c0Choi = new CarAgent(busStop4);
+		CarAnimation c0AnimChoi = new CarAnimation(c0Choi, busStop4);
+		c0Choi.setAnimation(c0AnimChoi);
+		mainFrame.cityView.addAnimation(c0AnimChoi);
+		CarAgent c1Choi = new CarAgent(busStop4);
+		CarAnimation c1AnimChoi = new CarAnimation(c1Choi, busStop4);
+		c1Choi.setAnimation(c1AnimChoi);
+		mainFrame.cityView.addAnimation(c1AnimChoi);
+		CarAgent c2Choi = new CarAgent(busStop4);
+		CarAnimation c2AnimChoi = new CarAnimation(c2Choi, busStop4);
+		c2Choi.setAnimation(c2AnimChoi);
+		mainFrame.cityView.addAnimation(c2AnimChoi);
+		CarAgent c3Choi = new CarAgent(busStop4);
+		CarAnimation c3AnimChoi = new CarAnimation(c3Choi, busStop4);
+		c3Choi.setAnimation(c3AnimChoi);
+		mainFrame.cityView.addAnimation(c3AnimChoi);
+		CarAgent c4Choi = new CarAgent(busStop4);
+		CarAnimation c4AnimChoi = new CarAnimation(c4Choi, busStop4);
+		c4Choi.setAnimation(c4AnimChoi);
+		mainFrame.cityView.addAnimation(c4AnimChoi);
+		CarAgent c5Choi = new CarAgent(busStop4);
+		CarAnimation c5AnimChoi = new CarAnimation(c5Choi, busStop4);
+		c5Choi.setAnimation(c5AnimChoi);
+		mainFrame.cityView.addAnimation(c5AnimChoi);
+		CarAgent c6Choi = new CarAgent(busStop4);
+		CarAnimation c6AnimChoi = new CarAnimation(c6Choi, busStop4);
+		c6Choi.setAnimation(c6AnimChoi);
+		mainFrame.cityView.addAnimation(c6AnimChoi);
+		CarAgent c7Choi = new CarAgent(busStop4);
+		CarAnimation c7AnimChoi = new CarAnimation(c7Choi, busStop4);
+		c7Choi.setAnimation(c7AnimChoi);
+		mainFrame.cityView.addAnimation(c7AnimChoi);
+		CarAgent c8Choi = new CarAgent(busStop4);
+		CarAnimation c8AnimChoi = new CarAnimation(c8Choi, busStop4);
+		c8Choi.setAnimation(c8AnimChoi);
+		mainFrame.cityView.addAnimation(c8AnimChoi);
+		CarAgent c9Choi = new CarAgent(busStop4);
+		CarAnimation c9AnimChoi = new CarAnimation(c9Choi, busStop4);
+		c9Choi.setAnimation(c9AnimChoi);
+		mainFrame.cityView.addAnimation(c9AnimChoi);
+		CarAgent c10Choi = new CarAgent(busStop4);
+		CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop4);
+		c10Choi.setAnimation(c10AnimChoi);
+		mainFrame.cityView.addAnimation(c10AnimChoi);
+
+		p0Choi.setCar(c0Choi);
+//		p1Choi.setCar(c1Choi);
+//		p2Choi.setCar(c2Choi);
+//		p3Choi.setCar(c3Choi);
+//		p4Choi.setCar(c4Choi);
+//		p5Choi.setCar(c5Choi);
+		p6Choi.setCar(c6Choi);
+		p7Choi.setCar(c7Choi);
+		p8Choi.setCar(c8Choi);
+		p9Choi.setCar(c9Choi);
+		p10Choi.setCar(c10Choi);
+		// RESTAURANTCHUNG------------------------------------------------------------------------------
+		
+		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
+		RestaurantChungPanel rcp1 = new RestaurantChungPanel(Color.black, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		// SECOND create a city view restaurant, the above panel is the last argument
+		CityViewRestaurant restaurantChung1 = new CityViewRestaurant(400, 250, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, rcp1); 
+		// THIRD add it to the list of statics in the cityView
+		mainFrame.cityView.addStatic(restaurantChung1);
+		// FOURTH create a new building, last argument is the panel in step ONE
+		RestaurantChungBuilding rcb1 = new RestaurantChungBuilding("RestaurantChung1", rcp1, restaurantChung1);
+		// FIFTH add the new building to the buildingView
+		mainFrame.buildingView.addView(rcp1, restaurantChung1.ID);
+		// SIXTH add the new building to the map
+		CityMap.addBuilding(BUILDING.restaurant, rcb1);
+		// SEVENTH create all your roles after
+		
+		HousePanel rhp1Chung = new HousePanel(Color.black, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+
+		// Create landlord
+		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date);
+		System.out.println(p0Chung);
+		System.out.println(p0Chung.getCash());
+		p0Chung.setCash(50); // TODO remove later
+		LandlordRole p0r1Chung = new LandlordRole();
+		p0Chung.addRole(p0r1Chung);
+		HouseBuilding h0Chung = new HouseBuilding("House 0 Chung", p0r1Chung, rhp1Chung);
+		p0Chung.setHome(h0Chung);
+		p0r1Chung.setActive();
+		people.add(p0Chung);
+
+		// Create houses
+		HouseBuilding h1Chung = new HouseBuilding("House 1 Chung", p0r1Chung, rhp1Chung);
+		HouseBuilding h2Chung = new HouseBuilding("House 2 Chung", p0r1Chung, rhp1Chung);
+		HouseBuilding h3Chung = new HouseBuilding("House 3 Chung", p0r1Chung, rhp1Chung);
+		HouseBuilding h4Chung = new HouseBuilding("House 4 Chung", p0r1Chung, rhp1Chung);
+
+		// Create people
+		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date);
+		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date);
+		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date);
+		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date);
+		people.add(p1Chung);
+		people.add(p2Chung);
+		people.add(p3Chung);
+		people.add(p4Chung);
+		p1Chung.setHome(h1Chung);
+		p2Chung.setHome(h2Chung);
+		p3Chung.setHome(h3Chung);
+		p4Chung.setHome(h4Chung);
+
+		// Give people cars
+		CarAgent c0Chung = new CarAgent(busStop1);
+		CarAnimation c0AnimChung = new CarAnimation(c0Chung, busStop1);
+		c0Chung.setAnimation(c0AnimChung);
+		mainFrame.cityView.addAnimation(c0AnimChung);
+		CarAgent c1Chung = new CarAgent(busStop1);
+		CarAnimation c1AnimChung = new CarAnimation(c1Chung, busStop1);
+		c1Chung.setAnimation(c1AnimChung);
+		mainFrame.cityView.addAnimation(c1AnimChung);
+		CarAgent c2Chung = new CarAgent(busStop1);
+		CarAnimation c2AnimChung = new CarAnimation(c2Chung, busStop1);
+		c2Chung.setAnimation(c2AnimChung);
+		mainFrame.cityView.addAnimation(c2AnimChung);
+		CarAgent c3Chung = new CarAgent(busStop1);
+		CarAnimation c3AnimChung = new CarAnimation(c3Chung, busStop1);
+		c3Chung.setAnimation(c3AnimChung);
+		mainFrame.cityView.addAnimation(c3AnimChung);
+		CarAgent c4Chung = new CarAgent(busStop1);
+		CarAnimation c4AnimChung = new CarAnimation(c4Chung, busStop1);
+		c4Chung.setAnimation(c4AnimChung);
+		mainFrame.cityView.addAnimation(c4AnimChung);
+		p0Chung.setCar(c0Chung);
+		p1Chung.setCar(c1Chung);
+		p2Chung.setCar(c2Chung);
+		p3Chung.setCar(c3Chung);
+		p4Chung.setCar(c4Chung);
+
+		// Create cashier
+		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(rcb1, 0, 12); // TODO Change shift times
+		p1r1Chung.setPerson(p1Chung);
+		p1r1Chung.setMarketCustomerDeliveryPaymentPerson();
+		p1r1Chung.setBankCustomerPerson();
+		rcb1.addRole(p1r1Chung);
+		p1Chung.setOccupation(p1r1Chung);
+		
+		// Create cook
+		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
+		p2r1Chung.setPerson(p2Chung);		
+		rcb1.addRole(p2r1Chung);
+		p2Chung.setOccupation(p2r1Chung);
+		
+		// Create host
+		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
+		p3r1Chung.setPerson(p3Chung);		
+		rcb1.addRole(p3r1Chung);
+		p3Chung.setOccupation(p3r1Chung);
+		
+		// Create waiter
+		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
+		p4r1Chung.setPerson(p4Chung);		
+		rcb1.addRole(p4r1Chung);
+		p4Chung.setOccupation(p4r1Chung);
+		
+		// Start threads
+
 		//RESTAURANTJP------------------------------------------------------------------------
 		// FIRST add a panel
-		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(mainFrame.cityView.CITY_WIDTH, mainFrame.cityView.CITY_HEIGHT));
+		RestaurantJPPanel rjpp1 = new RestaurantJPPanel(Color.DARK_GRAY, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
 		// SECOND create a city view restaurant, the above panel is the last argument
 		CityViewRestaurant restaurantJP1 = new CityViewRestaurant(400, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, rjpp1); 
 		// THIRD add it to the list of statics in the cityView
 		mainFrame.cityView.addStatic(restaurantJP1);
 		// FOURTH create a new building, last argument is the panel in step ONE
-		RestaurantJPBuilding rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1);
+		RestaurantJPBuilding rjpb1 = new RestaurantJPBuilding("RestaurantJP1", rjpp1, restaurantJP1);
 		// FIFTH add the new building to the buildingView
 		mainFrame.buildingView.addView(rjpp1, restaurantJP1.ID);
 		// SIXTH add the new building to the map
@@ -446,78 +777,10 @@ public class Application {
 		rjpb1.addRole(p4r1JP);
 		p4JP.setOccupation(p4r1JP);
 
-		/*
-		// Create landlord
-		PersonAgent p1 = new PersonAgent("Cashier 1", date);
-		RestaurantJPCashierRole p1r1 = new RestaurantJPCashierRole(rjpb1, 0, 12);
-		p1.setOccupation(p1r1);
-		people.add(p1);
-		p1.startThread();         
-
-		PersonAgent p2 = new PersonAgent("Cook 1", date);
-		RestaurantJPCookRole p2r1 = new RestaurantJPCookRole(rjpb1, 0, 12);
-		RestaurantJPCookAnimation p2a1 = new RestaurantJPCookAnimation(p2r1);
-		p2r1.setAnimation(p2a1);
-		rjpp1.addVisualizationElement(p2a1);
-		p2.setOccupation(p2r1);
-		people.add(p2);
-		p2.startThread();
-
-		PersonAgent p3 = new PersonAgent("Host 1", date);
-		RestaurantJPHostRole p3r1 = new RestaurantJPHostRole(rjpb1, 0, 12);
-		p3.setOccupation(p3r1);
-		people.add(p3);
-		p3.startThread();
-
-		PersonAgent p4 = new PersonAgent("Waiter 1", date);
-		RestaurantJPWaiterRole p4r1 = new RestaurantJPWaiterRole(rjpb1, 0, 12);
-		RestaurantJPWaiterAnimation p4a1 = new RestaurantJPWaiterAnimation(p4r1, 0);
-		p4r1.setAnimation(p4a1);
-		p3r1.addWaiter(p4r1, "W1");
-		rjpp1.addVisualizationElement(p4a1);
-		p4.setOccupation(p4r1);
-		people.add(p4);
-		p4.startThread();
-
-		// Set up the table
-
-		// Wait for things to get in position
-		try {
-			Thread.sleep(4000);
-		} catch (InterruptedException e) {}
-
-		// Send in a customer
-		PersonAgent p5 = new PersonAgent("Customer 1", date);
-		RestaurantJPCustomerRole p5r1 = new RestaurantJPCustomerRole(rjpb1);
-		RestaurantJPCustomerAnimation p5a1 = new RestaurantJPCustomerAnimation(p5r1, 0);
-		p5r1.setAnimation(p5a1);
-		rjpp1.addVisualizationElement(p5a1);
-		p5.addRole(p5r1);
-		people.add(p5);
-		p5.startThread();
-		p5r1.gotHungry();
-
-		// TODO these shouldn't be necessary, figure out why they're needed
-		p5r1.setActive();
-		p5.stateChanged();
-
-
-		 */
-
-
-
-
-
-
-
-
 		// Wait for stuff to get set up
 		try {
 			Thread.sleep(5000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 
 		// Start threads
 		c0Timms.startThread();
@@ -534,10 +797,7 @@ public class Application {
 		// Wait for stuff to get set up
 		try {
 			Thread.sleep(1000);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+		} catch (InterruptedException e) {}
 
 		// Start threads for RestaurantZhang
 		c0Zhang.startThread();
@@ -550,11 +810,58 @@ public class Application {
 		p2Zhang.startThread();
 		p3Zhang.startThread();
 		p4Zhang.startThread();
+		
+		// Wait for stuff to get set up
+		try {
+			Thread.sleep(3000);
+		} catch (InterruptedException e) {}
+		
+		// Start threads for RestaurantChoi
+		c0Choi.startThread();
+		c1Choi.startThread();
+		c2Choi.startThread();
+		c3Choi.startThread();
+		c4Choi.startThread();
+		c5Choi.startThread();
+		c6Choi.startThread();
+		c7Choi.startThread();
+		c8Choi.startThread();
+		c9Choi.startThread();
+		c10Choi.startThread();
+		p0Choi.startThread();
+		p1Choi.startThread();
+		p2Choi.startThread();
+		p3Choi.startThread();
+		p4Choi.startThread();
+		p5Choi.startThread();
+		p6Choi.startThread();
+		p7Choi.startThread();
+		p8Choi.startThread();
+		p9Choi.startThread();
+		p10Choi.startThread();
+		
+		// Wait for stuff to get set up
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {}
+		
+		// Start threads for RestaurantChung
+		c0Chung.startThread();
+		c1Chung.startThread();
+		c2Chung.startThread();
+		c3Chung.startThread();
+		c4Chung.startThread();
+		p0Chung.startThread();
+		p1Chung.startThread();
+		p2Chung.startThread();
+		p3Chung.startThread();
+		p4Chung.startThread();
 	}
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
-
+		private static int restaurantNumber = 0;
+		
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -580,22 +887,25 @@ public class Application {
 		 * Returns a random building of type
 		 */
 		public static Building findRandomBuilding(BUILDING type) {
+			if(type == BUILDING.restaurant) {
+				List<Building> list = map.get(type);
+				if(restaurantNumber > list.size()) {
+					restaurantNumber = 0;
+				}
+				Building buildingToReturn = list.get(restaurantNumber);
+				if(++restaurantNumber > list.size()) {
+					restaurantNumber = 0;
+				}
+				return buildingToReturn;
+			}
+			
 			List<Building> list = map.get(type);
 			Collections.shuffle(list);
 			return list.get(0);
 		}
 
 		/**
-		 * Return the building of type closest to the person's location
-		 */
-		public static Building findClosestBuilding() {
-			return null;
-		}
-
-		/**
-		 * Return the building of type closest to the destination building
-		 * 
-		 * @param b the destination you wish to reach
+		 * Find the building of type closest to the destination building
 		 */
 		public static Building findClosestBuilding(BUILDING type, Building b) {
 			int x = b.getCityViewBuilding().x;
@@ -612,6 +922,9 @@ public class Application {
 			return returnBuilding;
 		}
 
+		/**
+		 * Find the building of type closest to the person's location
+		 */
 		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
 			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
 			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5

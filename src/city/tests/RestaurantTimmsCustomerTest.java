@@ -3,6 +3,7 @@ package city.tests;
 import junit.framework.TestCase;
 import city.Application;
 import city.buildings.RestaurantTimmsBuilding;
+import city.gui.CityViewRestaurant;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.roles.RestaurantTimmsCustomerRole;
 import city.tests.animations.mock.MockRestaurantTimmsAnimatedCustomer;
@@ -30,7 +31,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		host = new MockRestaurantTimmsHost();
 		waiter = new MockRestaurantTimmsWaiter();
 		
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null);
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
 		rtb.setCashier(cashier);
 		rtb.setHost(host);
 		

@@ -1,42 +1,47 @@
 package city.interfaces;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
+import utilities.EventLog;
+import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.buildings.MarketBuilding;
+import city.roles.RestaurantChoiCashierRole.Check;
 
-public interface RestaurantChoiCashier extends RoleInterface{
+public interface RestaurantChoiCashier extends RoleInterface {
 
-	//Data
-	public static HashMap <FOOD_ITEMS, Integer> foodCost = new HashMap<FOOD_ITEMS,Integer>();
-
-	//ConcurrentHashMap<Market, Integer> marketBills = new ConcurrentHashMap<Market, Integer>(); TODO
-	//ArrayList<Market> markets = new ArrayList<Market>(); // TODO match with Market in simcity201 TODO
-	final static int NOT_IN_TRANSIT = 0;
-	final static int IN_TRANSIT = 1;
+	// Data
+	
+	public static HashMap <FOOD_ITEMS, Integer> FOOD_COST = new HashMap<FOOD_ITEMS,Integer>();
+	public static final int NOT_IN_TRANSIT = 0;
+	public static final int IN_TRANSIT = 1;
+	// public static ConcurrentHashMap<Market, Integer> MARKET_BILLS = new ConcurrentHashMap<Market, Integer>(); TODO 
     
-	//Messages
-	// public abstract void msgPayMarket(Market m, int money); // TODO
-	public abstract void msgCompute(FOOD_ITEMS food_ITEMS, RestaurantChoiCustomer c,
-			RestaurantChoiWaiter restaurantChoiWaiter);
-	public abstract void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash);
-	//public void msgHeresYourMarketBill(Market m, int type, int amount); TODO
-	public abstract void msgHeresYourMoney(int withdrawal);
-	public abstract void msgDoneWithDishes(RestaurantChoiCustomer c);
-
-	//Actions
-
-	public abstract void depositMoney();
-	public abstract void getMoney();
-	//public void payMarketBill(Market m, int payment); TODO
-
-	//Getters
-	public abstract RestaurantChoiAnimatedCashier getAnimation();
+	// Messages
 	
-	//Setters
-	//public void addMarket(Market m);
-	public abstract void setInactive();
+	// public void msgPayMarket(Market m, int money); // TODO
+	public void msgCompute(FOOD_ITEMS i, RestaurantChoiCustomer c, RestaurantChoiWaiter w);
+	public void msgHeresMyPayment(RestaurantChoiCustomer c, int allHisCash);
+	// public void msgHeresYourMarketBill(Market m, int type, int amount); TODO
+	public void msgHeresYourMoney(int withdrawal);
+	public void msgDoneWithDishes(RestaurantChoiCustomer c);
+	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o);
+
+	// Actions
+
+	// Getters
 	
-	//Utilities
+	public RestaurantChoiAnimatedCashier getAnimation();
+	public ArrayList<Check> getChecks();
+	public EventLog getLog();
+	public int getMoneyIncoming();
+	
+	// Setters
+	
+	public void setGui(RestaurantChoiAnimatedCashier r);
+	
+	// Utilities
 
 }

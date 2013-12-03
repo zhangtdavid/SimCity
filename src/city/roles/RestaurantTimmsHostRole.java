@@ -18,6 +18,7 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		
 	private RestaurantTimmsWaiter waiterWantingBreak;
 	private RestaurantTimmsBuilding rtb;
+	private boolean shiftOver;
 	
 	// Constructor
 
@@ -35,6 +36,7 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 		this.setShift(shiftStart, shiftEnd);
 		this.waiterWantingBreak = null;
 		this.rtb = b;
+		this.shiftOver = false;
 	}
 
 	// Messages
@@ -75,6 +77,13 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	
 	@Override
 	public boolean runScheduler() {
+		
+		if (shiftOver && !rtb.getHost().equals(this)) {
+			print("Leaving shift.");
+			super.setInactive();
+			return false;
+		}
+		
 		if (waiterWantingBreak != null) {
 			actHandleBreakRequest();
 		}
@@ -125,13 +134,19 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	@Override
 	public void setActive() {
 		rtb.setHost(this);
+		this.shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedHost.class).setVisible(true);
 		super.setActive();
 	}
 	
 	@Override
+	public void setInactive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		shiftOver = true;
+	}
+	
+	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsHostRole " + this.getPerson().getName(), msg);
     }
 

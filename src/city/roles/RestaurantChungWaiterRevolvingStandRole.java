@@ -12,7 +12,7 @@ import city.buildings.RestaurantChungBuilding;
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
-public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBaseRole {	
+public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBase {	
 	RestaurantChungRevolvingStand orderStand;
 
 	public RestaurantChungWaiterRevolvingStandRole(RestaurantChungBuilding b, int t1, int t2) {

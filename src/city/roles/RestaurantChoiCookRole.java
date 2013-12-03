@@ -24,24 +24,24 @@ import city.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 
-	//Data
-	RestaurantChoiAnimatedCook cookGui;
-	public int marketIndex=0;
-	Semaphore inProgress = new Semaphore(0, true);
-	String name = "LeChef";
-	RestaurantChoiRevolvingStand orderqueue;
-	boolean checkback;
-	RestaurantChoiBuilding building;
-	boolean wantsToLeave;
-	public List<RestaurantChoiOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChoiOrder>());
-	Timer timer = new Timer(); // for cooking!
-	public List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>()); // myMarket has a MarketBuilding AND goodies.
+	// Data
+	
+	private RestaurantChoiAnimatedCook cookGui;
+	private int marketIndex=0;
+	private Semaphore inProgress = new Semaphore(0, true);
+	private RestaurantChoiRevolvingStand orderqueue;
+	private boolean checkback;
+	private RestaurantChoiBuilding building;
+	private boolean wantsToLeave;
+	private List<RestaurantChoiOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChoiOrder>());
+	private Timer timer = new Timer(); // for cooking!
+	private List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>()); // myMarket has a MarketBuilding AND goodies.
     private MarketCustomerDelivery marketCustomerDelivery;
-    //private RestaurantChoiCashier cashier; // THIS IS REQUIRED FOR MARKETS.
-    // public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
-
+    // private RestaurantChoiCashier cashier; // THIS IS REQUIRED FOR MARKETS.
+    // private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
     
-	//Constructor
+	// Constructor
+    
 	/**
 	 * Initializes Cook for RestaurantChoi
 	 * @param b : for RestaurantChoiBuilding
@@ -59,7 +59,9 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public RestaurantChoiCookRole(){ // to just test mechanics
 		super(); 
 	}
-	//Messages
+	
+	// Messages
+	
 	@Override
 	public void msgRelease() {
 		inProgress.release();// = true;
@@ -90,9 +92,9 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				}
 			}
 		}
-	}
-
-*/
+	}*/
+	
+	@Override
 	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id) {
         print("Cook received msgFoodReceived");
         //MyMarketOrder mo = findMarketOrder(id); //TODO THIS IS FOR MARKET INTEGRATION
@@ -106,6 +108,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
         }
         stateChanged();
     }
+	
 	/*@Override
 	public void msgFoodReceived(int choice, int amount, Market m) {
 		synchronized(foods){
@@ -122,7 +125,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 				}
 			}
 		}
-	}TODO*/
+	}*/
 
 	@Override
 	public void msgAtRefrigerator() {
@@ -139,7 +142,8 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		stateChanged();
 	} // these 3 functions didn't do anything in v2.2 anyways
 
-	//Scheduler
+	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		boolean blocking = false;
@@ -194,9 +198,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		cookGui.DoLeave();
 		return blocking;
 	}
-	//Actions
-	@Override
-	public void MoveFoodToPlating(RestaurantChoiOrder o) {
+	
+	// Actions
+	
+	private void MoveFoodToPlating(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.READY_FOR_PICKUP);
 		}
@@ -204,29 +209,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		System.out.println("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
 	}
 
-	@Override
-	public void CheckBack() { // check every 5000 seconds
-		//System.out.println("checkback (REVOLVING STAND per 5000ticks)");
-		if(orderqueue != null){
-			timer.schedule(new TimerTask() {
-				public void run() {
-					synchronized(orderqueue){
-						if(!orderqueue.isEmpty()){
-							RestaurantChoiOrder o = orderqueue.poll();
-							orders.add(o);
-							DoGoToRefrig();
-							AnalyzeCookOrder(o);
-						}
-					}
-					//CheckBack();
-					checkback = false;
-					stateChanged();
-				}
-			}, 5000);
-		}
-	}
-
-	public boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
+	private boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.CHECKING);
 		}
@@ -271,8 +254,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		return true;
 	}
 
-	@Override
-	public boolean CookOrder(RestaurantChoiOrder o) {
+	private boolean CookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.COOKING);
 		}
@@ -310,8 +292,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		return true; // <<why? lol
 	}
 
-	@Override
-	public void DoGoToRefrig() {
+	private void DoGoToRefrig() {
 		cookGui.setAcquired();
 		cookGui.toRef();
 		try {
@@ -323,8 +304,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		stateChanged();
 	}
 
-	@Override
-	public void DoGoToGrills() {
+	private void DoGoToGrills() {
 		cookGui.setAcquired();
 		cookGui.toGrill();
 		try {
@@ -336,8 +316,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		stateChanged();
 	}
 
-	@Override
-	public void DoGoToPlates() {
+	private void DoGoToPlates() {
 		cookGui.setAcquired();
 		cookGui.toPlate();
 		try {
@@ -349,36 +328,41 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 		stateChanged();
 	}
 
-	//Getters	
-	@Override
-	public String getName() {
-		return name;
-	}
+	// Getters	
+	
 	@Override
 	public RestaurantChoiAnimatedCook getGui() {
 		return cookGui;
 	}
-	//@Override
+	
+	@Override
 	public RestaurantChoiRevolvingStand getRevolvingStand() {
 		return orderqueue;
 	}
+	
+	@Override
+	public List<RestaurantChoiOrder> getOrders() {
+		return orders;
+	}
 
-	//Setters
+	// Setters
+	
 	@Override
 	public void setGui(RestaurantChoiAnimatedCook gui) {
 		cookGui = gui;	
 	}
 	
+	@Override
 	public void setRevolvingStand(RestaurantChoiRevolvingStand in){
 		orderqueue = in;
 	}
+	
 	@Override
 	public void setInactive(){
 		if(orders.isEmpty() && building.seatedCustomers == 0)
 			super.setInactive();
 		else wantsToLeave = true;
 	}
-
 
 	@Override
 	public void addMarket(MarketBuilding m) {
@@ -391,13 +375,17 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 			mm.outOf.put("Salad", false);
 		}		
 	}
-	//Utilities
-	public void hackNoFood(){
+	
+	// Utilities
+	
+	@Override
+	public void hackNoFood() {
 		building.updateFoodQuantity(FOOD_ITEMS.chicken, 0);
 		building.updateFoodQuantity(FOOD_ITEMS.pizza, 0);
 		building.updateFoodQuantity(FOOD_ITEMS.salad, 0);
 		building.updateFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
+	
 	/* TODO THIS IS FOR MARKET INTEGRATION
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
@@ -414,7 +402,8 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
             }
         }
     }*/
-    public Food findFood(String choice) {
+	
+    private Food findFood(String choice) {
         for(Food f: building.getFoods().values()){
             if(f.item.equals(choice)) {
                 return f;
@@ -423,13 +412,35 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
         return null;
     }
     
+	@Override
+	public void CheckBack() { // check every 5000 seconds
+		if(orderqueue != null){
+			timer.schedule(new TimerTask() {
+				public void run() {
+					synchronized(orderqueue){
+						if(!orderqueue.isEmpty()){
+							RestaurantChoiOrder o = orderqueue.poll();
+							orders.add(o);
+							DoGoToRefrig();
+							AnalyzeCookOrder(o);
+						}
+					}
+					//CheckBack();
+					checkback = false;
+					stateChanged();
+				}
+			}, 5000);
+		}
+	}
+    
     @Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCookRole " + this.getPerson().getName(), msg);
     }
     
-	//Classes
+	// Classes
+    
     /*     // TODO THIS IS FOR MARKET INTEGRATION
 	   private class MyMarketOrder{
 	    	MarketOrder order;
@@ -441,6 +452,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	        }
 	    }
 	    private enum MarketOrderState
-	    {Pending, Ordered};
-*/
+	    {Pending, Ordered}; */
+    
+    
 }

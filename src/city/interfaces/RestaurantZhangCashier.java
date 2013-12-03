@@ -1,11 +1,31 @@
 package city.interfaces;
 
+import java.util.List;
+
 import utilities.RestaurantZhangCheck;
+import utilities.RestaurantZhangMenu;
 
 public interface RestaurantZhangCashier extends RoleInterface {
-	// Sent from waiter to create check to be given to the customer by the waiter
-		public abstract void msgComputeBill(RestaurantZhangWaiter waiter, RestaurantZhangCustomer customer, String choice);
-		// Sent from customer to play for check
-		public abstract void msgHereIsPayment(RestaurantZhangCheck c, int cash);
-		public abstract MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
+	
+	// Data
+	
+	public static final int CASHIERX = 0;
+	public static final int CASHIERY = 200;
+	public static final int RESTAURANTZHANGCASHIERSALARY = 100;
+	
+	// Messages
+	
+	public void msgComputeBill(RestaurantZhangWaiter w, RestaurantZhangCustomer c, String choice);
+	public void msgHereIsPayment(RestaurantZhangCheck c, int cash);
+	
+	// Getters
+	
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
+	public List<RestaurantZhangCheck> getPendingChecks();
+	
+	// Setters
+	
+	public void setMenu(RestaurantZhangMenu m);
+	public void setHost(RestaurantZhangHost h);
+	
 }

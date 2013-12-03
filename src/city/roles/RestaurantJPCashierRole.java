@@ -84,6 +84,11 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		stateChanged();
 	}
 
+	/**
+	 * Sent by the cashier prompting the customer's money after the customer has approached the cashier.
+	 * 
+	 * @param total The cost according to the cashier
+	 */
 	public void msgPayment(RestaurantJPCustomer c, int cash){
 		// log.add(new LoggedEvent("Payment received"));
 		// RestaurantJPCustomer temp = c;

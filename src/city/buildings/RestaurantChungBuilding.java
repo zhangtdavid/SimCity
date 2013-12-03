@@ -10,12 +10,14 @@ import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.gui.CityViewBuilding;
 import city.gui.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
+import city.roles.BankCustomerRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungCustomerRole;
@@ -38,12 +40,14 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 	private static final int WORKER_SALARY = 500;
 	
 	// Constructor
-	public RestaurantChungBuilding(String name, RestaurantChungPanel panel) {
+	public RestaurantChungBuilding(String name, RestaurantChungPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
 		orderStand = new RestaurantChungRevolvingStand();
+		this.setCityViewBuilding(cityBuilding);
+		bankCustomer = new BankCustomerRole(this);
 		
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
@@ -51,7 +55,7 @@ public class RestaurantChungBuilding extends RestaurantBaseBuilding {
 		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
 		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
         
-        setCash(500);
+        setCash(999);
 	}
 	
 	// Getters

@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
+import city.buildings.MarketBuilding;
 
 public interface MarketCustomer extends RoleInterface {
 
@@ -12,12 +13,12 @@ public interface MarketCustomer extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgWhatWouldYouLike(MarketEmployee e, int loc);
-	public abstract void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id);
-	public abstract void msgPaymentReceived();
-	public abstract void msgAnimationFinishedLeaveMarket();
-	public abstract void msgAnimationAtCounter();
-	public abstract void msgAnimationAtCashier();
+	public void msgWhatWouldYouLike(MarketEmployee e, int loc);
+	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id);
+	public void msgPaymentReceived();
+	public void msgAnimationFinishedLeaveMarket();
+	public void msgAnimationAtCounter();
+	public void msgAnimationAtCashier();
 
 	// Scheduler
 	
@@ -25,9 +26,15 @@ public interface MarketCustomer extends RoleInterface {
 	
 	// Getters
 	
+	public MarketBuilding getMarket();
+	
 	// Setters
 	
+	public void setMarket(MarketBuilding market);
+	
 	// Utilities
+	
+	public int checkBill();
 	
 	// Classes
 	

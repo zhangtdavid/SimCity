@@ -6,10 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
+import city.Application;
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantBaseBuilding;
 import city.buildings.RestaurantChungBuilding;
+import city.gui.CityViewRestaurant;
 import city.gui.MarketPanel;
 import city.gui.RestaurantChungPanel;
 import city.roles.MarketCustomerDeliveryRole;
@@ -59,11 +63,13 @@ public class MarketCustomerDeliveryTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
 		market = new MarketBuilding("Market1", marketPanel);
 
 		restaurantChungPanel = new RestaurantChungPanel(Color.red, new Dimension(500, 500));
-		restaurant = new RestaurantChungBuilding("RestuarantChung", restaurantChungPanel);
+		restaurant = new RestaurantChungBuilding("RestuarantChung", restaurantChungPanel, new CityViewRestaurant(0, 0));
 
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);

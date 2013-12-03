@@ -5,12 +5,16 @@ import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
+import city.Application;
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.gui.MarketPanel;
 import city.roles.MarketManagerRole;
-import city.roles.MarketManagerRole.MarketEmployeeState;
+import city.roles.MarketManagerRole.MyMarketEmployee.MarketEmployeeState;
 import city.tests.mock.MockMarketCashier;
 import city.tests.mock.MockMarketCustomer;
 import city.tests.mock.MockMarketCustomerDelivery;
@@ -18,7 +22,6 @@ import city.tests.mock.MockMarketCustomerDeliveryPayment;
 import city.tests.mock.MockMarketDeliveryPerson;
 import city.tests.mock.MockMarketEmployee;
 import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
 
 public class MarketManagerTest extends TestCase {
 	MarketPanel marketPanel;
@@ -53,6 +56,8 @@ public class MarketManagerTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
 		market = new MarketBuilding("Market1", marketPanel);
 		

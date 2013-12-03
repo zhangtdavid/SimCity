@@ -1,60 +1,63 @@
 package city.interfaces;
 
-
 import java.util.HashMap;
+import java.util.List;
 
 import utilities.RestaurantChoiOrder;
+import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.buildings.MarketBuilding;
-public interface RestaurantChoiCook extends RoleInterface{
-	//Constructor
-	
-	//Messages
-	public abstract void msgRelease();
-	public abstract void msgHeresAnOrder(RestaurantChoiOrder or);
-	public abstract void msgFoodsDone(RestaurantChoiOrder o);
-	//public abstract void msgOutOfThisFood(Market m, int choice); // ? need market to be settled first TODO fix market here
-	//public abstract void msgFoodReceived(int choice, int amount, Market m);
-	//msgs from gui
-	public abstract void msgAtRefrigerator();
-	public abstract void msgAtGrills();
-	public abstract void msgAtPlatingArea();
-	
-	//Scheduler
-	
-	//Actions
-	public abstract void CheckBack();
-	public abstract void MoveFoodToPlating(RestaurantChoiOrder o);
-	public abstract boolean AnalyzeCookOrder(RestaurantChoiOrder o);
-	public abstract boolean CookOrder(RestaurantChoiOrder o);
-	public abstract void DoGoToRefrig();
-	public abstract void DoGoToGrills();
-	public abstract void DoGoToPlates();
-	
-	//Getters
-	public abstract String getName();
-	public abstract RestaurantChoiAnimatedCook getGui();
-	
-	//Setters
-	public abstract void setGui(RestaurantChoiAnimatedCook gui);
-	//public abstract void setRevolvingStand(RestaurantChoiRevolvingStand r);
-	//public abstract RestaurantChoiRevolvingStand getRevolvingStand();
-	public abstract void addMarket(MarketBuilding m);
-	public abstract void setInactive();
 
+public interface RestaurantChoiCook extends RoleInterface {
 	
-	//Utilities
-	public abstract void hackNoFood();
+	// Data
+
+	// Messages
+	
+	public void msgRelease();
+	public void msgHeresAnOrder(RestaurantChoiOrder or);
+	public void msgFoodsDone(RestaurantChoiOrder o);
+	// public void msgOutOfThisFood(Market m, int choice); TODO
+	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id);
+	public void msgAtRefrigerator();
+	public void msgAtGrills();
+	public void msgAtPlatingArea();
+	
+	// Scheduler
+	
+	// Actions
+	
+	// Getters
+	
+	public RestaurantChoiAnimatedCook getGui();
+	public RestaurantChoiRevolvingStand getRevolvingStand();
+	public List<RestaurantChoiOrder> getOrders();
+	
+	// Setters
+	
+	public void setGui(RestaurantChoiAnimatedCook gui);
+	// public void setRevolvingStand(RestaurantChoiRevolvingStand r);
+	// public RestaurantChoiRevolvingStand getRevolvingStand();
+	public void addMarket(MarketBuilding m);
+	public void setRevolvingStand(RestaurantChoiRevolvingStand in);
+
+	// Utilities
+	
+	public void hackNoFood();
+	public void CheckBack();
+	
+	// Classes
 	
 	class myMarket{
-		MarketBuilding market;
+		public MarketBuilding market;
 		public HashMap<String, Boolean> outOf;
 		
 		public myMarket(MarketBuilding m){
 			market = m;
 			outOf = new HashMap<String, Boolean>();
 		}
+		
 		public MarketBuilding getMarket(){
 			return market;
 		}
@@ -67,6 +70,7 @@ public interface RestaurantChoiCook extends RoleInterface{
 		public int capacity; // amount to order to
 		public int threshold;
 		public int amountOrdered; // amount ordered that's being processed
+		
 		public FoodData(FOOD_ITEMS i){ 
 			choiceID = i;
 			cookingTime = (int)Math.ceil(Math.random()*6)*1000;

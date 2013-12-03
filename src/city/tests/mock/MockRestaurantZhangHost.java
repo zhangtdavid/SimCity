@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.util.Collection;
+
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangTable;
 import city.MockRole;
@@ -15,18 +17,18 @@ public class MockRestaurantZhangHost extends MockRole implements RestaurantZhang
 
 	@Override
 	public void msgImEntering(RestaurantZhangCustomer cust) {
-		log.add(new LoggedEvent(cust.getName() + " entered restaurant"));
+		log.add(new LoggedEvent(cust.getPerson().getName() + " entered restaurant"));
 		
 	}
 
 	@Override
 	public void msgIWantFood(RestaurantZhangCustomer cust) {
-		log.add(new LoggedEvent("Customer " + cust.getName() + " wants food"));
+		log.add(new LoggedEvent("Customer " + cust.getPerson().getName() + " wants food"));
 	}
 
 	@Override
 	public void msgImLeaving(RestaurantZhangCustomer cust) {
-		log.add(new LoggedEvent("Customer " + cust.getName() + " is leaving"));
+		log.add(new LoggedEvent("Customer " + cust.getPerson().getName() + " is leaving"));
 	}
 
 	@Override
@@ -36,16 +38,28 @@ public class MockRestaurantZhangHost extends MockRole implements RestaurantZhang
 
 	@Override
 	public void msgWaiterRequestBreak(RestaurantZhangWaiter w) {
-		log.add(new LoggedEvent("Waiter " + w.getName() + " requested break"));
+		log.add(new LoggedEvent("Waiter " + w.getPerson().getName() + " requested break"));
 	}
 
 	@Override
 	public void msgOffBreak(RestaurantZhangWaiter w) {
-		log.add(new LoggedEvent("Waiter " + w.getName() + " is off break"));
+		log.add(new LoggedEvent("Waiter " + w.getPerson().getName() + " is off break"));
 	}
 
 	@Override
 	public void addWaiter(RestaurantZhangWaiter wa) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getNumberOfCustomersInRestaurant() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setTables(Collection<RestaurantZhangTable> t) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -3,6 +3,7 @@ package city.interfaces;
 import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
+import city.buildings.MarketBuilding;
 
 public interface MarketCashier extends RoleInterface {
 
@@ -12,13 +13,13 @@ public interface MarketCashier extends RoleInterface {
 	
 	// Messages
 	
-	public abstract void msgNewDeliveryPerson(MarketDeliveryPerson d);
-	public abstract void msgRemoveDeliveryPerson(MarketDeliveryPerson d);
-	public abstract void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
-	public abstract void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
-	public abstract void msgHereIsPayment(int id, int money);
-	public abstract void msgDeliveringItems(MarketDeliveryPerson d);
-	public abstract void msgFinishedDeliveringItems(MarketDeliveryPerson d, int orderId);
+	public void msgNewDeliveryPerson(MarketDeliveryPerson d);
+	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d);
+	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
+	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
+	public void msgHereIsPayment(int id, int money);
+	public void msgDeliveringItems(MarketDeliveryPerson d);
+	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int orderId);
 	
 	// Scheduler
 	
@@ -26,7 +27,11 @@ public interface MarketCashier extends RoleInterface {
 	
 	// Getters
 	
+	public MarketBuilding getMarket();
+	
 	// Setters
+	
+	public void setMarket(MarketBuilding market);
 	
 	// Utilities
 	

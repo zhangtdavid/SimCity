@@ -2,6 +2,8 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.Application;
+import city.Application.BANK_SERVICE;
+import city.Application.TRANSACTION_TYPE;
 import city.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
@@ -61,6 +63,12 @@ public class MockBankTeller extends MockRole implements BankTeller {
 	@Override
 	public void msgDeposit(int money, int acctNum) {
 		log.add(new LoggedEvent("Received msgDeposit " + money + " " + acctNum));
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setActive(BANK_SERVICE s, int money, TRANSACTION_TYPE t) {
 		// TODO Auto-generated method stub
 		
 	}

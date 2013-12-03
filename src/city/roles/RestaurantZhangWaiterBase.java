@@ -1,5 +1,10 @@
-package city.interfaces;
-import java.util.*;
+package city.roles;
+
+import java.util.ArrayList;
+import java.util.ConcurrentModificationException;
+import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import utilities.RestaurantZhangCheck;
@@ -9,39 +14,34 @@ import utilities.RestaurantZhangTable;
 import city.Building;
 import city.Role;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
-import city.roles.RestaurantZhangHostRole;
+import city.interfaces.RestaurantZhangCashier;
+import city.interfaces.RestaurantZhangCook;
+import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
+import city.interfaces.RestaurantZhangWaiter;
 
 public abstract class RestaurantZhangWaiterBase extends Role implements RestaurantZhangWaiter {
-	// Customers
 	
+	// Data
+	
+	private Timer timer = new Timer();
+	private Semaphore atTable = new Semaphore(0, false);
+	private boolean restaurantClosing = false;
+	
+	// TODO Change these to private and add getters/setters
 	public List<MyCustomer> myCustomerList = new ArrayList<MyCustomer>();
 	public int numberCustomersServed = 0; // Host uses this to decide which waiter to choose
-	// Other employees
 	public RestaurantZhangCook myCook;
 	public RestaurantZhangHost myHost;
 	public RestaurantZhangCashier myCashier;
-	//Menu
 	public RestaurantZhangMenu waiterMenu;
-	// Revolving stand
 	public RestaurantZhangRevolvingStand myOrderStand;
-	// GUI
 	public RestaurantZhangAnimatedWaiter thisGui;
-	
 	public List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
-	
-	protected String name;
-	
 	public enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
 	public breakStatus wBreakStatus = breakStatus.notOnBreak;
 	
-	Timer timer = new Timer(); // Timer for waiting actions
-	Semaphore atTable = new Semaphore(0, false);
-	private boolean restaurantClosing = false;
-	
-	static final int BREAKX = 600;
-	static final int BREAKY = 600;
-	static final int BREAKTIME = 10000;
-	private static final int RESTAURANTZHANGCASHIERSALARY = 100;
+	// Constructor
 	
 	public RestaurantZhangWaiterBase(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -50,32 +50,31 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
 	}
 
-	public String getName() {
-		return super.getPerson().getName();
-	}
-
 	// Messages
 
+	@Override
 	public void msgSeatCustomer(RestaurantZhangTable t, RestaurantZhangCustomer c) {
 		numberCustomersServed++;
 		myCustomerList.add(new MyCustomer(c, t));
 		stateChanged();
 	}
 	
+	@Override
 	public void msgReadyToOrder(RestaurantZhangCustomer c) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.customer.equals(c)) {
-				mc.state = mcState.readyToOrder;
+				mc.state = MyCustomer.STATE.readyToOrder;
 				break;
 			}
 		}
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsMyChoice(RestaurantZhangCustomer c, String choice) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.customer.equals(c)) {
-				mc.state = mcState.ordered;
+				mc.state = MyCustomer.STATE.ordered;
 				mc.choice = choice;
 				break;
 			}
@@ -83,20 +82,22 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOutOfFood(RestaurantZhangTable t) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.table.equals(t)) {
-				mc.state = mcState.reOrder;
+				mc.state = MyCustomer.STATE.reOrder;
 				break;
 			}
 		}
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOrderIsReady(String choice, RestaurantZhangTable t) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.table.equals(t)) {
-				mc.state = mcState.orderReady;
+				mc.state = MyCustomer.STATE.orderReady;
 				mc.choice = choice;
 				break;
 			}
@@ -104,31 +105,35 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereWasMyOrder(RestaurantZhangCustomer c, String choice) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.customer.equals(c)) {
-				mc.state = mcState.doneEating;
+				mc.state = MyCustomer.STATE.doneEating;
 				break;
 			}
 		}
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsWaiterCheck(RestaurantZhangCheck c) {
 		checkList.add(c);
 		stateChanged();
 	}
 	
+	@Override
 	public void msgLeavingTable(RestaurantZhangCustomer c) {
 		for(MyCustomer mc : myCustomerList) {
 			if(mc.customer.equals(c)) {
-				mc.state = mcState.leaving;
+				mc.state = MyCustomer.STATE.leaving;
 				break;
 			}
 		}
 		stateChanged();
 	}
 	
+	@Override
 	public void msgGoOnBreak(boolean canGoOnBreak) {
 		if(canGoOnBreak) {
 			wBreakStatus = breakStatus.goingOnBreak;
@@ -138,54 +143,57 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 
+	@Override
 	public void msgAtDestination() { //from animation
 		atTable.release();
 		stateChanged();
 	}
 
+	// Scheduler
+	
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
 	public boolean runScheduler() {
 		try {
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.waiting) {
+				if(mc.state == MyCustomer.STATE.waiting) {
 					seatCustomer(mc);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.ordering) {
+				if(mc.state == MyCustomer.STATE.ordering) {
 					waitForOrder(mc);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.ordered) {
+				if(mc.state == MyCustomer.STATE.ordered) {
 					sendOrderToCook(mc, mc.choice, mc.table);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.readyToOrder) {
+				if(mc.state == MyCustomer.STATE.readyToOrder) {
 					takeOrderFromCustomer(mc);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.reOrder) {
+				if(mc.state == MyCustomer.STATE.reOrder) {
 					tellCustomerDecideAgain(mc);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.orderReady) {
+				if(mc.state == MyCustomer.STATE.orderReady) {
 					serveCustomer(mc);
 					return true;
 				}
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.doneEating) {
+				if(mc.state == MyCustomer.STATE.doneEating) {
 					GetCheckForCustomer(mc);
 					return true;
 				}
@@ -195,7 +203,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 				return true;
 			}
 			for(MyCustomer mc : myCustomerList) {
-				if(mc.state == mcState.leaving) {
+				if(mc.state == MyCustomer.STATE.leaving) {
 					notifyHostCustomerLeaving(mc);
 					return true;
 				}
@@ -214,69 +222,70 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	}
 
 	// Actions
-	void seatCustomer(MyCustomer mc) {
+	
+	private void seatCustomer(MyCustomer mc) {
 		print("Going to entrance");
 		DoGoToEntrance(mc.customer);
 		WaitForAnimation();
 		mc.customer.msgFollowMe(this, waiterMenu, mc.table);
 		print("Seating " + mc.customer + " at " + mc.table);
 		DoGoToTable(mc.table);
-		mc.state = mcState.deciding;
+		mc.state = MyCustomer.STATE.deciding;
 		WaitForAnimation();
 		stateChanged();
 	}
 	
-	void takeOrderFromCustomer(MyCustomer mc) {
-		print("Going to customer " + mc.customer.getName() + " to take order");
+	private void takeOrderFromCustomer(MyCustomer mc) {
+		print("Going to customer " + mc.customer.getPerson().getName() + " to take order");
 		DoGoToTable(mc.table);
 		WaitForAnimation();
-		mc.state = mcState.ordering;
+		mc.state = MyCustomer.STATE.ordering;
 		mc.customer.msgWhatWouldYouLike();
 	}
 	
-	void waitForOrder(MyCustomer mc) {
-		print("Waiting for customer " + mc.customer.getName() + " to take order");
+	private void waitForOrder(MyCustomer mc) {
+		print("Waiting for customer " + mc.customer.getPerson().getName() + " to take order");
 		stateChanged();
 	}
 	
-	public abstract void sendOrderToCook(MyCustomer mc, String choice, RestaurantZhangTable t);
+	protected abstract void sendOrderToCook(MyCustomer mc, String choice, RestaurantZhangTable t);
 	
-	void tellCustomerDecideAgain(MyCustomer mc) {
+	private void tellCustomerDecideAgain(MyCustomer mc) {
 		print("Telling customer to reorder");
 		DoGoToTable(mc.table);
 		WaitForAnimation();
-		mc.state = mcState.deciding;
+		mc.state = MyCustomer.STATE.deciding;
 		mc.customer.msgOrderAgain();
 	}
 	
-	void serveCustomer(MyCustomer mc) {
-		print("Going to cook to get food for customer " + mc.customer.getName());
+	private void serveCustomer(MyCustomer mc) {
+		print("Going to cook to get food for customer " + mc.customer.getPerson().getName());
 		DoGoToCook();
 		WaitForAnimation();
 		myCook.msgGotCompletedOrder(mc.table);
-		print("Going to customer "+ mc.customer.getName() + " to serve");
+		print("Going to customer "+ mc.customer.getPerson().getName() + " to serve");
 		thisGui.setFoodLabel(mc.choice, true);
 		DoGoToTable(mc.table);
 		WaitForAnimation();
 		mc.customer.msgHereIsYourFood(mc.choice);
 		thisGui.setFoodLabel("", true);
-		mc.state = mcState.eating;
+		mc.state = MyCustomer.STATE.eating;
 	}
 	
-	void GetCheckForCustomer(MyCustomer mc) {
-		print("Getting check for customer " + mc.customer.getName());
+	private void GetCheckForCustomer(MyCustomer mc) {
+		print("Getting check for customer " + mc.customer.getPerson().getName());
 		myCashier.msgComputeBill(this, mc.customer, mc.choice);
-		mc.state = mcState.waitingForCheck;
+		mc.state = MyCustomer.STATE.waitingForCheck;
 	}
 	
-	void giveCheckToCust(RestaurantZhangCheck c) {
-		print("Giving check to customer " + ((RestaurantZhangCustomer) c.cust).getName());
+	private void giveCheckToCust(RestaurantZhangCheck c) {
+		print("Giving check to customer " + ((RestaurantZhangCustomer) c.cust).getPerson().getName());
 		checkList.remove(c);
 		c.cust.msgHereIsCustCheck(c);
 	}
 	
-	void notifyHostCustomerLeaving(MyCustomer mc) {
-		print("Notifying host that customer " + mc.customer.getName() + " has left");
+	private void notifyHostCustomerLeaving(MyCustomer mc) {
+		print("Notifying host that customer " + mc.customer.getPerson().getName() + " has left");
 		myCustomerList.remove(mc);
 		myHost.msgTableOpen(mc.table);
 		if(restaurantClosing) {
@@ -287,13 +296,13 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		}
 	}
 	
-	void DoingNothing() {
+	private void DoingNothing() {
 		if(DoReturnToBase()) {
 			WaitForAnimation();
 		}
 	}
 	
-	void GoOnBreak() {
+	private void GoOnBreak() {
 		print("Going on break");
 		wBreakStatus = breakStatus.onBreak;
 		thisGui.GoToDestination(BREAKX, BREAKY);
@@ -310,54 +319,34 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	}
 	
 	// The animation DoXYZ() routines
-	void DoGoToEntrance(RestaurantZhangCustomer c) {
+	private void DoGoToEntrance(RestaurantZhangCustomer c) {
 		thisGui.GoToCustomer(c.getPos());
 	}
 	
-	void DoGoToTable(RestaurantZhangTable table) {
+	private void DoGoToTable(RestaurantZhangTable table) {
 		thisGui.GoToTable(table);
 	}
 	
-	public void DoGoToCook() {
-		thisGui.GoToDestination(myCook.getX(), myCook.getY());
+	protected void DoGoToCook() {
+		thisGui.GoToDestination(RestaurantZhangCook.COOKX, RestaurantZhangCook.COOKY);
 	}
 	
-	boolean DoReturnToBase() {
+	private boolean DoReturnToBase() {
 		return thisGui.ReturnToBase();
 	}
 
-	public void WaitForAnimation() {
+	protected void WaitForAnimation() {
 		try {
 			atTable.acquire();
 		} catch (InterruptedException e) {
 			e.printStackTrace();
 		}
 	}
-
-	//utilities
-
-	public void setAnimation(RestaurantZhangAnimatedWaiter gui) {
-		thisGui = gui;
-	}
-
+	
+	// Getters
+	
 	public RestaurantZhangAnimatedWaiter getAnimation() {
 		return thisGui;
-	}
-	
-	public void setCook(RestaurantZhangCook c) {
-		myCook = c;
-	}
-	
-	public void setHost(RestaurantZhangHost h) {
-		myHost = h;
-	}
-	
-	public void setCashier(RestaurantZhangCashier c) {
-		myCashier = c;
-	}
-	
-	public void setMenu(RestaurantZhangMenu m) {
-		waiterMenu = m;
 	}
 	
 	public int getNumberCustomers() {
@@ -376,13 +365,42 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		}
 	}
 	
+	// Setters
+
+	@Override
+	public void setAnimation(RestaurantZhangAnimatedWaiter gui) {
+		thisGui = gui;
+	}
+	
+	@Override
+	public void setCook(RestaurantZhangCook c) {
+		myCook = c;
+	}
+	
+	@Override
+	public void setHost(RestaurantZhangHost h) {
+		myHost = h;
+	}
+	
+	@Override
+	public void setCashier(RestaurantZhangCashier c) {
+		myCashier = c;
+	}
+	
+	@Override
+	public void setMenu(RestaurantZhangMenu m) {
+		waiterMenu = m;
+	}
+	
+	@Override
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
 	}
 	
+	@Override
 	public void setInactive() {
 		if(myHost != null) {
-			if(((RestaurantZhangHostRole)myHost).numberOfCustomersInRestaurant !=0) {
+			if(((RestaurantZhangHostRole)myHost).getNumberOfCustomersInRestaurant() !=0) {
 				restaurantClosing = true;
 				return;
 			}
@@ -390,18 +408,21 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		super.setInactive();
 	}
 
-	public enum mcState {waiting, seating, deciding, readyToOrder, ordering, ordered, 
-			reOrder, orderCooking, orderReady, eating, doneEating, waitingForCheck, leaving};
-	public class MyCustomer {
+	// Utilities
+	
+	// Classes
+	
+	public static class MyCustomer {
+		public enum STATE {waiting, seating, deciding, readyToOrder, ordering, ordered, reOrder, orderCooking, orderReady, eating, doneEating, waitingForCheck, leaving};
 		public RestaurantZhangCustomer customer;
 		public RestaurantZhangTable table;
 		public String choice = null;
-		public mcState state;
+		public STATE state;
 		
 		MyCustomer(RestaurantZhangCustomer c, RestaurantZhangTable t) {
 			customer = c;
 			table = t;
-			state = mcState.waiting;
+			state = STATE.waiting;
 		}
 	}
 }

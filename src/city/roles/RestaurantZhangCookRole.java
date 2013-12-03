@@ -31,39 +31,28 @@ import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
-/**
- * Restaurant Cook Agent
- */
-
 public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook {
-	private static final int RESTAURANTZHANGCOOKSALARY = 100;
-	private final int COOKX = 190;
-	private final int COOKY = 120;
 
-	public List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
-
-	// REVOLVING STAND STUFF
-	public RestaurantZhangRevolvingStand myOrderStand;
-	public boolean waitingToCheckStand = false;
-
-	public String name;
-
-	public RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
-	public Map<String, Food> cookInventory = new HashMap<String, Food>();
-
-	public List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
-	public List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
-	public RestaurantZhangCashier cashier;
-	public List<MarketCustomerDelivery> marketCustomerDeliveryList = new ArrayList<MarketCustomerDelivery>();
-
-	public RestaurantZhangAnimatedCook thisGui;
-
-	public RestaurantZhangHost host;
-
-	Timer timer = new Timer();
-
+	// Data
+	
+	private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
+	private RestaurantZhangCashier cashier;
+	private List<MarketCustomerDelivery> marketCustomerDeliveryList = new ArrayList<MarketCustomerDelivery>();
+	private RestaurantZhangAnimatedCook thisGui;
+	private RestaurantZhangHost host;
+	private Timer timer = new Timer();
 	private Semaphore atBase = new Semaphore(0, false);
 	private boolean restaurantClosing = false;
+	
+	// TODO Change these to private and add getters/setters
+	public List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
+	public RestaurantZhangRevolvingStand myOrderStand;
+	public boolean waitingToCheckStand = false;
+	public RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
+	public Map<String, Food> cookInventory = new HashMap<String, Food>();
+	public List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
+	
+	// Constructor
 
 	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
@@ -71,16 +60,16 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCOOKSALARY);
 	}
+	
+	// Messages
 
-	public String getName() {
-		return super.getPerson().getName();
-	}
-
+	@Override
 	public void msgHereIsAnOrder(RestaurantZhangWaiter w, String choice, RestaurantZhangTable t) {
 		ordersToCook.add(new RestaurantZhangOrder(w, choice, t, ordersToCook.size()));
 		stateChanged();
 	}
 
+	@Override
 	public void msgGotCompletedOrder(RestaurantZhangTable t) {
 		synchronized(ordersToCook) {
 			for(RestaurantZhangOrder o : ordersToCook) {
@@ -93,6 +82,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 	}
 
+	@Override
 	public void msgProcessedInvoice(String food, boolean isAvailable, int processedAmount) {
 		//		CookInvoice currentInvoice = null; // Find the cookInvoice associated with the food
 		//		for(CookInvoice ci : cookInvoiceList) {
@@ -117,6 +107,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		//		}
 	}
 
+	@Override
 	public void msgHereIsInvoice(String food, int amount) {
 		//		CookInvoice currentInvoice = null; // Find the cookInvoice associated with the food
 		//		for(CookInvoice ci : cookInvoiceList) {
@@ -129,18 +120,22 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		//		stateChanged();
 	}
 
+	@Override
 	public void msgAtDestination() { //from animation
 		atBase.release();
 		stateChanged();
 	}
+	
+	// Scheduler
 
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
+	@Override
 	public boolean runScheduler() {
 		try {
 			if(restaurantClosing) {
-				if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant <= 0) {
+				if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() <= 0) {
 					super.setInactive();
 					restaurantClosing = false;
 					return true;
@@ -219,7 +214,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 
 	// Actions
 
-	void cookOrder(RestaurantZhangOrder o) {
+	private void cookOrder(RestaurantZhangOrder o) {
 		o.status = RestaurantZhangOrder.OrderStatus.cooking;
 		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
@@ -262,7 +257,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		(long) cookInventory.get(tempOrder.choice).cookingTime);
 	}
 
-	public void orderIsReady(RestaurantZhangOrder o) {
+	private void orderIsReady(RestaurantZhangOrder o) {
 		print("Finished order: " + o.choice);
 		for(RestaurantZhangOrder order : ordersToCook) {
 			if(order.equals(o)) {
@@ -273,7 +268,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 	}
 
-	void plateFood(RestaurantZhangOrder o) {
+	private void plateFood(RestaurantZhangOrder o) {
 		thisGui.goToGrill(o.pos);
 		waitForAnimation();
 		thisGui.removeFromGrill(o.pos);
@@ -282,23 +277,23 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		thisGui.addToPlatingArea(o.choice, o.pos);
 		thisGui.goToBase();
 		waitForAnimation();
-		print("Plated order " + o.choice + " for waiter " + o.w.getName());
+		print("Plated order " + o.choice + " for waiter " + o.w.getPerson().getName());
 		o.status = RestaurantZhangOrder.OrderStatus.plated;
 		o.w.msgOrderIsReady(o.choice, o.t);
 	}
 
-	void removeFromPlating(RestaurantZhangOrder o) {
+	private void removeFromPlating(RestaurantZhangOrder o) {
 		thisGui.removeFromPlatingArea(o.pos);
 		ordersToCook.remove(o);
 	}
 
-	//	void notifyMarket(CookInvoice ci) {
+	//	private void notifyMarket(CookInvoice ci) {
 	//		print("Asking market " + ci.assignedMarket.getName() + " for " + ci.amount + " " + ci.food);
 	//		ci.status = CookInvoiceStatus.processing;
 	//		ci.assignedMarket.msgNeedFood(ci.amount, ci.food);
 	//	}
 
-	//	void changeMarket(CookInvoice ci) {
+	//	private void changeMarket(CookInvoice ci) {
 	//		Do("Asking another market for " + ci.amount + " " + ci.food);
 	//		if(marketList.indexOf(ci.assignedMarket) >= marketList.size() - 1) { // Last market, no more food
 	//			Do("All markets out of " + ci.food);
@@ -310,7 +305,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	//		}
 	//	}
 
-	//	void restockInventory(CookInvoice ci) {
+	//	private void restockInventory(CookInvoice ci) {
 	//		Food foodToRestock = cookInventory.get(ci.food);
 	//		foodToRestock.amount += ci.amount;
 	//		Do("Added " + ci.amount + " " + ci.food + " to inventory.");
@@ -325,17 +320,22 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			e.printStackTrace();
 		}
 	}
-
-	//utilities
-
-	public int getX() {
-		return COOKX;
+	
+	// Getters
+	
+	@Override
+	public int getPosOfNewOrder() {
+		return ordersToCook.size();
+	}
+	
+	@Override
+	public RestaurantZhangAnimatedCook getGui() {
+		return thisGui;
 	}
 
-	public int getY() {
-		return COOKY;
-	}
+	// Setters
 
+	@Override
 	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food) {
 		mainMenu = m;
 		Iterator<Map.Entry<FOOD_ITEMS, Food>> foodIt = food.entrySet().iterator();
@@ -345,38 +345,36 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		}
 	}
 
+	@Override
 	public void setAnimation(RestaurantZhangAnimatedCook gui) {
 		thisGui = gui;
 	}
 
-	public RestaurantZhangAnimatedCook getGui() {
-		return thisGui;
-	}
-
+	@Override
 	public void addMarket(MarketBuilding m) {
 		markets.add(m);
 	}
 
-	public int getPosOfNewOrder() {
-		return ordersToCook.size();
-	}
-
+	@Override
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		myOrderStand = rs;
 	}
 
+	@Override
 	public void setActive() {
 		super.setActive();
 		runScheduler();
 	}
 	
+	@Override
 	public void setHost(RestaurantZhangHost h) {
 		host = h;
 	}
 	
+	@Override
 	public void setInactive() {
 		if(host != null) {
-			if(((RestaurantZhangHostRole)host).numberOfCustomersInRestaurant !=0) {
+			if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() !=0) {
 				restaurantClosing = true;
 				return;
 			}
@@ -384,11 +382,20 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		super.setInactive();
 	}
 	
+	// Utilities
 	
+	@Override
 	public void print(String msg) {
 		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
 		super.print(msg);
     }
+	
+	@Override
+	public void hackOrderIsReady(RestaurantZhangOrder o) {
+		orderIsReady(o);
+	}
+	
+	// Classes
 
 	private static class CookInvoice {
 		// MarketBuilding assignedMarket;
@@ -418,5 +425,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			// status = CookInvoiceStatus.created;
 		}
 	}
+	
 }
 

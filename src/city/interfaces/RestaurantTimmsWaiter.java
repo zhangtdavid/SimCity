@@ -28,8 +28,4 @@ public interface RestaurantTimmsWaiter extends RoleInterface {
 	public Boolean getWantsBreak();
 	public List<InternalCustomer> getCustomers();
 	
-	// Setters
-	
-	public void setActive();
-	
 }

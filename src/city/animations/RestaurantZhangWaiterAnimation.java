@@ -56,7 +56,7 @@ public class RestaurantZhangWaiterAnimation extends Animation implements Restaur
     public void draw(Graphics2D g) {
     	g.setColor(Color.PINK);
     	g.fillRect(BASEX, BASEY, MOVEMENTINTERVAL, MOVEMENTINTERVAL);
-    	g.drawString(waiter.getName(), BASEX, BASEY);
+    	g.drawString(waiter.getPerson().getName(), BASEX, BASEY);
         g.setColor(Color.MAGENTA);
         g.fillRect(xPos, yPos, MOVEMENTINTERVAL, MOVEMENTINTERVAL);
         if(foodString != null)

@@ -10,19 +10,25 @@ import city.interfaces.BankTeller;
 
 public class BankTellerRole extends Role implements BankTeller {
 	
-// Data
-	//TellerGui gui;
-	BankBuilding building;
-	int boothNumber;
+	// Data
+	
+	// private TellerGui gui;
+	private BankBuilding building;
+	private int boothNumber;
 	private boolean wantsInactive = false;
+	
+	// TODO Change these to private and add getters/setters
 	public MyCustomer currentCustomer;
-// Constructor
+	
+	// Constructor
+	
 	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
+
 	public void setActive(){
 		print("Teller has been set active");
 		super.setActive();
@@ -40,103 +46,120 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 // Messages
 	//From BankManager
+	
+	// Messages
+	
+	@Override
 	public void msgAddressCustomer(BankCustomer bc){
 		print("Address Customer msg received");
 		currentCustomer = new MyCustomer(bc);
-		currentCustomer.s = serviceState.needsService;
+		currentCustomer.s = SERVICE_STATE.needsService;
 		stateChanged();
 	}
+	
+	@Override
 	public void msgHereIsAccount(int acctNum){
 		print("Here is Account msg received");
-		if(currentCustomer.t == serviceType.deposit){
+		if(currentCustomer.t == SERVICE_TYPE.deposit){
 			currentCustomer.acctNum = acctNum;
-			currentCustomer.s = serviceState.newAccount;
+			currentCustomer.s = SERVICE_STATE.newAccount;
 			stateChanged();
 		}
 	}
+	
+	@Override
 	public void msgWithdrawalFailed(){
 		print("Withdrawal failed msg received");
-		if(currentCustomer.t == serviceType.withdrawal){
-			currentCustomer.s = serviceState.failed;
+		if(currentCustomer.t == SERVICE_TYPE.withdrawal){
+			currentCustomer.s = SERVICE_STATE.failed;
 			stateChanged();
 		}
 	}
+	
+	@Override
 	public void msgTransactionSuccessful(){
 		print("Transaction successful msg received");
-		if(currentCustomer.t == serviceType.deposit)
-			currentCustomer.s = serviceState.confirmed;
-		else if(currentCustomer.t == serviceType.withdrawal)
-			currentCustomer.s = serviceState.confirmed;
+		if(currentCustomer.t == SERVICE_TYPE.deposit)
+			currentCustomer.s = SERVICE_STATE.confirmed;
+		else if(currentCustomer.t == SERVICE_TYPE.withdrawal)
+			currentCustomer.s = SERVICE_STATE.confirmed;
 		stateChanged();
 	}
-	//From BankCustomer
+	
+	@Override
 	public void msgWithdraw(int acctNum, int money, int salary){
 		print("Withdraw message received from Customer");
-		currentCustomer.s = serviceState.pending;
-		currentCustomer.t = serviceType.withdrawal;
+		currentCustomer.s = SERVICE_STATE.pending;
+		currentCustomer.t = SERVICE_TYPE.withdrawal;
 		currentCustomer.acctNum = acctNum;
 		currentCustomer.amount = money;
 		currentCustomer.salary = salary;
 		stateChanged();
 	}
+	
+	@Override
 	public void msgDeposit(int money, int acctNum){
 		print("Deposit message received");
-		currentCustomer.s = serviceState.pending;
-		currentCustomer.t = serviceType.deposit;
+		currentCustomer.s = SERVICE_STATE.pending;
+		currentCustomer.t = SERVICE_TYPE.deposit;
 		currentCustomer.amount = money;
 		currentCustomer.acctNum = acctNum;
 		stateChanged();
 	}
+	
+	@Override
 	public void msgDoneAndLeaving() {
 		print("Done and Leaving message received");
-		currentCustomer.s = serviceState.done;
+		currentCustomer.s = SERVICE_STATE.done;
 		stateChanged();
 	}
-// Scheduler
+	
+	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		// TODO Auto-generated method stub
 		if(wantsInactive && currentCustomer == null){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
 			return false;
 		}
 		if(currentCustomer != null){
-			if(currentCustomer.s == serviceState.needsService){
+			if(currentCustomer.s == SERVICE_STATE.needsService){
 				ServiceCustomer();
 				return true;
 			}
-			if(currentCustomer.t == serviceType.deposit){
-				if(currentCustomer.s == serviceState.pending){
+			if(currentCustomer.t == SERVICE_TYPE.deposit){
+				if(currentCustomer.s == SERVICE_STATE.pending){
 					TryDeposit();
 					return true;
 				}
-				if(currentCustomer.s == serviceState.newAccount){
+				if(currentCustomer.s == SERVICE_STATE.newAccount){
 					GiveAccountNumber();
 					return true;
 				}
-				if(currentCustomer.s == serviceState.confirmed){
+				if(currentCustomer.s == SERVICE_STATE.confirmed){
 					DepositSuccessful();
 					return true;
 				}
 			}
-			if(currentCustomer.t == serviceType.withdrawal){
-				if(currentCustomer.s == serviceState.pending){
+			if(currentCustomer.t == SERVICE_TYPE.withdrawal){
+				if(currentCustomer.s == SERVICE_STATE.pending){
 					TryWithdraw();
 					return true;
 				}
-				if(currentCustomer.s == serviceState.confirmed){
+				if(currentCustomer.s == SERVICE_STATE.confirmed){
 					TransferWithdrawal();
 					return true;
 				}
-				if(currentCustomer.s == serviceState.failed){
+				if(currentCustomer.s == SERVICE_STATE.failed){
 					CheckLoanEligible();
 					return true;
 				}
 			}
 
-			if(currentCustomer.s == serviceState.done){
+			if(currentCustomer.s == SERVICE_STATE.done){
 				GetNewCustomer();
 				return true;
 			}
@@ -144,33 +167,40 @@ public class BankTellerRole extends Role implements BankTeller {
 		return false;
 	}
 	
-// Actions
-	public void ServiceCustomer(){
+	// Actions
+	
+	private void ServiceCustomer(){
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
-		currentCustomer.s = serviceState.inProgress;
+		currentCustomer.s = SERVICE_STATE.inProgress;
 	}
-	public void TryDeposit(){
-		currentCustomer.s = serviceState.inProgress;
+	
+	private void TryDeposit(){
+		currentCustomer.s = SERVICE_STATE.inProgress;
 		building.getManager().msgTryDeposit(currentCustomer.amount, currentCustomer.acctNum, this);
 	}
-	public void GiveAccountNumber(){
+	
+	private void GiveAccountNumber(){
 		currentCustomer.bc.msgAccountCreated(currentCustomer.acctNum);
-		currentCustomer.s = serviceState.finished;
+		currentCustomer.s = SERVICE_STATE.finished;
 	}
-	public void TryWithdraw(){
+	
+	private void TryWithdraw(){
 		building.getManager().msgWithdraw(currentCustomer.acctNum, currentCustomer.amount, this);
-		currentCustomer.s = serviceState.inProgress;
+		currentCustomer.s = SERVICE_STATE.inProgress;
 	}
-	public void TransferWithdrawal(){
+	
+	private void TransferWithdrawal(){
 		currentCustomer.bc.msgHereIsWithdrawal(currentCustomer.amount);
-		currentCustomer.s = serviceState.finished;
+		currentCustomer.s = SERVICE_STATE.finished;
 	}
-	public void DepositSuccessful(){
+	
+	private void DepositSuccessful(){
 		currentCustomer.bc.msgDepositCompleted();
-		currentCustomer.s = serviceState.finished;
+		currentCustomer.s = SERVICE_STATE.finished;
 	}
-	public void CheckLoanEligible(){
-		currentCustomer.s = serviceState.inProgress;
+	
+	private void CheckLoanEligible(){
+		currentCustomer.s = SERVICE_STATE.inProgress;
 		if(currentCustomer.salary == 0){
 			currentCustomer.bc.msgTransactionDenied();
 			//Non- norm and will hang for now
@@ -178,19 +208,22 @@ public class BankTellerRole extends Role implements BankTeller {
 		else if(currentCustomer.salary*2 > currentCustomer.amount){
 			building.getManager().msgCreateLoan(currentCustomer.amount, currentCustomer.amount/4, currentCustomer.acctNum);
 			currentCustomer.bc.msgLoanGranted(currentCustomer.amount);
-			currentCustomer.s = serviceState.finished;
+			currentCustomer.s = SERVICE_STATE.finished;
 		}
 	}
 	
-	public void GetNewCustomer(){
+	private void GetNewCustomer(){
 		currentCustomer = null;
 		building.getManager().msgAvailable(this);
 	}
+	
 	// Getters
 	
 	// Setters
+
 	
 	// Utilities
+	
 	@Override
 	public void print(String msg) {
         super.print(msg);
@@ -198,13 +231,14 @@ public class BankTellerRole extends Role implements BankTeller {
     }
 	
 	// Classes
+	
 	public class MyCustomer{
 		public int acctNum;
 		BankCustomer bc;
 		int amount;
 		int salary;
-		serviceState s;
-		serviceType t;
+		SERVICE_STATE s;
+		SERVICE_TYPE t;
 		public MyCustomer(BankCustomer bc2){
 			bc = bc2;
 		}

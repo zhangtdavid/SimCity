@@ -10,7 +10,7 @@ public interface Resident extends RoleInterface {
 	// Data
 	
 	public static enum STATE {needToPayRent, none}; 
-	public static long RENT_DUE_INTERVAL = (Application.INTERVAL * 336); // 7 days
+	public static final long RENT_DUE_INTERVAL = (Application.INTERVAL * 336); // 7 days
 	
 	// Constructor
 	
@@ -19,24 +19,22 @@ public interface Resident extends RoleInterface {
 	// Scheduler
 	
 	// Actions
-	
-	//public abstract void payMaintenance();
-	public abstract void payRent();
+
+	public void payRent();
 	
 	// Getters
-	public abstract Date getRentDueDate();
-	public abstract boolean isLandlord();
+	
+	public Date getRentDueDate();
+	public boolean isLandlord();
 	
 	// Setters
-	public abstract void setActive();
-	public abstract void setResidence(ResidenceBaseBuilding b);
-	public abstract void setLandlord(Landlord l);
+	
+	public void setActive();
+	public void setResidence(ResidenceBaseBuilding b);
+	public void setLandlord(Landlord l);
+	
 	// Utilities
 	
-	public abstract boolean rentIsDue();
-
-
-	
-	// Classes
+	public boolean rentIsDue();
 
 }

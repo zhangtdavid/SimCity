@@ -13,8 +13,4 @@ public interface RestaurantTimmsCook extends RoleInterface {
 	
 	public int getMenuItemPrice(Application.FOOD_ITEMS stockItem);
 	
-	// Setters
-	
-	public void setActive();
-	
 }

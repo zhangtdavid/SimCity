@@ -7,27 +7,25 @@ import city.roles.BankTellerRole;
 public interface BankCustomer extends RoleInterface {
 
 	// Data
-	enum service {createAcct, withdraw};
-	public enum state {entering, requestService, inProgress, exit};
+	
+	public static enum SERVICE {createAcct, withdraw};
+	public static enum STATE {entering, requestService, inProgress, exit};
 	
 	// Constructor
 	
 	// Messages
-	public void msgDepositCompleted();
 	
 	public void msgWhatDoYouWant(int boothnumber, BankTeller tell);
-	
+
+	public void msgDepositCompleted();
 	public void msgAccountCreated(int acct);
-	
 	public void msgHereIsWithdrawal(int money);
-	
 	public void msgLoanGranted(int loanMoney);
-	
 	public void msgTransactionDenied();
+	
 	// Scheduler
 
-	public void setActive(BANK_SERVICE atmdeposit, int i,
-			TRANSACTION_TYPE business); // Added by Shirley
+	public void setActive(BANK_SERVICE atmdeposit, int i, TRANSACTION_TYPE business);
 	
 	// Actions
 	

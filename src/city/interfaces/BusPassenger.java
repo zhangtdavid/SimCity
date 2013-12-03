@@ -7,8 +7,10 @@ public interface BusPassenger extends RoleInterface {
 	// Constructor
 	
 	// Messages
-	abstract void msgBusIsHere(Bus b);
-	abstract void msgImAtYourDestination();
+	
+	public void msgBusIsHere(Bus b);
+	public void msgImAtYourDestination();
+	public void msgAtWaitingStop();
 	
 	// Scheduler
 	

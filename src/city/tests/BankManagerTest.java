@@ -29,12 +29,12 @@ public class BankManagerTest extends TestCase {
 	public void testDirectDepositScenario() {
 		// Preconditions
 		assertEquals("Customers's log should be empty.", 0, customer.log.size());
-		assertEquals("Manger should have no tasks.", 0, manager.bankTasks.size());
+		assertEquals("Manger should have no tasks.", 0, manager.getBankTasks().size());
 		
 		// Send a message from the host to seat a customer
 		manager.msgDirectDeposit(-1, 50, customer);
 		
-		assertEquals("Manager should have a bankTask.", true, manager.bankTasks.size() == 1);
+		assertEquals("Manager should have a bankTask.", true, manager.getBankTasks().size() == 1);
 		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Customer's log length should be 1.", 1, customer.log.size());
 		assertTrue("Customer should be informed of account creation.", customer.log.containsString("Received msgAccountCreated"));

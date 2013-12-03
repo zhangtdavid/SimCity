@@ -14,18 +14,19 @@ import city.interfaces.Resident;
 public class LandlordRole extends Role implements Landlord {
 
 	// Data
-	// Murphy's Law: Anything that can go wrong will go wrong.
-	Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
-	ResidenceBaseBuilding residence; // the landlord is the landlord of this building
-
-	List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
+	
+	private Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
+	private ResidenceBaseBuilding residence; // the landlord is the landlord of this building
+	private List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	
 	// Constructor
+	
 	public LandlordRole(){
 		super();
 	}
 	
 	// Messages
+	
 	@Override
 	public void msgHeresRent(int d) {
 		this.getPerson().setCash(this.getPerson().getCash()+d);
@@ -38,19 +39,29 @@ public class LandlordRole extends Role implements Landlord {
 		return false;
 	}
 
-
 	// Actions
 
 	// Getters
 
 	// Setters
+	
+	@Override
+	public void setRent(int d) {
+		residence.setRent(d);		
+	}
+	
 	@Override
 	public void setActive(){
-//		if(residence.total_current_maintenance != 0){
-//			
-//		}
 		super.setInactive();
 	}
+	
+	@Override
+	public void setResidence(ResidenceBaseBuilding b) {
+		residence = b; // landlord knows where he lives
+		b.landlord = this; // building knows who the landlord is
+	}
+	
+	// Utilities
 	
 	@Override
 	public void addResident(Resident r) {
@@ -71,23 +82,14 @@ public class LandlordRole extends Role implements Landlord {
 		landlordRes = r;
 	}
 
-	@Override
-	public void setRent(int d) {
-		residence.setRent(d);		
-	}
-
-	@Override
-	public void setResidence(ResidenceBaseBuilding b) {
-		residence = b; // landlord knows where he lives
-		b.landlord = this; // building knows who the landlord is
-	}
-
 	// Utilities
+	
 	@Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.HOUSE, "LandlordRole " + this.getPerson().getName(), msg);
     }
+	
 	// Classes
-
+	
 }

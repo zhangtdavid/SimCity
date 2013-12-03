@@ -16,43 +16,35 @@ import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
-/**
- * Restaurant customer agent.
- */
 public class RestaurantZhangCustomerRole extends Role implements RestaurantZhangCustomer {
-	private String name;
+	
+	// Data
+
 	private int hungerLevel = 5; // Determines length of meal
 	private static final int DECIDINGTIME = 3000;
 	private static final int EATINGTIME = 6000;
 	private static final int CHANCETOLEAVE = 2;
-	Timer timer = new Timer(); // Timer for waiting actions
+	private Timer timer = new Timer(); // Timer for waiting actions
 	private RestaurantZhangAnimatedCustomer customerAnimation;
 	
+	// TODO Change these to private and add getters/setters
 	public RestaurantZhangTable myTable;
-
-	// Agent correspondents
 	public RestaurantZhangHost host;
 	public RestaurantZhangWaiter myWaiter;
-	
 	public int waitingPosition;
-	
-	// Menu and choices
 	public RestaurantZhangMenu customerMenu;
 	public String choice;
-	
 	public RestaurantZhangCashier myCashier;
 	public RestaurantZhangCheck myCheck;
 	public int money;
 	public int myTab = 0;
-	
-	public enum AgentState
-	{DoingNothing, AtEntrance, GoingToWaitingPosition, WaitingInRestaurant, ChoosingToLeave, DecidedToWait, BeingSeated, Deciding, Ordering, Ordered, Eating, WaitingForCheck, PayingForCheck, Leaving};
+	public enum AgentState {DoingNothing, AtEntrance, GoingToWaitingPosition, WaitingInRestaurant, ChoosingToLeave, DecidedToWait, BeingSeated, Deciding, Ordering, Ordered, Eating, WaitingForCheck, PayingForCheck, Leaving};
 	public AgentState state = AgentState.DoingNothing;
-
-	public enum AgentEvent 
-	{none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, restaurantClosed, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
+	public enum AgentEvent {none, gotWaitingPosition, atWaitingPosition, gotHungry, restaurantFull, restaurantClosed, followWaiter, Seated, Decided, TellWaiterOrder, OrderAgain, GotFood, gotCheck, gotChange, gotTab, DoneEating};
 	public AgentEvent event = AgentEvent.none;
-
+	
+	// Constructor
+	
 	/**
 	 * Constructor for CustomerAgent class
 	 *
@@ -73,10 +65,6 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 */
 	public void setHost(RestaurantZhangHost host) {
 		this.host = host;
-	}
-
-	public String getCustomerName() {
-		return name;
 	}
 	
 	public void gotHungry() {//from animation
