@@ -26,4 +26,34 @@ public class MockCar extends MockAgent implements Car {
 		// TODO
 	}
 
+	@Override
+	public void msgImAtCarDestination() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public CARSTATE getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CAREVENT getEvent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CarPassenger getPassenger() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BuildingInterface getDestination() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

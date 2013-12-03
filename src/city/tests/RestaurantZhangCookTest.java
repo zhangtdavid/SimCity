@@ -29,109 +29,110 @@ public class RestaurantZhangCookTest extends TestCase {
 		cook.setRevolvingStand(stand);
 		cook.setAnimation(anim);
 		cook.setMenuTimes(menu, cook.getWorkplace(RestaurantZhangBuilding.class).foods);
+		waiter.setPerson(new MockPerson("Waiter"));
 	}
 
 	public void testOneNormalCustomerOrderScenario() {
 		// Check preconditions
-		assertTrue("Cook's ordersToCook list should be empty. It isn't", cook.ordersToCook.isEmpty());
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertFalse("Cook should not be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertTrue("Cook's ordersToCook list should be empty. It isn't", cook.getOrdersToCook().isEmpty());
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertFalse("Cook should not be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 
 		// Step one, set active
 		cook.setActive();
-		assertTrue("Cook's ordersToCook list should be empty. It isn't", cook.ordersToCook.isEmpty());
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty false. It isn't", cook.cookInvoiceList.isEmpty());
+		assertTrue("Cook's ordersToCook list should be empty. It isn't", cook.getOrdersToCook().isEmpty());
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty false. It isn't", cook.getCookInvoiceList().isEmpty());
 		assertFalse("Cook's scheduler should not have ran, but it did", cook.runScheduler());
 
 		// Step two, msg an order from waiter
 		cook.msgHereIsAnOrder(waiter, "Steak", table);
-		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
-		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
-		assertEquals("Order status should be created. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.created, cook.ordersToCook.get(0).status);
-		assertEquals("Order choice should be steak, but is instead " + cook.ordersToCook.get(0).choice, "Steak", cook.ordersToCook.get(0).choice);
-		assertEquals("Order table should be set, but isn't", table, cook.ordersToCook.get(0).t);
-		assertEquals("Order pos should be 0, but is instead " + cook.ordersToCook.get(0).pos, 0, cook.ordersToCook.get(0).pos);
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.getOrdersToCook().size());
+		assertEquals("Order should have a waiter. It doesn't", waiter, cook.getOrdersToCook().get(0).w);
+		assertEquals("Order status should be created. It's instead " + cook.getOrdersToCook().get(0).status, RestaurantZhangOrder.OrderStatus.created, cook.getOrdersToCook().get(0).status);
+		assertEquals("Order choice should be steak, but is instead " + cook.getOrdersToCook().get(0).choice, "Steak", cook.getOrdersToCook().get(0).choice);
+		assertEquals("Order table should be set, but isn't", table, cook.getOrdersToCook().get(0).t);
+		assertEquals("Order pos should be 0, but is instead " + cook.getOrdersToCook().get(0).pos, 0, cook.getOrdersToCook().get(0).pos);
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 
 		// Step three, run scheduler
 		assertTrue("Cook's scheduler should have ran, but it didn't", cook.runScheduler());
-		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
-		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
-		assertEquals("Order status should be cooking. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.cooking, cook.ordersToCook.get(0).status);
-		assertEquals("Order choice should be steak, but is instead " + cook.ordersToCook.get(0).choice, "Steak", cook.ordersToCook.get(0).choice);
-		assertEquals("Order table should be set, but isn't", table, cook.ordersToCook.get(0).t);
-		assertEquals("Order pos should be 0, but is instead " + cook.ordersToCook.get(0).pos, 0, cook.ordersToCook.get(0).pos);
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.getOrdersToCook().size());
+		assertEquals("Order should have a waiter. It doesn't", waiter, cook.getOrdersToCook().get(0).w);
+		assertEquals("Order status should be cooking. It's instead " + cook.getOrdersToCook().get(0).status, RestaurantZhangOrder.OrderStatus.cooking, cook.getOrdersToCook().get(0).status);
+		assertEquals("Order choice should be steak, but is instead " + cook.getOrdersToCook().get(0).choice, "Steak", cook.getOrdersToCook().get(0).choice);
+		assertEquals("Order table should be set, but isn't", table, cook.getOrdersToCook().get(0).t);
+		assertEquals("Order pos should be 0, but is instead " + cook.getOrdersToCook().get(0).pos, 0, cook.getOrdersToCook().get(0).pos);
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 		assertFalse("Cook's scheduler should not have ran, but it did", cook.runScheduler());
 
 		// Step four, call orderIsReady, which should be called from a timer. I don't want to wait for the timer
-		cook.hackOrderIsReady(cook.ordersToCook.get(0));
-		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
-		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
-		assertEquals("Order status should be doneCooking. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.doneCooking, cook.ordersToCook.get(0).status);
-		assertEquals("Order choice should be steak, but is instead " + cook.ordersToCook.get(0).choice, "Steak", cook.ordersToCook.get(0).choice);
-		assertEquals("Order table should be set, but isn't", table, cook.ordersToCook.get(0).t);
-		assertEquals("Order pos should be 0, but is instead " + cook.ordersToCook.get(0).pos, 0, cook.ordersToCook.get(0).pos);
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty()); 
+		cook.hackOrderIsReady(cook.getOrdersToCook().get(0));
+		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.getOrdersToCook().size());
+		assertEquals("Order should have a waiter. It doesn't", waiter, cook.getOrdersToCook().get(0).w);
+		assertEquals("Order status should be doneCooking. It's instead " + cook.getOrdersToCook().get(0).status, RestaurantZhangOrder.OrderStatus.doneCooking, cook.getOrdersToCook().get(0).status);
+		assertEquals("Order choice should be steak, but is instead " + cook.getOrdersToCook().get(0).choice, "Steak", cook.getOrdersToCook().get(0).choice);
+		assertEquals("Order table should be set, but isn't", table, cook.getOrdersToCook().get(0).t);
+		assertEquals("Order pos should be 0, but is instead " + cook.getOrdersToCook().get(0).pos, 0, cook.getOrdersToCook().get(0).pos);
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty()); 
 
 		// Step three, run scheduler
 		assertTrue("Cook's scheduler should have ran, but it didn't", cook.runScheduler());
-		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
-		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
-		assertEquals("Order status should be plated. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.plated, cook.ordersToCook.get(0).status);
-		assertEquals("Order choice should be steak, but is instead " + cook.ordersToCook.get(0).choice, "Steak", cook.ordersToCook.get(0).choice);
-		assertEquals("Order table should be set, but isn't", table, cook.ordersToCook.get(0).t);
-		assertEquals("Order pos should be 0, but is instead " + cook.ordersToCook.get(0).pos, 0, cook.ordersToCook.get(0).pos);
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.getOrdersToCook().size());
+		assertEquals("Order should have a waiter. It doesn't", waiter, cook.getOrdersToCook().get(0).w);
+		assertEquals("Order status should be plated. It's instead " + cook.getOrdersToCook().get(0).status, RestaurantZhangOrder.OrderStatus.plated, cook.getOrdersToCook().get(0).status);
+		assertEquals("Order choice should be steak, but is instead " + cook.getOrdersToCook().get(0).choice, "Steak", cook.getOrdersToCook().get(0).choice);
+		assertEquals("Order table should be set, but isn't", table, cook.getOrdersToCook().get(0).t);
+		assertEquals("Order pos should be 0, but is instead " + cook.getOrdersToCook().get(0).pos, 0, cook.getOrdersToCook().get(0).pos);
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 		assertTrue("Waiter's log is wrong. It reads " + waiter.log.getLastLoggedEvent(), waiter.log.getLastLoggedEvent().toString().contains("Order for table 1 and choice Steak received"));
 		assertFalse("Cook's scheduler should not have ran, but it did", cook.runScheduler());
 
 		// Step four, msg cook that waiter has recevied order
 		cook.msgGotCompletedOrder(table);
-		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.ordersToCook.size());
-		assertEquals("Order should have a waiter. It doesn't", waiter, cook.ordersToCook.get(0).w);
-		assertEquals("Order status should be plated. It's instead " + cook.ordersToCook.get(0).status, RestaurantZhangOrder.OrderStatus.removed, cook.ordersToCook.get(0).status);
-		assertEquals("Order choice should be steak, but is instead " + cook.ordersToCook.get(0).choice, "Steak", cook.ordersToCook.get(0).choice);
-		assertEquals("Order table should be set, but isn't", table, cook.ordersToCook.get(0).t);
-		assertEquals("Order pos should be 0, but is instead " + cook.ordersToCook.get(0).pos, 0, cook.ordersToCook.get(0).pos);
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertEquals("Cook's ordersToCook list should have one order. It doesn't", 1, cook.getOrdersToCook().size());
+		assertEquals("Order should have a waiter. It doesn't", waiter, cook.getOrdersToCook().get(0).w);
+		assertEquals("Order status should be plated. It's instead " + cook.getOrdersToCook().get(0).status, RestaurantZhangOrder.OrderStatus.removed, cook.getOrdersToCook().get(0).status);
+		assertEquals("Order choice should be steak, but is instead " + cook.getOrdersToCook().get(0).choice, "Steak", cook.getOrdersToCook().get(0).choice);
+		assertEquals("Order table should be set, but isn't", table, cook.getOrdersToCook().get(0).t);
+		assertEquals("Order pos should be 0, but is instead " + cook.getOrdersToCook().get(0).pos, 0, cook.getOrdersToCook().get(0).pos);
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 		assertTrue("Waiter's log is wrong. It reads " + waiter.log.getLastLoggedEvent(), waiter.log.getLastLoggedEvent().toString().contains("Order for table 1 and choice Steak received"));
 
 		// Step five, run scheduler
 		assertTrue("Cook's scheduler should have ran, but it didn't", cook.runScheduler());
-		assertEquals("Cook's ordersToCook list should be empty. It isnt't", 0, cook.ordersToCook.size());
-		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.myOrderStand);
-		assertTrue("Cook should be waiting to check stand. It isn't", cook.waitingToCheckStand);
-		assertEquals("Cook doesn't have a menu. It should", menu, cook.mainMenu);
-		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.cookInventory.size(), 3, cook.cookInventory.size());
-		assertTrue("Cook's invoice list should be empty. It isn't", cook.cookInvoiceList.isEmpty());
+		assertEquals("Cook's ordersToCook list should be empty. It isnt't", 0, cook.getOrdersToCook().size());
+		assertEquals("Cook's revolving stand is nonexistent. It shouldn't be", stand, cook.getOrderStand());
+		assertTrue("Cook should be waiting to check stand. It isn't", cook.getWaitingToCheckStand());
+		assertEquals("Cook doesn't have a menu. It should", menu, cook.getMainMenu());
+		assertEquals("Cook's inventory should have three types of food. It instead has " + cook.getCookInventory().size(), 3, cook.getCookInventory().size());
+		assertTrue("Cook's invoice list should be empty. It isn't", cook.getCookInvoiceList().isEmpty());
 		assertFalse("Cook's scheduler should not have ran, but it did", cook.runScheduler());
 	}
 }

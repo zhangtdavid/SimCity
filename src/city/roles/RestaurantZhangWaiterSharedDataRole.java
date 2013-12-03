@@ -20,8 +20,8 @@ public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBa
 	protected void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {
 		print("Going to cook for customer " + mc.customer.getPerson().getName());
 		thisGui.setFoodLabel(choice, false); // Shows food ordered in animation
-		DoGoToCook();
-		WaitForAnimation();
+		doGoToCook();
+		waitForAnimation();
 		print("Adding order for customer " + mc.customer.getPerson().getName() + " to order stand.");
 		myOrderStand.addOrder(new RestaurantZhangOrder(this, choice, t, myCook.getPosOfNewOrder()));
 		mc.state = MyCustomer.STATE.orderCooking;

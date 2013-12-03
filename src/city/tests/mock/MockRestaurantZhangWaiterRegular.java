@@ -1,11 +1,14 @@
 package city.tests.mock;
 
+import java.util.List;
+
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.abstracts.MockRole;
+import city.abstracts.RestaurantZhangWaiterBase.MyCustomer;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
@@ -60,7 +63,7 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	}
 
 	@Override
-	public int getNumberCustomersServed() {
+	public int getNumCustomersServed() {
 		// TODO Auto-generated method stub
 		return 0;
 	}
@@ -128,5 +131,65 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<MyCustomer> getCustomerList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangCook getCook() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangHost getHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangMenu getMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangRevolvingStand getOrderStand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RestaurantZhangCheck> getCheckList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public breakStatus getBreakStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangAnimatedWaiter getAnimation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getOnBreak() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }
