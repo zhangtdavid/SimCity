@@ -3,6 +3,7 @@ package city.tests.mock;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
+import city.abstracts.RestaurantChungWaiterBase.WCustomer;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
@@ -124,6 +125,24 @@ public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements
 
 	@Override
 	public void msgAnimationAtLine() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public WCustomer findCustomer(RestaurantChungCustomer ca) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WCustomer findTable(int table) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void removeCustomerFromList(WCustomer c) {
 		// TODO Auto-generated method stub
 		
 	}
