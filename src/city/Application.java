@@ -159,75 +159,66 @@ public class Application {
 		for(int i = 0; i < roads.size() - 1; i++) {
 			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
 				roads.get(i).setNextRoad(intersectionNorth);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getY() == intersectionNorth.getY() + 25 && roads.get(i).getX() == intersectionNorth.getX()) { // Set nextRoad of road to south of north intersection
 				roads.get(i).setNextRoad(intersectionNorth);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getX() == intersectionNorth.getX() - 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to west of north intersection
 				intersectionNorth.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getY() == intersectionWest.getY() - 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to north of west intersection
 				roads.get(i).setNextRoad(intersectionWest);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getY() == intersectionWest.getY() + 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to south of west intersection
 				intersectionWest.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
 				intersectionWest.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
 				intersectionSouth.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getX() == intersectionSouth.getX() - 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to west of south intersection
 				roads.get(i).setNextRoad(intersectionSouth);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getX() == intersectionSouth.getX() + 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to east of south intersection
 				intersectionSouth.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getY() == intersectionEast.getY() - 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to north of east intersection
 				intersectionEast.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getX() == intersectionEast.getX() - 25 && roads.get(i).getY() == intersectionEast.getY()) { // Set nextRoad of road to west of east intersection
 				intersectionEast.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getY() == intersectionEast.getY() + 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to south of east intersection
 				roads.get(i).setNextRoad(intersectionEast);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getY() == intersectionCenter.getY() - 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to north of center intersection
 				intersectionCenter.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getX() == intersectionCenter.getX() + 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to east of center intersection
 				roads.get(i).setNextRoad(intersectionCenter);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getX() == intersectionCenter.getX() - 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to west of center intersection
 				intersectionCenter.setNextRoad(roads.get(i));
-				System.out.println("Next road set for intersection");
+				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getY() == intersectionCenter.getY() + 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to south of center intersection
 				roads.get(i).setNextRoad(intersectionCenter);
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 125) { // Last road in the outer loop
 				roads.get(i).setNextRoad(roads.get(0));
-				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			}
 			roads.get(i).setNextRoad(roads.get(i+1));
-			System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i+1).getX() + " " + roads.get(i+1).getY());
 		}
 
 		// Bus Stops!!!!!!!!
@@ -246,7 +237,7 @@ public class Application {
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 375, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 325, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
