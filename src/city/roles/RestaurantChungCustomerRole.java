@@ -37,7 +37,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	private AgentEvent event = AgentEvent.none;
 
 //	Constructor
-//	====================================================================
+//	=====================================================================
 	public RestaurantChungCustomerRole(){
 		super();
 	}

@@ -53,7 +53,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	WorkingState workingState = WorkingState.Working;
             
 //  Constructor
-//  =====================================================================                
+//	=====================================================================
     public RestaurantChungCookRole(RestaurantChungBuilding b, int t1, int t2) {
         super();
 		restaurant = b;
