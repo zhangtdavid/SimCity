@@ -1,10 +1,9 @@
 package city.interfaces;
 
 import city.Application;
-import city.RoleInterface;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
-import city.roles.BankTellerRole;
+import city.RoleInterface;
 
 public interface BankCustomer extends RoleInterface {
 

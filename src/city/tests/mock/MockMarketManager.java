@@ -1,9 +1,11 @@
 package city.tests.mock;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
@@ -12,7 +14,8 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
-import city.Application.FOOD_ITEMS;
+import city.roles.MarketManagerRole.MyMarketCustomer;
+import city.roles.MarketManagerRole.MyMarketEmployee;
 
 public class MockMarketManager extends MockRole implements MarketManager {
 	
@@ -75,5 +78,41 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	public void setMarket(MarketBuilding market) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean getItemsLow() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public List<MyMarketEmployee> getEmployees() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MyMarketCustomer> getCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WorkingState getWorkingState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyMarketEmployee findEmployee(MarketEmployee me) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

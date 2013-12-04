@@ -1,13 +1,19 @@
 package city.tests.mock;
 
 
+import java.util.Collection;
+import java.util.List;
+
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.abstracts.MockRole;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import utilities.EventLog;
-import utilities.LoggedEvent;
+import city.roles.RestaurantChungHostRole.HCustomer;
+import city.roles.RestaurantChungHostRole.MyWaiter;
+import city.roles.RestaurantChungHostRole.Table;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
@@ -92,6 +98,48 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 	public void msgRemoveWaiter(RestaurantChungWaiter waiter) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<HCustomer> getCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Collection<Table> getTables() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getNumTables() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addTable() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public Table findTable(int t) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public HCustomer findCustomer(RestaurantChungCustomer ca) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyWaiter findWaiter(RestaurantChungWaiter w) {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

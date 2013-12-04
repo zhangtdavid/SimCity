@@ -2,38 +2,92 @@ package city.tests.mock;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.concurrent.Semaphore;
 
 import city.RoleInterface;
 import city.abstracts.MockAgent;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.interfaces.AnimatedPerson;
+import city.interfaces.BankCustomer;
+import city.interfaces.BusPassenger;
 import city.interfaces.Car;
+import city.interfaces.CarPassenger;
+import city.interfaces.MarketCustomer;
 import city.interfaces.Person;
-import city.roles.BankCustomerRole;
-import city.roles.BusPassengerRole;
-import city.roles.CarPassengerRole;
-import city.roles.MarketCustomerRole;
-import city.roles.ResidentRole;
+import city.interfaces.Resident;
 
 public class MockPerson extends MockAgent implements Person {
 	
 	// Data
 	
+	private Date date;
+	private RoleInterface occupation;
+	private ResidenceBuildingInterface home;
+	private Car car;
+	private CarPassenger carPassengerRole; // not retained
+	private BusPassenger busPassengerRole; // not retained
+	private BankCustomer bankCustomerRole; // retained
+	private Resident residentRole; // retained
+	private RoleInterface restaurantCustomerRole; // not retained
+	private MarketCustomer marketCustomerRole; // not retained
+	// private Date lastAteAtRestaurant;
+	// private Date lastWentToSleep;
 	private String name;
-	public ResidenceBuildingInterface home;
+	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
+	private Semaphore atDestination = new Semaphore(0, true);
+	private AnimatedPerson animation;
+	private STATE state; 
 	private int cash;
-	private RoleInterface occupation = null;
+	private boolean hasEaten;
+	
 	// Constructor
 	
-	public MockPerson(String name) {
+    /**
+     * Create a MockPerson.
+     * 
+     * @param name the person's name
+     * @param startDate the current simulation date
+     */
+	public MockPerson(String name, Date startDate) {
+		super();
 		this.name = name;
+		this.date = new Date(startDate.getTime());
+		// this.lastAteAtRestaurant = new Date(startDate.getTime());
+		// this.lastWentToSleep = new Date(startDate.getTime());
+		this.state = STATE.none;
+		this.cash = 0;
+		this.hasEaten = false;
+		
+		residentRole = new MockResident(new Date(startDate.getTime()));
+		bankCustomerRole = new MockBankCustomer();
+		this.addRole(residentRole);
+		this.addRole(bankCustomerRole);
+	}
+	
+	/**
+	 * For the benefit of tests that aren't using a constructor with startDate
+	 */
+	public MockPerson(String name) {
+		super();
+		this.name = name;
+		this.date = new Date(0);
+		// this.lastAteAtRestaurant = new Date(0);
+		// this.lastWentToSleep = new Date(0);
+		this.state = STATE.none;
+		this.cash = 0;
+		this.hasEaten = false;
+		
+		residentRole = new MockResident(new Date(0));
+		bankCustomerRole = new MockBankCustomer();
+		this.addRole(residentRole);
+		this.addRole(bankCustomerRole);
 	}
 	
 	// Messages
 	
 	@Override
 	public void guiAtDestination() {
-		// TODO Auto-generated method stub
-		
+		this.atDestination.release();
 	}
 	
 	// Scheduler
@@ -48,8 +102,8 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
     @Override
-    public Date getDate() { // TODO
-    	return new Date(0);
+    public Date getDate() {
+    	return date;
     }
 	
 	@Override
@@ -64,112 +118,101 @@ public class MockPerson extends MockAgent implements Person {
 	
 	@Override
 	public RoleInterface getOccupation() {
-		// TODO Auto-generated method stub
-		return null;
+		return occupation;
 	}
 	
 	@Override
 	public ArrayList<RoleInterface> getRoles() {
-		// TODO Auto-generated method stub
-		return null;
+		return roles;
 	}
 
 	@Override
 	public Car getCar() {
-		// TODO Auto-generated method stub
-		return null;
+		return car;
 	}
 
 	@Override
-	public CarPassengerRole getCarPassengerRole() {
-		// TODO Auto-generated method stub
-		return null;
+	public CarPassenger getCarPassengerRole() {
+		return carPassengerRole;
 	}
 
 	@Override
-	public BusPassengerRole getBusPassengerRole() {
-		// TODO Auto-generated method stub
-		return null;
+	public BusPassenger getBusPassengerRole() {
+		return busPassengerRole;
 	}
 
 	@Override
-	public MarketCustomerRole getMarketCustomerRole() {
-		// TODO Auto-generated method stub
-		return null;
+	public MarketCustomer getMarketCustomerRole() {
+		return marketCustomerRole;
 	}
 	
 	@Override
 	public RoleInterface getRestaurantCustomerRole() {
-		// TODO Auto-generated method stub
-		return occupation;
+		return restaurantCustomerRole;
+	}
+	
+	@Override
+	public STATE getState() {
+		return this.state;
+	}
+
+	@Override
+	public BankCustomer getBankCustomerRole() {
+		return this.bankCustomerRole;
+	}
+
+	@Override
+	public boolean getHasEaten() {
+		return this.hasEaten;
+	}
+
+	@Override
+	public Resident getResidentRole() {
+		return this.residentRole;
+	}
+	
+	@Override
+	public AnimatedPerson getAnimation() {
+		return this.animation;
 	}
 	
 	// Setters
 	
 	@Override
-	public void setAnimation(city.animations.interfaces.AnimatedPerson p) {
-		// TODO Auto-generated method stub
-		
+	public void setAnimation(AnimatedPerson p) {
+		this.animation = p;
 	}
 	
 	@Override
 	public void setCar(Car c) {
-		// TODO Auto-generated method stub
-		
+		this.car = c;
 	}
 	
 	@Override
 	public void setDate(Date d) {
-		// TODO Auto-generated method stub
-		
+		this.date = new Date(d.getTime());
 	}
 	
 	@Override
 	public void setOccupation(RoleInterface r) {
-		// TODO Auto-generated method stub
-		occupation = r;
+		this.occupation = r;
 	}
 
 	@Override
 	public void setCash(int c) {
-		cash = c;
+		this.cash = c;
 	}
 	
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
-		home = h;		
+		this.home = h;		
 	}
 	
 	// Utilities
 
 	@Override
 	public void addRole(RoleInterface r) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public STATE getState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public BankCustomerRole getBankCustomerRole() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public boolean getHasEaten() {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-	@Override
-	public ResidentRole getResidentRole() {
-		// TODO Auto-generated method stub
-		return null;
+		this.roles.add(r);
 	}
 
 }

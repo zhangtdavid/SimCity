@@ -7,11 +7,7 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
-import city.roles.BankCustomerRole;
-import city.roles.BusPassengerRole;
-import city.roles.CarPassengerRole;
-import city.roles.MarketCustomerRole;
-import city.roles.ResidentRole;
+import city.animations.interfaces.AnimatedPerson;
 
 public interface Person extends AgentInterface {
 
@@ -24,6 +20,7 @@ public interface Person extends AgentInterface {
 	public static long RESTAURANT_DINING_INTERVAL = (Application.HALF_HOUR * 144); // 3 days
 	public static long WAKE_UP_THRESHOLD = (Application.HALF_HOUR * 24); // 12 hours
 	public static final int RENT_MIN_THRESHOLD = 200;
+	public static final int INSIGNIFICANT_CASH = 10; // For tests. Use this to give an amount of cash to a person that won't trigger any special (banking, restaurant) behavior.
 	
 	// Constructor
 	
@@ -44,18 +41,19 @@ public interface Person extends AgentInterface {
 	public RoleInterface getOccupation();
 	public ArrayList<RoleInterface> getRoles();
 	public Car getCar();
-	public CarPassengerRole getCarPassengerRole();
-	public BusPassengerRole getBusPassengerRole();
-	public MarketCustomerRole getMarketCustomerRole();
+	public CarPassenger getCarPassengerRole();
+	public BusPassenger getBusPassengerRole();
+	public MarketCustomer getMarketCustomerRole();
 	public RoleInterface getRestaurantCustomerRole();
-	public ResidentRole getResidentRole();
+	public Resident getResidentRole();
 	public STATE getState();
-	public BankCustomerRole getBankCustomerRole();
+	public BankCustomer getBankCustomerRole();
 	public boolean getHasEaten();
+	public AnimatedPerson getAnimation();
 	
 	// Setters
 	
-	public void setAnimation(city.animations.interfaces.AnimatedPerson p);
+	public void setAnimation(AnimatedPerson p);
 	public void setCar(Car c);
 	public void setDate(Date d);
 	public void setOccupation(RoleInterface r);

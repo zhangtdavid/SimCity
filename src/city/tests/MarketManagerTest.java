@@ -129,26 +129,26 @@ public class MarketManagerTest extends TestCase {
 		manager.msgNewEmployee(employee);
 		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgNewEmployee\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgNewEmployee"));
-		assertEquals("Manager should have 1 employee in employee list.", manager.employees.size(), 1);
-		assertTrue("Manager employees should contain an employee with state == Available.", manager.employees.get(0).s == MarketEmployeeState.Available);
+		assertEquals("Manager should have 1 employee in employee list.", manager.getEmployees().size(), 1);
+		assertTrue("Manager employees should contain an employee with state == Available.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.Available);
 
 		assertTrue("Manager scheduler should return false", !manager.runScheduler());
 
 		manager.msgIWouldLikeToPlaceAnOrder(customer);
 		assertEquals("Manager log should have 2 entries.", manager.log.size(), 2);
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceAnOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceAnOrder"));
-		assertEquals("Manager should have 1 customer in customer list.", manager.customers.size(), 1);
+		assertEquals("Manager should have 1 customer in customer list.", manager.getCustomers().size(), 1);
 		
 		manager.runScheduler();
 		assertEquals("Employee log should have 1 entry.", employee.log.size(), 1);
 		assertTrue("Employee log should have \"Employee received msgAssistCustomer\". The last event logged is " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgAssistCustomer"));
-		assertEquals("Manager should have 0 customer in customer list.", manager.customers.size(), 0);
-		assertTrue("Manager employees should contain an employee with state == CollectingItems.", manager.employees.get(0).s == MarketEmployeeState.CollectingItems);
+		assertEquals("Manager should have 0 customer in customer list.", manager.getCustomers().size(), 0);
+		assertTrue("Manager employees should contain an employee with state == CollectingItems.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.CollectingItems);
 
 		manager.msgIAmAvailableToAssist(employee);
 		assertEquals("Manager log should have 3 entries.", manager.log.size(), 3);
 		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
-		assertTrue("Manager employees should contain an employee with state == Available.", manager.employees.get(0).s == MarketEmployeeState.Available);
+		assertTrue("Manager employees should contain an employee with state == Available.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.Available);
 	}
 	
 	public void testNormCustomerDeliveryScenario() {
@@ -163,37 +163,37 @@ public class MarketManagerTest extends TestCase {
 		manager.msgNewEmployee(employee);
 		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgNewEmployee\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgNewEmployee"));
-		assertEquals("Manager should have 1 employee in employee list.", manager.employees.size(), 1);
-		assertTrue("Manager employees should contain an employee with customerDelivery == null.", manager.employees.get(0).customerDelivery == null);
-		assertTrue("Manager employees should contain an employee with state == Available.", manager.employees.get(0).s == MarketEmployeeState.Available);
+		assertEquals("Manager should have 1 employee in employee list.", manager.getEmployees().size(), 1);
+		assertTrue("Manager employees should contain an employee with customerDelivery == null.", manager.getEmployees().get(0).getMarketCustomerDelivery() == null);
+		assertTrue("Manager employees should contain an employee with state == Available.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.Available);
 
 		assertTrue("Manager scheduler should return false", !manager.runScheduler());
 
 		manager.msgIWouldLikeToPlaceADeliveryOrder(customerDelivery, customerDeliveryPayment, order.orderItems, order.orderId);
 		assertEquals("Manager log should have 2 entries.", manager.log.size(), 2);
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceADeliveryOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceADeliveryOrder"));
-		assertEquals("Manager should have 1 customer in customer list.", manager.customers.size(), 1);
+		assertEquals("Manager should have 1 customer in customer list.", manager.getCustomers().size(), 1);
 		
 		manager.runScheduler();
 		assertEquals("Employee log should have 1 entry.", employee.log.size(), 1);
 		assertTrue("Employee log should have \"Employee received msgAssistCustomerDelivery\". The last event logged is " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgAssistCustomerDelivery"));
-		assertTrue("Manager employees should contain an employee with customerDelivery == customerDelivery.", manager.employees.get(0).customerDelivery == customerDelivery);
-		assertTrue("Manager employees should contain an employee with state == GoingToPhone.", manager.employees.get(0).s == MarketEmployeeState.GoingToPhone);
+		assertTrue("Manager employees should contain an employee with customerDelivery == customerDelivery.", manager.getEmployees().get(0).getMarketCustomerDelivery() == customerDelivery);
+		assertTrue("Manager employees should contain an employee with state == GoingToPhone.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.GoingToPhone);
 
 		manager.msgWhatWouldCustomerDeliveryLike(employee);
 		assertEquals("Manager log should have 3 entries.", manager.log.size(), 3);
 		assertTrue("Manager log should have \"Manager received msgWhatWouldCustomerDeliveryLike\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgWhatWouldCustomerDeliveryLike"));
-		assertTrue("Manager employees should contain an employee with state == GettingOrder.", manager.employees.get(0).s == MarketEmployeeState.GettingOrder);
+		assertTrue("Manager employees should contain an employee with state == GettingOrder.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.GettingOrder);
 
 		manager.runScheduler();
 		assertEquals("Employee log should have 2 entries.", employee.log.size(), 2);
 		assertTrue("Employee log should have \"Employee received msgHereIsCustomerDeliveryOrder\". The last event logged is " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsCustomerDeliveryOrder"));
-		assertTrue("Manager employees should contain an employee with state == CollectingItems.", manager.employees.get(0).s == MarketEmployeeState.CollectingItems);
-		assertEquals("Manager should have 0 customer in customer list.", manager.customers.size(), 0);
+		assertTrue("Manager employees should contain an employee with state == CollectingItems.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.CollectingItems);
+		assertEquals("Manager should have 0 customer in customer list.", manager.getCustomers().size(), 0);
 
 		manager.msgIAmAvailableToAssist(employee);
 		assertEquals("Manager log should have 4 entries.", manager.log.size(), 4);
 		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
-		assertTrue("Manager employees should contain an employee with state == Available.", manager.employees.get(0).s == MarketEmployeeState.Available);
+		assertTrue("Manager employees should contain an employee with state == Available.", manager.getEmployees().get(0).getMarketEmployeeState() == MarketEmployeeState.Available);
 	}
 }

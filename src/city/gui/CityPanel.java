@@ -7,6 +7,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import javax.swing.JPanel;
 import javax.swing.Timer;
@@ -18,15 +20,16 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	private static final long serialVersionUID = 7439702094727197622L;
 	protected MainFrame mainframe;
-	public ArrayList<CityViewBuilding> statics, movings;
-	public ArrayList<AnimationInterface> animations = new ArrayList<AnimationInterface>();
+	public List<CityViewBuilding> statics, movings;
+	public List<AnimationInterface> animations;
 	protected Color background;
 	protected Timer timer;
 	
 	public CityPanel(MainFrame mf) {
 		mainframe = mf;
-		statics = new ArrayList<CityViewBuilding>();
-		movings = new ArrayList<CityViewBuilding>();
+		statics = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
+		movings = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
+		animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 		timer = new Timer(5, this);
 		timer.start();
 	}
@@ -45,7 +48,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 		for (AnimationInterface a : animations) {
 			a.draw((Graphics2D) g);
 		}
-		for (CityViewBuilding c:statics) {
+		for (CityViewBuilding c: statics) {
 			c.paint(g);
 		}
 		
