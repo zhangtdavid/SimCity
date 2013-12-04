@@ -13,6 +13,7 @@ import city.RoleInterface;
 import city.animations.MarketCashierAnimation;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.gui.buildings.MarketPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.Market;
@@ -28,7 +29,6 @@ import city.roles.MarketManagerRole;
 public class MarketBuilding extends Building implements Market { 
 //	Data
 //	=====================================================================
-	private MarketPanel panel;	
 	private MarketManager manager;
 	private MarketCashier cashier;
 	private BankCustomer bankCustomer;
@@ -42,11 +42,10 @@ public class MarketBuilding extends Building implements Market {
 	
 //	Constructor
 //	=====================================================================	
-	public MarketBuilding(String name, MarketPanel panel) {
-		super(name);
+	public MarketBuilding(String name, MarketPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
-		this.panel = panel;
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
 		inventory.put(FOOD_ITEMS.pizza, 50);
@@ -78,7 +77,7 @@ public class MarketBuilding extends Building implements Market {
 	
 	@Override
 	public MarketPanel getMarketPanel() {
-		return panel;
+		return (MarketPanel)(super.getPanel());
 	}
 	
 	@Override
@@ -148,7 +147,7 @@ public class MarketBuilding extends Building implements Market {
 				MarketAnimatedCashier anim = new MarketCashierAnimation(c); 
 				c.setAnimation(anim);	
 				anim.setVisible(true);
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				cashier = c;
 //				c.setActive();
 				super.addOccupyingRole(c, null); // null --> anim

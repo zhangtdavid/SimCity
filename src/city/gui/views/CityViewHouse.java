@@ -5,7 +5,7 @@ import java.awt.Rectangle;
 
 import city.gui.BuildingCard;
 
-public class CityViewHouse extends CityViewBuilding{
+public class CityViewHouse extends CityViewBuilding {
 
 	public CityViewHouse(int x, int y) {
 		super(x, y, Color.WHITE, "House 1");

@@ -72,7 +72,6 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public void addStatic(CityViewBuilding c) {
 		statics.add(c);
-		System.out.println(c.toString());
 	}
 
 	public int getStaticsSize() {

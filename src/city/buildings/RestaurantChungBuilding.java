@@ -35,7 +35,6 @@ import city.roles.RestaurantChungWaiterRevolvingStandRole;
 public class RestaurantChungBuilding extends RestaurantBuildingBase implements RestaurantChung {
 //	Data
 //	=====================================================================
-	private RestaurantChungPanel panel;
 	private RestaurantChungHost host;
 	private RestaurantChungCashier cashier;
 	private RestaurantChungCook cook;
@@ -50,12 +49,10 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 //	Constructor
 //	=====================================================================
 	public RestaurantChungBuilding(String name, RestaurantChungPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
-		this.panel = panel;
 		orderStand = new RestaurantChungRevolvingStand();
-		this.setCityViewBuilding(cityBuilding);
 		bankCustomer = (new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))));
 		
         // Add items and their cooking times to a map
@@ -71,7 +68,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 //	=====================================================================	
 	@Override
 	public RestaurantChungPanel getRestaurantChungPanel() {
-		return panel;
+		return (RestaurantChungPanel)(super.getPanel());
 	}
 	
 	@Override
@@ -132,7 +129,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 				c.setAnimation(anim);
 				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addOccupyingRole(c, anim);
 				host.msgIWantToEat(c);
@@ -168,7 +165,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 				RestaurantChungCookAnimation anim = new RestaurantChungCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				getPanel().addVisualizationElement(anim);
 				cook = c;
 				c.setRevolvingStand(orderStand);
 				super.addOccupyingRole(c, anim);
@@ -180,7 +177,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 				RestaurantChungCashierAnimation anim = new RestaurantChungCashierAnimation(c); 
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				getPanel().addVisualizationElement(anim);
 				cashier = c;
 				super.addOccupyingRole(c, anim);
 			}
@@ -192,7 +189,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		waiters.add(w);
 		w.setAnimation(anim);
 		anim.setVisible(true); // TODO set this in setActive()
-		panel.addVisualizationElement(anim);
+		getPanel().addVisualizationElement(anim);
     	for (int i = 0; i < 9; i++) {
     		anim.addTable(RestaurantChungPanel.TABLEX+((i%3)*RestaurantChungPanel.TABLEGAP), RestaurantChungPanel.TABLEY+((i/3)*RestaurantChungPanel.TABLEGAP));
     	}	

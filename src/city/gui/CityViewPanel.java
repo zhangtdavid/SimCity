@@ -81,11 +81,11 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			return;
 		addingObject = true;
 		switch (type) {
-		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red, new Dimension(500, 500))); break;
+		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)); break;
+		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)); break;
+		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)); break;
+		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)); break;
+		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)); break;
 		// TODO BankBranch c0e51d580a4
 		// case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(500, 500))); break;
 		default: return;

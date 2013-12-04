@@ -5,6 +5,8 @@ import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
 import city.Building;
+import city.gui.BuildingCard;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.BankCustomer;
 
 /**
@@ -20,8 +22,8 @@ public abstract class RestaurantBuildingBase extends Building implements Restaur
 	
 	// Constructor
 
-	public RestaurantBuildingBase(String name) {
-		super(name);
+	public RestaurantBuildingBase(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 	}
     
     // Messages

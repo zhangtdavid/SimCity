@@ -10,6 +10,8 @@ import city.Animation;
 import city.Building;
 import city.Role;
 import city.RoleInterface;
+import city.gui.buildings.BankPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankManager;
 import city.roles.BankManagerRole;
@@ -31,8 +33,8 @@ public class BankBuilding extends Building implements Bank {
 	
 	// Constructor
 	
-	public BankBuilding(String name) {
-		super(name);
+	public BankBuilding(String name, BankPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 	}
 	
 	// Getters
