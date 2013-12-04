@@ -1,12 +1,16 @@
 package city.interfaces;
 
 import city.RoleInterface;
+import city.buildings.RestaurantChungBuilding;
 import utilities.RestaurantChungMenu;
 
 public interface RestaurantChungCustomer extends RoleInterface {
+	public enum AgentState
+	{DoingNothing, GoingToRestaurant, WaitingInRestaurant, DecidedToStay, BeingSeated, DecideLeaving, Deciding, CallingWaiter, WaitingForFood, Eating, WaitingForCheck, GoingToCashier, Paying, WaitingForChange, Leaving};
+	public enum AgentEvent
+	{none, gotHungry, getInLine, standInLine, followWaiter, noTables, decidedToLeave, seated, readyToOrder, askedForOrder, receivedFood, doneEating, receivedCheck, atCashier, receivedChange, doneLeaving, kickedOut};
 	
 	// Messages
-
 	public void gotHungry();
 	public void msgGetInLinePosition(int positionInLine);
 	public void msgNoTablesAvailable();
@@ -25,9 +29,12 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	public void msgKickingYouOutAfterPaying(int debt);
 	
 	// Getters
-	
 	public int getHungerLevel();
 	public String getState();
 	public String getOrder();
 
+	// Setters
+	public void setHungerLevel(int hungerLevel);
+	public void setRestaurant(RestaurantChungBuilding r);
+	
 }

@@ -29,6 +29,9 @@ public class BankTellerRole extends Role implements BankTeller {
 		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
+
+// Messages
+	//From BankManager
 	
 	// Messages
 	
@@ -205,7 +208,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Setters
 	
 	@Override
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t) {
+	public void setActive() {
 		print("Customer has been set active");
 		building.manager.msgAvailable(this);
 		this.setActivityBegun();

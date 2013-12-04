@@ -5,6 +5,7 @@ import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
 import city.abstracts.MockRole;
 import city.interfaces.BankCustomer;
+import city.interfaces.BankTeller;
 import city.roles.BankTellerRole;
 
 public class MockBankCustomer extends MockRole implements BankCustomer {
@@ -22,7 +23,7 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 	}
 
 	@Override
-	public void msgWhatDoYouWant(int boothnumber, BankTellerRole tell) {
+	public void msgWhatDoYouWant(int boothnumber, BankTeller tell) {
 		log.add(new LoggedEvent("Received msgWhatDoYouWant"));
 		// TODO Auto-generated method stub
 		

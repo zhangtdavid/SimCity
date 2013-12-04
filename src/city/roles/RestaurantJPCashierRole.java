@@ -156,7 +156,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		}
 		if(building.funds > 2000){
 			building.bankCustomer.setActive(BANK_SERVICE.atmDeposit, building.funds - 2000, TRANSACTION_TYPE.business);
-			roles.add(building.bankCustomer);
+			roles.add((Role) building.bankCustomer);
 			building.funds -= 2000;
 		}
 		

@@ -7,8 +7,8 @@ import city.Application.FOOD_ITEMS;
 import city.buildings.MarketBuilding;
 
 public interface MarketDeliveryPerson extends RoleInterface {
-
 	// Data
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	
 	// Constructor
 	
@@ -23,11 +23,13 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	// Getters
 	
 	public Market getMarket();
+	MarketCustomerDelivery getCustomerDelivery();
+	int getOrderId();
+	Map<FOOD_ITEMS, Integer> getCollectedItems();
 	
 	// Setters
-
 	public void setMarket(MarketBuilding market);
-	
+
 	// Utilities
 	
 	// Classes

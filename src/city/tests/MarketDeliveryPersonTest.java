@@ -129,16 +129,16 @@ public class MarketDeliveryPersonTest extends TestCase {
 		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
-		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.customerDelivery == null);
+		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.getCustomerDelivery() == null);
 
 		deliveryPerson.msgDeliverOrder(customerDelivery, collectedItemsAll, order.orderId);
 		assertEquals("DeliveryPerson log should have 1 entry.", deliveryPerson.log.size(), 1);
 		assertTrue("DeliveryPerson log should have \"DeliveryPerson received msgDeliverOrder\". The last event logged is " + deliveryPerson.log.getLastLoggedEvent().toString(), deliveryPerson.log.containsString("DeliveryPerson received msgDeliverOrder"));
-		assertTrue("DeliveryPerson customerDelivery should be customerDelivery.", deliveryPerson.customerDelivery == customerDelivery);
+		assertTrue("DeliveryPerson customerDelivery should be customerDelivery.", deliveryPerson.getCustomerDelivery() == customerDelivery);
 		for (FOOD_ITEMS item: collectedItemsAll.keySet()) {
-			assertTrue("deliveryPerson.collectedItems should be collectedItemsAll.", deliveryPerson.collectedItems.get(item) == collectedItemsAll.get(item));
+			assertTrue("deliveryPerson.collectedItems should be collectedItemsAll.", deliveryPerson.getCollectedItems().get(item) == collectedItemsAll.get(item));
 		}
-		assertTrue("deliveryPerson.orderId should be order.orderId.", deliveryPerson.orderId == order.orderId);
+		assertTrue("deliveryPerson.orderId should be order.orderId.", deliveryPerson.getOrderId() == order.orderId);
 		
 		deliveryPerson.runScheduler();
 //		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1); // next actions execute too quickly
@@ -147,7 +147,7 @@ public class MarketDeliveryPersonTest extends TestCase {
 		assertTrue("CustomerDelivery log should have \"CustomerDelivery received msgHereIsOrderDelivery\". The last event logged is " + customerDelivery.log.getLastLoggedEvent().toString(), customerDelivery.log.containsString("CustomerDelivery received msgHereIsOrderDelivery"));
 		assertEquals("Cashier log should have 2 entries.", cashier.log.size(), 2);
 		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
-		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.customerDelivery == null);
+		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.getCustomerDelivery() == null);
 	}
 }
 

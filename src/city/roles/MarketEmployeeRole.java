@@ -2,6 +2,7 @@ package city.roles;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -17,34 +18,32 @@ import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
-
 //  Data
 //	=====================================================================
-	private MarketBuilding market;
-	private WorkingState workingState = WorkingState.Working;
-	private int loc; // location at front counter
-	//	TODO schung 99c0f4da25
-	//	private Semaphore atPhone = new Semaphore(0, true);
-	//	private Semaphore finishedCollectingItems = new Semaphore(0, true);
-	//	private Semaphore atCashier = new Semaphore(0, true);
-	//	private Semaphore atCounter = new Semaphore(0, true);
-    
-    // TODO Change these to private and add getters/setters
 	public EventLog log = new EventLog();
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public MarketCustomer customer;
-	public MarketCustomerDelivery customerDelivery;
-	public MarketCustomerDeliveryPayment customerDeliveryPayment;
-	public enum MarketEmployeeState {None, AskedForOrder};
-	public MarketEmployeeState state;
-	public enum MarketEmployeeEvent {AskedToAssistCustomer, OrderReceived};
-	public MarketEmployeeEvent event;
-    public Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
-    public int orderId;
-    public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	private Semaphore atPhone = new Semaphore(0, true);
+	private Semaphore finishedCollectingItems = new Semaphore(0, true);
+	private Semaphore atCashier = new Semaphore(0, true);
+	private Semaphore atCounter = new Semaphore(0, true);
+
+	private MarketBuilding market;
+ 
+	private int loc; // location at front counter
 	
+	private MarketCustomer customer;
+	private MarketCustomerDelivery customerDelivery;
+	private MarketCustomerDeliveryPayment customerDeliveryPayment;
+
+	private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
+	private int orderId;
+	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+    
+	private MarketEmployeeState state;
+	private MarketEmployeeEvent event;
+	private WorkingState workingState = WorkingState.Working;
+
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================
 	public MarketEmployeeRole(MarketBuilding b, int t1, int t2) {
 		super();
 		market = b;
@@ -57,6 +56,20 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		state = MarketEmployeeState.None;
 		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
     }
+	
+//  Activity
+//	=====================================================================
+//	// TODO schung 99c0f4da25
+//	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
 	
 //  Messages
 //	=====================================================================
@@ -211,8 +224,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		state = MarketEmployeeState.None;
 	}
 
-
-//  Getters and Setters
+//  Getters
 //	=====================================================================
 	// Market
 	@Override
@@ -221,20 +233,50 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public MarketCustomer getMarketCustomer() {
+		return customer;
 	}
 	
-//	// TODO schung 99c0f4da25
-//	@Override
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
+	@Override
+	public MarketCustomerDelivery getMarketCustomerDelivery() {
+		return customerDelivery;
+	}
 	
 	@Override
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+		return customerDeliveryPayment;
+	}
+	
+	@Override
+	public Map<FOOD_ITEMS, Integer> getOrder() {
+		return order;
+	}
+	
+	@Override
+	public int getOrderId() {
+		return orderId;
+	}
+	
+	@Override
+	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
+		return collectedItems;
+	}
+	
+	@Override
+	public MarketEmployeeState getMarketEmployeeState() {
+		return state;
+	}
+	
+	@Override
+	public MarketEmployeeEvent getMarketEmployeeEvent() {
+		return event;
+	}
+	
+//  Setters
+//	=====================================================================
+	@Override
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
 	}
 	
 //  Utilities

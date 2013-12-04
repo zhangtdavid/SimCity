@@ -14,7 +14,6 @@ import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
-import city.roles.BankCustomerRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
@@ -36,7 +35,6 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 	int waiterCounter = 0;
 	RestaurantJPPanel panel;
 	RestaurantJPRevolvingStand orderStand = new RestaurantJPRevolvingStand();
-	public BankCustomerRole bankCustomer;
 	
 	// Constructor
 	
@@ -58,7 +56,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
 		this.panel = panel;
-		bankCustomer = new BankCustomerRole(this);
+		this.setCityViewBuilding(cvr2);
 	}
 	
 	// Utilities

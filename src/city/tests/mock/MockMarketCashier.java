@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.EventLog;
@@ -7,6 +8,7 @@ import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -14,6 +16,8 @@ import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
+import city.roles.MarketCashierRole.MyDeliveryPerson;
+import city.roles.MarketCashierRole.Transaction;
 
 public class MockMarketCashier extends MockRole implements MarketCashier {
 
@@ -77,5 +81,23 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	public void setMarket(MarketBuilding market) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public BankCustomer getBankCustomer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Transaction> getTransactions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MyDeliveryPerson> getDeliveryPeople() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

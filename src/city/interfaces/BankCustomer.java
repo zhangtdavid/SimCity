@@ -17,8 +17,9 @@ public interface BankCustomer extends RoleInterface {
 	
 	// Messages
 	
+	public void msgWhatDoYouWant(int boothnumber, BankTeller tell);
+
 	public void msgDepositCompleted();
-	public void msgWhatDoYouWant(int boothnumber, BankTellerRole tell);
 	public void msgAccountCreated(int acct);
 	public void msgHereIsWithdrawal(int money);
 	public void msgLoanGranted(int loanMoney);

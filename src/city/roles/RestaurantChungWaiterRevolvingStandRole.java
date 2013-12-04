@@ -25,6 +25,8 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
 
+	// Messages
+	@Override
 	public void tellCookOrder(WCustomer customer, String choice, int table) {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 
@@ -44,12 +46,14 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}
 	
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
-		orderStand = stand;
-	}
-	
+	// Getters
 	public RestaurantChungRevolvingStand getRevolvingStand() {
 		return orderStand;
+	}
+	
+	// Setters
+	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
+		orderStand = stand;
 	}
 	
 	@Override

@@ -30,7 +30,7 @@ public interface BankTeller extends RoleInterface {
 	
 	// Setters
 	
-	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t);
+	public void setActive();
 	
 	// Utilities
 	

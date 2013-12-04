@@ -7,13 +7,8 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
-import city.animations.HouseResidentAnimation;
+import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.roles.BankCustomerRole;
-import city.roles.BusPassengerRole;
-import city.roles.CarPassengerRole;
-import city.roles.MarketCustomerRole;
-import city.roles.ResidentRole;
 
 public interface Person extends AgentInterface {
 
@@ -46,20 +41,20 @@ public interface Person extends AgentInterface {
 	public RoleInterface getOccupation();
 	public ArrayList<RoleInterface> getRoles();
 	public Car getCar();
-	public CarPassengerRole getCarPassengerRole();
-	public BusPassengerRole getBusPassengerRole();
-	public MarketCustomerRole getMarketCustomerRole();
+	public CarPassenger getCarPassengerRole();
+	public BusPassenger getBusPassengerRole();
+	public MarketCustomer getMarketCustomerRole();
 	public RoleInterface getRestaurantCustomerRole();
-	public ResidentRole getResidentRole();
+	public Resident getResidentRole();
 	public STATE getState();
-	public BankCustomerRole getBankCustomerRole();
+	public BankCustomer getBankCustomerRole();
 	public boolean getHasEaten();
 	public int getRoomNumber();
 	
 	
 	// Setters
 	
-	public void setAnimation(city.animations.interfaces.AnimatedPerson p);
+	public void setAnimation(AnimatedPerson p);
 	public void setCar(Car c);
 	public void setDate(Date d);
 	public void setOccupation(RoleInterface r);

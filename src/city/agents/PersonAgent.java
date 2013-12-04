@@ -31,11 +31,16 @@ import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
 import city.interfaces.Apartment;
 import city.interfaces.Bank;
+import city.interfaces.BankCustomer;
+import city.interfaces.BusPassenger;
 import city.interfaces.BusStop;
 import city.interfaces.Car;
+import city.interfaces.CarPassenger;
 import city.interfaces.House;
 import city.interfaces.Market;
+import city.interfaces.MarketCustomer;
 import city.interfaces.Person;
+import city.interfaces.Resident;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
@@ -51,12 +56,12 @@ public class PersonAgent extends Agent implements Person {
 	private ResidenceBuildingInterface home;
 	private int roomNumber; // relevant for apartments only. retained (for homes: 0; for apartments, 1~5)
 	private Car car;
-	private CarPassengerRole carPassengerRole; // not retained
-	private BusPassengerRole busPassengerRole; // not retained
-	private BankCustomerRole bankCustomerRole; // retained
-	private ResidentRole residentRole; // retained
+	private CarPassenger carPassengerRole; // not retained
+	private BusPassenger busPassengerRole; // not retained
+	private BankCustomer bankCustomerRole; // retained
+	private Resident residentRole; // retained
 	private RoleInterface restaurantCustomerRole; // not retained
-	private MarketCustomerRole marketCustomerRole; // not retained
+	private MarketCustomer marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
 	private Date lastWentToSleep;
 	private String name;
@@ -446,22 +451,22 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public CarPassengerRole getCarPassengerRole() {
+	public CarPassenger getCarPassengerRole() {
 		return carPassengerRole;
 	}
 
 	@Override
-	public BusPassengerRole getBusPassengerRole() {
+	public BusPassenger getBusPassengerRole() {
 		return busPassengerRole;
 	}
 
 	@Override
-	public BankCustomerRole getBankCustomerRole() {
+	public BankCustomer getBankCustomerRole() {
 		return bankCustomerRole;
 	}
 
 	@Override
-	public MarketCustomerRole getMarketCustomerRole() {
+	public MarketCustomer getMarketCustomerRole() {
 		return marketCustomerRole;
 	}
 
@@ -481,7 +486,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public ResidentRole getResidentRole() {
+	public Resident getResidentRole() {
 		return residentRole;
 	}
 	
@@ -508,7 +513,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setAnimation(city.animations.interfaces.AnimatedPerson p) {
+	public void setAnimation(AnimatedPerson p) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation = p;
 	}

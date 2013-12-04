@@ -62,6 +62,7 @@ import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
+import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantTimmsCashierRole;
@@ -885,6 +886,21 @@ public class Application {
 		p2Chung.startThread();
 		p3Chung.startThread();
 		p4Chung.startThread();
+		
+		try {
+			Thread.sleep(2000);
+		} catch (InterruptedException e) {}
+		
+		c0JP.startThread();
+		c1JP.startThread();
+		c2JP.startThread();
+		c3JP.startThread();
+		c4JP.startThread();
+		p0JP1.startThread();
+		p1JP.startThread();
+		p2JP.startThread();
+		p3JP.startThread();
+		p4JP.startThread();
 	}
 
 	public static class CityMap {
@@ -915,6 +931,7 @@ public class Application {
 		/**
 		 * Returns a random building of type
 		 */
+
 		public static BuildingInterface findRandomBuilding(BUILDING type) {
 			if(type == BUILDING.restaurant) {
 				List<BuildingInterface> list = map.get(type);
@@ -984,7 +1001,9 @@ public class Application {
 			return returnRoad;
 		}
 		
+
 		public static void clearMap() {
+
 			map.clear();
 		}
 	}

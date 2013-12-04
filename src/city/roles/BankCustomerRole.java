@@ -10,6 +10,7 @@ import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
+import city.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
@@ -24,8 +25,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private int netTransaction = 0;
 	private STATE st;
 	private int amount;
-	private BankTellerRole t;
-	private int acctNum = -1;
+	private BankTeller t;
+	public int acctNum = -1;
 	private int boothNumber;
 
 	// Constructor
@@ -39,10 +40,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building = (Bank) (Application.CityMap.findRandomBuilding(BUILDING.bank));
 	}
 	
-	// Messages
 	
-	@Override
-	public void msgWhatDoYouWant(int booth, BankTellerRole tell) {
+	// Messages
+
+	public void msgWhatDoYouWant(int booth, BankTeller tell) {
 		print("WhatDoYouWant message received");
 		t = tell;
 		boothNumber = booth;
@@ -92,8 +93,10 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	@Override
 	public boolean runScheduler() {
 		if(service == BANK_SERVICE.atmDeposit){
-			DirectDeposit();
-			return true;
+			if(st == STATE.entering){
+				DirectDeposit();
+				return true;
+			}
 		}
 		if (st == STATE.entering){
 			AskForService();
@@ -124,6 +127,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
 	
+
 	private void AskForService(){
 		if(building == null)
 			print("Null building. what the fuck");
@@ -165,14 +169,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public void setActive(Application.BANK_SERVICE s, int money, Application.TRANSACTION_TYPE t){
-		//print("Customer has been set active"); // uncomment for null pointer exception~
-		super.setActive();
+		print("Customer has been set active");
 		this.service = s;
 		this.depositType = t;
 		amount = money;
-		if(s != Application.BANK_SERVICE.atmDeposit)
-			st = STATE.entering;
-		this.setActivityBegun();
+		st = STATE.entering;
+		super.setActive();
+		stateChanged();
 	}
 	
 	// Utilities

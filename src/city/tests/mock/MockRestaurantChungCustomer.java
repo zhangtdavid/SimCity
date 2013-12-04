@@ -4,6 +4,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
 import city.abstracts.MockRole;
+import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
@@ -130,6 +131,18 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgGetInLinePosition(int positionInLine) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHungerLevel(int hungerLevel) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setRestaurant(RestaurantChungBuilding r) {
 		// TODO Auto-generated method stub
 		
 	}

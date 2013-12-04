@@ -317,9 +317,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		return hasRequestedBreak;
 	}
 	
-	public List<MyCustomer> getCustomers(){
-		return myCustomers;
-	}
 	
 	// Setters
 	
@@ -347,10 +344,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	
 	// Utilities
 	
-	public void removeAllCustomers(){
-		myCustomers.clear();
-	}
-	
 	// Classes
 	
 	public class MyCustomer {
@@ -375,4 +368,23 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		}
 	}
 	
+	public int getSalary(){
+		return RestaurantJPBuilding.WORKER_SALARY;
+	}
+	
+	public List<MyCustomer> getCustomers(){
+		return myCustomers;
+	}
+	
+	public void removeAllCustomers(){
+		myCustomers.clear();
+	}
+	
+	public void setGui(RestaurantJPWaiterAnimation gui) {
+		waiterGui = gui;
+	}
+	
+	public void setRevolvingOrderStand(RestaurantJPRevolvingStand orderStand){
+		revolvingStand = orderStand;
+	}
 }
