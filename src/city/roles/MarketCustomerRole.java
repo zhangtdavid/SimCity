@@ -12,6 +12,7 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
 
@@ -170,8 +171,13 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	=====================================================================
 	// Market
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
+	}
+	
+	@Override
+	public MarketOrder getOrder() {
+		return order;
 	}
 	
 	@Override
@@ -182,6 +188,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public void setActive(){
 		event = MarketCustomerEvent.ArrivedAtMarket;
+		super.setActive();
 		this.setActivityBegun();
 		stateChanged();
 	}

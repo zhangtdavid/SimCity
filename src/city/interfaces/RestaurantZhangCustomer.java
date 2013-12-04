@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.RoleInterface;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;

@@ -5,6 +5,7 @@ import trace.AlertTag;
 import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedHost;
 import city.buildings.RestaurantTimmsBuilding;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsHost;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -17,7 +18,7 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	// Data
 		
 	private RestaurantTimmsWaiter waiterWantingBreak;
-	private RestaurantTimmsBuilding rtb;
+	private RestaurantTimms rtb;
 	private boolean shiftOver;
 	
 	// Constructor
@@ -32,7 +33,7 @@ public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost
 	public RestaurantTimmsHostRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantTimms.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.waiterWantingBreak = null;
 		this.rtb = b;

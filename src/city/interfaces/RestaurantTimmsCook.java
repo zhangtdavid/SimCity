@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import city.Application;
+import city.RoleInterface;
 
 public interface RestaurantTimmsCook extends RoleInterface {
 	

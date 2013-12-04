@@ -3,14 +3,15 @@ package city.tests.mock;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MockMarketCustomerDeliveryPayment extends MockRole implements MarketCustomerDeliveryPayment {
 	
 	public EventLog log = new EventLog();
-	public MarketBuilding market;
+	public Market market;
 	
 	public MockMarketCustomerDeliveryPayment() {
 		// TODO Auto-generated method stub
@@ -30,7 +31,7 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	}
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		// TODO Auto-generated method stub
 		return null;
 	}

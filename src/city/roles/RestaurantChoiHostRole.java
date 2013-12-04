@@ -9,6 +9,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiTable;
 import city.Role;
+import city.abstracts.RestaurantChoiWaiterBase;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
 import city.buildings.RestaurantChoiBuilding;
 import city.interfaces.RestaurantChoiCustomer;

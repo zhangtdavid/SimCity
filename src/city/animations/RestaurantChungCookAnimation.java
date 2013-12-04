@@ -4,7 +4,7 @@ import java.awt.*;
 
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
-import city.gui.RestaurantChungPanel;
+import city.gui.buildings.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCook;
 
 public class RestaurantChungCookAnimation extends Animation implements RestaurantChungAnimatedCook {

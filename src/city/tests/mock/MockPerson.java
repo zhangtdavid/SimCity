@@ -1,21 +1,27 @@
 package city.tests.mock;
 
+import java.util.ArrayList;
 import java.util.Date;
 
-import city.MockAgent;
-import city.Role;
-import city.buildings.ResidenceBaseBuilding;
+import city.RoleInterface;
+import city.abstracts.MockAgent;
+import city.abstracts.ResidenceBuildingInterface;
 import city.interfaces.Car;
 import city.interfaces.Person;
+import city.roles.BankCustomerRole;
+import city.roles.BusPassengerRole;
+import city.roles.CarPassengerRole;
+import city.roles.MarketCustomerRole;
+import city.roles.ResidentRole;
 
 public class MockPerson extends MockAgent implements Person {
 	
 	// Data
 	
 	private String name;
-	public ResidenceBaseBuilding home;
+	public ResidenceBuildingInterface home;
 	private int cash;
-	private Role occupation = null;
+	private RoleInterface occupation = null;
 	// Constructor
 	
 	public MockPerson(String name) {
@@ -52,12 +58,48 @@ public class MockPerson extends MockAgent implements Person {
 	}
 
 	@Override
-	public ResidenceBaseBuilding getHome() {
+	public ResidenceBuildingInterface getHome() {
 		return home;
 	}
 	
 	@Override
-	public Role getOccupation() {
+	public RoleInterface getOccupation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public ArrayList<RoleInterface> getRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Car getCar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public CarPassengerRole getCarPassengerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BusPassengerRole getBusPassengerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketCustomerRole getMarketCustomerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	@Override
+	public RoleInterface getRestaurantCustomerRole() {
 		// TODO Auto-generated method stub
 		return occupation;
 	}
@@ -83,7 +125,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(Role r) {
+	public void setOccupation(RoleInterface r) {
 		// TODO Auto-generated method stub
 		occupation = r;
 	}
@@ -94,16 +136,40 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBaseBuilding h) {
+	public void setHome(ResidenceBuildingInterface h) {
 		home = h;		
 	}
 	
 	// Utilities
 
 	@Override
-	public void addRole(Role r) {
+	public void addRole(RoleInterface r) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public STATE getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BankCustomerRole getBankCustomerRole() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getHasEaten() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
+	@Override
+	public ResidentRole getResidentRole() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

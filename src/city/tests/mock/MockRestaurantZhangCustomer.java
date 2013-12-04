@@ -4,7 +4,7 @@ import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantZhangCustomer;
 import city.interfaces.RestaurantZhangWaiter;
 

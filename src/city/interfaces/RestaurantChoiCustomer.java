@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import utilities.RestaurantChoiMenu;
+import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 

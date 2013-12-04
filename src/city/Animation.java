@@ -2,8 +2,6 @@ package city;
 
 import java.awt.Graphics2D;
 
-import city.interfaces.AnimationInterface;
-
 /**
  * The base class for all SimCity201 agent animations.
  */
@@ -13,6 +11,7 @@ public abstract class Animation implements AnimationInterface {
 	
 	private boolean isVisible = false;
 	protected int xPos, yPos;
+	private Agent agent;
 	
 	// Constructor
 	
@@ -44,6 +43,11 @@ public abstract class Animation implements AnimationInterface {
     public int getYPos() {
     	return yPos;
     }
+	
+	@Override
+	public Agent getAgent() {
+		return agent;
+	}
     
     // Setters
 	
@@ -52,6 +56,11 @@ public abstract class Animation implements AnimationInterface {
 		this.isVisible = b;
 	}
     
+	@Override
+	public void setAgent(Agent a) {
+		this.agent = a;
+	}
+	
     // Utilities
 
 }

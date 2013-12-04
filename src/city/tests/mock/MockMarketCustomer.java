@@ -4,8 +4,10 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.MockRole;
+import utilities.MarketOrder;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
 import city.Application.FOOD_ITEMS;
@@ -13,7 +15,7 @@ import city.Application.FOOD_ITEMS;
 public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	
 	public EventLog log = new EventLog();
-	public MarketBuilding market;
+	public Market market;
 	
 	public MockMarketCustomer() {
 		// TODO Auto-generated method stub
@@ -57,7 +59,7 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -72,6 +74,12 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	public int checkBill() {
 		// TODO Auto-generated method stub
 		return 0;
+	}
+
+	@Override
+	public MarketOrder getOrder() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import utilities.MarketTransaction;
+import city.RoleInterface;
 import city.buildings.MarketBuilding;
 
 public interface MarketCustomerDeliveryPayment extends RoleInterface {
@@ -20,7 +21,7 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Getters
 	
-	public MarketBuilding getMarket();
+	public Market getMarket();
 	
 	// Setters
 	

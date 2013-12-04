@@ -17,7 +17,7 @@ public class BuildingCard extends JPanel {
 	public int panelY;
 	public final int delayMS = 5;
 	public List<Animation> animations = new ArrayList<Animation>();
-	Color background;
+	public Color background;
 
 	public static final int CARD_WIDTH = 500, CARD_HEIGHT = 500;
 

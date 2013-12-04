@@ -5,6 +5,13 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import city.gui.buildings.RestaurantChoiPanel;
+import city.gui.buildings.RestaurantChungPanel;
+import city.gui.buildings.RestaurantJPPanel;
+import city.gui.buildings.RestaurantTimmsPanel;
+import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.views.CityViewBuilding;
+import city.gui.views.CityViewRestaurant;
 import trace.AlertLog;
 import trace.AlertTag;
 

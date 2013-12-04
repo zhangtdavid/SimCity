@@ -8,7 +8,7 @@ import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Application.FOOD_ITEMS;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.animations.RestaurantChoiWaiterAnimation;
 import city.interfaces.RestaurantChoiCashier;
 import city.interfaces.RestaurantChoiCook;

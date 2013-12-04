@@ -1,5 +1,8 @@
 package city.interfaces;
 
+import city.BuildingInterface;
+import city.RoleInterface;
+
 public interface BusPassenger extends RoleInterface {
 
 	// Data
@@ -17,6 +20,9 @@ public interface BusPassenger extends RoleInterface {
 	// Actions
 	
 	// Getters
+	
+	public BuildingInterface getDestination(); 
+	public BuildingInterface getBusStopToWaitAt();
 	
 	// Setters
 	

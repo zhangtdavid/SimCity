@@ -2,10 +2,11 @@ package city.tests.mock;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import utilities.LoggedEvent;
-import city.MockRole;
-import city.buildings.ResidenceBaseBuilding;
+import city.abstracts.MockRole;
+import city.abstracts.ResidenceBuildingBase;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -15,7 +16,7 @@ public class MockResident extends MockRole implements Resident{
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
-	private ResidenceBaseBuilding residence;
+	private ResidenceBuildingBase residence;
 	
 	public MockResident(){
 		super();
@@ -34,12 +35,12 @@ public class MockResident extends MockRole implements Resident{
 	public void payRent() {
 		rentLastPaid = this.getPerson().getDate();
 		log.add(new LoggedEvent("Rent Last Paid is: " + rentLastPaid));
-		landlord.msgHeresRent(residence.rent); // pay rent
+		landlord.msgHeresRent(residence.getRent()); // pay rent
 		log.add(new LoggedEvent("Before paying rent, money is " + this.getPerson().getCash()));
-		 this.getPerson().setCash( this.getPerson().getCash()-residence.rent); // lose $ for rent
+		 this.getPerson().setCash( this.getPerson().getCash()-residence.getRent()); // lose $ for rent
 		log.add(new LoggedEvent("After paying rent, money is " + this.getPerson().getCash()));
-		if(residence.total_current_maintenance != 0) // pay maintenance if needed
-			this.getPerson().setCash( this.getPerson().getCash()-residence.total_current_maintenance/residence.residents.size()); 
+		if(residence.getTotalCurrentMaintenance() != 0) // pay maintenance if needed
+			this.getPerson().setCash( this.getPerson().getCash()-residence.getTotalCurrentMaintenance()/residence.getResidents().size()); 
 		// lose $ for maintenance;
 		
 		this.setInactive();		
@@ -51,13 +52,15 @@ public class MockResident extends MockRole implements Resident{
 		dueDate.setTime(rentLastPaid.getTime() + RENT_DUE_INTERVAL);
 		return dueDate;
 	}
+	
 	@Override
 	public boolean isLandlord() {
 		return (landlord != null);
 	}
+	
 	@Override
 	public boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(this.getPerson().getDate());
 		int day = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(getRentDueDate());
@@ -70,7 +73,12 @@ public class MockResident extends MockRole implements Resident{
 		
 	}
 	@Override
-	public void setResidence(ResidenceBaseBuilding b) {
+	public void setResidence(ResidenceBuildingBase b) {
 		residence = b;		
+	}
+	@Override
+	public void setRentLastPaid(Date d) {
+		// TODO Auto-generated method stub
+		
 	}
 }

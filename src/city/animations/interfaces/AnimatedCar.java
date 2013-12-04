@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
-import city.Building;
-import city.interfaces.AnimationInterface;
+import city.AnimationInterface;
+import city.BuildingInterface;
 
 public interface AnimatedCar extends AnimationInterface {
 	
@@ -13,7 +13,7 @@ public interface AnimatedCar extends AnimationInterface {
 	
 	// Movement
 	
-	public void goToDestination(Building destination);
+	public void goToDestination(BuildingInterface destination);
     
     // Getters
     

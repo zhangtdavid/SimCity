@@ -16,7 +16,7 @@ import city.agents.PersonAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
-import city.buildings.AptBuilding;
+import city.buildings.ApartmentBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
@@ -26,22 +26,22 @@ import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.BankPanel;
-import city.gui.BusStopPanel;
 import city.gui.CityRoad;
-import city.gui.CityViewBank;
-import city.gui.CityViewBusStop;
-import city.gui.CityViewMarket;
 import city.gui.CityViewPanel;
-import city.gui.CityViewRestaurant;
-import city.gui.HousePanel;
 import city.gui.MainFrame;
-import city.gui.MarketPanel;
-import city.gui.RestaurantChoiPanel;
-import city.gui.RestaurantChungPanel;
-import city.gui.RestaurantJPPanel;
-import city.gui.RestaurantTimmsPanel;
-import city.gui.RestaurantZhangPanel;
+import city.gui.buildings.BankPanel;
+import city.gui.buildings.BusStopPanel;
+import city.gui.buildings.HousePanel;
+import city.gui.buildings.MarketPanel;
+import city.gui.buildings.RestaurantChoiPanel;
+import city.gui.buildings.RestaurantChungPanel;
+import city.gui.buildings.RestaurantJPPanel;
+import city.gui.buildings.RestaurantTimmsPanel;
+import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.views.CityViewBank;
+import city.gui.views.CityViewBusStop;
+import city.gui.views.CityViewMarket;
+import city.gui.views.CityViewRestaurant;
 import city.interfaces.Person;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
@@ -79,6 +79,7 @@ public class Application {
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
 
+	public static final int HALF_HOUR = 1800000; // A half hour in milliseconds
 	public static final int INTERVAL = 1000; // One interval is the simulation's equivalent of a half-hour
 	public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
@@ -104,7 +105,7 @@ public class Application {
 		// Start the simulation
 		TimerTask tt = new TimerTask() {
 			public void run() {
-				date.setTime(date.getTime() + 1800000);
+				date.setTime(date.getTime() + HALF_HOUR);
 				for (Person p : people) {
 					p.setDate(date);
 				}
@@ -271,22 +272,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p1r1Zhang);
+		rzb1.addOccupyingRole(p1r1Zhang);
 		p1Zhang.setOccupation(p1r1Zhang);
 
 		// Create cook
 		RestaurantZhangCookRole p2r1Zhang = new RestaurantZhangCookRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p2r1Zhang);
+		rzb1.addOccupyingRole(p2r1Zhang);
 		p2Zhang.setOccupation(p2r1Zhang);
 
 		// Create host
 		RestaurantZhangHostRole p3r1Zhang = new RestaurantZhangHostRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p3r1Zhang);
+		rzb1.addOccupyingRole(p3r1Zhang);
 		p3Zhang.setOccupation(p3r1Zhang);
 
 		// Create waiter
 		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100); // TODO Change shift times
-		rzb1.addRole(p4r1Zhang);
+		rzb1.addOccupyingRole(p4r1Zhang);
 		p4Zhang.setOccupation(p4r1Zhang);
 
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
@@ -369,22 +370,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantTimmsCashierRole p1r1Timms = new RestaurantTimmsCashierRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p1r1Timms);
+		rtb.addOccupyingRole(p1r1Timms);
 		p1Timms.setOccupation(p1r1Timms);
 
 		// Create cook
 		RestaurantTimmsCookRole p2r1Timms = new RestaurantTimmsCookRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p2r1Timms);
+		rtb.addOccupyingRole(p2r1Timms);
 		p2Timms.setOccupation(p2r1Timms);
 
 		// Create host
 		RestaurantTimmsHostRole p3r1Timms = new RestaurantTimmsHostRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p3r1Timms);
+		rtb.addOccupyingRole(p3r1Timms);
 		p3Timms.setOccupation(p3r1Timms);
 
 		// Create waiter
 		RestaurantTimmsWaiterRole p4r1Timms = new RestaurantTimmsWaiterRole(rtb, 0, 100); // TODO Change shift times
-		rtb.addRole(p4r1Timms);
+		rtb.addOccupyingRole(p4r1Timms);
 		p4Timms.setOccupation(p4r1Timms);
 
 		// RESTAURANTCHOI----------------------------------------------------------------------------
@@ -436,8 +437,8 @@ public class Application {
 		HouseBuilding h2Choi = new HouseBuilding("House 2 Choi", p0r1Choi, rhp2Choi);
 		HouseBuilding h3Choi = new HouseBuilding("House 3 Choi", p0r1Choi, rhp3Choi);
 		HouseBuilding h4Choi = new HouseBuilding("House 4 Choi", p0r1Choi, rhp4Choi);
-		AptBuilding app0Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
-		AptBuilding app1Choi = new AptBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+		ApartmentBuilding app0Choi = new ApartmentBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
+		ApartmentBuilding app1Choi = new ApartmentBuilding("AptBuilding Choi", p0r1Choi); // this landlord owns everything!
 
 		// Create people
 		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date);
@@ -475,23 +476,23 @@ public class Application {
 
 		// Landlord
 		RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(rchoib1, 0, 24);
-		rchoib1.addRole(p1r1Choi);
+		rchoib1.addOccupyingRole(p1r1Choi);
 		p1Choi.setOccupation(p1r1Choi);
 
 		// Create cook
 		RestaurantChoiCookRole p2r1Choi = new RestaurantChoiCookRole(rchoib1, 0, 24);
-		rchoib1.addRole(p2r1Choi);
+		rchoib1.addOccupyingRole(p2r1Choi);
 		p2Choi.setOccupation(p2r1Choi);
 		p2r1Choi.addMarket(m1);
 
 		// Create host
 		RestaurantChoiHostRole p3r1Choi = new RestaurantChoiHostRole(rchoib1, 0, 24);
-		rchoib1.addRole(p3r1Choi);
+		rchoib1.addOccupyingRole(p3r1Choi);
 		p3Choi.setOccupation(p3r1Choi);
 
 		// Create waiter
 		RestaurantChoiWaiterQueueRole p4r1Choi = new RestaurantChoiWaiterQueueRole(rchoib1, 0, 24);
-		rchoib1.addRole(p4r1Choi);
+		rchoib1.addOccupyingRole(p4r1Choi);
 		p4Choi.setOccupation(p4r1Choi);
 
 		//Create bank roles
@@ -502,8 +503,8 @@ public class Application {
 		BankTellerRole p10r1Choi = new BankTellerRole(b1, 0, 24);
 		p10Choi.setOccupation(p10r1Choi);
 		p10r1Choi.setPerson(p10Choi);
-		b1.addRole(p9r1Choi);
-		b1.addRole(p10r1Choi);
+		b1.addOccupyingRole(p9r1Choi);
+		b1.addOccupyingRole(p10r1Choi);
 
 		//Create Market people
 		MarketManagerRole p5r1Choi = new MarketManagerRole(m1, 0, 24);
@@ -518,10 +519,10 @@ public class Application {
 		p7r1Choi.setPerson(p7Choi);
 		p8r1Choi.setPerson(p8Choi);
 		p8Choi.setOccupation(p8r1Choi);
-		m1.addRole(p5r1Choi);
-		m1.addRole(p6r1Choi);
-		m1.addRole(p7r1Choi);
-		m1.addRole(p8r1Choi);
+		m1.addOccupyingRole(p5r1Choi);
+		m1.addOccupyingRole(p6r1Choi);
+		m1.addOccupyingRole(p7r1Choi);
+		m1.addOccupyingRole(p8r1Choi);
 		m1.manager = p5r1Choi;
 		m1.cashier = p6r1Choi;
 		m1.addEmployee(p7r1Choi);
@@ -666,25 +667,25 @@ public class Application {
 		p1r1Chung.setPerson(p1Chung);
 		p1r1Chung.setMarketCustomerDeliveryPaymentPerson();
 		p1r1Chung.setBankCustomerPerson();
-		rcb1.addRole(p1r1Chung);
+		rcb1.addOccupyingRole(p1r1Chung);
 		p1Chung.setOccupation(p1r1Chung);
 		
 		// Create cook
 		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(rcb1, 0, 12); // TODO Change shift times
 		p2r1Chung.setPerson(p2Chung);		
-		rcb1.addRole(p2r1Chung);
+		rcb1.addOccupyingRole(p2r1Chung);
 		p2Chung.setOccupation(p2r1Chung);
 		
 		// Create host
 		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(rcb1, 0, 12); // TODO Change shift times
 		p3r1Chung.setPerson(p3Chung);		
-		rcb1.addRole(p3r1Chung);
+		rcb1.addOccupyingRole(p3r1Chung);
 		p3Chung.setOccupation(p3r1Chung);
 		
 		// Create waiter
 		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(rcb1, 0, 12); // TODO Change shift times
 		p4r1Chung.setPerson(p4Chung);		
-		rcb1.addRole(p4r1Chung);
+		rcb1.addOccupyingRole(p4r1Chung);
 		p4Chung.setOccupation(p4r1Chung);
 		
 		// Start threads
@@ -760,22 +761,22 @@ public class Application {
 
 		// Create cashier
 		RestaurantJPCashierRole p1r1JP = new RestaurantJPCashierRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p1r1JP);
+		rjpb1.addOccupyingRole(p1r1JP);
 		p1JP.setOccupation(p1r1JP);
 
 		// Create cook
 		RestaurantJPCookRole p2r1JP = new RestaurantJPCookRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p2r1JP);
+		rjpb1.addOccupyingRole(p2r1JP);
 		p2JP.setOccupation(p2r1JP);
 
 		// Create host
 		RestaurantJPHostRole p3r1JP = new RestaurantJPHostRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p3r1JP);
+		rjpb1.addOccupyingRole(p3r1JP);
 		p3JP.setOccupation(p3r1JP);
 
 		// Create waiter
 		RestaurantJPWaiterRole p4r1JP = new RestaurantJPWaiterRole(rjpb1, 0, 100); // TODO Change shift times
-		rjpb1.addRole(p4r1JP);
+		rjpb1.addOccupyingRole(p4r1JP);
 		p4JP.setOccupation(p4r1JP);
 
 		// Wait for stuff to get set up
@@ -875,8 +876,8 @@ public class Application {
 	}
 
 	public static class CityMap {
-		private static HashMap<BUILDING, List<Building>> map = new HashMap<BUILDING, List<Building>>();
-		private static int restaurantNumber = 0;
+		private static HashMap<BUILDING, List<BuildingInterface>> map = new HashMap<BUILDING, List<BuildingInterface>>();
+		public static int restaurantNumber = 0;
 		
 		/**
 		 * Adds a new building to the HashMap
@@ -888,11 +889,11 @@ public class Application {
 		 * @param type the type of building from the BUILDING enumeration
 		 * @param b the building to add
 		 */
-		public static Building addBuilding(BUILDING type, Building b) {
+		public static BuildingInterface addBuilding(BUILDING type, BuildingInterface b) {
 			if(map.containsKey(type)) {
 				map.get(type).add(b);
 			} else {
-				List<Building> list = new ArrayList<Building>();
+				List<BuildingInterface> list = new ArrayList<BuildingInterface>();
 				list.add(b);
 				map.put(type, list);
 			}
@@ -902,20 +903,21 @@ public class Application {
 		/**
 		 * Returns a random building of type
 		 */
-		public static Building findRandomBuilding(BUILDING type) {
-			/*if(type == BUILDING.restaurant) {
-				List<Building> list = map.get(type);
+
+		public static BuildingInterface findRandomBuilding(BUILDING type) {
+			if(type == BUILDING.restaurant) {
+				List<BuildingInterface> list = map.get(type);
 				if(restaurantNumber > list.size()) {
 					restaurantNumber = 0;
 				}
-				Building buildingToReturn = list.get(restaurantNumber);
-				if(restaurantNumber > list.size()) {
+				BuildingInterface buildingToReturn = list.get(restaurantNumber);
+				if(++restaurantNumber > list.size()) {
 					restaurantNumber = 0;
 				}
 				return buildingToReturn;
-			}*/
+			}
 			
-			List<Building> list = map.get(type);
+			List<BuildingInterface> list = map.get(type);
 			Collections.shuffle(list);
 			return list.get(0);
 		}
@@ -923,12 +925,12 @@ public class Application {
 		/**
 		 * Find the building of type closest to the destination building
 		 */
-		public static Building findClosestBuilding(BUILDING type, Building b) {
+		public static BuildingInterface findClosestBuilding(BUILDING type, BuildingInterface b) {
 			int x = b.getCityViewBuilding().x;
 			int y = b.getCityViewBuilding().y;
 			double closestDistance = 1000000;
-			Building returnBuilding = null;
-			for(Building tempBuilding : map.get(type)) {
+			BuildingInterface returnBuilding = null;
+			for(BuildingInterface tempBuilding : map.get(type)) {
 				double distance = Math.sqrt((double)(Math.pow(tempBuilding.getCityViewBuilding().x - x, 2) + Math.pow(tempBuilding.getCityViewBuilding().y - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
@@ -941,12 +943,12 @@ public class Application {
 		/**
 		 * Find the building of type closest to the person's location
 		 */
-		public static Building findClosestBuilding(BUILDING type, PersonAgent p) {
+		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
 			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
 			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
 			double closestDistance = 1000000;
-			Building returnBuilding = null;
-			for(Building b : map.get(type)) {
+			BuildingInterface returnBuilding = null;
+			for(BuildingInterface b : map.get(type)) {
 				double distance = Math.sqrt((double)(Math.pow(b.getCityViewBuilding().x - x, 2) + Math.pow(b.getCityViewBuilding().y - y, 2)));
 				if( distance < closestDistance) {
 					closestDistance = distance;
@@ -956,7 +958,7 @@ public class Application {
 			return returnBuilding;
 		}
 
-		public static CityRoad findClosestRoad(Building b) {
+		public static CityRoad findClosestRoad(BuildingInterface b) {
 			int x = b.getCityViewBuilding().x;
 			int y = b.getCityViewBuilding().y;
 			double closestDistance = 1000000;
@@ -971,7 +973,9 @@ public class Application {
 			return returnRoad;
 		}
 		
-		public static void clear(){
+
+		public static void clearMap() {
+
 			map.clear();
 		}
 	}

@@ -8,8 +8,9 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import city.abstracts.RestaurantBuildingBase;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.Application.FOOD_ITEMS;
@@ -19,7 +20,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 
 //  Data
 //	=====================================================================	
-	private RestaurantBaseBuilding restaurant;
+	private RestaurantBuildingBase restaurant;
 	private MarketBuilding market;
 	private MarketCustomerDeliveryPayment restaurantCashier;
 	private MarketOrder order;
@@ -32,7 +33,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	---------------------------------------------------------------
-	public MarketCustomerDeliveryRole(RestaurantBaseBuilding r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
+	public MarketCustomerDeliveryRole(RestaurantBuildingBase r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
 		restaurant = r;
 		order = new MarketOrder(o);
@@ -82,18 +83,18 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	// Restaurant
 	@Override
-	public RestaurantBaseBuilding getRestaurant() {
+	public RestaurantBuildingBase getRestaurant() {
 		return restaurant;
 	}
 	
 	@Override
-	public void setRestaurant(RestaurantBaseBuilding restaurant) {
+	public void setRestaurant(RestaurantBuildingBase restaurant) {
 		this.restaurant = restaurant;
 	}
 	
 	// Market
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 	

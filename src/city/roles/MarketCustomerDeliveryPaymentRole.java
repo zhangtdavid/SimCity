@@ -12,6 +12,7 @@ import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.Role;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
 public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
@@ -86,7 +87,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================
 	// Market
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 	

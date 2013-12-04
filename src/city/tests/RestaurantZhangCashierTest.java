@@ -7,7 +7,7 @@ import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.RestaurantZhangPanel;
+import city.gui.buildings.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCashierRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangCustomer;

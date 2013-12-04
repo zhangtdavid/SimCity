@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.RoleInterface;
 import utilities.RestaurantJPMenuClass;
 
 public interface RestaurantJPCustomer extends RoleInterface {

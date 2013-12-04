@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
 import utilities.RestaurantZhangTable;
-import city.interfaces.AnimationInterface;
+import city.AnimationInterface;
 
 public interface RestaurantZhangAnimatedWaiter extends AnimationInterface {
 	

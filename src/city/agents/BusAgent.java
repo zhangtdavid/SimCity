@@ -10,6 +10,7 @@ import trace.AlertTag;
 import city.Agent;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
+import city.interfaces.BusStop;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
 
@@ -21,8 +22,8 @@ public class BusAgent extends Agent implements Bus {
 	public enum BusEvent {NONE, ATSTOP};
 	public BusEvent myEvent = BusEvent.ATSTOP; // Event of bus
 	public List<MyBusPassenger> passengerList = Collections.synchronizedList(new ArrayList<MyBusPassenger>()); // List of bus passengers
-	public BusStopBuilding currentStop; // Stop the bus is at
-	public BusStopBuilding nextStop; // Stop the bus is going to
+	public BusStop currentStop; // Stop the bus is at
+	public BusStop nextStop; // Stop the bus is going to
 	public static final int busFare = 2; // Fare price of bus
 	public int earnedMoney = 0; // Amount of fare the bus earned
 	public AnimatedBus animation;
@@ -53,7 +54,7 @@ public class BusAgent extends Agent implements Bus {
 		stateChanged();
 	}
 
-	public void msgImOnBus(BusPassenger bp, BusStopBuilding dest) { // From BusPassengerRole, role has gotten on bus
+	public void msgImOnBus(BusPassenger bp, BusStop dest) { // From BusPassengerRole, role has gotten on bus
 		earnedMoney += busFare; // Add fare to money
 		synchronized(passengerList) {
 			for(MyBusPassenger mbp : passengerList) { // Set this role's state to ONBUS and its destination
@@ -132,8 +133,8 @@ public class BusAgent extends Agent implements Bus {
 	void notifyPassengersAtStopToGetOn() { // Tells passengers at stop to get on the bus
 		print("Notifying passengers at stop to get on");
 		boolean passengersPickedUp = false; // Flag to see if passengers got on
-		synchronized(currentStop.waitingList) {
-			for(BusPassenger bp : currentStop.waitingList) {
+		synchronized(currentStop.getWaitingList()) {
+			for(BusPassenger bp : currentStop.getWaitingList()) {
 				print("Picking up passenger " + bp.getPerson().getName() + " at " + currentStop.getName());
 				passengersPickedUp = true; // Set flag to true
 				passengerList.add(new MyBusPassenger(bp)); // Add this passenger to the passengerList
@@ -187,7 +188,7 @@ public class BusAgent extends Agent implements Bus {
 	class MyBusPassenger {
 		PassengerState myPassengerState = PassengerState.GETTINGONBUS;
 		BusPassenger bp;
-		BusStopBuilding destination;
+		BusStop destination;
 		
 		MyBusPassenger(BusPassenger bp_) {
 			bp = bp_;

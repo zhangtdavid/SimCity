@@ -2,7 +2,7 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import utilities.RestaurantJPMenuClass;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;

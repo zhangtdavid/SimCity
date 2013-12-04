@@ -2,9 +2,10 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
-import city.buildings.RestaurantJPBuilding;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 
@@ -25,25 +26,10 @@ public class BankTellerRole extends Role implements BankTeller {
 	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
 
-	public void setActive(){
-		print("Teller has been set active");
-		super.setActive();
-		building.manager.msgAvailable(this);
-	}
-	public void setInactive(){
-		if(currentCustomer == null){
-			super.setInactive();
-			this.getPerson().setCash(this.getPerson().getCash() + building.WORKER_SALARY);
-		}	
-		else{
-			building.manager.msgUnavailable(this);
-			wantsInactive = true;
-		}
-	}
 // Messages
 	//From BankManager
 	
@@ -122,7 +108,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		if(wantsInactive && currentCustomer == null){
 			super.setInactive();
 			wantsInactive = false;
-			this.getPerson().setCash(this.getPerson().getCash() + BankBuilding.WORKER_SALARY);
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 			return false;
 		}
 		if(currentCustomer != null){
@@ -220,7 +206,25 @@ public class BankTellerRole extends Role implements BankTeller {
 	// Getters
 	
 	// Setters
-
+	
+	@Override
+	public void setActive() {
+		print("Customer has been set active");
+		building.manager.msgAvailable(this);
+		this.setActivityBegun();
+	}
+	
+	@Override
+	public void setInactive(){
+		if(currentCustomer == null){
+			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
+		}	
+		else{
+			building.manager.msgUnavailable(this);
+			wantsInactive = true;
+		}
+	}
 	
 	// Utilities
 	

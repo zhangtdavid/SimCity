@@ -21,7 +21,7 @@ public class BankCustomerTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		Application.CityMap.clear();
+		Application.CityMap.clearMap();
 		this.teller = new MockBankTeller();
 		this.manager = new MockBankManager();
 		BankBuilding b = new BankBuilding("Bank");

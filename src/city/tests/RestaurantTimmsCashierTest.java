@@ -3,7 +3,7 @@ package city.tests;
 import junit.framework.TestCase;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
-import city.gui.CityViewRestaurant;
+import city.gui.views.CityViewRestaurant;
 import city.roles.RestaurantTimmsCashierRole;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantTimmsCustomer;

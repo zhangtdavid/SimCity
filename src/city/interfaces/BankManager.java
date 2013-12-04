@@ -2,6 +2,7 @@ package city.interfaces;
 
 import java.util.List;
 
+import city.RoleInterface;
 import city.roles.BankManagerRole.BankTask;
 
 public interface BankManager extends RoleInterface {

@@ -5,7 +5,7 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantChoiBuilding;
-import city.gui.RestaurantChoiPanel;
+import city.gui.buildings.RestaurantChoiPanel;
 import city.interfaces.RestaurantChoiCustomer;
 import city.interfaces.RestaurantChoiWaiter;
 import city.roles.RestaurantChoiCashierRole;

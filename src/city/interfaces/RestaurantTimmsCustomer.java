@@ -1,7 +1,7 @@
 package city.interfaces;
 
 import city.Application;
-import city.buildings.RestaurantTimmsBuilding;
+import city.RoleInterface;
 import city.roles.RestaurantTimmsCustomerRole.State;
 
 public interface RestaurantTimmsCustomer extends RoleInterface {
@@ -30,6 +30,6 @@ public interface RestaurantTimmsCustomer extends RoleInterface {
 	
 	// Setters
 	
-	public void setRestaurantTimmsBuilding(RestaurantTimmsBuilding b);
+	public void setRestaurantTimmsBuilding(RestaurantTimms b);
 	
 }

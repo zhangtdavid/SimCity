@@ -9,11 +9,13 @@ import java.util.List;
 import city.Animation;
 import city.Building;
 import city.Role;
+import city.RoleInterface;
+import city.interfaces.Bank;
 import city.interfaces.BankManager;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
 
-public class BankBuilding extends Building {
+public class BankBuilding extends Building implements Bank {
 	
 	// Data
 
@@ -24,7 +26,7 @@ public class BankBuilding extends Building {
 	double funds;
 	public Date loanLastPaid;
 	public HashMap<Role, Animation> allRoles = new HashMap<Role, Animation>();
-	public static final int WORKER_SALARY = 300;
+	
 
 	
 	// Constructor
@@ -35,20 +37,24 @@ public class BankBuilding extends Building {
 	
 	// Getters
 	
+	@Override
 	public List<Loan> getLoans(){
 		return loans;
 	}
 	
+	@Override
 	public List<Account> getAccounts(){
 		return accounts;
 	}
 	
+	@Override
 	public BankManager getManager() {
 		return manager;
 	}
 
 	// Setters
 	
+	@Override
 	public void setManager(BankManager b){
 		manager = b;
 	}
@@ -56,7 +62,7 @@ public class BankBuilding extends Building {
 	// Utilities
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof BankManagerRole) {
 			BankManagerRole c = (BankManagerRole)r;
 			

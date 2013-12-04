@@ -2,11 +2,12 @@ package city.roles;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.TimeZone;
 
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Role;
-import city.buildings.ResidenceBaseBuilding;
+import city.abstracts.ResidenceBuildingBase;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -17,7 +18,7 @@ public class ResidentRole extends Role implements Resident {
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
-	private ResidenceBaseBuilding house;
+	private ResidenceBuildingBase house;
 
 	// Constructor
 
@@ -44,10 +45,12 @@ public class ResidentRole extends Role implements Resident {
 
 	@Override
 	public void payRent() {
-		landlord.msgHeresRent(house.rent); // pay rent
-		this.getPerson().setCash((int)(this.getPerson().getCash()-house.rent)); // lose $ for rent
-		if(house.total_current_maintenance != 0) // pay maintenance if needed
-			this.getPerson().setCash((int)(this.getPerson().getCash()-house.total_current_maintenance/house.residents.size())); // lose $ for maintenance;
+		landlord.msgHeresRent(house.getRent()); // pay rent
+		this.getPerson().setCash((int)(this.getPerson().getCash()-house.getRent())); // lose $ for rent
+		if(house.getTotalCurrentMaintenance() != 0) {
+			// pay maintenance if needed
+			this.getPerson().setCash( (this.getPerson().getCash() - (house.getTotalCurrentMaintenance() / house.getResidents().size())) ); // lose $ for maintenance;
+		}
 		System.out.println(rentLastPaid.getTime());
 		rentLastPaid = this.getPerson().getDate();
 		this.setInactive(); // step out of resident role
@@ -75,6 +78,11 @@ public class ResidentRole extends Role implements Resident {
 	
 	// Setters
 	
+	@Override
+	public void setRentLastPaid(Date d) {
+		this.rentLastPaid = new Date(d.getTime());
+	}
+	
 	// Utilities
 
 	/**
@@ -82,7 +90,7 @@ public class ResidentRole extends Role implements Resident {
 	 */
 	@Override
 	public boolean rentIsDue() {
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(this.getPerson().getDate()); 
 		long day = c.getTimeInMillis();// this is the time and date RIGHT NOW
 		
@@ -94,7 +102,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	@Override
-	public void setResidence(ResidenceBaseBuilding b) {
+	public void setResidence(ResidenceBuildingBase b) {
 		house = b;
 	}
 

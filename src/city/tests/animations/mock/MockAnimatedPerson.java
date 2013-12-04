@@ -2,14 +2,15 @@ package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
-import city.MockAnimation;
+import city.abstracts.MockAnimation;
 import city.animations.interfaces.AnimatedPerson;
-import city.buildings.BusStopBuilding;
+import city.interfaces.BusStop;
+import city.interfaces.Person;
 
 public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson {
-
+	
 	public MockAnimatedPerson() {
-		// TODO
+		// TODO Auto-generated constructor stub
 		
 	}
 
@@ -26,7 +27,7 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 	}
 
 	@Override
-	public void goToBusStop(BusStopBuilding b) {
+	public void goToBusStop(BusStop b) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -39,8 +40,8 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 
 	@Override
 	public void cookAndEatFood() {
-		// TODO Auto-generated method stub
-		
+		Person p = (Person) this.getAgent();
+		p.guiAtDestination(); // Reply immediately since this is a mock
 	}
 
 }

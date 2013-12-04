@@ -12,6 +12,7 @@ import city.Role;
 import city.agents.CarAgent;
 import city.buildings.MarketBuilding;
 import city.interfaces.CarPassenger;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
 
@@ -119,7 +120,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================
 	// Market
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		return market;
 	}
 	

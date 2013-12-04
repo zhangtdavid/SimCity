@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import city.RoleInterface;
 import utilities.RestaurantChungMenu;
 
 public interface RestaurantChungCustomer extends RoleInterface {

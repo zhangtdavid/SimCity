@@ -1,5 +1,5 @@
 package city.interfaces;
-import city.buildings.BusStopBuilding;
+import city.AgentInterface;
 
 public interface Bus extends AgentInterface {
 
@@ -11,7 +11,7 @@ public interface Bus extends AgentInterface {
 	
 	// Messages
 	
-	void msgImOnBus(BusPassenger busPassengerRole,BusStopBuilding destination);
+	void msgImOnBus(BusPassenger busPassengerRole,BusStop destination);
 	void msgImOffBus(BusPassenger busPassengerRole);
 	void msgAtDestination();
 	

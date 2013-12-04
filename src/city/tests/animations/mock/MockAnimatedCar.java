@@ -2,8 +2,8 @@ package city.tests.animations.mock;
 
 import java.awt.Graphics2D;
 
-import city.Building;
-import city.MockAnimation;
+import city.BuildingInterface;
+import city.abstracts.MockAnimation;
 import city.animations.interfaces.AnimatedCar;
 import city.interfaces.Car;
 
@@ -28,7 +28,7 @@ public class MockAnimatedCar extends MockAnimation implements AnimatedCar {
 	}
 
 	@Override
-	public void goToDestination(Building destination) {
+	public void goToDestination(BuildingInterface destination) {
 		// TODO Auto-generated method stub
 		car.msgAtDestination();
 	}

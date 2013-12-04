@@ -2,8 +2,9 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import utilities.RestaurantJPWaiterBase;
+import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
@@ -11,7 +12,7 @@ public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	public RestaurantJPWaiterRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super(b, shiftStart, shiftEnd);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 	}
 	

@@ -3,7 +3,7 @@ package city.tests.animations.mock;
 import java.awt.Graphics2D;
 
 import city.Application.FOOD_ITEMS;
-import city.MockAnimation;
+import city.abstracts.MockAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
 
 public class MockRestaurantChoiAnimatedCustomer extends MockAnimation implements RestaurantChoiAnimatedCustomer{

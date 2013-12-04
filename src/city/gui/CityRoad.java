@@ -10,6 +10,7 @@ import java.util.ArrayList;
 import city.Animation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
+import city.gui.views.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
 	ArrayList<Line2D.Double> sides;

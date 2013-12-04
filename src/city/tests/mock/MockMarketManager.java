@@ -4,8 +4,9 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -16,7 +17,7 @@ import city.Application.FOOD_ITEMS;
 public class MockMarketManager extends MockRole implements MarketManager {
 	
 	public EventLog log = new EventLog();
-	public MarketBuilding market;
+	public Market market;
 	
 	@Override
 	public void msgNewEmployee(MarketEmployee e) {
@@ -65,7 +66,7 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	}
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		// TODO Auto-generated method stub
 		return null;
 	}

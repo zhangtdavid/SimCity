@@ -1,7 +1,7 @@
 package city.interfaces;
 
 import city.Application;
-import city.buildings.ResidenceBaseBuilding;
+import city.abstracts.ResidenceBuildingBase;
 
 public interface Landlord {
 
@@ -23,7 +23,7 @@ public interface Landlord {
 	
 	// Setters
 	
-	public void setResidence(ResidenceBaseBuilding b);
+	public void setResidence(ResidenceBuildingBase b);
 	public void setRent(int d);
 	
 	// Utilities

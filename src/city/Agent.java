@@ -3,7 +3,6 @@ package city;
 import java.util.concurrent.Semaphore;
 
 import utilities.StringUtil;
-import city.interfaces.AgentInterface;
 
 /**
  * The base class for all SimCity201 agents.
@@ -29,7 +28,7 @@ public abstract class Agent implements AgentInterface {
      * @throws InterruptedException 
      * @return true iff some action was executed that might have changed the state.
      */
-    protected abstract boolean runScheduler() throws InterruptedException;
+   public abstract boolean runScheduler() throws InterruptedException;
     
     // Actions
     

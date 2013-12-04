@@ -1,6 +1,6 @@
 package city.animations.interfaces;
 
-import city.interfaces.AnimationInterface;
+import city.AnimationInterface;
 
 public interface RestaurantTimmsAnimatedWaiter extends AnimationInterface {
 	

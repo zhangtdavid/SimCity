@@ -1,8 +1,8 @@
 package city.animations.interfaces;
 
+import city.AnimationInterface;
 import city.Building;
-import city.buildings.BusStopBuilding;
-import city.interfaces.AnimationInterface;
+import city.interfaces.BusStop;
 
 public interface AnimatedBus extends AnimationInterface {
 	
@@ -16,7 +16,7 @@ public interface AnimatedBus extends AnimationInterface {
 	
 	public void goToDestination(Building destination);
 
-	public void DoGoToNextStop(BusStopBuilding nextStop);
+	public void DoGoToNextStop(BusStop nextStop);
     
     // Getters
     

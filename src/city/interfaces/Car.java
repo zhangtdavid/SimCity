@@ -1,6 +1,7 @@
 package city.interfaces;
 
-import city.Building;
+import city.AgentInterface;
+import city.BuildingInterface;
 
 public interface Car extends AgentInterface {
 	
@@ -10,7 +11,7 @@ public interface Car extends AgentInterface {
 	
 	// Messages
 	
-	public void msgIWantToDrive(CarPassenger carPassenger, Building destination);
+	public void msgIWantToDrive(CarPassenger carPassenger, BuildingInterface destination);
 	public void msgAtDestination();
 	
 	// Scheduler

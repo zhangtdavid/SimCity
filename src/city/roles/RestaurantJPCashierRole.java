@@ -16,6 +16,7 @@ import city.Role;
 import city.Application.TRANSACTION_TYPE;
 import city.buildings.RestaurantJPBuilding;
 import city.interfaces.MarketCustomerDeliveryPayment;
+import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
@@ -54,7 +55,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		building.setCashier(this);
 		//name = this.getPerson().getName();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantJPBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(b, marketTransactions);
 		Prices.put("Steak", 13);

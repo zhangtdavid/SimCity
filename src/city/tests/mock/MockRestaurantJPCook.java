@@ -1,7 +1,7 @@
 package city.tests.mock;
 
 import utilities.RestaurantJPTableClass;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.MarketManager;
 import city.interfaces.Person;
 import city.interfaces.RestaurantJPCook;

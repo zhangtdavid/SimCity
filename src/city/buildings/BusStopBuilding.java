@@ -1,23 +1,24 @@
 package city.buildings;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 
 import city.Building;
-import city.Role;
-import city.gui.BusStopPanel;
+import city.RoleInterface;
 import city.gui.CityRoad;
-import city.gui.CityViewBusStop;
-import city.roles.BusPassengerRole;
+import city.gui.buildings.BusStopPanel;
+import city.gui.views.CityViewBusStop;
+import city.interfaces.BusPassenger;
+import city.interfaces.BusStop;
 
-public class BusStopBuilding extends Building {
+public class BusStopBuilding extends Building implements BusStop {
 	
 	// Data
 	
-	public BusStopBuilding nextStop = null;
-	public BusStopBuilding previousStop = null;
-	public List<BusPassengerRole> waitingList = Collections.synchronizedList(new ArrayList<BusPassengerRole>());
+	public BusStop nextStop = null;
+	public BusStop previousStop = null;
+	public List<BusPassenger> waitingList = Collections.synchronizedList(new ArrayList<BusPassenger>());
 	public CityRoad roadLocatedOn;
 	
 	// Constructor
@@ -41,21 +42,30 @@ public class BusStopBuilding extends Building {
 	public BusStopBuilding(String name) {
 		super(name);
 	}
+	
+	@Override
+	public List<BusPassenger> getWaitingList() {
+		return waitingList;
+	}
 
-	public BusStopBuilding getNextStop() {
+	@Override
+	public BusStop getNextStop() {
 		return nextStop;
 	}
 	
 	// Setters
 	
-	public void setNextStop(BusStopBuilding b) {
+	@Override
+	public void setNextStop(BusStop b) {
 		nextStop = b;
 	}
 	
-	public void setPreviousStop(BusStopBuilding b) {
+	@Override
+	public void setPreviousStop(BusStop b) {
 		previousStop = b;
 	}
 	
+	@Override
 	public void setRoad(CityRoad road) {
 		this.roadLocatedOn = road;
 	}
@@ -63,8 +73,18 @@ public class BusStopBuilding extends Building {
 	// Utilities
 	
 	@Override
-	public void addRole(Role r) {
+	public void addOccupyingRole(RoleInterface r) {
 		// TODO
 		return;
+	}
+
+	@Override
+	public void addToWaitingList(BusPassenger p) {
+		this.waitingList.add(p);
+	}
+	
+	@Override
+	public void removeFromWaitingList(BusPassenger p) {
+		this.waitingList.remove(p);
 	}
 }

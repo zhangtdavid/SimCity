@@ -5,7 +5,7 @@ import java.util.List;
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;

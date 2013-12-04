@@ -5,6 +5,8 @@ import trace.AlertTag;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 import utilities.RestaurantChungRevolvingStand;
+import city.abstracts.RestaurantChungWaiterBase;
+import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
 

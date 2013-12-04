@@ -3,7 +3,7 @@ package city.tests.mock;
 import utilities.LoggedEvent;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
 import city.roles.BankTellerRole;
@@ -60,6 +60,12 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 			TRANSACTION_TYPE business) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public BANK_SERVICE getService() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -5,7 +5,7 @@ import java.awt.Graphics2D;
 
 import city.Animation;
 import city.Application;
-import city.Building;
+import city.BuildingInterface;
 import city.animations.interfaces.AnimatedCar;
 import city.gui.CityRoad;
 import city.interfaces.Car;
@@ -17,8 +17,8 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
 
-	Building currentBuilding;
-	Building destinationBuilding = null;
+	BuildingInterface currentBuilding;
+	BuildingInterface destinationBuilding = null;
 	public CityRoad startingRoad = null;
 	public CityRoad endRoad = null;
 	
@@ -27,7 +27,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 
 	public static final int SIZE = 25;
 
-	public CarAnimation(Car c, Building startingBuilding) {
+	public CarAnimation(Car c, BuildingInterface startingBuilding) {
 		car = c;
 		xDestination = xPos = startingBuilding.getCityViewBuilding().x;
 		yDestination = yPos = startingBuilding.getCityViewBuilding().y;
@@ -87,7 +87,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		return yPos;
 	}
 
-	public void goToDestination(Building destination) {
+	public void goToDestination(BuildingInterface destination) {
 		destinationBuilding = destination;
 		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
 		startingRoad.addVehicle(this);

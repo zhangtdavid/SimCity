@@ -3,29 +3,32 @@ package city.agents;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Calendar;
+import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.List;
+import java.util.LinkedList;
+import java.util.TimeZone;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketOrder;
 import city.Agent;
+import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
-import city.Application;
-import city.Building;
-import city.Role;
-import city.buildings.BankBuilding;
-import city.buildings.BusStopBuilding;
-import city.buildings.MarketBuilding;
-import city.buildings.ResidenceBaseBuilding;
+import city.BuildingInterface;
+import city.RoleInterface;
+import city.abstracts.ResidenceBuildingInterface;
+import city.interfaces.Bank;
+import city.interfaces.BusStop;
 import city.interfaces.Car;
+import city.interfaces.Market;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
@@ -38,23 +41,24 @@ public class PersonAgent extends Agent implements Person {
 	// Data
 	
 	private Date date;
-	private Role occupation;
-	private ResidenceBaseBuilding home;
+	private RoleInterface occupation;
+	private ResidenceBuildingInterface home;
 	private Car car;
 	private CarPassengerRole carPassengerRole; // not retained
 	private BusPassengerRole busPassengerRole; // not retained
 	private BankCustomerRole bankCustomerRole; // retained
 	private ResidentRole residentRole; // retained
-	private Role restaurantCustomerRole; // not retained
+	private RoleInterface restaurantCustomerRole; // not retained
 	private MarketCustomerRole marketCustomerRole; // not retained
 	private Date lastAteAtRestaurant;
 	private Date lastWentToSleep;
 	private String name;
-	private List<Role> roles = new ArrayList<Role>();
+	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
 	private city.animations.interfaces.AnimatedPerson animation;
 	private STATE state; 
 	private int cash;
+	private boolean hasEaten;
 	
 	// Constructor
 	
@@ -67,13 +71,14 @@ public class PersonAgent extends Agent implements Person {
 	public PersonAgent(String name, Date startDate) {
 		super();
 		this.name = name;
-		this.date = startDate;
-		this.lastAteAtRestaurant = startDate;
-		this.lastWentToSleep = startDate;
+		this.date = new Date(startDate.getTime());
+		this.lastAteAtRestaurant = new Date(startDate.getTime());
+		this.lastWentToSleep = new Date(startDate.getTime());
 		this.state = STATE.none;
-		this.setCash(50); // If you have an error on startup, this might be it. Don't know why, but it is. 
+		this.cash = 0;
+		this.hasEaten = false;
 		
-		residentRole = new ResidentRole(startDate);
+		residentRole = new ResidentRole(new Date(startDate.getTime()));
 		bankCustomerRole = new BankCustomerRole();
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
@@ -94,7 +99,7 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	
 	@Override
-	protected boolean runScheduler() throws InterruptedException {
+	public boolean runScheduler() throws InterruptedException {
 		//-------------------/
 		// Central Scheduler /
 		//-------------------/
@@ -135,7 +140,8 @@ public class PersonAgent extends Agent implements Person {
 				if (cash >= BANK_DEPOSIT_THRESHOLD) { 
 					choice = BANK_SERVICE.atmDeposit; 
 					money = BANK_DEPOSIT_SUM;
-				} else if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { 
+				} 
+				if (residentRole.rentIsDue()) { 
 					choice = BANK_SERVICE.moneyWithdraw; 
 					money = RENT_MIN_THRESHOLD;
 				}
@@ -203,11 +209,16 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (state == STATE.goingToCook) {
 			if (processTransportationArrival()) {
-				// actCookAndEatFood() will run the daily task scheduler
 				state = STATE.atCooking;
 				actCookAndEatFood();
 				return true;
 			}
+		}
+		if (state == STATE.atCooking) {
+			atDestination.acquire();
+			state = pickDailyTask();
+			performDailyTaskAction();
+			return true;
 		}
 		if (state == STATE.goingToSleep) {
 			if (processTransportationArrival()) {
@@ -216,7 +227,7 @@ public class PersonAgent extends Agent implements Person {
 				return false;
 			}
 		}
-		if (state == STATE.atSleep || state == STATE.none) { // TODO needs testing. 
+		if (state == STATE.atSleep) {
 			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
@@ -228,13 +239,21 @@ public class PersonAgent extends Agent implements Person {
 			}
 			return false;
 		}
+		if (state == STATE.none) {
+			// If state == STATE.none (the condition at PersonAgent creation) we don't want anything special to 
+			// happen. The person either has a first-shift job and will go to work, or the person has a
+			// second-shift job and will begin daily tasks.	
+			state = pickDailyTask();
+			performDailyTaskAction();
+			return true;
+		}
 		
 		//----------------/
 		// Role Scheduler /
 		//----------------/
 		
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+		for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
 			boolean activity = r.runScheduler();
 			if (!activity) {
@@ -258,7 +277,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToWork() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(occupation.getWorkplace(Building.class));
+		processTransportationDeparture(occupation.getWorkplace(BuildingInterface.class));
 		state = STATE.goingToWork;
 	}
 	
@@ -269,7 +288,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToBank() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		BankBuilding b = (BankBuilding) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
+		Bank b = (Bank) Application.CityMap.findClosestBuilding(BUILDING.bank, this);
 		processTransportationDeparture(b);
 		state = STATE.goingToBank;
 	}
@@ -281,7 +300,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToPayRent() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		processTransportationDeparture((ResidenceBuildingInterface) home);
 		state = STATE.goingToPayRent;
 	}
 	
@@ -294,15 +313,16 @@ public class PersonAgent extends Agent implements Person {
 		// Thread.sleep(9000); // TODO testing - Delay the customer entering
 		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		Building building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
+		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
+		this.lastAteAtRestaurant = this.date;
+		this.hasEaten = true;
 		
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
 		try {
-
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
-			restaurantCustomerRole = (Role) r0.newInstance();
-			building.addRole(restaurantCustomerRole);
+			restaurantCustomerRole = (RoleInterface) r0.newInstance();
+			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -319,14 +339,24 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToMarket() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		MarketBuilding b = (MarketBuilding) Application.CityMap.findClosestBuilding(BUILDING.market, this);
-		processTransportationDeparture(b);
+		Market m = (Market) Application.CityMap.findClosestBuilding(BUILDING.market, this);
+		processTransportationDeparture(m);
 		state = STATE.goingToMarket;
 		
-		// TODO construct an actual order
-		HashMap<FOOD_ITEMS, Integer> items = null;
+		// Orders one of each of four random food items
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
+		LinkedList<FOOD_ITEMS> list = new LinkedList<FOOD_ITEMS>(Arrays.asList(FOOD_ITEMS.values()));
+		Collections.shuffle(list);
+		int i = 0;
+		do {
+			FOOD_ITEMS f = list.get(0);
+			list.remove(0);
+			items.put(f, 1);
+			i += 1;
+		} while (i < 4);
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(order);
+		m.addOccupyingRole(marketCustomerRole);
 		this.addRole(marketCustomerRole);
 	}
 	
@@ -335,7 +365,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToCook() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		processTransportationDeparture((BuildingInterface) home);
 		state = STATE.goingToCook;
 	}
 	
@@ -346,21 +376,24 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		this.hasEaten = true;
 		animation.cookAndEatFood();
-		atDestination.acquire();
-		state = pickDailyTask();
-		performDailyTaskAction();
-		// Expected to go to sleep next
+		// The scheduler will pick up the atDestination and continue the program
 	}
 	
 	/**
 	 * Takes the person home and allows them to "sleep" until awakened for work.
 	 * 
+	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
+	 * 
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
+		// TODO this shouldn't transport them home if they're already at home
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		processTransportationDeparture(home);
+		this.hasEaten = false;
+		processTransportationDeparture((BuildingInterface) home);
+		lastWentToSleep = this.getDate();
 		state = STATE.goingToSleep;
 	}
 	
@@ -374,6 +407,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
+	public STATE getState() {
+		return this.state;
+	}
+	
+	@Override
 	public Date getDate() {
 		return this.date;
 	}
@@ -384,13 +422,58 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public ResidenceBaseBuilding getHome() {
+	public ResidenceBuildingInterface getHome() {
 		return home;
 	}
 	
 	@Override
-	public Role getOccupation() {
+	public Car getCar() {
+		return car;
+	}
+	
+	@Override
+	public RoleInterface getOccupation() {
 		return occupation;
+	}
+	
+	@Override
+	public CarPassengerRole getCarPassengerRole() {
+		return carPassengerRole;
+	}
+
+	@Override
+	public BusPassengerRole getBusPassengerRole() {
+		return busPassengerRole;
+	}
+
+	@Override
+	public BankCustomerRole getBankCustomerRole() {
+		return bankCustomerRole;
+	}
+
+	@Override
+	public MarketCustomerRole getMarketCustomerRole() {
+		return marketCustomerRole;
+	}
+
+	@Override
+	public RoleInterface getRestaurantCustomerRole() {
+		return restaurantCustomerRole;
+	}
+
+	@Override
+	public ArrayList<RoleInterface> getRoles() {
+		return roles;
+	}
+	
+	@Override
+	public boolean getHasEaten() {
+		return hasEaten;
+	}
+	
+	@Override
+	public ResidentRole getResidentRole() {
+		return residentRole;
 	}
 	
 	//=========//
@@ -404,10 +487,10 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(Role r) {
+	public void setOccupation(RoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
-		addRole(r);
+		if (r != null) { addRole(r); }
 	}
 	
 	@Override
@@ -429,7 +512,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setHome(ResidenceBaseBuilding h) {
+	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		home = h;
 	}
@@ -439,7 +522,7 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	
 	@Override
-	public void addRole(Role r) {
+	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 		roles.add(r);
 	}
@@ -450,7 +533,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 * @param destination the building to travel to
 	 */
-	private void processTransportationDeparture(Building destination) throws InterruptedException {
+	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (car != null) {
 			carPassengerRole = new CarPassengerRole(car, destination);
@@ -458,8 +541,8 @@ public class PersonAgent extends Agent implements Person {
 			carPassengerRole.setPerson(this);
 			this.addRole(carPassengerRole);
 		} else {
-			BusStopBuilding b = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, this);
-			BusStopBuilding d = (BusStopBuilding) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+			BusStop b = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, this);
+			BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
 // TODO
 //			animation.goToBusStop(b);
 //			atDestination.acquire();
@@ -600,8 +683,8 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = false;
 		if (cash >= BANK_DEPOSIT_THRESHOLD) { disposition = true; }
-		if (residentRole.rentIsDue() && cash < RENT_MAX_THRESHOLD) { disposition = true; }
-		if (residentRole.rentIsDue() && cash > RENT_MIN_THRESHOLD) { disposition = false; }
+		if (residentRole.rentIsDue() && cash < RENT_MIN_THRESHOLD) { disposition = true; }
+		if (residentRole.rentIsDue() && cash >= RENT_MIN_THRESHOLD) { disposition = false; }
 		return disposition;
 	}
 	
@@ -624,7 +707,7 @@ public class PersonAgent extends Agent implements Person {
 		// Calculations
 		Date thresholdDate = new Date(0);
 		thresholdDate.setTime(lastAteAtRestaurant.getTime() + RESTAURANT_DINING_INTERVAL);
-		Calendar c = Calendar.getInstance();
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
 		int today = c.get(Calendar.DAY_OF_YEAR);
 		c.setTime(thresholdDate);
@@ -634,6 +717,7 @@ public class PersonAgent extends Agent implements Person {
 		boolean disposition = false;
 		if (cash >= RESTAURANT_DINING_THRESHOLD) { disposition = true; }
 		if (today >= threshold) { disposition = true; }
+		if (this.hasEaten) { disposition = false; }
 		
 		return disposition;
 	}
@@ -645,25 +729,32 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean shouldGoToMarket() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		boolean disposition = false;
+		boolean disposition = true;
 		int items = 0;
-		for (FOOD_ITEMS i : home.foodItems.keySet()) {
-			items = items + home.foodItems.get(i);
+		for (FOOD_ITEMS i : home.getFoodItems().keySet()) {
+			items = items + home.getFoodItems().get(i);
+			if (items > 3) { 
+				disposition = false;
+				break;
+			}
 		}
-		if (items <= 3) { disposition = true; }
 		return disposition;
 	}
 	
 	/**
 	 * Returns true if the person should go home to cook their food.
 	 * 
-	 * Should be called only after visiting a market, and will only go to cook
-	 * if a market has just been visited.
+	 * Since eating at home is lower in priority in the task picker than going 
+	 * to a restaurant, the person will automatically go home to cook if 
+	 * shouldGoToCook() is called and the person has not eaten.
+	 * 
+	 * Though the person can go to the market after going to a restaurant, the 
+	 * person will not go home to cook.
 	 */
 	private boolean shouldGoToCook() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		boolean disposition = false;
-		if (state == STATE.atMarket) { disposition = true; }
+		boolean disposition = true;
+		if (hasEaten) { disposition = false; }
 		return disposition;
 	}
 	
@@ -678,7 +769,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Decision
 		boolean disposition = false;
-		if (thresholdDate.getTime() >= date.getTime()) { disposition = true; }
+		if (date.getTime() >= thresholdDate.getTime()) { disposition = true; }
 		return disposition;
 	}
 	
@@ -689,14 +780,25 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the current time is at or within their working hours
 	 */
 	private boolean inShiftRange() {
-		Calendar c = Calendar.getInstance();
+		// TODO do we need to give the person enough time to get to work?
+		
+		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
-		int time = c.get(Calendar.HOUR_OF_DAY);
+		int hour = c.get(Calendar.HOUR_OF_DAY);
+		int minute = c.get(Calendar.MINUTE);
 		
 		boolean disposition = false;
-		// TODO do we need to give the person enough time to get to work?
-		if (time >= occupation.getShiftStart() && time <= occupation.getShiftEnd()) {
+		// Covers any range starting at 0 or above and going to 23
+		if (hour >= occupation.getShiftStart() && hour <= occupation.getShiftEnd()) {
 			disposition = true;
+		}
+		// Covers any range starting at 0 or above and ending at 0
+		if (hour >= occupation.getShiftStart() && occupation.getShiftEnd() == 0 && hour != 0) {
+			disposition = true;
+		}
+		// Shifts end at exactly shiftEnd
+		if (hour == occupation.getShiftEnd() && minute >= 0) {
+			disposition = false;
 		}
 		return disposition;
 	}

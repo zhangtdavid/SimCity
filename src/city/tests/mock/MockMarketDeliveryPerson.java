@@ -5,15 +5,16 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketDeliveryPerson;
 
 public class MockMarketDeliveryPerson extends MockRole implements MarketDeliveryPerson {
 	
 	public EventLog log = new EventLog();
-	public MarketBuilding market;
+	public Market market;
 	
 	public MockMarketDeliveryPerson() {
 		// TODO Auto-generated method stub
@@ -27,7 +28,7 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 	}
 
 	@Override
-	public MarketBuilding getMarket() {
+	public Market getMarket() {
 		// TODO Auto-generated method stub
 		return null;
 	}

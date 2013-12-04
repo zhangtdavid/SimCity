@@ -4,8 +4,9 @@ import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
 import city.Building;
+import city.RoleInterface;
+import city.abstracts.RestaurantBuildingBase;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding;
 
 public interface MarketCustomerDelivery extends RoleInterface {
 	
@@ -23,12 +24,12 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Getters
 	
-	public MarketBuilding getMarket();
+	public Market getMarket();
 	public Building getRestaurant();
 	
 	// Setters
 	
-	public void setRestaurant(RestaurantBaseBuilding restaurant);
+	public void setRestaurant(RestaurantBuildingBase restaurant);
 	public void setMarket(MarketBuilding selectedMarket);
 	
 	// Utilities

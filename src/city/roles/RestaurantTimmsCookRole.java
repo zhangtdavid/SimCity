@@ -21,6 +21,7 @@ import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
 import city.buildings.RestaurantTimmsBuilding.Order;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCook;
 import city.interfaces.RestaurantTimmsCustomer;
 import city.interfaces.RestaurantTimmsWaiter;
@@ -52,7 +53,7 @@ public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook
 	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
-		this.setSalary(RestaurantTimmsBuilding.WORKER_SALARY);
+		this.setSalary(RestaurantTimms.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
 		this.speed = 3;
 		this.rtb = b;

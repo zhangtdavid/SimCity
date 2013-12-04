@@ -8,7 +8,7 @@ import java.util.Vector;
 import utilities.StringUtil;
 import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
-import city.gui.RestaurantChungPanel;
+import city.gui.buildings.RestaurantChungPanel;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
 

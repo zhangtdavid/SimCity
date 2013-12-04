@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import utilities.RestaurantJPTableClass;
+import city.RoleInterface;
 import city.roles.RestaurantJPCashierRole;
 
 public interface RestaurantJPWaiter extends RoleInterface {

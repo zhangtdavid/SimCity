@@ -9,7 +9,7 @@ import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.RestaurantZhangPanel;
+import city.gui.buildings.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCookRole;
 import city.tests.animations.mock.MockRestaurantZhangAnimatedCook;
 import city.tests.mock.MockPerson;

@@ -1,7 +1,7 @@
 package city.tests.mock;
 
 
-import city.MockRole;
+import city.abstracts.MockRole;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;

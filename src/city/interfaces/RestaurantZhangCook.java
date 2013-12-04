@@ -2,14 +2,15 @@ package city.interfaces;
 
 import java.util.Map;
 
-import city.Application.FOOD_ITEMS;
-import city.animations.interfaces.RestaurantZhangAnimatedCook;
-import city.buildings.MarketBuilding;
-import city.buildings.RestaurantBaseBuilding.Food;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Application.FOOD_ITEMS;
+import city.RoleInterface;
+import city.abstracts.RestaurantBuildingInterface.Food;
+import city.animations.interfaces.RestaurantZhangAnimatedCook;
+import city.buildings.MarketBuilding;
 
 public interface RestaurantZhangCook extends RoleInterface {
 	

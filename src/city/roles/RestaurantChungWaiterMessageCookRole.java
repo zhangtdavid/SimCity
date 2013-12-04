@@ -2,6 +2,8 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import city.abstracts.RestaurantChungWaiterBase;
+import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
 
@@ -12,7 +14,7 @@ import city.buildings.RestaurantChungBuilding;
 public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterBase {
 	public RestaurantChungWaiterMessageCookRole(RestaurantChungBuilding b, int t1, int t2) {
 		super();
-		restaurant = b;
+		this.restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
