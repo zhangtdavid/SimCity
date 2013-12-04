@@ -110,7 +110,7 @@ public abstract class Building implements BuildingInterface {
 	public abstract void addOccupyingRole(RoleInterface r);
 	
 	@Override
-	public void addOccupyingRole(RoleInterface r, Animation a) {
+	public void addOccupyingRole(RoleInterface r, AnimationInterface a) {
 		occupyingRoles.put(r, a);
 	}
 	

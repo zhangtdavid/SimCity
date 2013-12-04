@@ -25,7 +25,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	private MarketBuilding market;
+	private Market market;
 
 	private boolean itemsLow;
 	
@@ -36,12 +36,12 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Constructor
 //	=====================================================================
-	public MarketManagerRole(MarketBuilding b, int t1, int t2) {
+	public MarketManagerRole(Market b, int t1, int t2) {
 		super();
 		market = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(MarketBuilding.getWorkerSalary());
+		this.setSalary(MarketBuilding.WORKER_SALARY);
 	}
 	
 //  Activity
@@ -136,7 +136,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.employees.size() > 1)
+			if (market.getEmployees().size() > 1)
 				workingState = WorkingState.NotWorking;
 		}		
 		
@@ -221,7 +221,7 @@ public class MarketManagerRole extends Role implements MarketManager {
 //  Setters
 //	=====================================================================
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 	

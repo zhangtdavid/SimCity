@@ -6,7 +6,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -53,7 +52,7 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 	}
 
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -104,6 +103,30 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 	public MarketEmployeeEvent getMarketEmployeeEvent() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void msgAnimationAtPhone() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgFinishedCollectingItems() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCounter() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

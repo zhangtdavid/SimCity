@@ -7,7 +7,6 @@ import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
@@ -65,7 +64,7 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		// TODO Auto-generated method stub
 		
 	}

@@ -522,8 +522,8 @@ public class Application {
 		m1.addOccupyingRole(p6r1Choi);
 		m1.addOccupyingRole(p7r1Choi);
 		m1.addOccupyingRole(p8r1Choi);
-		m1.manager = p5r1Choi;
-		m1.cashier = p6r1Choi;
+		m1.setManager(p5r1Choi);
+		m1.setCashier(p6r1Choi);
 		m1.addEmployee(p7r1Choi);
 		m1.addDeliveryPerson(p8r1Choi);
 

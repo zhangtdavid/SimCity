@@ -28,7 +28,7 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	Map<FOOD_ITEMS, Integer> getCollectedItems();
 	
 	// Setters
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 
 	// Utilities
 	

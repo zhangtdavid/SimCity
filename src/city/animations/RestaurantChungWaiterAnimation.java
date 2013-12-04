@@ -22,7 +22,6 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 	private boolean delivering = false;
     private String food = null;
 
-    
 //	Location Information
 //	=====================================================================
     private int xPos = -20, yPos = -20; //default waiter position

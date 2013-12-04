@@ -14,7 +14,6 @@ import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.buildings.MarketBuilding;
-import city.interfaces.BankCustomer;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -29,22 +28,20 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	private MarketBuilding market;
+	private Market market;
 	private WorkingState workingState = WorkingState.Working;
 	
-	private BankCustomer bankCustomer;
 	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
 
 //	Constructor
 //	=====================================================================
-	public MarketCashierRole(MarketBuilding b, int t1, int t2) {
+	public MarketCashierRole(Market market, int t1, int t2) {
 		super();
-		market = b;
+		this.market = market;
 		this.setShift(t1, t2);
-		this.setWorkplace(b);
-		this.setSalary(MarketBuilding.getWorkerSalary());
-		bankCustomer = b.bankCustomer;
+		this.setWorkplace(market);
+		this.setSalary(MarketBuilding.WORKER_SALARY);
 	}
 
 //	Activity
@@ -145,16 +142,16 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public boolean runScheduler() {
 		// Role Scheduler
 		boolean blocking = false;
-		if (market.bankCustomer.getActive() && market.bankCustomer.getActivity()) {
+		if (market.getBankCustomer().getActive() && market.getBankCustomer().getActivity()) {
 			blocking  = true;
-			boolean activity = market.bankCustomer.runScheduler();
+			boolean activity = market.getBankCustomer().runScheduler();
 			if (!activity) {
-				market.bankCustomer.setActivityFinished();
+				market.getBankCustomer().setActivityFinished();
 			}
 		}
 		
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.cashier != this)
+			if (market.getCashier() != this)
 				workingState = WorkingState.NotWorking;
 		}
 		
@@ -199,14 +196,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		market.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		market.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
 	}
 	
 	private void computeBill(Transaction t) {
 		t.s = TransactionState.Calculating;
 
 		for (FOOD_ITEMS s: t.collectedItems.keySet()) {
-        	t.bill += t.collectedItems.get(s)*market.prices.get(s);
+        	t.bill += t.collectedItems.get(s)*market.getPrices().get(s);
         }
         // TODO notify customer if there is a difference between order and collected items
 
@@ -253,11 +250,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	public Market getMarket() {
 		return market;
 	}
-	
-	@Override
-	public BankCustomer getBankCustomer() {
-		return bankCustomer;
-	}
 
 	@Override
 	public List<Transaction> getTransactions() {
@@ -272,7 +264,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //  Setters
 //	=====================================================================	
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 		

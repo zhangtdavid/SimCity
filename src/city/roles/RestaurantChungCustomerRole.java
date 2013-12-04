@@ -10,7 +10,7 @@ import trace.AlertTag;
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungCustomerAnimation;
-import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
 
@@ -24,7 +24,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	private Semaphore atSeat = new Semaphore(0, true);
 	private Semaphore atCashier = new Semaphore(0, true);
 	
-	RestaurantChungBuilding restaurant;
+	RestaurantChung restaurant;
 	private RestaurantChungWaiter waiter;
 	
 	private int hungerLevel = 10; // determines length of meal
@@ -357,19 +357,19 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		state = AgentState.Paying;
 		
 		if (bill > this.getPerson().getCash()) {
-			restaurant.cashier.msgHereIsPayment(this, this.getPerson().getCash());
+			restaurant.getRestaurantChungCashier().msgHereIsPayment(this, this.getPerson().getCash());
 			this.getPerson().setCash(0);
 			return;
 		}
 		
-		restaurant.cashier.msgHereIsPayment(this, bill);		
+		restaurant.getRestaurantChungCashier().msgHereIsPayment(this, bill);		
 		this.getPerson().setCash(this.getPerson().getCash() - bill);
 	}
 	
 	private void leaveRestaurant() {
 		print("Leaving");
 		state = AgentState.Leaving;
-		restaurant.host.msgLeaving(this);
+		restaurant.getRestaurantChungHost().msgLeaving(this);
 		this.getAnimation(RestaurantChungCustomerAnimation.class).DoExitRestaurant();
 	}
 	
@@ -387,7 +387,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		else if(leaving == 1) {
 			print("Decided to stay");
 			state = AgentState.DecidedToStay;
-			restaurant.host.msgDecidedToStay(this);
+			restaurant.getRestaurantChungHost().msgDecidedToStay(this);
 		}
 	}
 	
@@ -423,7 +423,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}	
 	
 	@Override
-	public void setRestaurant(RestaurantChungBuilding r) {
+	public void setRestaurant(RestaurantChung r) {
 		restaurant = r;
 	}
 	

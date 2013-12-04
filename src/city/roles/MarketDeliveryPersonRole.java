@@ -11,6 +11,7 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.agents.CarAgent;
 import city.buildings.MarketBuilding;
+import city.interfaces.Car;
 import city.interfaces.CarPassenger;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
@@ -22,9 +23,9 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	private MarketBuilding market;
+	private Market market;
 	
-	private CarAgent car;
+	private Car car;
 	private CarPassenger carPassenger;
 	
 	private MarketCustomerDelivery customerDelivery;
@@ -35,12 +36,12 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 //	Constructor
 //	=====================================================================
-	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
+	public MarketDeliveryPersonRole(Market b, int t1, int t2) {
 		super();
 		market = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(MarketBuilding.getWorkerSalary());
+		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
@@ -81,7 +82,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.deliveryPeople.size() > 1)
+			if (market.getDeliveryPeople().size() > 1)
 				workingState = WorkingState.NotWorking;
 		}
 		
@@ -113,7 +114,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	private void deliverItems() {
 		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant());
 		carPassenger.setActive();
-		market.cashier.msgDeliveringItems(this);
+		market.getCashier().msgDeliveringItems(this);
 
 //		// TODO schung 99c0f4da25
 //      deliveryTruckGui.doGoToAddress();
@@ -125,7 +126,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //		// TODO how does all this car stuff work??
 		
 		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
-		market.cashier.msgFinishedDeliveringItems(this, orderId);
+		market.getCashier().msgFinishedDeliveringItems(this, orderId);
 		customerDelivery = null;
 	}
 	
@@ -155,7 +156,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 //  Setters
 //	=====================================================================	
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 	

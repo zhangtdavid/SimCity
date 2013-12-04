@@ -11,7 +11,6 @@ import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.Role;
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
@@ -24,7 +23,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private Semaphore atCounter = new Semaphore(0, true);	
 	private Semaphore atCashier = new Semaphore(0, true);
 	
-	private MarketBuilding market;
+	private Market market;
 	private MarketEmployee employee;
 	
 	private MarketOrder order;
@@ -139,7 +138,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	=====================================================================	
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
-		market.manager.msgIWouldLikeToPlaceAnOrder(this);
+		market.getManager().msgIWouldLikeToPlaceAnOrder(this);
 //		marketCustomerGui.DoStandInWaitingForServiceLine();			
 	}
 	
@@ -167,7 +166,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	}
 		int payment = checkBill();
 		if (payment != -1) 
-			market.cashier.msgHereIsPayment(order.orderId, payment);
+			market.getCashier().msgHereIsPayment(order.orderId, payment);
 			this.getPerson().setCash(this.getPerson().getCash() - payment);
 	}
 	
@@ -223,7 +222,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //  Setters
 //	=====================================================================	
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 
@@ -233,7 +232,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public int checkBill() {
 		int tempBill = 0;
         for (FOOD_ITEMS item: order.orderItems.keySet()) {
-        	tempBill += order.orderItems.get(item)*market.prices.get(item);
+        	tempBill += order.orderItems.get(item)*market.getPrices().get(item);
         }
 
         if (tempBill == bill)

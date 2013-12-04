@@ -32,12 +32,11 @@ public interface MarketCashier extends RoleInterface {
 	
 	// Getters
 	public Market getMarket();
-	BankCustomer getBankCustomer();
 	List<Transaction> getTransactions();
 	List<MyDeliveryPerson> getDeliveryPeople();
 	
 	// Setters
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 
 	
 	// Utilities

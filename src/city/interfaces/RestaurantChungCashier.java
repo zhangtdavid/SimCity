@@ -3,8 +3,6 @@ package city.interfaces;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.RoleInterface;
-import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChungBuilding;
 import city.roles.RestaurantChungCashierRole.Transaction;
 
 public interface RestaurantChungCashier extends RoleInterface {
@@ -14,13 +12,13 @@ public interface RestaurantChungCashier extends RoleInterface {
 	// Messages
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order);
 	public void msgHereIsPayment(RestaurantChungCustomer c, int bill);
-	public void msgAddMarketOrder(MarketBuilding selectedMarket, MarketOrder o);
+	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o);
 	
 	// Getters
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
 	
 	// Setters
-	void setRestaurant(RestaurantChungBuilding restaurant);
+	void setRestaurant(RestaurantChung restaurant);
 	void setHost(RestaurantChungHost host);
 	void setMarketCustomerDeliveryPaymentPerson();
 	void setBankCustomerPerson();
@@ -30,5 +28,4 @@ public interface RestaurantChungCashier extends RoleInterface {
 	Transaction findTransaction(RestaurantChungCustomer c);
 	MarketTransaction findMarketTransaction(int id);
 	void removeOrderFromList(Transaction transaction);
-	
 }

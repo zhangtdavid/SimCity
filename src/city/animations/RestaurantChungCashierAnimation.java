@@ -30,10 +30,6 @@ public class RestaurantChungCashierAnimation extends Animation implements Restau
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
-
-//		if (xPos == xDestination && yPos == yDestination) {
-//
-//		}
 	}
 
 	public void draw(Graphics2D g) {
