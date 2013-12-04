@@ -307,29 +307,35 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	=====================================================================	
 	public class MyDeliveryPerson {
 		MarketDeliveryPerson deliveryPerson;
-		public boolean available;
+		private boolean available;
 		
 		public MyDeliveryPerson(MarketDeliveryPerson d) {
 			deliveryPerson = d;
 			available = true;
 		}
+		
+		// Getters
+		public boolean getAvailable() {
+			return available;
+		}
 	}
 	
 	public class Transaction {
-		MarketEmployee employee;
-		MarketCustomer customer;
-		MarketCustomerDelivery customerDelivery;
-		MarketCustomerDeliveryPayment customerDeliveryPayment;
+		private MarketEmployee employee;
+		private MarketCustomer customer;
+		private MarketCustomerDelivery customerDelivery;
+		private MarketCustomerDeliveryPayment customerDeliveryPayment;
 		
-		Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS,Integer>();
-		Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS,Integer>();
+		private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS,Integer>();
+		private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS,Integer>();
 		
-		int orderId;
-		public int bill;
-		public int payment;
+		private int orderId;
+		private int bill;
+		private int payment;
 		
-		public TransactionState s;
+		private TransactionState s;
 		
+		// constructor for in person order
 		public Transaction(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 			employee = e;
 			customer = c;
@@ -347,6 +353,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        s = TransactionState.Pending;
 	    }
 		
+		// constructor for delivery order
 		public Transaction(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 			employee = e;
 			customer = null;
@@ -363,6 +370,24 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        payment = 0;
 	        s = TransactionState.Pending;
 	    }
+		
+		// Getters
+		public int getOrderId() {
+			return orderId;
+		}
+		
+		public int getBill() {
+			return bill;
+		}
+		
+		public int getPayment() {
+			return payment;
+		}
+		
+		public TransactionState getTransactionState() {
+			return s;
+		}
+		
 	}
 
 }
