@@ -2,8 +2,6 @@ package city.tests.mock;
 
 import utilities.LoggedEvent;
 import city.Application;
-import city.Application.BANK_SERVICE;
-import city.Application.TRANSACTION_TYPE;
 import city.abstracts.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;

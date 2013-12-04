@@ -60,7 +60,6 @@ import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
-import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantTimmsCashierRole;

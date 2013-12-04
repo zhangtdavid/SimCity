@@ -4,8 +4,8 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.Building;
 import city.abstracts.MockRole;
 import city.abstracts.RestaurantBuildingBase;
 import city.buildings.MarketBuilding;

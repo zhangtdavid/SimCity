@@ -1,6 +1,7 @@
 package city.tests.mock;
 
 import utilities.EventLog;
+import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
@@ -11,7 +12,6 @@ import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 import city.roles.RestaurantChungCashierRole.Transaction;
-import utilities.MarketOrder;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.

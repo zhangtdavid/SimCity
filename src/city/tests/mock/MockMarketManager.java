@@ -5,6 +5,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
@@ -15,7 +16,6 @@ import city.interfaces.MarketEmployee;
 import city.interfaces.MarketManager;
 import city.roles.MarketManagerRole.MyMarketCustomer;
 import city.roles.MarketManagerRole.MyMarketEmployee;
-import city.Application.FOOD_ITEMS;
 
 public class MockMarketManager extends MockRole implements MarketManager {
 	

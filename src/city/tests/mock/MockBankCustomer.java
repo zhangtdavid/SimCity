@@ -6,7 +6,6 @@ import city.Application.TRANSACTION_TYPE;
 import city.abstracts.MockRole;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
-import city.roles.BankTellerRole;
 
 public class MockBankCustomer extends MockRole implements BankCustomer {
 	
