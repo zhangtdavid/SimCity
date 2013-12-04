@@ -4,18 +4,15 @@ import java.awt.*;
 
 import city.Animation;
 import city.animations.interfaces.MarketAnimatedCashier;
+import city.gui.buildings.MarketPanel;
 import city.interfaces.MarketCashier;
 
 public class MarketCashierAnimation extends Animation implements MarketAnimatedCashier {
 	private MarketCashier cashier = null;
-
-//	Fixed Numbers
-//	=====================================================================
-	private static final int CRECTDIM = 20;
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 465, yPos = 320;
+	private int xPos = MarketPanel.CASHIERX, yPos = MarketPanel.CASHIERY;
 	private int xDestination = xPos, yDestination = yPos;
 
 	public MarketCashierAnimation(MarketCashier c) {
@@ -32,15 +29,11 @@ public class MarketCashierAnimation extends Animation implements MarketAnimatedC
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
-
-//		if (xPos == xDestination && yPos == yDestination) {
-//
-//		}
 	}
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.BLUE);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, MarketPanel.RECTDIM, MarketPanel.RECTDIM);
 	}
 
 	public boolean isPresent() {

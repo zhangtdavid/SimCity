@@ -1,5 +1,6 @@
 package city.interfaces;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.RestaurantZhangMenu;
@@ -11,6 +12,7 @@ import city.RoleInterface;
 import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
+import city.roles.RestaurantZhangCookRole.CookInvoice;
 
 public interface RestaurantZhangCook extends RoleInterface {
 	
@@ -30,8 +32,19 @@ public interface RestaurantZhangCook extends RoleInterface {
 
 	// Getters
 	
-	public int getPosOfNewOrder();
+	public void hackOrderIsReady(RestaurantZhangOrder o);
+	public List<MarketBuilding> getMarkets();
+	public RestaurantZhangCashier getCashier();
+	public List<MarketCustomerDelivery> getmarketCustomerDeliveryList();
 	public RestaurantZhangAnimatedCook getGui();
+	public RestaurantZhangHost getHost();
+	public List<RestaurantZhangOrder> getOrdersToCook();
+	public RestaurantZhangRevolvingStand getOrderStand();
+	public RestaurantZhangMenu getMainMenu();
+	public Map<String, Food> getCookInventory();
+	public List<CookInvoice> getCookInvoiceList();
+	public int getPosOfNewOrder();
+	public boolean getWaitingToCheckStand();
 	
 	// Setters
 	
@@ -42,7 +55,5 @@ public interface RestaurantZhangCook extends RoleInterface {
 	public void setHost(RestaurantZhangHost h);
 	
 	// Utilities
-	
-	public void hackOrderIsReady(RestaurantZhangOrder o);
 	
 }

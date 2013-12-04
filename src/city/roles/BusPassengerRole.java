@@ -12,17 +12,13 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	// Data
 	
-	//	private Semaphore atDestination = new Semaphore(0, true);
-	
-	// TODO Change these to private and add getters/setters
-	public enum BusPassengerState {NOTBUSSING, WAITINGFORBUS, GETTINGONBUS, GETTINGOFFBUS, ONBUS};
-	public BusPassengerState myState = BusPassengerState.NOTBUSSING;
-	public enum BusPassengerEvent {NONE, ATSTOP, BUSISHERE, ATDESTINATION};
-	public BusPassengerEvent myEvent = BusPassengerEvent.NONE;
-	public Bus myBus;
-	public BusStop busStopToWaitAt;
-	public BusStop destination;
+	private BUSPASSENGERSTATE myState = BUSPASSENGERSTATE.NOTBUSSING;
+	private BUSPASSENGEREVENT myEvent = BUSPASSENGEREVENT.NONE;
+	private Bus myBus;
+	private BusStop busStopToWaitAt;
+	private BusStop destination;
 	// public AnimatedBus animation;
+	// private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	
@@ -36,20 +32,20 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	@Override
 	public void msgAtWaitingStop() {
 		busStopToWaitAt.addToWaitingList(this);
-		myEvent = BusPassengerEvent.ATSTOP;
+		myEvent = BUSPASSENGEREVENT.ATSTOP;
 		stateChanged();
 	}
 	
 	@Override
 	public void msgBusIsHere(Bus b) {
 		myBus = b;
-		myEvent = BusPassengerEvent.BUSISHERE;
+		myEvent = BUSPASSENGEREVENT.BUSISHERE;
 		stateChanged();
 	}
 	
 	@Override
 	public void msgImAtYourDestination() {
-		myEvent = BusPassengerEvent.ATDESTINATION;
+		myEvent = BUSPASSENGEREVENT.ATDESTINATION;
 		stateChanged();
 	}
 	
@@ -57,17 +53,17 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	@Override
 	public boolean runScheduler() {
-		if(myState == BusPassengerState.NOTBUSSING && myEvent == BusPassengerEvent.ATSTOP) {
-			myState = BusPassengerState.WAITINGFORBUS;
+		if(myState == BUSPASSENGERSTATE.NOTBUSSING && myEvent == BUSPASSENGEREVENT.ATSTOP) {
+			myState = BUSPASSENGERSTATE.WAITINGFORBUS;
 			return true;
 		}
-		if(myState == BusPassengerState.WAITINGFORBUS && myEvent == BusPassengerEvent.BUSISHERE) {
-			myState = BusPassengerState.GETTINGONBUS;
+		if(myState == BUSPASSENGERSTATE.WAITINGFORBUS && myEvent == BUSPASSENGEREVENT.BUSISHERE) {
+			myState = BUSPASSENGERSTATE.GETTINGONBUS;
 			getOnBus();
 			return true;
 		}
-		if(myState == BusPassengerState.ONBUS && myEvent == BusPassengerEvent.ATDESTINATION) {
-			myState = BusPassengerState.GETTINGOFFBUS;
+		if(myState == BUSPASSENGERSTATE.ONBUS && myEvent == BUSPASSENGEREVENT.ATDESTINATION) {
+			myState = BUSPASSENGERSTATE.GETTINGOFFBUS;
 			getOffBus();
 			return true;
 		}
@@ -81,7 +77,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		// myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 		this.getPerson().setCash(this.getPerson().getCash() - Bus.BUS_FARE);
 		busStopToWaitAt.removeFromWaitingList(this);
-		myState = BusPassengerState.ONBUS;
+		myState = BUSPASSENGERSTATE.ONBUS;
 		myBus.msgImOnBus(this, destination);
 	}
 	
@@ -89,8 +85,8 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		print("Getting off bus " + myBus.getName() + " at stop " + destination.getName());
 		// animation.doGetOffBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
 		myBus.msgImOffBus(this);
-		myState = BusPassengerState.NOTBUSSING;
-		myEvent = BusPassengerEvent.NONE;
+		myState = BUSPASSENGERSTATE.NOTBUSSING;
+		myEvent = BUSPASSENGEREVENT.NONE;
 		this.setInactive();
 	}
 	
@@ -104,6 +100,21 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	@Override
 	public BuildingInterface getBusStopToWaitAt() {
 		return busStopToWaitAt;
+	}
+	
+	@Override
+	public Bus getBus() {
+		return myBus;
+	}
+
+	@Override
+	public BUSPASSENGERSTATE getState() {
+		return myState;
+	}
+
+	@Override
+	public BUSPASSENGEREVENT getEvent() {
+		return myEvent;
 	}
 	
 	// Setters

@@ -43,6 +43,8 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	int low = 2;
 	MarketCustomerDelivery deliveryRole;
 
+	//Constructor
+	
 	public RestaurantJPCookRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
@@ -55,22 +57,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		Foods.put("Salad", new Food(3000, 5, FOOD_ITEMS.salad));
 		Foods.put("Pizza", new Food(2000, 5, FOOD_ITEMS.pizza));					//HACKHACKHACK
 	}
-	public void setInactive(){
-		if(orders.size() == 0 && building.seatedCustomers == 0)
-			super.setInactive();
-		else
-			wantsInactive = true;
-	}
-	public String getName() {
-		return name;
-	}
 	
-	public void setGui(RestaurantJPCookAnimation g){
-		gui = g;
-	}
-	public void addMarket(MarketManagerRole m){
-		Markets.add(new MyMarket(m));
-	}
 //MSGS-----------------------------------------------------------------------------------------------------------
 	
 	public void msgHereIsAnOrder(RestaurantJPWaiter wait, String c, RestaurantJPTableClass t) {
@@ -113,13 +100,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		atDestination.release();// = true;
 		stateChanged();
 	}
-	/*public void msgWaiterHasGoneOnBreak(WaiterAgent oldWaiter, WaiterAgent newWaiter){
-		Do("Handling change in waiter");
-		for(Order o : orders){
-			if(o.w == oldWaiter)
-				o.w = newWaiter;
-		}
-	}*/
+
 	public void msgFoodRetrieved(String f){
 		//Do("Food retrieved");
 		synchronized(orders){
@@ -136,6 +117,7 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 	public boolean runScheduler() {
 		if(wantsInactive && orders.size() == 0 && building.seatedCustomers == 0){
 			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
 			wantsInactive = false;
 		}
 		if(!ordering){
@@ -265,10 +247,51 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		gui.DoOrderRemoved(o.choice);
 		orders.remove(o);
 	}
+	
+	
+	//Getters
+	
+	public String getName() {
+		return name;
+	}
+	
+	//Setters
+	
+	public void setRevolvingStand(RestaurantJPRevolvingStand orderStand) {
+		// TODO Auto-generated method stub
+		revolvingStand = orderStand;
+	}
+	
+	public void setInactive(){
+		if(orders.size() == 0 && building.seatedCustomers == 0){
+			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
+		}
+		else
+			wantsInactive = true;
+	}
+	
+	public void setGui(RestaurantJPCookAnimation g){
+		gui = g;
+	}
+	public void addMarket(MarketManagerRole m){
+		Markets.add(new MyMarket(m));
+	}
+	
 	public void setAnimation(RestaurantJPCookAnimation g) {
 		gui = g;
 		
 	}
+	
+	//Utilities
+	
+	@Override
+	public void print(String msg) {
+        super.print(msg);
+        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCookRole " + this.getPerson().getName(), msg);
+    }
+	
+	//Classes
 	
 	public class Order{
 		state s;
@@ -325,18 +348,6 @@ public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
 		public Food(){
 		}
 	}
-
-	public void setRevolvingStand(RestaurantJPRevolvingStand orderStand) {
-		// TODO Auto-generated method stub
-		revolvingStand = orderStand;
-	}
-
-	
-	@Override
-	public void print(String msg) {
-        super.print(msg);
-        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCookRole " + this.getPerson().getName(), msg);
-    }
 }
 
 

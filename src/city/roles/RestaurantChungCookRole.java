@@ -25,6 +25,7 @@ import city.animations.RestaurantChungCookAnimation;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungWaiter;
 
@@ -42,7 +43,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     private boolean plating = false;
 	boolean waitingToCheckStand = false;
 	
-	RestaurantChungBuilding restaurant;
+	RestaurantChung restaurant;
 
 	RestaurantChungRevolvingStand orderStand;
 
@@ -54,12 +55,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             
 //  Constructor
 //	=====================================================================
-    public RestaurantChungCookRole(RestaurantChungBuilding b, int t1, int t2) {
+    public RestaurantChungCookRole(RestaurantChung b, int t1, int t2) {
         super();
 		restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 	}
 
 //  Activity
@@ -179,7 +180,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 			}
     		
     		if (workingState == WorkingState.GoingOffShift) {
-    			if (restaurant.cashier != this)
+    			if (restaurant.getRestaurantChungCashier() != this)
     				workingState = WorkingState.NotWorking;
     		}
     		
@@ -317,11 +318,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         }
                 
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
-        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.cashier.getMarketCustomerDeliveryPayment());
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setPerson(super.getPerson());
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
-    	restaurant.cashier.msgAddMarketOrder(selectedMarket, o.order);
+    	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
         marketCustomerDelivery.setActive();
         return;
     }

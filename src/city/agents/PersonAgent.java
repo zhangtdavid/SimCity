@@ -85,7 +85,7 @@ public class PersonAgent extends Agent implements Person {
 		this.hasEaten = false;
 		
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
-		bankCustomerRole = new BankCustomerRole();
+		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))); // TODO Get replace with correct constructor
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
 	}
@@ -318,7 +318,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actGoToRestaurant() throws InterruptedException { 
 		// Thread.sleep(9000); // TODO testing - Delay the customer entering
-		
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
 		this.lastAteAtRestaurant = this.date;

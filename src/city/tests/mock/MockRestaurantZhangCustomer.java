@@ -5,7 +5,10 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
 import city.abstracts.MockRole;
+import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
+import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCustomer;
+import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
 
 public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZhangCustomer {
@@ -57,12 +60,6 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 	}
 
 	@Override
-	public int getPos() {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
 	public void msgAnimationFinishedEnterRestaurant() {
 		// TODO Auto-generated method stub
 		
@@ -81,13 +78,115 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 	}
 
 	@Override
-	public void gotHungry() {
+	public void msgGotHungry() {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
 	public void msgRestaurantClosed() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public RestaurantZhangTable getTable() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangHost getHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangWaiter getWaiter() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getWaitingPosition() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public RestaurantZhangMenu getCustomerMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getChoice() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangCheck getCheck() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getMoney() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getTab() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public AGENTSTATE getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public AGENTEVENT getEvent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setWaitingPosition(int newPos) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAnimation(RestaurantZhangAnimatedCustomer g) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCashier(RestaurantZhangCashier c) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHost(RestaurantZhangHost host) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMoney(int newMoney) {
 		// TODO Auto-generated method stub
 		
 	}

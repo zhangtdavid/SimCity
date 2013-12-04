@@ -8,6 +8,7 @@ import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.abstracts.MockRole;
 import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantBuildingInterface;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
@@ -28,7 +29,7 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 	}
 
 	@Override
-	public Building getRestaurant() {
+	public RestaurantBuildingInterface getRestaurant() {
 		// TODO Auto-generated method stub
 		return null;
 	}

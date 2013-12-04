@@ -25,7 +25,7 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	
 	// Setters
 	
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 	
 	// Utilities
 

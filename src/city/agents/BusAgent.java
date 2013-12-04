@@ -17,49 +17,50 @@ import city.buildings.BusStopBuilding;
 public class BusAgent extends Agent implements Bus {
 
 	// Data
-	public enum BusState {DRIVING, DROPPINGPASSENGERSOFF, PICKINGPEOPLEUP};
-	public BusState myState = BusState.DRIVING; // State of bus
-	public enum BusEvent {NONE, ATSTOP};
-	public BusEvent myEvent = BusEvent.ATSTOP; // Event of bus
-	public List<MyBusPassenger> passengerList = Collections.synchronizedList(new ArrayList<MyBusPassenger>()); // List of bus passengers
-	public BusStop currentStop; // Stop the bus is at
-	public BusStop nextStop; // Stop the bus is going to
-	public static final int busFare = 2; // Fare price of bus
-	public int earnedMoney = 0; // Amount of fare the bus earned
-	public AnimatedBus animation;
-	
+	private BUSSTATE myState = BUSSTATE.DRIVING; // State of bus
+	private BUSEVENT myEvent = BUSEVENT.ATSTOP; // Event of bus
+	private List<MyBusPassenger> passengerList = Collections.synchronizedList(new ArrayList<MyBusPassenger>()); // List of bus passengers
+	private BusStop currentStop; // Stop the bus is at
+	private BusStop nextStop; // Stop the bus is going to
+	private int earnedMoney = 0; // Amount of fare the bus earned
+	private AnimatedBus animation;
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
+	
 	public BusAgent(BusStopBuilding currentStop_, BusStopBuilding nextStop_) {
 		currentStop = currentStop_;
 		nextStop = nextStop_;
 	}
 	
 	// Messages
+	
+	@Override
 	public void msgAtBusDestination() { // From GUI, bus is at the bus stop
-		myEvent = BusEvent.ATSTOP;
+		myEvent = BUSEVENT.ATSTOP;
 		currentStop = nextStop;
 		nextStop = currentStop.getNextStop();
 		stateChanged();
 	}
-
+	
+	@Override
 	public void msgImOffBus(BusPassenger bp) { // From BusPassengerRole, role has gotten off bus
 		for(MyBusPassenger mbp : passengerList) { // Set this role's state to OFFBUS  
 			if(mbp.bp == bp) {
-				mbp.myPassengerState = PassengerState.OFFBUS;
+				mbp.myPassengerState = MyBusPassenger.MYPASSENGERSTATE.OFFBUS;
 				break;
 			}
 		}
 		stateChanged();
 	}
-
+	
+	@Override
 	public void msgImOnBus(BusPassenger bp, BusStop dest) { // From BusPassengerRole, role has gotten on bus
-		earnedMoney += busFare; // Add fare to money
+		earnedMoney += BUS_FARE; // Add fare to money
 		synchronized(passengerList) {
 			for(MyBusPassenger mbp : passengerList) { // Set this role's state to ONBUS and its destination
 				if(mbp.bp == bp) {
-					mbp.myPassengerState = PassengerState.ONBUS;
+					mbp.myPassengerState = MyBusPassenger.MYPASSENGERSTATE.ONBUS;
 					mbp.destination = dest;
 					break;
 				}
@@ -68,38 +69,43 @@ public class BusAgent extends Agent implements Bus {
 		stateChanged();
 	}
 	
+	@Override
+	public void msgAtDestination() {
+		atDestination.release();
+	}
+	
 	// Scheduler
 	
 	@Override
 	public boolean runScheduler() {
-		if(myState == BusState.DRIVING && myEvent == BusEvent.ATSTOP) { // Bus has arrived at stop
-			myState = BusState.DROPPINGPASSENGERSOFF;
+		if(myState == BUSSTATE.DRIVING && myEvent == BUSEVENT.ATSTOP) { // Bus has arrived at stop
+			myState = BUSSTATE.DROPPINGPASSENGERSOFF;
 			notifyPassengersToDropOff(); // Drop off passengers that are getting off here
 			return true;
 		}
 		synchronized(passengerList) {
 			for(MyBusPassenger mbp1 : passengerList) { // Bus is unloading roles
-				if(mbp1.myPassengerState == PassengerState.OFFBUS) { // If a role is off the bus
+				if(mbp1.myPassengerState == MyBusPassenger.MYPASSENGERSTATE.OFFBUS) { // If a role is off the bus
 					passengerList.remove(mbp1); // Remove this role from the passengerList
 					for(MyBusPassenger mbp2 : passengerList) {
-						if(mbp2.myPassengerState == PassengerState.GETTINGOFFBUS) // If there are still roles to get off, rerun scheduler
+						if(mbp2.myPassengerState == MyBusPassenger.MYPASSENGERSTATE.GETTINGOFFBUS) // If there are still roles to get off, rerun scheduler
 							return true;
 					}
 					// If there aren't people to get off, tell roles at stop to get on
-					myState = BusState.PICKINGPEOPLEUP;
+					myState = BUSSTATE.PICKINGPEOPLEUP;
 					notifyPassengersAtStopToGetOn();
 					return true;
 				}
 			}
 			for(MyBusPassenger mbp1 : passengerList) { // Bus is loading roles
-				if(mbp1.myPassengerState == PassengerState.ONBUS) { // If a role is on the bus
+				if(mbp1.myPassengerState == MyBusPassenger.MYPASSENGERSTATE.ONBUS) { // If a role is on the bus
 					for(MyBusPassenger mbp2 : passengerList) { // Check if any roles are getting on the bus
-						if(mbp2.myPassengerState == PassengerState.GETTINGONBUS) // If a role is getting on the bus
+						if(mbp2.myPassengerState == MyBusPassenger.MYPASSENGERSTATE.GETTINGONBUS) // If a role is getting on the bus
 							return true; // Rerun scheduler
 					}
 					// If all roles at the bus stop are loaded, set bus state/event to driving and drive to next stop
-					myState = BusState.DRIVING;
-					myEvent = BusEvent.NONE;
+					myState = BUSSTATE.DRIVING;
+					myEvent = BUSEVENT.NONE;
 					driveToNextStop();
 					return true;
 				}
@@ -109,7 +115,8 @@ public class BusAgent extends Agent implements Bus {
 	}
 	
 	// Actions
-	void notifyPassengersToDropOff() { // Tells passengers on the bus with the same currentStop to get off
+	
+	private void notifyPassengersToDropOff() { // Tells passengers on the bus with the same currentStop to get off
 		print("Notifying passengers to be dropped off");
 		boolean passengersDroppedOff = false; // Flag to see if passengers got off
 		synchronized(passengerList) {
@@ -117,7 +124,7 @@ public class BusAgent extends Agent implements Bus {
 				if(mbp.destination == currentStop) { // If a passenger has the same stop
 					print("Dropping off passenger " + mbp.bp.getPerson().getName() + " at " + currentStop.getName());
 					passengersDroppedOff = true; // Set flag to true
-					mbp.myPassengerState = PassengerState.GETTINGOFFBUS; // Set this passenger's state to getting off
+					mbp.myPassengerState = MyBusPassenger.MYPASSENGERSTATE.GETTINGOFFBUS; // Set this passenger's state to getting off
 					mbp.bp.msgImAtYourDestination(); // Message this passenger to get off
 				}
 			}
@@ -125,12 +132,12 @@ public class BusAgent extends Agent implements Bus {
 		// If no passengers were dropped off, tell people at stop to get on
 		if(passengersDroppedOff == false) {
 			print("No passengers getting off at " + currentStop.getName());
-			myState = BusState.PICKINGPEOPLEUP;
+			myState = BUSSTATE.PICKINGPEOPLEUP;
 			notifyPassengersAtStopToGetOn();
 		}
 	}
 
-	void notifyPassengersAtStopToGetOn() { // Tells passengers at stop to get on the bus
+	private void notifyPassengersAtStopToGetOn() { // Tells passengers at stop to get on the bus
 		print("Notifying passengers at stop to get on");
 		boolean passengersPickedUp = false; // Flag to see if passengers got on
 		synchronized(currentStop.getWaitingList()) {
@@ -144,15 +151,15 @@ public class BusAgent extends Agent implements Bus {
 		// If no passengers were picked up
 		if(passengersPickedUp == false) {
 			print("No passengers picked up at " + currentStop.getName());
-			myState = BusState.DRIVING; // Set bus state and event to driving and drive to next stop
-			myEvent = BusEvent.NONE;
+			myState = BUSSTATE.DRIVING; // Set bus state and event to driving and drive to next stop
+			myEvent = BUSEVENT.NONE;
 			driveToNextStop();
 		}
 	}
 
-	void driveToNextStop() { // Tells 
+	private void driveToNextStop() { // Tells 
 		print("Driving to stop " + nextStop.getName());
-		animation.DoGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		animation.doGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -160,22 +167,51 @@ public class BusAgent extends Agent implements Bus {
 		}
 		msgAtBusDestination();
 	}
+	
 	// Getters
 	
+	@Override
+	public BUSSTATE getState() {
+		return myState;
+	}
+	
+	@Override
+	public BUSEVENT getEvent() {
+		return myEvent;
+	}
+	
+	@Override
+	public List<MyBusPassenger> getPassengerList() {
+		return passengerList;
+	}
+	
+	@Override
+	public BusStop getCurrentStop() {
+		return currentStop;
+	}
+	
+	@Override
+	public BusStop getNextStop() {
+		return nextStop;
+	}
+	
+	@Override
+	public int getEarnedMoney() {
+		return earnedMoney;
+	}
+	
 	// Setters
+	
 	public void setAnimation(AnimatedBus anim) {
 		animation = anim;
 	}
 	
 	// Utilities
+	
+	@Override
 	public void startThread() {
 		super.startThread();
 		stateChanged();
-	}
-	
-	@Override
-	public void msgAtDestination() {
-		atDestination.release();
 	}
 	
 	@Override
@@ -184,14 +220,43 @@ public class BusAgent extends Agent implements Bus {
     }
 	
 	// Classes
-	enum PassengerState {GETTINGONBUS, ONBUS, GETTINGOFFBUS, OFFBUS};
-	class MyBusPassenger {
-		PassengerState myPassengerState = PassengerState.GETTINGONBUS;
-		BusPassenger bp;
-		BusStop destination;
+
+	public static class MyBusPassenger {
+		public enum MYPASSENGERSTATE {GETTINGONBUS, ONBUS, GETTINGOFFBUS, OFFBUS};
+		private MYPASSENGERSTATE myPassengerState = MYPASSENGERSTATE.GETTINGONBUS;
+		private BusPassenger bp;
+		private BusStop destination;
 		
 		MyBusPassenger(BusPassenger bp_) {
 			bp = bp_;
+		}
+		
+		// Getters
+		
+		public MYPASSENGERSTATE getState() {
+			return myPassengerState;
+		}
+		
+		public BusPassenger getPassenger() {
+			return bp;
+		}
+		
+		public BusStop getDestination() {
+			return destination;
+		}
+		
+		// Setters
+		
+		public void setState(MYPASSENGERSTATE newState) {
+			myPassengerState = newState;
+		}
+		
+		public void setPassenger(BusPassenger newPassenger) {
+			bp = newPassenger;
+		}
+		
+		public void setDestination(BusStop newDestination) {
+			destination = newDestination;
 		}
 	}
 }

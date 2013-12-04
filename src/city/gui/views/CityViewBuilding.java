@@ -8,25 +8,31 @@ import java.awt.Rectangle;
 import city.gui.BuildingCard;
 
 public abstract class CityViewBuilding {
-	//Consider creating a rectangle for every Component for better universal collision detection
-
-	public Rectangle rectangle;
-	public int x, y;
-	public Color color;
-	public String ID;
-	public BuildingCard building;
-	public boolean isActive;
-	public enum BuildingType {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, RESTAURANTCHUNG, BANK, ROAD, HOUSE};
-	public BuildingType type = BuildingType.NONE;
+	
+	// Data
+	
+	public enum BUILDINGTYPE {NONE, RESTAURANTZHANG, RESTAURANTCHOI, RESTAURANTJP, RESTAURANTTIMMS, RESTAURANTCHUNG, BANK, ROAD, HOUSE};
+	
+	protected Rectangle rectangle;
+	protected int x;
+	protected int y;
+	protected Color color;
+	protected String ID;
+	protected BuildingCard building;
+	protected boolean isActive;
+	protected BUILDINGTYPE type = BUILDINGTYPE.NONE;
+	
+	// Constructors
 	
 	public CityViewBuilding() {
 		x = 0;
 		y = 0;
+		rectangle = new Rectangle(0, 0, 0, 0);
 		color = Color.black;
 		ID = "";
 		isActive = true;
 	}
-	
+
 	public CityViewBuilding(int x, int y) {
 		this.x = x;
 		this.y = y;
@@ -34,7 +40,7 @@ public abstract class CityViewBuilding {
 		ID = "";
 		isActive = true;
 	}
-	
+
 	public CityViewBuilding(int x, int y, Color c) {
 		this.x = x;
 		this.y = y;
@@ -42,7 +48,7 @@ public abstract class CityViewBuilding {
 		ID = "";
 		isActive = true;
 	}
-	
+
 	public CityViewBuilding(int x, int y, Color c, String I) {
 		this.x = x;
 		this.y = y;
@@ -50,7 +56,7 @@ public abstract class CityViewBuilding {
 		ID = I;
 		isActive = true;
 	}
-	
+
 	public CityViewBuilding(int x, int y, Color c, String I, BuildingCard b) {
 		this.x = x;
 		this.y = y;
@@ -60,8 +66,10 @@ public abstract class CityViewBuilding {
 		isActive = true;
 	}
 	
-	public abstract void updatePosition();
+	// Painting
 	
+	public abstract void updatePosition();
+
 	public void paint(Graphics g) {
 		if (isActive) {
 			g.setColor(color);
@@ -71,40 +79,78 @@ public abstract class CityViewBuilding {
 				g.drawString(building.getClass().getSimpleName(), rectangle.x, rectangle.y);
 		}
 	}
-	
-	public boolean contains(int x, int y) {
-		return rectangle.contains(x, y);
+
+	// Getters
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 	
-	public boolean contains(Point p) {
-		return contains((int)p.getX(), (int)p.getY());
+	public String getID() {
+		return ID;
 	}
 	
-	public void disable() {
-		isActive = false;
+	public Rectangle getRectangle() {
+		return rectangle;
 	}
 	
-	public void enable() {
-		isActive = true;
+	public BuildingCard getBuilding() {
+		return building;
 	}
 	
-	public boolean isActive() {
-		return isActive;
-	}
-	
+	// Setters
+
 	public void setX(int x) {
 		this.x = x;
 		rectangle.setLocation(x, y);
 	}
-	
+
 	public void setY(int y) {
 		this.y = y;
-		rectangle.setLocation(x, y);
+		rectangle.setLocation(getX(), y);
 	}
-	
+
 	public void setPosition(Point p) {
 		this.x = p.x;
 		this.y = p.y;
 		rectangle.setLocation(p);
+	}
+
+	public void setID(String iD) {
+		ID = iD;
+	}
+	
+	public void setRectangle(Rectangle rectangle) {
+		this.rectangle = rectangle;
+	}
+	
+	public void setBuilding(BuildingCard building) {
+		this.building = building;
+	}
+	
+	// Utilities
+	
+	public boolean contains(int x, int y) {
+		return rectangle.contains(x, y);
+	}
+
+	public boolean contains(Point p) {
+		return contains((int)p.getX(), (int)p.getY());
+	}
+
+	public void disable() {
+		isActive = false;
+	}
+
+	public void enable() {
+		isActive = true;
+	}
+
+	public boolean isActive() {
+		return isActive;
 	}
 }

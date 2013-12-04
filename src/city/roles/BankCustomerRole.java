@@ -4,7 +4,6 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
-import city.Application.BUILDING;
 import city.Building;
 import city.Role;
 import city.buildings.BankBuilding;
@@ -20,8 +19,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private Building business;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
-
-	private BankManagerRole b;
 	private int netTransaction = 0;
 	private STATE st;
 	private int amount;
@@ -31,13 +28,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	// Constructor
 	
-	public BankCustomerRole(Building b) {
-		building = (BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank);
-		business = b;
+	public BankCustomerRole(Building bus, BankBuilding b) {
+		building = b;
+		business = bus;
 	}
 	
-	public BankCustomerRole() {
-		building = (Bank) (Application.CityMap.findRandomBuilding(BUILDING.bank));
+	public BankCustomerRole(Bank b) {
+		building = b;
 	}
 	
 	

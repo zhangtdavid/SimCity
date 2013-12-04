@@ -3,7 +3,6 @@ package city.abstracts;
 import java.util.HashMap;
 
 import utilities.EventLog;
-import city.Animation;
 import city.AnimationInterface;
 import city.BuildingInterface;
 import city.RoleInterface;
@@ -124,7 +123,7 @@ public abstract class MockBuilding implements BuildingInterface {
 	}
 
 	@Override
-	public void addOccupyingRole(RoleInterface r, Animation a) {
+	public void addOccupyingRole(RoleInterface r, AnimationInterface a) {
 		occupyingRoles.put(r, a);
 	}
 

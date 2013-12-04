@@ -44,14 +44,12 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	private Timer timer = new Timer();
 	private Semaphore atBase = new Semaphore(0, false);
 	private boolean restaurantClosing = false;
-	
-	// TODO Change these to private and add getters/setters
-	public List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
-	public RestaurantZhangRevolvingStand myOrderStand;
-	public boolean waitingToCheckStand = false;
-	public RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
-	public Map<String, Food> cookInventory = new HashMap<String, Food>();
-	public List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
+	private List<RestaurantZhangOrder> ordersToCook = Collections.synchronizedList(new ArrayList<RestaurantZhangOrder>());
+	private RestaurantZhangRevolvingStand myOrderStand;
+	private boolean waitingToCheckStand = false;
+	private RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
+	private Map<String, Food> cookInventory = new HashMap<String, Food>();
+	private List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
 	
 	// Constructor
 
@@ -128,10 +126,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	}
 	
 	// Scheduler
-
-	/**
-	 * Scheduler.  Determine what action is called for, and do it.
-	 */
+	
 	@Override
 	public boolean runScheduler() {
 		try {
@@ -192,7 +187,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			//			}
 			//			// Timer to check the stand
 			if(!waitingToCheckStand) {
-				print("Waiting 5 seconds to check the stand");
 				waitingToCheckStand = true;
 				timer.schedule(new TimerTask() {
 					public void run() {
@@ -325,13 +319,63 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	// Getters
 	
 	@Override
-	public int getPosOfNewOrder() {
-		return ordersToCook.size();
+	public List<MarketBuilding> getMarkets() {
+		return markets;
+	}
+	
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		return cashier;
+	}
+	
+	@Override
+	public List<MarketCustomerDelivery> getmarketCustomerDeliveryList() {
+		return marketCustomerDeliveryList;
 	}
 	
 	@Override
 	public RestaurantZhangAnimatedCook getGui() {
 		return thisGui;
+	}
+	
+	@Override
+	public RestaurantZhangHost getHost() {
+		return host;
+	}
+	
+	@Override
+	public List<RestaurantZhangOrder> getOrdersToCook() {
+		return ordersToCook;
+	}
+	
+	@Override
+	public RestaurantZhangRevolvingStand getOrderStand() {
+		return myOrderStand;
+	}
+	
+	@Override
+	public boolean getWaitingToCheckStand() {
+		return waitingToCheckStand;
+	}
+	
+	@Override
+	public RestaurantZhangMenu getMainMenu() {
+		return mainMenu;
+	}
+	
+	@Override
+	public Map<String, Food> getCookInventory() {
+		return cookInventory;
+	}
+	
+	@Override
+	public List<CookInvoice> getCookInvoiceList() {
+		return cookInvoiceList;
+	}
+	
+	@Override
+	public int getPosOfNewOrder() {
+		return ordersToCook.size();
 	}
 
 	// Setters
@@ -349,11 +393,6 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	@Override
 	public void setAnimation(RestaurantZhangAnimatedCook gui) {
 		thisGui = gui;
-	}
-
-	@Override
-	public void addMarket(MarketBuilding m) {
-		markets.add(m);
 	}
 
 	@Override
@@ -396,9 +435,14 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		orderIsReady(o);
 	}
 	
+	@Override
+	public void addMarket(MarketBuilding m) {
+		markets.add(m);
+	}
+	
 	// Classes
 
-	private static class CookInvoice {
+	public static class CookInvoice {
 		// MarketBuilding assignedMarket;
 		MarketOrder marketorder;
 		// CookInvoiceStatus status;

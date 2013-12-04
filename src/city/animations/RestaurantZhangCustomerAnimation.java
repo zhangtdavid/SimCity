@@ -79,7 +79,7 @@ public class RestaurantZhangCustomerAnimation extends Animation implements Resta
 	}
 	public void setHungry() {
 		isHungry = true;
-		role.gotHungry();
+		role.msgGotHungry();
 		setPresent(true);
 	}
 	public boolean isHungry() {

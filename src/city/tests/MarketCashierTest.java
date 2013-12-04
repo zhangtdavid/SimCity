@@ -12,6 +12,8 @@ import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.gui.buildings.MarketPanel;
+import city.interfaces.Bank;
+import city.interfaces.Market;
 import city.interfaces.MarketCashier.TransactionState;
 import city.roles.MarketCashierRole;
 import city.tests.mock.MockMarketCustomer;
@@ -25,9 +27,9 @@ import junit.framework.TestCase;
 
 public class MarketCashierTest extends TestCase {
 	MarketPanel marketPanel;
-	MarketBuilding market;
+	Market market;
 	
-	BankBuilding bank;
+	Bank bank;
 	
 	MockPerson cashierPerson;
 	MarketCashierRole cashier;

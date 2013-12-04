@@ -4,7 +4,13 @@ import city.RoleInterface;
 import utilities.RestaurantJPMenuClass;
 
 public interface RestaurantJPCustomer extends RoleInterface {
-
+	//Data
+	
+	public enum AgentState
+	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Choosing, PlacingOrder, Eating, DoneEating, Paying, Leaving};
+	
+	public enum AgentEvent 
+	{none, gotHungry, restaurantFull, DecidedToStay, followHost, seated, choiceReady, waiterCalled, outOfFood, foodArrived, readyToPay, donePaying, doneLeaving};
 	// Messages
 	
 	public void msgHereIsCheck(int check, RestaurantJPCashier cashier);

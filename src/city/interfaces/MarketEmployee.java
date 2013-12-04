@@ -19,7 +19,11 @@ public interface MarketEmployee extends RoleInterface {
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay);
 	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id);
 	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id);
-
+	public void msgAnimationAtPhone();
+	public void msgFinishedCollectingItems();
+	public void msgAnimationAtCashier();
+	public void msgAnimationAtCounter();
+	
 	// Scheduler
 	
 	// Actions
@@ -37,7 +41,7 @@ public interface MarketEmployee extends RoleInterface {
 	MarketEmployeeEvent getMarketEmployeeEvent();
 	
 	// Setters
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 	
 	// Utilities
 	

@@ -4,7 +4,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
@@ -37,7 +36,7 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	}
 
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		// TODO Auto-generated method stub
 		
 	}

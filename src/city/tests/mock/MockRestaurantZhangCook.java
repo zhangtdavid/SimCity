@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.LoggedEvent;
@@ -12,9 +13,12 @@ import city.abstracts.MockRole;
 import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomerDelivery;
+import city.interfaces.RestaurantZhangCashier;
 import city.interfaces.RestaurantZhangCook;
 import city.interfaces.RestaurantZhangHost;
 import city.interfaces.RestaurantZhangWaiter;
+import city.roles.RestaurantZhangCookRole.CookInvoice;
 
 public class MockRestaurantZhangCook extends MockRole implements RestaurantZhangCook {
 	
@@ -98,5 +102,65 @@ public class MockRestaurantZhangCook extends MockRole implements RestaurantZhang
 	public void hackOrderIsReady(RestaurantZhangOrder o) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<MarketBuilding> getMarkets() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MarketCustomerDelivery> getmarketCustomerDeliveryList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangHost getHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<RestaurantZhangOrder> getOrdersToCook() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangRevolvingStand getOrderStand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public RestaurantZhangMenu getMainMenu() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Food> getCookInventory() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<CookInvoice> getCookInvoiceList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public boolean getWaitingToCheckStand() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 }

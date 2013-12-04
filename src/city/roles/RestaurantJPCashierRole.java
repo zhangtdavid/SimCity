@@ -22,7 +22,9 @@ import city.interfaces.RestaurantJPCustomer;
 import city.interfaces.RestaurantJPWaiter;
 
 public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier {
-															//DATA	
+	
+	//DATA	
+	
 	public List<MyBill> Bills = Collections.synchronizedList(new ArrayList<MyBill>());
 	String name;
 	private boolean wantsInactive = false;
@@ -30,25 +32,11 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	private RestaurantJPBuilding building;
 	List<MarketTransaction> marketTransactions = new ArrayList<MarketTransaction>();
 	private List<Role> roles = new ArrayList<Role>();
-	public class MyBill{
-		public state s;
-		RestaurantJPWaiter w = null;
-		public MarketManagerRole m = null;
-		public String choice;
-		public RestaurantJPCustomer c;
-		int tab = 0;
-		public MyBill(RestaurantJPWaiter wait, MarketManagerRole market, String ch, RestaurantJPCustomer cust){
-			s = state.pending;
-			w = wait;
-			m = market;
-			choice = ch;
-			c = cust;
-		}
-	};
-	public enum state{pending, computing, charging, finished};
-	
 	Map<String, Integer> Prices = new HashMap<String, Integer>();
 	public EventLog log  = new EventLog();
+	
+	//Constructor
+	
 	public RestaurantJPCashierRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd){
 		super();
 		building = b;
@@ -63,17 +51,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		Prices.put("Salad", 6);
 		Prices.put("Pizza", 8);
 	}
-	public void setInactive(){
-		if(Bills.size() == 0 && building.seatedCustomers == 0){
-			super.setInactive();
-		}
-		else
-			wantsInactive = true;
-	}
 	
-	public String getName() {
-		return name;
-	}
 //MSGS-----------------------------------------------------------------------------------------------------------
 	
 	public void msgComputeBill(RestaurantJPWaiter w, RestaurantJPCustomer c, String choice) {
@@ -157,7 +135,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		if(building.funds > 2000){
 			building.bankCustomer.setActive(BANK_SERVICE.atmDeposit, building.funds - 2000, TRANSACTION_TYPE.business);
 			roles.add((Role) building.bankCustomer);
-			building.funds -= 2000;
+			building.funds -= (building.funds - 2000);
 		}
 		
 		boolean blocking = false;
@@ -169,7 +147,7 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 			}
 			break;
 		}
-		return false;
+		return blocking;
 		
 	}
 
@@ -206,15 +184,52 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 		}
 	}
 
+	//Getters
+	
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment(){
 		return marketPaymentRole;
 	}
+	
+	public String getName() {
+		return name;
+	}
 
+	//Setters
+	
+	public void setInactive(){
+		if(Bills.size() == 0 && building.seatedCustomers == 0){
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
+			super.setInactive();
+		}
+		else
+			wantsInactive = true;
+	}
+	
+	//Utilities
+	
 	@Override
 	public void print(String msg) {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCashierRole " + this.getPerson().getName(), msg);
     }
+	
+	//Classes
+	
+	public class MyBill{
+		public state s;
+		RestaurantJPWaiter w = null;
+		public MarketManagerRole m = null;
+		public String choice;
+		public RestaurantJPCustomer c;
+		int tab = 0;
+		public MyBill(RestaurantJPWaiter wait, MarketManagerRole market, String ch, RestaurantJPCustomer cust){
+			s = state.pending;
+			w = wait;
+			m = market;
+			choice = ch;
+			c = cust;
+		}
+	};
 
 }
 

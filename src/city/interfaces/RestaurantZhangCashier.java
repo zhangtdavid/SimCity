@@ -1,6 +1,7 @@
 package city.interfaces;
 
 import java.util.List;
+import java.util.Map;
 
 import city.RoleInterface;
 import utilities.RestaurantZhangCheck;
@@ -21,8 +22,12 @@ public interface RestaurantZhangCashier extends RoleInterface {
 	
 	// Getters
 	
-	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
 	public List<RestaurantZhangCheck> getPendingChecks();
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment();
+	public RestaurantZhangHost getHost();
+	public int getBalance();
+	public Map<RestaurantZhangCustomer, Integer> getTabCustomers();
+	public Map<String, Integer> getMenu();
 	
 	// Setters
 	

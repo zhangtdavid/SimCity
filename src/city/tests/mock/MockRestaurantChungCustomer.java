@@ -4,7 +4,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
 import city.abstracts.MockRole;
-import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
@@ -142,7 +142,7 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void setRestaurant(RestaurantChungBuilding r) {
+	public void setRestaurant(RestaurantChung r) {
 		// TODO Auto-generated method stub
 		
 	}

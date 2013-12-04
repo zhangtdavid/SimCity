@@ -96,8 +96,8 @@ public class MarketDeliveryPersonTest extends TestCase {
 		manager.setPerson(managerPerson);
 		manager.market = market;
 
-		market.cashier = cashier;
-		market.manager = manager;
+		market.setCashier(cashier);
+		market.setManager(manager);
 		market.addEmployee(employee);
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();

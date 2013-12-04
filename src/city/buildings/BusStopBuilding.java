@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import city.Application;
 import city.Building;
 import city.RoleInterface;
 import city.gui.CityRoad;
@@ -19,7 +20,7 @@ public class BusStopBuilding extends Building implements BusStop {
 	public BusStop nextStop = null;
 	public BusStop previousStop = null;
 	public List<BusPassenger> waitingList = Collections.synchronizedList(new ArrayList<BusPassenger>());
-	public CityRoad roadLocatedOn;
+	private CityRoad roadLocatedOn;
 	
 	// Constructor
 	
@@ -27,6 +28,7 @@ public class BusStopBuilding extends Building implements BusStop {
 		super(name);
 		this.setPanel(panel);
 		this.setCityViewBuilding(cityBuilding);
+		roadLocatedOn = Application.CityMap.findClosestRoad(this);
 	}
 	
 	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {
@@ -35,6 +37,7 @@ public class BusStopBuilding extends Building implements BusStop {
 		nextStop.previousStop = this; // Assign the nextStop's previousStop to this
 		this.previousStop = previousStop; // Assign the previousStop argument to this stop's previousStop
 		previousStop.nextStop = this; // Assign the previousStop's nextStop to this
+		roadLocatedOn = Application.CityMap.findClosestRoad(this);
 	}
 	
 	// Getters
@@ -51,6 +54,11 @@ public class BusStopBuilding extends Building implements BusStop {
 	@Override
 	public BusStop getNextStop() {
 		return nextStop;
+	}
+	
+	@Override
+	public CityRoad getRoadLocatedOn() {
+		return roadLocatedOn;
 	}
 	
 	// Setters

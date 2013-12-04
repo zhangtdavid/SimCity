@@ -41,6 +41,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
+		b.host.addWaiter(this, null);
 	}
 
 	// Messages
@@ -141,12 +142,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		comingBackFromBreak = true;
 		stateChanged();
 	}
-
-//	public void msgPickUpHisCustomers(WaiterAgent w){
-//		Do("PickUpCustomers message received from Host");
-//		HandleTransfer(w);
-//		stateChanged();
-//	}
 	
 	// Scheduler
 	
@@ -154,6 +149,7 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		if(wantsInactive && myCustomers.size() == 0) {
 			super.setInactive();
 			building.host.msgSetUnavailable(this);
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
 			wantsInactive = false;
 		} 
 		try {	
@@ -271,7 +267,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		myC.s = state.served;
 		myC.customer.msgHereIsYourFood();
 		building.cashier.msgComputeBill(this, myC.customer, myC.choice);
-		//waiterGui.DoDeliverFood(myC.choice, myC.table.tableNumber);
 	}
 	
 	private void DeliverCheck(MyCustomer myC){
@@ -292,16 +287,6 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		comingBackFromBreak = false;
 	}
 	
-//	private void HandleTransfer(WaiterAgent w){
-//		List<MyCustomer> transferCustomers = w.getCustomers();
-//		for(MyCustomer tCust : transferCustomers){
-//			myCustomers.add(tCust);
-//			tCust.customer.setWaiter(this);
-//		}
-//		//w.removeAllCustomers();
-//		w.waiterGui.DoLeaveCustomer();
-//		cook.msgWaiterHasGoneOnBreak(w, this);
-//	}
 	
 	// Getters
 	
@@ -317,6 +302,14 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		return hasRequestedBreak;
 	}
 	
+	public int getSalary(){
+		return RestaurantJPBuilding.WORKER_SALARY;
+	}
+	
+	public List<MyCustomer> getCustomers(){
+		return myCustomers;
+	}
+	
 	
 	// Setters
 	
@@ -327,8 +320,10 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 	
 	@Override
 	public void setInactive() {
-		if(myCustomers.size() == 0)
+		if(myCustomers.size() == 0){
 			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
+		}
 		else
 			wantsInactive = true;
 		building.host.msgSetUnavailable(this);
@@ -342,7 +337,19 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		revolvingStand = rs;
 	}
 	
+	public void setGui(RestaurantJPWaiterAnimation gui) {
+		waiterGui = gui;
+	}
+	
+	public void setRevolvingOrderStand(RestaurantJPRevolvingStand orderStand){
+		revolvingStand = orderStand;
+	}
+	
 	// Utilities
+	
+	public void removeAllCustomers(){
+		myCustomers.clear();
+	}
 	
 	// Classes
 	
@@ -367,24 +374,5 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 			return table;
 		}
 	}
-	
-	public int getSalary(){
-		return RestaurantJPBuilding.WORKER_SALARY;
-	}
-	
-	public List<MyCustomer> getCustomers(){
-		return myCustomers;
-	}
-	
-	public void removeAllCustomers(){
-		myCustomers.clear();
-	}
-	
-	public void setGui(RestaurantJPWaiterAnimation gui) {
-		waiterGui = gui;
-	}
-	
-	public void setRevolvingOrderStand(RestaurantJPRevolvingStand orderStand){
-		revolvingStand = orderStand;
-	}
+
 }
