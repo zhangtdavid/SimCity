@@ -20,21 +20,21 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //  Data
 //	=====================================================================	
-	private MarketBuilding market;
-	private MarketOrder order;
+	public EventLog log = new EventLog();
 	private Semaphore atCounter = new Semaphore(0, true);	
 	private Semaphore atCashier = new Semaphore(0, true);
 	
-	// TODO Change these to private and add getters/setters
-	public MarketCustomerEvent event;
-    public Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
-	public int loc; // stall number of employee
-	public int bill;
-	public enum MarketCustomerState {None, WaitingForService, WaitingForOrder, Paying};
-	public MarketCustomerState state;
-	public enum MarketCustomerEvent {ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
-	public MarketEmployee employee;
-	public EventLog log = new EventLog();
+	private MarketBuilding market;
+	private MarketEmployee employee;
+	
+	private MarketOrder order;
+
+	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
+	private int loc; // stall number of employee
+	private int bill;
+
+	private MarketCustomerEvent event;
+	private MarketCustomerState state;
 	
 //	Constructor
 //	=====================================================================
@@ -46,6 +46,15 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         order = o;
 		state = MarketCustomerState.None;
   }	
+	
+//	Activity
+//	=====================================================================
+	@Override
+	public void setActive(){
+		event = MarketCustomerEvent.ArrivedAtMarket;
+		this.setActivityBegun();
+		stateChanged();
+	}
 	
 //  Messages
 //	=====================================================================
@@ -104,7 +113,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //  Scheduler
 //	=====================================================================	
-
 	@Override
 	public boolean runScheduler() {
 		if (state == MarketCustomerState.None && event == MarketCustomerEvent.ArrivedAtMarket) {
@@ -167,7 +175,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //		marketCustomerGui.DoExitMarket();
 	}
 	
-//  Getters and Setters
+//  Getters
 //	=====================================================================
 	// Market
 	@Override
@@ -176,17 +184,43 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public MarketEmployee getEmployee() {
+		return employee;
 	}
 	
 	@Override
-	public void setActive(){
-		event = MarketCustomerEvent.ArrivedAtMarket;
-		this.setActivityBegun();
-		stateChanged();
+	public Map<FOOD_ITEMS, Integer> getReceivedItems() {
+		return receivedItems;
 	}
 	
+	@Override
+	public int getLoc() {
+		return loc;
+	}
+	
+	@Override
+	public int getBill() {
+		return bill;
+	}
+	
+	@Override
+	public MarketCustomerEvent getMarketCustomerEvent() {
+		return event;
+	}
+	
+	@Override
+	public MarketCustomerState getMarketCustomerState() {
+		return state;
+	}
+	
+	
+//  Setters
+//	=====================================================================	
+	@Override
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
+
 //  Utilities
 //	=====================================================================
 	@Override
