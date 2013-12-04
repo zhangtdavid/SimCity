@@ -20,9 +20,11 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //  Data
 //	=====================================================================	
 	private EventLog log = new EventLog();
+	
 	private Building restaurant;
 	private MarketBuilding market;
-	private List<MarketTransaction> marketTransactions; // list shared with the restaurant cashier
+	
+	private List<MarketTransaction> marketTransactions; // point to list shared with the restaurant cashier
 	
 //	Constructor
 //	=====================================================================
@@ -52,7 +54,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
 		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
 		//	MarketTransaction mt = findMarketTransaction(id);
-		//	removeMarketTransactionFromList(mt); TODO this might have cause when cashier is adding to the list
+		//	removeMarketTransactionFromList(mt); // this might have cause when cashier is adding to the list
 	}
 	
 //  Scheduler
@@ -83,7 +85,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //		}
 	}
 
-//  Getters and Setters
+//  Getters
 //	=====================================================================
 	// Market
 	@Override
@@ -91,6 +93,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		return market;
 	}
 	
+//  Setters
+//	=====================================================================	
 	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
@@ -111,7 +115,8 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		return -1;
 	}	
 
-	private MarketTransaction findMarketTransaction(int id) {
+	@Override
+	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction mt : marketTransactions){
 			if(mt.order.orderId == id) {
 				return mt;		
