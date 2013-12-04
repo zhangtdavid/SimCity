@@ -320,11 +320,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		MarketCustomer customer;
 		MarketCustomerDelivery customerDelivery;
 		MarketCustomerDeliveryPayment customerDeliveryPayment;
+		
 		Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS,Integer>();
 		Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS,Integer>();
+		
 		int orderId;
 		public int bill;
 		public int payment;
+		
 		public TransactionState s;
 		
 		public Transaction(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
