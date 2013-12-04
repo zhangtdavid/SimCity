@@ -16,11 +16,6 @@ public class MockRestaurantChungWaiterRevolvingStand extends MockRole implements
 	 */
 	public RestaurantChungCashier cashier;
 
-//	public MockRestaurantChungWaiterRevolvingStand(String name) {
-//		super(name);
-//
-//	}
-
 	@Override
 	public void msgAnimationAskedForBreak() {
 		// TODO Auto-generated method stub
