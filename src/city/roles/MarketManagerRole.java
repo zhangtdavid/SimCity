@@ -23,24 +23,39 @@ import city.Role;
 public class MarketManagerRole extends Role implements MarketManager {
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
-	private WorkingState workingState = WorkingState.Working;
+
 	private boolean itemsLow;
 	
-	// TODO Change these to private and add getters/setters
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public EventLog log = new EventLog();
-	public List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
-	public List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
+	private List<MyMarketEmployee> employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
+	private List<MyMarketCustomer> customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
 
+	private WorkingState workingState = WorkingState.Working;
+	
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================
 	public MarketManagerRole(MarketBuilding b, int t1, int t2) {
 		super();
 		market = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
+	}
+	
+//  Activity
+//	=====================================================================	
+//	// TODO schung 99c0f4da25
+// 	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
@@ -176,35 +191,44 @@ public class MarketManagerRole extends Role implements MarketManager {
 		customers.remove(cd);
 	}
 	
-	
-//  Getters and Setters
+//  Getters
 //	=====================================================================
-	// Market
 	@Override
 	public Market getMarket() {
 		return market;
 	}
 	
 	@Override
+	public boolean getItemsLow() {
+		return itemsLow;
+	}
+	
+	@Override
+	public List<MyMarketEmployee> getEmployees() {
+		return employees;
+	}
+	
+	@Override
+	public List<MyMarketCustomer> getCustomers() {
+		return customers;
+	}
+	
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
+	}
+
+//  Setters
+//	=====================================================================
+	@Override
 	public void setMarket(MarketBuilding market) {
 		this.market = market;
 	}
 	
-//	// TODO schung 99c0f4da25
-// 	@Override
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
-	@Override
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
-	}
-	
 //	Utilities
 //=====================================================================
-	private MyMarketEmployee findEmployee(MarketEmployee me) {
+	@Override
+	public MyMarketEmployee findEmployee(MarketEmployee me) {
 		for(MyMarketEmployee e : employees ){
 			if(e.employee == me) {
 				return e;
@@ -213,7 +237,8 @@ public class MarketManagerRole extends Role implements MarketManager {
 		return null;
 	}
 	
-	private MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
+	@Override
+	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
 		for(MyMarketCustomer c : customers ){
 			if(c.customerDelivery == cd) {
 				return c;		
@@ -230,21 +255,33 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 //	Classes
 //=====================================================================
-	
 	public static class MyMarketEmployee {
+		private MarketEmployee employee;
+		private MarketCustomerDelivery customerDelivery;
 		public enum MarketEmployeeState {Available, GoingToPhone, GettingOrder, CollectingItems};
-		public MarketEmployee employee;
-		public MarketCustomerDelivery customerDelivery;
-		public MarketEmployeeState s;
+		private MarketEmployeeState s;
 		
 		public MyMarketEmployee(MarketEmployee employee) {
 			this.employee = employee;
 			customerDelivery = null;
 			s = MarketEmployeeState.Available;
 		}
+		
+		// Getters
+		public MarketEmployee getMarketEmployee() {
+			return employee;
+		}
+		
+		public MarketCustomerDelivery getMarketCustomerDelivery() {
+			return customerDelivery;
+		}
+		
+		public MarketEmployeeState getMarketEmployeeState() {
+			return s;
+		}
 	}
 	
-	private class MyMarketCustomer {
+	public class MyMarketCustomer {
 		private MarketCustomer customer;
 		private MarketCustomerDelivery customerDelivery;
 		private MarketCustomerDeliveryPayment customerDeliveryPayment;
