@@ -12,6 +12,7 @@ import city.buildings.RestaurantJPBuilding;
 import city.interfaces.RestaurantJP;
 
 public class RestaurantJPHostRole extends Role {
+	//Data
 	static final int NTABLES = 3;
 	RestaurantJPBuilding building;
 	public List<RestaurantJPCustomerRole> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantJPCustomerRole>());
@@ -19,18 +20,11 @@ public class RestaurantJPHostRole extends Role {
 	int WAITERCOUNT = 0;
 	public List<MyWaiter> waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
 	private boolean wantsInactive = false;
-	class MyWaiter{
-		RestaurantJPWaiterRole w;
-		state s;
-		String name;
-		boolean isAvailable() {
-			return s == state.available;
-		}	
-	}
 	public enum state{available, wantsBreak, onBreak, unavailable};
 	private String name;
-//	public HostGui hostGui = null;
 
+	//Constructor
+	
 	public RestaurantJPHostRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
@@ -43,43 +37,8 @@ public class RestaurantJPHostRole extends Role {
 			tables.add(new RestaurantJPTableClass(ix));//how you add to a collections
 		}
 	}
-	
-	public void setInactive(){
-		if(building.host != this && waitingCustomers.size() == 0){
-			super.setInactive();
-		}
-		else
-			wantsInactive = true;
-	}
 
-	public void addWaiter(RestaurantJPWaiterRole w, String name)
-	{
-		MyWaiter myW = new MyWaiter();
-		myW.w = w;      							
-		myW.name = name;
-	    myW.s = state.available;
-	    synchronized(waiters){
-		waiters.add(myW);
-	    }
-		stateChanged();
-	}
-	
-	public String getMaitreDName() {
-		return name;
-	}
-
-	public String getName() {
-		return name;
-	}
-
-	/*public List getWaitingCustomers() {
-		return waitingCustomers;
-	}
-
-	public Collection getTables() {
-		return tables;
-	}*/
-	// ----------------------------------------------------------Messages
+	//Messages
 
 	public void msgSetUnavailable(RestaurantJPWaiterBase waiter){
 		for(MyWaiter myW : waiters){
@@ -142,9 +101,8 @@ public class RestaurantJPHostRole extends Role {
 		stateChanged();
 	}
 
-	/**
-	 * Scheduler.  Determine what action is called for, and do it.
-	 */
+	//Scheduler
+	
 	public boolean runScheduler() {
 		/* Think of this next rule as:
             Does there exist a table and customer,
@@ -153,6 +111,7 @@ public class RestaurantJPHostRole extends Role {
 		 */
 		if(wantsInactive && building.host != this && waitingCustomers.size() == 0){
 			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
 			wantsInactive = false;
 		}
 		
@@ -210,9 +169,6 @@ public class RestaurantJPHostRole extends Role {
 		}
 		
 		return false;
-		//we have tried all our rules and found
-		//nothing to do. So return false to main loop of abstract agent
-		//and wait.
 	}
 
 	// Actions
@@ -222,8 +178,41 @@ public class RestaurantJPHostRole extends Role {
 		synchronized(waitingCustomers){
 		waitingCustomers.remove(c);
 		}
-		//Do("Telling " + w.name + " to seat customer");
-		w.w.msgSitAtTable(c, t);														//Fix w.w
+		w.w.msgSitAtTable(c, t);														
+	}
+	
+	//Getters
+	
+	public String getMaitreDName() {
+		return name;
+	}
+
+	public String getName() {
+		return name;
+	}
+	
+	//Setters
+	
+	public void setInactive(){
+		if(building.host != this && waitingCustomers.size() == 0){
+			super.setInactive();
+			this.getPerson().setCash(this.getPerson().getCash() + RestaurantJP.WORKER_SALARY);
+		}
+		else
+			wantsInactive = true;
+	}
+	
+	//Utilities
+	public void addWaiter(RestaurantJPWaiterBase restaurantJPWaiterBase, String name)
+	{
+		MyWaiter myW = new MyWaiter();
+		myW.w = restaurantJPWaiterBase;      							
+		myW.name = name;
+	    myW.s = state.available;
+	    synchronized(waiters){
+		waiters.add(myW);
+	    }
+		stateChanged();
 	}
 	
 	@Override
@@ -231,13 +220,15 @@ public class RestaurantJPHostRole extends Role {
         super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPHostRole " + this.getPerson().getName(), msg);
     }
-	
-/*	private void ReassignCustomers(MyWaiter myW){
-		Do("Reassigning " + myW.name + "'s Customers");
-		for(MyWaiter w : waiters){
-			if(w.s == state.available)
-				w.w.msgPickUpHisCustomers(myW.w);
-		}
-	}*/
+
+	//Classes
+	class MyWaiter{
+		RestaurantJPWaiterBase w;
+		state s;
+		String name;
+		boolean isAvailable() {
+			return s == state.available;
+		}	
+	}
 }
 

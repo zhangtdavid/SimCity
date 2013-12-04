@@ -717,16 +717,18 @@ public class Application {
 		HouseBuilding h2JP = new HouseBuilding("House 2 JP", p0r1JP1, rhp1);
 		HouseBuilding h3JP = new HouseBuilding("House 3 JP", p0r1JP1, rhp1);
 		HouseBuilding h4JP = new HouseBuilding("House 4 JP", p0r1JP1, rhp1);
-
+		
 		// Create people
 		PersonAgent p1JP = new PersonAgent("Cashier 1 JP", date);
 		PersonAgent p2JP = new PersonAgent("Cook 1 JP", date);
 		PersonAgent p3JP = new PersonAgent("Host 1 JP", date);
 		PersonAgent p4JP = new PersonAgent("Waiter 1 JP", date);
+		PersonAgent p5JP = new PersonAgent("Customer 1 JP", date);
 		people.add(p1JP);
 		people.add(p2JP);
 		people.add(p3JP);
 		people.add(p4JP);
+
 		p1JP.setHome(h1JP);
 		p2JP.setHome(h2JP);
 		p3JP.setHome(h3JP);
@@ -873,6 +875,7 @@ public class Application {
 		p2JP.startThread();
 		p3JP.startThread();
 		p4JP.startThread();
+		
 	}
 
 	public static class CityMap {

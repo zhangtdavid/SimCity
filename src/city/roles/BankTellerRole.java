@@ -2,7 +2,6 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.Bank;
@@ -12,17 +11,12 @@ import city.interfaces.BankTeller;
 public class BankTellerRole extends Role implements BankTeller {
 	
 	// Data
-	
-	// private TellerGui gui;
 	private BankBuilding building;
 	private int boothNumber;
 	private boolean wantsInactive = false;
-	
-	// TODO Change these to private and add getters/setters
 	public MyCustomer currentCustomer;
 	
 	// Constructor
-	
 	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
@@ -30,11 +24,7 @@ public class BankTellerRole extends Role implements BankTeller {
 		this.setShift(shiftStart, shiftEnd);
 	}
 
-// Messages
-	//From BankManager
-	
 	// Messages
-	
 	@Override
 	public void msgAddressCustomer(BankCustomer bc){
 		print("Address Customer msg received");
@@ -101,7 +91,6 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	// Scheduler
-	
 	@Override
 	public boolean runScheduler() {
 		// TODO Auto-generated method stub
@@ -154,7 +143,6 @@ public class BankTellerRole extends Role implements BankTeller {
 	}
 	
 	// Actions
-	
 	private void ServiceCustomer(){
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
 		currentCustomer.s = SERVICE_STATE.inProgress;

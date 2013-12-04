@@ -29,7 +29,7 @@ public class BankCustomerTest extends TestCase {
 		Application.CityMap.addBuilding(BUILDING.bank, b);
 		this.customerPerson = new MockPerson("Customer");
 		customerPerson.setOccupation(new RestaurantJPWaiterRole(new RestaurantJPBuilding(null, null, null), 0, 12)); 
-		this.customer = new BankCustomerRole();
+		this.customer = new BankCustomerRole(b);
 		customer.setPerson(customerPerson);
 		customerPerson.setCash(100);
 	}

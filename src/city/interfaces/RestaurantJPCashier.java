@@ -5,7 +5,7 @@ import city.RoleInterface;
 public interface RestaurantJPCashier extends RoleInterface {
 	
 	// Data
-	
+	public enum state{pending, computing, charging, finished};
 	// Messages
 	
 	public void msgPayment(RestaurantJPCustomer cust, int bill);

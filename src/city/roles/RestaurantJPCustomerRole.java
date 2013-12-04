@@ -19,49 +19,29 @@ import city.interfaces.RestaurantJPWaiter;
  * Restaurant customer agent.
  */
 public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustomer {
+	//Data
+	
 	private int hungerLevel = 5;        // determines length of meal
 	int currentTable;
 	RestaurantJPBuilding building;
 	Timer timer = new Timer();
 	private RestaurantJPWaiter waiter;    
 	private RestaurantJPCustomerAnimation customerGui;
-	//    private boolean isHungry = false; //hack for gui
-	public enum AgentState
-	{DoingNothing, WaitingInRestaurant, BeingSeated, Seated, ReadyToOrder, Choosing, PlacingOrder, Eating, DoneEating, Paying, Leaving};
 	private AgentState state = AgentState.DoingNothing;//The start state
-	public enum AgentEvent 
-	{none, gotHungry, restaurantFull, DecidedToStay, followHost, seated, choiceReady, waiterCalled, outOfFood, foodArrived, readyToPay, donePaying, doneLeaving};
 	AgentEvent event = AgentEvent.none;
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
 	int bill = 0;
 	RestaurantJPCashier cashier;
 
+	//Constructor
+	
 	public RestaurantJPCustomerRole() {
 		super();
 		myMenu = new RestaurantJPMenuClass();
 		// TODO Auto-generated constructor stub
 	}
 	
-	public void setActive(){
-		gotHungry();
-	}
-	
-	public void setBuilding(RestaurantJPBuilding b){
-		building = b;
-	}
-	
-
-	/**
-	 * hack to establish connection to Host agent.
-	 */
-    public void setWaiter(RestaurantJPWaiter w)
-    {
-    	waiter = w;
-    }
-	public String getCustomerName() {
-		return this.getName();
-	}
 	
 //------------------------------------------------------------------------ Messages
 
@@ -192,7 +172,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		return false;
 	}
 
-//-----------------------------------------------------------------------------------------------------------Actions
+//-------------------------------------------------------------------------------------------Actions
 
 	public void goToRestaurant() {
 		building.host.msgIWantToEat(this);//send our instance, so he can respond to us
@@ -279,8 +259,11 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 		}
 	}
 
-	// Accessors, etc.
-
+	
+	
+	
+	//Getters
+	
 	public String getName() {
 		return this.getPerson().getName();
 	}
@@ -288,36 +271,51 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	public int getHungerLevel() {
 		return hungerLevel;
 	}
-
-	public void setHungerLevel(int hungerLevel) {
-		this.hungerLevel = hungerLevel;
-		//could be a state change. Maybe you don't
-		//need to eat until hunger lever is > 5?
+	
+	public RestaurantJPCustomerAnimation getGui() {
+		return customerGui;
 	}
-
+	
+	//Setters
+	
+	public void setActive(){
+		super.setActive();
+		gotHungry();
+	}
+	
+	public void setBuilding(RestaurantJPBuilding b){
+		building = b;
+	}
+	
+    public void setWaiter(RestaurantJPWaiter w)
+    {
+    	waiter = w;
+    }
+    
+    public void setHungerLevel(int hungerLevel) {
+		this.hungerLevel = hungerLevel;
+	}
+	
+    public void setGui(RestaurantJPCustomerAnimation g) {
+		customerGui = g;
+	}
+    
+    public void setAnimation(RestaurantJPCustomerAnimation gui) {
+		customerGui = gui;
+		
+	}
+    
+    public void setCashier(RestaurantJPCashier csh) {
+		// TODO Auto-generated method stub
+		cashier = csh;
+	}
+    
+	//Utilities
+	
 	public String toString() {
 		return "customer " + getName();
 	}
 
-	public void setGui(RestaurantJPCustomerAnimation g) {
-		customerGui = g;
-	}
-
-	public RestaurantJPCustomerAnimation getGui() {
-		return customerGui;
-	}
-
-	public void setAnimation(RestaurantJPCustomerAnimation gui) {
-		customerGui = gui;
-		
-	}
-
-	public void setCashier(RestaurantJPCashier csh) {
-		// TODO Auto-generated method stub
-		cashier = csh;
-	}
-
-	
 	@Override
 	public void print(String msg) {
         super.print(msg);
