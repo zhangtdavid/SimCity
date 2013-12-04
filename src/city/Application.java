@@ -21,6 +21,7 @@ import city.buildings.HouseBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.BuildingCard;
 import city.gui.CityRoad;
+import city.gui.CityRoadIntersection;
 import city.gui.CityViewPanel;
 import city.gui.MainFrame;
 import city.gui.buildings.BusStopPanel;
@@ -86,32 +87,147 @@ public class Application {
 	 */
 	private static void parseConfig() {
 		// Create roads
+		// North roads
 		for(int i = 375; i >= 125; i -= 25) {
+			if(i == 225)
+				continue;
 			CityRoad tempRoad = new CityRoad(i, 100, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
+		// West roads
 		for(int i = 100; i <= 300; i+=25) {
+			if(i == 225)
+				continue;
 			CityRoad tempRoad = new CityRoad(100, i, 25, 25, 0, 1, false, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
+		// South roads
 		for(int i = 100; i <= 350; i+=25) {
+			if(i == 225)
+				continue;
 			CityRoad tempRoad = new CityRoad(i, 325, 25, 25, 1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
+		// East roads
 		for(int i = 325; i >= 125; i-=25) {
+			if(i == 225)
+				continue;
 			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
-		for(int i = 0; i < roads.size(); i++) { // Connect all roads
-			if(i == roads.size() - 1) {
+		// North/South middle roads
+		for(int i = 300; i >= 125; i-=25) {
+			if(i == 225)
+				continue;
+			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.red);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		// East/West middle roads
+		for(int i = 350; i >= 125; i -= 25) {
+			if(i == 225)
+				continue;
+			CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.orange);
+			roads.add(tempRoad);
+			mainFrame.cityView.addMoving(tempRoad);
+		}
+		// North intersection
+		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 100, 25, 25, Color.gray);
+		roads.add(intersectionNorth);
+		mainFrame.cityView.addMoving(intersectionNorth);
+		// West intersection
+		CityRoadIntersection intersectionWest = new CityRoadIntersection(100, 225, 25, 25, Color.gray);
+		roads.add(intersectionWest);
+		mainFrame.cityView.addMoving(intersectionWest);
+		// South intersection
+		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 325, 25, 25, Color.gray);
+		roads.add(intersectionSouth);
+		mainFrame.cityView.addMoving(intersectionSouth);
+		// East intersection
+		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
+		roads.add(intersectionEast);
+		mainFrame.cityView.addMoving(intersectionEast);
+		// Center intersection
+		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
+		roads.add(intersectionCenter);
+		mainFrame.cityView.addMoving(intersectionCenter);
+		// Connect all roads
+		for(int i = 0; i < roads.size() - 1; i++) {
+			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
+				roads.get(i).setNextRoad(intersectionNorth);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getY() == intersectionNorth.getY() + 25 && roads.get(i).getX() == intersectionNorth.getX()) { // Set nextRoad of road to south of north intersection
+				roads.get(i).setNextRoad(intersectionNorth);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getX() == intersectionNorth.getX() - 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to west of north intersection
+				intersectionNorth.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getY() == intersectionWest.getY() - 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to north of west intersection
+				roads.get(i).setNextRoad(intersectionWest);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getY() == intersectionWest.getY() + 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to south of west intersection
+				intersectionWest.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
+				intersectionWest.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
+				intersectionSouth.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getX() == intersectionSouth.getX() - 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to west of south intersection
+				roads.get(i).setNextRoad(intersectionSouth);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getX() == intersectionSouth.getX() + 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to east of south intersection
+				intersectionSouth.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getY() == intersectionEast.getY() - 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to north of east intersection
+				intersectionEast.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getX() == intersectionEast.getX() - 25 && roads.get(i).getY() == intersectionEast.getY()) { // Set nextRoad of road to west of east intersection
+				intersectionEast.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getY() == intersectionEast.getY() + 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to south of east intersection
+				roads.get(i).setNextRoad(intersectionEast);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getY() == intersectionCenter.getY() - 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to north of center intersection
+				intersectionCenter.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getX() == intersectionCenter.getX() + 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to east of center intersection
+				roads.get(i).setNextRoad(intersectionCenter);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getX() == intersectionCenter.getX() - 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to west of center intersection
+				intersectionCenter.setNextRoad(roads.get(i));
+				System.out.println("Next road set for intersection");
+				continue;
+			} else if(roads.get(i).getY() == intersectionCenter.getY() + 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to south of center intersection
+				roads.get(i).setNextRoad(intersectionCenter);
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
+				continue;
+			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 125) { // Last road in the outer loop
 				roads.get(i).setNextRoad(roads.get(0));
+				System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i).getNextRoad().getX() + " " + roads.get(i).getNextRoad().getY());
 				continue;
 			}
 			roads.get(i).setNextRoad(roads.get(i+1));
+			System.out.println(roads.get(i).getX() + " " + roads.get(i).getY() + roads.get(i+1).getX() + " " + roads.get(i+1).getY());
 		}
 
 		// Bus Stops!!!!!!!!
@@ -142,7 +258,14 @@ public class Application {
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop4 ); 
-
+		
+//		try {
+//			Thread.sleep(5000);
+//		} catch (InterruptedException e1) {
+//			// TODO Auto-generated catch block
+//			e1.printStackTrace();
+//		}
+		
 		// Create buildings
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
 
@@ -171,7 +294,7 @@ public class Application {
 		createBuilding(restaurantZhangPanel1, cityViewRestaurantZhang1, rzb1);
 
 		HousePanel rhp1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529), new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
-		
+
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
 		LandlordRole p0r1Zhang = new LandlordRole();
@@ -265,7 +388,7 @@ public class Application {
 		p3Zhang.startThread();
 		p4Zhang.startThread();
 	}
-	
+
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
@@ -274,7 +397,7 @@ public class Application {
 
 	public static class CityMap {
 		private static HashMap<BUILDING, List<BuildingInterface>> map = new HashMap<BUILDING, List<BuildingInterface>>();
-		
+
 		/**
 		 * Adds a new building to the HashMap
 		 * 
@@ -355,7 +478,7 @@ public class Application {
 			}
 			return returnRoad;
 		}
-		
+
 		public static void clearMap() {
 			map.clear();
 		}

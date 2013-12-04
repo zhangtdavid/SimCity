@@ -77,6 +77,7 @@ public class CityRoad extends CityViewBuilding {
 			if(((BusAnimation) vehicle).isAtDestination()) {
 				return;
 			}
+			System.out.println(this.getX() + " " + this.getY() + " " + nextRoad);
 			if(nextRoad.vehicle == null) {
 				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);

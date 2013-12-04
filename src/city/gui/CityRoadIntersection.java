@@ -125,10 +125,6 @@ public class CityRoadIntersection extends CityRoad {
 				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + thisNextRoad.yVelocity);
 			}
 
-			if(nextRoad.vehicle == null) {
-				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
-				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
-			}
 			x = vehicle.getXPos();
 			y = vehicle.getYPos();
 			vWidth = BusAnimation.SIZE;
