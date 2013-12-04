@@ -30,12 +30,12 @@ public class MockPerson extends MockAgent implements Person {
 	private Resident residentRole; // retained
 	private RoleInterface restaurantCustomerRole; // not retained
 	private MarketCustomer marketCustomerRole; // not retained
-	private Date lastAteAtRestaurant;
-	private Date lastWentToSleep;
+	// private Date lastAteAtRestaurant;
+	// private Date lastWentToSleep;
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private city.animations.interfaces.AnimatedPerson animation;
+	private AnimatedPerson animation;
 	private STATE state; 
 	private int cash;
 	private boolean hasEaten;
@@ -52,13 +52,32 @@ public class MockPerson extends MockAgent implements Person {
 		super();
 		this.name = name;
 		this.date = new Date(startDate.getTime());
-		this.lastAteAtRestaurant = new Date(startDate.getTime());
-		this.lastWentToSleep = new Date(startDate.getTime());
+		// this.lastAteAtRestaurant = new Date(startDate.getTime());
+		// this.lastWentToSleep = new Date(startDate.getTime());
 		this.state = STATE.none;
 		this.cash = 0;
 		this.hasEaten = false;
 		
 		residentRole = new MockResident(new Date(startDate.getTime()));
+		bankCustomerRole = new MockBankCustomer();
+		this.addRole(residentRole);
+		this.addRole(bankCustomerRole);
+	}
+	
+	/**
+	 * For the benefit of tests that aren't using a constructor with startDate
+	 */
+	public MockPerson(String name) {
+		super();
+		this.name = name;
+		this.date = new Date(0);
+		// this.lastAteAtRestaurant = new Date(0);
+		// this.lastWentToSleep = new Date(0);
+		this.state = STATE.none;
+		this.cash = 0;
+		this.hasEaten = false;
+		
+		residentRole = new MockResident(new Date(0));
 		bankCustomerRole = new MockBankCustomer();
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
@@ -150,6 +169,11 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public Resident getResidentRole() {
 		return this.residentRole;
+	}
+	
+	@Override
+	public AnimatedPerson getAnimation() {
+		return this.animation;
 	}
 	
 	// Setters
