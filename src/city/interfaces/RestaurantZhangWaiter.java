@@ -1,10 +1,13 @@
 package city.interfaces;
 
+import java.util.List;
+
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.RoleInterface;
+import city.abstracts.RestaurantZhangWaiterBase.MyCustomer;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
 
 public interface RestaurantZhangWaiter extends RoleInterface {
@@ -15,6 +18,7 @@ public interface RestaurantZhangWaiter extends RoleInterface {
 	public static final int BREAKY = 600;
 	public static final int BREAKTIME = 10000;
 	public static final int RESTAURANTZHANGCASHIERSALARY = 100;
+	public enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
 	
 	// Messages
 	
@@ -30,17 +34,25 @@ public interface RestaurantZhangWaiter extends RoleInterface {
 	public void msgAtDestination();
 	
 	// Getters
-	
+	public List<MyCustomer> getCustomerList();
+	public int getNumCustomersServed();
+	public RestaurantZhangCook getCook();
+	public RestaurantZhangHost getHost();
+	public RestaurantZhangCashier getCashier();
+	public RestaurantZhangMenu getMenu();
+	public RestaurantZhangRevolvingStand getOrderStand();
+	public List<RestaurantZhangCheck> getCheckList();
+	public breakStatus getBreakStatus();
+	public RestaurantZhangAnimatedWaiter getAnimation();
 	public int getNumberCustomers();
-	public int getNumberCustomersServed();
+	public boolean getOnBreak();
 	
 	// Setters
-
-	public void setAnimation(RestaurantZhangAnimatedWaiter gui);
-	public void setCook(RestaurantZhangCook c);
-	public void setHost(RestaurantZhangHost h);
-	public void setCashier(RestaurantZhangCashier c);
-	public void setMenu(RestaurantZhangMenu m);
-	public void setRevolvingStand(RestaurantZhangRevolvingStand rs);
 	
+	void setAnimation(RestaurantZhangAnimatedWaiter gui);
+	void setCook(RestaurantZhangCook c);
+	void setHost(RestaurantZhangHost h);
+	void setCashier(RestaurantZhangCashier c);
+	void setMenu(RestaurantZhangMenu m);
+	void setRevolvingStand(RestaurantZhangRevolvingStand rs);
 }

@@ -57,11 +57,9 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 	// Constructor
 	
 	public RestaurantZhangBuilding(String name, RestaurantZhangPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.RestaurantZhangCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantZhangCustomerAnimation");
-		this.setPanel(panel);
-		this.setCityViewBuilding(cityBuilding);
 		// Specific to my restaurant panel
 		tables = new ArrayList<RestaurantZhangTable>(nTables);
     	for (int ix = 0; ix < nTables; ix++) {

@@ -6,8 +6,8 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
 import city.Application.BUILDING;
-import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Building;
 import city.RoleInterface;
 import city.animations.MarketCashierAnimation;
@@ -29,7 +29,6 @@ import city.roles.MarketManagerRole;
 public class MarketBuilding extends Building implements Market { 
 //	Data
 //	=====================================================================
-	private MarketPanel panel;	
 	private MarketManager manager;
 	private MarketCashier cashier;
 	private BankCustomer bankCustomer;
@@ -44,12 +43,10 @@ public class MarketBuilding extends Building implements Market {
 //	Constructor
 //	=====================================================================	
 	public MarketBuilding(String name, MarketPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
-		this.panel = panel;
-		this.setCityViewBuilding(cityBuilding);
-		
+
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
 		inventory.put(FOOD_ITEMS.pizza, 50);
@@ -61,8 +58,8 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.pizza, (10)/2);
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
-		
-		bankCustomer = new BankCustomerRole(this, (Bank) CityMap.findRandomBuilding(BUILDING.bank)); // TODO
+
+		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		
 		super.setCash(1000);
 	}
@@ -81,7 +78,7 @@ public class MarketBuilding extends Building implements Market {
 	
 	@Override
 	public MarketPanel getMarketPanel() {
-		return panel;
+		return (MarketPanel)(super.getPanel());
 	}
 	
 	@Override
@@ -151,7 +148,7 @@ public class MarketBuilding extends Building implements Market {
 				MarketAnimatedCashier anim = new MarketCashierAnimation(c); 
 				c.setAnimation(anim);	
 				anim.setVisible(true);
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				cashier = c;
 //				c.setActive();
 				super.addOccupyingRole(c, null); // null --> anim

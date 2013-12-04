@@ -3,7 +3,6 @@ package city.roles;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Role;
-import city.buildings.BankBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
@@ -11,13 +10,13 @@ import city.interfaces.BankTeller;
 public class BankTellerRole extends Role implements BankTeller {
 	
 	// Data
-	private BankBuilding building;
+	private Bank building;
 	private int boothNumber;
 	private boolean wantsInactive = false;
 	public MyCustomer currentCustomer;
 	
 	// Constructor
-	public BankTellerRole (BankBuilding b, int shiftStart, int shiftEnd){
+	public BankTellerRole (Bank b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
 		this.setSalary(Bank.WORKER_SALARY);
@@ -198,7 +197,7 @@ public class BankTellerRole extends Role implements BankTeller {
 	@Override
 	public void setActive() {
 		print("Customer has been set active");
-		building.manager.msgAvailable(this);
+		building.getManager().msgAvailable(this);
 		this.setActivityBegun();
 	}
 	
@@ -209,7 +208,7 @@ public class BankTellerRole extends Role implements BankTeller {
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}	
 		else{
-			building.manager.msgUnavailable(this);
+			building.getManager().msgUnavailable(this);
 			wantsInactive = true;
 		}
 	}

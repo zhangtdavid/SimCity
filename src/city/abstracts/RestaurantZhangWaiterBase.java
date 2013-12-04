@@ -25,22 +25,19 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	// Data
 	
-	private Timer timer = new Timer();
-	private Semaphore atTable = new Semaphore(0, false);
-	private boolean restaurantClosing = false;
-	
-	// TODO Change these to private and add getters/setters
-	public List<MyCustomer> myCustomerList = new ArrayList<MyCustomer>();
-	public int numberCustomersServed = 0; // Host uses this to decide which waiter to choose
-	public RestaurantZhangCook myCook;
-	public RestaurantZhangHost myHost;
-	public RestaurantZhangCashier myCashier;
-	public RestaurantZhangMenu waiterMenu;
-	public RestaurantZhangRevolvingStand myOrderStand;
-	public RestaurantZhangAnimatedWaiter thisGui;
-	public List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
-	public enum breakStatus {notOnBreak, wantToBreak, goingOnBreak, onBreak};
-	public breakStatus wBreakStatus = breakStatus.notOnBreak;
+	protected Timer timer = new Timer();
+	protected Semaphore atTable = new Semaphore(0, false);
+	protected boolean restaurantClosing = false;
+	protected List<MyCustomer> myCustomerList = new ArrayList<MyCustomer>();
+	protected int numberCustomersServed = 0; // Host uses this to decide which waiter to choose
+	protected RestaurantZhangCook myCook;
+	protected RestaurantZhangHost myHost;
+	protected RestaurantZhangCashier myCashier;
+	protected RestaurantZhangMenu waiterMenu;
+	protected RestaurantZhangRevolvingStand myOrderStand;
+	protected RestaurantZhangAnimatedWaiter thisGui;
+	protected List<RestaurantZhangCheck> checkList = new ArrayList<RestaurantZhangCheck>();
+	protected breakStatus wBreakStatus = breakStatus.notOnBreak;
 	
 	// Constructor
 	
@@ -195,7 +192,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 			}
 			for(MyCustomer mc : myCustomerList) {
 				if(mc.state == MyCustomer.STATE.doneEating) {
-					GetCheckForCustomer(mc);
+					getCheckForCustomer(mc);
 					return true;
 				}
 			}
@@ -210,10 +207,10 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 				}
 			}
 			if(myCustomerList.isEmpty() && wBreakStatus == breakStatus.goingOnBreak) {
-				GoOnBreak();
+				goOnBreak();
 				return false;
 			} else if (wBreakStatus != breakStatus.onBreak) {
-				DoingNothing(); // If waiter has no more tasks
+				doingNothing(); // If waiter has no more tasks
 			}
 			return false;
 		} catch(ConcurrentModificationException e) {
@@ -224,68 +221,68 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 
 	// Actions
 	
-	private void seatCustomer(MyCustomer mc) {
+	protected void seatCustomer(MyCustomer mc) {
 		print("Going to entrance");
-		DoGoToEntrance(mc.customer);
-		WaitForAnimation();
+		doGoToEntrance(mc.customer);
+		waitForAnimation();
 		mc.customer.msgFollowMe(this, waiterMenu, mc.table);
 		print("Seating " + mc.customer + " at " + mc.table);
-		DoGoToTable(mc.table);
+		doGoToTable(mc.table);
 		mc.state = MyCustomer.STATE.deciding;
-		WaitForAnimation();
+		waitForAnimation();
 		stateChanged();
 	}
 	
-	private void takeOrderFromCustomer(MyCustomer mc) {
+	protected void takeOrderFromCustomer(MyCustomer mc) {
 		print("Going to customer " + mc.customer.getPerson().getName() + " to take order");
-		DoGoToTable(mc.table);
-		WaitForAnimation();
+		doGoToTable(mc.table);
+		waitForAnimation();
 		mc.state = MyCustomer.STATE.ordering;
 		mc.customer.msgWhatWouldYouLike();
 	}
 	
-	private void waitForOrder(MyCustomer mc) {
+	protected void waitForOrder(MyCustomer mc) {
 		print("Waiting for customer " + mc.customer.getPerson().getName() + " to take order");
 		stateChanged();
 	}
 	
 	protected abstract void sendOrderToCook(MyCustomer mc, String choice, RestaurantZhangTable t);
 	
-	private void tellCustomerDecideAgain(MyCustomer mc) {
+	protected void tellCustomerDecideAgain(MyCustomer mc) {
 		print("Telling customer to reorder");
-		DoGoToTable(mc.table);
-		WaitForAnimation();
+		doGoToTable(mc.table);
+		waitForAnimation();
 		mc.state = MyCustomer.STATE.deciding;
 		mc.customer.msgOrderAgain();
 	}
 	
-	private void serveCustomer(MyCustomer mc) {
+	protected void serveCustomer(MyCustomer mc) {
 		print("Going to cook to get food for customer " + mc.customer.getPerson().getName());
-		DoGoToCook();
-		WaitForAnimation();
+		doGoToCook();
+		waitForAnimation();
 		myCook.msgGotCompletedOrder(mc.table);
 		print("Going to customer "+ mc.customer.getPerson().getName() + " to serve");
 		thisGui.setFoodLabel(mc.choice, true);
-		DoGoToTable(mc.table);
-		WaitForAnimation();
+		doGoToTable(mc.table);
+		waitForAnimation();
 		mc.customer.msgHereIsYourFood(mc.choice);
 		thisGui.setFoodLabel("", true);
 		mc.state = MyCustomer.STATE.eating;
 	}
 	
-	private void GetCheckForCustomer(MyCustomer mc) {
+	protected void getCheckForCustomer(MyCustomer mc) {
 		print("Getting check for customer " + mc.customer.getPerson().getName());
 		myCashier.msgComputeBill(this, mc.customer, mc.choice);
 		mc.state = MyCustomer.STATE.waitingForCheck;
 	}
 	
-	private void giveCheckToCust(RestaurantZhangCheck c) {
+	protected void giveCheckToCust(RestaurantZhangCheck c) {
 		print("Giving check to customer " + ((RestaurantZhangCustomer) c.cust).getPerson().getName());
 		checkList.remove(c);
 		c.cust.msgHereIsCustCheck(c);
 	}
 	
-	private void notifyHostCustomerLeaving(MyCustomer mc) {
+	protected void notifyHostCustomerLeaving(MyCustomer mc) {
 		print("Notifying host that customer " + mc.customer.getPerson().getName() + " has left");
 		myCustomerList.remove(mc);
 		myHost.msgTableOpen(mc.table);
@@ -297,17 +294,17 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		}
 	}
 	
-	private void DoingNothing() {
-		if(DoReturnToBase()) {
-			WaitForAnimation();
+	protected void doingNothing() {
+		if(doReturnToBase()) {
+			waitForAnimation();
 		}
 	}
 	
-	private void GoOnBreak() {
+	protected void goOnBreak() {
 		print("Going on break");
 		wBreakStatus = breakStatus.onBreak;
 		thisGui.GoToDestination(BREAKX, BREAKY);
-		WaitForAnimation();
+		waitForAnimation();
 		timer.schedule(new TimerTask() {
 			public void run() {
 				print("Returned from break");
@@ -320,23 +317,23 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	}
 	
 	// The animation DoXYZ() routines
-	private void DoGoToEntrance(RestaurantZhangCustomer c) {
-		thisGui.GoToCustomer(c.getPos());
+	protected void doGoToEntrance(RestaurantZhangCustomer c) {
+		thisGui.GoToCustomer(c.getWaitingPosition());
 	}
 	
-	private void DoGoToTable(RestaurantZhangTable table) {
+	protected void doGoToTable(RestaurantZhangTable table) {
 		thisGui.GoToTable(table);
 	}
 	
-	protected void DoGoToCook() {
+	protected void doGoToCook() {
 		thisGui.GoToDestination(RestaurantZhangCook.COOKX, RestaurantZhangCook.COOKY);
 	}
 	
-	private boolean DoReturnToBase() {
+	protected boolean doReturnToBase() {
 		return thisGui.ReturnToBase();
 	}
 
-	protected void WaitForAnimation() {
+	protected void waitForAnimation() {
 		try {
 			atTable.acquire();
 		} catch (InterruptedException e) {
@@ -346,18 +343,62 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 	
 	// Getters
 	
+	@Override
+	public List<MyCustomer> getCustomerList() {
+		return myCustomerList;
+	}
+	
+	@Override
+	public int getNumCustomersServed() {
+		return numberCustomersServed;
+	}
+	
+	@Override
+	public RestaurantZhangCook getCook() {
+		return myCook;
+	}
+	
+	@Override
+	public RestaurantZhangHost getHost() {
+		return myHost;
+	}
+	
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		return myCashier;
+	}
+	
+	@Override
+	public RestaurantZhangMenu getMenu() {
+		return waiterMenu;
+	}
+	
+	@Override
+	public RestaurantZhangRevolvingStand getOrderStand() {
+		return myOrderStand;
+	}
+	
+	@Override
+	public List<RestaurantZhangCheck> getCheckList() {
+		return checkList;
+	}
+	
+	@Override
+	public breakStatus getBreakStatus() {
+		return wBreakStatus;
+	}
+	
+	@Override
 	public RestaurantZhangAnimatedWaiter getAnimation() {
 		return thisGui;
 	}
 	
+	@Override
 	public int getNumberCustomers() {
 		return myCustomerList.size();
 	}
 	
-	public int getNumberCustomersServed() {
-		return numberCustomersServed;
-	}
-	
+	@Override
 	public boolean getOnBreak() {
 		if(wBreakStatus == breakStatus.notOnBreak || wBreakStatus == breakStatus.wantToBreak) {
 			return false;

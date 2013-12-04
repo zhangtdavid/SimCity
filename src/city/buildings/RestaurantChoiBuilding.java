@@ -11,8 +11,8 @@ import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
 import city.Application.BUILDING;
-import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
@@ -56,13 +56,13 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	// Constructor
 
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		setCash(DAILY_CAPITAL); // initial launch
 		menu = new RestaurantChoiMenu();
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole(this, (Bank) CityMap.findRandomBuilding(BUILDING.bank)); // Shirley did this temp. to get rid of error
+		bankConnection = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		this.setCityViewBuilding(cityBuilding);
 		//this.setCashOnSite(cash_on_site);	
 		//set up tables

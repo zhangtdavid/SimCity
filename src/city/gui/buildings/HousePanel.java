@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -31,8 +30,6 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	private static final long serialVersionUID = -9051230986691103443L;
 	
 	//Data
-	private int panelX;
-    private int panelY;
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
@@ -50,10 +47,8 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
 	
 	//Constructor
-	public HousePanel(Color color, Dimension panelDimension){
+	public HousePanel(Color color){
 	  	super(color);
-    	panelX = panelDimension.width;
-    	panelY = panelDimension.height;
     	
         setVisible(true);
  

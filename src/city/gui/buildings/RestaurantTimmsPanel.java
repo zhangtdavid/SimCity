@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -9,17 +8,15 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import city.Animation;
+import city.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantTimmsPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
 
-	public RestaurantTimmsPanel(Color color, Dimension panelDimension) {
+	public RestaurantTimmsPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
@@ -42,7 +39,7 @@ public class RestaurantTimmsPanel extends BuildingCard implements ActionListener
 
 		// Draw each visible element after updating their positions
 		// TODO generates concurrent modification exception
-		for(Animation animation : animations) {
+		for(AnimationInterface animation : animations) {
 			if (animation.getVisible()) {
 				animation.draw(graphics2D);
 			}

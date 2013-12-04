@@ -6,6 +6,8 @@ import city.BuildingInterface;
 public interface AnimatedCar extends AnimationInterface {
 	
 	// Data
+
+	static final int SIZE = 25;
 	
 	// Constructor
 	

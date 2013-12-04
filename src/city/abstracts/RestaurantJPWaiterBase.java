@@ -41,7 +41,8 @@ public abstract class RestaurantJPWaiterBase extends Role implements RestaurantJ
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
-		b.host.addWaiter(this, null);
+		if(b.host != null)
+			b.host.addWaiter(this, null);
 	}
 
 	// Messages

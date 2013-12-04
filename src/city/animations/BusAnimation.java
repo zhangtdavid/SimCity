@@ -17,14 +17,12 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
 
-	public boolean atDestination = true;
-
-	public static final int SIZE = 25;
+	private boolean atDestination = true;
 
 	public BusAnimation(Bus b, Building startingBuilding) {
 		bus = b;
-		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).x;
-		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).y;
+		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).getX();
+		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).getY();
 	}
 
 	public void updatePosition() {
@@ -41,7 +39,25 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		g.setColor(Color.black);
 		g.drawString("Bus", xPos, yPos + 10);
 	}
+	
+	// Actions
 
+	@Override
+	public void goToDestination(Building destination) {
+		xDestination = destination.getCityViewBuilding().getX();
+		yDestination = destination.getCityViewBuilding().getY();
+		atDestination = false;
+	}
+
+	@Override
+	public void doGoToNextStop(BusStop nextStop) {
+		xDestination = Application.CityMap.findClosestRoad(nextStop).getX();
+		yDestination = Application.CityMap.findClosestRoad(nextStop).getY();
+		atDestination = false;
+	}
+	
+	// Getters
+	
 	public int getXPos() {
 		return xPos;
 	}
@@ -49,24 +65,19 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	public int getYPos() {
 		return yPos;
 	}
-
-	@Override
-	public void goToDestination(Building destination) {
-		xDestination = destination.getCityViewBuilding().x;
-		yDestination = destination.getCityViewBuilding().y;
-		atDestination = false;
+	
+	public Bus getBus() {
+		return bus;
 	}
-
-	@Override
-	public void DoGoToNextStop(BusStop nextStop) {
-		xDestination = Application.CityMap.findClosestRoad(nextStop).x;
-		yDestination = Application.CityMap.findClosestRoad(nextStop).y;
-		atDestination = false;
+	
+	public boolean isAtDestination() {
+		return atDestination;
 	}
-
+	
+	// Setters
+	
 	public void setXPos(int x) {
 		xPos = x;
-		
 	}
 
 	public void setYPos(int y) {

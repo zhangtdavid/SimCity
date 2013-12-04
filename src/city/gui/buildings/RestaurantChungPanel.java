@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import city.Animation;
 import city.AnimationInterface;
 import city.gui.BuildingCard;
 
@@ -65,16 +63,12 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     public static final int ORDERDROPX = 280, ORDERDROPY = 20;
     public static final int WAITERBREAKX = 260, WAITERBREAKY = 40; 
     
-	private int panelX;
-	private int panelY;
 	private final int delayMS = 5;
 	private List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
 	
 	
-	public RestaurantChungPanel(Color color, Dimension panelDimension) {
+	public RestaurantChungPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
