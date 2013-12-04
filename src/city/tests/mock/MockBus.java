@@ -1,8 +1,11 @@
 package city.tests.mock;
 
+import java.util.List;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.abstracts.MockAgent;
+import city.agents.BusAgent.MyBusPassenger;
 import city.interfaces.Bus;
 import city.interfaces.BusPassenger;
 import city.interfaces.BusStop;
@@ -31,6 +34,48 @@ public class MockBus extends MockAgent implements Bus {
 	public void msgAtDestination() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void msgAtBusDestination() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public BUSSTATE getState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BUSEVENT getEvent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MyBusPassenger> getPassengerList() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BusStop getCurrentStop() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public BusStop getNextStop() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getEarnedMoney() {
+		// TODO Auto-generated method stub
+		return 0;
 	}
 
 }

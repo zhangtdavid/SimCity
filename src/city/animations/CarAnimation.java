@@ -11,45 +11,47 @@ import city.gui.CityRoad;
 import city.interfaces.Car;
 
 public class CarAnimation extends Animation implements AnimatedCar {
-
+	
+	// Data
+	
 	private Car car = null;
 
-	private int xPos , yPos;//default waiter position
-	private int xDestination, yDestination;//default start position
+	private int xPos, yPos;
+	private int xDestination, yDestination;
 
-	BuildingInterface currentBuilding;
-	BuildingInterface destinationBuilding = null;
-	public CityRoad startingRoad = null;
-	public CityRoad endRoad = null;
+	private BuildingInterface currentBuilding;
+	private BuildingInterface destinationBuilding = null;
+	private CityRoad startingRoad = null;
+	private CityRoad endRoad = null;
 	
-	public boolean atDestinationRoad = false;
+	private boolean atDestinationRoad = false;
 	private boolean atDestination = true;
-
-	public static final int SIZE = 25;
 
 	public CarAnimation(Car c, BuildingInterface startingBuilding) {
 		car = c;
-		xDestination = xPos = startingBuilding.getCityViewBuilding().x;
-		yDestination = yPos = startingBuilding.getCityViewBuilding().y;
+		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
+		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
 		currentBuilding = startingBuilding;
 	}
-
+	
+	// Paint
+	
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingRoad != null) {
-			if(startingRoad.addVehicle(this) == false && startingRoad.vehicle != this) {
+			if(startingRoad.setVehicle(this) == false && startingRoad.getVehicle() != this) {
 				return;
 			}
-			if (xPos < startingRoad.x && !startingRoad.isHorizontal)
+			if (xPos < startingRoad.getX() && !startingRoad.getHorizontal())
 				xPos++;
-			else if (xPos > startingRoad.x && !startingRoad.isHorizontal)
+			else if (xPos > startingRoad.getX() && !startingRoad.getHorizontal())
 				xPos--;
 
-			if (yPos < startingRoad.y && startingRoad.isHorizontal)
+			if (yPos < startingRoad.getY() && startingRoad.getHorizontal())
 				yPos++;
-			else if (yPos > startingRoad.y && startingRoad.isHorizontal)
+			else if (yPos > startingRoad.getY() && startingRoad.getHorizontal())
 				yPos--;
-			if(xPos == startingRoad.x && yPos == startingRoad.y)
+			if(xPos == startingRoad.getX() && yPos == startingRoad.getY())
 				startingRoad = null;
 		}
 		// Getting on the destination road
@@ -70,7 +72,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			car.msgAtDestination();
 		}
 	}
-
+	
 	public void draw(Graphics2D g) {
 		g.setColor(Color.PINK);
 		g.fillRect(xPos, yPos, SIZE, SIZE);
@@ -78,25 +80,49 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		if(car != null)
 			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
 	}
-
+	
+	// Action
+	
+	public void goToDestination(BuildingInterface destination) {
+		destinationBuilding = destination;
+		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
+		startingRoad.setVehicle(this);
+		xDestination = destination.getCityViewBuilding().getX();
+		yDestination = destination.getCityViewBuilding().getY();
+		endRoad = Application.CityMap.findClosestRoad(destination);
+		atDestination = false;
+	}
+	
+	// Getters
+	
+	@Override
 	public int getXPos() {
 		return xPos;
 	}
 
+	@Override
 	public int getYPos() {
 		return yPos;
 	}
-
-	public void goToDestination(BuildingInterface destination) {
-		destinationBuilding = destination;
-		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
-		startingRoad.addVehicle(this);
-		xDestination = destination.getCityViewBuilding().x;
-		yDestination = destination.getCityViewBuilding().y;
-		endRoad = Application.CityMap.findClosestRoad(destination);
-		atDestination = false;
+	
+	public BuildingInterface getDestinationBuilding() {
+		return destinationBuilding;
 	}
-
+	
+	public CityRoad getEndRoad() {
+		return endRoad;
+	}
+	
+	public boolean getAtDestinationRoad() {
+		return atDestinationRoad;
+	}
+	
+	public CityRoad getStartingRoad() {
+		return startingRoad;
+	}
+	
+	// Setters
+	
 	@Override
 	public void setXPos(int x) {
 		xPos = x;
@@ -105,5 +131,21 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	@Override
 	public void setYPos(int y) {
 		yPos = y;
+	}
+
+	public void setDestinationBuilding(BuildingInterface destinationBuilding) {
+		this.destinationBuilding = destinationBuilding;
+	}
+
+	public void setEndRoad(CityRoad endRoad) {
+		this.endRoad = endRoad;
+	}
+
+	public void setAtDestinationRoad(boolean atDestinationRoad) {
+		this.atDestinationRoad = atDestinationRoad;
+	}
+
+	public void setStartingRoad(CityRoad startingRoad) {
+		this.startingRoad = startingRoad;
 	}
 }

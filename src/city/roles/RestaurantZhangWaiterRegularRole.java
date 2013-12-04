@@ -19,8 +19,8 @@ public class RestaurantZhangWaiterRegularRole extends RestaurantZhangWaiterBase 
 	protected void sendOrderToCook(RestaurantZhangWaiterBase.MyCustomer mc, String choice, RestaurantZhangTable t) {
 		print("Going to cook for customer " + mc.customer.getPerson().getName());
 		thisGui.setFoodLabel(choice, false); // Shows food ordered in animation
-		DoGoToCook();
-		WaitForAnimation();
+		doGoToCook();
+		waitForAnimation();
 		myCook.msgHereIsAnOrder(this, choice, t);
 		mc.state = MyCustomer.STATE.orderCooking;
 		thisGui.setFoodLabel("", true); // Removes food ordered in animation

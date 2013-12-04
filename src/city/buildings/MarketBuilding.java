@@ -5,12 +5,15 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Building;
 import city.RoleInterface;
 import city.animations.MarketCashierAnimation;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.gui.buildings.MarketPanel;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier;
@@ -56,7 +59,7 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		bankCustomer = new BankCustomerRole();
+		bankCustomer = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		
 		super.setCash(1000);
 	}

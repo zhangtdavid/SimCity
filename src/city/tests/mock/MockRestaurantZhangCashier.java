@@ -1,6 +1,7 @@
 package city.tests.mock;
 
 import java.util.List;
+import java.util.Map;
 
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
@@ -51,5 +52,29 @@ public class MockRestaurantZhangCashier extends MockRole implements RestaurantZh
 	public void setHost(RestaurantZhangHost h) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public RestaurantZhangHost getHost() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getBalance() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Map<RestaurantZhangCustomer, Integer> getTabCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<String, Integer> getMenu() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

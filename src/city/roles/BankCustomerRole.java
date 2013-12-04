@@ -33,7 +33,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		business = bus;
 	}
 	
-	public BankCustomerRole(BankBuilding b) {
+	public BankCustomerRole(Bank b) {
 		building = b;
 	}
 	

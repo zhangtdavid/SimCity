@@ -11,15 +11,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
 	
+	private CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
+	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
+	private Car myCar; // Car this person is getting into
+	private BuildingInterface destination; // Building this car is going to
 	// private CarPassengerGui myGui; // GUI for animation
-	
-	// TODO Change these to private and add getters/setters
-	public enum CarPassengerState {NOTDRIVING, DRIVING};
-	public CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
-	public enum CarPassengerEvent {NONE, ATCAR, ATDESTINATION};
-	public CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
-	public Car myCar; // Car this person is getting into
-	public BuildingInterface destination; // Building this car is going to
 	
 	// Constructor
 	
@@ -76,6 +72,21 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	}
 	
 	// Getters
+	
+	@Override
+	public CarPassengerState getState() {
+		return myState;
+	}
+	
+	@Override
+	public CarPassengerEvent getEvent() {
+		return myEvent;
+	}
+	
+	@Override
+	public Car getCar() {
+		return myCar;
+	}
 	
 	@Override
 	public BuildingInterface getDestination() {

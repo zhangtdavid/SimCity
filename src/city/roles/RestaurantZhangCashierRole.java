@@ -25,16 +25,14 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	// Data
 	
 	// private Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
-	private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	// private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	private List<RestaurantZhangCheck> pendingChecks = Collections.synchronizedList(new ArrayList<RestaurantZhangCheck>());
 	private List<Role> roles = new ArrayList<Role>();
 	private RestaurantZhangHost host;
 	private boolean restaurantClosing = false;
-	
-	// TODO Change these to private and add getters/setters
-	public Map<RestaurantZhangCustomer, Integer> tabCustomers = new HashMap<RestaurantZhangCustomer, Integer>();
-	public int balance = 10000;
-	public Map<String, Integer> menu;
+	private Map<RestaurantZhangCustomer, Integer> tabCustomers = new HashMap<RestaurantZhangCustomer, Integer>();
+	private int balance = 10000;
+	private Map<String, Integer> menu;
 	
 	// Constructor
 
@@ -64,9 +62,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	
 	// Scheduler
 
-	/**
-	 * Scheduler.  Determine what action is called for, and do it.
-	 */
+	@Override
 	public boolean runScheduler() {
 		if(restaurantClosing) {
 			if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() <= 0) {
@@ -134,7 +130,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 		}
 	}
 
-	//	void payMarket(Market m, int bill) {
+	//	private void payMarket(Market m, int bill) {
 	//		Do("Paying Market " + m.getName() + " bill of " + bill);
 	//		marketBills.remove(m);
 	//		m.msgPayBill(bill);
@@ -145,13 +141,33 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
 	// Getters
 	
 	@Override
-	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
-		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
+	public List<RestaurantZhangCheck> getPendingChecks() {
+		return pendingChecks;
 	}
 	
 	@Override
-	public List<RestaurantZhangCheck> getPendingChecks() {
-		return pendingChecks;
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO cleanup
+	}
+	
+	@Override
+	public RestaurantZhangHost getHost() {
+		return host;
+	}
+	
+	@Override
+	public Map<RestaurantZhangCustomer, Integer> getTabCustomers() {
+		return tabCustomers;
+	}
+	
+	@Override
+	public int getBalance() {
+		return balance;
+	}
+	
+	@Override
+	public Map<String, Integer> getMenu() {
+		return menu;
 	}
 	
 	// Setters
@@ -186,7 +202,7 @@ public class RestaurantZhangCashierRole extends Role implements RestaurantZhangC
     }
 
 	// Classes
-	
+
 	public static class MarketTransaction {
 		public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
 		public Market market;

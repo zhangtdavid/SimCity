@@ -56,4 +56,10 @@ public class MockBusStop extends MockBuilding implements BusStop {
 		
 	}
 
+	@Override
+	public CityRoad getRoadLocatedOn() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
