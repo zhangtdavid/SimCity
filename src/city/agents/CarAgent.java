@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Agent;
-import city.Building;
 import city.BuildingInterface;
 import city.animations.interfaces.AnimatedCar;
 import city.interfaces.Car;
@@ -25,7 +24,7 @@ public class CarAgent extends Agent implements Car {
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
-	public CarAgent(Building currentLocation) { // Sets all variables to null
+	public CarAgent(BuildingInterface currentLocation) { // Sets all variables to null
 		super();
 		carPassenger = null;
 		destination = currentLocation;

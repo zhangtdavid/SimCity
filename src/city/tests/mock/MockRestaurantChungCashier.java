@@ -3,9 +3,9 @@ package city.tests.mock;
 import utilities.EventLog;
 import utilities.MarketTransaction;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
-import city.buildings.RestaurantChungBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
@@ -42,13 +42,13 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void msgAddMarketOrder(MarketBuilding selectedMarket, MarketOrder o) {
+	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void setRestaurant(RestaurantChungBuilding restaurant) {
+	public void setRestaurant(RestaurantChung restaurant) {
 		// TODO Auto-generated method stub
 		
 	}

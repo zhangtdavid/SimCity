@@ -6,7 +6,6 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
@@ -75,7 +74,7 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	}
 
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		// TODO Auto-generated method stub
 		
 	}

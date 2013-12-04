@@ -36,16 +36,11 @@ public interface MarketManager extends RoleInterface {
 	WorkingState getWorkingState();
 	
 	// Setters
-	
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 
-
-
-	
 	// Utilities
 	MyMarketEmployee findEmployee(MarketEmployee me);
 	MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd);
 	
 	// Classes
-	
 }

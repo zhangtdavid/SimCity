@@ -7,8 +7,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
-import city.buildings.MarketBuilding;
-import city.interfaces.BankCustomer;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier;
 import city.interfaces.MarketCustomer;
@@ -78,18 +76,6 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	}
 
 	@Override
-	public void setMarket(MarketBuilding market) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public BankCustomer getBankCustomer() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Transaction> getTransactions() {
 		// TODO Auto-generated method stub
 		return null;
@@ -99,5 +85,11 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	public List<MyDeliveryPerson> getDeliveryPeople() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setMarket(Market market) {
+		// TODO Auto-generated method stub
+		
 	}
 }

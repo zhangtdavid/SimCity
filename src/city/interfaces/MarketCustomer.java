@@ -40,7 +40,7 @@ public interface MarketCustomer extends RoleInterface {
 	MarketCustomerState getMarketCustomerState();
 	
 	// Setters
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 	
 	// Utilities
 	public int checkBill();

@@ -26,7 +26,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	private Semaphore atCashier = new Semaphore(0, true);
 	private Semaphore atCounter = new Semaphore(0, true);
 
-	private MarketBuilding market;
+	private Market market;
  
 	private int loc; // location at front counter
 	
@@ -44,17 +44,17 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 
 //	Constructor
 //	=====================================================================
-	public MarketEmployeeRole(MarketBuilding b, int t1, int t2) {
+	public MarketEmployeeRole(Market b, int t1, int t2) {
 		super();
 		market = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(MarketBuilding.getWorkerSalary());
+		this.setSalary(MarketBuilding.WORKER_SALARY);
 		customer = null;
 		customerDelivery = null;
 		customerDeliveryPayment = null;
 		state = MarketEmployeeState.None;
-		loc = market.employees.size(); // TODO double check this. Need to decide how to set loc for each employee
+		loc = market.getEmployees().size(); // TODO double check this. Need to decide how to set loc for each employee
     }
 	
 //  Activity
@@ -134,7 +134,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.employees.size() > 1)
+			if (market.getEmployees().size() > 1)
 				workingState = WorkingState.NotWorking;
 		}
 		
@@ -170,18 +170,18 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //				// TODO Auto-generated catch block
 //				e.printStackTrace();
 //			}
-			market.manager.msgWhatWouldCustomerDeliveryLike(this);
+			market.getManager().msgWhatWouldCustomerDeliveryLike(this);
 		}
 	}
 	
 	private void collectItems() {
         for (FOOD_ITEMS item: order.keySet()) {
-        	if (market.inventory.get(item) < order.get(item) && market.inventory.get(item) > 0) {
-        		collectedItems.put(item, collectedItems.get(item) + market.inventory.get(item));
-        		market.inventory.put(item, 0);
+        	if (market.getInventory().get(item) < order.get(item) && market.getInventory().get(item) > 0) {
+        		collectedItems.put(item, collectedItems.get(item) + market.getInventory().get(item));
+        		market.getInventory().put(item, 0);
         	}
-        	else if (market.inventory.get(item) >= order.get(item)) {
-        		market.inventory.put(item, market.inventory.get(item) - order.get(item));
+        	else if (market.getInventory().get(item) >= order.get(item)) {
+        		market.getInventory().put(item, market.getInventory().get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
 //     			TODO schung 99c0f4da25
 //        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
@@ -192,8 +192,8 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //    				e.printStackTrace();
 //    			}
         	}
-        	if (market.inventory.get(item) < 10)
-        		market.manager.msgItemLow();
+        	if (market.getInventory().get(item) < 10)
+        		market.getManager().msgItemLow();
 // 			TODO schung 99c0f4da25
 //        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
 //    		try {
@@ -206,9 +206,9 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
         }
     	// dependent on customer type
     	if (customer != null)
-    		market.cashier.msgComputeBill(this, customer, order, collectedItems, orderId);
+    		market.getCashier().msgComputeBill(this, customer, order, collectedItems, orderId);
     	else
-    		market.cashier.msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
+    		market.getCashier().msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
 //			TODO schung 99c0f4da25
 //    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
 //		try {
@@ -217,7 +217,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-    	market.manager.msgIAmAvailableToAssist(this);
+    	market.getManager().msgIAmAvailableToAssist(this);
     	customer = null;
     	customerDelivery = null;
     	customerDeliveryPayment = null;
@@ -275,7 +275,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 //  Setters
 //	=====================================================================
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 	

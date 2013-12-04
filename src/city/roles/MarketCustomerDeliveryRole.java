@@ -9,6 +9,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantBuildingInterface;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
@@ -21,8 +22,8 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	public EventLog log = new EventLog();
 
-	private RestaurantBuildingBase restaurant;
-	private MarketBuilding market;
+	private RestaurantBuildingInterface restaurant;
+	private Market market;
 	private MarketCustomerDeliveryPayment restaurantCashier;
 	
 	private MarketOrder order;
@@ -32,7 +33,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	
 //	Constructor
 //	=====================================================================
-	public MarketCustomerDeliveryRole(RestaurantBuildingBase r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
+	public MarketCustomerDeliveryRole(RestaurantBuildingInterface r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
 		restaurant = r;
 		order = new MarketOrder(o);
@@ -83,14 +84,14 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	private void callMarket() {
 		state = MarketCustomerState.None;
-		market.manager.msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);
+		market.getManager().msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);
 		super.setInactive(); // set role inactive after placing order
 	}
 
 //  Getters
 //	=====================================================================
 	@Override
-	public RestaurantBuildingBase getRestaurant() {
+	public RestaurantBuildingInterface getRestaurant() {
 		return restaurant;
 	}
 

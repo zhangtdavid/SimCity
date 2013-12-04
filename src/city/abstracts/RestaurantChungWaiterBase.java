@@ -9,7 +9,7 @@ import trace.AlertTag;
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungWaiterAnimation;
-import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungWaiter;
 
@@ -27,11 +27,11 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	protected Semaphore atCook = new Semaphore(0, true);
 	protected Semaphore atCashier = new Semaphore(0, true);
 	
-	protected RestaurantChungBuilding restaurant;
+	protected RestaurantChung restaurant;
 
 	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 
-	public List<WCustomer> customers = new ArrayList<WCustomer>();
+	protected List<WCustomer> customers = new ArrayList<WCustomer>();
 	
 	protected BreakState state = BreakState.Working;
 	protected WorkingState workingState = WorkingState.Working;
@@ -322,12 +322,12 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	private void askForBreak() {
 		print("Waiter asking for break");
 		state = BreakState.AskedForBreak;
-		restaurant.host.msgIWantToGoOnBreak(this);
+		restaurant.getRestaurantChungHost().msgIWantToGoOnBreak(this);
 	}	
 
 	private void rejectForBreak() {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).setOffBreak();
-		restaurant.host.msgIAmReturningToWork(this);
+		restaurant.getRestaurantChungHost().msgIAmReturningToWork(this);
 		state = BreakState.Working;
 	}
 	
@@ -340,7 +340,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	private void returnToWork() {
 		print("Waiter returning to work");
 		state = BreakState.Working;
-		restaurant.host.msgIAmReturningToWork(this);
+		restaurant.getRestaurantChungHost().msgIAmReturningToWork(this);
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();		
 	}
 	
@@ -351,7 +351,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCustomerLine();
 		// atEntrance.drainPermits(); // Have to drain because of multiple calls of DoReturnToEntrance() without atEntrance.acquires();
 		atLine.acquire();
-		restaurant.host.msgTakingCustomerToTable(customer.c);
+		restaurant.getRestaurantChungHost().msgTakingCustomerToTable(customer.c);
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoBringToTable(customer.c, customer.table-1);
 		customer.c.msgFollowMeToTable(this, menu);
 		atTable.acquire();
@@ -405,7 +405,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCashier();
 		atCashier.acquire();
 		customer.cs = WCustomer.CheckState.AskedForBill;
-		restaurant.cashier.msgComputeBill(this, customer.c, customer.o.choice);
+		restaurant.getRestaurantChungCashier().msgComputeBill(this, customer.c, customer.o.choice);
 	}
 	
 	private void giveCheck(WCustomer customer) throws InterruptedException {
@@ -417,13 +417,12 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	}
 
 	private void removeCustomer(WCustomer customer) {
-		restaurant.host.msgTableIsFree(this, customer.table, customer.c);
+		restaurant.getRestaurantChungHost().msgTableIsFree(this, customer.table, customer.c);
 		removeCustomerFromList(customer);
 	}
 	
 //  Getters and Setters
 //  ====================================================================
-
 	
 	
 //  Utilities

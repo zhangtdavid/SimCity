@@ -1,12 +1,8 @@
-package city.tests;
-//package restaurant.test;
+//package city.tests;
 //
-//import restaurant.CashierAgent;
-//import restaurant.CashierAgent.TransactionState;
-//import restaurant.test.mock.MockCustomer;
-//import restaurant.test.mock.MockHost;
-//import restaurant.test.mock.MockMarket;
-//import restaurant.test.mock.MockWaiterMessageCook;
+//import city.buildings.BankBuilding;
+//import city.gui.buildings.RestaurantChungPanel;
+//import city.interfaces.RestaurantChung;
 //import junit.framework.*;
 //
 ///**
@@ -17,10 +13,14 @@ package city.tests;
 // *
 // * @author Monroe Ekilah
 // */
-//public class CashierTest extends TestCase
+//public class RestaurantChungCashierTest extends TestCase
 //{
-//	//these are instantiated for each test separately via the setUp() method.
-//	CashierAgent cashier;
+//	RestaurantChungPanel restaurantChungPanel;
+//	RestaurantChung restaurantChung;
+//	
+//	Bank bank;
+//	
+//	RestaurantChungCashierRole cashier;
 //	MockWaiterMessageCook waiter;
 //	MockHost host;
 //	MockCustomer customer;

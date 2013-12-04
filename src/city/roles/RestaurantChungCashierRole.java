@@ -14,9 +14,10 @@ import utilities.MarketTransaction;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.Role;
-import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
+import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
@@ -28,7 +29,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public EventLog log = new EventLog();
 	Timer timer = new Timer();
 	
-	private RestaurantChungBuilding restaurant;
+	private RestaurantChung restaurant;
 	private RestaurantChungHost host;
 	
 	private List<Role> roles = new ArrayList<Role>();
@@ -39,14 +40,15 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	
 //	Constructor
 //	=====================================================================
-	public RestaurantChungCashierRole(RestaurantChungBuilding b, int t1, int t2) {
+	public RestaurantChungCashierRole(RestaurantChung b, int t1, int t2) {
 		super();
 		restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
-		roles.add((Role) restaurant.bankCustomer);
+//		roles.get(0).setActive();
+		roles.add((Role) restaurant.getBankCustomer());
 	}
 
 //	Activity
@@ -88,7 +90,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	Cook
 //	---------------------------------------------------------------
 	@Override
-	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
+	public void msgAddMarketOrder(Market m, MarketOrder o) {
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
 	}
@@ -115,7 +117,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		// TODO handle nested actions
 		
 		if (workingState == WorkingState.GoingOffShift) {
-			if (restaurant.cashier != this)
+			if (restaurant.getRestaurantChungCashier() != this)
 				workingState = WorkingState.NotWorking;
 		}
 		
@@ -170,7 +172,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		restaurant.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		restaurant.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
 		// TODO how does this work with different bank customer instances when the account number is tied to the role?
 	}
 	
@@ -217,7 +219,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	Setters
 //	=====================================================================		
 	@Override
-	public void setRestaurant(RestaurantChungBuilding restaurant) {
+	public void setRestaurant(RestaurantChung restaurant) {
 		this.restaurant = restaurant;
 	}
 	
@@ -233,7 +235,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 
 	@Override
 	public void setBankCustomerPerson() {
-		restaurant.bankCustomer.setPerson(super.getPerson());
+		restaurant.getBankCustomer().setPerson(super.getPerson());
 	}	
 //	Utilities
 //	=====================================================================
@@ -241,7 +243,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: t.order.orderItems.keySet()) {
-        	tempBill += t.order.orderItems.get(item)*t.market.prices.get(item);
+        	tempBill += t.order.orderItems.get(item)*t.market.getPrices().get(item);
         }
 
         if (tempBill == t.bill)

@@ -21,22 +21,22 @@ import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
 
 public class MarketBuilding extends Building implements Market { 
+//	Data
+//	=====================================================================
+	private MarketPanel panel;	
+	private MarketManager manager;
+	private MarketCashier cashier;
+	private BankCustomer bankCustomer;
+	private List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
+	private List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
 	
-	// Data
-	public MarketPanel panel;	
-	public MarketManager manager;
-	public MarketCashier cashier;
-	public BankCustomer bankCustomer;
-	public List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
-	public List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
+	public static final int WORKER_SALARY = 500;
 	
-	private static final int WORKER_SALARY = 500;
+	private Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
+	private Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	
-	public Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
-	public Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
-	
-	// Constructor
-	
+//	Constructor
+//	=====================================================================	
 	public MarketBuilding(String name, MarketPanel panel) {
 		super(name);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
@@ -54,15 +54,77 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		 bankCustomer = new BankCustomerRole();
+		bankCustomer = new BankCustomerRole();
 		
 		super.setCash(1000);
 	}
-	
-	
-// Utilities
+
+//  Getters
 //	=====================================================================	
+	@Override
+	public MarketManager getManager() {
+		return manager;
+	}
+
+	@Override
+	public MarketCashier getCashier() {
+		return cashier;
+	}
 	
+	@Override
+	public MarketPanel getMarketPanel() {
+		return panel;
+	}
+	
+	@Override
+	public MarketManager getMarketManager() {
+		return manager;
+	}
+	
+	@Override
+	public MarketCashier getMarketCashier() {
+		return cashier;
+	}
+	
+	@Override
+	public BankCustomer getBankCustomer() {
+		return bankCustomer;
+	}
+	
+	@Override
+	public List<MarketEmployee> getEmployees() {
+		return employees;
+	}
+	
+	@Override
+	public List<MarketDeliveryPerson> getDeliveryPeople() {
+		return deliveryPeople;
+	}
+	
+	@Override
+	public Map<FOOD_ITEMS, Integer> getInventory() {
+		return inventory;
+	}
+	
+	@Override
+	public Map<FOOD_ITEMS, Integer> getPrices() {
+		return prices;
+	}
+	
+//  Setters
+//	=====================================================================	
+	@Override
+	public void setManager(MarketManager manager) {
+		this.manager = manager;
+	}
+	
+	@Override
+	public void setCashier(MarketCashier cashier) {
+		this.cashier = cashier;
+	}
+	
+//	Utilities
+//	=====================================================================
 	@Override
 	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof MarketManagerRole) {
@@ -134,41 +196,4 @@ public class MarketBuilding extends Building implements Market {
 		deliveryPeople.remove(deliveryPerson);
 		cashier.msgRemoveDeliveryPerson(deliveryPerson);		
 	}
-	
-//  Getters and Setters
-//	=====================================================================	
-	// Manager
-	@Override
-	public MarketManager getManager() {
-		return manager;
-	}
-	
-	@Override
-	public void setManager(MarketManager manager) {
-		this.manager = manager;
-	}
-	
-	// Cashier
-	@Override
-	public MarketCashier getCashier() {
-		return cashier;
-	}
-	
-	@Override
-	public void setCashier(MarketCashier cashier) {
-		this.cashier = cashier;
-	}
-
-
-	public static int getWorkerSalary() {
-		return WORKER_SALARY;
-	}
-	
-	// Employees
-
-	// TODO should there be a getEmployee?
-	
-	// Delivery People
-
-	// TODO should there be a getDeliveryPerson?
 }

@@ -37,7 +37,7 @@ public interface MarketEmployee extends RoleInterface {
 	MarketEmployeeEvent getMarketEmployeeEvent();
 	
 	// Setters
-	public void setMarket(MarketBuilding market);
+	public void setMarket(Market market);
 	
 	// Utilities
 	

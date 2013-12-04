@@ -1,6 +1,7 @@
 package utilities;
 
 import city.buildings.MarketBuilding;
+import city.interfaces.Market;
 
 /** 
  * A class to handle transactions between RestaurantCashiers who assume MarketCustomerDeliveryPaymentRoles and MarketCasheirs 
@@ -9,12 +10,12 @@ import city.buildings.MarketBuilding;
  *
  */
 public class MarketTransaction {
-	public MarketBuilding market;
+	public Market market;
 	public MarketOrder order;
 	public int bill;
 	public MarketTransactionState s;
 	
-	public MarketTransaction (MarketBuilding m, MarketOrder o) {
+	public MarketTransaction (Market m, MarketOrder o) {
 		market = m;
 		order = new MarketOrder(o);
         bill = 0;
