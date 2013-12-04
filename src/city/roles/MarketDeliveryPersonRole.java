@@ -34,7 +34,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	private WorkingState workingState = WorkingState.Working;
 
 //	Constructor
-//	=====================================================================		
+//	=====================================================================
 	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
 		super();
 		market = b;

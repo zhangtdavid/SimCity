@@ -35,7 +35,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	private BankCustomer bankCustomer;
 	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
 	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
-	
 
 //	Constructor
 //	=====================================================================
@@ -387,7 +386,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		public TransactionState getTransactionState() {
 			return s;
 		}
-		
 	}
 
 }
