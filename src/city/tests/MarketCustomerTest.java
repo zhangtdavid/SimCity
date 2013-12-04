@@ -106,7 +106,7 @@ public class MarketCustomerTest extends TestCase {
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
 		home = new HouseBuilding("House", landlord, housePanel);
-		customerPerson.home = home;
+		customerPerson.setHome(home);
 		customerPerson.setCash(500);
 		
 		customerDeliveryPerson = new MockPerson("CustomerDelivery"); 

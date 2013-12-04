@@ -26,6 +26,14 @@ public class MockResident extends MockRole implements Resident {
 		this.rentLastPaid = rentLastPaid;
 	}
 	
+	/**
+	 * For the benefit of tests that don't use rentLastPaid
+	 */
+	public MockResident() {
+		super();
+		this.rentLastPaid = new Date(0);
+	}
+	
 	// Scheduler
 	
 	@Override
