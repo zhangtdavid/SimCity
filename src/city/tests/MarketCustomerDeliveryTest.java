@@ -16,8 +16,8 @@ import city.buildings.RestaurantChungBuilding;
 import city.gui.buildings.MarketPanel;
 import city.gui.buildings.RestaurantChungPanel;
 import city.gui.views.CityViewRestaurant;
+import city.interfaces.MarketCustomerDelivery.MarketCustomerState;
 import city.roles.MarketCustomerDeliveryRole;
-import city.roles.MarketCustomerDeliveryRole.MarketCustomerState;
 import city.tests.mock.MockMarketCashier;
 import city.tests.mock.MockMarketCustomer;
 import city.tests.mock.MockMarketCustomerDeliveryPayment;
@@ -139,13 +139,13 @@ public class MarketCustomerDeliveryTest extends TestCase {
 		assertEquals("CustomerDelivery should have an empty log.", customerDelivery.log.size(), 0);
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
-		assertTrue("CustomerDelivery state should be None.", customerDelivery.state == MarketCustomerState.None);
+		assertTrue("CustomerDelivery state should be None.", customerDelivery.getState() == MarketCustomerState.None);
         
 		customerDelivery.setActive();
-		assertTrue("CustomerDelivery state should be Ordering.", customerDelivery.state == MarketCustomerState.Ordering);
+		assertTrue("CustomerDelivery state should be Ordering.", customerDelivery.getState() == MarketCustomerState.Ordering);
 
 		customerDelivery.runScheduler();		
-		assertTrue("CustomerDelivery state should be None.", customerDelivery.state == MarketCustomerState.None);
+		assertTrue("CustomerDelivery state should be None.", customerDelivery.getState() == MarketCustomerState.None);
 		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceADeliveryOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceADeliveryOrder"));
 		assertTrue("CustomerDelivery active should be false", !customerDelivery.getActive());

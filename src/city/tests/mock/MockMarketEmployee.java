@@ -58,4 +58,52 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 		
 	}
 
+	@Override
+	public MarketCustomer getMarketCustomer() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketCustomerDelivery getMarketCustomerDelivery() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Map<FOOD_ITEMS, Integer> getOrder() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getOrderId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketEmployeeState getMarketEmployeeState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketEmployeeEvent getMarketEmployeeEvent() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

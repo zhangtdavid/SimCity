@@ -17,22 +17,21 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
-
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private RestaurantBuildingBase restaurant;
 	private MarketBuilding market;
 	private MarketCustomerDeliveryPayment restaurantCashier;
+	
 	private MarketOrder order;
 	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	// TODO Change these to private and add getters/setters
-	public EventLog log = new EventLog();
-	public MarketCustomerState state;
-	public enum MarketCustomerState {None, Ordering};
+	private MarketCustomerState state;
 	
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================
 	public MarketCustomerDeliveryRole(RestaurantBuildingBase r, MarketOrder o, MarketCustomerDeliveryPayment marketCustomerDeliveryPayment) {
 		super(); // TODO
 		restaurant = r;
@@ -44,6 +43,15 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
         state = MarketCustomerState.None;
     }
 
+//  Activity
+//	=====================================================================
+	@Override
+	public void setActive(){
+		// this.setActivityBegun();
+        state = MarketCustomerState.Ordering;
+        runScheduler(); // direct call to scheduler necessary for nested roles
+	}
+	
 //  Messages
 //	=====================================================================	
 	@Override
@@ -79,35 +87,38 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 		super.setInactive(); // set role inactive after placing order
 	}
 
-//  Getters and Setters
+//  Getters
 //	=====================================================================
-	// Restaurant
 	@Override
 	public RestaurantBuildingBase getRestaurant() {
 		return restaurant;
 	}
-	
-	@Override
-	public void setRestaurant(RestaurantBuildingBase restaurant) {
-		this.restaurant = restaurant;
-	}
-	
-	// Market
+
 	@Override
 	public Market getMarket() {
 		return market;
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public MarketCustomerState getState() {
+		return state;
+	}
+	
+//  Setters
+//	=====================================================================
+	@Override
+	public void setRestaurant(RestaurantBuildingBase restaurant) {
+		this.restaurant = restaurant;
 	}
 	
 	@Override
-	public void setActive(){
-		// this.setActivityBegun();
-        state = MarketCustomerState.Ordering;
-        runScheduler();
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
+	}
+
+	@Override
+	public void setState(MarketCustomerState state) {
+		this.state = state;
 	}
 	
 //  Utilities

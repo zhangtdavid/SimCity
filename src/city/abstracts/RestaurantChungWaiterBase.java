@@ -10,10 +10,7 @@ import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.RestaurantChungCashier;
-import city.interfaces.RestaurantChungCook;
 import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
 
 /**
@@ -23,67 +20,80 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	
 //  Data
 //	=====================================================================
-	
-	protected RestaurantChungBuilding restaurant;
-	protected RestaurantChungHost host;
-	protected RestaurantChungCook cook;
-	protected RestaurantChungCashier cashier;
-	// protected RestaurantChungWaiterAnimation waiterGui;
-	protected RestaurantChungMenu menu = new RestaurantChungMenu();
 	protected Semaphore atEntrance = new Semaphore(0, true);
 	protected Semaphore atWaiterHome = new Semaphore(0, true);
 	protected Semaphore atLine = new Semaphore(0, true);
 	protected Semaphore atTable = new Semaphore(0, true);
 	protected Semaphore atCook = new Semaphore(0, true);
 	protected Semaphore atCashier = new Semaphore(0, true);
-	public enum WaiterState {Working, WantBreak, AskedForBreak, ApprovedForBreak, RejectedForBreak, OnBreak, ReturningToWork};
-	protected WaiterState state = WaiterState.Working;
+	
+	protected RestaurantChungBuilding restaurant;
+
+	protected RestaurantChungMenu menu = new RestaurantChungMenu();
+
 	public List<WCustomer> customers = new ArrayList<WCustomer>();
+	
+	protected BreakState state = BreakState.Working;
+	protected WorkingState workingState = WorkingState.Working;
 	
 //  Constructor
 //	=====================================================================
-		
 	public RestaurantChungWaiterBase() {
 		super();
+	}
+
+//	Activity
+//	====================================================================
+	@Override
+	public void setInactive() {
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
 //	=====================================================================
-	
 	//	Break
 	//	---------------------------------------------------------------
+	@Override
 	public void msgAnimationAskedForBreak() {
 		print("Waiter received gotGoOnBreak");
-		state = WaiterState.WantBreak;
+		state = BreakState.WantBreak;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgApprovedForBreak() {
 		print("Waiter received msgApprovedForBreak");
-		state = WaiterState.ApprovedForBreak;
+		state = BreakState.ApprovedForBreak;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgRejectedForBreak() {
 		print("Waiter received msgRejectedForBreak");
-		state = WaiterState.RejectedForBreak;
+		state = BreakState.RejectedForBreak;
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationBreakOver() {
 		print("Waiter received msgAnimationBreakOver");
-		state = WaiterState.ReturningToWork;
+		state = BreakState.ReturningToWork;
 		stateChanged();
 	}
 	
 	//	Customer
 	//	---------------------------------------------------------------
+	@Override
 	public void msgSitAtTable(RestaurantChungCustomer c, int table) {
-		print("Waiter received msgSitAtTable");
-		customers.add(new WCustomer(c, table, WCustomer.CustomerState.Waiting));
-		stateChanged();
+		if (workingState != WorkingState.NotWorking) {
+			print("Waiter received msgSitAtTable");
+			customers.add(new WCustomer(c, table, WCustomer.CustomerState.Waiting));
+			stateChanged();
+		}
+		// TODO inform sender of inactivity
 	}
 	
+	@Override
 	public void msgReadyToOrder(RestaurantChungCustomer c) {
 		print("Waiter received msgReadyToOrder");
 		WCustomer wc = findCustomer(c);
@@ -92,6 +102,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgHereIsMyOrder(RestaurantChungCustomer c, String choice) {
 		print("Waiter received msgHereIsMyOrder");
 		WCustomer wc = findCustomer(c);
@@ -101,6 +112,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOutOfItem(String choice, int table) {
 		print("Waiter received msgOutOfItem " + choice);
 		WCustomer wc = findTable(table);
@@ -109,6 +121,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgOrderIsReady(String choice, int table) {
 		print("Waiter received msgOrderIsReady");
 		WCustomer wc = findTable(table);
@@ -117,6 +130,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgGetCheck(RestaurantChungCustomer c) {
 		print("Waiter received msgGetCheck");
 		WCustomer wc = findCustomer(c);
@@ -124,6 +138,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		stateChanged();
 	}
 	
+	@Override
 	public void msgLeaving(RestaurantChungCustomer c) {
 		print("Waiter received msgLeaving");
 		WCustomer wc = findCustomer(c);
@@ -134,6 +149,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 
 	//	Cashier
 	//	---------------------------------------------------------------
+	@Override
 	public void msgHereIsBill(RestaurantChungCustomer c, int price) {
 		print("Waiter received msgHereIsBill");
 		WCustomer wc = findCustomer(c);
@@ -144,36 +160,42 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	
 	//	Animation
 	//	---------------------------------------------------------------
+	@Override
 	public void msgAnimationAtWaiterHome() {
 		print("Waiter at Waiter Home");
 		atWaiterHome.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtEntrance() {
 		print("Waiter at Entrance");
 		atEntrance.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtLine() {
 		print("Waiter at Line");
 		atLine.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtTable() {
 		print("Waiter at Table");
 		atTable.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtCook() {
 		print("Waiter at Cook");
 		atCook.release();
 		stateChanged();
 	}
 	
+	@Override
 	public void msgAnimationAtCashier() {
 		print("Waiter at Cashier");
 		atCashier.release();
@@ -182,18 +204,24 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 
 //  Scheduler
 //	=====================================================================
-	public boolean runScheduler() {
-		if (state == WaiterState.ReturningToWork) {
+	@Override
+	public boolean runScheduler() {	
+		if (workingState == WorkingState.GoingOffShift) {
+			if (customers.size() == 0)
+				workingState = WorkingState.NotWorking;
+		}
+		
+		if (state == BreakState.ReturningToWork) {
 			returnToWork();
 			return true;
 		}
 		
-		if (state == WaiterState.RejectedForBreak) {
+		if (state == BreakState.RejectedForBreak) {
 			rejectForBreak();
 			return true;
 		}
 		
-		if (state == WaiterState.WantBreak) {
+		if (state == BreakState.WantBreak) {
 			askForBreak();
 			return true;
 		}
@@ -275,42 +303,43 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 			}
 		}
 
-		if (customers.size() == 0 && state == WaiterState.ApprovedForBreak) {
+		if (workingState == WorkingState.NotWorking)
+			super.setInactive();
+		
+		if (customers.size() == 0 && state == BreakState.ApprovedForBreak) {
 			goOnBreak();
 			return true;
 		}
 		
-		// print("return false in waiter scheduler");
 		return false;
 		// we have tried all our rules and found nothing to do. So return false to main loop of abstract agent and wait.
 	}
 
 //  Actions
 //	=====================================================================
-	
 	//	Break
 	//	---------------------------------------------------------------
 	private void askForBreak() {
 		print("Waiter asking for break");
-		state = WaiterState.AskedForBreak;
+		state = BreakState.AskedForBreak;
 		restaurant.host.msgIWantToGoOnBreak(this);
 	}	
 
 	private void rejectForBreak() {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).setOffBreak();
 		restaurant.host.msgIAmReturningToWork(this);
-		state = WaiterState.Working;
+		state = BreakState.Working;
 	}
 	
 	private void goOnBreak() {
 		print("Waiter going on break");
-		state = WaiterState.OnBreak;
+		state = BreakState.OnBreak;
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoOnBreak();
 	}
 	
 	private void returnToWork() {
 		print("Waiter returning to work");
-		state = WaiterState.Working;
+		state = BreakState.Working;
 		restaurant.host.msgIAmReturningToWork(this);
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();		
 	}
@@ -331,7 +360,6 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	}
 	
 	private void informCustomerOfCancellation(WCustomer customer) throws InterruptedException {
-		// TODO Auto-generated method stub
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.table-1);
 		atTable.acquire();
 		customer.c.msgOutOfItem(customer.o.choice, menu);
@@ -395,22 +423,13 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	
 //  Getters and Setters
 //  ====================================================================
-	
-	@Override
-	public void setActive() {
-		// this.setActivityBegun();
-		super.setActive();
-	}
-	
-	@Override
-	public void setInactive() {
-		super.setInactive();
-	}
+
 	
 	
 //  Utilities
 //	=====================================================================	
 
+	@Override
 	public WCustomer findCustomer(RestaurantChungCustomer ca) {
 		for(WCustomer customer : customers ){
 			if(customer.c == ca) {
@@ -420,6 +439,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		return null;
 	}
 	
+	@Override
 	public WCustomer findTable(int table) {
 		for(WCustomer customer : customers){
 			if(customer.table == table) {
@@ -429,6 +449,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 		return null;
 	}
 	
+	@Override
 	public void removeCustomerFromList(WCustomer c) {
 		for(int i = 0; i < customers.size(); i ++) {
 			if(customers.get(i) == c) {
@@ -445,7 +466,6 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 	
 //	Classes
 //	=====================================================================	
-	
 	public static class WCustomer {
 		public enum CustomerState {Waiting, Seated, ReadyToOrder, Asked, Eating, WaitingForCheck, Leaving};
 		public enum CheckState {None, AskedForBill, ReceivedBill, DeliveredBill};

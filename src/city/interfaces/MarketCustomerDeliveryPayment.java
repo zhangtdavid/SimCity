@@ -30,6 +30,7 @@ public interface MarketCustomerDeliveryPayment extends RoleInterface {
 	// Utilities
 
 	public int checkBill(MarketTransaction mt);
+	public MarketTransaction findMarketTransaction(int id);
 	public void removeMarketTransactionFromList(MarketTransaction transaction);
 	
 	// Classes
