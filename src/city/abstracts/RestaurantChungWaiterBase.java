@@ -6,6 +6,7 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import utilities.EventLog;
 import utilities.RestaurantChungMenu;
 import city.Role;
 import city.animations.RestaurantChungWaiterAnimation;
@@ -17,9 +18,9 @@ import city.interfaces.RestaurantChungWaiter;
  * Restaurant Waiter Agent
  */
 public abstract class RestaurantChungWaiterBase extends Role implements RestaurantChungWaiter {
-	
 //  Data
 //	=====================================================================
+	public EventLog log = new EventLog();
 	protected Semaphore atEntrance = new Semaphore(0, true);
 	protected Semaphore atWaiterHome = new Semaphore(0, true);
 	protected Semaphore atLine = new Semaphore(0, true);

@@ -11,6 +11,7 @@ import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.gui.buildings.RestaurantChungPanel;
 import city.gui.views.CityViewBuilding;
 import city.interfaces.BankCustomer;
@@ -124,7 +125,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		if(r instanceof RestaurantChungCustomerRole) {
 			RestaurantChungCustomerRole c = (RestaurantChungCustomerRole)r;
 			if(!super.occupyingRoleExists(c)) {
-				RestaurantChungCustomerAnimation anim = new RestaurantChungCustomerAnimation(c); 
+				RestaurantChungAnimatedCustomer anim = new RestaurantChungCustomerAnimation(c); 
 				c.setAnimation(anim);
 				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()

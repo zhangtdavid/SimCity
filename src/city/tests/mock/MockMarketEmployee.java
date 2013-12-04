@@ -105,4 +105,28 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 		return null;
 	}
 
+	@Override
+	public void msgAnimationAtPhone() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgFinishedCollectingItems() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCashier() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void msgAnimationAtCounter() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
