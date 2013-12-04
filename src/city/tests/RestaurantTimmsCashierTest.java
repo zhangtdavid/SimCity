@@ -33,6 +33,10 @@ public class RestaurantTimmsCashierTest extends TestCase {
 	}
 	
 	public void testExactCustomerPayment() {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		boolean outcome;
+		
 		int beginningMoney = cashier.getWorkplace(RestaurantTimmsBuilding.class).getCash(); 
 		
 		// Preconditions
@@ -46,57 +50,117 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		assertEquals("Cashier should have 1 check.", 1, rtb.getChecks().size());
 		assertEquals("Waiter's log should be empty.", 0, waiter.log.size());
 		assertEquals("Check should be in queue.", Check.State.queue, rtb.getChecks().get(0).getState());
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		
+		// Run scheduler
+		// - Cashier computes the check
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);
 		assertEquals("Check should be unpaid.", Check.State.unpaid, rtb.getChecks().get(0).getState());
 		assertEquals("Cashier should be owed $10.", 10, cashier.getMoneyOwed());
 		assertEquals("Waiter's log should have 1 message.", 1, waiter.log.size());
-		assertFalse("Cashier's scheduler should return false.", cashier.runScheduler());
+
+		// Run Scheduler
+		// - Allow marketCustomerDeliveryPaymentRole to become inactive (it's never had anything to do)
+		// - Gratuitous run to test the scheduler returns false
+		outcome = cashier.runScheduler();
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
 		
 		// Send a message from a customer to pay a check
 		cashier.msgMakePayment(customer, 10);
 		
 		assertEquals("Customer's log should be empty.", 0, customer.log.size());
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		
+		// Run scheduler
+		// - Cashier accepts payment
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);
 		assertEquals("Check should be paid.", Check.State.paid, rtb.getChecks().get(0).getState());
 		assertEquals("Cashier should have collected $10.", 10, cashier.getMoneyCollected());
 		assertEquals("Cashier should not be owed money.", 0, cashier.getMoneyOwed());
 		assertEquals("Customer's log should have one message.", 1, customer.log.size());
 		assertTrue("Customer should have recieved no change.", customer.log.containsString("Received msgPaidCashier. Change: 0"));
-		assertFalse("Cashier's scheduler should return false.", cashier.runScheduler());
+		
+		// Run Scheduler
+		// - Gratuitous run to test the scheduler returns false
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
 	}
 	
 	public void testCustomerPaymentWithChange() {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		boolean outcome;
+		
 		// Send a message from a waiter creating a check for $10
 		cashier.msgComputeCheck(waiter, customer, 10);
 		
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		// Run scheduler
+		// - Cashier computes the check
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);
 		
 		// Send a message from a customer with more than enough money to pay check
 		cashier.msgMakePayment(customer, 11);
 		
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		// Run Scheduler
+		// - Cashier accepts payment
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);	
 		assertEquals("Check should be paid.", Check.State.paid, rtb.getChecks().get(0).getState());
 		assertEquals("Cashier should have collected $10.", 10, cashier.getMoneyCollected());
 		assertEquals("Cashier should not be owed money.", 0, cashier.getMoneyOwed());
 		assertTrue("Customer should have recieved $1 change.", customer.log.containsString("Received msgPaidCashier. Change: 1"));
-		assertFalse("Cashier's scheduler should return false.", cashier.runScheduler());
+		
+		// Run Scheduler
+		// - Allow marketCustomerDeliveryPaymentRole to become inactive (it's never had anything to do)
+		// - Gratuitous run to test the scheduler returns false
+		outcome = cashier.runScheduler();
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
 	}
 	
-	public void testCustomerNonPayment() {		
+	public void testCustomerNonPayment() {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		boolean outcome;
+		
 		// Send a message from a waiter creating a check for $10
 		cashier.msgComputeCheck(waiter, customer, 10);
 		
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		// Run scheduler
+		// - Cashier computes the check
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);
 		
 		// Send a message from a customer without enough money to pay check
 		cashier.msgMakePayment(customer, 5);
 		
-		assertTrue("Cashier's scheduler should return true.", cashier.runScheduler());
+		// Run Scheduler
+		// - Cashier accepts payment
+		outcome = cashier.runScheduler();
+		
+		assertTrue("Cashier's scheduler should return true.", outcome);		
 		assertEquals("Check should be unpaid.", Check.State.unpaid, rtb.getChecks().get(0).getState());
 		assertEquals("Cashier should not have collected money.", 0, cashier.getMoneyCollected());
 		assertEquals("Cashier should be owed $10.", 10, cashier.getMoneyOwed());
 		assertTrue("Customer should have recieved full ($5) change.", customer.log.containsString("Received msgPaidCashier. Change: 5"));
-		assertFalse("Cashier's scheduler should return false.", cashier.runScheduler());
+		
+		// Run Scheduler
+		// - Allow marketCustomerDeliveryPaymentRole to become inactive (it's never had anything to do)
+		// - Gratuitous run to test the scheduler returns false
+		outcome = cashier.runScheduler();
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
 		
 		// Send a message from a waiter adding another $10 to the check
 		cashier.msgComputeCheck(waiter, customer, 10);
