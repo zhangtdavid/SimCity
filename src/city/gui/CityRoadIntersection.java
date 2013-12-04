@@ -68,8 +68,12 @@ public class CityRoadIntersection extends CityRoad {
 			synchronized(nextRoads) {
 				double closestDistance = 1000000;
 				for(CityRoad r : nextRoads) {
-					double distance = Math.sqrt((double)(Math.pow(r.getX() - ((CarAnimation) vehicle).getEndRoad().getX(), 2) 
-							+ Math.pow(r.getY() - ((CarAnimation) vehicle).getEndRoad().getY(), 2)));
+					CityRoad tempRoad = r;
+					while(tempRoad.getNextRoad().getClass() != CityRoadIntersection.class) {
+						tempRoad = tempRoad.getNextRoad();
+					}
+					double distance = Math.sqrt((double)(Math.pow(tempRoad.getX() - ((CarAnimation) vehicle).getEndRoad().getX(), 2) 
+							+ Math.pow(tempRoad.getY() - ((CarAnimation) vehicle).getEndRoad().getY(), 2)));
 					if(distance < closestDistance) {
 						closestDistance = distance;
 						thisNextRoad = r;
@@ -119,8 +123,12 @@ public class CityRoadIntersection extends CityRoad {
 			synchronized(nextRoads) {
 				double closestDistance = 1000000;
 				for(CityRoad r : nextRoads) {
-					double distance = Math.sqrt((double)(Math.pow(r.getX() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getX(), 2) 
-							+ Math.pow(r.getY() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getY(), 2)));
+					CityRoad tempRoad = r;
+					while(tempRoad.getNextRoad().getClass() != CityRoadIntersection.class) {
+						tempRoad = tempRoad.getNextRoad();
+					}
+					double distance = Math.sqrt((double)(Math.pow(tempRoad.getX() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getX(), 2) 
+							+ Math.pow(tempRoad.getY() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getY(), 2)));
 					if(distance < closestDistance) {
 						closestDistance = distance;
 						thisNextRoad = r;
