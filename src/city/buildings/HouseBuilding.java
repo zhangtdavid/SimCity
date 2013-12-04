@@ -1,9 +1,14 @@
 package city.buildings;
 
+import java.util.HashMap;
+import java.util.Map;
+
+import city.Animation;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingBase;
 import city.animations.HouseResidentAnimation;
 import city.gui.buildings.HousePanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.House;
 import city.interfaces.Landlord;
 import city.interfaces.Person;
@@ -13,15 +18,20 @@ public class HouseBuilding extends ResidenceBuildingBase implements House {
 
 	// Data
 	private HousePanel panel; // reference to main gui
+	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
 
 	// Constructor
 
-	public HouseBuilding(String name, Landlord l, HousePanel p) {
+	public HouseBuilding(String name, Landlord l, HousePanel p, CityViewBuilding cityBuilding) {
 		super(name);
-		this.setLandlord(l); // THIS IS WHO YOU PAY RENT TO. HE MIGHT NOT LIVE
-								// HERE.
-		// this.landlord.setResidence(this); // keep commented if landlord !=
-		// resident is an option
+		//Perhaps I should eliminate the landlord requirement, and have that be added separately? :/
+		this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
+		// this.landlord.setResidence(this); 
+		// keep^ commented if landlord != one of the residents is an option
+		this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation");
+		this.panel = p;
+		this.setCityViewBuilding(cityBuilding);
+
 	}
 
 	// Getters
@@ -47,7 +57,7 @@ public class HouseBuilding extends ResidenceBuildingBase implements House {
 	@Override
 	public void addOccupyingRole(RoleInterface ri) {
 		// This doesn't apply for HouseBuilding because the PersonAgent acts as
-		// a PersonAgent in residences, not as Residents. }
+		// a PersonAgent in residences, not as Residents. 
 	}
 
 	/**
@@ -58,11 +68,11 @@ public class HouseBuilding extends ResidenceBuildingBase implements House {
 	 *            The person to move within the house.
 	 */
 	@Override
-	public void addOccupyingRole(Person p) {
+	public void addOccupyingPerson(Person p) {
 		HouseResidentAnimation anim = new HouseResidentAnimation(p);
-		p.setAnimation(anim);
+		p.setHomeAnimation(anim);
 		anim.setVisible(true);
 		panel.addVisualizationElement(anim);
+		
 	}
-
 }

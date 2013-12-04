@@ -6,6 +6,7 @@ import java.util.Date;
 import city.RoleInterface;
 import city.abstracts.MockAgent;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.interfaces.AnimatedPersonAtHome;
 import city.interfaces.Car;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -180,6 +181,12 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void setRoomNumber(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHomeAnimation(AnimatedPersonAtHome anim) {
 		// TODO Auto-generated method stub
 		
 	}

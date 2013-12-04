@@ -4,15 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import city.Animation;
-import city.Application.BUILDING;
-import city.Application.CityMap;
 import city.animations.interfaces.AnimatedPerson;
-import city.interfaces.BusStop;
+import city.animations.interfaces.AnimatedPersonAtHome;
+import city.gui.buildings.HousePanel;
 import city.interfaces.Person;
 
-public class HouseResidentAnimation extends Animation implements AnimatedPerson{
-	//Q: why does this implement AnimatedPerson?
-	//A: convenience? If needed it could also implement a ResidenceAnimation but that would be sort of a pain since these could persist 
+public class HouseResidentAnimation extends Animation implements AnimatedPersonAtHome{
 	
 	//Data
 	private int xDestination, yDestination;
@@ -23,6 +20,10 @@ public class HouseResidentAnimation extends Animation implements AnimatedPerson{
 	//Constructor
 	public HouseResidentAnimation(Person p){
 		person = p;
+		xDestination = HousePanel.HDX;
+		xDestination = HousePanel.HDY;
+		xPos = HousePanel.HDX; // the door is in the front center bottom of the house panel
+		yPos = HousePanel.HDY; // so start from a little outside the door (drawn from top to bottom, so can't see)
 	}
 	
 	//Update position (Drawing)
@@ -38,24 +39,18 @@ public class HouseResidentAnimation extends Animation implements AnimatedPerson{
 		else if (yPos > yDestination)
 			yPos--;
 
-		// Msging, enums have some organization-related prefixes.
-		//r signifies residence. The person is in the residence base building inset view
-		//w signifies walking. The person is in the city view
+		// MSG back to Person
 		if (xPos == xDestination && yPos == yDestination) {
-			if (command == Command.rToDoor) { // rDoor: leave
+			if (command == Command.ToDoor) { // rDoor: leave
 				//TODO msg person to decide his next action... or just do nothing if this has already been done
-			} else if (command == Command.rToBed) { // rBed: sleep
+			} else if (command == Command.ToBed) { // rBed: sleep
 				//TODO msg person to go to sleep for x hours
-			} else if (command == Command.rToRef) { // rRef: look for food
+			} else if (command == Command.ToRef) { // rRef: look for food
 				//TODO msg person to check inventory of foods / randomly pick a food item to eat
-			} else if (command == Command.rToStove) { // rStove: ^ then cook food
+			} else if (command == Command.ToStove) { // rStove: ^ then cook food
 				//TODO msg person to cook food (timer event just like in CookAgent)
-			} else if (command == Command.rToTable) { // rTable: ^ then eat food
+			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				//TODO msg person to eat food (timer event just like in CustomerAgent)
-			} else if (command == Command.wToBuilding){
-				//TODO msg person to enter the building and take the appropriate role
-			} else if (command == Command.wToBusStop){
-				//TODO msg person to go to the nearest bus stop
 			}
 		}
 	}
@@ -74,46 +69,39 @@ public class HouseResidentAnimation extends Animation implements AnimatedPerson{
 	
 	//Msg (from agent)
 	
-	/**
-	 * Moves the person to a bus stop (already determined which is closest) 
-	 */
 	@Override
-	public void goToBusStop(BusStop b) {
-		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().x;
-		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().y;
+	public void goOutside(){
+		command = Command.ToDoor;
+		xDestination = HousePanel.HDX;
+		yDestination = HousePanel.HDY;
 	}
 
 	@Override
-	/**
-	 * Moves the person to bed before sleeping. 
-	 */
 	public void goToSleep() {
-		xDestination = AnimatedPerson.RES_BED[0];
-		yDestination = AnimatedPerson.RES_BED[1]+AnimatedPerson.RES_BED_Y_INTERVAL;
+		command = Command.ToBed;
+		xDestination = HousePanel.HBXi;
+		yDestination = HousePanel.HBYi;
 	}
 
-	/**
-	 * Moves the person to refrigerator to check for food stocks.
-	 * Person always knows how much food there is in the refrigerator. Or does he?
-	 * What if his room mate ate all the food in there without person knowing? Too real. Thus, we check.
-	 * This is before actually checking the food; it moves the Person to the refrigerator.
-	 */
+
 	@Override
 	public void verifyFood(){
-		//Send agent to the refrigerator
-		xDestination = AnimatedPerson.RES_REFRIGERATOR[0];
-		yDestination = AnimatedPerson.RES_REFRIGERATOR[1];
+		command = Command.ToRef;
+		xDestination = HousePanel.HRX;
+		yDestination = HousePanel.HRY;
 	}
 	
-	/**
-	 * Moves the person to stove to cook food.
-	 * After verifyFood().
-	 * This animation takes Person to the stove with item, (then timer - cook)
-	 */
+
 	@Override
 	public void cookAndEatFood() {
-		xDestination = AnimatedPerson.RES_STOVE[0];
-		xDestination = AnimatedPerson.RES_STOVE[1];
+		command = Command.ToStove;
+		xDestination = HousePanel.HSX;
+		xDestination = HousePanel.HSY;
+	}
+
+	@Override
+	public void goToRoom(int roomNo) {
+		//this does nothing for persons who live in houses.
 	}
 	
 	/**

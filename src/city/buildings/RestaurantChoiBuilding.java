@@ -62,7 +62,6 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.panel = panel;
 		bankConnection = new BankCustomerRole(this);
 		this.setCityViewBuilding(cityBuilding);
-		//this.setCashOnSite(cash_on_site);	
 		//set up tables
 		// Add items and their data times to a map
 

@@ -7,6 +7,8 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.HouseResidentAnimation;
+import city.animations.interfaces.AnimatedPersonAtHome;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
@@ -54,6 +56,7 @@ public interface Person extends AgentInterface {
 	public boolean getHasEaten();
 	public int getRoomNumber();
 	
+	
 	// Setters
 	
 	public void setAnimation(city.animations.interfaces.AnimatedPerson p);
@@ -63,11 +66,11 @@ public interface Person extends AgentInterface {
 	public void setCash(int c);
 	public void setHome(ResidenceBuildingInterface h);
 	public void setRoomNumber(int i);
+	public void setHomeAnimation(AnimatedPersonAtHome anim);
 	
 	// Utilities
 	
 	public void addRole(RoleInterface r);
-
 	
 	// Classes
 	

@@ -2,6 +2,8 @@ package city.abstracts;
 
 import java.util.*;
 
+import city.Animation;
+import city.AnimationInterface;
 import city.Building;
 import city.Application.FOOD_ITEMS;
 import city.interfaces.Landlord;
@@ -9,14 +11,17 @@ import city.interfaces.Person;
 import city.interfaces.Resident;
 
 public abstract class ResidenceBuildingBase extends Building implements ResidenceBuildingInterface {
+	//This inherits building, but adds functionality for Person Animations within frames.
 	
 	// Data
-
 	private Landlord landlord;
 	private int rent = 5;
 	private int totalCurrentMaintenance = 0;
 	private Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
 	protected List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
+	private String homeAnimationInterfaceName;     // The interface name of the animation that interacts with this building as a tenant
+	private HashMap<Person, AnimationInterface> occupyingPersons = new HashMap<Person, AnimationInterface>(); //Since the animations in homes aren't role-bound, need a Person counterpart of above.
+
 	
 	// Constructor 
 	
@@ -55,6 +60,17 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	public Map<FOOD_ITEMS, Integer> getFoodItems() {
 		return foodItems;
 	}
+	
+	@Override
+	public String getHomeAnimationName() {
+		return homeAnimationInterfaceName;
+	}
+	
+	@Override
+	public <T extends AnimationInterface> T getOccupyingPersonAnimation(Person r, Class<T> type) {
+		return type.cast(occupyingPersons.get(r));
+	}
+	
 
 	// Setters
 	
@@ -73,8 +89,33 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 		this.totalCurrentMaintenance = m;
 	}
 	
+	@Override
+	public void setHomeAnimationName(String c){
+		this.homeAnimationInterfaceName = c;
+	}
+	
+	
+	
 	
 	// Utilities
+	
+	@Override
+	public abstract void addOccupyingPerson(Person p);
+	
+	@Override
+	public void addOccupyingPerson(Person p, Animation a) {
+		occupyingPersons.put(p, a);
+	}
+	
+	@Override
+	public void removeOccupyingPerson(Person r) {
+		occupyingPersons.remove(r);
+	}
+	
+	@Override
+	public boolean occupyingPersonExists(Person p) {
+		return occupyingPersons.containsKey(p);
+	}
 	
 	@Override
 	public void setFood(Map<FOOD_ITEMS, Integer> items) {
@@ -94,13 +135,6 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	}
 	
 	@Override
-	public abstract void addResident(Resident r);
+	public abstract void addResident(Resident r);	
 
-	/**
-	 * This doesn't override anything because it's unique to just residence buildings, not all buildings need this. (Maybe the bus stop building)
-	 * @param p Person
-	 */
-	public abstract void addOccupyingRole(Person p);
-	
-	
 }

@@ -25,9 +25,15 @@ import city.Application.TRANSACTION_TYPE;
 import city.BuildingInterface;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.AptResidentAnimation;
+import city.animations.HouseResidentAnimation;
+import city.animations.interfaces.AnimatedPerson;
+import city.animations.interfaces.AnimatedPersonAtHome;
+import city.interfaces.Apartment;
 import city.interfaces.Bank;
 import city.interfaces.BusStop;
 import city.interfaces.Car;
+import city.interfaces.House;
 import city.interfaces.Market;
 import city.interfaces.Person;
 import city.roles.BankCustomerRole;
@@ -56,7 +62,8 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private city.animations.interfaces.AnimatedPerson animation;
+	private city.animations.interfaces.AnimatedPerson animation; // animation for person in city view
+	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
 	private STATE state; 
 	private int cash;
 	private boolean hasEaten;
@@ -222,8 +229,9 @@ public class PersonAgent extends Agent implements Person {
 			return true;
 		}
 		if (state == STATE.goingToSleep) {
-			if (processTransportationArrival()) {
-				animation.goToSleep();
+			if (processTransportationArrival()) { // upon arrival
+				homeAnimation.goToRoom(this.roomNumber); // first, person goes to his own room
+				homeAnimation.goToSleep(); // now, person may crash (figuratively, as in go to bed!)
 				state = STATE.atSleep;
 				return false;
 			}
@@ -372,13 +380,13 @@ public class PersonAgent extends Agent implements Person {
 	
 	/**
 	 * Has the person cook and eat a meal at home.
-	 * 
+	 * Assume they are already at home when this is called
 	 * @throws InterruptedException 
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = true;
-		animation.cookAndEatFood();
+		homeAnimation.cookAndEatFood();
 		// The scheduler will pick up the atDestination and continue the program
 	}
 	
@@ -504,6 +512,11 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation = p;
 	}
+	
+	public void setHomeAnimation(AnimatedPersonAtHome a){
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		homeAnimation = a;
+	}
 
 	@Override
 	public void setCar(Car c) {
@@ -516,11 +529,25 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		cash = c;
 	}
-	
+
+	/**
+	 * This method sets Home for the PersonAgent.
+	 * @param h is a ResidenceBuildingInterface; that is, it can be a Home or an Apartment.
+	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		//set home
 		home = h;
+		
+		//Set animation for inside home. Both inherit the same type, so it's A-OK	
+		if(h instanceof House){
+			homeAnimation = new HouseResidentAnimation(this); 
+		}
+		else if(h instanceof Apartment){
+			homeAnimation = new AptResidentAnimation(this);
+		}			
 	}
 	
 	@Override
@@ -818,4 +845,5 @@ public class PersonAgent extends Agent implements Person {
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
     }
+
 }

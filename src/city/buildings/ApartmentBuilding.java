@@ -40,7 +40,7 @@ public class ApartmentBuilding extends ResidenceBuildingBase implements Apartmen
 	}
 
 	@Override
-	public void addOccupyingRole(Person p) {
+	public void addOccupyingPerson(Person p) {
 		//TODO AptResidentAnimation anim = new AptResidentAnimation(p);
 		//p.setAnimation(anim);
 		//anim.setVisible(true);
