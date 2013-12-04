@@ -68,7 +68,7 @@ public class MockBankTeller extends MockRole implements BankTeller {
 	}
 
 	@Override
-	public void setActive(BANK_SERVICE s, int money, TRANSACTION_TYPE t) {
+	public void setActive() {
 		// TODO Auto-generated method stub
 		
 	}
