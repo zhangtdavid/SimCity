@@ -20,20 +20,21 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
-	private WorkingState workingState = WorkingState.Working;
+	
 	private CarAgent car;
 	private CarPassenger carPassenger;
 	
-	// TODO Change these to private and add getters/setters
-	public int orderId;
-	public MarketCustomerDelivery customerDelivery;
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public EventLog log = new EventLog();
-	public Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	private MarketCustomerDelivery customerDelivery;
+	private int orderId;
+	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
+	
+	private WorkingState workingState = WorkingState.Working;
 
 //	Constructor
-//	---------------------------------------------------------------
+//	=====================================================================		
 	public MarketDeliveryPersonRole(MarketBuilding b, int t1, int t2) {
 		super();
 		market = b;
@@ -43,6 +44,19 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
+//  Activity
+//	=====================================================================		
+//	// TODO schung 99c0f4da25
+//	@Override
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
+	}
 	
 //  Messages
 //	=====================================================================	
@@ -64,7 +78,6 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	
 //  Scheduler
 //	=====================================================================
-
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
@@ -116,7 +129,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		customerDelivery = null;
 	}
 	
-//  Getters and Setters
+//  Getters
 //	=====================================================================
 	// Market
 	@Override
@@ -125,20 +138,25 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public MarketCustomerDelivery getCustomerDelivery() {
+		return customerDelivery;
 	}
 	
-//	// TODO schung 99c0f4da25
-//	@Override
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
+	@Override
+	public int getOrderId() {
+		return orderId;
+	}
 	
 	@Override
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
+	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
+		return collectedItems;
+	}
+	
+//  Setters
+//	=====================================================================	
+	@Override
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
 	}
 	
 //  Utilities
