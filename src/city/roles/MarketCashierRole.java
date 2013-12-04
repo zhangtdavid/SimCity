@@ -27,18 +27,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
 	private WorkingState workingState = WorkingState.Working;
-	// private MarketAnimatedCashier marketCashierGui; // TODO schung 99c0f4da25
 	
-	// TODO Change these to private and add getters/setters
-	public EventLog log = new EventLog();
-	public BankCustomer bankCustomer;
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public enum TransactionState {Pending, Calculating, ReceivedPayment, PendingDelivery, Delivering};
-	public List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
-	
+	private BankCustomer bankCustomer;
+	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
+	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
 
 //	Constructor
 //	=====================================================================
@@ -49,6 +45,19 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
 		bankCustomer = b.bankCustomer;
+	}
+
+//	Activity
+//	=====================================================================
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
@@ -238,28 +247,33 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		dt.deliveryPerson.msgDeliverOrder(t.customerDelivery, t.collectedItems, t.orderId);
 	}
 	
-//  Getters and Setters
+//  Getters
 //	=====================================================================
-
 	@Override
 	public Market getMarket() {
 		return market;
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public BankCustomer getBankCustomer() {
+		return bankCustomer;
+	}
+
+	@Override
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 	
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
+	@Override	
+	public List<MyDeliveryPerson> getDeliveryPeople() {
+		return deliveryPeople;
+	}
 	
+//  Setters
+//	=====================================================================	
 	@Override
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
 	}
 		
 //  Utilities
@@ -292,26 +306,35 @@ public class MarketCashierRole extends Role implements MarketCashier {
 //	=====================================================================	
 	public class MyDeliveryPerson {
 		MarketDeliveryPerson deliveryPerson;
-		public boolean available;
+		private boolean available;
 		
 		public MyDeliveryPerson(MarketDeliveryPerson d) {
 			deliveryPerson = d;
 			available = true;
 		}
+		
+		// Getters
+		public boolean getAvailable() {
+			return available;
+		}
 	}
 	
 	public class Transaction {
-		MarketEmployee employee;
-		MarketCustomer customer;
-		MarketCustomerDelivery customerDelivery;
-		MarketCustomerDeliveryPayment customerDeliveryPayment;
-		Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS,Integer>();
-		Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS,Integer>();
-		int orderId;
-		public int bill;
-		public int payment;
-		public TransactionState s;
+		private MarketEmployee employee;
+		private MarketCustomer customer;
+		private MarketCustomerDelivery customerDelivery;
+		private MarketCustomerDeliveryPayment customerDeliveryPayment;
 		
+		private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS,Integer>();
+		private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS,Integer>();
+		
+		private int orderId;
+		private int bill;
+		private int payment;
+		
+		private TransactionState s;
+		
+		// constructor for in person order
 		public Transaction(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 			employee = e;
 			customer = c;
@@ -329,6 +352,7 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        s = TransactionState.Pending;
 	    }
 		
+		// constructor for delivery order
 		public Transaction(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
 			employee = e;
 			customer = null;
@@ -345,6 +369,23 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	        payment = 0;
 	        s = TransactionState.Pending;
 	    }
+		
+		// Getters
+		public int getOrderId() {
+			return orderId;
+		}
+		
+		public int getBill() {
+			return bill;
+		}
+		
+		public int getPayment() {
+			return payment;
+		}
+		
+		public TransactionState getTransactionState() {
+			return s;
+		}
 	}
 
 }

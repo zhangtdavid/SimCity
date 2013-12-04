@@ -7,10 +7,12 @@ import city.Building;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
 import city.buildings.MarketBuilding;
+import city.interfaces.MarketCustomerDelivery.MarketCustomerState;
 
 public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Data
+	public enum MarketCustomerState {None, Ordering};
 	
 	// Constructor
 	
@@ -31,6 +33,10 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	public void setRestaurant(RestaurantBuildingBase restaurant);
 	public void setMarket(MarketBuilding selectedMarket);
+
+	MarketCustomerState getState();
+
+	void setState(MarketCustomerState state);
 	
 	// Utilities
 	

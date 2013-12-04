@@ -1,11 +1,13 @@
 package city.interfaces;
 
 import city.RoleInterface;
+import city.abstracts.RestaurantChungWaiterBase.WCustomer;
 
 public interface RestaurantChungWaiter extends RoleInterface {
+	public enum BreakState {Working, WantBreak, AskedForBreak, ApprovedForBreak, RejectedForBreak, OnBreak, ReturningToWork};
+	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	
 	// Messages
-
 	public abstract void msgAnimationAskedForBreak();
 	public abstract void msgApprovedForBreak();
 	public abstract void msgRejectedForBreak();
@@ -25,4 +27,16 @@ public interface RestaurantChungWaiter extends RoleInterface {
 	public abstract void msgAnimationAtWaiterHome();
 	public abstract void msgAnimationAtLine();
 
+	
+	// Getters
+// Only applies to one waiter type
+//	public RestaurantChungRevolvingStand getRevolvingStand();
+//	public void setRevolvingStand(RestaurantChungRevolvingStand stand);
+	
+	// Setters
+
+	// Utilities
+	public WCustomer findCustomer(RestaurantChungCustomer ca);
+	public WCustomer findTable(int table);
+	public void removeCustomerFromList(WCustomer c);
 }

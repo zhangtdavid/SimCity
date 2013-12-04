@@ -20,6 +20,8 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
 
+	// Messages
+	@Override
 	public void tellCookOrder(WCustomer customer, String choice, int table) {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 

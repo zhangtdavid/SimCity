@@ -39,4 +39,22 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 		
 	}
 
+	@Override
+	public MarketCustomerDelivery getCustomerDelivery() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public int getOrderId() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
