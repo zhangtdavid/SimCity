@@ -1,7 +1,6 @@
 package city;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,7 +27,6 @@ import city.buildings.RestaurantZhangBuilding;
 import city.gui.BuildingCard;
 import city.gui.CityRoad;
 import city.gui.CityRoadIntersection;
-import city.gui.CityViewPanel;
 import city.gui.MainFrame;
 import city.gui.buildings.BankPanel;
 import city.gui.buildings.BusStopPanel;
@@ -260,28 +258,28 @@ public class Application {
 		}
 
 		// Bus Stops!!!!!!!!
-		BusStopPanel bsp1 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		BusStopPanel bsp1 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(250, 50, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp1);
 		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
 
-		BusStopPanel bsp2 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		BusStopPanel bsp2 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp2);
 		mainFrame.cityView.addStatic(cityViewBusStop2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
-		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		BusStopPanel bsp3 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(250, 250, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
 
-		BusStopPanel bsp4 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
+		BusStopPanel bsp4 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(400, 150, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp4);
 		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);

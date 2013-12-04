@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -29,8 +28,6 @@ public class AptPanel extends BuildingCard implements ActionListener{
 	private static final long serialVersionUID = -9051230986691103443L;
 	
 	//Data
-	private int panelX;
-    private int panelY;
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
@@ -48,10 +45,8 @@ public class AptPanel extends BuildingCard implements ActionListener{
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
 	
 	//Constructor
-	public AptPanel(Color color, Dimension panelDimension){
+	public AptPanel(Color color) {
 	  	super(color);
-    	panelX = panelDimension.width;
-    	panelY = panelDimension.height;
     	
         setVisible(true);
  
@@ -64,7 +59,7 @@ public class AptPanel extends BuildingCard implements ActionListener{
 
 	        // Clear the screen by painting a rectangle the size of the frame
 	        graphics2D.setColor(Color.getHSBColor((float)37, (float).53, (float).529)); // nice subtle gray
-	        graphics2D.fillRect(0, 0, panelX, panelY);
+	        graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 	        
 	        // Draw static elements (furniture)
 	        // are we going to share to utilities or not? decision drawn here. (we share for now... waiting should be straightforward)

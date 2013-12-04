@@ -53,7 +53,7 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         Graphics2D graphics2D = (Graphics2D)graphics;
         // Clear the screen by painting a rectangle the size of the frame
         graphics2D.setColor(Color.GRAY);
-        graphics2D.fillRect(0, 0, panelX, panelY);
+        graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
         // PERSONAL DRAWING STARTS HERE; FIRST DRAW STATIC OBJECTS (UTILITIES, TABLES, CASHIER)
         graphics.setColor(Color.ORANGE); //drawing tables
         for(int i = 0; i < TABLE_COUNT; i++){

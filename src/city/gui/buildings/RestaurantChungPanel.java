@@ -84,7 +84,7 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 	public void paint(Graphics graphics) {
 		Graphics2D g2 = (Graphics2D)graphics;
 		g2.setColor(background);
-		g2.fillRect(0, 0, panelX, panelY);
+		g2.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
         // kitchen area
         g2.setColor(Color.YELLOW);
