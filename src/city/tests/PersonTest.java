@@ -71,7 +71,6 @@ public class PersonTest extends TestCase {
 		busStop2 = new MockBusStop("MockBusStop2");
 		busStop2.setCityViewBuilding(busStop2CityViewBuilding);
 		Application.CityMap.clearMap();
-		Application.CityMap.restaurantNumber = 0; // TODO remove, part of David's debugging code
 		Application.CityMap.addBuilding(BUILDING.bank, bank);
 		Application.CityMap.addBuilding(BUILDING.restaurant, restaurant);
 		Application.CityMap.addBuilding(BUILDING.market, market);
@@ -393,9 +392,6 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should not continue running", false, outcome);
 		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
 		
-		// Go ahead and reset the debugging code // TODO remove
-		Application.CityMap.restaurantNumber = 0;
-		
 		// The time now still be 0, just as it was at the start
 		// Run the clock forward so that it is still in the person's off hours
 		incrementDateHelper(12); // It's 6 hours past start
@@ -597,9 +593,6 @@ public class PersonTest extends TestCase {
 		// Person should have arrived at home and be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
 		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
-		
-		// Go ahead and reset the debugging code // TODO remove
-		Application.CityMap.restaurantNumber = 0;
 		
 		// The time now should still be 0, just as it was at the start
 		// Run the clock forward so that it is still in the person's off hours
