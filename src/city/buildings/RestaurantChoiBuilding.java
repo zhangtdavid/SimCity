@@ -10,6 +10,8 @@ import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.RoleInterface;
@@ -60,7 +62,7 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole(this);
+		bankCustomer = new BankCustomerRole(this, (BankBuilding)CityMap.findRandomBuilding(BUILDING.bank));
 		this.setCityViewBuilding(cityBuilding);
 		//set up tables
 		// Add items and their data times to a map

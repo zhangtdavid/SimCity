@@ -92,7 +92,7 @@ public class PersonAgent extends Agent implements Person {
 		this.hasEaten = false;
 		
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
-		bankCustomerRole = new BankCustomerRole();
+		//bankCustomerRole = new BankCustomerRole();
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
 	}

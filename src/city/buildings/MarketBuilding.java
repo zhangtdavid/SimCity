@@ -5,6 +5,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.RoleInterface;
@@ -54,7 +56,7 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 		
-		 bankCustomer = new BankCustomerRole();
+		bankCustomer = new BankCustomerRole(this, (BankBuilding)CityMap.findRandomBuilding(BUILDING.bank));
 		
 		super.setCash(1000);
 	}
