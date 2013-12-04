@@ -50,7 +50,6 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	public RestaurantChoiRevolvingStand rs;
 	public RestaurantChoiTable t;
 	public Bank bank;
-	public BankCustomerRole bankConnection; 
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor

@@ -29,6 +29,7 @@ import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
+import city.buildings.BankBuilding;
 import city.interfaces.Apartment;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
@@ -92,7 +93,7 @@ public class PersonAgent extends Agent implements Person {
 		this.hasEaten = false;
 		
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
-		//bankCustomerRole = new BankCustomerRole();
+		bankCustomerRole = new BankCustomerRole((BankBuilding) CityMap.findRandomBuilding(BUILDING.bank));
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
 	}

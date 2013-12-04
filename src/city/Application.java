@@ -461,34 +461,36 @@ public class Application {
 		PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date);
 		PersonAgent p3Choi = new PersonAgent("Host 1 Choi", date);
 		PersonAgent p4Choi = new PersonAgent("Waiter 1 Choi", date);
+		/*
 		PersonAgent p5Choi = new PersonAgent("Market Mgr Choi", date);
 		PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date);
 		PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date);
 		PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date);
 		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date);
 		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date);
+		*/
 
 		people.add(p1Choi);
 		people.add(p2Choi);
 		people.add(p3Choi);
-		people.add(p4Choi);
+		people.add(p4Choi);/*
 		people.add(p5Choi);
 		people.add(p6Choi);
 		people.add(p7Choi);
 		people.add(p8Choi);
 		people.add(p9Choi);
-		people.add(p10Choi);
+		people.add(p10Choi);*/
 
 		p1Choi.setHome(h1Choi);
 		p2Choi.setHome(h2Choi);
 		p3Choi.setHome(h3Choi);
-		p4Choi.setHome(h4Choi);
+		p4Choi.setHome(h4Choi);/*
 		p5Choi.setHome(app0Choi);
 		p6Choi.setHome(app0Choi);
 		p7Choi.setHome(app0Choi);
 		p8Choi.setHome(app0Choi);
 		p9Choi.setHome(app1Choi);
-		p10Choi.setHome(app1Choi);
+		p10Choi.setHome(app1Choi);*/
 
 		// Landlord
 		RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(rchoib1, 0, 24);
@@ -513,20 +515,21 @@ public class Application {
 
 		//Create bank roles
 
-		BankManagerRole p9r1Choi = new BankManagerRole(b1, 0, 24);
+		/*BankManagerRole p9r1Choi = new BankManagerRole(b1, 0, 24);
 		p9Choi.setOccupation(p9r1Choi);
 		p9r1Choi.setPerson(p9Choi);
 		BankTellerRole p10r1Choi = new BankTellerRole(b1, 0, 24);
 		p10Choi.setOccupation(p10r1Choi);
 		p10r1Choi.setPerson(p10Choi);
 		b1.addOccupyingRole(p9r1Choi);
-		b1.addOccupyingRole(p10r1Choi);
+		b1.addOccupyingRole(p10r1Choi);*/
 
 		//Create Market people
 		MarketManagerRole p5r1Choi = new MarketManagerRole(m1, 0, 24);
 		MarketCashierRole p6r1Choi = new MarketCashierRole(m1, 0, 24);
 		MarketEmployeeRole p7r1Choi = new MarketEmployeeRole(m1, 0, 24);
 		MarketDeliveryPersonRole p8r1Choi = new MarketDeliveryPersonRole(m1, 0, 24);
+		/*
 		p5Choi.setOccupation(p5r1Choi);
 		p5r1Choi.setPerson(p5Choi);
 		p6Choi.setOccupation(p6r1Choi);
@@ -542,7 +545,7 @@ public class Application {
 		m1.manager = p5r1Choi;
 		m1.cashier = p6r1Choi;
 		m1.addEmployee(p7r1Choi);
-		m1.addDeliveryPerson(p8r1Choi);
+		m1.addDeliveryPerson(p8r1Choi);*/
 
 		// Give people cars
 		CarAgent c0Choi = new CarAgent(busStop4);
@@ -564,7 +567,7 @@ public class Application {
 		CarAgent c4Choi = new CarAgent(busStop4);
 		CarAnimation c4AnimChoi = new CarAnimation(c4Choi, busStop4);
 		c4Choi.setAnimation(c4AnimChoi);
-		mainFrame.cityView.addAnimation(c4AnimChoi);
+		mainFrame.cityView.addAnimation(c4AnimChoi);/*
 		CarAgent c5Choi = new CarAgent(busStop4);
 		CarAnimation c5AnimChoi = new CarAnimation(c5Choi, busStop4);
 		c5Choi.setAnimation(c5AnimChoi);
@@ -588,19 +591,20 @@ public class Application {
 		CarAgent c10Choi = new CarAgent(busStop4);
 		CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop4);
 		c10Choi.setAnimation(c10AnimChoi);
-		mainFrame.cityView.addAnimation(c10AnimChoi);
+		mainFrame.cityView.addAnimation(c10AnimChoi);*/
 
 		p0Choi.setCar(c0Choi);
-//		p1Choi.setCar(c1Choi);
-//		p2Choi.setCar(c2Choi);
-//		p3Choi.setCar(c3Choi);
-//		p4Choi.setCar(c4Choi);
-//		p5Choi.setCar(c5Choi);
+		p1Choi.setCar(c1Choi);
+		p2Choi.setCar(c2Choi);
+		p3Choi.setCar(c3Choi);
+		p4Choi.setCar(c4Choi);
+		/*
+		p5Choi.setCar(c5Choi);
 		p6Choi.setCar(c6Choi);
 		p7Choi.setCar(c7Choi);
 		p8Choi.setCar(c8Choi);
 		p9Choi.setCar(c9Choi);
-		p10Choi.setCar(c10Choi);
+		p10Choi.setCar(c10Choi);*/
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
@@ -851,24 +855,24 @@ public class Application {
 		c1Choi.startThread();
 		c2Choi.startThread();
 		c3Choi.startThread();
-		c4Choi.startThread();
+		c4Choi.startThread();/*
 		c5Choi.startThread();
 		c6Choi.startThread();
 		c7Choi.startThread();
 		c8Choi.startThread();
 		c9Choi.startThread();
-		c10Choi.startThread();
+		c10Choi.startThread();*/
 		p0Choi.startThread();
 		p1Choi.startThread();
 		p2Choi.startThread();
 		p3Choi.startThread();
-		p4Choi.startThread();
+		p4Choi.startThread();/*
 		p5Choi.startThread();
 		p6Choi.startThread();
 		p7Choi.startThread();
 		p8Choi.startThread();
 		p9Choi.startThread();
-		p10Choi.startThread();
+		p10Choi.startThread();*/
 		
 		// Wait for stuff to get set up
 		try {
