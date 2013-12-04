@@ -6,7 +6,6 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Role;
-import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
 import city.interfaces.Bank;
@@ -18,7 +17,7 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	// Data
 
-	public BankBuilding building;
+	public Bank building;
 	private List<MyTeller> myTellers = new ArrayList<MyTeller>();
 	private List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
@@ -26,7 +25,7 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	// Constructor
 
-	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
+	public BankManagerRole (Bank b, int shiftStart, int shiftEnd){
 		building = b;
 		this.setWorkplace(b);
 		this.setSalary(Bank.WORKER_SALARY);
@@ -110,7 +109,7 @@ public class BankManagerRole extends Role implements BankManager {
 	@Override
 	public boolean runScheduler() {
 		
-		if(wantsInactive && building.manager != this && customers.size() == 0){
+		if(wantsInactive && building.getManager() != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
@@ -241,7 +240,7 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	@Override
 	public void setInactive(){
-		if(building.manager != this && customers.size() == 0){
+		if(building.getManager() != this && customers.size() == 0){
 			super.setInactive();
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}
