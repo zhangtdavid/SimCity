@@ -42,21 +42,18 @@ public class CityRoadIntersection extends CityRoad {
 			if(atIntersection == false) {
 				if(((CarAnimation) vehicle).getXPos() < xOrigin) {
 					((CarAnimation) vehicle).setXPos(vehicle.getXPos() + 1);
-					atIntersection = true;
 					return;
 				} else if(((CarAnimation) vehicle).getXPos() > xOrigin) {
 					((CarAnimation) vehicle).setXPos(vehicle.getXPos() - 1);
-					atIntersection = true;
 					return;
 				} else if(((CarAnimation) vehicle).getYPos() < yOrigin) {
 					((CarAnimation) vehicle).setYPos(vehicle.getYPos() + 1);
-					atIntersection = true;
 					return;
 				} else if(((CarAnimation) vehicle).getYPos() > yOrigin) {
 					((CarAnimation) vehicle).setYPos(vehicle.getYPos() - 1);
-					atIntersection = true;
 					return;
 				}
+				atIntersection = true;
 			}
 			
 			// At the destination
@@ -97,24 +94,20 @@ public class CityRoadIntersection extends CityRoad {
 
 			// Move it to the intersection fully
 			if(atIntersection == false) {
-				System.out.println("Here");
 				if(((BusAnimation) vehicle).getXPos() < xOrigin) {
 					((BusAnimation) vehicle).setXPos(vehicle.getXPos() + 1);
-					atIntersection = true;
 					return;
 				} else if(((BusAnimation) vehicle).getXPos() > xOrigin) {
 					((BusAnimation) vehicle).setXPos(vehicle.getXPos() - 1);
-					atIntersection = true;
 					return;
 				} else if(((BusAnimation) vehicle).getYPos() < yOrigin) {
 					((BusAnimation) vehicle).setYPos(vehicle.getYPos() + 1);
-					atIntersection = true;
 					return;
 				} else if(((BusAnimation) vehicle).getYPos() > yOrigin) {
 					((BusAnimation) vehicle).setYPos(vehicle.getYPos() - 1);
-					atIntersection = true;
 					return;
 				}
+				atIntersection = true;
 			}
 			
 			// At the destination
@@ -134,7 +127,6 @@ public class CityRoadIntersection extends CityRoad {
 					}
 				}
 			}
-
 			// If the next road is clear, move it to the road
 			if(thisNextRoad.vehicle == null) {
 				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + thisNextRoad.xVelocity);

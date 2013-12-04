@@ -175,8 +175,7 @@ public class Application {
 				roads.get(i).setNextRoad(roads.get(i + 1));
 				continue;
 			} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
-				intersectionWest.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
+				roads.get(i).setNextRoad(intersectionWest);
 				continue;
 			} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
 				intersectionSouth.setNextRoad(roads.get(i));
@@ -218,8 +217,11 @@ public class Application {
 				roads.get(i).setNextRoad(roads.get(0));
 				continue;
 			}
-			roads.get(i).setNextRoad(roads.get(i+1));
+			// Straight road
+			if(roads.get(i).getClass() != CityRoadIntersection.class)
+				roads.get(i).setNextRoad(roads.get(i+1));
 		}
+		System.out.println(intersectionWest.getNextRoads().size());
 
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
@@ -237,7 +239,7 @@ public class Application {
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white, new Dimension(CityViewPanel.CITY_WIDTH, CityViewPanel.CITY_HEIGHT));
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(300, 325, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(250, 250, "Bus Stop " + (mainFrame.cityView.getStaticsSize()), Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
