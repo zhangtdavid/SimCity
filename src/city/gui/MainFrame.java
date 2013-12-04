@@ -12,16 +12,16 @@ public class MainFrame extends JFrame {
 
 	private static final long serialVersionUID = -1848134216103293730L;
 
-	private static int WINDOWX = 1200;
-	private static int WINDOWY = 700;
-	private static int CITYVIEWX = 500;
-	private static int CITYVIEWY = 500;
-	private static int BUILDINGVIEWX = 500;
-	private static int BUILDINGVIEWY = 500;
-	private static int CONTROLPANELX = 200;
-	private static int CONTROLPANELY = 700;
-	private static int TRACEPANELX = 1000;
-	private static int TRACEPANELY = 190;
+	public final static int WINDOWX = 1300;
+	public final static int WINDOWY = 700;
+	public final static int CITYVIEWX = 500;
+	public final static int CITYVIEWY = 500;
+	public final static int BUILDINGVIEWX = 500;
+	public final static int BUILDINGVIEWY = 500;
+	public final static int CONTROLPANELX = 300;
+	public final static int CONTROLPANELY = 700;
+	public final static int TRACEPANELX = 1000;
+	public final static int TRACEPANELY = 190;
 
 	public CityViewPanel cityView;
 	public BuildingView buildingView;
