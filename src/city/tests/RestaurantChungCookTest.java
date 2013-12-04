@@ -1,23 +1,19 @@
 package city.tests;
 
-import java.awt.Color;
+import java.util.HashMap;
+import java.util.Map;
 
+import utilities.MarketOrder;
 import city.Application.BUILDING;
 import city.Application.CityMap;
+import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.gui.buildings.BankPanel;
-import city.gui.buildings.MarketPanel;
-import city.gui.buildings.RestaurantChungPanel;
-import city.gui.views.CityViewBank;
-import city.gui.views.CityViewMarket;
-import city.gui.views.CityViewRestaurant;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.RestaurantChung;
 import city.roles.RestaurantChungCookRole;
-import city.tests.mock.MockMarket;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChungCashier;
 import city.tests.mock.MockRestaurantChungCustomer;
@@ -35,17 +31,11 @@ import junit.framework.*;
  * @author Monroe Ekilah
  */
 public class RestaurantChungCookTest extends TestCase {
-	RestaurantChungPanel restaurantChungPanel;
-	CityViewRestaurant restaurantChungCityView;
+	Bank bank;
+
 	RestaurantChung restaurantChung;
 
-	MarketPanel marketPanel;
-	CityViewMarket marketCityView;
 	Market market;
-	
-	BankPanel bankPanel;
-	CityViewBank bankCityView;
-	Bank bank;
 	
 	MockPerson cashierPerson;
 	MockRestaurantChungCashier cashier;
@@ -59,11 +49,14 @@ public class RestaurantChungCookTest extends TestCase {
 	MockPerson hostPerson;
 	MockRestaurantChungHost host;
 	
-	MockPerson waiterMessageCookPerson;
+	MockPerson waiterMCPerson;
 	MockRestaurantChungWaiterMessageCook waiterMC;
 	
-	MockPerson waiterRevolvingStandPerson;	
+	MockPerson waiterRSPerson;	
 	MockRestaurantChungWaiterRevolvingStand waiterRS;
+	
+	Map<FOOD_ITEMS, Integer> orderItems;
+	MarketOrder order;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -71,29 +64,49 @@ public class RestaurantChungCookTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();
-				
-		restaurantChungPanel = new RestaurantChungPanel(Color.blue);		
-		restaurantChungCityView = new CityViewRestaurant(0, 0, "Restaurant Chung", Color.blue, restaurantChungPanel); 		
-		restaurantChung = new RestaurantChungBuilding("RestaurantChung", restaurantChungPanel, restaurantChungCityView);
+		
+		// Bank must come first so the restaurant and market can create bankCustomerRoles
+		bank = new BankBuilding("Bank", null, null);		
+		CityMap.addBuilding(BUILDING.bank, bank);
+		
+		restaurantChung = new RestaurantChungBuilding("RestaurantChung", null, null);
 		CityMap.addBuilding(BUILDING.restaurant, restaurantChung);
 		
-		marketPanel = new MarketPanel(Color.blue);
-		marketCityView = new CityViewMarket(0, 0, "Market", Color.blue, marketPanel);
-		market = new MarketBuilding("Market", marketPanel, marketCityView);
+		market = new MarketBuilding("Market", null, null);
 		CityMap.addBuilding(BUILDING.market, market);
-		
-		bankPanel = new BankPanel(Color.blue);
-		bankCityView = new CityViewBank(0, 0, "Bank", Color.blue, bankPanel);
-		bank = new BankBuilding("Bank", bankPanel, bankCityView);		
-		CityMap.addBuilding(BUILDING.bank, bank);
 
+		cashierPerson = new MockPerson("Cashier");
 		cashier = new MockRestaurantChungCashier();
+		cashier.setPerson(cashierPerson);
+//		cashier.market = market;
+		
+		cookPerson = new MockPerson("Cook");
 		cook = new RestaurantChungCookRole(restaurantChung, 0, 12);
+		cook.setPerson(cookPerson);
+		
+		customerPerson = new MockPerson("Customer"); 
 		customer = new MockRestaurantChungCustomer();
+		customer.setPerson(customerPerson);
+		
+		hostPerson = new MockPerson("Host"); 
 		host = new MockRestaurantChungHost();
+		host.setPerson(hostPerson);
+		
+		waiterMCPerson = new MockPerson("WaiterMC"); 
 		waiterMC = new MockRestaurantChungWaiterMessageCook();
+		waiterMC.setPerson(waiterMCPerson);
+		
+		waiterRSPerson = new MockPerson("WaiterRS");
 		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
-		market = new MockMarket("Market");
+		waiterRS.setPerson(waiterRSPerson);
+		
+		orderItems = new HashMap<FOOD_ITEMS, Integer>();
+		orderItems.put(FOOD_ITEMS.chicken, 5);
+		orderItems.put(FOOD_ITEMS.pizza, 5);
+		orderItems.put(FOOD_ITEMS.salad, 5);
+		orderItems.put(FOOD_ITEMS.steak, 5);
+
+		order = new MarketOrder(orderItems);
 	}	
 	/**
 	 * This tests the cook ordering food when low.

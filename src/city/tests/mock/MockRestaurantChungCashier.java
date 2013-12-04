@@ -22,6 +22,7 @@ import city.roles.RestaurantChungCashierRole.Transaction;
  */
 public class MockRestaurantChungCashier extends MockRole implements RestaurantChungCashier {
 	public EventLog log = new EventLog();
+	public Market market;
 
 	@Override
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {

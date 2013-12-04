@@ -27,10 +27,8 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketCashierTest extends TestCase {
-	MarketPanel marketPanel;
 	Market market;
 	
-	BankPanel bankPanel;
 	Bank bank;
 	
 	MockPerson cashierPerson;
@@ -62,11 +60,10 @@ public class MarketCashierTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		bank = new BankBuilding("Bank", bankPanel, null);
+		bank = new BankBuilding("Bank", null, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
 	
-		marketPanel = new MarketPanel(Color.blue);
-		market = new MarketBuilding("Market1", marketPanel, null); // TODO Fix
+		market = new MarketBuilding("Market1", null, null);
 
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank
