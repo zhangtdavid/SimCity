@@ -9,9 +9,8 @@ import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import utilities.MarketTransaction.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
-import city.Building;
 import city.Role;
-import city.buildings.MarketBuilding;
+import city.abstracts.RestaurantBuildingInterface;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDeliveryPayment;
 
@@ -21,14 +20,14 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================	
 	private EventLog log = new EventLog();
 	
-	private Building restaurant;
-	private MarketBuilding market;
+	private RestaurantBuildingInterface restaurant;
+	private Market market;
 	
 	private List<MarketTransaction> marketTransactions; // point to list shared with the restaurant cashier
 	
 //	Constructor
 //	=====================================================================
-	public MarketCustomerDeliveryPaymentRole(Building r, List<MarketTransaction> marketTransactions) {
+	public MarketCustomerDeliveryPaymentRole(RestaurantBuildingInterface r, List<MarketTransaction> marketTransactions) {
 		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
@@ -46,7 +45,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.s = MarketTransactionState.Processing;
 		mt.bill = bill;
-		runScheduler();
+		runScheduler(); // TODO need to fix this, change it to run when setActive
 	}
 
 	@Override
@@ -75,7 +74,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	private void pay(MarketTransaction mt) {
 		int payment = checkBill(mt);
 		if (payment != -1) {
-			market.cashier.msgHereIsPayment(mt.order.orderId, payment);
+			market.getCashier().msgHereIsPayment(mt.order.orderId, payment);
 			restaurant.setCash(restaurant.getCash()-payment);
 	    	mt.s = MarketTransactionState.WaitingForConfirmation;
 		}
@@ -96,7 +95,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //  Setters
 //	=====================================================================	
 	@Override
-	public void setMarket(MarketBuilding market) {
+	public void setMarket(Market market) {
 		this.market = market;
 	}
 	
@@ -106,7 +105,7 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
         for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
-        	tempBill += mt.order.orderItems.get(item)*market.prices.get(item);
+        	tempBill += mt.order.orderItems.get(item)*market.getPrices().get(item);
         }
 
         if (tempBill == mt.bill)

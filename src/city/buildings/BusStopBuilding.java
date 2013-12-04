@@ -1,13 +1,17 @@
 package city.buildings;
 
+import java.awt.Color;
+import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import city.Application;
 import city.Building;
 import city.RoleInterface;
 import city.gui.CityRoad;
 import city.gui.buildings.BusStopPanel;
+import city.gui.views.CityViewBuilding;
 import city.gui.views.CityViewBusStop;
 import city.interfaces.BusPassenger;
 import city.interfaces.BusStop;
@@ -19,29 +23,20 @@ public class BusStopBuilding extends Building implements BusStop {
 	public BusStop nextStop = null;
 	public BusStop previousStop = null;
 	public List<BusPassenger> waitingList = Collections.synchronizedList(new ArrayList<BusPassenger>());
-	public CityRoad roadLocatedOn;
+	private CityRoad roadLocatedOn;
 	
 	// Constructor
 	
-	public BusStopBuilding(String name, BusStopPanel panel, CityViewBusStop cityBuilding) {
-		super(name);
-		this.setPanel(panel);
-		this.setCityViewBuilding(cityBuilding);
-	}
-	
-	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {
-		super(name);
-		this.nextStop = nextStop; // Assign the nextStop argument to this stop's nextStop
-		nextStop.previousStop = this; // Assign the nextStop's previousStop to this
-		this.previousStop = previousStop; // Assign the previousStop argument to this stop's previousStop
-		previousStop.nextStop = this; // Assign the previousStop's nextStop to this
+	public BusStopBuilding(String name, BusStopPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
+		roadLocatedOn = Application.CityMap.findClosestRoad(this);
 	}
 	
 	// Getters
 	
 	public BusStopBuilding(String name) {
-		super(name);
-	}
+		super(name, new BusStopPanel(Color.black, new Dimension(1, 1)), new CityViewBusStop(1, 1));
+	};
 	
 	@Override
 	public List<BusPassenger> getWaitingList() {
@@ -51,6 +46,11 @@ public class BusStopBuilding extends Building implements BusStop {
 	@Override
 	public BusStop getNextStop() {
 		return nextStop;
+	}
+	
+	@Override
+	public CityRoad getRoadLocatedOn() {
+		return roadLocatedOn;
 	}
 	
 	// Setters

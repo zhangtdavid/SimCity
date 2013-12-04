@@ -7,6 +7,7 @@ import city.interfaces.BusStop;
 public interface AnimatedBus extends AnimationInterface {
 	
 	// Data
+	public static final int SIZE = 25;
 	
 	// Constructor
 	
@@ -16,7 +17,7 @@ public interface AnimatedBus extends AnimationInterface {
 	
 	public void goToDestination(Building destination);
 
-	public void DoGoToNextStop(BusStop nextStop);
+	public void doGoToNextStop(BusStop nextStop);
     
     // Getters
     

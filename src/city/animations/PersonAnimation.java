@@ -36,7 +36,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	 */
 	@Override
 	public void goToBusStop(BusStop b) {
-		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().x;
-		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().y;
+		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().getX();
+		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().getY();
 	}
 }

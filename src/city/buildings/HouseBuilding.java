@@ -21,17 +21,16 @@ public class HouseBuilding extends ResidenceBuildingBase implements House {
 	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
 
 	// Constructor
-
-	public HouseBuilding(String name, Landlord l, HousePanel p, CityViewBuilding cityBuilding) {
-		super(name);
+	
+	public HouseBuilding(String name, Landlord l, HousePanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		//Perhaps I should eliminate the landlord requirement, and have that be added separately? :/
-		this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
-		// this.landlord.setResidence(this); 
-		// keep^ commented if landlord != one of the residents is an option
-		this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation");
-		this.panel = p;
-		this.setCityViewBuilding(cityBuilding);
-
+				this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
+				// this.landlord.setResidence(this); 
+				// keep^ commented if landlord != one of the residents is an option
+				this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation");
+				this.panel = panel;
+				this.setCityViewBuilding(cityBuilding); 
 	}
 
 	// Getters

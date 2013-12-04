@@ -11,8 +11,8 @@ import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
 import city.Application.BUILDING;
-import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
+import city.Application;
 import city.Role;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
@@ -55,13 +55,13 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	// Constructor
 
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		setCash(DAILY_CAPITAL); // initial launch
 		menu = new RestaurantChoiMenu();
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankCustomer = new BankCustomerRole(this, (BankBuilding)CityMap.findRandomBuilding(BUILDING.bank));
+		bankCustomer = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		this.setCityViewBuilding(cityBuilding);
 		//set up tables
 		// Add items and their data times to a map

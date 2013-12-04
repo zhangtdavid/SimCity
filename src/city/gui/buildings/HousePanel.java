@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -24,11 +23,12 @@ public class HousePanel extends ResidenceBasePanel{
 	 * what does this do?
 	 */
 	private static final long serialVersionUID = -9051230986691103443L;
-
 	// Data
 	private int panelX;
 	private int panelY;
-	private final int delayMS = 5;
+	public static final int HDX = 250;
+	public static final int HDY = 490;
+    private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
 	public static final int HRX = -10; // house refrigerator
@@ -39,13 +39,19 @@ public class HousePanel extends ResidenceBasePanel{
 	public static final int HTY = 400;
 	public static final int HBXi = 490; // initial house bed
 	public static final int HBYi = 50;
-	public static final int HDX = 250;
-	public static final int HDY = 490;
-	public static final int NUMBER_OF_BEDS = 1;
-
-	// Constructor
-	public HousePanel(Color color, Dimension panelDimension) {
-		super(color, panelDimension);
+	public static final int HBYint = 100; // y-Interval for house beds
+	// every house has 1 bed regardless of how many people there are; already furnished!
+	static final int NUMBER_OF_BEDS = 1;
+	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
+	
+	//Constructor
+	public HousePanel(Color color){
+	  	super(color);
+    	
+        setVisible(true);
+ 
+    	Timer timer = new Timer(delayMS, this);
+    	timer.start();
 	}
 
 	public void paintComponent(Graphics graphics) {
@@ -84,7 +90,7 @@ public class HousePanel extends ResidenceBasePanel{
 		}
 	}
 
-	@Override // from BuildingCard?
+	//TODO remove?
 	public void addVisualizationElement(Animation ve) {
 		animations.add(ve);
 	}

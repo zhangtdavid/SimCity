@@ -26,9 +26,11 @@ public abstract class Building implements BuildingInterface {
 	
 	// Constructor
 
-	public Building(String name) {
+	public Building(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
 		this.name = name;
 		this.cash = 0;
+		this.setPanel(panel);
+		this.setCityViewBuilding(cityBuilding);
 	}
     
     // Messages
@@ -115,7 +117,7 @@ public abstract class Building implements BuildingInterface {
 	public abstract void addOccupyingRole(RoleInterface r);
 	
 	@Override
-	public void addOccupyingRole(RoleInterface r, Animation a) {
+	public void addOccupyingRole(RoleInterface r, AnimationInterface a) {
 		occupyingRoles.put(r, a);
 	}
 	

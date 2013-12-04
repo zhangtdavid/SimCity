@@ -40,9 +40,7 @@ public interface BuildingInterface {
 	// Utilities 
 	
 	public void addOccupyingRole(RoleInterface r);
-	public void addOccupyingRole(RoleInterface r, Animation a);
+	public void addOccupyingRole(RoleInterface r, AnimationInterface a);
 	public void removeOccupyingRole(RoleInterface r);
 	public boolean occupyingRoleExists(RoleInterface r);
-	
-
 }

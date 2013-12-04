@@ -9,6 +9,7 @@ import city.abstracts.RestaurantChungWaiterBase;
 import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 
 /**
  * Restaurant Waiter Agent
@@ -17,12 +18,12 @@ import city.buildings.RestaurantChungBuilding;
 public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBase {	
 	RestaurantChungRevolvingStand orderStand;
 
-	public RestaurantChungWaiterRevolvingStandRole(RestaurantChungBuilding b, int t1, int t2) {
+	public RestaurantChungWaiterRevolvingStandRole(RestaurantChung b, int t1, int t2) {
 		super();
 		restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 	}
 
 	// Messages

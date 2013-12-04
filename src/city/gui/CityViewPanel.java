@@ -54,20 +54,20 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			for (CityViewBuilding c: statics) {
 				if (c.equals(temp))
 					continue;
-				if (c.rectangle.intersects(temp.rectangle)) {
+				if (c.getRectangle().intersects(temp.getRectangle())) {
 					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
 					return;
 				}
 			}
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-			mainframe.buildingView.addView(temp.building, temp.ID);
+			mainframe.buildingView.addView(temp.getBuilding(), temp.getID());
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
 			if (c.contains(arg0.getX(), arg0.getY())) {
-				mainframe.buildingView.setView(c.ID);
-				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.ID);
+				mainframe.buildingView.setView(c.getID());
+				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.getID());
 			}
 		}
 	}
@@ -76,16 +76,16 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		
 	}
 	
-	public void addObject(CityViewBuilding.BuildingType type) {
+	public void addObject(CityViewBuilding.BUILDINGTYPE type) {
 		if (addingObject)
 			return;
 		addingObject = true;
 		switch (type) {
-		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow, new Dimension(CITY_WIDTH, CITY_HEIGHT))); break;
-		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red, new Dimension(500, 500))); break;
+		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)); break;
+		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)); break;
+		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)); break;
+		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)); break;
+		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)); break;
 		// TODO BankBranch c0e51d580a4
 		// case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(500, 500))); break;
 		default: return;

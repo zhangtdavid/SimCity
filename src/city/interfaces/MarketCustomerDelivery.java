@@ -6,6 +6,7 @@ import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
+import city.abstracts.RestaurantBuildingInterface;
 import city.buildings.MarketBuilding;
 
 public interface MarketCustomerDelivery extends RoleInterface {
@@ -26,7 +27,7 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	// Getters
 	
 	public Market getMarket();
-	public Building getRestaurant();
+	public RestaurantBuildingInterface getRestaurant();
 	
 	// Setters
 	

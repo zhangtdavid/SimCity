@@ -12,6 +12,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Role;
 import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
@@ -23,7 +24,7 @@ import city.interfaces.RestaurantChungWaiter;
 public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
 	public EventLog log = new EventLog();
 
-	RestaurantChungBuilding restaurant;
+	RestaurantChung restaurant;
 	
 	private int nTables = 4;
 	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
@@ -37,12 +38,12 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 
 //	Constructor
 //	====================================================================
-	public RestaurantChungHostRole(RestaurantChungBuilding b, int t1, int t2) {
+	public RestaurantChungHostRole(RestaurantChung b, int t1, int t2) {
 		super();
 		restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 		
 		// make some tables
 		tables = new Vector<Table>(nTables);
@@ -177,7 +178,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (restaurant.host != this)
+			if (restaurant.getRestaurantChungHost() != this)
 				workingState = WorkingState.NotWorking;
 		}
 		

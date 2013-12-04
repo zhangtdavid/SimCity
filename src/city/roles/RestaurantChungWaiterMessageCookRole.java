@@ -6,18 +6,19 @@ import city.abstracts.RestaurantChungWaiterBase;
 import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
+import city.interfaces.RestaurantChung;
 
 /**
  * Restaurant Waiter Agent
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterBase {
-	public RestaurantChungWaiterMessageCookRole(RestaurantChungBuilding b, int t1, int t2) {
+	public RestaurantChungWaiterMessageCookRole(RestaurantChung b, int t1, int t2) {
 		super();
 		this.restaurant = b;
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
-		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
+		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 	}
 
 	// Messages
@@ -33,7 +34,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		}
 
 		print("telling cook order " + choice + " for " + customer.c);
-		restaurant.cook.msgHereIsAnOrder(this, choice, table);
+		restaurant.getRestaurantChungCook().msgHereIsAnOrder(this, choice, table);
 		customer.o.os = OrderStatus.Cooking;
 		
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();

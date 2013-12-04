@@ -157,7 +157,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 		int pos = 0;
 		synchronized(waitingCustomers) {
 			for(int i = 0; i < waitingCustomers.size(); i++) {
-				if(RestaurantZhangCustomer.WAITING_POSITION == pos) {
+				if(waitingCustomers.get(i).getWaitingPosition() == pos) {
 					pos++;
 					i = -1;
 				}
@@ -183,7 +183,7 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 			for(int i = 1; i < myWaiterList.size(); i++) {
 				if(myWaiterList.get(i).mwBreakStatus == MyWaiter.BREAK_STATUS.notOnBreak) {
 					if((myWaiterList.get(i).w.getNumberCustomers() <= currentWaiter.w.getNumberCustomers())
-							&& (myWaiterList.get(i).w.getNumberCustomersServed() < currentWaiter.w.getNumberCustomersServed())) {
+							&& (myWaiterList.get(i).w.getNumCustomersServed() < currentWaiter.w.getNumCustomersServed())) {
 						currentWaiter = myWaiterList.get(i);
 					}
 				} else {

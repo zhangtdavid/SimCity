@@ -35,6 +35,5 @@ public interface RestaurantChungCustomer extends RoleInterface {
 
 	// Setters
 	public void setHungerLevel(int hungerLevel);
-	public void setRestaurant(RestaurantChungBuilding r);
-	
+	public void setRestaurant(RestaurantChung r);
 }

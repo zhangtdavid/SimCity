@@ -4,8 +4,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
 
 import city.Animation;
 import city.animations.BusAnimation;
@@ -13,23 +11,25 @@ import city.animations.CarAnimation;
 import city.gui.views.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
-	ArrayList<Line2D.Double> sides;
-	int xVelocity;
-	int yVelocity;
-	boolean redLight;
-	int xOrigin;
-	int yOrigin;
-	int width;
-	int height;
-	public boolean isHorizontal;
-	boolean startAtOrigin;
-	Color laneColor;
-	public Animation vehicle = null;
-	public CityRoad nextRoad;
-
+	
+	// Data
+	
+	protected int xVelocity;
+	protected int yVelocity;
+	protected int xOrigin;
+	protected int yOrigin;
+	protected int width;
+	protected int height;
+	protected Color laneColor;
+	
+	protected Animation vehicle = null;
+	protected CityRoad nextRoad;
+	protected boolean isHorizontal;
+	
+	// Constructor
+	
 	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc) {
 		super(xo, yo, lc);
-		redLight = false;
 		width = w;
 		height = h;
 		xVelocity = xv;
@@ -42,15 +42,9 @@ public class CityRoad extends CityViewBuilding {
 		//Make the lane surface
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
 	}
-
-	public boolean addVehicle( Animation v ) {
-		if(vehicle == null) {
-			vehicle = v;
-			return true;
-		}
-		return false;
-	}
-
+	
+	// Paint stuff
+	
 	@Override
 	public void paint( Graphics g2 ) {
 		g2.setColor( laneColor );
@@ -63,13 +57,13 @@ public class CityRoad extends CityViewBuilding {
 		double vWidth = 0;
 		double vHeight = 0;
 		if(vehicle instanceof CarAnimation) {
-			vehicle = (CarAnimation)vehicle;
-			if(((CarAnimation) vehicle).endRoad == this) {
-				((CarAnimation) vehicle).atDestinationRoad = true;
+			vehicle = (CarAnimation) vehicle;
+			if(((CarAnimation) vehicle).getEndRoad() == this) {
+				((CarAnimation) vehicle).setAtDestinationRoad(true);
 				vehicle = null;
 				return;
 			}
-			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).startingRoad == null) {
+			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
 				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 			}
@@ -80,7 +74,7 @@ public class CityRoad extends CityViewBuilding {
 		}
 		if(vehicle instanceof BusAnimation) {
 			vehicle = (BusAnimation)vehicle;
-			if(((BusAnimation) vehicle).atDestination) {
+			if(((BusAnimation) vehicle).isAtDestination()) {
 				return;
 			}
 			if(nextRoad.vehicle == null) {
@@ -96,37 +90,51 @@ public class CityRoad extends CityViewBuilding {
 		if ( isHorizontal ) {
 			//End of lane is xOrigin + width - vehicle width
 			if ( xVelocity > 0 && x >= xOrigin + vWidth) {
-				nextRoad.vehicle = vehicle;
+				nextRoad.setVehicle(vehicle);
 				vehicle = null;
 			} else if ( xVelocity < 0 && x <= xOrigin - vWidth ) {
-				nextRoad.vehicle = vehicle;
+				nextRoad.setVehicle(vehicle);
 				vehicle = null;
 			}
 		} else {
 			if ( yVelocity > 0 && y >= yOrigin + vHeight ) {
-				nextRoad.vehicle = vehicle;
+				nextRoad.setVehicle(vehicle);
 				vehicle = null;
 			} else if ( yVelocity < 0 && y <= yOrigin - vHeight ) {
-				nextRoad.vehicle = vehicle;
+				nextRoad.setVehicle(vehicle);
 				vehicle = null;
 			}
 		}
-
-//		if(vehicle != null)
-//			vehicle.draw((Graphics2D) g2);
-	}
-
-	public void redLight() {
-		redLight = true;
-	}
-
-	public void greenLight() {
-		redLight = false;
 	}
 
 	@Override
-	public void updatePosition() {
-		// TODO Auto-generated method stub
-
+	public void updatePosition() { };
+	
+	 // Getters
+	
+	public CityRoad getNextRoad() {
+		return nextRoad;
+	}
+	
+	public Animation getVehicle() {
+		return vehicle;
+	}
+	
+	public boolean getHorizontal() {
+		return isHorizontal;
+	}
+	
+	// Setters
+	
+	public void setNextRoad( CityRoad r ) {
+		nextRoad = r;
+	}
+	
+	public boolean setVehicle( Animation v ) {
+		if(vehicle == null) {
+			vehicle = v;
+			return true;
+		}
+		return false;
 	}
 }

@@ -7,6 +7,9 @@ public interface CarPassenger extends RoleInterface {
 
 	// Data
 	
+	static enum CarPassengerState {NOTDRIVING, DRIVING};
+	static enum CarPassengerEvent {NONE, ATCAR, ATDESTINATION};
+	
 	// Constructor
 	
 	// Messages
@@ -20,7 +23,10 @@ public interface CarPassenger extends RoleInterface {
 	
 	// Getters
 	
-	public BuildingInterface getDestination(); 
+	public CarPassengerState getState();
+	public CarPassengerEvent getEvent();
+	public Car getCar();
+	public BuildingInterface getDestination();
 	
 	// Setters
 	

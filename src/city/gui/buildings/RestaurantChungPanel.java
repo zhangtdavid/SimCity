@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,18 +10,19 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import city.Animation;
+import city.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantChungPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1355285244678935863L;
-	
+//	Data
+//	=====================================================================	
 //	Fixed Numbers
-//	=====================================================================
+//	--------------------------------------------------------------------
 	public static final int RECTDIM = 20;
     public static final int ENTRANCEX = 40, ENTRANCEY = 480;
-    public static final int EXITX = 40, EXITY = -20;
+    public static final int EXITX = 40, EXITY = -RECTDIM;
 
 //	Tables
 //	--------------------------------------------------------------------
@@ -38,8 +38,8 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     private static final int KITCHEN2W = 200, KITCHEN2L = 30;
     public static final int GRILLX = KITCHEN1X+120, GRILLY = KITCHEN2Y;
     private static final int GRILLW = 60, GRILLL = 15;    
-    public static final int COOKGRILLX = KITCHEN1X+120, COOKGRILLY = KITCHEN2Y-20;
-    public static final int PLATINGX = KITCHEN1X+30, PLATINGY = KITCHEN1L-20;
+    public static final int COOKGRILLX = KITCHEN1X+120, COOKGRILLY = KITCHEN2Y-RECTDIM;
+    public static final int PLATINGX = KITCHEN1X+30, PLATINGY = KITCHEN1L-RECTDIM;
 
 //	Cook
 //	--------------------------------------------------------------------
@@ -47,9 +47,9 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 
 //	Cashier
 //	--------------------------------------------------------------------
-    public static final int CASHIERX= 140, CASHIERY = 5;
-    public static final int CASHIERDESKX= 140, CASHIERDESKY = 20+10;  
-    private static final int CASHIERDESKW = 20, CASHIERDESKL = 10;
+    public static final int CASHIERX = 140, CASHIERY = 5;
+    public static final int CASHIERDESKX= 140, CASHIERDESKY = RECTDIM+10;  
+    private static final int CASHIERDESKW = RECTDIM, CASHIERDESKL = 10;
     public static final int CASHIERINTERACTIONX = 140, CASHIERINTERACTIONY = CASHIERDESKY+CASHIERDESKL;
    
 //	Customer
@@ -63,16 +63,12 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     public static final int ORDERDROPX = 280, ORDERDROPY = 20;
     public static final int WAITERBREAKX = 260, WAITERBREAKY = 40; 
     
-	private int panelX;
-	private int panelY;
 	private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
+	private List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
 	
 	
-	public RestaurantChungPanel(Color color, Dimension panelDimension) {
+	public RestaurantChungPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
@@ -107,7 +103,7 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
         }
 		
 		// Update the position of each visible element
-		for(Animation animation : animations) {
+		for(AnimationInterface animation : animations) {
 //			if (animation.getVisible()) {
 				animation.updatePosition();
 //			}
@@ -115,14 +111,14 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
 
 		// Draw each visible element after updating their positions
 		// TODO generates concurrent modification exception
-		for(Animation animation : animations) {
+		for(AnimationInterface animation : animations) {
 //			if (animation.getVisible()) {
 				animation.draw(g2);
 //			}
 		}
 	}
 
-	public void addVisualizationElement(Animation ve) {
+	public void addVisualizationElement(AnimationInterface ve) {
 		animations.add(ve);
 	}
 }

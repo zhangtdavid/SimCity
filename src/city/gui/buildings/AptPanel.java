@@ -51,8 +51,8 @@ public class AptPanel extends ResidenceBasePanel {
 	// 490x350, 490x450. (5 max)
 
 	// Constructor
-	public AptPanel(Color color, Dimension panelDimension) {
-		super(color, panelDimension);
+	public AptPanel(Color color) {
+		super(color);
 	}
 
 	public void paintComponent(Graphics graphics) {
@@ -107,10 +107,5 @@ public class AptPanel extends ResidenceBasePanel {
 				animation.draw(graphics2D);
 			}
 		}
-	}
-	
-	@Override // from BuildingCard?
-	public void addVisualizationElement(Animation ve) {
-		animations.add(ve);
 	}
 }

@@ -20,10 +20,10 @@ public abstract class ResidenceBasePanel extends BuildingCard implements
 	public static final int WIDTH = 20;
 
 	// Constructor
-	public ResidenceBasePanel(Color color, Dimension panelDimension) {
-		super(color);
+	public ResidenceBasePanel(Color color) {
+		super(color);/*
 		panelX = panelDimension.width;
-		panelY = panelDimension.height;
+		panelY = panelDimension.height;*/
 		setVisible(true);
 		Timer timer = new Timer(delayMS, this);
 		timer.start();

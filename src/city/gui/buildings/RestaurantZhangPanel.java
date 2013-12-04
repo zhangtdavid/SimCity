@@ -12,7 +12,7 @@ import java.util.Collection;
 import javax.swing.Timer;
 
 import utilities.RestaurantZhangTable;
-import city.Animation;
+import city.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantZhangPanel extends BuildingCard implements ActionListener {
@@ -21,10 +21,8 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 
 	private Collection<RestaurantZhangTable> tables = new ArrayList<RestaurantZhangTable>();
 
-	public RestaurantZhangPanel(Color color, Dimension panelDimension) {
+	public RestaurantZhangPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
@@ -63,7 +61,7 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 
 		// Draw each visible element after updating their positions
 		// TODO generates concurrent modification exception
-		for(Animation animation : animations) {
+		for(AnimationInterface animation : animations) {
 			if (animation.getVisible()) {
 				animation.draw(graphics2D);
 			}
