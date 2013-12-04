@@ -1,75 +1,77 @@
-//package city.tests;
-//
-//import city.buildings.BankBuilding;
-//import city.gui.buildings.MarketPanel;
-//import city.gui.buildings.RestaurantChungPanel;
-//import city.interfaces.Bank;
-//import city.interfaces.Market;
-//import city.interfaces.RestaurantChung;
-//import city.interfaces.RestaurantChungCashier.TransactionState;
-//import city.roles.RestaurantChungCashierRole;
-//import city.tests.mock.MockMarket;
-//import city.tests.mock.MockPerson;
-//import city.tests.mock.MockRestaurantChungCustomer;
-//import city.tests.mock.MockRestaurantChungHost;
-//import city.tests.mock.MockRestaurantChungWaiterMessageCook;
-//import city.tests.mock.MockRestaurantChungWaiterRevolvingStand;
-//import junit.framework.*;
-//
-///**
-// * 
-// * This class is a JUnit test class to unit test the CashierAgent's basic interaction
-// * with waiters, customers, and the host.
-// * It is provided as an example to students in CS201 for their unit testing lab.
-// *
-// * @author Monroe Ekilah
-// */
-//public class RestaurantChungCashierTest extends TestCase {
-//	RestaurantChungPanel restaurantChungPanel;
-//	RestaurantChung restaurantChung;
-//
-//	MarketPanel marketPanel;
-//	Market market;
-//	
-//	Bank bank;
-//	
-//	MockPerson cashierPerson;
-//	RestaurantChungCashierRole cashier;
-//	
-//	MockPerson waiterMessageCookPerson;
-//	MockRestaurantChungWaiterMessageCook waiterMC;
-//	
-//	MockPerson waiterRevolvingStandPerson;	
-//	MockRestaurantChungWaiterRevolvingStand waiterRS;
-//
-//	MockPerson hostPerson;
-//	MockRestaurantChungHost host;
-//	
-//	MockPerson customerPerson;
-//	MockRestaurantChungCustomer customer;
-//	
-////	MockCustomer abnormCustomer;
-//
-//	/**
-//	 * This method is run before each test. You can use it to instantiate the class variables
-//	 * for your agent and mocks, etc.
-//	 */
-//	public void setUp() throws Exception{
-//		super.setUp();		
-//		cashier = new RestaurantChungCashierRole(restaurantChung, 0, 12);	
-//		waiterMC = new MockRestaurantChungWaiterMessageCook();
-//		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
-//		host = new MockRestaurantChungHost();
-//		customer = new MockRestaurantChungCustomer();
-////		abnormCustomer = new MockCustomer("abnormMockCustomer");
-////		abnormCustomer.cashier = cashier;
-//		market = new MockMarket("Market");
-//	}	
-//	/**
-//	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
-//	 */
+package city.tests;
+
+import city.buildings.BankBuilding;
+import city.gui.buildings.MarketPanel;
+import city.gui.buildings.RestaurantChungPanel;
+import city.interfaces.Bank;
+import city.interfaces.Market;
+import city.interfaces.RestaurantChung;
+import city.interfaces.RestaurantChungCashier.TransactionState;
+import city.roles.RestaurantChungCashierRole;
+import city.tests.mock.MockMarket;
+import city.tests.mock.MockPerson;
+import city.tests.mock.MockRestaurantChungCook;
+import city.tests.mock.MockRestaurantChungCustomer;
+import city.tests.mock.MockRestaurantChungHost;
+import city.tests.mock.MockRestaurantChungWaiterMessageCook;
+import city.tests.mock.MockRestaurantChungWaiterRevolvingStand;
+import junit.framework.*;
+
+/**
+ * 
+ * This class is a JUnit test class to unit test the CashierAgent's basic interaction
+ * with waiters, customers, and the host.
+ * It is provided as an example to students in CS201 for their unit testing lab.
+ *
+ * @author Monroe Ekilah
+ */
+public class RestaurantChungCashierTest extends TestCase {
+	RestaurantChungPanel restaurantChungPanel;
+	RestaurantChung restaurantChung;
+
+	MarketPanel marketPanel;
+	Market market;
+	
+	Bank bank;
+	
+	MockPerson cashierPerson;
+	RestaurantChungCashierRole cashier;
+	
+	MockPerson cookPerson;
+	MockRestaurantChungCook cook;
+	
+	MockPerson customerPerson;
+	MockRestaurantChungCustomer customer;
+	
+	MockPerson hostPerson;
+	MockRestaurantChungHost host;
+	
+	MockPerson waiterMessageCookPerson;
+	MockRestaurantChungWaiterMessageCook waiterMC;
+	
+	MockPerson waiterRevolvingStandPerson;	
+	MockRestaurantChungWaiterRevolvingStand waiterRS;
+	
+//	MockCustomer abnormCustomer;
+
+	/**
+	 * This method is run before each test. You can use it to instantiate the class variables
+	 * for your agent and mocks, etc.
+	 */
+	public void setUp() throws Exception{
+		super.setUp();		
+		cashier = new RestaurantChungCashierRole(restaurantChung, 0, 12);
+		cook = new MockRestaurantChungCook();
+		customer = new MockRestaurantChungCustomer();
+		host = new MockRestaurantChungHost();
+		waiterMC = new MockRestaurantChungWaiterMessageCook();
+		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
+		market = new MockMarket("Market");
+	}	
+	/**
+	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
+	 */
 //	public void testOneNormalCustomerScenario()	{
-////		assertEquals("Cashier should have 500.0. It doesn't", cashier.money, 500.0);
 //		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
 //		assertEquals("Customer should have an empty log. It doesn't", customer.log.size(), 0);
 //		assertEquals("WaiterMessageCook should have an empty log. It doesn't", waiterMC.log.size(), 0);
@@ -351,115 +353,118 @@
 //		cashier.runScheduler();
 //		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);
 //	}
-////		assertEquals("Customer payment variable should be 15.99. It's " + cashier.transactions.get(0).payment + "instead", 15.99, cashier.transactions.get(0).payment);
+	
+	
+	
+//		assertEquals("Customer payment variable should be 15.99. It's " + cashier.transactions.get(0).payment + "instead", 15.99, cashier.transactions.get(0).payment);
+
+		
+//		waiter.msgGetCheck(customer);
+//		assertEquals("Waiter log should have 1 entry. It doesn't", 1, waiter.log.size());
+//		assertTrue("Waiter log should have \"Waiter received msgGetCheck from customer\". Read " + waiter.log.getLastLoggedEvent().toString(), waiter.log.containsString("Waiter received msgGetCheck from customer"));
+
+//		assertEquals("Customer log should have 1 entry. It doesn't", 1, customer.log.size());
+//		assertTrue("Customer log should have \"Customer received msgHereIsCheck from waiter\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Cashier received msgHereIsCheck from waiter"));
+
+		
+		// assert true, cashier log has \"received compute bill\"
+		// cashier has one bill
+		// waiter receives bill from cashier, check log
+		// customer gets bill from waiter
+		
+		// cashier gets money from customer
+		// check amount for bill
+		// cashier checks the right customer
+		// customer should receive change
+		// customer check change
+		// assertFalse( "...", cashier.pickAndExecuteAnAction()); scheduler return false
+		
+//		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
+
+		
+//		assertEquals("Cashier should still have 1 transaction. It doesn't", cashier.transactions.size(), 1);
+//		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
+//		cashier.transactions.get(0).s == TransactionState.ReceivedPayment);		
+		
+//		//check preconditions
+//		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.bills.size(), 0);		
+//		assertEquals("CashierAgent should have an empty event log before the Cashier's HereIsBill is called. Instead, the Cashier's event log reads: "
+//						+ cashier.log.toString(), 0, cashier.log.size());
+//		
+//		//step 1 of the test
+//		//public Bill(Cashier, Customer, int tableNum, double price) {
+//		Bill bill = new Bill(cashier, customer, 2, 7.98);
+//		cashier.HereIsBill(bill);//send the message from a waiter
 //
+//		//check postconditions for step 1 and preconditions for step 2
+//		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
+//						+ waiter.log.toString(), 0, waiter.log.size());
 //		
-////		waiter.msgGetCheck(customer);
-////		assertEquals("Waiter log should have 1 entry. It doesn't", 1, waiter.log.size());
-////		assertTrue("Waiter log should have \"Waiter received msgGetCheck from customer\". Read " + waiter.log.getLastLoggedEvent().toString(), waiter.log.containsString("Waiter received msgGetCheck from customer"));
+//		assertEquals("Cashier should have 1 bill in it. It doesn't.", cashier.bills.size(), 1);
+//		
+//		assertFalse("Cashier's scheduler should have returned false (no actions to do on a bill from a waiter), but didn't.", cashier.pickAndExecuteAnAction());
+//		
+//		assertEquals(
+//				"MockWaiter should have an empty event log after the Cashier's scheduler is called for the first time. Instead, the MockWaiter's event log reads: "
+//						+ waiter.log.toString(), 0, waiter.log.size());
+//		
+//		assertEquals(
+//				"MockCustomer should have an empty event log after the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
+//						+ waiter.log.toString(), 0, waiter.log.size());
+//		
+//		//step 2 of the test
+//		cashier.ReadyToPay(customer, bill);
+//		
+//		//check postconditions for step 2 / preconditions for step 3
+//		assertTrue("CashierBill should contain a bill with state == customerApproached. It doesn't.",
+//				cashier.bills.get(0).state == cashierBillState.customerApproached);
+//		
+//		assertTrue("Cashier should have logged \"Received ReadyToPay\" but didn't. His log reads instead: " 
+//				+ cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Received ReadyToPay"));
 //
-////		assertEquals("Customer log should have 1 entry. It doesn't", 1, customer.log.size());
-////		assertTrue("Customer log should have \"Customer received msgHereIsCheck from waiter\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Cashier received msgHereIsCheck from waiter"));
-//
+//		assertTrue("CashierBill should contain a bill of price = $7.98. It contains something else instead: $" 
+//				+ cashier.bills.get(0).bill.netCost, cashier.bills.get(0).bill.netCost == 7.98);
 //		
-//		// assert true, cashier log has \"received compute bill\"
-//		// cashier has one bill
-//		// waiter receives bill from cashier, check log
-//		// customer gets bill from waiter
+//		assertTrue("CashierBill should contain a bill with the right customer in it. It doesn't.", 
+//					cashier.bills.get(0).bill.customer == customer);
 //		
-//		// cashier gets money from customer
-//		// check amount for bill
-//		// cashier checks the right customer
-//		// customer should receive change
-//		// customer check change
-//		// assertFalse( "...", cashier.pickAndExecuteAnAction()); scheduler return false
 //		
-////		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
-//
+//		//step 3
+//		//NOTE: I called the scheduler in the assertTrue statement below (to succintly check the return value at the same time)
+//		assertTrue("Cashier's scheduler should have returned true (needs to react to customer's ReadyToPay), but didn't.", 
+//					cashier.pickAndExecuteAnAction());
 //		
-////		assertEquals("Cashier should still have 1 transaction. It doesn't", cashier.transactions.size(), 1);
-////		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
-////		cashier.transactions.get(0).s == TransactionState.ReceivedPayment);		
-//		
-////		//check preconditions
-////		assertEquals("Cashier should have 0 bills in it. It doesn't.",cashier.bills.size(), 0);		
-////		assertEquals("CashierAgent should have an empty event log before the Cashier's HereIsBill is called. Instead, the Cashier's event log reads: "
-////						+ cashier.log.toString(), 0, cashier.log.size());
-////		
-////		//step 1 of the test
-////		//public Bill(Cashier, Customer, int tableNum, double price) {
-////		Bill bill = new Bill(cashier, customer, 2, 7.98);
-////		cashier.HereIsBill(bill);//send the message from a waiter
-////
-////		//check postconditions for step 1 and preconditions for step 2
-////		assertEquals("MockWaiter should have an empty event log before the Cashier's scheduler is called. Instead, the MockWaiter's event log reads: "
-////						+ waiter.log.toString(), 0, waiter.log.size());
-////		
-////		assertEquals("Cashier should have 1 bill in it. It doesn't.", cashier.bills.size(), 1);
-////		
-////		assertFalse("Cashier's scheduler should have returned false (no actions to do on a bill from a waiter), but didn't.", cashier.pickAndExecuteAnAction());
-////		
-////		assertEquals(
-////				"MockWaiter should have an empty event log after the Cashier's scheduler is called for the first time. Instead, the MockWaiter's event log reads: "
-////						+ waiter.log.toString(), 0, waiter.log.size());
-////		
-////		assertEquals(
-////				"MockCustomer should have an empty event log after the Cashier's scheduler is called for the first time. Instead, the MockCustomer's event log reads: "
-////						+ waiter.log.toString(), 0, waiter.log.size());
-////		
-////		//step 2 of the test
-////		cashier.ReadyToPay(customer, bill);
-////		
-////		//check postconditions for step 2 / preconditions for step 3
-////		assertTrue("CashierBill should contain a bill with state == customerApproached. It doesn't.",
-////				cashier.bills.get(0).state == cashierBillState.customerApproached);
-////		
-////		assertTrue("Cashier should have logged \"Received ReadyToPay\" but didn't. His log reads instead: " 
-////				+ cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Received ReadyToPay"));
-////
-////		assertTrue("CashierBill should contain a bill of price = $7.98. It contains something else instead: $" 
-////				+ cashier.bills.get(0).bill.netCost, cashier.bills.get(0).bill.netCost == 7.98);
-////		
-////		assertTrue("CashierBill should contain a bill with the right customer in it. It doesn't.", 
-////					cashier.bills.get(0).bill.customer == customer);
-////		
-////		
-////		//step 3
-////		//NOTE: I called the scheduler in the assertTrue statement below (to succintly check the return value at the same time)
-////		assertTrue("Cashier's scheduler should have returned true (needs to react to customer's ReadyToPay), but didn't.", 
-////					cashier.pickAndExecuteAnAction());
-////		
-////		//check postconditions for step 3 / preconditions for step 4
-////		assertTrue("MockCustomer should have logged an event for receiving \"HereIsYourTotal\" with the correct balance, but his last event logged reads instead: " 
-////				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received HereIsYourTotal from cashier. Total = 7.98"));
-////	
-////			
-////		assertTrue("Cashier should have logged \"Received HereIsMyPayment\" but didn't. His log reads instead: " 
-////				+ cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Received HereIsMyPayment"));
-////		
-////		
-////		assertTrue("CashierBill should contain changeDue == 0.0. It contains something else instead: $" 
-////				+ cashier.bills.get(0).changeDue, cashier.bills.get(0).changeDue == 0);
-////		
-////		
-////		
-////		//step 4
-////		assertTrue("Cashier's scheduler should have returned true (needs to react to customer's ReadyToPay), but didn't.", 
-////					cashier.pickAndExecuteAnAction());
-////		
-////		//check postconditions for step 4
-////		assertTrue("MockCustomer should have logged an event for receiving \"HereIsYourChange\" with the correct change, but his last event logged reads instead: " 
-////				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received HereIsYourChange from cashier. Change = 0.0"));
-////	
-////		
-////		assertTrue("CashierBill should contain a bill with state == done. It doesn't.",
-////				cashier.bills.get(0).state == cashierBillState.done);
-////		
-////		assertFalse("Cashier's scheduler should have returned false (no actions left to do), but didn't.", 
-////				cashier.pickAndExecuteAnAction());
-//		
+//		//check postconditions for step 3 / preconditions for step 4
+//		assertTrue("MockCustomer should have logged an event for receiving \"HereIsYourTotal\" with the correct balance, but his last event logged reads instead: " 
+//				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received HereIsYourTotal from cashier. Total = 7.98"));
 //	
-////end one normal customer scenario
+//			
+//		assertTrue("Cashier should have logged \"Received HereIsMyPayment\" but didn't. His log reads instead: " 
+//				+ cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Received HereIsMyPayment"));
+//		
+//		
+//		assertTrue("CashierBill should contain changeDue == 0.0. It contains something else instead: $" 
+//				+ cashier.bills.get(0).changeDue, cashier.bills.get(0).changeDue == 0);
+//		
+//		
+//		
+//		//step 4
+//		assertTrue("Cashier's scheduler should have returned true (needs to react to customer's ReadyToPay), but didn't.", 
+//					cashier.pickAndExecuteAnAction());
+//		
+//		//check postconditions for step 4
+//		assertTrue("MockCustomer should have logged an event for receiving \"HereIsYourChange\" with the correct change, but his last event logged reads instead: " 
+//				+ customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Received HereIsYourChange from cashier. Change = 0.0"));
 //	
-//	
-//}
+//		
+//		assertTrue("CashierBill should contain a bill with state == done. It doesn't.",
+//				cashier.bills.get(0).state == cashierBillState.done);
+//		
+//		assertFalse("Cashier's scheduler should have returned false (no actions left to do), but didn't.", 
+//				cashier.pickAndExecuteAnAction());
+		
+	
+//end one normal customer scenario
+	
+	
+}

@@ -23,7 +23,6 @@ import city.interfaces.MarketDeliveryPerson;
 import city.interfaces.MarketEmployee;
 
 public class MarketCashierRole extends Role implements MarketCashier {
-
 //  Data
 //	=====================================================================	
 	public EventLog log = new EventLog();
