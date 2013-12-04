@@ -170,6 +170,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
+	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
 			if (restaurant.host != this)

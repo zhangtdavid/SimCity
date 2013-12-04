@@ -61,7 +61,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.getWorkerSalary());
 	}
-	
+
+//  Activity
+//  ===================================================================== 
 	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -162,6 +164,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     /**
      * Scheduler.  Determine what action is called for, and do it.
      */
+	@Override
 	public boolean runScheduler() {
 		boolean blocking = false;
 		if (!cooking && !plating) {

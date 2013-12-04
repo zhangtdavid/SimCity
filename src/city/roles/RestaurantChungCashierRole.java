@@ -49,6 +49,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 		roles.add((Role) restaurant.bankCustomer);
 	}
 
+//	Activity
+//	=====================================================================	
 	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -96,6 +98,7 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 	/**
 	 * Scheduler.  Determine what action is called for, and do it.
 	 */
+	@Override
 	public boolean runScheduler() {
 //		if (transactions.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
 		

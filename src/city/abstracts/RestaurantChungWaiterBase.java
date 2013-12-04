@@ -204,6 +204,7 @@ public abstract class RestaurantChungWaiterBase extends Role implements Restaura
 
 //  Scheduler
 //	=====================================================================
+	@Override
 	public boolean runScheduler() {	
 		if (workingState == WorkingState.GoingOffShift) {
 			if (customers.size() == 0)
