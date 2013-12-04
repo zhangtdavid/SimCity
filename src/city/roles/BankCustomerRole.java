@@ -175,7 +175,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		st = STATE.entering;
 		super.setActive();
-		stateChanged();
 	}
 	
 	// Utilities
