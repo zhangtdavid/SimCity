@@ -8,6 +8,8 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application.FOOD_ITEMS;
 import city.Building;
 import city.RoleInterface;
+import city.animations.MarketCashierAnimation;
+import city.animations.interfaces.MarketAnimatedCashier;
 import city.gui.buildings.MarketPanel;
 import city.interfaces.BankCustomer;
 import city.interfaces.Market;
@@ -131,28 +133,22 @@ public class MarketBuilding extends Building implements Market {
 			MarketManagerRole m = (MarketManagerRole)r;
 			
 			if(!super.occupyingRoleExists(m)) {
-				//MarketManagerAnimation anim = new MarketManagerAnimation(m); 
-				//c.setGui(anim);	
-//				c.setAnimation(anim);
-				//anim.setVisible(true);
-				//panel.addVisualizationElement(anim);
-				this.manager = m;
-				m.setActive();
+				manager = m;
+//				m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
-			}
+			}			
 		}
 		if(r instanceof MarketCashierRole) {
-			MarketCashierRole m = (MarketCashierRole)r;
+			MarketCashierRole c = (MarketCashierRole)r;
 			
-			if(!super.occupyingRoleExists(m)) {
-				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
-				//c.setGui(anim);	
-//				c.setAnimation(anim);
-				//anim.setVisible(true);
-				//panel.addVisualizationElement(anim);
-				this.cashier = m;
-				m.setActive();
-				super.addOccupyingRole(m, null); // null --> anim
+			if(!super.occupyingRoleExists(c)) {
+				MarketAnimatedCashier anim = new MarketCashierAnimation(c); 
+				c.setAnimation(anim);	
+				anim.setVisible(true);
+				panel.addVisualizationElement(anim);
+				cashier = c;
+//				c.setActive();
+				super.addOccupyingRole(c, null); // null --> anim
 			}
 		}
 		if(r instanceof MarketEmployeeRole) {

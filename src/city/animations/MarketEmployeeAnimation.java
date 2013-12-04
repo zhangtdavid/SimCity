@@ -5,20 +5,19 @@ import java.awt.Graphics2D;
 
 import city.Animation;
 import city.animations.interfaces.MarketAnimatedEmployee;
+import city.gui.buildings.MarketPanel;
 import city.interfaces.MarketEmployee;
 
 public class MarketEmployeeAnimation extends Animation implements MarketAnimatedEmployee {
 	private MarketEmployee employee = null;
-
-//	Fixed Numbers
-//	=====================================================================
-	private static final int CRECTDIM = 20;
 	
 //	Location Information
 //	=====================================================================	
 	private int xPos = 20, yPos = 20;
 	private int xDestination = xPos, yDestination = yPos;
-
+	private enum Command {noCommand, GoToPhone, CollectItems, GoToCashier, GoToCounter};
+	private Command command=Command.noCommand;
+	
 	public MarketEmployeeAnimation(MarketEmployee e) {
 		employee = e;
 	}
@@ -34,14 +33,17 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 		else if (yPos > yDestination)
 			yPos--;
 
-//		if (xPos == xDestination && yPos == yDestination) {
-//
-//		}
+		if (xPos == xDestination && yPos == yDestination) {
+			if (command==Command.GoToPhone) employee.msgAnimationAtPhone();
+			else if (command == Command.CollectItems) employee.msgFinishedCollectingItems();
+			else if (command == Command.GoToCashier) employee.msgAnimationAtCashier();
+			else if (command == Command.GoToCounter) employee.msgAnimationAtCounter();
+		}
 	}
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.BLUE);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, MarketPanel.RECTDIM, MarketPanel.RECTDIM);
 	}
 
 	public boolean isPresent() {
@@ -49,8 +51,9 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 	}
 
 	public void doGoToPhone() {
-		// TODO Auto-generated method stub
-		
+        xDestination = MarketPanel.PHONEX;
+        yDestination = MarketPanel.PHONEY;
+		command = Command.GoToPhone;		
 	}
 	
 	public void doDeliverItems() {
@@ -65,7 +68,8 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 
 	@Override
 	public void doGoToCounter() {
-		// TODO Auto-generated method stub
-		
+        xDestination = MarketPanel.CASHIEREMPINTERACTIONX;
+        yDestination = MarketPanel.CASHIEREMPINTERACTIONY;
+		command = Command.GoToCounter;			
 	}
 }

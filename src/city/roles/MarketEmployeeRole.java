@@ -16,6 +16,7 @@ import city.interfaces.MarketCustomer;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
 import city.interfaces.MarketEmployee;
+import city.interfaces.RestaurantChungCustomer.AgentEvent;
 
 public class MarketEmployeeRole extends Role implements MarketEmployee {
 //  Data
@@ -78,7 +79,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public void msgAssistCustomer(MarketCustomer c) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Market Manager."));
-		System.out.println("Market Employee received msgAssistCustomer from Market Manager.");
+		print("Market Employee received msgAssistCustomer from Market Manager.");
 		if (workingState != WorkingState.NotWorking) {
 			event = MarketEmployeeEvent.AskedToAssistCustomer;
 			customer = c;
@@ -91,7 +92,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
-		System.out.println("Market Employee received msgAssistCustomerDelivery from Market Manager.");
+		print("Market Employee received msgAssistCustomerDelivery from Market Manager.");
 		if (workingState != WorkingState.NotWorking) {
 			event = MarketEmployeeEvent.AskedToAssistCustomer;
 			customer = null;
@@ -104,7 +105,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public void msgHereIsCustomerDeliveryOrder(Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager."));
-		System.out.println("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager.");
+		print("Market Employee received msgHereIsCustomerDeliveryOrder from Market Manager.");
 		event = MarketEmployeeEvent.OrderReceived;
         for (FOOD_ITEMS item: o.keySet()) {
             order.put(item, o.get(item)); // Create a deep copy of the order map
@@ -118,7 +119,7 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public void msgHereIsMyOrder(MarketCustomer c, Map<FOOD_ITEMS, Integer> o, int id) {
 		log.add(new LoggedEvent("Market Employee received msgHereIsMyOrder from Market Customer."));
-		System.out.println("Market Employee received msgHereIsMyOrder from Market Customer.");
+		print("Market Employee received msgHereIsMyOrder from Market Customer.");
 		if (customer == c) { // Makes sure it is the same customer
 			event = MarketEmployeeEvent.OrderReceived;
             for (FOOD_ITEMS item: o.keySet()) {
@@ -127,6 +128,40 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		}
         orderId = id;
         stateChanged();
+	}
+	
+//	Animation
+//	---------------------------------------------------------------
+	@Override
+	public void msgAnimationAtPhone() {
+		print("Market Employee received msgAnimationAtPhone");
+//		event = AgentEvent.seated;
+		atPhone.release();
+		stateChanged();
+	}
+	
+	@Override
+	public void msgFinishedCollectingItems() {
+		print("Market Employee received msgAnimationAtPhone");
+//		event = AgentEvent.seated;
+		finishedCollectingItems.release();
+		stateChanged();
+	}
+	
+	@Override
+	public void msgAnimationAtCashier() {
+		print("Market Employee received msgAnimationAtCashier");
+//		event = AgentEvent.seated;
+		atCashier.release();
+		stateChanged();
+	}
+	
+	@Override
+	public void msgAnimationAtCounter() {
+		print("Market Employee received msgAnimationAtCounter");
+//		event = AgentEvent.seated;
+		atCounter.release();
+		stateChanged();
 	}
 	
 //  Scheduler
@@ -152,7 +187,6 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		
 		return false;
 	}
-
 	
 //  Actions
 //	=====================================================================
