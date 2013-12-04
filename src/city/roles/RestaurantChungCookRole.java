@@ -334,10 +334,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  Cooking
 //  ---------------------------------------------------------------
     private void tryToCookIt(RestaurantChungOrder o) {
-        Food f = restaurant.getFoods().get(o.choice);
+        Food f = restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice));
         // If out of food
         identifyFoodThatIsLow();
-
+        
         if (f.amount == 0) {
                 // sets all orders of the same item to cancelled
             for (int i = 0; i < orders.size(); i++) {
