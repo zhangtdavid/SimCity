@@ -9,7 +9,7 @@ import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import utilities.MarketTransaction.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
-import city.Building;
+import city.BuildingInterface;
 import city.Role;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
@@ -21,14 +21,14 @@ public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCus
 //	=====================================================================	
 	private EventLog log = new EventLog();
 	
-	private Building restaurant;
+	private BuildingInterface restaurant;
 	private MarketBuilding market;
 	
 	private List<MarketTransaction> marketTransactions; // point to list shared with the restaurant cashier
 	
 //	Constructor
 //	=====================================================================
-	public MarketCustomerDeliveryPaymentRole(Building r, List<MarketTransaction> marketTransactions) {
+	public MarketCustomerDeliveryPaymentRole(BuildingInterface r, List<MarketTransaction> marketTransactions) {
 		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
