@@ -4,6 +4,8 @@ import java.util.*;
 
 import city.Building;
 import city.Application.FOOD_ITEMS;
+import city.gui.BuildingCard;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
@@ -19,8 +21,8 @@ public abstract class ResidenceBuildingBase extends Building implements Residenc
 	
 	// Constructor 
 	
-	public ResidenceBuildingBase(String name) {
-		super(name);
+	public ResidenceBuildingBase(String name, BuildingCard panel ,CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		
 		// TODO should we really be giving every home one of every food item upon instantiation?
         for (FOOD_ITEMS s: FOOD_ITEMS.values()) {

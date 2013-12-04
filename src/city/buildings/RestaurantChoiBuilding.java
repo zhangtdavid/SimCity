@@ -56,7 +56,7 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	// Constructor
 
 	public RestaurantChoiBuilding(String name, RestaurantChoiPanel panel, CityViewBuilding cityBuilding) {
-		super(name);
+		super(name, panel, cityBuilding);
 		setCash(DAILY_CAPITAL); // initial launch
 		menu = new RestaurantChoiMenu();
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");

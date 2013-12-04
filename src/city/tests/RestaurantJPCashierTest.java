@@ -26,7 +26,7 @@ public class RestaurantJPCashierTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();
 		MockPerson person = new MockPerson("JP's Cashier");
-		RestaurantJPBuilding b = new RestaurantJPBuilding("JP's restaurant", new RestaurantJPPanel(null, null), null);
+		RestaurantJPBuilding b = new RestaurantJPBuilding("JP's restaurant", null, null);
 		cashier = new RestaurantJPCashierRole(b, 0, 12);
 		cashier.setPerson(person);
 		customer = new MockRestaurantJPCustomer("mockcustomer");		

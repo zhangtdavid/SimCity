@@ -9,7 +9,7 @@ import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
 import city.gui.buildings.RestaurantJPPanel;
-import city.gui.views.CityViewRestaurant;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.RestaurantJP;
 import city.interfaces.RestaurantJPCashier;
 import city.interfaces.RestaurantJPCustomer;
@@ -33,7 +33,6 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 	public int funds = 2000;
 	int customerCounter = 0;
 	int waiterCounter = 0;
-	RestaurantJPPanel panel;
 	RestaurantJPRevolvingStand orderStand = new RestaurantJPRevolvingStand();
 	
 	// Constructor
@@ -51,12 +50,10 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 
 	// Constructor
 	
-	public RestaurantJPBuilding(String name, RestaurantJPPanel panel, CityViewRestaurant cvr2) {
-		super(name);
+	public RestaurantJPBuilding(String name, RestaurantJPPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
-		this.panel = panel;
-		this.setCityViewBuilding(cvr2);
 	}
 	
 	// Utilities
@@ -71,7 +68,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				customerCounter++;
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addOccupyingRole(c, anim);
 			}
@@ -83,7 +80,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				waiterCounter++;
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
 			}
@@ -95,7 +92,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				RestaurantJPWaiterAnimation anim = new RestaurantJPWaiterAnimation(w, waiterCounter); 
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
 			}
@@ -114,7 +111,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				RestaurantJPCookAnimation anim = new RestaurantJPCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addOccupyingRole(c, anim);
 			}

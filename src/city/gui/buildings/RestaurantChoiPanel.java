@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -9,15 +8,13 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import city.Animation;
+import city.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantChoiPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
 	
-	private int panelX;
-    private int panelY;
     private final int delayMS = 5;
 	
 	// personal restaurant specifications (for drawing)
@@ -38,10 +35,8 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
 	//TODO add bootup - cook shouldn't just pop up in the middle of the room on arrival... Or should he?
 	
 
-    public RestaurantChoiPanel(Color color, Dimension panelDimension) {
+    public RestaurantChoiPanel(Color color) {
     	super(color);
-    	panelX = panelDimension.width;
-    	panelY = panelDimension.height;
     	
         setVisible(true);
  
@@ -75,7 +70,7 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         
         animate();
         // Update the position of each visible element
-        for(Animation animation : animations) {
+        for(AnimationInterface animation : animations) {
         	if (animation.getVisible()) {
                 animation.updatePosition();
                 animation.draw(graphics2D);

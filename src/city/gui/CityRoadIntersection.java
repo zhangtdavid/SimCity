@@ -68,7 +68,7 @@ public class CityRoadIntersection extends CityRoad {
 			synchronized(nextRoads) {
 				double closestDistance = 1000000;
 				for(CityRoad r : nextRoads) {
-					CityRoad tempRoad = r;
+					CityRoad tempRoad = r; 
 					while(tempRoad.getNextRoad().getClass() != CityRoadIntersection.class) {
 						tempRoad = tempRoad.getNextRoad();
 					}

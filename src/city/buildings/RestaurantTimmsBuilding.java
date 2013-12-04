@@ -52,13 +52,11 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	
 	// Constructor
 	
-	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel p, CityViewBuilding cityBuilding) {
-		super(name);
+	public RestaurantTimmsBuilding(String name, RestaurantTimmsPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		this.setCash((START_CASH_MIN + (int)(Math.random() * ((START_CASH_MAX - START_CASH_MIN) + 1))));
 		this.setCustomerRoleName("city.roles.RestaurantTimmsCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantTimmsCustomerAnimation");
-		this.setPanel(p);
-		this.setCityViewBuilding(cityBuilding);
 		
 		// Create tables
 		int i = 0;

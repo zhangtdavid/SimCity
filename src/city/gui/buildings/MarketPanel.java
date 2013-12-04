@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -11,7 +10,6 @@ import java.util.List;
 
 import javax.swing.Timer;
 
-import city.Animation;
 import city.AnimationInterface;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.gui.BuildingCard;
@@ -49,17 +47,13 @@ public class MarketPanel extends BuildingCard implements ActionListener {
     public static final int CASHIEREMPINTERACTIONX = CASHIERX-RECTDIM, CASHIEREMPINTERACTIONY = CASHIERY;
     public static final int CASHIERCUSTINTERACTIONX = CASHIERX+COUNTERH, CASHIERCUSTINTERACTIONY = COUNTERY+COUNTERH;
 
-	private int panelX;
-	private int panelY;
 	private final int delayMS = 5;
 	private List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
 	
 //	Constructor
 //	=====================================================================
-	public MarketPanel(Color color, Dimension panelDimension) {
+	public MarketPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
