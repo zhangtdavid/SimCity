@@ -11,8 +11,7 @@ import city.buildings.RestaurantChungBuilding;
 import city.interfaces.RestaurantChungCustomer;
 import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import city.interfaces.RestaurantChungHost.CustomerState;
-import city.interfaces.RestaurantChungHost.WaiterState;
+
 /**
  * Restaurant Host Agent
  */
@@ -30,6 +29,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	private Collection<Table> tables;
 
 	WorkingState workingState = WorkingState.Working;
+	// TODO host needs to know if waiters are going off shift
 
 //	Constructor
 //	====================================================================
@@ -46,7 +46,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 			tables.add(new Table(i));
 		}
 	}
-	
+
+//	Activity
+//	====================================================================
 	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -206,8 +208,6 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 					return true;
 				}	
 			}
-			if (workingState == WorkingState.NotWorking)
-				setInactive();
 		}
 		
 		synchronized(waiters) {
@@ -259,6 +259,9 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 			}
 		}
 
+		if (workingState == WorkingState.NotWorking)
+			setInactive();
+		
 		return false;
 		//we have tried all our rules and found
 		//nothing to do. So return false to main loop of abstract agent
@@ -337,6 +340,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	private void informCustomerOfNoTables(HCustomer customer) {
 		customer.c.msgNoTablesAvailable();
 	}
+	
 //	private void removeCustomer(HCustomer customer) {
 //		removeCustomerFromList(customer);
 //	}
@@ -363,7 +367,7 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 //	=====================================================================	
 	@Override
 	public void addTable(){
-		tables.add(new Table(++nTables));//how you add to a collections
+		tables.add(new Table(++nTables));
 	}
 	
 	@Override
