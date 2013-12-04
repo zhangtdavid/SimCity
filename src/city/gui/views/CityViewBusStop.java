@@ -8,7 +8,7 @@ import city.gui.BuildingCard;
 public class CityViewBusStop extends CityViewBuilding {
 	
 	public CityViewBusStop(int x, int y) {
-		super(x, y, Color.white, "Restaurant 1");
+		super(x, y, Color.white, "Bus Stop 1");
 		setRectangle(new Rectangle(x, y, 50, 50));
 	}
 	
