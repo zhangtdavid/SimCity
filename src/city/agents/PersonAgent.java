@@ -67,8 +67,8 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private city.animations.interfaces.AnimatedPerson animation; // animation for person in city view
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
+	private AnimatedPerson animation; // only for cityview
 	private STATE state; 
 	private int cash;
 	private boolean hasEaten;
@@ -493,6 +493,16 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public int getRoomNumber(){
 		return roomNumber;
+	}
+	
+	@Override
+	public AnimatedPerson getAnimation() {
+		return animation;
+	}
+	
+	@Override
+	public AnimatedPersonAtHome getAnimationAtHome(){
+		return homeAnimation;
 	}
 	
 	//=========//

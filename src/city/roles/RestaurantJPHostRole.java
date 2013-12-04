@@ -1,11 +1,13 @@
 package city.roles;
 
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.List;
+
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantJPTableClass;
-
-import java.util.*;
-
 import city.Role;
 import city.abstracts.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;

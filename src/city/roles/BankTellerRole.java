@@ -2,7 +2,6 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Application;
 import city.Role;
 import city.buildings.BankBuilding;
 import city.interfaces.Bank;

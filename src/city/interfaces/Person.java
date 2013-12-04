@@ -21,6 +21,7 @@ public interface Person extends AgentInterface {
 	public static long RESTAURANT_DINING_INTERVAL = (Application.HALF_HOUR * 144); // 3 days
 	public static long WAKE_UP_THRESHOLD = (Application.HALF_HOUR * 24); // 12 hours
 	public static final int RENT_MIN_THRESHOLD = 200;
+	public static final int INSIGNIFICANT_CASH = 10; // For tests. Use this to give an amount of cash to a person that won't trigger any special (banking, restaurant) behavior.
 	
 	// Constructor
 	
@@ -50,7 +51,8 @@ public interface Person extends AgentInterface {
 	public BankCustomer getBankCustomerRole();
 	public boolean getHasEaten();
 	public int getRoomNumber();
-	
+	public AnimatedPerson getAnimation();
+	public AnimatedPersonAtHome getAnimationAtHome();
 	
 	// Setters
 	
@@ -66,6 +68,7 @@ public interface Person extends AgentInterface {
 	// Utilities
 	
 	public void addRole(RoleInterface r);
+
 	
 	// Classes
 	

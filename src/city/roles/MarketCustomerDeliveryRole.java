@@ -8,13 +8,13 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.abstracts.RestaurantBuildingBase;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomerDelivery;
 import city.interfaces.MarketCustomerDeliveryPayment;
-import city.Application.FOOD_ITEMS;
-import city.Role;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
 //  Data

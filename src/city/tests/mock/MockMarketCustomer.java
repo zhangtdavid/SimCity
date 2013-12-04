@@ -5,12 +5,12 @@ import java.util.Map;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
+import city.Application.FOOD_ITEMS;
 import city.abstracts.MockRole;
 import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.MarketEmployee;
-import city.Application.FOOD_ITEMS;
 
 public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	

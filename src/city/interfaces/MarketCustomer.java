@@ -6,8 +6,6 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.RoleInterface;
 import city.buildings.MarketBuilding;
-import city.interfaces.MarketCustomer.MarketCustomerEvent;
-import city.interfaces.MarketCustomer.MarketCustomerState;
 
 public interface MarketCustomer extends RoleInterface {
 	// Data

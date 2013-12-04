@@ -4,6 +4,8 @@ package city.tests.mock;
 import java.util.Collection;
 import java.util.List;
 
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import city.abstracts.MockRole;
 import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCustomer;
@@ -12,8 +14,6 @@ import city.interfaces.RestaurantChungWaiter;
 import city.roles.RestaurantChungHostRole.HCustomer;
 import city.roles.RestaurantChungHostRole.MyWaiter;
 import city.roles.RestaurantChungHostRole.Table;
-import utilities.EventLog;
-import utilities.LoggedEvent;
 
 /**
  * A sample MockCustomer built to unit test a CashierAgent.
