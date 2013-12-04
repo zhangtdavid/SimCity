@@ -133,6 +133,7 @@ public class PersonAgent extends Agent implements Person {
 			// Must go to intermediary leavingWork state to give setInactive() time to finish working
 			state = STATE.leavingWork;
 			occupation.setInactive();
+			occupation.setActivityBegun();
 			return true;
 		}
 		
