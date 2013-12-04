@@ -10,17 +10,24 @@ import city.abstracts.ResidenceBuildingBase;
 import city.interfaces.Landlord;
 import city.interfaces.Resident;
 
+public class MockResident extends MockRole implements Resident {
 
-public class MockResident extends MockRole implements Resident{
-
+	// Data
+	
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
 	private ResidenceBuildingBase residence;
 	
-	public MockResident(){
+	// Constructor
+	
+	public MockResident(Date rentLastPaid) {
 		super();
+		this.rentLastPaid = rentLastPaid;
 	}
+	
+	// Scheduler
+	
 	@Override
 	public boolean runScheduler() {
 		if(rstate == STATE.needToPayRent){
@@ -31,6 +38,9 @@ public class MockResident extends MockRole implements Resident{
 		}
 		return false;
 	}
+	
+	// Actions
+	
 	@Override
 	public void payRent() {
 		rentLastPaid = this.getPerson().getDate();
@@ -45,6 +55,13 @@ public class MockResident extends MockRole implements Resident{
 		
 		this.setInactive();		
 	}
+	
+	
+	
+	
+	
+	
+	
 	
 	@Override
 	public Date getRentDueDate() {
@@ -67,15 +84,18 @@ public class MockResident extends MockRole implements Resident{
 		int due = c.get(Calendar.DAY_OF_YEAR);
 		return (day >= due);
 	}
+	
 	@Override
 	public void setLandlord(Landlord l) {
 		landlord = l;
 		
 	}
+	
 	@Override
 	public void setResidence(ResidenceBuildingBase b) {
 		residence = b;		
 	}
+	
 	@Override
 	public void setRentLastPaid(Date d) {
 		// TODO Auto-generated method stub
