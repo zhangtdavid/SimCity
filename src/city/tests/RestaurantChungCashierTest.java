@@ -1,12 +1,10 @@
 package city.tests;
 
-import city.buildings.BankBuilding;
 import city.gui.buildings.MarketPanel;
 import city.gui.buildings.RestaurantChungPanel;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCashier.TransactionState;
 import city.roles.RestaurantChungCashierRole;
 import city.tests.mock.MockMarket;
 import city.tests.mock.MockPerson;

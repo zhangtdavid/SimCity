@@ -54,8 +54,8 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		this.panel = panel;
-		orderStand = new RestaurantChungRevolvingStand();
 		this.setCityViewBuilding(cityBuilding);
+		orderStand = new RestaurantChungRevolvingStand();
 		bankCustomer = (new BankCustomerRole(this, (Bank) CityMap.findRandomBuilding(BUILDING.bank))); // Shirley did this temp. to get rid of error
 		
         // Add items and their cooking times to a map

@@ -11,6 +11,8 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
@@ -32,6 +34,7 @@ import city.interfaces.RestaurantChungWaiter;
 public class RestaurantChungCookRole extends Role implements RestaurantChungCook {
 //  Data
 //  ===================================================================== 
+	public EventLog log = new EventLog();
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
     
@@ -47,9 +50,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 	RestaurantChungRevolvingStand orderStand;
 
-	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
-    public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
+    private List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
+
+    private List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // List of each marketCustomerDelivery role that is created for each order to the market
+    private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); // Holds MarketOrder and state
 
 	WorkingState workingState = WorkingState.Working;
             
@@ -77,6 +81,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	@Override
     public void msgHereIsAnOrder(RestaurantChungWaiter w, String choice, int table) {
         print("Cook received msgHereIsAnOrder");
+		log.add(new LoggedEvent("Cook received msgHereIsAnOrder. For " + choice));
         orders.add(new RestaurantChungOrder(w, choice, table, OrderState.Pending));
         stateChanged();
     }
@@ -92,6 +97,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
         print("Done cooking");
+		log.add(new LoggedEvent("Cook received msgSelfDoneCooking."));
         stateChanged();
     }
     
@@ -99,14 +105,16 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
         print("Done plating");
-       stateChanged();
+		log.add(new LoggedEvent("Cook received msgSelfDonePlating."));
+        stateChanged();
     }
 
 //  Market Delivery Person
 //  ---------------------------------------------------------------
 	@Override
     public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-        print("Cook received msgOrderIsReady");
+        print("Cook received msgHereIsOrderDelivery");
+		log.add(new LoggedEvent("Cook received msgHereIsOrderDelivery."));
         MyMarketOrder mo = findMarketOrder(id);
         removeMarketOrder(mo);
         
@@ -121,6 +129,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
 //    public void msgCannotFulfill(int id, Map<FOOD_ITEMS, Integer> unfulfilledItems) {
 //        print("Cook received msgCannotFulfill");
+//		log.add(new LoggedEvent("Cook received msgHereIsOrderDelivery."));
 ////                MarketOrder mo = findMarketOrder(id);
 //        Map<FOOD_ITEMS, Integer> tempItems = new HashMap<FOOD_ITEMS, Integer>();
 //        
@@ -142,6 +151,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	@Override
 	public void msgAnimationAtCookHome() {
 		print("Cook at Cook Home");
+		log.add(new LoggedEvent("Cook received msgAnimationAtCookHome."));
 		atCookHome.release();
 		stateChanged();
 	}
@@ -149,6 +159,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	@Override
 	public void msgAnimationAtGrill() {
 		print("Cook at Grill");
+		log.add(new LoggedEvent("Cook received msgAnimationAtGrill."));
 		atGrill.release();
 		stateChanged();
 	}
@@ -156,6 +167,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	@Override
 	public void msgAnimationAtPlating() {
 		print("Cook at Plating");
+		log.add(new LoggedEvent("Cook received msgAnimationAtPlating."));
 		atPlating.release();
 		stateChanged();
 	}
@@ -439,6 +451,21 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 	@Override
 	public RestaurantChungRevolvingStand getRevolvingStand() {
 		return orderStand;
+	}
+
+	@Override
+	public List<RestaurantChungOrder> getOrders() {
+		return orders;
+	}
+	
+	@Override
+	public List<Role> getMarketCustomerDeliveryRoles() {
+		return marketCustomerDeliveryRoles;
+	}
+	
+	@Override
+	public List<MyMarketOrder> getMarketOrders() {
+		return marketOrders;
 	}
 	
 //  Setters

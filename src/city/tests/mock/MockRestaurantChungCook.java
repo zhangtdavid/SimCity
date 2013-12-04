@@ -1,24 +1,17 @@
 package city.tests.mock;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.EventLog;
-import utilities.MarketOrder;
-import utilities.MarketTransaction;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
+import city.Role;
 import city.abstracts.MockRole;
 import city.abstracts.RestaurantBuildingInterface.Food;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCashier;
 import city.interfaces.RestaurantChungCook;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
 import city.interfaces.RestaurantChungWaiter;
-import city.roles.RestaurantChungCashierRole.Transaction;
 import city.roles.RestaurantChungCookRole.MyMarketOrder;
 
 /**
@@ -121,6 +114,24 @@ public class MockRestaurantChungCook extends MockRole implements RestaurantChung
 	public void removeMarketOrderFromList(MyMarketOrder order) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public List<RestaurantChungOrder> getOrders() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Role> getMarketCustomerDeliveryRoles() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MyMarketOrder> getMarketOrders() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

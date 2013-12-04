@@ -1,13 +1,15 @@
 package city.tests;
 
-import city.buildings.BankBuilding;
+import java.awt.Color;
+import java.awt.Dimension;
+
+import city.buildings.RestaurantChungBuilding;
 import city.gui.buildings.MarketPanel;
 import city.gui.buildings.RestaurantChungPanel;
+import city.gui.views.CityViewRestaurant;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCashier.TransactionState;
-import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.tests.mock.MockMarket;
 import city.tests.mock.MockPerson;
@@ -28,6 +30,7 @@ import junit.framework.*;
  */
 public class RestaurantChungCookTest extends TestCase {
 	RestaurantChungPanel restaurantChungPanel;
+	CityViewRestaurant restaurantChungCityView;
 	RestaurantChung restaurantChung;
 
 	MarketPanel marketPanel;
@@ -58,7 +61,12 @@ public class RestaurantChungCookTest extends TestCase {
 	 * for your agent and mocks, etc.
 	 */
 	public void setUp() throws Exception{
-		super.setUp();		
+		super.setUp();
+				
+		restaurantChungPanel = new RestaurantChungPanel(Color.blue, new Dimension(500, 500));		
+		restaurantChungCityView = new CityViewRestaurant(400, 250, "RestaurantChung", Color.yellow, restaurantChungPanel); 		
+		restaurantChung = new RestaurantChungBuilding("RestaurantChung", restaurantChungPanel, restaurantChungCityView);
+		
 		cashier = new MockRestaurantChungCashier();
 		cook = new RestaurantChungCookRole(restaurantChung, 0, 12);
 		customer = new MockRestaurantChungCustomer();
@@ -68,8 +76,22 @@ public class RestaurantChungCookTest extends TestCase {
 		market = new MockMarket("Market");
 	}	
 	/**
-	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
+	 * This tests the cook ordering food when low.
 	 */
+	public void testOrderFoodWhenLow() {
+		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
+		assertEquals("Cook should have an empty log. It doesn't", cook.log.size(), 0);
+		assertEquals("Customer should have an empty log. It doesn't", customer.log.size(), 0);
+		assertEquals("Host should have an empty log. It doesn't", host.log.size(), 0);
+		assertEquals("WaiterMC should have an empty log. It doesn't", waiterMC.log.size(), 0);
+		assertEquals("WaiterRS should have an empty log. It doesn't", waiterRS.log.size(), 0);
+		assertEquals("Cook should have 0 orders.", cook.getOrders().size(), 0);
+		assertEquals("Cook should have 0 marketCustomerDeliveryRoles.", cook.getMarketCustomerDeliveryRoles().size(), 0);
+		assertEquals("Cook should have 0 marketOrders.", cook.getMarketOrders().size(), 0);
+
+		cook.msgHereIsAnOrder(waiterMC, "steak", 1);
+	}
+	
 //	public void testOneNormalCustomerScenario()	{
 //		assertEquals("Cook should have an empty log. It doesn't", cook.log.size(), 0);
 //		assertEquals("Customer should have an empty log. It doesn't", customer.log.size(), 0);

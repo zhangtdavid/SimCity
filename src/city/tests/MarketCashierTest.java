@@ -64,7 +64,7 @@ public class MarketCashierTest extends TestCase {
 		CityMap.addBuilding(BUILDING.bank, bank);
 		
 		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
-		market = new MarketBuilding("Market1", marketPanel);
+		market = new MarketBuilding("Market1", marketPanel, null); // TODO Fix
 
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank

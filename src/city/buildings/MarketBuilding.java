@@ -13,6 +13,7 @@ import city.RoleInterface;
 import city.animations.MarketCashierAnimation;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.gui.buildings.MarketPanel;
+import city.gui.views.CityViewBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.Market;
@@ -42,11 +43,13 @@ public class MarketBuilding extends Building implements Market {
 	
 //	Constructor
 //	=====================================================================	
-	public MarketBuilding(String name, MarketPanel panel) {
+	public MarketBuilding(String name, MarketPanel panel, CityViewBuilding cityBuilding) {
 		super(name);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
 		this.panel = panel;
+		this.setCityViewBuilding(cityBuilding);
+		
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
 		inventory.put(FOOD_ITEMS.pizza, 50);

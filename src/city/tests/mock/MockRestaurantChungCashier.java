@@ -1,6 +1,7 @@
 package city.tests.mock;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.abstracts.MockRole;
@@ -23,16 +24,21 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	public EventLog log = new EventLog();
 
 	@Override
-	public void msgComputeBill(RestaurantChungWaiter w,
-			RestaurantChungCustomer c, String order) {
-		// TODO Auto-generated method stub
-		
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgComputeBill from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungCustomer received msgComputeBill from RestaurantChungWaiter");			
 	}
 
 	@Override
 	public void msgHereIsPayment(RestaurantChungCustomer c, int bill) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgHereIsPayment from RestaurantChungCustomer"));		
+		System.out.println("RestaurantChungCustomer received msgHereIsPayment from RestaurantChungCustomer");			
+	}
+
+	@Override
+	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o) {
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgAddMarketOrder from RestaurantChungCook"));		
+		System.out.println("RestaurantChungCustomer received msgAddMarketOrder from RestaurantChungCook");
 	}
 
 	@Override
@@ -40,13 +46,7 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 		// TODO Auto-generated method stub
 		return null;
 	}
-
-	@Override
-	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o) {
-		// TODO Auto-generated method stub
-		
-	}
-
+	
 	@Override
 	public void setRestaurant(RestaurantChung restaurant) {
 		// TODO Auto-generated method stub
