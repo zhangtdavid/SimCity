@@ -17,9 +17,7 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	private int xPos , yPos;//default waiter position
 	private int xDestination, yDestination;//default start position
 
-	public boolean atDestination = true;
-
-	public static final int SIZE = 25;
+	private boolean atDestination = true;
 
 	public BusAnimation(Bus b, Building startingBuilding) {
 		bus = b;
@@ -41,14 +39,8 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		g.setColor(Color.black);
 		g.drawString("Bus", xPos, yPos + 10);
 	}
-
-	public int getXPos() {
-		return xPos;
-	}
-
-	public int getYPos() {
-		return yPos;
-	}
+	
+	// Actions
 
 	@Override
 	public void goToDestination(Building destination) {
@@ -58,15 +50,34 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	}
 
 	@Override
-	public void DoGoToNextStop(BusStop nextStop) {
+	public void doGoToNextStop(BusStop nextStop) {
 		xDestination = Application.CityMap.findClosestRoad(nextStop).getX();
 		yDestination = Application.CityMap.findClosestRoad(nextStop).getY();
 		atDestination = false;
 	}
+	
+	// Getters
+	
+	public int getXPos() {
+		return xPos;
+	}
 
+	public int getYPos() {
+		return yPos;
+	}
+	
+	public Bus getBus() {
+		return bus;
+	}
+	
+	public boolean isAtDestination() {
+		return atDestination;
+	}
+	
+	// Setters
+	
 	public void setXPos(int x) {
 		xPos = x;
-		
 	}
 
 	public void setYPos(int y) {

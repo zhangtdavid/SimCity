@@ -10,6 +10,8 @@ public interface BusStop extends BuildingInterface {
 	public BusStop getNextStop();
 	
 	public List<BusPassenger> getWaitingList();
+	
+	public CityRoad getRoadLocatedOn();
 
 	public void setNextStop(BusStop b);
 

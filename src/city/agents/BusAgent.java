@@ -159,7 +159,7 @@ public class BusAgent extends Agent implements Bus {
 
 	private void driveToNextStop() { // Tells 
 		print("Driving to stop " + nextStop.getName());
-		animation.DoGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		animation.doGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {

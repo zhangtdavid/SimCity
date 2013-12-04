@@ -53,6 +53,11 @@ public class BusStopBuilding extends Building implements BusStop {
 		return nextStop;
 	}
 	
+	@Override
+	public CityRoad getRoadLocatedOn() {
+		return roadLocatedOn;
+	}
+	
 	// Setters
 	
 	@Override

@@ -34,7 +34,7 @@ public class MockAnimatedBus extends MockAnimation implements AnimatedBus {
 	}
 
 	@Override
-	public void DoGoToNextStop(BusStop nextStop) {
+	public void doGoToNextStop(BusStop nextStop) {
 		bus.msgAtDestination();
 	}
 }
