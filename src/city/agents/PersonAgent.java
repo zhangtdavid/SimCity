@@ -67,7 +67,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date lastWentToSleep;
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
-	private Semaphore atDestination = new Semaphore(1, true);
+	private Semaphore atDestination = new Semaphore(0, true);
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
 	private AnimatedPerson animation; // only for cityview
 	private STATE state; 
@@ -393,7 +393,7 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.setAcquired();
 		homeAnimation.verifyFood();  // give animation instructions
 		try{ 
-			atDestination.acquire(); //and freeze
+			//atDestination.acquire(); //and freeze
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to refrigerator");
 			e.printStackTrace();
@@ -404,7 +404,7 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
-			atDestination.acquire(); //and freeze
+			//atDestination.acquire(); //and freeze
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to stove/table");
 			e.printStackTrace();
