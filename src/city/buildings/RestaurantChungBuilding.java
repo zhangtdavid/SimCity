@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utilities.RestaurantChungRevolvingStand;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
@@ -14,6 +16,7 @@ import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.gui.buildings.RestaurantChungPanel;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.RestaurantChung;
 import city.interfaces.RestaurantChungCashier;
@@ -53,7 +56,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		this.panel = panel;
 		orderStand = new RestaurantChungRevolvingStand();
 		this.setCityViewBuilding(cityBuilding);
-		bankCustomer = (new BankCustomerRole(this));
+		bankCustomer = (new BankCustomerRole(this, (Bank) CityMap.findRandomBuilding(BUILDING.bank))); // Shirley did this temp. to get rid of error
 		
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));

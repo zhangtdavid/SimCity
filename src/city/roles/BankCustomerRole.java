@@ -28,12 +28,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	// Constructor
 	
-	public BankCustomerRole(Building bus, BankBuilding b) {
+	public BankCustomerRole(Building bus, Bank b) {
 		building = b;
 		business = bus;
 	}
 	
-	public BankCustomerRole(BankBuilding b) {
+	public BankCustomerRole(Bank b) {
 		building = b;
 	}
 	

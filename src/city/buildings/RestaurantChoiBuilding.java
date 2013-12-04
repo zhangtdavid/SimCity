@@ -10,6 +10,8 @@ import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.RoleInterface;
@@ -60,7 +62,7 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole(this);
+		bankConnection = new BankCustomerRole(this, (Bank) CityMap.findRandomBuilding(BUILDING.bank)); // Shirley did this temp. to get rid of error
 		this.setCityViewBuilding(cityBuilding);
 		//this.setCashOnSite(cash_on_site);	
 		//set up tables
