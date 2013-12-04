@@ -27,17 +27,14 @@ public class MarketCashierRole extends Role implements MarketCashier {
 
 //  Data
 //	=====================================================================	
+	public EventLog log = new EventLog();
+
 	private MarketBuilding market;
 	private WorkingState workingState = WorkingState.Working;
-	// private MarketAnimatedCashier marketCashierGui; // TODO schung 99c0f4da25
 	
-	// TODO Change these to private and add getters/setters
-	public EventLog log = new EventLog();
-	public BankCustomer bankCustomer;
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public enum TransactionState {Pending, Calculating, ReceivedPayment, PendingDelivery, Delivering};
-	public List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
+	private BankCustomer bankCustomer;
+	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
+	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
 	
 
 //	Constructor
@@ -49,6 +46,19 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.getWorkerSalary());
 		bankCustomer = b.bankCustomer;
+	}
+
+//	Activity
+//	=====================================================================
+//	// TODO schung 99c0f4da25
+//	public void setActive() {
+//		super.setActivityBegun();
+//		super.setActive();
+//	}
+	
+	@Override
+	public void setInactive(){
+		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
@@ -238,28 +248,33 @@ public class MarketCashierRole extends Role implements MarketCashier {
 		dt.deliveryPerson.msgDeliverOrder(t.customerDelivery, t.collectedItems, t.orderId);
 	}
 	
-//  Getters and Setters
+//  Getters
 //	=====================================================================
-
 	@Override
 	public Market getMarket() {
 		return market;
 	}
 	
 	@Override
-	public void setMarket(MarketBuilding market) {
-		this.market = market;
+	public BankCustomer getBankCustomer() {
+		return bankCustomer;
+	}
+
+	@Override
+	public List<Transaction> getTransactions() {
+		return transactions;
 	}
 	
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
+	@Override	
+	public List<MyDeliveryPerson> getDeliveryPeople() {
+		return deliveryPeople;
+	}
 	
+//  Setters
+//	=====================================================================	
 	@Override
-	public void setInactive(){
-		workingState = WorkingState.GoingOffShift;
+	public void setMarket(MarketBuilding market) {
+		this.market = market;
 	}
 		
 //  Utilities
