@@ -6,9 +6,11 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketTransaction;
+import city.Application.BANK_SERVICE;
+import city.Application.TRANSACTION_TYPE;
 import city.Role;
+import city.RoleInterface;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.buildings.RestaurantTimmsBuilding.Check.State;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -27,9 +29,9 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	private int moneyCollected;
 	private int moneyOwed;
 	private boolean shiftOver;
-	private RestaurantTimmsBuilding rtb; 
+	private RestaurantTimms rtb; 
 	
-	private List<Role> roles = new ArrayList<Role>(); // For market orders
+	private List<RoleInterface> roles = new ArrayList<RoleInterface>(); // For market orders and banking
 	
 	private MarketCustomerDeliveryPayment marketPaymentRole;
 	private List<MarketTransaction> marketTransactions;
@@ -43,7 +45,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsCashierRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
+	public RestaurantTimmsCashierRole(RestaurantTimms b, int shiftStart, int shiftEnd){
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);
@@ -113,7 +115,7 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 		// Primary Scheduler /
 		//-------------------/
 		
-		if (shiftOver && !rtb.getCashier().equals(this)) {
+		if (shiftOver && !rtb.getCashier().equals(this) && !rtb.getBankCustomer().getActive()) {
 			print("Leaving shift.");
 			super.setInactive();
 			return false;
@@ -129,13 +131,21 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 				return true;
 			}
 		}
+		
+		if (rtb.getCash() > RestaurantTimmsCashier.MAX_CAPITAL) {
+			int amount = (rtb.getCash() - RestaurantTimmsCashier.MAX_CAPITAL + RestaurantTimmsCashier.MIN_CAPITAL);
+			rtb.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, amount, TRANSACTION_TYPE.business);
+		} else if (rtb.getCash() < RestaurantTimmsCashier.MIN_CAPITAL) {
+			int amount = RestaurantTimmsCashier.MIN_CAPITAL;
+			rtb.getBankCustomer().setActive(BANK_SERVICE.deposit, amount, TRANSACTION_TYPE.business);
+		}
 
-		//------------------------------------/
-		// Role Scheduler (for market orders) /
-		//------------------------------------/
+		//------------------------------------------------/
+		// Role Scheduler (for market orders and banking) /
+		//------------------------------------------------/
 		
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+		for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
 			blocking  = true;
 			boolean activity = r.runScheduler();
 			if (!activity) {
@@ -211,6 +221,11 @@ public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsC
 	@Override
 	public void setActive() {
 		rtb.setCashier(this);
+		this.roles.add(rtb.getBankCustomer());
+		if (rtb.getBankCustomer().getActive()) {
+			// The bank customer should not be in the middle of a transaction when the cashier switches
+			throw new IllegalStateException();
+		}
 		this.getAnimation(RestaurantTimmsAnimatedCashier.class).setVisible(true);
 		shiftOver = false;
 		super.setActive();

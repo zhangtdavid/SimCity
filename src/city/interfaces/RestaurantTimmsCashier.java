@@ -4,6 +4,11 @@ import city.RoleInterface;
 
 public interface RestaurantTimmsCashier extends RoleInterface {
 	
+	// Data
+	
+	public static final int MIN_CAPITAL = 500;
+	public static final int MAX_CAPITAL = 2000;
+	
 	// Messages
 	
 	public void msgComputeCheck(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int money);

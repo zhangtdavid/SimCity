@@ -18,6 +18,7 @@ import city.animations.RestaurantTimmsWaiterAnimation;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
 import city.gui.buildings.RestaurantTimmsPanel;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.BankCustomer;
 import city.interfaces.RestaurantTimms;
 import city.interfaces.RestaurantTimmsCashier;
 import city.interfaces.RestaurantTimmsCook;
@@ -49,6 +50,7 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	private static final int MENU_PRICE_MAX = 12;
 	
 	private int waiterRoundRobinIndex = 0;
+	private BankCustomer bankCustomer = null;
 	
 	// Constructor
 	
@@ -89,6 +91,11 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	@Override
 	public RestaurantTimmsCook getCook() {
 		return cook;
+	}
+	
+	@Override
+	public BankCustomer getBankCustomer() {
+		return bankCustomer;
 	}
 	
 	/**
@@ -192,6 +199,11 @@ public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements R
 	@Override
 	public void setHost(RestaurantTimmsHost h) {
 		this.host = h;
+	}
+	
+	@Override 
+	public void setBankCustomer(BankCustomer b) {
+		this.bankCustomer = b;
 	}
 	
 	//===========//

@@ -29,12 +29,14 @@ public interface RestaurantTimms extends RestaurantBuildingInterface {
 	public List<MenuItem> getMenuItems();
 	public List<Check> getChecks();
 	public List<Order> getOrders();
+	public BankCustomer getBankCustomer();
 
 	// Setters
 	
 	public void setCashier(RestaurantTimmsCashier c);
 	public void setCook(RestaurantTimmsCook c);
 	public void setHost(RestaurantTimmsHost h);
+	public void setBankCustomer(BankCustomer b);
 	
 	// Utilities
 	

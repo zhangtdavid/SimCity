@@ -4,8 +4,12 @@ import junit.framework.TestCase;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.gui.views.CityViewRestaurant;
+import city.interfaces.RestaurantTimmsCashier;
 import city.roles.RestaurantTimmsCashierRole;
+import city.tests.animations.mock.MockRestaurantTimmsAnimatedCashier;
+import city.tests.mock.MockBankCustomer;
 import city.tests.mock.MockPerson;
+import city.tests.mock.MockRestaurantTimmsCashier;
 import city.tests.mock.MockRestaurantTimmsCustomer;
 import city.tests.mock.MockRestaurantTimmsWaiter;
 
@@ -13,23 +17,33 @@ public class RestaurantTimmsCashierTest extends TestCase {
 
 	MockRestaurantTimmsCustomer customer;
 	MockRestaurantTimmsWaiter waiter;
+	MockRestaurantTimmsCashier cashier2;
+	MockBankCustomer bankCustomer;
 	
 	RestaurantTimmsBuilding rtb;
 	
 	MockPerson cashierPerson;
 	RestaurantTimmsCashierRole cashier;
+	MockRestaurantTimmsAnimatedCashier cashierAnimation;
 
 	public void setUp() throws Exception {
 		super.setUp();
 		
 		customer = new MockRestaurantTimmsCustomer();
 		waiter = new MockRestaurantTimmsWaiter();
+		cashier2 = new MockRestaurantTimmsCashier();
+		bankCustomer = new MockBankCustomer();
 
 		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
+		rtb.setCash(RestaurantTimmsCashier.MIN_CAPITAL);
+		rtb.setBankCustomer(bankCustomer);
 		
 		cashierPerson = new MockPerson("Cashier");
 		cashier = new RestaurantTimmsCashierRole(rtb, 0, 23);
+		cashierAnimation = new MockRestaurantTimmsAnimatedCashier();
 		cashier.setPerson(cashierPerson);
+		cashier.setAnimation(cashierAnimation);
+		rtb.setCashier(cashier);
 	}
 	
 	public void testExactCustomerPayment() {
@@ -37,6 +51,8 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		
 		boolean outcome;
 		
+		// More setup
+		rtb.setCash(RestaurantTimmsCashier.MIN_CAPITAL);
 		int beginningMoney = cashier.getWorkplace(RestaurantTimmsBuilding.class).getCash(); 
 		
 		// Preconditions
@@ -184,7 +200,48 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		assertFalse("Cashier's scheduler should return false.", cashier.runScheduler());
 	}
 	
-	public void testMarketPayment() {
+	public void testCashierLeaving() {
+		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		boolean outcome;
+		
+		// More set-up
+		cashier.setActive();
+		
+		// Preconditions
+		assertTrue("Cashier should be active", cashier.getActive());
+		assertEquals("Building should have this cashier", cashier, rtb.getCashier());
+		
+		// Run Scheduler
+		// - Allow marketCustomerDeliveryPaymentRole to become inactive (it's never had anything to do)
+		// - Gratuitous run to test the scheduler returns false
+		outcome = cashier.runScheduler();
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
+		assertTrue("Cashier should be active", cashier.getActive());
+		
+		cashier.setInactive();
+	
+		// Run Scheduler
+		// - Allow cashier to make a decision
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
+		assertTrue("Cashier should still be active.", cashier.getActive());
+		
+		rtb.getBankCustomer().setInactive();
+		rtb.setCashier(cashier2);
+		
+		// Run Scheduler
+		// - Allow cashier to make a decision
+		outcome = cashier.runScheduler();
+		
+		assertFalse("Cashier's scheduler should return false.", outcome);
+		assertFalse("Cashier should not be active.", cashier.getActive());
+	}
+	
+	public void testBankDeposit() {
 		assertTrue("Placeholder", true);
 	}
 	
