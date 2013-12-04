@@ -1,6 +1,5 @@
 package utilities;
 
-import city.buildings.MarketBuilding;
 import city.interfaces.Market;
 
 /** 
@@ -22,7 +21,6 @@ public class MarketTransaction {
 		s = MarketTransactionState.Pending;
 	}
 	
-	public enum MarketTransactionState
-	{Pending, Processing, WaitingForConfirmation};
+	public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
 }
 
