@@ -11,6 +11,7 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
+import city.gui.buildings.BankPanel;
 import city.gui.buildings.MarketPanel;
 import city.interfaces.Bank;
 import city.interfaces.Market;
@@ -29,6 +30,7 @@ public class MarketCashierTest extends TestCase {
 	MarketPanel marketPanel;
 	Market market;
 	
+	BankPanel bankPanel;
 	Bank bank;
 	
 	MockPerson cashierPerson;
@@ -60,10 +62,10 @@ public class MarketCashierTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		bank = new BankBuilding("Bank");
+		bank = new BankBuilding("Bank", bankPanel, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
-		
-		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
+	
+		marketPanel = new MarketPanel(Color.blue);
 		market = new MarketBuilding("Market1", marketPanel, null); // TODO Fix
 
 		cashierPerson = new MockPerson("Cashier"); 

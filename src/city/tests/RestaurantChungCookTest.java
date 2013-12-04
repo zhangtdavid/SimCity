@@ -1,11 +1,17 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
+import city.Application.BUILDING;
+import city.Application.CityMap;
+import city.buildings.BankBuilding;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
+import city.gui.buildings.BankPanel;
 import city.gui.buildings.MarketPanel;
 import city.gui.buildings.RestaurantChungPanel;
+import city.gui.views.CityViewBank;
+import city.gui.views.CityViewMarket;
 import city.gui.views.CityViewRestaurant;
 import city.interfaces.Bank;
 import city.interfaces.Market;
@@ -34,8 +40,11 @@ public class RestaurantChungCookTest extends TestCase {
 	RestaurantChung restaurantChung;
 
 	MarketPanel marketPanel;
+	CityViewMarket marketCityView;
 	Market market;
 	
+	BankPanel bankPanel;
+	CityViewBank bankCityView;
 	Bank bank;
 	
 	MockPerson cashierPerson;
@@ -63,10 +72,21 @@ public class RestaurantChungCookTest extends TestCase {
 	public void setUp() throws Exception{
 		super.setUp();
 				
-		restaurantChungPanel = new RestaurantChungPanel(Color.blue, new Dimension(500, 500));		
-		restaurantChungCityView = new CityViewRestaurant(400, 250, "RestaurantChung", Color.yellow, restaurantChungPanel); 		
+		restaurantChungPanel = new RestaurantChungPanel(Color.blue);		
+		restaurantChungCityView = new CityViewRestaurant(0, 0, "Restaurant Chung", Color.blue, restaurantChungPanel); 		
 		restaurantChung = new RestaurantChungBuilding("RestaurantChung", restaurantChungPanel, restaurantChungCityView);
+		CityMap.addBuilding(BUILDING.restaurant, restaurantChung);
 		
+		marketPanel = new MarketPanel(Color.blue);
+		marketCityView = new CityViewMarket(0, 0, "Market", Color.blue, marketPanel);
+		market = new MarketBuilding("Market", marketPanel, marketCityView);
+		CityMap.addBuilding(BUILDING.market, market);
+		
+		bankPanel = new BankPanel(Color.blue);
+		bankCityView = new CityViewBank(0, 0, "Bank", Color.blue, bankPanel);
+		bank = new BankBuilding("Bank", bankPanel, bankCityView);		
+		CityMap.addBuilding(BUILDING.bank, bank);
+
 		cashier = new MockRestaurantChungCashier();
 		cook = new RestaurantChungCookRole(restaurantChung, 0, 12);
 		customer = new MockRestaurantChungCustomer();

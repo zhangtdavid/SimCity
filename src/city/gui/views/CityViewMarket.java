@@ -5,13 +5,7 @@ import java.awt.Rectangle;
 
 import city.gui.BuildingCard;
 
-public class CityViewMarket extends CityViewBuilding{
-
-	public CityViewMarket(int x, int y) {
-		super(x, y, Color.BLUE, "Market 1");
-		setRectangle(new Rectangle(x, y, 20, 20));
-	}
-	
+public class CityViewMarket extends CityViewBuilding{	
 	public CityViewMarket(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 20, 20));
