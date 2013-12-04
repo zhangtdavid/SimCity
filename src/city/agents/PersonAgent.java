@@ -67,7 +67,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date lastWentToSleep;
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
-	private Semaphore atDestination = new Semaphore(0, true);
+	private Semaphore atDestination = new Semaphore(1, true);
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
 	private AnimatedPerson animation; // only for cityview
 	private STATE state; 
@@ -229,7 +229,6 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == STATE.atCooking) {
-			atDestination.acquire();
 			state = pickDailyTask();
 			performDailyTaskAction();
 			return true;
@@ -391,8 +390,26 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		this.hasEaten = true;
+		homeAnimation.setAcquired();
+		homeAnimation.verifyFood();  // give animation instructions
+		try{ 
+			atDestination.acquire(); //and freeze
+		}catch(Exception e){
+			print("Something bad happened while trying to acquire while going to refrigerator");
+			e.printStackTrace();
+		}
+		homeAnimation.setCoords(homeAnimation.getDestination()[0], homeAnimation.getDestination()[1]);
+		
+		//BTW function was intentionally designed to combine these 3 steps into one action.
+		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
+		try{ 
+			atDestination.acquire(); //and freeze
+		}catch(Exception e){
+			print("Something bad happened while trying to acquire while going to stove/table");
+			e.printStackTrace();
+		}
+		this.hasEaten = true;
 		// The scheduler will pick up the atDestination and continue the program
 	}
 	
@@ -574,6 +591,21 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	// Utilities //
 	//===========//
+	
+	@Override
+	public void acquireSemaphoreFromAnimation(){
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			System.out.println("Could not acquire atDestination: ");
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void releaseSemaphoreFromAnimation(){
+		atDestination.release();
+	}
 	
 	@Override
 	public void addRole(RoleInterface r) {

@@ -2,6 +2,8 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import city.Animation;
 import city.animations.interfaces.AnimatedPerson;
@@ -12,10 +14,18 @@ import city.interfaces.Person;
 public class HouseResidentAnimation extends Animation implements AnimatedPersonAtHome{
 	
 	//Data
+	
+	/**
+	 * this is to bypass timer events in testing. Don't EVER use this in real application
+	 */
+	public boolean beingTested = false;
+	
 	private int xDestination, yDestination;
 	private Person person = null;
 	private String orderIcon = "";
 	private Command command = Command.noCommand;
+	private boolean personSemaphoreIsAcquired;
+	public Timer timer = new Timer(); // set public for testing (can set timer events as activated)
 	
 	//Constructor
 	public HouseResidentAnimation(Person p){
@@ -40,17 +50,44 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 			yPos--;
 
 		// MSG back to Person
-		if (xPos == xDestination && yPos == yDestination) {
+		//the boolean exists so we don't release the semaphore more than once, ever.
+		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired) {
 			if (command == Command.ToDoor) { // rDoor: leave
 				//TODO msg person to decide his next action... or just do nothing if this has already been done
 			} else if (command == Command.ToBed) { // rBed: sleep
 				//TODO msg person to go to sleep for x hours
 			} else if (command == Command.ToRef) { // rRef: look for food
-				//TODO msg person to check inventory of foods / randomly pick a food item to eat
+				person.releaseSemaphoreFromAnimation();
+				person.print("Semaphore released, at refrigerator"); //test
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
-				//TODO msg person to cook food (timer event just like in CookAgent)
+				System.out.println("Semaphore NOT released; at stove; cooking now (timer)");
+				command = Command.StationaryAtStove;
+				if(!beingTested){ // in practical conditions
+				timer.schedule(new TimerTask() {
+					public void run() {
+						command = Command.ToTable;
+						person.print("Done cooking");
+					}
+				}, 3000);
+				}else{ // if you're in a test, skip the timer.
+					command = Command.ToTable;
+					person.print("Skipped timer; done cooking");
+				}
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
-				//TODO msg person to eat food (timer event just like in CustomerAgent)
+				command = Command.StationaryAtTable;
+				if(!beingTested){ // in practical conditions
+				timer.schedule(new TimerTask() {
+					public void run() {
+						command = Command.noCommand; // animation doesn't know what to do now... back to Person
+						person.print("Done eating");
+					}
+				}, 4000);
+				}else{ // if you're in a test, skip the timer.
+					command = Command.ToTable;
+					person.print("Skipped timer; done eating");
+				}
+				person.releaseSemaphoreFromAnimation();
+				person.print("Semaphore released, at table, eating now (timer)");
 			}
 		}
 	}
@@ -67,7 +104,7 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 	} 
 
 	
-	//Msg (from agent)
+	//Movement
 	
 	@Override
 	public void goOutside(){
@@ -89,14 +126,22 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		command = Command.ToRef;
 		xDestination = HousePanel.HRX;
 		yDestination = HousePanel.HRY;
+		System.out.println("To refrigerator"); // test
 	}
 	
 
 	@Override
 	public void cookAndEatFood() {
-		command = Command.ToStove;
-		xDestination = HousePanel.HSX;
-		xDestination = HousePanel.HSY;
+		if(command == Command.ToTable){ // get to this point after you call CookAndEatFood the first time, self-message
+			xDestination = HousePanel.HTX;
+			xDestination = HousePanel.HTY;
+			System.out.println("To table"); // test
+		}else{
+			command = Command.ToStove;
+			xDestination = HousePanel.HSX;
+			xDestination = HousePanel.HSY;
+			System.out.println("To stove"); // test
+		}
 	}
 
 	@Override
@@ -114,4 +159,26 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[0];
 		xDestination = AnimatedPerson.RES_KITCHEN_TABLE[1];
 	}*/
+	
+	
+	//Getters (for testing)
+	public String getCommand(){
+		return command.toString();
+	}
+	
+	@Override
+	public int[] getDestination() {
+		return new int[]{xDestination, yDestination};
+	}
+	
+	//Setters (for testing)
+	@Override
+	public void setCoords(int x, int y){
+		xPos = x;
+		yPos = y;
+	}
+	@Override
+	public void setAcquired(){
+		personSemaphoreIsAcquired = true;
+	}
 }

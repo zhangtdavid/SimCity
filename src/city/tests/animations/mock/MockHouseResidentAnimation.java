@@ -68,4 +68,22 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 		
 	}
 
+	@Override
+	public void setAcquired() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int[] getDestination() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCoords(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

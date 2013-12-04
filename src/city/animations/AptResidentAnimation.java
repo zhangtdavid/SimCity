@@ -8,8 +8,10 @@ import city.interfaces.Person;
 
 public class AptResidentAnimation extends Animation implements AnimatedPersonAtHome{
 	//Data
+	boolean currentlyAcquired;
 	Person person = null;
 	Command command = Command.noCommand;
+	int xDestination, yDestination;
 	
 	//Constructor
 	public AptResidentAnimation(Person p){
@@ -59,5 +61,21 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setAcquired() {
+		currentlyAcquired = true;		
+	}
+
+	@Override
+	public int[] getDestination() {
+		return new int[]{xDestination, yDestination};
+	}
+
+	@Override
+	public void setCoords(int x, int y) {
+		xPos = x;
+		yPos = y;
 	}
 }

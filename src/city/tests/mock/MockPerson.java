@@ -240,4 +240,16 @@ public class MockPerson extends MockAgent implements Person {
 		return null;
 	}
 
+	@Override
+	public void acquireSemaphoreFromAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void releaseSemaphoreFromAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

@@ -2,7 +2,7 @@ package city.animations.interfaces;
 
 public interface AnimatedPersonAtHome {
 	// Data
-	public static enum Command {noCommand, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance}; // r=residence; w=walking
+	public static enum Command {noCommand, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable}; // r=residence; w=walking
 	public static enum OrderIcon {Steak, Chicken, Pizza, Salad}; // could use strings or something on Person's side instead
     public static final int WIDTH = 20; // Person is a 20x20 rect, standard.
 
@@ -42,10 +42,18 @@ public interface AnimatedPersonAtHome {
 	 * Moves the person to the door so he can go outside (and leave the house)
 	 */
 	public abstract void goOutside(); // to person's door
+
+
 	
     // Getters
-    
+    public int[] getDestination();
     // Setters
+	/**
+	 * Notifies the animation that it's OK to release the semaphore one time after animation is complete.
+	 */
+	public void setAcquired();
+	
+	public void setCoords(int x, int y);
     
     // Utilities
 

@@ -6,32 +6,43 @@ import java.util.HashMap;
 import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.animations.HouseResidentAnimation;
 import city.buildings.BankBuilding;
+import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.gui.buildings.HousePanel;
 import city.gui.views.CityViewBuilding;
+import city.gui.views.CityViewHouse;
 import city.interfaces.Person;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
 import city.tests.animations.mock.MockAnimatedPerson;
 import city.tests.mock.MockBank;
+import city.tests.mock.MockBus;
+import city.tests.mock.MockBusStop;
 import city.tests.mock.MockCityViewBuilding;
 
 public class HouseAnimationTest extends TestCase {
 	
 	// Needed things
 	private Date date;
-	private CityViewBuilding houseCityViewBuilding; // does nothing, no gui really pops out...
+	private CityViewHouse houseCityViewBuilding; // does nothing, no gui really pops out...
 	private HousePanel hp; // does nothing, no gui really pops out...
 	private MockAnimatedPerson animation;
 	private LandlordRole landlord;
 	private ResidentRole resident;
 	private BankBuilding bank;	
 	private CityViewBuilding bankCityViewBuilding;
-
+	private CityViewBuilding busstopCityViewBuilding;
+	private CityViewBuilding busstopCityViewBuilding2;
+	private MockBusStop busstop;
+	private MockBusStop busstop2;
+	private MockBus bus;
+	
+	
 	// Being tested
 	private PersonAgent person;
 	private HouseResidentAnimation homeAnimation;
@@ -46,11 +57,13 @@ public class HouseAnimationTest extends TestCase {
 		date = new Date(0);
 		//you need this to make a person...
 		bankCityViewBuilding =  new MockCityViewBuilding();
+		busstopCityViewBuilding = new MockCityViewBuilding();
+		busstopCityViewBuilding2 = new MockCityViewBuilding();
 		bank = new BankBuilding("MockBank");
+		busstop = new MockBusStop("busstop");
+		busstop2 = new MockBusStop("busstop2");
 		
-		//what's this for? :x
 		Application.CityMap.clearMap();
-		Application.CityMap.restaurantNumber = 0; // TODO remove, part of David's debugging code
 		
 		//needed things
 		resident = new ResidentRole(date);
@@ -58,13 +71,25 @@ public class HouseAnimationTest extends TestCase {
 		resident.setPerson(person);
 		landlord.setPerson(person);
 		bank.setCityViewBuilding(bankCityViewBuilding);
+		busstop.setCityViewBuilding(busstopCityViewBuilding);
+		busstop2.setCityViewBuilding(busstopCityViewBuilding2);
+		busstopCityViewBuilding.x = 40;
+		busstopCityViewBuilding.y = 40;
+		busstopCityViewBuilding2.x = 80;
+		busstopCityViewBuilding2.y = 80;
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop);
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop2);
 		Application.CityMap.addBuilding(BUILDING.bank, bank);
 		
+		bus = new MockBus("MockBus");
+		
 		//sort of relevant things
+		houseCityViewBuilding = new CityViewHouse(10, 10);
 		person = new PersonAgent("MovingPerson", date);
 		person.setCash(0); // so he doesn't go to market or restaurant
 		animation = new MockAnimatedPerson();
 		homeAnimation = new HouseResidentAnimation(person);
+		homeAnimation.beingTested = true; // turn off timers
 		person.addRole(resident);
 		person.setAnimation(animation);
 		person.setHomeAnimation(homeAnimation);
@@ -74,6 +99,7 @@ public class HouseAnimationTest extends TestCase {
 		//And the house, which is the real deal.
 		house = new HouseBuilding("House", landlord, hp, houseCityViewBuilding);
 		Application.CityMap.addBuilding(BUILDING.house,house);
+		house.setCityViewBuilding(houseCityViewBuilding);
 		person.setHome(house);
 		HashMap<FOOD_ITEMS, Integer> foods = new HashMap<FOOD_ITEMS, Integer>();
 		foods.put(FOOD_ITEMS.chicken, 5); // put one chicken in the refrigerator to eat.
@@ -105,11 +131,17 @@ public class HouseAnimationTest extends TestCase {
 		
 		boolean outcome;
 		outcome = person.runScheduler();
-		
 		// Person should be doing a daily task (going home to cook)
-		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to cook", Person.STATE.goingToCook, person.getState());
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true);
+		person.getBusPassengerRole().setInactive(); // HAS ARRIVED AT HOME
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
+		assertEquals("Person's homeAnimation should have state noCommand", homeAnimation.getCommand(), "noCommand");
 		
+		assertEquals("Scheduler should still be true", person.runScheduler(), true);
+		System.out.println(person.getState().toString());
+		System.out.println(homeAnimation.getCommand());
+
+		//Now check for go-to-bed from house animation logic
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
 		person.setDate(date);
 		//now, get him home
