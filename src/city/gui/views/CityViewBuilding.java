@@ -25,8 +25,9 @@ public abstract class CityViewBuilding {
 	// Constructors
 	
 	public CityViewBuilding() {
-		setX(0);
+		x = 0;
 		y = 0;
+		rectangle = new Rectangle(0, 0, 0, 0);
 		color = Color.black;
 		ID = "";
 		isActive = true;
