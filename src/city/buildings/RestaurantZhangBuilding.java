@@ -7,28 +7,27 @@ import java.util.Vector;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.Application.FOOD_ITEMS;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
-import city.gui.buildings.RestaurantZhangPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.RestaurantZhang;
-import city.interfaces.RestaurantZhangCashier;
-import city.interfaces.RestaurantZhangCook;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.RestaurantZhang;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangCustomerRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
+import city.roles.interfaces.RestaurantZhangCashier;
+import city.roles.interfaces.RestaurantZhangCook;
+import city.roles.interfaces.RestaurantZhangCustomer;
+import city.roles.interfaces.RestaurantZhangHost;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
-public class RestaurantZhangBuilding extends RestaurantBuildingBase implements RestaurantZhang {
+public class RestaurantZhangBuilding extends RestaurantBuilding implements RestaurantZhang {
 	
 	// Data
 	
@@ -67,9 +66,9 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
-        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
-        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak")));
+    	//foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
+        //foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
+        //foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak"))); //TODO david? this doesn't work anymore (error)
 	}
 	
 	// Utilities
@@ -130,7 +129,7 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
-			c.setMenuTimes(menu, foods);
+			c.setMenuTimes(menu, getFoods());
 //			c.addMarket(new MarketBuilding("Market"));
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);

@@ -2,11 +2,11 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.BuildingInterface;
-import city.Role;
-import city.interfaces.Bus;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
+import city.agents.interfaces.Bus;
+import city.bases.Role;
+import city.bases.interfaces.BuildingInterface;
+import city.buildings.interfaces.BusStop;
+import city.roles.interfaces.BusPassenger;
 
 public class BusPassengerRole extends Role implements BusPassenger {
 	

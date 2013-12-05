@@ -7,21 +7,21 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
-import city.RoleInterface;
 import city.agents.PersonAgent;
-import city.interfaces.Person;
-import city.interfaces.Person.STATES;
-import city.tests.animations.mock.MockAnimatedPerson;
-import city.tests.mock.MockBank;
-import city.tests.mock.MockBus;
-import city.tests.mock.MockBusStop;
-import city.tests.mock.MockCar;
-import city.tests.mock.MockCityViewBuilding;
-import city.tests.mock.MockHouse;
-import city.tests.mock.MockMarket;
-import city.tests.mock.MockOccupation;
-import city.tests.mock.MockRestaurant;
-import city.tests.mock.MockWorkplace;
+import city.agents.interfaces.Person;
+import city.agents.interfaces.Person.STATES;
+import city.bases.interfaces.RoleInterface;
+import city.tests.animations.mocks.MockAnimatedPerson;
+import city.tests.mocks.MockBank;
+import city.tests.mocks.MockBus;
+import city.tests.mocks.MockBusStop;
+import city.tests.mocks.MockCar;
+import city.tests.mocks.MockCityViewBuilding;
+import city.tests.mocks.MockGenericJob;
+import city.tests.mocks.MockHouse;
+import city.tests.mocks.MockMarket;
+import city.tests.mocks.MockRestaurant;
+import city.tests.mocks.MockWorkplace;
 
 public class PersonTest extends TestCase {
 
@@ -43,7 +43,7 @@ public class PersonTest extends TestCase {
 	private PersonAgent person;
 	private MockAnimatedPerson animation;
 	private MockWorkplace workplace;
-	private MockOccupation occupation;
+	private MockGenericJob occupation;
 	private MockHouse house;
 	private MockCar car;
 	private MockBus bus;
@@ -102,7 +102,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 0, 12);
+		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);
@@ -330,7 +330,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 12, 0);
+		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);
@@ -451,7 +451,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 12, 0);
+		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);
@@ -640,7 +640,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 0, 12);
+		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);
@@ -665,7 +665,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 0, 12);
+		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCash(0);
@@ -733,7 +733,7 @@ public class PersonTest extends TestCase {
 		boolean outcome;
 		
 		// Further setup
-		occupation = new MockOccupation(workplace, 12, 0);
+		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
 		person.setHome(house);
 		person.setCar(car);

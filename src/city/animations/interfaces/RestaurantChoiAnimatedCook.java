@@ -1,7 +1,7 @@
 package city.animations.interfaces;
 
-import city.AnimationInterface;
 import city.Application.FOOD_ITEMS;
+import city.bases.interfaces.AnimationInterface;
 
 public interface RestaurantChoiAnimatedCook extends AnimationInterface {
 
@@ -14,8 +14,8 @@ public interface RestaurantChoiAnimatedCook extends AnimationInterface {
 	static final int CGX = 200; // grills (cook2)
 	static final int CGY = 0;
 	static final int WIDTH = 20;
-	static final int restingCoordX = 200;//default cook position
-	static final int restingCoordY = 50;
+	static final int RESTX = 200;//default cook position
+	static final int RESTY = 50;
 	// Constructor
 
 	// Abstract

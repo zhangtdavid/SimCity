@@ -12,24 +12,25 @@ import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
+import city.bases.JobRole;
+import city.bases.Role;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.InternalMarketOrder;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
 import city.buildings.RestaurantTimmsBuilding.Order;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCook;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantTimmsCook;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant cook agent.
  */
-public class RestaurantTimmsCookRole extends Role implements RestaurantTimmsCook {
+public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsCook {
 	
 	// Data
 	

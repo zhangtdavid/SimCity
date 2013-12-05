@@ -2,13 +2,14 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Rectangle;
 
-import city.Animation;
 import city.Application;
-import city.BuildingInterface;
+import city.agents.interfaces.Car;
 import city.animations.interfaces.AnimatedCar;
+import city.bases.Animation;
+import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
-import city.interfaces.Car;
 
 public class CarAnimation extends Animation implements AnimatedCar {
 	
@@ -23,6 +24,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	private BuildingInterface destinationBuilding = null;
 	private CityRoad startingRoad = null;
 	private CityRoad endRoad = null;
+	private Rectangle rectangle;
 	
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = true;
@@ -31,6 +33,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		car = c;
 		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
 		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
+		rectangle = new Rectangle(xPos, yPos, SIZE, SIZE);
 		currentBuilding = startingBuilding;
 	}
 	
@@ -77,6 +80,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		g.setColor(Color.PINK);
 		g.fillRect(xPos, yPos, SIZE, SIZE);
 		g.setColor(Color.red);
+		rectangle.setLocation(xPos, yPos);
 		if(car != null)
 			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
 	}
@@ -107,18 +111,27 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		return yPos;
 	}
 	
+	@Override
+	public Car getCar() {
+		return car;
+	}
+	
+	@Override
 	public BuildingInterface getDestinationBuilding() {
 		return destinationBuilding;
 	}
 	
+	@Override
 	public CityRoad getEndRoad() {
 		return endRoad;
 	}
 	
+	@Override
 	public boolean getAtDestinationRoad() {
 		return atDestinationRoad;
 	}
 	
+	@Override
 	public CityRoad getStartingRoad() {
 		return startingRoad;
 	}
@@ -135,19 +148,30 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		yPos = y;
 	}
 
+	@Override
 	public void setDestinationBuilding(BuildingInterface destinationBuilding) {
 		this.destinationBuilding = destinationBuilding;
 	}
 
+	@Override
 	public void setEndRoad(CityRoad endRoad) {
 		this.endRoad = endRoad;
 	}
 
+	@Override
 	public void setAtDestinationRoad(boolean atDestinationRoad) {
 		this.atDestinationRoad = atDestinationRoad;
 	}
 
+	@Override
 	public void setStartingRoad(CityRoad startingRoad) {
 		this.startingRoad = startingRoad;
+	}
+	
+	// Utilities
+	
+	@Override
+	public boolean contains(int x, int y) {
+		return rectangle.contains(x, y);
 	}
 }

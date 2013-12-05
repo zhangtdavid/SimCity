@@ -5,15 +5,14 @@ import java.awt.Graphics2D;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Animation;
 import city.Application;
-import city.BuildingInterface;
 import city.Application.BUILDING;
 import city.animations.interfaces.AnimatedPerson;
-import city.gui.CityRoad;
+import city.bases.Animation;
+import city.bases.interfaces.BuildingInterface;
+import city.buildings.interfaces.BusStop;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
-import city.interfaces.BusStop;
 
 public class PersonAnimationTest extends Animation implements AnimatedPerson {
 

@@ -9,13 +9,13 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.abstracts.RestaurantBuildingBase;
-import city.abstracts.RestaurantBuildingInterface;
+import city.bases.RestaurantBuilding;
+import city.bases.Role;
+import city.bases.interfaces.RestaurantBuildingInterface;
 import city.buildings.MarketBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketCustomerDeliveryPayment;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
 
 public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDelivery {
 //  Data
@@ -108,7 +108,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //  Setters
 //	=====================================================================
 	@Override
-	public void setRestaurant(RestaurantBuildingBase restaurant) {
+	public void setRestaurant(RestaurantBuilding restaurant) {
 		this.restaurant = restaurant;
 	}
 	

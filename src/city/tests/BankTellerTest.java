@@ -1,11 +1,11 @@
 package city.tests;
 
+import junit.framework.TestCase;
 import city.buildings.BankBuilding;
 import city.roles.BankTellerRole;
-import city.tests.mock.MockBankCustomer;
-import city.tests.mock.MockBankManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.tests.mocks.MockBankCustomer;
+import city.tests.mocks.MockBankManager;
+import city.tests.mocks.MockPerson;
 
 public class BankTellerTest extends TestCase {
 
@@ -17,7 +17,7 @@ public class BankTellerTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		BankBuilding b = new BankBuilding("Bank");
+		BankBuilding b = new BankBuilding("Bank", null, null);
 		this.customer = new MockBankCustomer();
 		this.manager = new MockBankManager();
 		b.setManager(manager);

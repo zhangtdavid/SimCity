@@ -5,8 +5,8 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import city.AnimationInterface;
-import city.gui.views.CityViewBuilding;
+import city.bases.interfaces.AnimationInterface;
+import city.gui.exteriors.CityViewBuilding;
 
 public class CitySidewalk extends CityViewBuilding {
 	

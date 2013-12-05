@@ -6,11 +6,11 @@ import java.awt.Graphics2D;
 import java.util.Vector;
 
 import utilities.StringUtil;
-import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
-import city.gui.buildings.RestaurantChungPanel;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungWaiter;
+import city.bases.Animation;
+import city.gui.interiors.RestaurantChungPanel;
+import city.roles.interfaces.RestaurantChungCustomer;
+import city.roles.interfaces.RestaurantChungWaiter;
 
 public class RestaurantChungWaiterAnimation extends Animation implements RestaurantChungAnimatedWaiter {
     private RestaurantChungWaiter agent = null;

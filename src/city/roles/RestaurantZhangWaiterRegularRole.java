@@ -3,8 +3,8 @@ package city.roles;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantZhangTable;
-import city.Building;
-import city.abstracts.RestaurantZhangWaiterBase;
+import utilities.RestaurantZhangWaiterBase;
+import city.bases.Building;
 
 public class RestaurantZhangWaiterRegularRole extends RestaurantZhangWaiterBase {
 	

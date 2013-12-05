@@ -1,6 +1,6 @@
 package utilities;
 
-import city.interfaces.RestaurantZhangCustomer;
+import city.roles.interfaces.RestaurantZhangCustomer;
 
 public class RestaurantZhangTable {
 	RestaurantZhangCustomer occupiedBy;

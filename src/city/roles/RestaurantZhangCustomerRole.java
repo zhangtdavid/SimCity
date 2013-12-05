@@ -9,12 +9,12 @@ import trace.AlertTag;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangTable;
-import city.Role;
 import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
-import city.interfaces.RestaurantZhangCashier;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
+import city.bases.Role;
+import city.roles.interfaces.RestaurantZhangCashier;
+import city.roles.interfaces.RestaurantZhangCustomer;
+import city.roles.interfaces.RestaurantZhangHost;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
 public class RestaurantZhangCustomerRole extends Role implements RestaurantZhangCustomer {
 	

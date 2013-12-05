@@ -8,11 +8,11 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChungMenu;
-import city.Role;
 import city.animations.RestaurantChungCustomerAnimation;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungWaiter;
+import city.bases.Role;
+import city.buildings.interfaces.RestaurantChung;
+import city.roles.interfaces.RestaurantChungCustomer;
+import city.roles.interfaces.RestaurantChungWaiter;
 
 /**
  * Restaurant Customer agent.

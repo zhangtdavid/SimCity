@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import city.AnimationInterface;
+import city.bases.interfaces.AnimationInterface;
 
 public class BuildingCard extends JPanel {
 

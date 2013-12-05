@@ -1,28 +1,27 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.MarketPanel;
-import city.interfaces.MarketEmployee.MarketEmployeeEvent;
-import city.interfaces.MarketEmployee.MarketEmployeeState;
+import city.gui.interiors.MarketPanel;
 import city.roles.MarketEmployeeRole;
-import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomer;
-import city.tests.mock.MockMarketCustomerDelivery;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.roles.interfaces.MarketEmployee.MarketEmployeeEvent;
+import city.roles.interfaces.MarketEmployee.MarketEmployeeState;
+import city.tests.mocks.MockMarketCashier;
+import city.tests.mocks.MockMarketCustomer;
+import city.tests.mocks.MockMarketCustomerDelivery;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketDeliveryPerson;
+import city.tests.mocks.MockMarketManager;
+import city.tests.mocks.MockPerson;
 
 public class MarketEmployeeTest extends TestCase {
 	MarketPanel marketPanel;	

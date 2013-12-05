@@ -1,19 +1,18 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
+import junit.framework.TestCase;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
-import city.gui.buildings.RestaurantChoiPanel;
-import city.interfaces.RestaurantChoi;
+import city.buildings.interfaces.RestaurantChoi;
+import city.gui.interiors.RestaurantChoiPanel;
 import city.roles.RestaurantChoiCookRole;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChoiWaiterQueue;
-import city.tests.mock.MockRestaurantChoiWaiterDirect;
-import junit.framework.TestCase;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChoiWaiterDirect;
+import city.tests.mocks.MockRestaurantChoiWaiterQueue;
 
 public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	RestaurantChoiCookRole cook;
@@ -22,7 +21,7 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	MockRestaurantChoiWaiterQueue waiter1; 
 	MockRestaurantChoiWaiterDirect waiter2;
 	RestaurantChoi b;
-	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white, new Dimension(0,0));
+	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white);
 	
 	
 	public void setUp() throws Exception{

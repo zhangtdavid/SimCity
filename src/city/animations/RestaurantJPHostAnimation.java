@@ -6,7 +6,7 @@ import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import city.Animation;
+import city.bases.Animation;
 import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 

@@ -2,40 +2,41 @@ package city.animations;
 
 import java.awt.Graphics2D;
 
-import city.Animation;
+import city.Application.BUILDING;
+import city.Application.CityMap;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
-import city.interfaces.BusStop;
+import city.bases.Animation;
+import city.buildings.interfaces.BusStop;
 
-public class PersonAnimation extends Animation implements AnimatedPerson {
-
+public class PersonAnimation extends Animation implements AnimatedPerson { // needs code standard review
+	
+	//Data
+	int xDestination, yDestination;
+	Person person = null;
+	
+	//Update position (Drawing)
 	@Override
 	public void updatePosition() {
-		// TODO Auto-generated method stub
-		
+
 	}
 
+	/**
+	 * Draws person and a string symbolizing the food he is making/eating at the time. 
+	 */
 	@Override
 	public void draw(Graphics2D g) {
-		// TODO Auto-generated method stub
-		
-	}
+	} 
 
+	
+	//Movement
+	
+	/**
+	 * Moves the person to a bus stop (already determined which is closest) 
+	 */
 	@Override
 	public void goToBusStop(BusStop b) {
-		// TODO Auto-generated method stub
-		
+		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().getX();
+		xDestination = CityMap.findClosestBuilding(BUILDING.busStop, person).getCityViewBuilding().getY();
 	}
-
-	@Override
-	public void goToSleep() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cookAndEatFood() {
-		// TODO Auto-generated method stub
-		
-	}
-
 }

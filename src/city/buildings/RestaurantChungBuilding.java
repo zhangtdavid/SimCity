@@ -4,26 +4,20 @@ import java.util.ArrayList;
 import java.util.List;
 
 import utilities.RestaurantChungRevolvingStand;
+import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.Application;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
-import city.gui.buildings.RestaurantChungPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCashier;
-import city.interfaces.RestaurantChungCook;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiter;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.RestaurantChung;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantChungPanel;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
@@ -31,8 +25,14 @@ import city.roles.RestaurantChungCustomerRole;
 import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
 import city.roles.RestaurantChungWaiterRevolvingStandRole;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.RestaurantChungCashier;
+import city.roles.interfaces.RestaurantChungCook;
+import city.roles.interfaces.RestaurantChungCustomer;
+import city.roles.interfaces.RestaurantChungHost;
+import city.roles.interfaces.RestaurantChungWaiter;
 
-public class RestaurantChungBuilding extends RestaurantBuildingBase implements RestaurantChung {
+public class RestaurantChungBuilding extends RestaurantBuilding implements RestaurantChung {
 //	Data
 //	=====================================================================
 	private RestaurantChungHost host;
@@ -54,7 +54,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		orderStand = new RestaurantChungRevolvingStand();
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
-		
+
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
 		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));

@@ -1,11 +1,12 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
-import city.gui.buildings.RestaurantChungPanel;
-import city.interfaces.RestaurantChungCook;
+import city.bases.Animation;
+import city.gui.interiors.RestaurantChungPanel;
+import city.roles.interfaces.RestaurantChungCook;
 
 public class RestaurantChungCookAnimation extends Animation implements RestaurantChungAnimatedCook {
 	private RestaurantChungCook agent = null;

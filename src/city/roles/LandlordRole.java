@@ -6,23 +6,24 @@ import java.util.List;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
-import city.abstracts.ResidenceBuildingBase;
-import city.interfaces.Landlord;
-import city.interfaces.Resident;
+import city.bases.ResidenceBuilding;
+import city.bases.Role;
+import city.roles.interfaces.Landlord;
+import city.roles.interfaces.Resident;
 
 public class LandlordRole extends Role implements Landlord {
 
 	// Data
 	
 	private Resident landlordRes; // which of the residents is the landlord? enables easy handing-off of lordship
-	private ResidenceBuildingBase residence; // the landlord is the landlord of this building
+	private ResidenceBuilding residence; // the landlord is the landlord of this building
 	private List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	
 	// Constructor
 	
 	public LandlordRole(){
 		super();
+		if(landlordRes == null){} // kill warning
 	}
 	
 	// Messages
@@ -56,7 +57,7 @@ public class LandlordRole extends Role implements Landlord {
 	}
 	
 	@Override
-	public void setResidence(ResidenceBuildingBase b) {
+	public void setResidence(ResidenceBuilding b) {
 		residence = b; // landlord knows where he lives
 		b.setLandlord(this);
 	}

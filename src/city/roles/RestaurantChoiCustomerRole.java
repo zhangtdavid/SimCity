@@ -8,19 +8,18 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiMenu;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
-import city.interfaces.RestaurantChoiCashier;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiHost;
-import city.interfaces.RestaurantChoiWaiter;
+import city.bases.Role;
+import city.roles.interfaces.RestaurantChoiCashier;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiHost;
+import city.roles.interfaces.RestaurantChoiWaiter;
 
 public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCustomer{
 
 	// Data
 	
-	private int amt;  
 	private int punishment;
 	private int hungerLevel = 5; // determines length of meal
 	private Timer timer = new Timer();
@@ -29,8 +28,10 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	private RestaurantChoiMenu menu;
 	private FOOD_ITEMS choice;
 	private int line;
-	private int waitingCoordX;
-	private int waitingCoordY;
+	/*
+	private int amt;   // something to do with time for dishes punishment
+	private int waitingCoordX; why do i need these again? waitingCoordX is for waiting in line.
+	private int waitingCoordY;*/
 	private int xTableDestination, yTableDestination;
 	private ArrayList<FOOD_ITEMS> previousCanAfford = new ArrayList<FOOD_ITEMS>();
 	private boolean hasHitZero;
@@ -385,10 +386,12 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		waiter.msgImDone(this);
 		print("Can't buy anything, leaving table");
 		customerGui.DoExitRestaurant();
+		super.setInactive();
 	}
 
 	private void gotChange() {
 		customerGui.DoExitRestaurant();
+		super.setInactive();
 	}
 
 	private void startDishes() {
@@ -407,7 +410,8 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		print("Leaving now, after doing dishes");
 		state = STATE.Leaving;
 		cashier.msgDoneWithDishes(this);
-		customerGui.DoExitRestaurant(); 
+		customerGui.DoExitRestaurant();
+		super.setInactive();
 	}
 
 	private void ConsiderLeaving() {
@@ -426,6 +430,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 				print("Leaving restaurant; don't want to want in line");
 				state = STATE.Leaving;
 				customerGui.DoExitRestaurant();
+				super.setInactive();
 			}
 			stateChanged();
 		}
