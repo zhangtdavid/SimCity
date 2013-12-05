@@ -52,11 +52,14 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		// MSG back to Person
 		//the boolean exists so we don't release the semaphore more than once, ever.
 		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired) {
-			if (command == Command.ToDoor) { // rDoor: leave
+			if (command == Command.ToRoomEntrance) { // rRoom: for a house, do nothing...
+
+			} else if (command == Command.ToDoor) { // rDoor: leave
 				//TODO msg person to decide his next action... or just do nothing if this has already been done
 			} else if (command == Command.ToBed) { // rBed: sleep
 				//TODO msg person to go to sleep for x hours
 			} else if (command == Command.ToRef) { // rRef: look for food
+				personSemaphoreIsAcquired = false;
 				person.releaseSemaphoreFromAnimation();
 				person.print("Semaphore released, at refrigerator"); //test
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
@@ -82,10 +85,11 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 						person.print("Done eating");
 					}
 				}, 4000);
-				}else{ // if you're in a test, skip the timer.
+				}else{ // if you're in a test, skip the timer; skip the stationary phase
 					command = Command.ToTable;
 					person.print("Skipped timer; done eating");
 				}
+				personSemaphoreIsAcquired = false;
 				person.releaseSemaphoreFromAnimation();
 				person.print("Semaphore released, at table, eating now (timer)");
 			}
@@ -102,7 +106,6 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		g.setColor(Color.BLACK);
 		g.drawString(orderIcon, xPos, yPos+10); // draw the orderIcon for the person; often will be "".
 	} 
-
 	
 	//Movement
 	
@@ -119,7 +122,6 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		xDestination = HousePanel.HBXi;
 		yDestination = HousePanel.HBYi;
 	}
-
 
 	@Override
 	public void verifyFood(){
@@ -146,6 +148,7 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 
 	@Override
 	public void goToRoom(int roomNo) {
+		command = Command.ToRoomEntrance;
 		//this does nothing for persons who live in houses.
 	}
 	

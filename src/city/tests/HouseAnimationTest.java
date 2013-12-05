@@ -10,10 +10,12 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.animations.HouseResidentAnimation;
+import city.animations.interfaces.AnimatedPersonAtHome.Command;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
 import city.gui.buildings.HousePanel;
+import city.gui.buildings.BankPanel;
 import city.gui.views.CityViewBuilding;
 import city.gui.views.CityViewHouse;
 import city.interfaces.Person;
@@ -31,6 +33,7 @@ public class HouseAnimationTest extends TestCase {
 	private Date date;
 	private CityViewHouse houseCityViewBuilding; // does nothing, no gui really pops out...
 	private HousePanel hp; // does nothing, no gui really pops out...
+	private BankPanel bp;
 	private MockAnimatedPerson animation;
 	private LandlordRole landlord;
 	private ResidentRole resident;
@@ -59,7 +62,7 @@ public class HouseAnimationTest extends TestCase {
 		bankCityViewBuilding =  new MockCityViewBuilding();
 		busstopCityViewBuilding = new MockCityViewBuilding();
 		busstopCityViewBuilding2 = new MockCityViewBuilding();
-		bank = new BankBuilding("MockBank");
+		bank = new BankBuilding("MockBank", bp, bankCityViewBuilding);
 		busstop = new MockBusStop("busstop");
 		busstop2 = new MockBusStop("busstop2");
 		
@@ -73,10 +76,10 @@ public class HouseAnimationTest extends TestCase {
 		bank.setCityViewBuilding(bankCityViewBuilding);
 		busstop.setCityViewBuilding(busstopCityViewBuilding);
 		busstop2.setCityViewBuilding(busstopCityViewBuilding2);
-		busstopCityViewBuilding.x = 40;
-		busstopCityViewBuilding.y = 40;
-		busstopCityViewBuilding2.x = 80;
-		busstopCityViewBuilding2.y = 80;
+		busstopCityViewBuilding.setX(40);
+		busstopCityViewBuilding.setY(40);
+		busstopCityViewBuilding2.setX(80);
+		busstopCityViewBuilding2.setY(80);
 		Application.CityMap.addBuilding(BUILDING.busStop, busstop);
 		Application.CityMap.addBuilding(BUILDING.busStop, busstop2);
 		Application.CityMap.addBuilding(BUILDING.bank, bank);
@@ -138,14 +141,26 @@ public class HouseAnimationTest extends TestCase {
 		assertEquals("Person's homeAnimation should have state noCommand", homeAnimation.getCommand(), "noCommand");
 		
 		assertEquals("Scheduler should still be true", person.runScheduler(), true);
-		System.out.println(person.getState().toString());
-		System.out.println(homeAnimation.getCommand());
+		//System.out.println(person.getState().toString());
+		//System.out.println(homeAnimation.getCommand());
 
-		//Now check for go-to-bed from house animation logic
+		//Fast forward time
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
 		person.setDate(date);
-		//now, get him home
-		//person.
+		//now person is at home BTW
+		homeAnimation.setCoords(HousePanel.HDX, HousePanel.HDY);
+		assertEquals("xPos was just set to door's x", homeAnimation.getXPos(), HousePanel.HDX);
+		assertEquals("yPos was just set to door's y", homeAnimation.getYPos(), HousePanel.HDY);
+		assertEquals("Person's homeAnimation should have state noCommand before I tell it to go to room", homeAnimation.getCommand(), "noCommand");
+		homeAnimation.goToRoom(0); // for a house, this does nothing but change your state
+		assertEquals("Command of home Animation should be ToRoom", homeAnimation.getCommand(), Command.ToRoomEntrance.toString());
+		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
+		homeAnimation.setAcquired();
+		homeAnimation.verifyFood();
+		assertEquals("Command of home Animation should be ToRef", homeAnimation.getCommand(), Command.ToRef.toString());
+		homeAnimation.setCoords(HousePanel.HRX, HousePanel.HRY); // at refrigerator
+		homeAnimation.updatePosition(); // now no longer has command toRef...?
+		//assertEquals("Command of home Animation should be ToStove", homeAnimation.getCommand(), Command.ToStove.toString());
 		
 	}
 }

@@ -397,9 +397,10 @@ public class PersonAgent extends Agent implements Person {
 			print("Something bad happened while trying to acquire while going to refrigerator");
 			e.printStackTrace();
 		}
-		homeAnimation.setCoords(homeAnimation.getDestination()[0], homeAnimation.getDestination()[1]);
+		//??? why does below exist
+		//homeAnimation.setCoords(homeAnimation.getDestination()[0], homeAnimation.getDestination()[1]);
 		
-		//BTW function was intentionally designed to combine these 3 steps into one action.
+		//BTW function was intentionally designed to combine these 3 steps into 1 action.
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
