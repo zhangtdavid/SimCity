@@ -11,16 +11,16 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
-import city.Role;
+import city.bases.JobRole;
 import city.buildings.MarketBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomer;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.MarketEmployee;
-import city.interfaces.MarketManager;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.MarketEmployee;
+import city.roles.interfaces.MarketManager;
 
-public class MarketManagerRole extends Role implements MarketManager {
+public class MarketManagerRole extends JobRole implements MarketManager {
 //  Data
 //	=====================================================================	
 	public EventLog log = new EventLog();

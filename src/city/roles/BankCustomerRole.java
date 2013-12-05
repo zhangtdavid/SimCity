@@ -4,18 +4,19 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
-import city.Building;
-import city.Role;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankTeller;
+import city.bases.Building;
+import city.bases.Role;
+import city.bases.interfaces.BuildingInterface;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	
 	private Bank building;
-	private Building business = null;
+	private BuildingInterface business = null;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
 	private int netTransaction = 0;
@@ -27,7 +28,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	// Constructor
 	
-	public BankCustomerRole(Building bus, Bank b) {
+	public BankCustomerRole(BuildingInterface bus, Bank b) {
 		building = b;
 		business = bus;
 		st = STATE.none;
@@ -165,9 +166,16 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		return this.st.toString();
 	}
 	
-	public Building getBusiness() {
+	@Override
+	public BuildingInterface getBusiness() {
 		return business;
 	}
+	
+	@Override
+	public BANK_SERVICE getService() {
+		return service;
+	}
+	
 	// Setters
 	
 	@Override

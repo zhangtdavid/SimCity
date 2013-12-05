@@ -1,9 +1,9 @@
 package city.animations.interfaces;
 
-import city.AnimationInterface;
-import city.BuildingInterface;
+import city.agents.interfaces.Car;
+import city.bases.interfaces.AnimationInterface;
+import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
-import city.interfaces.Car;
 
 public interface AnimatedCar extends AnimationInterface {
 	

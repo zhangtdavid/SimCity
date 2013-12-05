@@ -13,15 +13,16 @@ import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
-import city.Role;
+import city.bases.JobRole;
+import city.bases.Role;
 import city.buildings.RestaurantJPBuilding;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantJP;
-import city.interfaces.RestaurantJPCashier;
-import city.interfaces.RestaurantJPCustomer;
-import city.interfaces.RestaurantJPWaiter;
+import city.buildings.interfaces.RestaurantJP;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.RestaurantJPCashier;
+import city.roles.interfaces.RestaurantJPCustomer;
+import city.roles.interfaces.RestaurantJPWaiter;
 
-public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier {
+public class RestaurantJPCashierRole extends JobRole implements RestaurantJPCashier {
 	
 	//DATA	
 	

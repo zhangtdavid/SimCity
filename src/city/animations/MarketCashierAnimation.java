@@ -1,11 +1,12 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.MarketAnimatedCashier;
-import city.gui.buildings.MarketPanel;
-import city.interfaces.MarketCashier;
+import city.bases.Animation;
+import city.gui.interiors.MarketPanel;
+import city.roles.interfaces.MarketCashier;
 
 public class MarketCashierAnimation extends Animation implements MarketAnimatedCashier {
 	private MarketCashier cashier = null;

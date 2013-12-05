@@ -11,16 +11,17 @@ import trace.AlertTag;
 import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
-import city.Building;
-import city.Role;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantZhangCashier;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
+import city.bases.Building;
+import city.bases.JobRole;
+import city.bases.Role;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.RestaurantZhangCashier;
+import city.roles.interfaces.RestaurantZhangCustomer;
+import city.roles.interfaces.RestaurantZhangHost;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
-public class RestaurantZhangCashierRole extends Role implements RestaurantZhangCashier {
+public class RestaurantZhangCashierRole extends JobRole implements RestaurantZhangCashier {
 	
 	// Data
 	

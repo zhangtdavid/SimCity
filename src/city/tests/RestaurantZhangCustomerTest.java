@@ -2,13 +2,13 @@ package city.tests;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangMenu;
-import city.interfaces.RestaurantZhangCustomer;
 import city.roles.RestaurantZhangCustomerRole;
-import city.tests.animations.mock.MockRestaurantZhangAnimatedCustomer;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangCashier;
-import city.tests.mock.MockRestaurantZhangHost;
-import city.tests.mock.MockRestaurantZhangWaiterRegular;
+import city.roles.interfaces.RestaurantZhangCustomer;
+import city.tests.animations.mocks.MockRestaurantZhangAnimatedCustomer;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangCashier;
+import city.tests.mocks.MockRestaurantZhangHost;
+import city.tests.mocks.MockRestaurantZhangWaiterRegular;
 
 /**
  * Restaurant customer Agent

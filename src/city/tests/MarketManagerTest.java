@@ -1,7 +1,6 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -12,16 +11,16 @@ import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.MarketPanel;
+import city.gui.interiors.MarketPanel;
 import city.roles.MarketManagerRole;
 import city.roles.MarketManagerRole.MyMarketEmployee.MarketEmployeeState;
-import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomer;
-import city.tests.mock.MockMarketCustomerDelivery;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketEmployee;
-import city.tests.mock.MockPerson;
+import city.tests.mocks.MockMarketCashier;
+import city.tests.mocks.MockMarketCustomer;
+import city.tests.mocks.MockMarketCustomerDelivery;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketDeliveryPerson;
+import city.tests.mocks.MockMarketEmployee;
+import city.tests.mocks.MockPerson;
 
 public class MarketManagerTest extends TestCase {
 	MarketPanel marketPanel;

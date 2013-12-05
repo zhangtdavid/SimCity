@@ -3,17 +3,14 @@ package city.buildings;
 import java.util.Vector;
 
 import utilities.RestaurantJPRevolvingStand;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
-import city.gui.buildings.RestaurantJPPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.RestaurantJP;
-import city.interfaces.RestaurantJPCashier;
-import city.interfaces.RestaurantJPCustomer;
-import city.interfaces.RestaurantJPWaiter;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.RestaurantJP;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
@@ -21,8 +18,11 @@ import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
+import city.roles.interfaces.RestaurantJPCashier;
+import city.roles.interfaces.RestaurantJPCustomer;
+import city.roles.interfaces.RestaurantJPWaiter;
 
-public class RestaurantJPBuilding extends RestaurantBuildingBase implements RestaurantJP {
+public class RestaurantJPBuilding extends RestaurantBuilding implements RestaurantJP {
 	
 	// Data
 	

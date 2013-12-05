@@ -1,6 +1,6 @@
 package utilities;
 
-import city.interfaces.RestaurantJPCustomer;
+import city.roles.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPTableClass {
 	public RestaurantJPCustomer occupiedBy;

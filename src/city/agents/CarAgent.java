@@ -4,13 +4,13 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Agent;
-import city.BuildingInterface;
-import city.RoleInterface;
+import city.agents.interfaces.Car;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedCar;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
-import city.interfaces.Person;
+import city.bases.Agent;
+import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.RoleInterface;
+import city.roles.interfaces.CarPassenger;
 
 public class CarAgent extends Agent implements Car {
 

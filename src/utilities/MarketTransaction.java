@@ -1,6 +1,6 @@
 package utilities;
 
-import city.interfaces.Market;
+import city.buildings.interfaces.Market;
 
 /** 
  * A class to handle transactions between RestaurantCashiers who assume MarketCustomerDeliveryPaymentRoles and MarketCasheirs 

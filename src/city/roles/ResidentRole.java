@@ -6,10 +6,10 @@ import java.util.TimeZone;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
-import city.abstracts.ResidenceBuildingBase;
-import city.interfaces.Landlord;
-import city.interfaces.Resident;
+import city.bases.ResidenceBuilding;
+import city.bases.Role;
+import city.roles.interfaces.Landlord;
+import city.roles.interfaces.Resident;
 
 public class ResidentRole extends Role implements Resident {
 
@@ -18,7 +18,7 @@ public class ResidentRole extends Role implements Resident {
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
-	private ResidenceBuildingBase house;
+	private ResidenceBuilding house;
 
 	// Constructor
 
@@ -102,7 +102,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	@Override
-	public void setResidence(ResidenceBuildingBase b) {
+	public void setResidence(ResidenceBuilding b) {
 		house = b;
 	}
 

@@ -3,24 +3,24 @@ package city.tests;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.interfaces.Bank;
-import city.interfaces.Market;
-import city.interfaces.MarketCashier.TransactionState;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.Market;
 import city.roles.MarketCashierRole;
-import city.tests.mock.MockMarketCustomer;
-import city.tests.mock.MockMarketCustomerDelivery;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketEmployee;
-import city.tests.mock.MockMarketManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.roles.interfaces.MarketCashier.TransactionState;
+import city.tests.mocks.MockMarketCustomer;
+import city.tests.mocks.MockMarketCustomerDelivery;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketDeliveryPerson;
+import city.tests.mocks.MockMarketEmployee;
+import city.tests.mocks.MockMarketManager;
+import city.tests.mocks.MockPerson;
 
 public class MarketCashierTest extends TestCase {
 	Market market;

@@ -3,6 +3,7 @@ package city.tests;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application.BUILDING;
 import city.Application.CityMap;
@@ -10,19 +11,18 @@ import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.Bank;
-import city.interfaces.Market;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCook.MarketOrderState;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.Market;
+import city.buildings.interfaces.RestaurantChung;
 import city.roles.RestaurantChungCookRole;
-import city.tests.animations.mock.MockRestaurantChungAnimatedCook;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChungCashier;
-import city.tests.mock.MockRestaurantChungCustomer;
-import city.tests.mock.MockRestaurantChungHost;
-import city.tests.mock.MockRestaurantChungWaiterMessageCook;
-import city.tests.mock.MockRestaurantChungWaiterRevolvingStand;
-import junit.framework.*;
+import city.roles.interfaces.RestaurantChungCook.MarketOrderState;
+import city.tests.animations.mocks.MockRestaurantChungAnimatedCook;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChungCashier;
+import city.tests.mocks.MockRestaurantChungCustomer;
+import city.tests.mocks.MockRestaurantChungHost;
+import city.tests.mocks.MockRestaurantChungWaiterMessageCook;
+import city.tests.mocks.MockRestaurantChungWaiterRevolvingStand;
 
 /**
  * 

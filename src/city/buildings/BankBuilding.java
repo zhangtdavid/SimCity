@@ -6,16 +6,16 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
-import city.Animation;
-import city.Building;
-import city.Role;
-import city.RoleInterface;
-import city.gui.buildings.BankPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.Bank;
-import city.interfaces.BankManager;
+import city.bases.Animation;
+import city.bases.Building;
+import city.bases.Role;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Bank;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.BankPanel;
 import city.roles.BankManagerRole;
 import city.roles.BankTellerRole;
+import city.roles.interfaces.BankManager;
 
 public class BankBuilding extends Building implements Bank {
 	

@@ -15,16 +15,16 @@ import utilities.MarketOrder;
 import utilities.RestaurantJPRevolvingStand;
 import utilities.RestaurantJPTableClass;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.animations.RestaurantJPCookAnimation;
+import city.bases.JobRole;
 import city.buildings.RestaurantJPBuilding;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketManager;
-import city.interfaces.RestaurantJP;
-import city.interfaces.RestaurantJPCook;
-import city.interfaces.RestaurantJPWaiter;
+import city.buildings.interfaces.RestaurantJP;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketManager;
+import city.roles.interfaces.RestaurantJPCook;
+import city.roles.interfaces.RestaurantJPWaiter;
 
-public class RestaurantJPCookRole extends Role implements RestaurantJPCook {
+public class RestaurantJPCookRole extends JobRole implements RestaurantJPCook {
 	
 	//DATA	
 	private RestaurantJPCookAnimation gui;

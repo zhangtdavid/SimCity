@@ -1,6 +1,6 @@
 package city.animations.interfaces;
 
-import city.AnimationInterface;
+import city.bases.interfaces.AnimationInterface;
 
 public interface RestaurantChungAnimatedCashier extends AnimationInterface {
 	

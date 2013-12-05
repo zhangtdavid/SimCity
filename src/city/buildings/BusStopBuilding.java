@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Application;
-import city.Building;
-import city.RoleInterface;
+import city.bases.Building;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.BusStop;
 import city.gui.CityRoad;
-import city.gui.buildings.BusStopPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.BusStopPanel;
+import city.roles.interfaces.BusPassenger;
 
 public class BusStopBuilding extends Building implements BusStop {
 	

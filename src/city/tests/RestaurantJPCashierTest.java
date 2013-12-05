@@ -2,12 +2,11 @@ package city.tests;
 
 import junit.framework.TestCase;
 import city.buildings.RestaurantJPBuilding;
-import city.gui.buildings.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantJPCook;
-import city.tests.mock.MockRestaurantJPCustomer;
-import city.tests.mock.MockRestaurantJPWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantJPCook;
+import city.tests.mocks.MockRestaurantJPCustomer;
+import city.tests.mocks.MockRestaurantJPWaiter;
 
 public class RestaurantJPCashierTest extends TestCase
 {

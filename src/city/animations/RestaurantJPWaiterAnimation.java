@@ -6,8 +6,8 @@ import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
-import city.Animation;
-import city.abstracts.RestaurantJPWaiterBase;
+import utilities.RestaurantJPWaiterBase;
+import city.bases.Animation;
 
 public class RestaurantJPWaiterAnimation extends Animation{
 
