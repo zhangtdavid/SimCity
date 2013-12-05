@@ -1,6 +1,7 @@
 package city;
 
 import java.awt.Color;
+import java.awt.Rectangle;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
@@ -28,6 +29,7 @@ import city.buildings.RestaurantZhangBuilding;
 import city.gui.BuildingCard;
 import city.gui.CityRoad;
 import city.gui.CityRoadIntersection;
+import city.gui.CitySidewalkLayout;
 import city.gui.MainFrame;
 import city.gui.CityRoad.STOPLIGHTTYPE;
 import city.gui.buildings.BankPanel;
@@ -92,6 +94,8 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
+	
+	static CitySidewalkLayout sidewalks;
 	
 	public static TrafficControl trafficControl;
 
@@ -269,41 +273,51 @@ public class Application {
 				roads.get(i).setNextRoad(roads.get(i+1));
 		}
 		trafficControl = new TrafficControl(roads);
-
+		
+		ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
+		nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
+		nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
+		nonSidewalkArea.add(new Rectangle(2, 4, 2, 8)); // Topmid left
+		nonSidewalkArea.add(new Rectangle(14, 6, 2, 10)); // Topmid center
+		nonSidewalkArea.add(new Rectangle(26, 4, 2, 12)); // Topmid right
+		nonSidewalkArea.add(new Rectangle(6, 14, 10, 2)); // Center left
+		nonSidewalkArea.add(new Rectangle(18, 14, 10, 2)); // Center right
+		nonSidewalkArea.add(new Rectangle(2, 14, 2, 12)); // Bottommid left
+		nonSidewalkArea.add(new Rectangle(14, 18, 2, 8)); // Bottommid center
+		nonSidewalkArea.add(new Rectangle(26, 18, 2, 8)); // Bottommid right
+		nonSidewalkArea.add(new Rectangle(2, 26, 10, 2)); // Bottom left
+		nonSidewalkArea.add(new Rectangle(14, 26, 14, 2)); // Bottom right
+		nonSidewalkArea.add(new Rectangle(6, 6, 6, 6)); // Top left square
+		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
+		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
+		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
+		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(350, 0, "Bus Stop 1", Color.white, bsp1);
-		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
-		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.getID());
-		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
-
+		createBuilding(bsp1, cityViewBusStop1, busStop1);
+		
 		BusStopPanel bsp2 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(0, 125, "Bus Stop 2", Color.white, bsp2);
-		mainFrame.cityView.addStatic(cityViewBusStop2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
-		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.getID());
-		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
+		createBuilding(bsp2, cityViewBusStop2, busStop2);
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(275, 275, "Bus Stop 3", Color.white, bsp3);
-		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
-		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
-		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
+		createBuilding(bsp3, cityViewBusStop3, busStop3);
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(50, 425, "Bus Stop 4", Color.white, bsp4);
-		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
-		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.getID());
-		Application.CityMap.addBuilding(BUILDING.busStop, busStop4 );
+		createBuilding(bsp4, cityViewBusStop4, busStop4);
 		
 		// Create buildings
 		BankPanel bankPanel1 = new BankPanel(Color.green);
-		CityViewBank cityViewBank1 = new CityViewBank(400, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
+		CityViewBank cityViewBank1 = new CityViewBank(450, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
 		BankBuilding bankBuilding1 = new BankBuilding("BankBuilding", bankPanel1, cityViewBank1);
-		Application.CityMap.addBuilding(BUILDING.bank, bankBuilding1);
+		createBuilding(bankPanel1, cityViewBank1, bankBuilding1);
 
 		busStop1.setNextStop(busStop2);
 		busStop1.setPreviousStop(busStop4);
@@ -324,7 +338,7 @@ public class Application {
 
 		// RESTAURANTZHANG------------------------------------------------------------
 		RestaurantZhangPanel restaurantZhangPanel1 = new RestaurantZhangPanel(Color.DARK_GRAY);
-		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(125, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, restaurantZhangPanel1);
+		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, restaurantZhangPanel1);
 		RestaurantZhangBuilding rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", restaurantZhangPanel1, cityViewRestaurantZhang1);
 		restaurantZhangPanel1.setTables(rzb1.tables);
 		createBuilding(restaurantZhangPanel1, cityViewRestaurantZhang1, rzb1);
@@ -425,7 +439,17 @@ public class Application {
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
-		CityMap.addBuilding(BUILDING.restaurant, building);
+		if(building.getClass().getName().contains("Restaurant")) {
+			CityMap.addBuilding(BUILDING.restaurant, building);
+		} else if(building.getClass().getName().contains("Bank")) {
+			CityMap.addBuilding(BUILDING.bank, building);
+		} else if(building.getClass().getName().contains("Market")) {
+			CityMap.addBuilding(BUILDING.market, building);
+		} else if(building.getClass().getName().contains("BusStop")) {
+			CityMap.addBuilding(BUILDING.busStop, building);
+		} else if(building.getClass().getName().contains("House")) {
+			CityMap.addBuilding(BUILDING.house, building);
+		}
 	}
 
 	public static class CityMap {
