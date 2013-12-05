@@ -70,5 +70,9 @@ public abstract class RestaurantBuildingBase extends Building implements Restaur
 	@Override
 	public void setFoodQuantity(FOOD_ITEMS f, int i) {
 		foods.get(f).amount = i;
+	}
+
+	public void setBankCustomer(BankCustomer bankCustomer) {
+		this.bankCustomer = bankCustomer;
 	}	
 }

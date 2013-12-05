@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import utilities.LoggedEvent;
@@ -67,6 +68,18 @@ public class MockBankManager extends MockRole implements BankManager {
 
 	@Override
 	public List<BankTask> getBankTasks() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
 	}

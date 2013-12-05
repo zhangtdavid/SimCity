@@ -44,7 +44,7 @@ public class HousingTest extends TestCase {
 		p2.setHome(hb);
 		p1r1.setLandlord(p2rL);
 		p2r1.setLandlord(p2rL);
-		hb = new HouseBuilding("House 1", p2rL, null);
+		hb = new HouseBuilding("House 1", p2rL, null, null ); // TODO fix this later
 		p2rL.addResident(p2r1);
 		p2rL.addResident(p1r1);
 		hb.addResident(p1r1);

@@ -34,7 +34,7 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public boolean runScheduler() {
 		if(rstate == STATE.needToPayRent){
-			System.out.println("need to pay rent!");
+			print("need to pay rent!");
 			payRent();
 			return true;
 		}
@@ -51,7 +51,7 @@ public class ResidentRole extends Role implements Resident {
 			// pay maintenance if needed
 			this.getPerson().setCash( (this.getPerson().getCash() - (house.getTotalCurrentMaintenance() / house.getResidents().size())) ); // lose $ for maintenance;
 		}
-		System.out.println(rentLastPaid.getTime());
+		//print(""+rentLastPaid.getTime()); // for debugging
 		rentLastPaid = this.getPerson().getDate();
 		this.setInactive(); // step out of resident role
 	}

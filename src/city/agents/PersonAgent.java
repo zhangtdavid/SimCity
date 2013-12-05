@@ -26,13 +26,18 @@ import city.Application.TRANSACTION_TYPE;
 import city.BuildingInterface;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.AptResidentAnimation;
+import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPerson;
+import city.animations.interfaces.AnimatedPersonAtHome;
+import city.interfaces.Apartment;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BusPassenger;
 import city.interfaces.BusStop;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
+import city.interfaces.House;
 import city.interfaces.Market;
 import city.interfaces.MarketCustomer;
 import city.interfaces.Person;
@@ -50,6 +55,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date date;
 	private RoleInterface occupation;
 	private ResidenceBuildingInterface home;
+	private int roomNumber; // relevant for apartments only. retained (for homes: 0; for apartments, 1~5)
 	private Car car;
 	private CarPassenger carPassengerRole; // not retained
 	private BusPassenger busPassengerRole; // not retained
@@ -62,7 +68,8 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private AnimatedPerson animation;
+	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
+	private AnimatedPerson animation; // only for cityview
 	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
@@ -224,14 +231,14 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == STATES.atCooking) {
-			atDestination.acquire();
 			state = pickDailyTask();
 			performDailyTaskAction();
 			return true;
 		}
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
-				animation.goToSleep();
+				homeAnimation.goToRoom(this.roomNumber); // first, person goes to his own room
+				homeAnimation.goToSleep(); // now, person may crash (figuratively, as in go to bed!)
 				setState(STATES.atSleep);
 				return false;
 			}
@@ -379,13 +386,35 @@ public class PersonAgent extends Agent implements Person {
 	
 	/**
 	 * Has the person cook and eat a meal at home.
-	 * 
+	 * Assume they are already at home when this is called
 	 * @throws InterruptedException 
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		homeAnimation.setAcquired();
+		homeAnimation.verifyFood();  // give animation instructions
+		try{ 
+			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+				//System.out.println("not being tested");
+				atDestination.acquire(); //and freeze
+			}
+		}catch(Exception e){
+			print("Something bad happened while trying to acquire while going to refrigerator");
+			e.printStackTrace();
+		}
+
+		//BTW function was intentionally designed to combine these 3 steps into 1 action.
+		homeAnimation.setAcquired(); // repeat
+		homeAnimation.cookAndEatFood();
+		try{ 
+			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+				atDestination.acquire(); //and freeze
+			}
+		}catch(Exception e){
+			print("Something bad happened while trying to acquire while going to stove/table");
+			e.printStackTrace();
+		}
 		this.hasEaten = true;
-		animation.cookAndEatFood();
 		// The scheduler will pick up the atDestination and continue the program
 	}
 	
@@ -485,6 +514,11 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
+	public int getRoomNumber(){
+		return roomNumber;
+	}
+	
+	@Override
 	public AnimatedPerson getAnimation() {
 		return animation;
 	}
@@ -493,6 +527,10 @@ public class PersonAgent extends Agent implements Person {
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
+	@Override
+	public AnimatedPersonAtHome getAnimationAtHome(){
+		return homeAnimation;
+	}
 	
 	//=========//
 	// Setters //
@@ -516,6 +554,11 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation = p;
 	}
+	
+	public void setHomeAnimation(AnimatedPersonAtHome a){
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		homeAnimation = a;
+	}
 
 	@Override
 	public void setCar(Car c) {
@@ -529,11 +572,30 @@ public class PersonAgent extends Agent implements Person {
 		getPropertyChangeSupport().firePropertyChange(CASH, this.cash, c);
 		this.cash = c;
 	}
-	
+
+	/**
+	 * This method sets Home for the PersonAgent.
+	 * @param h is a ResidenceBuildingInterface; that is, it can be a Home or an Apartment.
+	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		//set home
 		home = h;
+		
+		//Set animation for inside home. Both inherit the same type, so it's A-OK	
+		if(h instanceof House){
+			homeAnimation = new HouseResidentAnimation(this); 
+		}
+		else if(h instanceof Apartment){
+			homeAnimation = new AptResidentAnimation(this);
+		}			
+	}
+	
+	@Override
+	public void setRoomNumber(int i){
+		roomNumber = i;
 	}
 	
 	@Override
@@ -553,6 +615,21 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 	// Utilities //
 	//===========//
+	
+	@Override
+	public void acquireSemaphoreFromAnimation(){
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			System.out.println("Could not acquire atDestination: ");
+			e.printStackTrace();
+		}
+	}
+	
+	@Override
+	public void releaseSemaphoreFromAnimation(){
+		atDestination.release();
+	}
 	
 	@Override
 	public void addRole(RoleInterface r) {
@@ -846,4 +923,5 @@ public class PersonAgent extends Agent implements Person {
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
     }
+
 }

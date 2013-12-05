@@ -58,7 +58,7 @@ public class MarketCashierTest extends TestCase {
 		super.setUp();
 		bank = new BankBuilding("Bank", null, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
-	
+
 		market = new MarketBuilding("Market1", null, null);
 
 		cashierPerson = new MockPerson("Cashier"); 

@@ -30,7 +30,6 @@ public class BusStopBuilding extends Building implements BusStop {
 	}
 	
 	// Getters
-	
 	@Override
 	public List<BusPassenger> getWaitingList() {
 		return waitingList;

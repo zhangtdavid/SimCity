@@ -54,7 +54,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		orderStand = new RestaurantChungRevolvingStand();
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
-		
+
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
 		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));

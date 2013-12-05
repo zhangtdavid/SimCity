@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
@@ -7,6 +8,7 @@ import java.util.concurrent.Semaphore;
 import city.RoleInterface;
 import city.abstracts.MockAgent;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.interfaces.AnimatedPersonAtHome;
 import city.animations.interfaces.AnimatedPerson;
 import city.interfaces.BankCustomer;
 import city.interfaces.BusPassenger;
@@ -194,11 +196,6 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(RoleInterface r) {
-		this.occupation = r;
-	}
-
-	@Override
 	public void setCash(int c) {
 		this.cash = c;
 	}
@@ -213,6 +210,60 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public void addRole(RoleInterface r) {
 		this.roles.add(r);
+	}
+
+	@Override
+	public int getRoomNumber() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setRoomNumber(int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setHomeAnimation(AnimatedPersonAtHome anim) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public AnimatedPersonAtHome getAnimationAtHome() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void acquireSemaphoreFromAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void releaseSemaphoreFromAnimation() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setName(String n) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setOccupation(RoleInterface r) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

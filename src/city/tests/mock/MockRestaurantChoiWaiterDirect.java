@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import utilities.EventLog;
@@ -139,6 +140,16 @@ public class MockRestaurantChoiWaiterDirect extends MockRole implements Restaura
 	public void setRevolvingStand(RestaurantChoiRevolvingStand rs) {
 		// TODO Auto-generated method stub
 		
+	}
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

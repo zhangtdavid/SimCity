@@ -24,7 +24,7 @@ public class BankCustomerTest extends TestCase {
 		Application.CityMap.clearMap();
 		this.teller = new MockBankTeller();
 		this.manager = new MockBankManager();
-		BankBuilding b = new BankBuilding("Bank");
+		BankBuilding b = new BankBuilding("Bank", null, null);
 		b.setManager(manager);
 		Application.CityMap.addBuilding(BUILDING.bank, b);
 		this.customerPerson = new MockPerson("Customer");

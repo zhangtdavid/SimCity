@@ -67,9 +67,9 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
-        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
-        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak")));
+    	//foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
+        //foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
+        //foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak"))); //TODO david? this doesn't work anymore (error)
 	}
 	
 	// Utilities
@@ -130,7 +130,7 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
-			c.setMenuTimes(menu, foods);
+			c.setMenuTimes(menu, getFoods());
 //			c.addMarket(new MarketBuilding("Market"));
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);

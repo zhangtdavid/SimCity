@@ -15,30 +15,30 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 	private boolean currentlyAcquired;
 	boolean init;
 	private String orderIcon = new String();
-	RestaurantChoiCook the_cook;
+	RestaurantChoiCook theCook;
 
 	//Constructor
 	public RestaurantChoiCookAnimation(RestaurantChoiCook c) {
-		this.the_cook = c;
-		xPos = restingCoordX;
-		xDestination = restingCoordX;
-		yPos = restingCoordY;
-		yDestination = restingCoordY;
+		this.theCook = c;
+		xPos = RESTX;
+		xDestination = RESTX;
+		yPos = RESTY;
+		yDestination = RESTY;
 	}
 
 	//Abstract
 	@Override
 	public void updatePosition() {
 		if (xPos < xDestination)
-			xPos+=2;
+			xPos+=1;
 		else if (xPos > xDestination)
-			xPos-=2;
+			xPos-=1;
 		if (yPos < yDestination)
-			yPos+=2;
+			yPos+=1;
 		else if (yPos > yDestination)
-			yPos-=2;
+			yPos-=1;
 		if (xPos == xDestination && yPos == yDestination && currentlyAcquired) {
-			the_cook.msgRelease();
+			theCook.msgRelease();
 			currentlyAcquired = false;
 		}
 	}
@@ -46,19 +46,19 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 	@Override
 	public void draw(Graphics2D g) {
 		g.setColor(Color.lightGray); // shadow of Cook's name, marking where he goes to rest.
-		g.drawString(the_cook.getPerson().getName(), restingCoordX, restingCoordY+10);
+		g.drawString(theCook.getPerson().getName(), RESTX, RESTY+10);
 		g.setColor(Color.PINK); // the Cook
 		g.fillRect(xPos, yPos, WIDTH, WIDTH);
 		g.setColor(Color.BLACK); // the label on the Cook
-		g.drawString(the_cook.getPerson().getName(), xPos, yPos+10);
+		g.drawString(theCook.getPerson().getName(), xPos, yPos+10);
 		g.drawString(orderIcon, xPos, yPos+30);
 
 	}
 
 	// Movement
 	public void DoLeave() {
-		xDestination = restingCoordX;
-		yDestination = restingCoordY;
+		xDestination = RESTX;
+		yDestination = RESTY;
 	}
 
 	public void toRef(){

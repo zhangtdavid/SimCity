@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import city.Application;
 import city.Application.FOOD_ITEMS;
@@ -33,6 +35,18 @@ public class MockRestaurantTimmsCook extends MockRole implements RestaurantTimms
 	@Override
 	public int getMenuItemPrice(FOOD_ITEMS stockItem) {
 		return 0;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

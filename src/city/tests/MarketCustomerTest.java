@@ -104,7 +104,7 @@ public class MarketCustomerTest extends TestCase {
 		customer.setMarket(market);
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
-		home = new HouseBuilding("House", landlord, housePanel, null);
+		home = new HouseBuilding("House", landlord, housePanel, null); // TODO fix null perhaps.
 		customerPerson.setHome(home);
 		customerPerson.setCash(500);
 		
