@@ -20,8 +20,7 @@ public class HouseResidentAnimation extends Animation implements
 	 * this is to bypass timer events in testing. Don't EVER use this in real
 	 * application
 	 */
-	public boolean beingTested = false;
-
+	public static boolean beingTested;
 	private int xDestination, yDestination;
 	private Person person = null;
 	private String orderIcon = "";
@@ -55,27 +54,43 @@ public class HouseResidentAnimation extends Animation implements
 			yPos--;
 
 		// MSG back to Person
-		// the boolean exists so we don't release the semaphore more than once,
-		// ever.
+		// the boolean exists so we don't release the semaphore more than once, hopefully.
 		if (xPos == xDestination && yPos == yDestination
 				&& personSemaphoreIsAcquired) {
-			if (command == Command.ToRoomEntrance) { // rRoom: for a house, do
-														// nothing...
-
-			} else if (command == Command.ToDoor) { // rDoor: leave
-				// TODO msg person to decide his next action... or just do
-				// nothing if this has already been done
-			} else if (command == Command.ToBed) { // rBed: sleep
-				// TODO msg person to go to sleep for x hours
-			} else if (command == Command.ToRef) { // rRef: look for food
+			if(command == Command.noCommand){ // if the person isn't doing anything...
+				command = Command.ToDoor; // by default, we'll push the person to the door.
+			}
+			if (command == Command.ToRoomEntrance) {
+				//for a house, do nothing
+				command = Command.noCommand;
+			} else if (command == Command.ToDoor) { // ToDoor: leave
 				personSemaphoreIsAcquired = false;
-				person.releaseSemaphoreFromAnimation();
-				person.print("Semaphore released, at refrigerator"); // test
+				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
+					person.releaseSemaphoreFromAnimation();
+					person.print("Semaphore released, at door"); // test output
+				}
+				command = Command.AtDoor;
+				//TODO IF necessary, msg person that now stepping out of the building?
+			} else if (command == Command.ToBed) { // ToBed: sleep
+				personSemaphoreIsAcquired = false;
+				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
+					person.releaseSemaphoreFromAnimation();
+					person.print("Semaphore released, at bed"); // test output
+				}
+				command = Command.InBed;
+			} else if (command == Command.ToRef) { // ToRef: look for food
+				personSemaphoreIsAcquired = false;
+				if(!beingTested){
+					person.releaseSemaphoreFromAnimation();
+					person.print("Semaphore released, at refrigerator"); // test output
+				}
+				person.print("At refrigerator");
+				command = Command.noCommand;
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
 				command = Command.StationaryAtStove;
 				
 				if (!beingTested) { // in practical conditions
-					timer.schedule(new TimerTask() {
+					timer.schedule(new TimerTask() { // timer untested. but its counterpart (instant) works (see below)
 						public void run() {
 							command = Command.ToTable;
 							person.print("Done cooking");
@@ -87,12 +102,12 @@ public class HouseResidentAnimation extends Animation implements
 					cookAndEatFood();
 					person.print("Skipped timer; done cooking");
 				}
-
+				//do not set command to noCommand because we want to go straight to table.
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				command = Command.StationaryAtTable;
 				
 				if (!beingTested) { // in practical conditions
-					timer.schedule(new TimerTask() {
+					timer.schedule(new TimerTask() { // see above timer with regards to testing
 						public void run() {
 							command = Command.noCommand; // back to person
 							person.print("Done eating");
@@ -146,7 +161,6 @@ public class HouseResidentAnimation extends Animation implements
 		command = Command.ToRef;
 		xDestination = HousePanel.HRX;
 		yDestination = HousePanel.HRY;
-		System.out.println("To refrigerator"); // test
 	}
 
 	@Override
@@ -156,12 +170,10 @@ public class HouseResidentAnimation extends Animation implements
 			// basically self-message
 			xDestination = HousePanel.HTX;
 			yDestination = HousePanel.HTY;
-			System.out.println("To table"); // test
 		} else {
 			command = Command.ToStove;
 			xDestination = HousePanel.HSX;
 			yDestination = HousePanel.HSY;
-			System.out.println("To stove"); // test
 		}
 	}
 

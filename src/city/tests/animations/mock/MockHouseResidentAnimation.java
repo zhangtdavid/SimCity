@@ -86,4 +86,10 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 		
 	}
 
+	@Override
+	public boolean getBeingTested() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

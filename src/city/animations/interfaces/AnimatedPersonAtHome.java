@@ -2,7 +2,7 @@ package city.animations.interfaces;
 
 public interface AnimatedPersonAtHome {
 	// Data
-	public static enum Command {noCommand, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable}; // r=residence; w=walking
+	public static enum Command {noCommand, AtDoor, InBed, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable}; // r=residence; w=walking
 	public static enum OrderIcon {Steak, Chicken, Pizza, Salad}; // could use strings or something on Person's side instead
     public static final int WIDTH = 20; // Person is a 20x20 rect, standard.
 

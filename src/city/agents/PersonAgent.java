@@ -392,8 +392,10 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.setAcquired();
 		homeAnimation.verifyFood();  // give animation instructions
 		try{ 
-			if(!homeAnimation.getBeingTested()) // this is for testing, and has no impact for real-runs.
-			atDestination.acquire(); //and freeze
+			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+				System.out.println("not being tested");
+				atDestination.acquire(); //and freeze
+			}
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to refrigerator");
 			e.printStackTrace();
@@ -403,8 +405,9 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
-			if(!homeAnimation.getBeingTested()) // this is for testing, and has no impact for real-runs.
-			atDestination.acquire(); //and freeze
+			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+				atDestination.acquire(); //and freeze
+			}
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to stove/table");
 			e.printStackTrace();

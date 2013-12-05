@@ -43,7 +43,6 @@ public class HouseAnimationTest extends TestCase {
 	private CityViewBuilding busstopCityViewBuilding2;
 	private MockBusStop busstop;
 	private MockBusStop busstop2;
-	private MockBus bus;
 	
 	
 	// Being tested
@@ -83,16 +82,13 @@ public class HouseAnimationTest extends TestCase {
 		Application.CityMap.addBuilding(BUILDING.busStop, busstop);
 		Application.CityMap.addBuilding(BUILDING.busStop, busstop2);
 		Application.CityMap.addBuilding(BUILDING.bank, bank);
-		
-		bus = new MockBus("MockBus");
-		
+				
 		//sort of relevant things
 		houseCityViewBuilding = new CityViewHouse(10, 10);
 		person = new PersonAgent("MovingPerson", date);
 		person.setCash(0); // so he doesn't go to market or restaurant
 		animation = new MockAnimatedPerson();
 		homeAnimation = new HouseResidentAnimation(person);
-		homeAnimation.beingTested = true; // turn off timers
 		person.addRole(resident);
 		person.setAnimation(animation);
 		person.setHomeAnimation(homeAnimation);
@@ -110,13 +106,15 @@ public class HouseAnimationTest extends TestCase {
 		foods.put(FOOD_ITEMS.steak, 0);
 		foods.put(FOOD_ITEMS.pizza, 0); // there is no other food in the refrigerator
 		house.setFood(foods);
-				
+		homeAnimation.beingTested = true; // turn off timers and semaphores
+		System.out.println(homeAnimation.getBeingTested());
 	}
 	
 	public void testMovementInHouse() throws InterruptedException{
 		System.out.println("");
 		System.out.println("===================== Testing Animation Message Calls in House =====================");
 		System.out.println("");
+		
 		//sanity background check
 		assertEquals("There should be 5 chickens in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.chicken), 5);
 		assertEquals("There should be 0 steaks in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.steak), 0);
@@ -131,7 +129,6 @@ public class HouseAnimationTest extends TestCase {
 		//person hasn't eaten yet. Let's make him check the refrigerator.
 		assertEquals("Person shouldn't've eaten", person.getHasEaten(), false);
 		assertEquals("Person's state should be STATE.none", Person.STATE.none, person.getState());
-		
 		boolean outcome;
 		outcome = person.runScheduler();
 		// Person should be doing a daily task (going home to cook)
@@ -141,8 +138,6 @@ public class HouseAnimationTest extends TestCase {
 		assertEquals("Person's homeAnimation should have state noCommand", homeAnimation.getCommand(), "noCommand");
 		
 		assertEquals("Scheduler should still be true", person.runScheduler(), true);
-		//System.out.println(person.getState().toString());
-		//System.out.println(homeAnimation.getCommand());
 
 		//Fast forward time
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
@@ -155,24 +150,58 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.goToRoom(0); // for a house, this does nothing but change your state
 		assertEquals("Command of home Animation should be ToRoom", homeAnimation.getCommand(), Command.ToRoomEntrance.toString());
 		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
+		
+		//Now go to bed to sleep.
+		homeAnimation.setAcquired();
+		homeAnimation.goToSleep();
+		assertEquals("Command of home animation should be ToBed", homeAnimation.getCommand(), Command.ToBed.toString()); // state confirmed.
+		homeAnimation.setCoords(HousePanel.HBXi, HousePanel.HBYi);
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
+		homeAnimation.updatePosition(); // change command
+		assertEquals("Command of home animation should be InBed", homeAnimation.getCommand(), Command.InBed.toString()); // state confirmed. "sleeping!"
+		
 		homeAnimation.setAcquired();
 		homeAnimation.verifyFood();
+		// let's check movement really fast
+		homeAnimation.setCoords(HousePanel.HRX-2, HousePanel.HRY-2);
+		homeAnimation.updatePosition();
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]-1);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]-1);
+		homeAnimation.setCoords(HousePanel.HRX+2, HousePanel.HRY+2);
+		homeAnimation.updatePosition();
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]+1);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]+1);
+		
 		assertEquals("Command of home Animation should be ToRef", homeAnimation.getCommand(), Command.ToRef.toString());
 		homeAnimation.setCoords(HousePanel.HRX, HousePanel.HRY); // at refrigerator
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
 		homeAnimation.updatePosition(); // now done with going to refrigerator.
 		
 		homeAnimation.setAcquired(); // then the person would tell the animation to cookAndEatFood after acquiring the semaphore...
 		homeAnimation.cookAndEatFood(); 
 		assertEquals("Command of home animation should be ToStove", homeAnimation.getCommand(), Command.ToStove.toString()); // state confirmed
 		homeAnimation.setCoords(HousePanel.HSX, HousePanel.HSY);
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
 		homeAnimation.updatePosition(); // update command to toTable
 		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // state confirmed
 		homeAnimation.setCoords(HousePanel.HTX, HousePanel.HTY);
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
 		homeAnimation.updatePosition();
-		System.out.println(homeAnimation.getCommand());
 		assertEquals("Command of home animation should be noCommand", homeAnimation.getCommand(), Command.noCommand.toString()); // state confirmed. Done!
-		
-		
-		
-	}
+				
+		//Now leave the house.
+		homeAnimation.goOutside();
+		assertTrue("xDest = xPos", homeAnimation.getXPos() != homeAnimation.getDestination()[0]);
+		assertFalse("yDest = yPos", homeAnimation.getYPos() == homeAnimation.getDestination()[1]);
+		assertEquals("Command of home animation should be ToDoor", homeAnimation.getCommand(), Command.ToDoor.toString()); // state confirmed. leaving!		
+		homeAnimation.setCoords(HousePanel.HDX, HousePanel.HDY);
+		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
+		homeAnimation.updatePosition();
+		assertEquals("Command of home animation should be AtDoor", homeAnimation.getCommand(), Command.AtDoor.toString()); // state confirmed. leaving!
+		}
 }

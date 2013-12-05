@@ -12,7 +12,7 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	Person person = null;
 	Command command = Command.noCommand;
 	int xDestination, yDestination;
-	public boolean beingTested = false;
+	public boolean beingTested;
 	
 	//Constructor
 	public AptResidentAnimation(Person p){
