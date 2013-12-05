@@ -1,7 +1,5 @@
 package city.tests;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,8 +9,6 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.BankPanel;
-import city.gui.buildings.MarketPanel;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier.TransactionState;
