@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.concurrent.Semaphore;
@@ -179,11 +180,6 @@ public class MockPerson extends MockAgent implements Person {
 	// Setters
 	
 	@Override
-	public void setAnimation(AnimatedPerson p) {
-		this.animation = p;
-	}
-	
-	@Override
 	public void setCar(Car c) {
 		this.car = c;
 	}
@@ -213,6 +209,18 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public void addRole(RoleInterface r) {
 		this.roles.add(r);
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setName(String n) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

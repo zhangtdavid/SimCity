@@ -3,6 +3,7 @@ package city.abstracts;
 import utilities.EventLog;
 import utilities.StringUtil;
 import city.AgentInterface;
+import city.AnimationInterface;
 
 /**
  * The base class for all SimCity201 agent mocks.
@@ -36,8 +37,20 @@ public abstract class MockAgent implements AgentInterface {
     public String getName() {
         return StringUtil.shortName(this);
     }
+    
+	@Override
+	public AnimationInterface getAnimation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
 	// Setters
+	
+	@Override
+	public void setAnimation(AnimationInterface a) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	// Utilities
 	

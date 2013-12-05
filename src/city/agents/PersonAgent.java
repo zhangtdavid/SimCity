@@ -62,7 +62,6 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
-	private AnimatedPerson animation;
 	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
@@ -231,7 +230,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
-				animation.goToSleep();
+				((AnimatedPerson) this.getAnimation()).goToSleep();
 				setState(STATES.atSleep);
 				return false;
 			}
@@ -385,7 +384,7 @@ public class PersonAgent extends Agent implements Person {
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = true;
-		animation.cookAndEatFood();
+		((AnimatedPerson) this.getAnimation()).cookAndEatFood();
 		// The scheduler will pick up the atDestination and continue the program
 	}
 	
@@ -485,11 +484,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public AnimatedPerson getAnimation() {
-		return animation;
-	}
-	
-	@Override
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
@@ -510,16 +504,11 @@ public class PersonAgent extends Agent implements Person {
 		occupation = r;
 		if (r != null) { addRole(r); }
 	}
-	
-	@Override
-	public void setAnimation(AnimatedPerson p) {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		animation = p;
-	}
 
 	@Override
 	public void setCar(Car c) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		getPropertyChangeSupport().firePropertyChange(CAR, this.car, c);
 		car = c;
 	}
 	

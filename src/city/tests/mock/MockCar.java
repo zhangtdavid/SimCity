@@ -6,6 +6,7 @@ import city.BuildingInterface;
 import city.abstracts.MockAgent;
 import city.interfaces.Car;
 import city.interfaces.CarPassenger;
+import city.interfaces.Person;
 
 public class MockCar extends MockAgent implements Car {
 	
@@ -52,6 +53,12 @@ public class MockCar extends MockAgent implements Car {
 
 	@Override
 	public BuildingInterface getDestination() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public Person getOwner() {
 		// TODO Auto-generated method stub
 		return null;
 	}

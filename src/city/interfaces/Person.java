@@ -8,7 +8,6 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
-import city.animations.interfaces.AnimatedPerson;
 
 public interface Person extends AgentInterface {
 
@@ -19,6 +18,7 @@ public interface Person extends AgentInterface {
 	public static final String NAME = "name";
 	public static final String CASH = "cash";
 	public static final String ROLES = "roles";
+	public static final String CAR = "car";
 	public static final int BANK_DEPOSIT_THRESHOLD = 100;
 	public static final int BANK_DEPOSIT_SUM = 50;
 	public static final int RESTAURANT_DINING_THRESHOLD = 80;
@@ -39,7 +39,6 @@ public interface Person extends AgentInterface {
 	
 	// Getters
 	
-	public AnimatedPerson getAnimation();
 	public BankCustomer getBankCustomerRole();
 	public BusPassenger getBusPassengerRole();
 	public Car getCar();
@@ -59,7 +58,6 @@ public interface Person extends AgentInterface {
 	
 	// Setters
 	
-	public void setAnimation(AnimatedPerson p);
 	public void setCar(Car c);
 	public void setCash(int c);
 	public void setDate(Date d);

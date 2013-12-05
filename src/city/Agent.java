@@ -13,6 +13,7 @@ public abstract class Agent implements AgentInterface {
 	
     private Semaphore stateChange = new Semaphore(1, true);
     private AgentThread agentThread;
+    private AnimationInterface animation;
     
     // Constructor
     
@@ -44,7 +45,17 @@ public abstract class Agent implements AgentInterface {
         return StringUtil.shortName(this);
     }
     
+    @Override
+    public AnimationInterface getAnimation() {
+    	return this.animation;
+    }
+    
     // Setters
+    
+    @Override
+    public void setAnimation(AnimationInterface a) {
+    	this.animation = a;
+    }
     
     // Utilities
     

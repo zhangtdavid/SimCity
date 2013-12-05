@@ -26,6 +26,7 @@ public interface Car extends AgentInterface {
 	
 	public CARSTATE getState();
 	public CAREVENT getEvent();
+	public Person getOwner(); // Returns the actual owner, or if it belongs to a role, the person owning the role
 	public CarPassenger getPassenger();
 	public BuildingInterface getDestination();
 	

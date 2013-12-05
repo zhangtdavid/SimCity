@@ -28,8 +28,11 @@ public interface AgentInterface {
 	// Getters
 	
 	public String getName();
+	public AnimationInterface getAnimation();
 	
 	// Setters
+	
+	public void setAnimation(AnimationInterface a);
 	
 	// Utilities
 	

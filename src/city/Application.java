@@ -19,6 +19,7 @@ import city.agents.PersonAgent;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
+import city.buildings.ApartmentBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
@@ -32,6 +33,7 @@ import city.gui.BuildingCard;
 import city.gui.CityRoad;
 import city.gui.CityRoadIntersection;
 import city.gui.MainFrame;
+import city.gui.buildings.AptPanel;
 import city.gui.buildings.BankPanel;
 import city.gui.buildings.BusStopPanel;
 import city.gui.buildings.HousePanel;
@@ -323,17 +325,22 @@ public class Application {
 		restaurantZhangPanel1.setTables(rzb1.tables);
 		createBuilding(restaurantZhangPanel1, cityViewRestaurantZhang1, rzb1);
 
-		HousePanel housePanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, housePanelZhang1);
-		HouseBuilding houseBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, housePanelZhang1, cityViewHouseZhang1);
-		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
+//		HousePanel housePanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+//		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, housePanelZhang1);
+//		HouseBuilding houseBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, housePanelZhang1, cityViewHouseZhang1);
+//		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
+		
+		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1);
+		ApartmentBuilding apartmentBuildingZhang1 = new ApartmentBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
-		houseBuildingZhang1.setLandlord(p0r1Zhang);
-		p0Zhang.setHome(houseBuildingZhang1);
+		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
+		p0Zhang.setHome(apartmentBuildingZhang1);
 		p0r1Zhang.setActive();
 		model.addPerson(p0Zhang);
 
@@ -346,37 +353,32 @@ public class Application {
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
 		model.addPerson(p4Zhang);
-		p1Zhang.setHome(houseBuildingZhang1);
-		p2Zhang.setHome(houseBuildingZhang1);
-		p3Zhang.setHome(houseBuildingZhang1);
-		p4Zhang.setHome(houseBuildingZhang1);
+		p1Zhang.setHome(apartmentBuildingZhang1);
+		p2Zhang.setHome(apartmentBuildingZhang1);
+		p3Zhang.setHome(apartmentBuildingZhang1);
+		p4Zhang.setHome(apartmentBuildingZhang1);
 
 		// Give people cars
-		CarAgent c0Zhang = new CarAgent(busStop2);
-		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
-		c0Zhang.setAnimation(c0AnimZhang);
-		mainFrame.cityView.addAnimation(c0AnimZhang);
-		CarAgent c1Zhang = new CarAgent(busStop2);
+//		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
+//		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
+//		c0Zhang.setAnimation(c0AnimZhang);
+//		mainFrame.cityView.addAnimation(c0AnimZhang);
+		CarAgent c1Zhang = new CarAgent(busStop2, p1Zhang);
 		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, busStop2);
 		c1Zhang .setAnimation(c1AnimZhang);
 		mainFrame.cityView.addAnimation(c1AnimZhang);
-		CarAgent c2Zhang = new CarAgent(busStop2);
+		CarAgent c2Zhang = new CarAgent(busStop2, p2Zhang);
 		CarAnimation c2AnimZhang = new CarAnimation(c2Zhang, busStop2);
 		c2Zhang.setAnimation(c2AnimZhang);
 		mainFrame.cityView.addAnimation(c2AnimZhang);
-		CarAgent c3Zhang = new CarAgent(busStop2);
+		CarAgent c3Zhang = new CarAgent(busStop2, p3Zhang);
 		CarAnimation c3AnimZhang = new CarAnimation(c3Zhang, busStop2);
 		c3Zhang.setAnimation(c3AnimZhang);
 		mainFrame.cityView.addAnimation(c3AnimZhang);
-		CarAgent c4Zhang = new CarAgent(busStop2);
+		CarAgent c4Zhang = new CarAgent(busStop2, p4Zhang);
 		CarAnimation c4AnimZhang = new CarAnimation(c4Zhang, busStop2);
 		c4Zhang.setAnimation(c4AnimZhang);
 		mainFrame.cityView.addAnimation(c4AnimZhang);
-		//p0.setCar(c0);
-		p1Zhang.setCar(c1Zhang);
-		p2Zhang.setCar(c2Zhang);
-		p3Zhang.setCar(c3Zhang);
-		p4Zhang.setCar(c4Zhang);
 
 		// Create cashier
 		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100); // TODO Change shift times
@@ -443,31 +445,26 @@ public class Application {
 		p4Timms.setHome(rhb1Timms);
 
 		// Give people cars
-		CarAgent c0Timms = new CarAgent(busStop3);
+		CarAgent c0Timms = new CarAgent(busStop3, p0Timms);
 		CarAnimation c0AnimTimms = new CarAnimation(c0Timms, busStop3);
 		c0Timms.setAnimation(c0AnimTimms);
 		mainFrame.cityView.addAnimation(c0AnimTimms);
-		CarAgent c1Timms = new CarAgent(busStop3);
+		CarAgent c1Timms = new CarAgent(busStop3, p1Timms);
 		CarAnimation c1AnimTimms = new CarAnimation(c1Timms, busStop3);
 		c1Timms.setAnimation(c1AnimTimms);
 		mainFrame.cityView.addAnimation(c1AnimTimms);
-		CarAgent c2Timms = new CarAgent(busStop3);
+		CarAgent c2Timms = new CarAgent(busStop3, p2Timms);
 		CarAnimation c2AnimTimms = new CarAnimation(c2Timms, busStop3);
 		c2Timms.setAnimation(c2AnimTimms);
 		mainFrame.cityView.addAnimation(c2AnimTimms);
-		CarAgent c3Timms = new CarAgent(busStop3);
+		CarAgent c3Timms = new CarAgent(busStop3, p3Timms);
 		CarAnimation c3AnimTimms = new CarAnimation(c3Timms, busStop3);
 		c3Timms.setAnimation(c3AnimTimms);
 		mainFrame.cityView.addAnimation(c3AnimTimms);
-		CarAgent c4Timms = new CarAgent(busStop3);
+		CarAgent c4Timms = new CarAgent(busStop3, p4Timms);
 		CarAnimation c4AnimTimms = new CarAnimation(c4Timms, busStop3);
 		c4Timms.setAnimation(c4AnimTimms);
 		mainFrame.cityView.addAnimation(c4AnimTimms);
-		p0Timms.setCar(c0Timms);
-		p1Timms.setCar(c1Timms);
-		p2Timms.setCar(c2Timms);
-		p3Timms.setCar(c3Timms);
-		p4Timms.setCar(c4Timms);
 
 		// Create cashier
 		RestaurantTimmsCashierRole p1r1Timms = new RestaurantTimmsCashierRole(rtb, 0, 100); // TODO Change shift times
@@ -603,62 +600,50 @@ public class Application {
 		marketBuildingChoi1.addDeliveryPerson(p8r1Choi);
 
 		// Give people cars
-		CarAgent c0Choi = new CarAgent(busStop4);
+		CarAgent c0Choi = new CarAgent(busStop4, p0Choi);
 		CarAnimation c0AnimChoi = new CarAnimation(c0Choi, busStop4);
 		c0Choi.setAnimation(c0AnimChoi);
 		mainFrame.cityView.addAnimation(c0AnimChoi);
-		CarAgent c1Choi = new CarAgent(busStop4);
-		CarAnimation c1AnimChoi = new CarAnimation(c1Choi, busStop4);
-		c1Choi.setAnimation(c1AnimChoi);
-		mainFrame.cityView.addAnimation(c1AnimChoi);
-		CarAgent c2Choi = new CarAgent(busStop4);
-		CarAnimation c2AnimChoi = new CarAnimation(c2Choi, busStop4);
-		c2Choi.setAnimation(c2AnimChoi);
-		mainFrame.cityView.addAnimation(c2AnimChoi);
-		CarAgent c3Choi = new CarAgent(busStop4);
-		CarAnimation c3AnimChoi = new CarAnimation(c3Choi, busStop4);
-		c3Choi.setAnimation(c3AnimChoi);
-		mainFrame.cityView.addAnimation(c3AnimChoi);
-		CarAgent c4Choi = new CarAgent(busStop4);
-		CarAnimation c4AnimChoi = new CarAnimation(c4Choi, busStop4);
-		c4Choi.setAnimation(c4AnimChoi);
-		mainFrame.cityView.addAnimation(c4AnimChoi);
-		CarAgent c5Choi = new CarAgent(busStop4);
-		CarAnimation c5AnimChoi = new CarAnimation(c5Choi, busStop4);
-		c5Choi.setAnimation(c5AnimChoi);
-		mainFrame.cityView.addAnimation(c5AnimChoi);
-		CarAgent c6Choi = new CarAgent(busStop4);
+//		CarAgent c1Choi = new CarAgent(busStop4);
+//		CarAnimation c1AnimChoi = new CarAnimation(c1Choi, busStop4);
+//		c1Choi.setAnimation(c1AnimChoi);
+//		mainFrame.cityView.addAnimation(c1AnimChoi);
+//		CarAgent c2Choi = new CarAgent(busStop4);
+//		CarAnimation c2AnimChoi = new CarAnimation(c2Choi, busStop4);
+//		c2Choi.setAnimation(c2AnimChoi);
+//		mainFrame.cityView.addAnimation(c2AnimChoi);
+//		CarAgent c3Choi = new CarAgent(busStop4);
+//		CarAnimation c3AnimChoi = new CarAnimation(c3Choi, busStop4);
+//		c3Choi.setAnimation(c3AnimChoi);
+//		mainFrame.cityView.addAnimation(c3AnimChoi);
+//		CarAgent c4Choi = new CarAgent(busStop4);
+//		CarAnimation c4AnimChoi = new CarAnimation(c4Choi, busStop4);
+//		c4Choi.setAnimation(c4AnimChoi);
+//		mainFrame.cityView.addAnimation(c4AnimChoi);
+//		CarAgent c5Choi = new CarAgent(busStop4);
+//		CarAnimation c5AnimChoi = new CarAnimation(c5Choi, busStop4);
+//		c5Choi.setAnimation(c5AnimChoi);
+//		mainFrame.cityView.addAnimation(c5AnimChoi);
+		CarAgent c6Choi = new CarAgent(busStop4, p6Choi);
 		CarAnimation c6AnimChoi = new CarAnimation(c6Choi, busStop4);
 		c6Choi.setAnimation(c6AnimChoi);
 		mainFrame.cityView.addAnimation(c6AnimChoi);
-		CarAgent c7Choi = new CarAgent(busStop4);
+		CarAgent c7Choi = new CarAgent(busStop4, p7Choi);
 		CarAnimation c7AnimChoi = new CarAnimation(c7Choi, busStop4);
 		c7Choi.setAnimation(c7AnimChoi);
 		mainFrame.cityView.addAnimation(c7AnimChoi);
-		CarAgent c8Choi = new CarAgent(busStop4);
+		CarAgent c8Choi = new CarAgent(busStop4, p8Choi);
 		CarAnimation c8AnimChoi = new CarAnimation(c8Choi, busStop4);
 		c8Choi.setAnimation(c8AnimChoi);
 		mainFrame.cityView.addAnimation(c8AnimChoi);
-		CarAgent c9Choi = new CarAgent(busStop4);
+		CarAgent c9Choi = new CarAgent(busStop4, p9Choi);
 		CarAnimation c9AnimChoi = new CarAnimation(c9Choi, busStop4);
 		c9Choi.setAnimation(c9AnimChoi);
 		mainFrame.cityView.addAnimation(c9AnimChoi);
-		CarAgent c10Choi = new CarAgent(busStop4);
+		CarAgent c10Choi = new CarAgent(busStop4, p10Choi);
 		CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop4);
 		c10Choi.setAnimation(c10AnimChoi);
 		mainFrame.cityView.addAnimation(c10AnimChoi);
-
-		p0Choi.setCar(c0Choi);
-//		p1Choi.setCar(c1Choi);
-//		p2Choi.setCar(c2Choi);
-//		p3Choi.setCar(c3Choi);
-//		p4Choi.setCar(c4Choi);
-//		p5Choi.setCar(c5Choi);
-		p6Choi.setCar(c6Choi);
-		p7Choi.setCar(c7Choi);
-		p8Choi.setCar(c8Choi);
-		p9Choi.setCar(c9Choi);
-		p10Choi.setCar(c10Choi);
 		
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
 		
@@ -700,31 +685,26 @@ public class Application {
 		p4Chung.setHome(houseBuildingChung1);
 
 		// Give people cars
-		CarAgent c0Chung = new CarAgent(busStop1);
+		CarAgent c0Chung = new CarAgent(busStop1, p0Chung);
 		CarAnimation c0AnimChung = new CarAnimation(c0Chung, busStop1);
 		c0Chung.setAnimation(c0AnimChung);
 		mainFrame.cityView.addAnimation(c0AnimChung);
-		CarAgent c1Chung = new CarAgent(busStop1);
+		CarAgent c1Chung = new CarAgent(busStop1, p1Chung);
 		CarAnimation c1AnimChung = new CarAnimation(c1Chung, busStop1);
 		c1Chung.setAnimation(c1AnimChung);
 		mainFrame.cityView.addAnimation(c1AnimChung);
-		CarAgent c2Chung = new CarAgent(busStop1);
+		CarAgent c2Chung = new CarAgent(busStop1, p2Chung);
 		CarAnimation c2AnimChung = new CarAnimation(c2Chung, busStop1);
 		c2Chung.setAnimation(c2AnimChung);
 		mainFrame.cityView.addAnimation(c2AnimChung);
-		CarAgent c3Chung = new CarAgent(busStop1);
+		CarAgent c3Chung = new CarAgent(busStop1, p3Chung);
 		CarAnimation c3AnimChung = new CarAnimation(c3Chung, busStop1);
 		c3Chung.setAnimation(c3AnimChung);
 		mainFrame.cityView.addAnimation(c3AnimChung);
-		CarAgent c4Chung = new CarAgent(busStop1);
+		CarAgent c4Chung = new CarAgent(busStop1, p4Chung);
 		CarAnimation c4AnimChung = new CarAnimation(c4Chung, busStop1);
 		c4Chung.setAnimation(c4AnimChung);
 		mainFrame.cityView.addAnimation(c4AnimChung);
-		p0Chung.setCar(c0Chung);
-		p1Chung.setCar(c1Chung);
-		p2Chung.setCar(c2Chung);
-		p3Chung.setCar(c3Chung);
-		p4Chung.setCar(c4Chung);
 
 		// Create cashier
 		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(restaurantChungBuilding1, 0, 12); // TODO Change shift times
@@ -787,31 +767,26 @@ public class Application {
 		p4JP.setHome(houseBuildingJP1);
 
 		// Give people cars
-		CarAgent c0JP = new CarAgent(busStop3);
-		CarAnimation c0AnimJP = new CarAnimation(c0JP, busStop3);
-		c0JP.setAnimation(c0AnimJP);
-		mainFrame.cityView.addAnimation(c0AnimJP);
-		CarAgent c1JP = new CarAgent(busStop3);
+//		CarAgent c0JP = new CarAgent(busStop3);
+//		CarAnimation c0AnimJP = new CarAnimation(c0JP, busStop3);
+//		c0JP.setAnimation(c0AnimJP);
+//		mainFrame.cityView.addAnimation(c0AnimJP);
+		CarAgent c1JP = new CarAgent(busStop3, p1JP);
 		CarAnimation c1AnimJP = new CarAnimation(c1JP, busStop3);
 		c1JP .setAnimation(c1AnimJP);
 		mainFrame.cityView.addAnimation(c1AnimJP);
-		CarAgent c2JP = new CarAgent(busStop3);
+		CarAgent c2JP = new CarAgent(busStop3, p2JP);
 		CarAnimation c2AnimJP = new CarAnimation(c2JP, busStop3);
 		c2JP.setAnimation(c2AnimJP);
 		mainFrame.cityView.addAnimation(c2AnimJP);
-		CarAgent c3JP = new CarAgent(busStop3);
+		CarAgent c3JP = new CarAgent(busStop3, p3JP);
 		CarAnimation c3AnimJP = new CarAnimation(c3JP, busStop3);
 		c3JP.setAnimation(c3AnimJP);
 		mainFrame.cityView.addAnimation(c3AnimJP);
-		CarAgent c4JP = new CarAgent(busStop2);
+		CarAgent c4JP = new CarAgent(busStop2, p4JP);
 		CarAnimation c4AnimJP = new CarAnimation(c4JP, busStop3);
 		c4JP.setAnimation(c4AnimJP);
 		mainFrame.cityView.addAnimation(c4AnimJP);
-		//p0.setCar(c0);
-		p1JP.setCar(c1JP);
-		p2JP.setCar(c2JP);
-		p3JP.setCar(c3JP);
-		p4JP.setCar(c4JP);
 
 		// Create cashier
 		RestaurantJPCashierRole p1r1JP = new RestaurantJPCashierRole(restaurantJPBuilding1, 0, 100); // TODO Change shift times
@@ -839,7 +814,7 @@ public class Application {
 		} catch (InterruptedException e) {}
 
 		// Start threads for RestaurantZhang
-		c0Zhang.startThread();
+		// c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();
@@ -857,11 +832,11 @@ public class Application {
 		
 		// Start threads for RestaurantChoi
 		c0Choi.startThread();
-		c1Choi.startThread();
-		c2Choi.startThread();
-		c3Choi.startThread();
-		c4Choi.startThread();
-		c5Choi.startThread();
+//		c1Choi.startThread();
+//		c2Choi.startThread();
+//		c3Choi.startThread();
+//		c4Choi.startThread();
+//		c5Choi.startThread();
 		c6Choi.startThread();
 		c7Choi.startThread();
 		c8Choi.startThread();
@@ -900,7 +875,7 @@ public class Application {
 			Thread.sleep(2000);
 		} catch (InterruptedException e) {}
 		
-		c0JP.startThread();
+		// c0JP.startThread();
 		c1JP.startThread();
 		c2JP.startThread();
 		c3JP.startThread();
@@ -914,6 +889,10 @@ public class Application {
 	
 	public static DataModel getModel() {
 		return model;
+	}
+	
+	public static MainFrame getMainFrame() {
+		return mainFrame;
 	}
 
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
@@ -971,8 +950,6 @@ public class Application {
 					returnBuilding = tempBuilding;
 				}
 			}
-			if(returnBuilding == null) // TODO remove, hack for market 
-				return findRandomBuilding(BUILDING.restaurant);
 			return returnBuilding;
 		}
 
@@ -980,8 +957,8 @@ public class Application {
 		 * Find the building of type closest to the person's location
 		 */
 		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
-			int x = 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
-			int y = 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
+			int x = p.getAnimation().getXPos(); // 100; // p.animation.getXPos(); // TODO RestaurantZhang 92f655cfd5
+			int y = p.getAnimation().getYPos(); // 100; // p.animation.getYPos(); // TODO RestaurantZhang 92f655cfd5
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface b : map.get(type)) {
@@ -1006,8 +983,6 @@ public class Application {
 					returnRoad = r;
 				}
 			}
-			if(returnRoad == null) // TODO remove, hack for market
-				returnRoad =  findClosestRoad(findRandomBuilding(BUILDING.restaurant));
 			return returnRoad;
 		}
 
