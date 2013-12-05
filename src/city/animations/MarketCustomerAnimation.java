@@ -1,10 +1,11 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.MarketAnimatedCustomer;
-import city.interfaces.MarketCustomer;
+import city.bases.Animation;
+import city.roles.interfaces.MarketCustomer;
 
 public class MarketCustomerAnimation extends Animation implements MarketAnimatedCustomer {
 	private MarketCustomer customer = null;

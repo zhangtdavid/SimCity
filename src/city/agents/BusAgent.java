@@ -1,20 +1,20 @@
 package city.agents;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Agent;
-import city.interfaces.Bus;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
+import city.agents.interfaces.Bus;
 import city.animations.interfaces.AnimatedBus;
+import city.bases.Agent;
 import city.buildings.BusStopBuilding;
+import city.buildings.interfaces.BusStop;
+import city.roles.interfaces.BusPassenger;
 
 public class BusAgent extends Agent implements Bus {
 
@@ -25,7 +25,6 @@ public class BusAgent extends Agent implements Bus {
 	private BusStop currentStop; // Stop the bus is at
 	private BusStop nextStop; // Stop the bus is going to
 	private int earnedMoney = 0; // Amount of fare the bus earned
-	private AnimatedBus animation;
 	private Semaphore atDestination = new Semaphore(0, true);
 	private Timer timer = new Timer();
 	
@@ -174,7 +173,7 @@ public class BusAgent extends Agent implements Bus {
 
 	private void driveToNextStop() { // Tells 
 		print("Driving to stop " + nextStop.getName());
-		animation.doGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
+		((AnimatedBus) this.getAnimation()).doGoToNextStop(nextStop); // Calls msgAtBusDestination() when finished
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -216,10 +215,6 @@ public class BusAgent extends Agent implements Bus {
 	}
 	
 	// Setters
-	
-	public void setAnimation(AnimatedBus anim) {
-		animation = anim;
-	}
 	
 	// Utilities
 	

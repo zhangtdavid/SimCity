@@ -1,19 +1,19 @@
 package city.tests;
 
-import city.gui.buildings.MarketPanel;
-import city.gui.buildings.RestaurantChungPanel;
-import city.interfaces.Bank;
-import city.interfaces.Market;
-import city.interfaces.RestaurantChung;
+import junit.framework.TestCase;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.Market;
+import city.buildings.interfaces.RestaurantChung;
+import city.gui.interiors.MarketPanel;
+import city.gui.interiors.RestaurantChungPanel;
 import city.roles.RestaurantChungCashierRole;
-import city.tests.mock.MockMarket;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChungCook;
-import city.tests.mock.MockRestaurantChungCustomer;
-import city.tests.mock.MockRestaurantChungHost;
-import city.tests.mock.MockRestaurantChungWaiterMessageCook;
-import city.tests.mock.MockRestaurantChungWaiterRevolvingStand;
-import junit.framework.*;
+import city.tests.mocks.MockMarket;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChungCook;
+import city.tests.mocks.MockRestaurantChungCustomer;
+import city.tests.mocks.MockRestaurantChungHost;
+import city.tests.mocks.MockRestaurantChungWaiterMessageCook;
+import city.tests.mocks.MockRestaurantChungWaiterRevolvingStand;
 
 /**
  * 

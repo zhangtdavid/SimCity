@@ -1,7 +1,7 @@
 package utilities;
 
 import city.animations.RestaurantChoiFurnitureAnimation;
-import city.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiCustomer;
 
 
 public class RestaurantChoiTable {

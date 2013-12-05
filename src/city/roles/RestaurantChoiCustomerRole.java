@@ -8,13 +8,13 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiMenu;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
-import city.interfaces.RestaurantChoiCashier;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiHost;
-import city.interfaces.RestaurantChoiWaiter;
+import city.bases.Role;
+import city.roles.interfaces.RestaurantChoiCashier;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiHost;
+import city.roles.interfaces.RestaurantChoiWaiter;
 
 public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCustomer{
 

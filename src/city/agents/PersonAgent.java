@@ -16,44 +16,44 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketOrder;
-import city.Agent;
 import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
-import city.BuildingInterface;
-import city.RoleInterface;
-import city.abstracts.ResidenceBuildingInterface;
+import city.agents.interfaces.Car;
+import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
-import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.interfaces.Apartment;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
-import city.interfaces.House;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomer;
-import city.interfaces.Person;
-import city.interfaces.Resident;
+import city.bases.Agent;
+import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.JobRoleInterface;
+import city.bases.interfaces.ResidenceBuildingInterface;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Apartment;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.BusStop;
+import city.buildings.interfaces.House;
+import city.buildings.interfaces.Market;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
 import city.roles.ResidentRole;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BusPassenger;
+import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.Resident;
 
 public class PersonAgent extends Agent implements Person {
 	
 	// Data
 	
 	private Date date;
-	private RoleInterface occupation;
+	private JobRoleInterface occupation;
 	private ResidenceBuildingInterface home;
 	private int roomNumber; // relevant for apartments only. retained (for homes: 0; for apartments, 1~5)
 	private Car car;
@@ -69,7 +69,6 @@ public class PersonAgent extends Agent implements Person {
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
-	private AnimatedPerson animation; // only for cityview
 	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
@@ -471,7 +470,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public RoleInterface getOccupation() {
+	public JobRoleInterface getOccupation() {
 		return occupation;
 	}
 	
@@ -521,11 +520,6 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public AnimatedPerson getAnimation() {
-		return animation;
-	}
-	
-	@Override
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
@@ -546,26 +540,22 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(RoleInterface r) {
+	public void setOccupation(JobRoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
 		if (r != null) { addRole(r); }
 	}
 	
 	@Override
-	public void setAnimation(AnimatedPerson p) {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		animation = p;
-	}
-	
 	public void setHomeAnimation(AnimatedPersonAtHome a){
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		homeAnimation = a;
 	}
-
+	
 	@Override
 	public void setCar(Car c) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		getPropertyChangeSupport().firePropertyChange(CAR, this.car, c);
 		car = c;
 	}
 	
@@ -605,6 +595,11 @@ public class PersonAgent extends Agent implements Person {
 	public void setName(String n) {
 		getPropertyChangeSupport().firePropertyChange(NAME, this.name, n);
 		this.name = n;
+	}
+	
+	@Override
+	public void setResidentRole(Resident r) {
+		this.residentRole = r;
 	}
 	
 	/**

@@ -20,18 +20,19 @@ import utilities.RestaurantChungRevolvingStand;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.abstracts.RestaurantBuildingBase.FoodOrderState;
-import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantChungAnimatedCook;
+import city.bases.JobRole;
+import city.bases.Role;
+import city.bases.RestaurantBuilding.FoodOrderState;
+import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCook;
-import city.interfaces.RestaurantChungWaiter;
+import city.buildings.interfaces.RestaurantChung;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantChungCook;
+import city.roles.interfaces.RestaurantChungWaiter;
 
-public class RestaurantChungCookRole extends Role implements RestaurantChungCook {
+public class RestaurantChungCookRole extends JobRole implements RestaurantChungCook {
 //  Data
 //  ===================================================================== 
 	public EventLog log = new EventLog();

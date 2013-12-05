@@ -1,38 +1,37 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.abstracts.RestaurantBuildingBase;
+import city.bases.RestaurantBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.gui.buildings.MarketPanel;
-import city.gui.buildings.RestaurantChungPanel;
-import city.gui.views.CityViewRestaurant;
-import city.interfaces.MarketCustomerDelivery.MarketCustomerState;
+import city.gui.exteriors.CityViewRestaurant;
+import city.gui.interiors.MarketPanel;
+import city.gui.interiors.RestaurantChungPanel;
 import city.roles.MarketCustomerDeliveryRole;
-import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomer;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketEmployee;
-import city.tests.mock.MockMarketManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.roles.interfaces.MarketCustomerDelivery.MarketCustomerState;
+import city.tests.mocks.MockMarketCashier;
+import city.tests.mocks.MockMarketCustomer;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketDeliveryPerson;
+import city.tests.mocks.MockMarketEmployee;
+import city.tests.mocks.MockMarketManager;
+import city.tests.mocks.MockPerson;
 
 public class MarketCustomerDeliveryTest extends TestCase {	
 	MarketPanel marketPanel;	
 	MarketBuilding market;
 	
 	RestaurantChungPanel restaurantChungPanel;	
-	RestaurantBuildingBase restaurant;
+	RestaurantBuilding restaurant;
 	
 	MockPerson cashierPerson;
 	MockMarketCashier cashier;

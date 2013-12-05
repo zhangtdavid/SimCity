@@ -10,10 +10,10 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomer;
-import city.interfaces.MarketEmployee;
+import city.bases.Role;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.MarketEmployee;
 
 public class MarketCustomerRole extends Role implements MarketCustomer {
 	

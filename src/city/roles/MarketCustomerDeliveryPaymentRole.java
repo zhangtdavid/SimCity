@@ -9,12 +9,12 @@ import utilities.LoggedEvent;
 import utilities.MarketTransaction;
 import utilities.MarketTransaction.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.abstracts.RestaurantBuildingInterface;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDeliveryPayment;
+import city.bases.JobRole;
+import city.bases.interfaces.RestaurantBuildingInterface;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
 
-public class MarketCustomerDeliveryPaymentRole extends Role implements MarketCustomerDeliveryPayment {
+public class MarketCustomerDeliveryPaymentRole extends JobRole implements MarketCustomerDeliveryPayment {
 
 //  Data
 //	=====================================================================	

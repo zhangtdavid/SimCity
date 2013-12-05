@@ -5,14 +5,14 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantChoiBuilding;
-import city.gui.buildings.RestaurantChoiPanel;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiWaiter;
+import city.gui.interiors.RestaurantChoiPanel;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCashierRole.Check;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChoiCustomer;
-import city.tests.mock.MockRestaurantChoiWaiterQueue;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChoiCustomer;
+import city.tests.mocks.MockRestaurantChoiWaiterQueue;
 
 public class RestaurantChoiCashierTest extends TestCase{
 	//these are instantiated for each test separately via the setUp() method.

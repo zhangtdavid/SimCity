@@ -2,15 +2,15 @@ package city.tests;
 
 import java.awt.Color;
 
+import junit.framework.TestCase;
 import city.agents.BusAgent;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
-import city.gui.buildings.BusStopPanel;
-import city.gui.views.CityViewBusStop;
+import city.gui.exteriors.CityViewBusStop;
+import city.gui.interiors.BusStopPanel;
 import city.roles.BusPassengerRole;
-import city.tests.animations.mock.MockAnimatedBus;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.tests.animations.mocks.MockAnimatedBus;
+import city.tests.mocks.MockPerson;
 
 public class BusPassengerTest extends TestCase {
 	BusStopPanel startPanel = new BusStopPanel(Color.black);

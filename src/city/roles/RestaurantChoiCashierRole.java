@@ -11,17 +11,18 @@ import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.Application;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
+import city.bases.JobRole;
+import city.bases.Role;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantChoi;
-import city.interfaces.RestaurantChoiCashier;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiWaiter;
+import city.buildings.interfaces.RestaurantChoi;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.RestaurantChoiCashier;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiWaiter;
 
-public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCashier {
+public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoiCashier {
 	
 	// Data
 	

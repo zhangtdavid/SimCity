@@ -8,24 +8,24 @@ import java.util.Map;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.FOOD_ITEMS;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
 import city.animations.RestaurantTimmsCustomerAnimation;
 import city.animations.RestaurantTimmsHostAnimation;
 import city.animations.RestaurantTimmsWaiterAnimation;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RoleInterface;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
-import city.gui.buildings.RestaurantTimmsPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCashier;
-import city.interfaces.RestaurantTimmsCook;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsHost;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantTimmsPanel;
+import city.roles.interfaces.RestaurantTimmsCashier;
+import city.roles.interfaces.RestaurantTimmsCook;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsHost;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
-public class RestaurantTimmsBuilding extends RestaurantBuildingBase implements RestaurantTimms {
+public class RestaurantTimmsBuilding extends RestaurantBuilding implements RestaurantTimms {
 	
 	// Data
 	
