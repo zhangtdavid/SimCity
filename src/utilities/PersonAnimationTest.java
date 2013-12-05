@@ -80,12 +80,15 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					yPos--;
+					System.out.println("Chose north");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					System.out.println("Chose east");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					System.out.println("Chose west");
 					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() >= yPos)
@@ -100,12 +103,15 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					xPos++;
+					System.out.println("Chose east");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					System.out.println("Chose north");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					System.out.println("Chose south");
 					break;
 				}
 				if(nextSidewalk.getX() <= xPos && nextSidewalk.getY() == yPos)
@@ -120,12 +126,15 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					yPos++;
+					System.out.println("Chose south");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					System.out.println("Chose east");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					System.out.println("Chose west");
 					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() <= yPos)
@@ -139,13 +148,16 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
+					System.out.println("Chose west");
 					xPos--;
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					System.out.println("Chose south");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					System.out.println("Chose north");
 					break;
 				}
 				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)

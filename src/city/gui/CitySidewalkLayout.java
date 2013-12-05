@@ -2,7 +2,10 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.PriorityQueue;
+import java.util.TreeSet;
 
 import utilities.TrafficControl;
 import city.bases.interfaces.AnimationInterface;
@@ -215,26 +218,12 @@ public class CitySidewalkLayout {
 		return null;
 	}
 	
-//	public List<CitySidewalk> getAllConnectedSidewalks(CitySidewalk parentSidewalk) {
-//		List<CitySidewalk>
-//		for(int i = 0; i < height; i++) {
-//			for(int j = 0; j < width; j++) {
-//				if(sidewalkGrid[i][j] == parentSidewalk) {
-//					if(i - 1 >= 0)
-//						
-//				}
-//			}
-//		}
-//		return null;
-//	}
-	
 	public CitySidewalk getSidewalkClosestTo(CitySidewalk targetSidewalk, List<CitySidewalk> potentialSidewalks) {
 		double closestDistance = 10000000;
 		CitySidewalk closestSidewalk = potentialSidewalks.get(0);
 		for(CitySidewalk currentSidewalk : potentialSidewalks) {
 			if(currentSidewalk == null)
 				continue;
-			System.out.println(potentialSidewalks.indexOf(currentSidewalk));
 			double distance = Math.sqrt((double)(Math.pow(targetSidewalk.getX() - currentSidewalk.getX(), 2) + Math.pow(targetSidewalk.getY() - currentSidewalk.getY(), 2)));
 			if( distance < closestDistance) {
 				closestDistance = distance;
@@ -248,5 +237,15 @@ public class CitySidewalkLayout {
 
 	public void setRoads(TrafficControl newRoads) {
 		roads = newRoads;
+	}
+	
+	// A Star
+	public List<CitySidewalk> getBestPath(CitySidewalk startingSidewalk, CitySidewalk endingSidewalk) {
+		List<CitySidewalk> listToReturn = new ArrayList<CitySidewalk>();
+		PriorityQueue<CitySidewalk> openList = new PriorityQueue<CitySidewalk>();
+		TreeSet<CitySidewalk> closedSet = new TreeSet<CitySidewalk>();
+		
+//		openList.add(arg0)
+		return null;
 	}
 }
