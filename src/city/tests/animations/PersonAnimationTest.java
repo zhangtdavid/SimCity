@@ -1,4 +1,4 @@
-package utilities;
+package city.tests.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -199,18 +199,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 
 	@Override
 	public void goToBusStop(BusStop b) {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void goToSleep() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void cookAndEatFood() {
 		// TODO Auto-generated method stub
 
 	}

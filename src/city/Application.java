@@ -14,7 +14,6 @@ import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
 import utilities.DataModel;
-import utilities.PersonAnimationTest;
 import utilities.TrafficControl;
 import city.agents.BusAgent;
 import city.agents.CarAgent;
@@ -48,6 +47,7 @@ import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
+import city.tests.animations.PersonAnimationTest;
 
 public class Application {
 
