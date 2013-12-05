@@ -156,7 +156,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		// From animation
 		event = AGENTEVENT.DoneEating;
 		stateChanged();
-		super.setInactive();
+		setInactive();
 	}
 
 	// Scheduler
@@ -467,6 +467,12 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		super.setActive();
 		customerAnimation.setVisible(true);
 		msgGotHungry();
+	}
+	
+	@Override
+	public void setInactive() {
+		customerAnimation.setVisible(false);
+		super.setInactive();
 	}
 	
 	// Utilities
