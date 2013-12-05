@@ -53,9 +53,18 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 9166425422374406573L;
 	
-	// Data
+	//============================================================================//
+	// Data       
+    //============================================================================//
 	
-	private MainFrame mainFrame;
+	private final ImageIcon car = new ImageIcon(EditPersonTab.class.getResource("/icons/car.png"));
+	private final ImageIcon nocar = new ImageIcon(EditPersonTab.class.getResource("/icons/nocar.png"));
+	private final ImageIcon house = new ImageIcon(EditPersonTab.class.getResource("/icons/home.png"));
+	private final ImageIcon apartment = new ImageIcon(EditPersonTab.class.getResource("/icons/apartment.png"));
+	private final ImageIcon job = new ImageIcon(EditPersonTab.class.getResource("/icons/job.png"));
+	private final ImageIcon nojob = new ImageIcon(EditPersonTab.class.getResource("/icons/nojob.png"));
+    private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
+	
 	private DataModel dataModel;
 	private DefaultListModel<Person> peopleListModel;
 	private DefaultListModel<RoleInterface> roleListModel;
@@ -93,12 +102,6 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private JButton btnHouse;
 	private JButton btnWork;
 	private JButton btnHasHouse;
-	private final ImageIcon car = new ImageIcon(EditPersonTab.class.getResource("/icons/car.png"));
-	private final ImageIcon nocar = new ImageIcon(EditPersonTab.class.getResource("/icons/nocar.png"));
-	private final ImageIcon house = new ImageIcon(EditPersonTab.class.getResource("/icons/home.png"));
-	private final ImageIcon apartment = new ImageIcon(EditPersonTab.class.getResource("/icons/apartment.png"));
-	private final ImageIcon job = new ImageIcon(EditPersonTab.class.getResource("/icons/job.png"));
-	private final ImageIcon nojob = new ImageIcon(EditPersonTab.class.getResource("/icons/nojob.png"));
 	private JPanel panelShift;
 	private JLabel lblShift;
 	private JLabel lblShiftStart;
@@ -112,13 +115,18 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private JButton btnRoleRevert;
 	private JButton btnRoleSave;
 	private JButton btnHasJob;
-    NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
 	
-	// Constructor
+	//============================================================================//
+	// Constructor        
+    //============================================================================//
 		
 	public EditPersonTab(MainFrame mf) {
+		
+		//--------------------------------------//
+		// Start setup         
+		//--------------------------------------//
+		
 		// Set up variables
-		this.mainFrame = mf;
 		this.setVisible(true);
 	    this.currencyFormat.setRoundingMode(RoundingMode.DOWN);
 	    this.currencyFormat.setParseIntegerOnly(true);
@@ -139,6 +147,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		// The ListModel is an object which stores what the JList displays
 		this.peopleListModel = new DefaultListModel<Person>();
 		this.roleListModel = new DefaultListModel<RoleInterface>();
+		
+		//--------------------------------------//
+		// Person list         
+		//--------------------------------------//
         
 		// Scroll for the list
 		scrollPeople = new JScrollPane();
@@ -193,6 +205,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         });
         scrollPeople.setViewportView(listPeople);
         
+		//--------------------------------------//
+		// Person info    
+		//--------------------------------------//
+        
         // Create the state area
         panelState = new JPanel();
         panelState.setPreferredSize(new Dimension(300, 20));
@@ -211,6 +227,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         labelStateValue = new JLabel("null");
         labelStateValue.setFont(getFont().deriveFont(Font.BOLD));
         panelState.add(labelStateValue);
+        
+		//--------------------------------------//
+		// Person form        
+		//--------------------------------------//
         
         // Create the name control
         panelName = new JPanel();
@@ -257,6 +277,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         textCash.setMaximumSize(new Dimension(200, 20));
         textCash.setColumns(10);
         panelCash.add(textCash);
+        
+		//--------------------------------------//
+		// Person buttons 1        
+		//--------------------------------------//
         
         // Create the revert/save controls
         panelControl = new JPanel();
@@ -313,6 +337,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		});
 		btnWork.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panelControl.add(btnWork);
+		
+		//--------------------------------------//
+		// Person buttons 2       
+		//--------------------------------------//
         
         // Add car button
         panelToggles = new JPanel();
@@ -391,6 +419,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnHasJob.setMaximumSize(new Dimension(55, 40));
         panelToggles.add(btnHasJob);
         
+		//--------------------------------------//
+		// Roles list      
+		//--------------------------------------//
+        
         // Add roles panel
         panelRoles = new JPanel();
         panelRoles.setBorder(new EmptyBorder(5, 0, 0, 0));
@@ -454,6 +486,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
             }
         });
         scrollRoles.setViewportView(listRoles);
+        
+		//--------------------------------------//
+		// Role info    
+		//--------------------------------------//
         
         // Create role state area
         panelRoleState = new JPanel();
@@ -531,6 +567,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         labelRoleSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
         panelSalary.add(labelRoleSalaryValue);
         
+		//--------------------------------------//
+		// Role form
+		//--------------------------------------//
+        
         // Create role shift editor
         panelShift = new JPanel();
         panelShift.setPreferredSize(new Dimension(300, 30));
@@ -566,6 +606,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         spnShiftEnd.setMaximumSize(new Dimension(40, 20));
         panelShift.add(spnShiftEnd);
         
+		//--------------------------------------//
+		// Role buttons 1
+		//--------------------------------------//
+        
         panelRoleControl = new JPanel();
         panelRoleControl.setPreferredSize(new Dimension(300, 30));
         panelRoleControl.setMinimumSize(new Dimension(300, 30));
@@ -591,6 +635,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         });
         btnRoleSave.setFocusable(false);
         panelRoleControl.add(btnRoleSave);
+        
+		//--------------------------------------//
+		// Finish setup
+		//--------------------------------------//
 		
         // Disable the buttons until a list item is selected
         toggleButtonAvailability(false);
@@ -598,7 +646,9 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         toggleRoleEditorAvailability(false);
 	}
 	
-	// Listeners
+	//============================================================================//
+	// Listeners     
+    //============================================================================//
 	
 	/**
 	 * This updates the list when people are added and removed
@@ -641,16 +691,77 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         	}
         }
     }
-
-    // Getters
     
-	public MainFrame getMainFrame() {
-		return mainFrame;
+	//============================================================================//
+	// Messages   
+    //============================================================================//
+    
+	public void displayPerson(Person p) {
+		listPeople.setSelectedValue(p, true);
+	}
+    
+	//============================================================================//
+	// Actions   
+    //============================================================================//
+	
+	//--------------------------------------//
+	// Saves
+	//--------------------------------------//
+	
+	private void saveChangedPerson(Person p) {
+		p.setName(textName.getText());
+		try {
+			textCash.commitEdit();
+		} catch (ParseException e) {}
+		p.setCash(Integer.parseInt(textCash.getValue().toString()));
+		listPeople.repaint();
 	}
 	
-	// Utilities
+	private void saveChangedJobRole(JobRoleInterface r) {
+		try {
+			spnShiftStart.commitEdit();
+			spnShiftEnd.commitEdit();
+		} catch (ParseException e) {}
+		r.setShift(Integer.parseInt(spnShiftStart.getValue().toString()), Integer.parseInt(spnShiftEnd.getValue().toString()));
+	}
 	
-	public void updatePersonFormValues(Person p) {
+	//--------------------------------------//
+	// Toggle button handlers
+	//--------------------------------------//
+	
+	private void togglePersonCar(Person p) {
+		if (p.getCar() == null) {
+			CarAgent c = new CarAgent(p.getHome(), p);
+			CarAnimation ca = new CarAnimation(c, p.getHome());
+			c.setAnimation(ca);
+			Application.getMainFrame().cityView.addAnimation(ca);
+		} else {
+			p.getCar().stopThread();
+			CarAnimation ca = (CarAnimation) p.getCar().getAnimation();
+			Application.getMainFrame().cityView.removeAnimation(ca);
+			p.setCar(null);
+		}
+	}
+	
+	private void togglePersonHome(Person p) {
+		// TODO
+		return;
+	}
+	
+	private void togglePersonJob(Person p) {
+		// TODO
+		return;
+	}
+	
+	//============================================================================//
+	// Utilities    
+    //============================================================================//
+	
+	//--------------------------------------//
+	// Update forms
+	//--------------------------------------//
+    
+	private void updatePersonFormValues(Person p) {
 		labelStateValue.setText(p.getState().toString());
 		textName.setText(p.getName());
 		textCash.setValue(p.getCash());
@@ -681,7 +792,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		toggleButtonAvailability(true);
 	}
 	
-	public void updateRoleFormValues(RoleInterface r) {
+	private void updateRoleFormValues(RoleInterface r) {
 		labelRoleStateValue.setText(r.getStateString());
 		labelRoleActiveValue.setText(String.valueOf(r.getActive()));
 		labelRoleActivityValue.setText(String.valueOf(r.getActivity()));
@@ -700,7 +811,11 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		}
 	}
 	
-	public void setPersonFormBlank() {
+	//--------------------------------------//
+	// Blank forms
+	//--------------------------------------//
+	
+	private void setPersonFormBlank() {
 		labelStateValue.setText("null");
 		textName.setText("");
 		textCash.setText("");
@@ -712,7 +827,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		setRoleFormBlank();
 	}
 	
-	public void setRoleFormBlank() {
+	private void setRoleFormBlank() {
 		labelRoleStateValue.setText("null");
 		labelRoleActiveValue.setText("null");
 		labelRoleActivityValue.setText("null");
@@ -720,7 +835,11 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		toggleRoleEditorAvailability(false);
 	}
 	
-	public void toggleButtonAvailability(boolean b) {
+	//--------------------------------------//
+	// Toggle views
+	//--------------------------------------//
+	
+	private void toggleButtonAvailability(boolean b) {
 		btnRevert.setEnabled(b);
 		btnSave.setEnabled(b);
 		btnHasCar.setEnabled(b);
@@ -739,54 +858,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		}
 	}
 	
-	public void toggleRoleEditorAvailability(boolean b) {
+	private void toggleRoleEditorAvailability(boolean b) {
 		panelSalary.setVisible(b);
 		panelShift.setVisible(b);
 		panelRoleControl.setVisible(b);
 	}
-	
-	public void saveChangedPerson(Person p) {
-		p.setName(textName.getText());
-		try {
-			textCash.commitEdit();
-		} catch (ParseException e) {}
-		p.setCash(Integer.parseInt(textCash.getValue().toString()));
-		listPeople.repaint();
-	}
-	
-	public void saveChangedJobRole(JobRoleInterface r) {
-		try {
-			spnShiftStart.commitEdit();
-			spnShiftEnd.commitEdit();
-		} catch (ParseException e) {}
-		r.setShift(Integer.parseInt(spnShiftStart.getValue().toString()), Integer.parseInt(spnShiftEnd.getValue().toString()));
-	}
-	
-	public void togglePersonCar(Person p) {
-		if (p.getCar() == null) {
-			CarAgent c = new CarAgent(p.getHome(), p);
-			CarAnimation ca = new CarAnimation(c, p.getHome());
-			c.setAnimation(ca);
-			Application.getMainFrame().cityView.addAnimation(ca);
-		} else {
-			p.getCar().stopThread();
-			CarAnimation ca = (CarAnimation) p.getCar().getAnimation();
-			Application.getMainFrame().cityView.removeAnimation(ca);
-			p.setCar(null);
-		}
-	}
-	
-	public void togglePersonHome(Person p) {
-		// TODO
-		return;
-	}
-	
-	public void togglePersonJob(Person p) {
-		// TODO
-		return;
-	}
-	
-	public void displayPerson(Person p) {
-		listPeople.setSelectedValue(p, true);
-	}
+
 }
