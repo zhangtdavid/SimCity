@@ -5,6 +5,11 @@ import java.awt.Dimension;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionListener;
 
+import trace.AlertLog;
+import trace.AlertTag;
+import city.AnimationInterface;
+import city.Application;
+import city.animations.interfaces.AnimatedCar;
 import city.gui.buildings.RestaurantChoiPanel;
 import city.gui.buildings.RestaurantChungPanel;
 import city.gui.buildings.RestaurantJPPanel;
@@ -12,8 +17,6 @@ import city.gui.buildings.RestaurantTimmsPanel;
 import city.gui.buildings.RestaurantZhangPanel;
 import city.gui.views.CityViewBuilding;
 import city.gui.views.CityViewRestaurant;
-import trace.AlertLog;
-import trace.AlertTag;
 
 public class CityViewPanel extends CityPanel implements MouseMotionListener {
 
@@ -70,10 +73,19 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 				AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Building Selected: " + c.getID());
 			}
 		}
+		for (AnimationInterface a : animations) {
+			if (AnimatedCar.class.isInstance(a)) {
+				AnimatedCar c = (AnimatedCar) a;
+				if (c.contains(arg0.getX(), arg0.getY())) {
+					AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Car Selected: " + c.getCar().getName());
+					Application.getMainFrame().CP.editPersonTab.displayPerson(c.getCar().getOwner());
+				}
+			}
+		}
 	}
 	
 	public void mouseReleased(MouseEvent arg0) {
-		
+
 	}
 	
 	public void addObject(CityViewBuilding.BUILDINGTYPE type) {

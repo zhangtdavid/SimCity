@@ -42,7 +42,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
-		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
+		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
 //  Activity

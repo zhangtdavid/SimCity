@@ -29,6 +29,9 @@ public abstract class Role implements RoleInterface {
 		propertyChangeSupport = new PropertyChangeSupport(this);
 		active = false;
 		activity = false;
+		salary = -1;
+		shiftStart = -1;
+		shiftEnd = -1;
 	}
 	
 	// Messages
@@ -105,6 +108,7 @@ public abstract class Role implements RoleInterface {
 	
 	@Override
 	public void setSalary(int s) {
+		getPropertyChangeSupport().firePropertyChange(SALARY, this.salary, s);
 		this.salary = s;
 	}
 	
@@ -115,6 +119,8 @@ public abstract class Role implements RoleInterface {
 	
 	@Override
 	public void setShift(int shiftStart, int shiftEnd) {
+		getPropertyChangeSupport().firePropertyChange(SHIFT_START, this.shiftStart, shiftStart);
+		getPropertyChangeSupport().firePropertyChange(SHIFT_END, this.shiftEnd, shiftEnd);
 		this.shiftStart = shiftStart;
 		this.shiftEnd = shiftEnd;
 	}

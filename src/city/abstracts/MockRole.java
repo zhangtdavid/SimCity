@@ -1,5 +1,7 @@
 package city.abstracts;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.EventLog;
 import city.AnimationInterface;
 import city.BuildingInterface;
@@ -91,6 +93,18 @@ public abstract class MockRole implements RoleInterface {
     	return activity;
     }
 	
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+    
 	// Setters
 	
 	@Override

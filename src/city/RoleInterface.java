@@ -11,6 +11,9 @@ public interface RoleInterface {
 	public static final String ACTIVE = "active";
 	public static final String ACTIVITY = "activity";
 	public static final String STATE_STRING = "state string";
+	public static final String SALARY = "salary";
+	public static final String SHIFT_START = "shift start";
+	public static final String SHIFT_END = "shift end";
 	
 	// Constructor
 	

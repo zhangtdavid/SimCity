@@ -8,6 +8,8 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JPanel;
 
+import city.BuildingInterface;
+
 public class CityControlPanelEditBuildingTab extends JPanel implements ActionListener{
 
 	private static final long serialVersionUID = 9166425422374406573L;
@@ -36,5 +38,10 @@ public class CityControlPanelEditBuildingTab extends JPanel implements ActionLis
 
 	public MainFrame getMainFrame() {
 		return mainFrame;
+	}
+	
+	public void displayBuilding(BuildingInterface b) {
+		// TODO
+		return;
 	}
 }

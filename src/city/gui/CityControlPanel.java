@@ -10,6 +10,12 @@ public class CityControlPanel extends JPanel {
 	private static final long serialVersionUID = 9166425422374406573L;
 
 	private MainFrame mainframe;
+	public CityControlPanelTraceTab traceTab;
+	public CityControlPanelScenariosTab scenariosTab;
+	public CityControlPanelAddBuildingTab addBuildingsTab;
+	public CityControlPanelEditBuildingTab editBuildingsTab;
+	public CityControlPanelAddPersonTab addPersonTab;
+	public CityControlPanelEditPersonTab editPersonTab;
 
 	public CityControlPanel(MainFrame mf) {
 		this.mainframe = mf;
@@ -21,22 +27,22 @@ public class CityControlPanel extends JPanel {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
 		tabbedPane.setFocusable(false);
 		
-		CityControlPanelTraceTab traceTab = new CityControlPanelTraceTab(mf);
+		traceTab = new CityControlPanelTraceTab(mf);
 		tabbedPane.addTab("Trace", null, traceTab);
 		
-		CityControlPanelScenariosTab scenariosTab = new CityControlPanelScenariosTab(mf);
+		scenariosTab = new CityControlPanelScenariosTab(mf);
 		tabbedPane.addTab("Scenarios", null, scenariosTab);
 		
-		CityControlPanelAddBuildingTab addBuildingsTab = new CityControlPanelAddBuildingTab(mf);
+		addBuildingsTab = new CityControlPanelAddBuildingTab(mf);
 		tabbedPane.addTab("Add Buildings", null, addBuildingsTab);
 		
-		CityControlPanelEditBuildingTab editBuildingsTab = new CityControlPanelEditBuildingTab(mf);
+		editBuildingsTab = new CityControlPanelEditBuildingTab(mf);
 		tabbedPane.addTab("Edit Buildings", null, editBuildingsTab);
 		
-		CityControlPanelAddPersonTab addPersonTab = new CityControlPanelAddPersonTab(mf);
+		addPersonTab = new CityControlPanelAddPersonTab(mf);
 		tabbedPane.addTab("Add Person", null, addPersonTab);
 		
-		CityControlPanelEditPersonTab editPersonTab = new CityControlPanelEditPersonTab(mf);
+		editPersonTab = new CityControlPanelEditPersonTab(mf);
 		tabbedPane.addTab("Edit Person", null, editPersonTab);
 		
 		add(tabbedPane);

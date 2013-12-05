@@ -85,6 +85,10 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	public void addAnimation(AnimationInterface anim) {
 		animations.add(anim);
 	}
+	
+	public void removeAnimation(AnimationInterface a) {
+		animations.remove(a);
+	}
 
 	public void actionPerformed(ActionEvent e) {
 		this.repaint();
