@@ -117,6 +117,11 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		return myEvent;
 	}
 	
+	@Override
+	public String getStateString() {
+		return myState.toString();
+	}
+	
 	// Setters
 	
 	@Override

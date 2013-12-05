@@ -71,7 +71,7 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 		// Clear the screen by painting a rectangle the size of the frame
 		
 		g2.setColor(background);
-		g2.fillRect(0, 0, panelX, panelY);
+		g2.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 		
 		g2.setColor(Color.YELLOW);
 		g2.fillRect(PHONEX, PHONEY, PHONEW, PHONEH);

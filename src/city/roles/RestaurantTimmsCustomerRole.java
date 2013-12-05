@@ -273,6 +273,11 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 		return orderItem.getItem();
 	}
 	
+	@Override
+	public String getStateString() {
+		return this.state.toString();
+	}
+	
 	// Setters
 	
 	@Override

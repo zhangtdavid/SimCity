@@ -1,10 +1,16 @@
 package city;
 
+import java.beans.PropertyChangeSupport;
+
 import city.interfaces.Person;
 
 public interface RoleInterface {
 	
 	// Data
+	
+	public static final String ACTIVE = "active";
+	public static final String ACTIVITY = "activity";
+	public static final String STATE_STRING = "state string";
 	
 	// Constructor
 	
@@ -26,6 +32,8 @@ public interface RoleInterface {
 	public int getShiftEnd();
 	public boolean getActive();
 	public boolean getActivity();
+	public PropertyChangeSupport getPropertyChangeSupport();
+	public String getStateString();
 	
 	// Setters
 	

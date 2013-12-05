@@ -61,7 +61,7 @@ public class HousePanel extends BuildingCard implements ActionListener{
 
 	        // Clear the screen by painting a rectangle the size of the frame
 	        graphics2D.setColor(Color.getHSBColor((float)37, (float).53, (float).529)); // nice subtle gray
-	        graphics2D.fillRect(0, 0, panelX, panelY);
+	        graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 	        
 	        // Draw static elements (furniture)
 	        graphics.setColor(Color.CYAN); // Refrig 
