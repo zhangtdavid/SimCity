@@ -23,7 +23,7 @@ public interface RestaurantBuildingInterface extends BuildingInterface {
 
 	public void addFood(FOOD_ITEMS i, Food f);
 	public void incrementFoodQuantity(Map<FOOD_ITEMS, Integer> receivedItems);
-	public void updateFoodQuantity(FOOD_ITEMS f, int i);
+	public void setFoodQuantity(FOOD_ITEMS f, int i);
 	
 	// Classes
 	
@@ -45,6 +45,5 @@ public interface RestaurantBuildingInterface extends BuildingInterface {
             this.price = price;
             this.s = FoodOrderState.None;
         }
-    }
-	
+    }	
 }

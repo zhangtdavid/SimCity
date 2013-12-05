@@ -103,21 +103,22 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 
 //	Setters
 //	=====================================================================	
+	//Only used in testing, usually set in addOccupyingRole() call
 	@Override
 	public void setRestaurantChungHost(RestaurantChungHost host) {
 		this.host = host;
 	}
 	
 	@Override
-	public void setRestaurantChungHost(RestaurantChungCashier cashier) {
+	public void setRestaurantChungCashier(RestaurantChungCashier cashier) {
 		this.cashier = cashier;
 	}
 	
 	@Override
-	public void setRestaurantChungHost(RestaurantChungCook cook) {
+	public void setRestaurantChungCook(RestaurantChungCook cook) {
 		this.cook = cook;
 	}
-	
+		
 //	Utilities
 //	=====================================================================	
 	@Override

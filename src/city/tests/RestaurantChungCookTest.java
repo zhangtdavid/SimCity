@@ -13,7 +13,9 @@ import city.buildings.RestaurantChungBuilding;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.RestaurantChung;
+import city.interfaces.RestaurantChungCook.MarketOrderState;
 import city.roles.RestaurantChungCookRole;
+import city.tests.animations.mock.MockRestaurantChungAnimatedCook;
 import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantChungCashier;
 import city.tests.mock.MockRestaurantChungCustomer;
@@ -42,6 +44,7 @@ public class RestaurantChungCookTest extends TestCase {
 
 	MockPerson cookPerson;
 	RestaurantChungCookRole cook;
+	MockRestaurantChungAnimatedCook cookAnim;
 	
 	MockPerson customerPerson;
 	MockRestaurantChungCustomer customer;
@@ -78,12 +81,15 @@ public class RestaurantChungCookTest extends TestCase {
 		cashierPerson = new MockPerson("Cashier");
 		cashier = new MockRestaurantChungCashier();
 		cashier.setPerson(cashierPerson);
+		cashier.setMarketCustomerDeliveryPaymentPerson();
 //		cashier.market = market;
 		
 		cookPerson = new MockPerson("Cook");
 		cook = new RestaurantChungCookRole(restaurantChung, 0, 12);
+		cookAnim = new MockRestaurantChungAnimatedCook(cook);
 		cook.setPerson(cookPerson);
-		
+		cook.setAnimation(cookAnim);
+
 		customerPerson = new MockPerson("Customer"); 
 		customer = new MockRestaurantChungCustomer();
 		customer.setPerson(customerPerson);
@@ -99,6 +105,10 @@ public class RestaurantChungCookTest extends TestCase {
 		waiterRSPerson = new MockPerson("WaiterRS");
 		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
 		waiterRS.setPerson(waiterRSPerson);
+		
+		restaurantChung.setRestaurantChungCashier(cashier);
+		restaurantChung.setRestaurantChungCook(cook);
+		restaurantChung.setRestaurantChungHost(host);
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
@@ -123,6 +133,27 @@ public class RestaurantChungCookTest extends TestCase {
 		assertEquals("Cook should have 0 marketOrders.", cook.getMarketOrders().size(), 0);
 
 		cook.msgHereIsAnOrder(waiterMC, "steak", 1);
+		assertEquals("Cook log should have 1 entry.", cook.log.size(), 1);
+		assertTrue("Cook log should have \"RestaurantChungCook received msgHereIsAnOrder\". The last event logged is " + cook.log.getLastLoggedEvent().toString(), cook.log.containsString("RestaurantChungCook received msgHereIsAnOrder"));
+		assertEquals("Cook should have 1 orders.", cook.getOrders().size(), 1);
+		
+		restaurantChung.setFoodQuantity(FOOD_ITEMS.chicken, 5);
+		restaurantChung.setFoodQuantity(FOOD_ITEMS.pizza, 5);
+		restaurantChung.setFoodQuantity(FOOD_ITEMS.salad, 5);
+		restaurantChung.setFoodQuantity(FOOD_ITEMS.steak, 5);
+		
+		cook.runScheduler();
+		assertEquals("Cook should have 1 marketOrder.", cook.getMarketOrders().size(), 1);
+		assertTrue("Cook marketOrders should contain a marketOrder with state == Pending.", cook.getMarketOrders().get(0).getMarketOrderState() == MarketOrderState.Pending);
+
+		try {
+			Thread.sleep(2100);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cook.runScheduler();	
 	}
 	
 //	public void testOneNormalCustomerScenario()	{
