@@ -10,7 +10,7 @@ import city.gui.CityRoad;
 
 public class TrafficControl implements ActionListener {
 	List<CityRoad> roads;
-	Timer stopLightTimer = new Timer(10000, this);
+	Timer stopLightTimer = new Timer(3000, this);
 	
 	public TrafficControl(List<CityRoad> roads) {
 		this.roads = roads;
@@ -27,7 +27,6 @@ public class TrafficControl implements ActionListener {
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
 		for(CityRoad r : roads) {
 			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.HORIZONTALON);

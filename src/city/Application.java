@@ -130,13 +130,13 @@ public class Application {
 		for(int i = 375; i >= 100; i -= 25) {
 			if(i == 225)
 				continue;
-			CityRoad tempRoad = new CityRoad(i, 100, 25, 25, -1, 0, true, Color.black);
+			CityRoad tempRoad = new CityRoad(i, 75, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// West roads
-		for(int i = 100; i <= 375; i+=25) {
-			if(i == 250)
+		for(int i = 75; i <= 350; i+=25) {
+			if(i == 225)
 				continue;
 			CityRoad tempRoad = new CityRoad(75, i, 25, 25, 0, 1, false, Color.black);
 			roads.add(tempRoad);
@@ -146,21 +146,21 @@ public class Application {
 		for(int i = 75; i <= 350; i+=25) {
 			if(i == 225)
 				continue;
-			CityRoad tempRoad = new CityRoad(i, 400, 25, 25, 1, 0, true, Color.black);
+			CityRoad tempRoad = new CityRoad(i, 375, 25, 25, 1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// East roads
-		for(int i = 400; i >= 125; i-=25) {
-			if(i == 250)
+		for(int i = 375; i >= 100; i-=25) {
+			if(i == 225)
 				continue;
 			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North/South middle roads
-		for(int i = 375; i >= 125; i-=25) {
-			if(i == 250)
+		for(int i = 350; i >= 100; i-=25) {
+			if(i == 225)
 				continue;
 			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
@@ -170,28 +170,28 @@ public class Application {
 		for(int i = 350; i >= 100; i -= 25) {
 			if(i == 225)
 				continue;
-			CityRoad tempRoad = new CityRoad(i, 250, 25, 25, -1, 0, true, Color.black);
+			CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North intersection
-		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 100, 25, 25, Color.gray);
+		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 75, 25, 25, Color.gray);
 		roads.add(intersectionNorth);
 		mainFrame.cityView.addMoving(intersectionNorth);
 		// West intersection
-		CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 250, 25, 25, Color.gray);
+		CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 225, 25, 25, Color.gray);
 		roads.add(intersectionWest);
 		mainFrame.cityView.addMoving(intersectionWest);
 		// South intersection
-		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 400, 25, 25, Color.gray);
+		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 375, 25, 25, Color.gray);
 		roads.add(intersectionSouth);
 		mainFrame.cityView.addMoving(intersectionSouth);
 		// East intersection
-		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 250, 25, 25, Color.gray);
+		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
 		roads.add(intersectionEast);
 		mainFrame.cityView.addMoving(intersectionEast);
 		// Center intersection
-		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 250, 25, 25, Color.gray);
+		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
 		roads.add(intersectionCenter);
 		mainFrame.cityView.addMoving(intersectionCenter);
 		// Connect all roads
@@ -260,7 +260,7 @@ public class Application {
 				roads.get(i).setNextRoad(intersectionCenter);
 				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
 				continue;
-			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 125) { // Last road in the outer loop
+			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 100) { // Last road in the outer loop
 				roads.get(i).setNextRoad(roads.get(0));
 				continue;
 			}
@@ -272,28 +272,28 @@ public class Application {
 
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(250, 50, "Bus Stop 1", Color.white, bsp1);
+		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(350, 0, "Bus Stop 1", Color.white, bsp1);
 		mainFrame.cityView.addStatic(cityViewBusStop1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		mainFrame.buildingView.addView(bsp1, cityViewBusStop1.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop1);
 
 		BusStopPanel bsp2 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(50, 300, "Bus Stop 2", Color.white, bsp2);
+		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(0, 125, "Bus Stop 2", Color.white, bsp2);
 		mainFrame.cityView.addStatic(cityViewBusStop2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		mainFrame.buildingView.addView(bsp2, cityViewBusStop2.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2); 
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(250, 275, "Bus Stop 3", Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(275, 275, "Bus Stop 3", Color.white, bsp3);
 		mainFrame.cityView.addStatic(cityViewBusStop3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		mainFrame.buildingView.addView(bsp3, cityViewBusStop3.getID());
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop3); 
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(50, 400, "Bus Stop 4", Color.white, bsp4);
+		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(50, 425, "Bus Stop 4", Color.white, bsp4);
 		mainFrame.cityView.addStatic(cityViewBusStop4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		mainFrame.buildingView.addView(bsp4, cityViewBusStop4.getID());
