@@ -10,7 +10,9 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import utilities.PersonAnimationTest;
 import utilities.TrafficControl;
+
 import javax.swing.UIManager;
 import javax.swing.UnsupportedLookAndFeelException;
 
@@ -299,7 +301,7 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
-		//sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
 		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
@@ -942,6 +944,8 @@ public class Application {
 		c3JP.startThread();
 		c4JP.startThread();
 */
+		PersonAnimationTest testPersonAnimation = new PersonAnimationTest(busStop1, sidewalks);
+		mainFrame.cityView.addAnimation(testPersonAnimation);
 	}
 	
 	public static DataModel getModel() {
