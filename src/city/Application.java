@@ -919,7 +919,17 @@ public class Application {
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
-		CityMap.addBuilding(BUILDING.restaurant, building);
+		if(building.getClass().getName().contains("Restaurant")) {
+			CityMap.addBuilding(BUILDING.restaurant, building);
+		} else if(building.getClass().getName().contains("Bank")) {
+			CityMap.addBuilding(BUILDING.bank, building);
+		} else if(building.getClass().getName().contains("Market")) {
+			CityMap.addBuilding(BUILDING.market, building);
+		} else if(building.getClass().getName().contains("BusStop")) {
+			CityMap.addBuilding(BUILDING.busStop, building);
+		} else if(building.getClass().getName().contains("House")) {
+			CityMap.addBuilding(BUILDING.house, building);
+		}
 	}
 
 	public static class CityMap {
