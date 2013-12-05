@@ -68,11 +68,11 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
 			}
+			List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
 			CitySidewalk nextSidewalk = null;
 			switch(directionOfTravel) {
 			case NORTH:
 				System.out.println("North");
-				List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
 				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
@@ -93,59 +93,60 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				break;
 			case EAST:
 				System.out.println("East");
-				nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getY() > yPos) {
-						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					}
-					else if(endSidewalk.getY() < yPos) {
-						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					xPos++;
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					break;
 				}
 				if(nextSidewalk.getX() <= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case SOUTH:
-				nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getX() > xPos) {
-						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					}
-					else if(endSidewalk.getX() < xPos) {
-						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				System.out.println("South");
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					yPos++;
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					break;
 				}
-
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() <= yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case WEST:
-				nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getY() > yPos) {
-						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					}
-					else if(endSidewalk.getY() < yPos) {
-						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				System.out.println("West");
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					xPos--;
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					break;
 				}
 				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
