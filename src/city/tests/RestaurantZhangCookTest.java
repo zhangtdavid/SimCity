@@ -8,11 +8,11 @@ import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCookRole;
-import city.tests.animations.mock.MockRestaurantZhangAnimatedCook;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangWaiterRegular;
+import city.tests.animations.mocks.MockRestaurantZhangAnimatedCook;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangWaiterRegular;
 
 public class RestaurantZhangCookTest extends TestCase {
 	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);

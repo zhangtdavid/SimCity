@@ -2,10 +2,10 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.abstracts.RestaurantJPWaiterBase;
+import utilities.RestaurantJPWaiterBase;
 import city.buildings.RestaurantJPBuilding;
-import city.interfaces.RestaurantJP;
-import city.interfaces.RestaurantJPCustomer;
+import city.buildings.interfaces.RestaurantJP;
+import city.roles.interfaces.RestaurantJPCustomer;
 
 public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	

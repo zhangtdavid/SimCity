@@ -5,14 +5,14 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.RestaurantChoiBuilding;
-import city.gui.buildings.RestaurantChoiPanel;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiWaiter;
+import city.gui.interiors.RestaurantChoiPanel;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCashierRole.Check;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantChoiCustomer;
-import city.tests.mock.MockRestaurantChoiWaiterQueue;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChoiCustomer;
+import city.tests.mocks.MockRestaurantChoiWaiterQueue;
 
 public class RestaurantChoiCashierTest extends TestCase{
 	//these are instantiated for each test separately via the setUp() method.
@@ -235,14 +235,14 @@ public class RestaurantChoiCashierTest extends TestCase{
 		assertTrue("should have no checks", cashier.getChecks().size() ==0);
 		cashier.msgCompute(FOOD_ITEMS.pizza, (RestaurantChoiCustomer)customer, (RestaurantChoiWaiter)waiter);
 		System.out.println("Cashier # of checks after receiving check: " + cashier.getChecks().size());
-		assertTrue(cashier.runScheduler());
-		assertTrue("customer should have choice 2", customer.choice==2);
+		assertEquals("RunScheduler should return true right now after receiving check", true,cashier.runScheduler());
+		assertEquals("customer should have choice 2", customer.choice, 2);
 		assertTrue("customer name is evil", customer.name.contains("evil"));
 		//test msgHeresMyPayment; didn't pay enough
 		cashier.msgHeresMyPayment(customer,0);
 		assertEquals("should have one check", cashier.getChecks().size(), 1);
 		assertEquals("state of the check should be NOT_FULFILLED but isn't", cashier.getChecks().get(0).getState(), Check.NOT_FULFILLED);
-		assertTrue("Cashier should do an action after receiving msgHeresMyPayment", cashier.runScheduler());
+		assertEquals("Cashier should do an action after receiving msgHeresMyPayment", cashier.runScheduler(), true);
 		assertTrue("MockCustomer's log should have msgDoTheDishes in it. But it has this instead: ",
 				customer.log.toString().contains("msgDoTheDishes"));
 		System.out.println("Customer sent to dishes");

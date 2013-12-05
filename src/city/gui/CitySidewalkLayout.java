@@ -4,8 +4,8 @@ import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.List;
 
-import city.AnimationInterface;
 import utilities.TrafficControl;
+import city.bases.interfaces.AnimationInterface;
 
 public class CitySidewalkLayout {
 

@@ -3,10 +3,10 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCustomer;
-import city.interfaces.RestaurantChoiCustomer;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantChoiCustomer;
 
 public class RestaurantChoiCustomerAnimation extends Animation implements RestaurantChoiAnimatedCustomer{
 
@@ -43,14 +43,14 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 	//Abstract
 	public void updatePosition() {
 		if (xPos < xDestination) {
-			xPos+=2;
+			xPos+=1;
 		} else if (xPos > xDestination) {
-			xPos-=2;
+			xPos-=1;
 		}
 		if (yPos < yDestination) {
-			yPos+=2;
+			yPos+=1;
 		} else if (yPos > yDestination) {
-			yPos-=2;
+			yPos-=1;
 		}
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.GoToWaiting){
@@ -66,7 +66,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 				choicustomer.msgAnimationFinishedGoToSeat();
 			} else if (command == Command.LeaveRestaurant) {
 				choicustomer.msgAnimationFinishedLeaveRestaurant();
-				System.out.println("Enabling customer again");
 				isHungry = false;
 				//gui.setCustomerEnabled(agent); TODO deal with this somehow; we shouldn't need to enable customer, we just set customer as not hungry now (he's a person)
 			}
@@ -84,7 +83,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 
 	//Movements
 	
-
 	public void DoGoToSeat(int x, int y) {
 		xDestination = x;
 		yDestination = y;
@@ -97,7 +95,6 @@ public class RestaurantChoiCustomerAnimation extends Animation implements Restau
 		command = Command.GoToDishes;
 	}
 	public void DoGoToWaiting(int offset){
-		System.out.println("Received DoGoToWaiting");
 		xDestination = waitCoordX;
 		waitY = waitCoordY+offset*10;
 		yDestination = waitY;

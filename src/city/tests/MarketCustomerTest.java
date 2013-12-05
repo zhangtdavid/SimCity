@@ -1,10 +1,10 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
@@ -12,20 +12,19 @@ import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.HousePanel;
-import city.gui.buildings.MarketPanel;
-import city.interfaces.MarketCustomer.MarketCustomerEvent;
-import city.interfaces.MarketCustomer.MarketCustomerState;
+import city.gui.interiors.HousePanel;
+import city.gui.interiors.MarketPanel;
 import city.roles.MarketCustomerRole;
-import city.tests.mock.MockLandlord;
-import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomerDelivery;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketDeliveryPerson;
-import city.tests.mock.MockMarketEmployee;
-import city.tests.mock.MockMarketManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.roles.interfaces.MarketCustomer.MarketCustomerEvent;
+import city.roles.interfaces.MarketCustomer.MarketCustomerState;
+import city.tests.mocks.MockLandlord;
+import city.tests.mocks.MockMarketCashier;
+import city.tests.mocks.MockMarketCustomerDelivery;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketDeliveryPerson;
+import city.tests.mocks.MockMarketEmployee;
+import city.tests.mocks.MockMarketManager;
+import city.tests.mocks.MockPerson;
 
 public class MarketCustomerTest extends TestCase {
 	MarketPanel marketPanel;	
@@ -104,7 +103,7 @@ public class MarketCustomerTest extends TestCase {
 		customer.setMarket(market);
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
-		home = new HouseBuilding("House", landlord, housePanel, null);
+		home = new HouseBuilding("House", landlord, housePanel, null); // TODO fix null perhaps.
 		customerPerson.setHome(home);
 		customerPerson.setCash(500);
 		

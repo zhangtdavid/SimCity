@@ -6,11 +6,11 @@ import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCashierRole;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangCustomer;
-import city.tests.mock.MockRestaurantZhangWaiterRegular;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangCustomer;
+import city.tests.mocks.MockRestaurantZhangWaiterRegular;
 
 public class RestaurantZhangCashierTest extends TestCase {
 	RestaurantZhangCashierRole cashier;

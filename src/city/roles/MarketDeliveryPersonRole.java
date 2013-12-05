@@ -8,16 +8,16 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
-import city.Role;
 import city.agents.CarAgent;
+import city.agents.interfaces.Car;
+import city.bases.JobRole;
 import city.buildings.MarketBuilding;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketDeliveryPerson;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketDeliveryPerson;
 
-public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPerson {
+public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryPerson {
 
 //  Data
 //	=====================================================================	
@@ -42,7 +42,7 @@ public class MarketDeliveryPersonRole extends Role implements MarketDeliveryPers
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
-		car = new CarAgent(b); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
+		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
     }
 	
 //  Activity

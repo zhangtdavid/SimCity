@@ -1,6 +1,6 @@
 package utilities;
 
-import city.interfaces.RestaurantZhangWaiter;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
 public class RestaurantZhangOrder {
 	public RestaurantZhangWaiter w;

@@ -9,23 +9,22 @@ import java.util.Map;
 import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
-import city.Animation;
+import utilities.RestaurantChoiWaiterBase;
+import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.Application;
-import city.Role;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
-import city.abstracts.RestaurantChoiWaiterBase;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
 import city.animations.RestaurantChoiWaiterAnimation;
-import city.gui.buildings.RestaurantChoiPanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.Bank;
-import city.interfaces.RestaurantChoi;
-import city.interfaces.RestaurantChoiCustomer;
+import city.bases.Animation;
+import city.bases.RestaurantBuilding;
+import city.bases.Role;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.RestaurantChoi;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantChoiPanel;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
@@ -33,8 +32,9 @@ import city.roles.RestaurantChoiCustomerRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterDirectRole;
 import city.roles.RestaurantChoiWaiterQueueRole;
+import city.roles.interfaces.RestaurantChoiCustomer;
 
-public class RestaurantChoiBuilding extends RestaurantBuildingBase implements RestaurantChoi{
+public class RestaurantChoiBuilding extends RestaurantBuilding implements RestaurantChoi{
 
 	// Data
 	
@@ -50,7 +50,6 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	public RestaurantChoiRevolvingStand rs;
 	public RestaurantChoiTable t;
 	public Bank bank;
-	public BankCustomerRole bankConnection; 
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor
@@ -62,9 +61,8 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		this.setBankCustomer(new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))));
 		this.setCityViewBuilding(cityBuilding);
-		//this.setCashOnSite(cash_on_site);	
 		//set up tables
 		// Add items and their data times to a map
 

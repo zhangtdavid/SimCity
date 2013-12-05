@@ -8,19 +8,17 @@ import java.util.concurrent.ConcurrentHashMap;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiTable;
-import city.Role;
-import city.abstracts.RestaurantChoiWaiterBase;
+import utilities.RestaurantChoiWaiterBase;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
+import city.bases.JobRole;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiHost;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiHost;
 
-public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
+public class RestaurantChoiHostRole extends JobRole implements RestaurantChoiHost{
 
 	// Data
 
-	private static int xstart = 50;
-	private static int ystart = 50;
 	private List<RestaurantChoiCustomer> waitingCustomers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
 	private int waitersOnBreak;
 	private RestaurantChoiWaiterBase leastActiveWaiter;
@@ -51,7 +49,6 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		tables = Collections.synchronizedList(new ArrayList<RestaurantChoiTable>(NTABLES));
 		for (int ix = 1; ix <= NTABLES; ix++) {
 			tables.add(new RestaurantChoiTable(ix));// how you add to a collection
-			System.out.println("made a table");
 		}
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
@@ -63,7 +60,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	@Override
 	public void msgImHungry(RestaurantChoiCustomer c) {
 		synchronized(waitingCustomers){
-			System.out.println("received msgimhungry;added to queue");
+			print("received msgimhungry;added to queue");
 			waitingCustomers.add(c);
 		}
 		stateChanged();
@@ -96,7 +93,7 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 		//set the table to null.
 		synchronized(tables){
 			table.setOccupant(null);
-			System.out.println("Cleared table " + table.getTableNumber());
+			print("Cleared table " + table.getTableNumber());
 		}
 		//find the waiter and de-increment his customer count.
 		synchronized(waiters){
@@ -129,11 +126,11 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 				if(waiters.get(i).askedForBreak()){
 					if(waiters.size() == 1){
 						//if only one waiter, outright reject the break request.
-						System.out.println("Rejected break request, only 1 waiter");
+						print("Rejected break request, only 1 waiter");
 						waiters.get(i).msgBreakOK(false);
 					}
 					else if(waitersOnBreak == waiters.size()-1){
-						System.out.println("Rejected break request; accepting would mean 0 waiters on duty");
+						print("Rejected break request; accepting would mean 0 waiters on duty");
 						waiters.get(i).msgBreakOK(false);
 					}
 					//he can only go on break after he finishes his work.
@@ -205,11 +202,11 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 			waiters.remove(i); // now remove him from the list of OK waiters
 		}
 		//to maintain injunctive relationship
-		System.out.println("Removed waiter; on break. Uncheck his checkbox to return from break");
+		print("Removed waiter; on break. Uncheck his checkbox to return from break");
 	}
 
 	private void assignTable(int i){
-		System.out.println("Host told "+leastActiveWaiter.getName()
+		print("Host told "+leastActiveWaiter.getName()
 				+" to seat customer " + waitingCustomers.get(0).getPerson().getName() 
 				+  " at table " + tables.get(i).getTableNumber());
 		synchronized(tables){

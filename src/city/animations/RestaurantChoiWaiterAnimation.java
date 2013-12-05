@@ -2,11 +2,11 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedWaiter;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiWaiter;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiWaiter;
 
 public class RestaurantChoiWaiterAnimation extends Animation implements RestaurantChoiAnimatedWaiter {
 
@@ -14,24 +14,15 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	RestaurantChoiWaiter agent;
 	private int xPos = 640, yPos = -20;//default waiter position
 	private int xDestination = 640, yDestination = -20;//default start position
-	public static final int COOKX = 270; // go to plating; also put orders there
-	public static final int COOKY = 20;    
-	public static final int CASHX = 480;
-	public static final int CASHY = 0;
-	public static int xTable = 200;
-	public static int yTable = 400;
-	public static final int WIDTH = 20;
-	private static final int restingCoordX = 350;
-	private static final int restingCoordY = 20; 
-	private static final int doorCoordX = 620;
-	private static final int doorCoordY = -20;
-	private static int waitCoordX = 420;
-	private static int waitCoordY = 150;
 	private boolean currentlyAcquired;
 	private String orderIcon = new String();
 	private int Y;
 	private static int counterY;
 	boolean init;
+	public static int WAITX = 420;
+	public static int WAITY = 150;
+	public static int TABLEX = 200;
+	public static int TABLEY = 400;
 	
 	// Constructor
 	public RestaurantChoiWaiterAnimation(RestaurantChoiWaiter agent) {
@@ -43,13 +34,13 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	// Abstract
 	public void updatePosition() {
 		if (xPos < xDestination)
-			xPos+=2;
+			xPos+=1;
 		else if (xPos > xDestination)
-			xPos-=2;
+			xPos-=1;
 		if (yPos < yDestination)
-			yPos+=2;
+			yPos+=1;
 		else if (yPos > yDestination)
-			yPos-=2;
+			yPos-=1;
 		if (xPos == xDestination && yPos == yDestination && currentlyAcquired) {
 			agent.msgRelease();
 			currentlyAcquired = false;
@@ -59,7 +50,7 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	public void draw(Graphics2D g){
 		g.setColor(Color.GRAY);
 		g.setColor(Color.lightGray);
-		g.drawString(agent.getPerson().getName(),restingCoordX, restingCoordY+Y+10);
+		g.drawString(agent.getPerson().getName(),RESTX, RESTY+Y+10);
 		g.setColor(Color.MAGENTA);
 		g.fillRect(xPos, yPos, WIDTH, WIDTH);
 		g.drawString(orderIcon, xPos, yPos);
@@ -70,10 +61,10 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	// Movement
 
 	public void DoBringToTable(RestaurantChoiCustomer customer, int xTableCoord, int yTableCoord) {
-		xTable = xTableCoord;
-		yTable = yTableCoord;
-		xDestination = xTable + WIDTH;
-		yDestination = yTable - WIDTH;
+		TABLEX = xTableCoord;
+		TABLEY = yTableCoord;
+		xDestination = TABLEX + WIDTH;
+		yDestination = TABLEY - WIDTH;
 	}
 
 	public void GoTo(int x, int y){
@@ -94,18 +85,18 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 	}
 	
 	public void DoLeave() {
-		xDestination = restingCoordX;
-		yDestination = restingCoordY+Y;
+		xDestination = RESTX;
+		yDestination = RESTY+Y;
 	}
 	
 	public void toTopRight(){
-		xDestination = doorCoordX;
-		yDestination = doorCoordY;
+		xDestination = DOORX;
+		yDestination = DOORY;
 	}
 	
 	public void toWaitingZone(){
-		xDestination = waitCoordX;
-		yDestination = waitCoordY;
+		xDestination = WAITX;
+		yDestination = WAITY;
 	}
 
     // Getters

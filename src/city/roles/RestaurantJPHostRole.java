@@ -8,12 +8,12 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantJPTableClass;
-import city.Role;
-import city.abstracts.RestaurantJPWaiterBase;
+import utilities.RestaurantJPWaiterBase;
+import city.bases.JobRole;
 import city.buildings.RestaurantJPBuilding;
-import city.interfaces.RestaurantJP;
+import city.buildings.interfaces.RestaurantJP;
 
-public class RestaurantJPHostRole extends Role {
+public class RestaurantJPHostRole extends JobRole {
 	//Data
 	static final int NTABLES = 3;
 	RestaurantJPBuilding building;

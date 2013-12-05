@@ -2,11 +2,11 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.abstracts.RestaurantChungWaiterBase;
-import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
+import utilities.RestaurantChungWaiterBase;
+import utilities.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.RestaurantChung;
+import city.buildings.interfaces.RestaurantChung;
 
 /**
  * Restaurant Waiter Agent

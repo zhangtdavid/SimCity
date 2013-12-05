@@ -1,7 +1,7 @@
 package utilities;
 
 import city.Application.FOOD_ITEMS;
-import city.interfaces.RestaurantChoiWaiter;
+import city.roles.interfaces.RestaurantChoiWaiter;
 
 
 public class RestaurantChoiOrder {

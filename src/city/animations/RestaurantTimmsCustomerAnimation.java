@@ -3,10 +3,10 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
-import city.interfaces.RestaurantTimmsCustomer;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantTimmsCustomer;
 
 public class RestaurantTimmsCustomerAnimation extends Animation implements RestaurantTimmsAnimatedCustomer {
 	

@@ -8,12 +8,12 @@ import java.util.TimerTask;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantJPMenuClass;
-import city.Role;
 import city.animations.RestaurantJPCustomerAnimation;
+import city.bases.Role;
 import city.buildings.RestaurantJPBuilding;
-import city.interfaces.RestaurantJPCashier;
-import city.interfaces.RestaurantJPCustomer;
-import city.interfaces.RestaurantJPWaiter;
+import city.roles.interfaces.RestaurantJPCashier;
+import city.roles.interfaces.RestaurantJPCustomer;
+import city.roles.interfaces.RestaurantJPWaiter;
 
 /**
  * Restaurant customer agent.

@@ -4,8 +4,8 @@ import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
 
-import city.BuildingInterface;
-import city.interfaces.Person;
+import city.agents.interfaces.Person;
+import city.bases.interfaces.BuildingInterface;
 
 public class DataModel {
     public static final String PEOPLE = "people";

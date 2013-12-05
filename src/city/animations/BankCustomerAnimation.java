@@ -1,12 +1,14 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Dimension;
+import java.awt.Graphics2D;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
-import city.Animation;
+import city.bases.Animation;
 import city.roles.RestaurantJPCookRole;
 
 public class BankCustomerAnimation extends Animation{

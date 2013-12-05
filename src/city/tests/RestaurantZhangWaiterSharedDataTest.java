@@ -7,17 +7,17 @@ import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.abstracts.RestaurantZhangWaiterBase;
-import city.abstracts.RestaurantZhangWaiterBase.MyCustomer;
+import utilities.RestaurantZhangWaiterBase;
+import utilities.RestaurantZhangWaiterBase.MyCustomer;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.mock.MockRestaurantZhangAnimatedWaiter;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangCashier;
-import city.tests.mock.MockRestaurantZhangCook;
-import city.tests.mock.MockRestaurantZhangCustomer;
-import city.tests.mock.MockRestaurantZhangHost;
+import city.tests.animations.mocks.MockRestaurantZhangAnimatedWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangCashier;
+import city.tests.mocks.MockRestaurantZhangCook;
+import city.tests.mocks.MockRestaurantZhangCustomer;
+import city.tests.mocks.MockRestaurantZhangHost;
 
 public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 	RestaurantZhangWaiterSharedDataRole waiter;

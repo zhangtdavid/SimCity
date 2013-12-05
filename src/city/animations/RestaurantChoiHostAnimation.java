@@ -1,9 +1,9 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
+import city.bases.Animation;
 
 public class RestaurantChoiHostAnimation extends Animation implements RestaurantChoiAnimatedHost {
 

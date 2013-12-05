@@ -3,10 +3,10 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.MarketAnimatedEmployee;
-import city.gui.buildings.MarketPanel;
-import city.interfaces.MarketEmployee;
+import city.bases.Animation;
+import city.gui.interiors.MarketPanel;
+import city.roles.interfaces.MarketEmployee;
 
 public class MarketEmployeeAnimation extends Animation implements MarketAnimatedEmployee {
 	private MarketEmployee employee = null;
