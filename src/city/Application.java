@@ -529,12 +529,12 @@ public class Application {
 		createBuilding(marketPanelChoi1, cityViewMarketChoi1, marketBuildingChoi1);
 
 		RestaurantChoiPanel restaurantChoiPanel1 = new RestaurantChoiPanel(Color.GRAY);
-		CityViewRestaurant cityViewRestaurantChoi1 = new CityViewRestaurant(200, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, restaurantChoiPanel1);
+		CityViewRestaurant cityViewRestaurantChoi1 = new CityViewRestaurant(300, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, restaurantChoiPanel1);
 		RestaurantChoiBuilding restaurantChoiBuilding1 = new RestaurantChoiBuilding("RestaurantChoi1", restaurantChoiPanel1, cityViewRestaurantChoi1);
 		createBuilding(restaurantChoiPanel1, cityViewRestaurantChoi1, restaurantChoiBuilding1);
 		
 		HousePanel rhp1Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse rhcv1Choi = new CityViewHouse(350, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
+		CityViewHouse rhcv1Choi = new CityViewHouse(300, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
 		HouseBuilding rhb1Choi = new HouseBuilding("Choi House", null, rhp1Choi, rhcv1Choi);
 		createBuilding(rhp1Choi, rhcv1Choi, rhb1Choi);
 		

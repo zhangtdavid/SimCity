@@ -30,7 +30,6 @@ import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.buildings.BankBuilding;
 import city.interfaces.Apartment;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
