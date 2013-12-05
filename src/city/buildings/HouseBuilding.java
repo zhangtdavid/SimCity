@@ -3,18 +3,18 @@ package city.buildings;
 import java.util.HashMap;
 import java.util.Map;
 
-import city.Animation;
-import city.RoleInterface;
-import city.abstracts.ResidenceBuildingBase;
+import city.agents.interfaces.Person;
 import city.animations.HouseResidentAnimation;
-import city.gui.buildings.HousePanel;
-import city.gui.views.CityViewBuilding;
-import city.interfaces.House;
-import city.interfaces.Landlord;
-import city.interfaces.Person;
-import city.interfaces.Resident;
+import city.bases.Animation;
+import city.bases.ResidenceBuilding;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.House;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.HousePanel;
+import city.roles.interfaces.Landlord;
+import city.roles.interfaces.Resident;
 
-public class HouseBuilding extends ResidenceBuildingBase implements House {
+public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Data
 	private HousePanel panel; // reference to main gui

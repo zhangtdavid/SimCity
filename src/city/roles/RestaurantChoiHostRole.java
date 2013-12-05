@@ -8,14 +8,14 @@ import java.util.concurrent.ConcurrentHashMap;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChoiTable;
-import city.Role;
-import city.abstracts.RestaurantChoiWaiterBase;
+import utilities.RestaurantChoiWaiterBase;
 import city.animations.interfaces.RestaurantChoiAnimatedHost;
+import city.bases.JobRole;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.RestaurantChoiCustomer;
-import city.interfaces.RestaurantChoiHost;
+import city.roles.interfaces.RestaurantChoiCustomer;
+import city.roles.interfaces.RestaurantChoiHost;
 
-public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
+public class RestaurantChoiHostRole extends JobRole implements RestaurantChoiHost{
 
 	// Data
 

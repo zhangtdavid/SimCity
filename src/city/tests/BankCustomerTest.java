@@ -7,9 +7,9 @@ import city.buildings.BankBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.roles.BankCustomerRole;
 import city.roles.RestaurantJPWaiterRole;
-import city.tests.mock.MockBankManager;
-import city.tests.mock.MockBankTeller;
-import city.tests.mock.MockPerson;
+import city.tests.mocks.MockBankManager;
+import city.tests.mocks.MockBankTeller;
+import city.tests.mocks.MockPerson;
 
 public class BankCustomerTest extends TestCase {
 

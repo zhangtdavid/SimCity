@@ -9,12 +9,12 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Agent;
+import city.agents.interfaces.Bus;
 import city.animations.interfaces.AnimatedBus;
+import city.bases.Agent;
 import city.buildings.BusStopBuilding;
-import city.interfaces.Bus;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
+import city.buildings.interfaces.BusStop;
+import city.roles.interfaces.BusPassenger;
 
 public class BusAgent extends Agent implements Bus {
 

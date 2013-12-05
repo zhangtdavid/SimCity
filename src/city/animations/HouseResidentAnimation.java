@@ -5,11 +5,11 @@ import java.awt.Graphics2D;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.Animation;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.gui.buildings.HousePanel;
-import city.interfaces.Person;
+import city.bases.Animation;
+import city.gui.interiors.HousePanel;
 
 public class HouseResidentAnimation extends Animation implements
 		AnimatedPersonAtHome {

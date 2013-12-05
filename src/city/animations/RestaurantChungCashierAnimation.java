@@ -3,10 +3,10 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantChungAnimatedCashier;
-import city.gui.buildings.RestaurantChungPanel;
-import city.interfaces.RestaurantChungCashier;
+import city.bases.Animation;
+import city.gui.interiors.RestaurantChungPanel;
+import city.roles.interfaces.RestaurantChungCashier;
 
 public class RestaurantChungCashierAnimation extends Animation implements RestaurantChungAnimatedCashier {
 	private RestaurantChungCashier agent = null;

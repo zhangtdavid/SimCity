@@ -3,12 +3,12 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.Application;
-import city.Building;
+import city.agents.interfaces.Bus;
 import city.animations.interfaces.AnimatedBus;
-import city.interfaces.Bus;
-import city.interfaces.BusStop;
+import city.bases.Animation;
+import city.bases.Building;
+import city.buildings.interfaces.BusStop;
 
 public class BusAnimation extends Animation implements AnimatedBus {
 

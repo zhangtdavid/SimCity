@@ -1,11 +1,12 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
-import city.interfaces.RestaurantChoiCook;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantChoiCook;
 
 public class RestaurantChoiCookAnimation extends Animation implements RestaurantChoiAnimatedCook {
 

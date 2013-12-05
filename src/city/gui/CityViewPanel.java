@@ -7,16 +7,16 @@ import java.awt.event.MouseMotionListener;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.AnimationInterface;
 import city.Application;
 import city.animations.interfaces.AnimatedCar;
-import city.gui.buildings.RestaurantChoiPanel;
-import city.gui.buildings.RestaurantChungPanel;
-import city.gui.buildings.RestaurantJPPanel;
-import city.gui.buildings.RestaurantTimmsPanel;
-import city.gui.buildings.RestaurantZhangPanel;
-import city.gui.views.CityViewBuilding;
-import city.gui.views.CityViewRestaurant;
+import city.bases.interfaces.AnimationInterface;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.exteriors.CityViewRestaurant;
+import city.gui.interiors.RestaurantChoiPanel;
+import city.gui.interiors.RestaurantChungPanel;
+import city.gui.interiors.RestaurantJPPanel;
+import city.gui.interiors.RestaurantTimmsPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 
 public class CityViewPanel extends CityPanel implements MouseMotionListener {
 

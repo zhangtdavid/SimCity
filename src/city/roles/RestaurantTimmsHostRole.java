@@ -2,18 +2,18 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedHost;
+import city.bases.JobRole;
 import city.buildings.RestaurantTimmsBuilding;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsHost;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsHost;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant host agent.
  */
-public class RestaurantTimmsHostRole extends Role implements RestaurantTimmsHost {
+public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsHost {
 	
 	// Data
 		

@@ -2,12 +2,12 @@ package city.animations;
 
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.Application.BUILDING;
 import city.Application.CityMap;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
-import city.interfaces.BusStop;
-import city.interfaces.Person;
+import city.bases.Animation;
+import city.buildings.interfaces.BusStop;
 
 public class PersonAnimation extends Animation implements AnimatedPerson { // needs code standard review
 	

@@ -13,16 +13,16 @@ import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.abstracts.RestaurantBuildingBase.FoodOrderState;
-import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.bases.JobRole;
+import city.bases.RestaurantBuilding.FoodOrderState;
+import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChoiCook;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantChoiCook;
 
-public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
+public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCook {
 
 	// Data
 	

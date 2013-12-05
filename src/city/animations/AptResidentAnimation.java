@@ -2,9 +2,9 @@ package city.animations;
 
 import java.awt.Graphics2D;
 
-import city.Animation;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.interfaces.Person;
+import city.bases.Animation;
 
 public class AptResidentAnimation extends Animation implements AnimatedPersonAtHome{
 	//Data

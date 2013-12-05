@@ -4,12 +4,11 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
-import city.Building;
-import city.Role;
-import city.buildings.BankBuilding;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankTeller;
+import city.bases.Building;
+import city.bases.Role;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	

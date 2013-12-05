@@ -3,15 +3,15 @@ package city.tests;
 import junit.framework.TestCase;
 import city.Application;
 import city.buildings.RestaurantTimmsBuilding;
-import city.gui.views.CityViewRestaurant;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCustomer;
+import city.buildings.interfaces.RestaurantTimms;
+import city.gui.exteriors.CityViewRestaurant;
 import city.roles.RestaurantTimmsCustomerRole;
-import city.tests.animations.mock.MockRestaurantTimmsAnimatedCustomer;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantTimmsCashier;
-import city.tests.mock.MockRestaurantTimmsHost;
-import city.tests.mock.MockRestaurantTimmsWaiter;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.tests.animations.mocks.MockRestaurantTimmsAnimatedCustomer;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantTimmsCashier;
+import city.tests.mocks.MockRestaurantTimmsHost;
+import city.tests.mocks.MockRestaurantTimmsWaiter;
 
 public class RestaurantTimmsCustomerTest extends TestCase {
 	

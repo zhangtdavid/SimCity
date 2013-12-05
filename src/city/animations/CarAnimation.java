@@ -4,12 +4,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import city.Animation;
 import city.Application;
-import city.BuildingInterface;
+import city.agents.interfaces.Car;
 import city.animations.interfaces.AnimatedCar;
+import city.bases.Animation;
+import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
-import city.interfaces.Car;
 
 public class CarAnimation extends Animation implements AnimatedCar {
 	

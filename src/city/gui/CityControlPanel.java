@@ -5,17 +5,24 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import city.gui.tabs.AddBuildingTab;
+import city.gui.tabs.AddPersonTab;
+import city.gui.tabs.EditBuildingTab;
+import city.gui.tabs.EditPersonTab;
+import city.gui.tabs.ScenariosTab;
+import city.gui.tabs.TraceTab;
+
 public class CityControlPanel extends JPanel {
 
 	private static final long serialVersionUID = 9166425422374406573L;
 
 	private MainFrame mainframe;
-	public CityControlPanelTraceTab traceTab;
-	public CityControlPanelScenariosTab scenariosTab;
-	public CityControlPanelAddBuildingTab addBuildingsTab;
-	public CityControlPanelEditBuildingTab editBuildingsTab;
-	public CityControlPanelAddPersonTab addPersonTab;
-	public CityControlPanelEditPersonTab editPersonTab;
+	public TraceTab traceTab;
+	public ScenariosTab scenariosTab;
+	public AddBuildingTab addBuildingsTab;
+	public EditBuildingTab editBuildingsTab;
+	public AddPersonTab addPersonTab;
+	public EditPersonTab editPersonTab;
 
 	public CityControlPanel(MainFrame mf) {
 		this.mainframe = mf;
@@ -27,22 +34,22 @@ public class CityControlPanel extends JPanel {
 		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
 		tabbedPane.setFocusable(false);
 		
-		traceTab = new CityControlPanelTraceTab(mf);
+		traceTab = new TraceTab(mf);
 		tabbedPane.addTab("Trace", null, traceTab);
 		
-		scenariosTab = new CityControlPanelScenariosTab(mf);
+		scenariosTab = new ScenariosTab(mf);
 		tabbedPane.addTab("Scenarios", null, scenariosTab);
 		
-		addBuildingsTab = new CityControlPanelAddBuildingTab(mf);
+		addBuildingsTab = new AddBuildingTab(mf);
 		tabbedPane.addTab("Add Buildings", null, addBuildingsTab);
 		
-		editBuildingsTab = new CityControlPanelEditBuildingTab(mf);
+		editBuildingsTab = new EditBuildingTab(mf);
 		tabbedPane.addTab("Edit Buildings", null, editBuildingsTab);
 		
-		addPersonTab = new CityControlPanelAddPersonTab(mf);
+		addPersonTab = new AddPersonTab(mf);
 		tabbedPane.addTab("Add Person", null, addPersonTab);
 		
-		editPersonTab = new CityControlPanelEditPersonTab(mf);
+		editPersonTab = new EditPersonTab(mf);
 		tabbedPane.addTab("Edit Person", null, editPersonTab);
 		
 		add(tabbedPane);

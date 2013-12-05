@@ -1,8 +1,10 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics;
+import java.awt.Graphics2D;
 
-import city.Animation;
+import city.bases.Animation;
 import city.roles.RestaurantJPCustomerRole;
 
 public class RestaurantJPCustomerAnimation extends Animation{

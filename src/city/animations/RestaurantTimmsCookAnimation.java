@@ -3,8 +3,8 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
+import city.bases.Animation;
 
 public class RestaurantTimmsCookAnimation extends Animation implements RestaurantTimmsAnimatedCook {
 	

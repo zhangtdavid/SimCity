@@ -10,19 +10,19 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
-import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
+import city.bases.JobRole;
 import city.buildings.RestaurantTimmsBuilding;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant waiter agent.
  */
-public class RestaurantTimmsWaiterRole extends Role implements RestaurantTimmsWaiter {
+public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimmsWaiter {
 	
 	// Data
 	

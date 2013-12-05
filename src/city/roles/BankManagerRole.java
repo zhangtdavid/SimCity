@@ -5,15 +5,15 @@ import java.util.List;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
+import city.bases.JobRole;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankManager;
-import city.interfaces.BankTeller;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankManager;
+import city.roles.interfaces.BankTeller;
 
-public class BankManagerRole extends Role implements BankManager {
+public class BankManagerRole extends JobRole implements BankManager {
 	
 	// Data
 

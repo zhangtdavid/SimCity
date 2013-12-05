@@ -5,10 +5,10 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import city.Animation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-import city.gui.views.CityViewBuilding;
+import city.bases.Animation;
+import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
 	

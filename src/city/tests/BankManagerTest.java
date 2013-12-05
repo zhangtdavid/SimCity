@@ -2,10 +2,11 @@ package city.tests;
 
 import junit.framework.TestCase;
 import city.buildings.BankBuilding;
+import city.buildings.interfaces.Bank;
 import city.roles.BankManagerRole;
-import city.tests.mock.MockBankCustomer;
-import city.tests.mock.MockBankTeller;
-import city.tests.mock.MockPerson;
+import city.tests.mocks.MockBankCustomer;
+import city.tests.mocks.MockBankTeller;
+import city.tests.mocks.MockPerson;
 
 public class BankManagerTest extends TestCase {
 
@@ -38,7 +39,7 @@ public class BankManagerTest extends TestCase {
 		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Customer's log length should be 1.", 1, customer.log.size());
 		assertTrue("Customer should be informed of account creation.", customer.log.containsString("Received msgAccountCreated"));
-		assertTrue("New account should exist in building accounts.", manager.building.accounts.get(0).balance == 50);
+		assertTrue("New account should exist in building accounts.", Bank.accounts.get(0).balance == 50);
 	}
 	
 	public void testNormativeDepositThenWithdrawalScenario(){
@@ -59,6 +60,6 @@ public class BankManagerTest extends TestCase {
 		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Teller's log length should be 2.", 2, teller.log.size());
 		assertTrue("Teller should be allowed to give withdrawal. His log reads instead: " + teller.log.getLastLoggedEvent().toString(), teller.log.containsString("Received msgTransactionSuccessful"));
-		assertTrue("Account funds should be depleted.", manager.building.accounts.get(0).balance == 0);
+		assertTrue("Account funds should be depleted.", Bank.accounts.get(0).balance == 0);
 	}
 }

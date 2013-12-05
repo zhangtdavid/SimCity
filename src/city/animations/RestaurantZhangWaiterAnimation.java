@@ -1,11 +1,12 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
 import utilities.RestaurantZhangTable;
-import city.Animation;
 import city.animations.interfaces.RestaurantZhangAnimatedWaiter;
-import city.interfaces.RestaurantZhangWaiter;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
 public class RestaurantZhangWaiterAnimation extends Animation implements RestaurantZhangAnimatedWaiter {
 

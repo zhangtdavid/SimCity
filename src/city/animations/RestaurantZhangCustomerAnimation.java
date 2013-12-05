@@ -4,9 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 
 import utilities.RestaurantZhangTable;
-import city.Animation;
 import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
-import city.interfaces.RestaurantZhangCustomer;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantZhangCustomer;
 
 public class RestaurantZhangCustomerAnimation extends Animation implements RestaurantZhangAnimatedCustomer {
 

@@ -2,12 +2,12 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankTeller;
+import city.bases.JobRole;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankTeller;
 
-public class BankTellerRole extends Role implements BankTeller {
+public class BankTellerRole extends JobRole implements BankTeller {
 	
 	// Data
 	private Bank building;

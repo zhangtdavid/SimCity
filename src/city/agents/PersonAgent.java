@@ -16,43 +16,44 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketOrder;
-import city.Agent;
 import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
-import city.BuildingInterface;
-import city.RoleInterface;
-import city.abstracts.ResidenceBuildingInterface;
+import city.agents.interfaces.Car;
+import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.interfaces.Apartment;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
-import city.interfaces.House;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomer;
-import city.interfaces.Person;
-import city.interfaces.Resident;
+import city.bases.Agent;
+import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.JobRoleInterface;
+import city.bases.interfaces.ResidenceBuildingInterface;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Apartment;
+import city.buildings.interfaces.Bank;
+import city.buildings.interfaces.BusStop;
+import city.buildings.interfaces.House;
+import city.buildings.interfaces.Market;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
 import city.roles.ResidentRole;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BusPassenger;
+import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.Resident;
 
 public class PersonAgent extends Agent implements Person {
 	
 	// Data
 	
 	private Date date;
-	private RoleInterface occupation;
+	private JobRoleInterface occupation;
 	private ResidenceBuildingInterface home;
 	private int roomNumber; // relevant for apartments only. retained (for homes: 0; for apartments, 1~5)
 	private Car car;
@@ -467,7 +468,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public RoleInterface getOccupation() {
+	public JobRoleInterface getOccupation() {
 		return occupation;
 	}
 	
@@ -537,7 +538,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	@Override
-	public void setOccupation(RoleInterface r) {
+	public void setOccupation(JobRoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		occupation = r;
 		if (r != null) { addRole(r); }
@@ -592,6 +593,11 @@ public class PersonAgent extends Agent implements Person {
 	public void setName(String n) {
 		getPropertyChangeSupport().firePropertyChange(NAME, this.name, n);
 		this.name = n;
+	}
+	
+	@Override
+	public void setResidentRole(Resident r) {
+		this.residentRole = r;
 	}
 	
 	/**
