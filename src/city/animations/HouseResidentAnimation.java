@@ -217,6 +217,6 @@ public class HouseResidentAnimation extends Animation implements
 
 	@Override
 	public boolean getBeingTested() {
-		return this.beingTested;
+		return HouseResidentAnimation.beingTested;
 	}
 }

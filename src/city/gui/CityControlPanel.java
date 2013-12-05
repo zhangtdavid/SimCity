@@ -18,8 +18,8 @@ public class CityControlPanel extends JPanel {
 		this.setMinimumSize(new Dimension(MainFrame.CONTROLPANELX, MainFrame.CONTROLPANELY));
 		this.setVisible(true);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.SCROLL_TAB_LAYOUT);
-		tabbedPane.setTabLayoutPolicy(JTabbedPane.SCROLL_TAB_LAYOUT);
+		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
+		tabbedPane.setFocusable(false);
 		
 		CityControlPanelTraceTab traceTab = new CityControlPanelTraceTab(mf);
 		tabbedPane.addTab("Trace", null, traceTab);

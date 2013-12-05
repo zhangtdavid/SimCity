@@ -218,6 +218,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 		return state;
 	}
 	
+	@Override
+	public String getStateString() {
+		return state.toString();
+	}
+	
 	
 //  Setters
 //	=====================================================================	

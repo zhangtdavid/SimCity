@@ -67,9 +67,9 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
-        foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
-        foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak")));
+    	//foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
+        //foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
+        //foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak"))); //TODO david? this doesn't work anymore (error)
 	}
 	
 	// Utilities
@@ -83,7 +83,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(c)) {
 				RestaurantZhangCustomerAnimation anim = new RestaurantZhangCustomerAnimation(c); 
 				c.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addOccupyingRole(c, anim);
@@ -99,7 +98,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
@@ -116,7 +114,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
@@ -133,12 +130,11 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 		if(r instanceof RestaurantZhangCookRole) {
 			RestaurantZhangCookRole c = (RestaurantZhangCookRole)r;
 			c.setRevolvingStand(orderStand);
-			c.setMenuTimes(menu, foods);
+			c.setMenuTimes(menu, getFoods());
 //			c.addMarket(new MarketBuilding("Market"));
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addOccupyingRole(c, anim);

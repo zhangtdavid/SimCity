@@ -52,11 +52,11 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
+		building.getBankCustomer().setPerson(this.getPerson());
+		roles.add((Role) building.getBankCustomer());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-		building.bankCustomer.setPerson(this.getPerson());
-		roles.add((Role) building.bankCustomer); // TODO clean up
 	}
-	
+
 	public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
 		FOOD_COST.put(FOOD_ITEMS.steak, 16);
@@ -259,7 +259,8 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	@Override 
 	public void setBanker(Banker b){
 		restaurantBanker = b; // only one banker (we can trust...) TODO fix so that this matches with bank in simcity201
-    }
+    } // fixed in setBankCustomer (2 below)
+    
 
 	@Override
     public void addMarket(Market m){
@@ -291,7 +292,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 
 	private void depositMoney() {
 		int toDep=building.getCash()-RestaurantChoi.DAILY_CAPITAL;
-		this.building.bankCustomer.setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
+		this.building.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
 		building.setCash(building.getCash()-toDep);
 	}
 
@@ -356,7 +357,6 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		public void setwa(RestaurantChoiWaiter wa) {
 			this.wa = wa;
 		}
-
 	}
 
 }

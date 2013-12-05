@@ -415,6 +415,11 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 		return order;
 	}
 	
+	@Override
+	public String getStateString() {
+		return state.toString();
+	}
+	
 //	Setters
 //	=====================================================================	
 	@Override

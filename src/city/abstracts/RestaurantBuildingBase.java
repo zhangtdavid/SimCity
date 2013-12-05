@@ -16,8 +16,8 @@ public abstract class RestaurantBuildingBase extends Building implements Restaur
 	
 	// Data
 	
-	public BankCustomer bankCustomer;
-	public HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
+	private BankCustomer bankCustomer;
+	protected HashMap<FOOD_ITEMS, Food> foods = new HashMap<FOOD_ITEMS, Food>();
 	public enum FoodOrderState {None, Pending, Ordered};
 	
 	// Constructor
@@ -33,11 +33,16 @@ public abstract class RestaurantBuildingBase extends Building implements Restaur
 	// Actions
 	
 	// Getters
-	
+	public BankCustomer getBankCustomer() {
+		return bankCustomer;
+	}
+
 	@Override
 	public HashMap<FOOD_ITEMS, Food> getFoods() {
 		return foods;
 	}
+	
+	// Setters
 	
 	// Utilities 
 	
@@ -63,8 +68,11 @@ public abstract class RestaurantBuildingBase extends Building implements Restaur
 	 * Set food item quantity explicitly (update)
 	 */
 	@Override
-	public void updateFoodQuantity(FOOD_ITEMS f, int i) {
+	public void setFoodQuantity(FOOD_ITEMS f, int i) {
 		foods.get(f).amount = i;
 	}
-	
+
+	public void setBankCustomer(BankCustomer bankCustomer) {
+		this.bankCustomer = bankCustomer;
+	}	
 }

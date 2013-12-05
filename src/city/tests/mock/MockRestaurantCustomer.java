@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import city.abstracts.MockRole;
 
 /**
@@ -24,6 +26,18 @@ public class MockRestaurantCustomer extends MockRole {
 	public void setInactive() {
 		// Restaurant customers must set themselves inactive
 		return;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

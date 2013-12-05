@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
 import city.interfaces.MarketCustomerDeliveryPayment;
@@ -41,6 +43,18 @@ public class MockRestaurantTimmsCashier extends MockRole implements RestaurantTi
 	@Override
 	public int getMoneyOwed() {
 		return 0;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

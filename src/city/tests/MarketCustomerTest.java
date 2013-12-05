@@ -70,7 +70,6 @@ public class MarketCustomerTest extends TestCase {
 		marketPanel = new MarketPanel(Color.blue);
 		market = new MarketBuilding("Market1", marketPanel, null);
 
-		
 		housePanel = new HousePanel(Color.black);
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
@@ -105,7 +104,7 @@ public class MarketCustomerTest extends TestCase {
 		customer.setMarket(market);
 //		customer.setAnimation((Animation) marketCustomerGui);
 		landlord = new MockLandlord();
-		home = new HouseBuilding("House", landlord, housePanel, null); // TODO fix this later
+		home = new HouseBuilding("House", landlord, housePanel, null); // TODO fix null perhaps.
 		customerPerson.setHome(home);
 		customerPerson.setCash(500);
 		

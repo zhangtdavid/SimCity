@@ -1,7 +1,5 @@
 package city.tests;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -11,7 +9,6 @@ import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.MarketPanel;
 import city.interfaces.Bank;
 import city.interfaces.Market;
 import city.interfaces.MarketCashier.TransactionState;
@@ -26,7 +23,6 @@ import city.tests.mock.MockPerson;
 import junit.framework.TestCase;
 
 public class MarketCashierTest extends TestCase {
-	MarketPanel marketPanel;
 	Market market;
 	
 	Bank bank;
@@ -62,9 +58,8 @@ public class MarketCashierTest extends TestCase {
 		super.setUp();
 		bank = new BankBuilding("Bank", null, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
-		
-		marketPanel = new MarketPanel(Color.blue);
-		market = new MarketBuilding("Market1", marketPanel, null);
+
+		market = new MarketBuilding("Market1", null, null);
 
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MarketCashierRole(market, 0, 12); // this constructs a bank customer, which requires a bank

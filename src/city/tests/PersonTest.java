@@ -10,7 +10,7 @@ import city.Application.FOOD_ITEMS;
 import city.RoleInterface;
 import city.agents.PersonAgent;
 import city.interfaces.Person;
-import city.interfaces.Person.STATE;
+import city.interfaces.Person.STATES;
 import city.tests.animations.mock.MockAnimatedPerson;
 import city.tests.mock.MockBank;
 import city.tests.mock.MockBus;
@@ -130,7 +130,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		assertEquals("Person should be going to work", Person.STATES.goingToWork, person.getState());
 		assertTrue("Person should have a CarPassengerRole", person.getCarPassengerRole() != null);
 		assertTrue("Person's CarPassengerRole should be active", person.getCarPassengerRole().getActive());
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
@@ -149,7 +149,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
-		assertEquals("Person should be at work", Person.STATE.atWork, person.getState());
+		assertEquals("Person should be at work", Person.STATES.atWork, person.getState());
 		assertTrue("Person's job should be active", person.getOccupation().getActive());
 		
 		// Run the scheduler for person.
@@ -167,7 +167,7 @@ public class PersonTest extends TestCase {
 		
 		// The person should be leaving work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be leaving work", Person.STATE.leavingWork, person.getState());
+		assertEquals("Person should be leaving work", Person.STATES.leavingWork, person.getState());
 		assertTrue("Person's job should not be active", !person.getOccupation().getActive());
 		
 		// Run the scheduler for person
@@ -175,7 +175,7 @@ public class PersonTest extends TestCase {
 		
 		// The person should be going to the bank
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to the bank", Person.STATE.goingToBank, person.getState());
+		assertEquals("Person should be going to the bank", Person.STATES.goingToBank, person.getState());
 		assertTrue("Person should have a CarPassengerRole", person.getCarPassengerRole() != null);
 		assertTrue("Person's CarPassengerRole should be active", person.getCarPassengerRole().getActive());
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
@@ -194,7 +194,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
-		assertEquals("Person should be at the bank", Person.STATE.atBank, person.getState());
+		assertEquals("Person should be at the bank", Person.STATES.atBank, person.getState());
 		assertTrue("Person's BankCustomerRole should be active", person.getBankCustomerRole().getActive());
 		assertEquals("Person's BankCustomerRole should be making a deposit", Application.BANK_SERVICE.atmDeposit, person.getBankCustomerRole().getService());
 		
@@ -212,7 +212,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a restaurant
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 		assertTrue("Person should have a CarPassengerRole", person.getCarPassengerRole() != null);
 		assertTrue("Person's CarPassengerRole should be active", person.getCarPassengerRole().getActive());
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
@@ -233,7 +233,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, RestaurantCustomer
-		assertEquals("Person should be at the restaurant", Person.STATE.atRestaurant, person.getState());
+		assertEquals("Person should be at the restaurant", Person.STATES.atRestaurant, person.getState());
 		assertTrue("Person's RestaurantCustomerRole should be active", person.getRestaurantCustomerRole().getActive());
 		assertEquals("Person should have eaten", true, person.getHasEaten()); // hasEaten is set true by actGoToRestaurant(), not the scheduler
 		
@@ -245,7 +245,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a market
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to the market", Person.STATE.goingToMarket, person.getState());
+		assertEquals("Person should be going to the market", Person.STATES.goingToMarket, person.getState());
 		assertTrue("Person should have a CarPassengerRole", person.getCarPassengerRole() != null);
 		assertTrue("Person's CarPassengerRole should be active", person.getCarPassengerRole().getActive());
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
@@ -268,7 +268,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, MarketCustomer
-		assertEquals("Person should be at the market", Person.STATE.atMarket, person.getState());
+		assertEquals("Person should be at the market", Person.STATES.atMarket, person.getState());
 		assertTrue("Person's MarketCustomerRole should be active", person.getMarketCustomerRole().getActive());
 		
 		// Force the market interaction to end. Simulate the addition of food. Run the scheduler for person.
@@ -279,7 +279,7 @@ public class PersonTest extends TestCase {
 		
 		// Test that the person has properly left the market and is going home to sleep
 		assertEquals("Person should not still have MarketCustomerRole", null, person.getMarketCustomerRole());
-		assertEquals("Person should be going home to sleep", STATE.goingToSleep, person.getState());
+		assertEquals("Person should be going home to sleep", STATES.goingToSleep, person.getState());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassengerRole
 
 		// Run the scheduler for person.
@@ -294,7 +294,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should not continue running", false, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		assertEquals("Person should not have eaten", false, person.getHasEaten());
 		
 		// The time now should be 12, or when the person's shift is over
@@ -305,7 +305,7 @@ public class PersonTest extends TestCase {
 		// Person should do nothing and still be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		assertEquals("Person should not have eaten", false, person.getHasEaten());
 		
 		// Fast-forward the time and verify the person wakes up and starts the cycle again
@@ -314,7 +314,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		assertEquals("Person should be going to work", Person.STATES.goingToWork, person.getState());
 		
 		// That's one full day's cycle.
 	}
@@ -338,14 +338,14 @@ public class PersonTest extends TestCase {
 		person.setAnimation(animation);
 		
 		// Preconditions
-		assertEquals("Person's state should be STATE.none", Person.STATE.none, person.getState());
+		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
 		
 		// Run the scheduler. Right now it is hour 0, the person should move from STATE.none right into daily tasks.
 		outcome = person.runScheduler();
 		
 		// Person should be doing a daily task (going to a restaurant)
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -361,7 +361,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a market
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to the market", Person.STATE.goingToMarket, person.getState());
+		assertEquals("Person should be going to the market", Person.STATES.goingToMarket, person.getState());
 		
 		// Run the scheduler for person. End the market interaction and simulate success. Run the scheduler some more.
 		// - The car should leave
@@ -378,7 +378,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to sleep
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going home to sleep", STATE.goingToSleep, person.getState());
+		assertEquals("Person should be going home to sleep", STATES.goingToSleep, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -390,7 +390,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should have arrived at home and be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		
 		// The time now still be 0, just as it was at the start
 		// Run the clock forward so that it is still in the person's off hours
@@ -399,7 +399,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should do nothing and still be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		
 		// Fast-forward the time to the person's work start
 		incrementDateHelper(12); // It's 6 hours forward again, or exactly ShiftStart
@@ -407,7 +407,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		assertEquals("Person should be going to work", Person.STATES.goingToWork, person.getState());
 
 		// Run the scheduler for person.
 		// - The car should leave
@@ -419,7 +419,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should have arrived at work
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
-		assertEquals("Person should be at work", Person.STATE.atWork, person.getState());
+		assertEquals("Person should be at work", Person.STATES.atWork, person.getState());
 		
 		// Fast-forward time until the person should leave work. Run the scheduler for person.
 		incrementDateHelper(24); // It's 12 hours past shiftStart, now exactly shiftEnd
@@ -427,14 +427,14 @@ public class PersonTest extends TestCase {
 		
 		// The person should be leaving work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be leaving work", Person.STATE.leavingWork, person.getState());
+		assertEquals("Person should be leaving work", Person.STATES.leavingWork, person.getState());
 		
 		// Run the scheduler.
 		outcome = person.runScheduler();
 		
 		// The person should loop and begin doing daily tasks again.
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 		
 		// That's one full day's cycle.
 	}
@@ -459,7 +459,7 @@ public class PersonTest extends TestCase {
 		person.setAnimation(animation);
 		
 		// Preconditions
-		assertEquals("Person's state should be STATE.none", Person.STATE.none, person.getState());
+		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
 		
 		// The time now is of course zero
 		// Run the clock forward so that the person's rent will be due
@@ -468,7 +468,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to the bank
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to the bank", Person.STATE.goingToBank, person.getState());
+		assertEquals("Person should be going to the bank", Person.STATES.goingToBank, person.getState());
 
 		// Run the scheduler for person.
 		// - The car should leave
@@ -480,7 +480,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should have arrived at bank
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be at the bank", Person.STATE.atBank, person.getState());
+		assertEquals("Person should be at the bank", Person.STATES.atBank, person.getState());
 		assertTrue("Person's BankCustomerRole should be active", person.getBankCustomerRole().getActive());
 		assertEquals("Person's BankCustomerRole should be withdrawing money", Application.BANK_SERVICE.moneyWithdraw, person.getBankCustomerRole().getService());
 		
@@ -492,7 +492,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to pay rent
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to pay rent", Person.STATE.goingToPayRent, person.getState());
+		assertEquals("Person should be going to pay rent", Person.STATES.goingToPayRent, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -504,7 +504,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be at rent payment
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be at rent payment", Person.STATE.atRentPayment, person.getState());
+		assertEquals("Person should be at rent payment", Person.STATES.atRentPayment, person.getState());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
 		assertEquals("Person's ResidentRole should be active", true, person.getResidentRole().getActive());
 		
@@ -517,7 +517,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a restaurant
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 		
 		// End of cycle
 	}
@@ -540,14 +540,14 @@ public class PersonTest extends TestCase {
 		person.setAnimation(animation);
 		
 		// Preconditions
-		assertEquals("Person's state should be STATE.none", Person.STATE.none, person.getState());
+		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
 		
 		// Run the scheduler. Right now it is hour 0, the person should move from STATE.none right into daily tasks.
 		outcome = person.runScheduler();
 		
 		// Person should be doing a daily task
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -563,7 +563,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a market
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to the market", Person.STATE.goingToMarket, person.getState());
+		assertEquals("Person should be going to the market", Person.STATES.goingToMarket, person.getState());
 		
 		// Run the scheduler for person. End the market interaction and simulate success. Run the scheduler some more.
 		// - The car should leave
@@ -580,7 +580,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to sleep
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going home to sleep", STATE.goingToSleep, person.getState());
+		assertEquals("Person should be going home to sleep", STATES.goingToSleep, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -592,7 +592,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should have arrived at home and be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		
 		// The time now should still be 0, just as it was at the start
 		// Run the clock forward so that it is still in the person's off hours
@@ -601,7 +601,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should do nothing and still be sleeping
 		assertEquals("Person scheduler should not continue running", false, outcome);
-		assertEquals("Person should be sleeping", Person.STATE.atSleep, person.getState());
+		assertEquals("Person should be sleeping", Person.STATES.atSleep, person.getState());
 		
 		// Fast-forward the time to when the person should be forced to wake up (he has no job, remember)
 		incrementDateHelper(12); // It's 6 hours forward again, or exactly time to wake up
@@ -609,7 +609,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a restaurant
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to a restaurant", Person.STATE.goingToRestaurant, person.getState());
+		assertEquals("Person should be going to a restaurant", Person.STATES.goingToRestaurant, person.getState());
 
 		// Run the scheduler for person.
 		// - The car should leave
@@ -625,7 +625,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to sleep (he went to the market yesterday)
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going home to sleep", STATE.goingToSleep, person.getState());
+		assertEquals("Person should be going home to sleep", STATES.goingToSleep, person.getState());
 		
 		// That's one full day's cycle.
 	}
@@ -651,7 +651,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		assertEquals("Person should be going to work", Person.STATES.goingToWork, person.getState());
 	}
 	
 	/**
@@ -683,7 +683,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to work
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to work", Person.STATE.goingToWork, person.getState());
+		assertEquals("Person should be going to work", Person.STATES.goingToWork, person.getState());
 		assertTrue("Person should have a BusPassengerRole", person.getBusPassengerRole() != null);
 		assertTrue("Person's BusPassengerRole should be active", person.getBusPassengerRole().getActive());
 		assertTrue("Person's BusPassengerRole should know that Person owns it", person.getBusPassengerRole().getPerson().equals(person));
@@ -718,7 +718,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a BusPassengerRole", null, person.getBusPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
-		assertEquals("Person should be at work", Person.STATE.atWork, person.getState());
+		assertEquals("Person should be at work", Person.STATES.atWork, person.getState());
 		assertTrue("Person's job should be active", person.getOccupation().getActive());
 	}
 	
@@ -743,14 +743,14 @@ public class PersonTest extends TestCase {
 		person.getHome().addFood(FOOD_ITEMS.chicken, 4);
 		
 		// Preconditions
-		assertEquals("Person's state should be STATE.none", Person.STATE.none, person.getState());
+		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
 		
 		// Run the scheduler. Right now it is hour 0, the person should move from STATE.none right into daily tasks.
 		outcome = person.runScheduler();
 		
 		// Person should be doing a daily task (going home to cook)
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to cook", Person.STATE.goingToCook, person.getState());
+		assertEquals("Person should be going to cook", Person.STATES.goingToCook, person.getState());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -762,7 +762,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to a market
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be cooking", Person.STATE.atCooking, person.getState());
+		assertEquals("Person should be cooking", Person.STATES.atCooking, person.getState());
 		
 		// Run the scheduler for person
 		// - The person should finish cooking/eating and go to sleep
@@ -770,7 +770,7 @@ public class PersonTest extends TestCase {
 		
 		// Person should be going to sleep
 		assertEquals("Person scheduler should continue running", true, outcome);
-		assertEquals("Person should be going to sleep", Person.STATE.goingToSleep, person.getState());
+		assertEquals("Person should be going to sleep", Person.STATES.goingToSleep, person.getState());
 		
 		// Finished
 	}

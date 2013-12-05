@@ -288,7 +288,7 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		myHost.msgTableOpen(mc.table);
 		if(restaurantClosing) {
 			if(myCustomerList.isEmpty()) {
-				super.setInactive();
+				setInactive();
 				restaurantClosing = false;
 			}
 		}
@@ -447,7 +447,15 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 				return;
 			}
 		}
+		thisGui.setVisible(false);
 		super.setInactive();
+	}
+	
+	@Override
+	public void setActive() {
+		super.setActive();
+		thisGui.setVisible(true);
+		runScheduler();
 	}
 
 	// Utilities

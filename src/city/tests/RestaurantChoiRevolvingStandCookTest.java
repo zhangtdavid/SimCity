@@ -1,8 +1,6 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
-
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;

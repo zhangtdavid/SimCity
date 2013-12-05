@@ -19,8 +19,8 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 
 	//	Setters
 	public void setRestaurantChungHost(RestaurantChungHost host);
-	public void setRestaurantChungHost(RestaurantChungCashier cashier);
-	public void setRestaurantChungHost(RestaurantChungCook cook);
+	public void setRestaurantChungCashier(RestaurantChungCashier cashier);
+	public void setRestaurantChungCook(RestaurantChungCook cook);
 	
 	//	Utilities
 	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim);

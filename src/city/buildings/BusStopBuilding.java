@@ -1,7 +1,5 @@
 package city.buildings;
 
-import java.awt.Color;
-import java.awt.Dimension;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -12,7 +10,6 @@ import city.RoleInterface;
 import city.gui.CityRoad;
 import city.gui.buildings.BusStopPanel;
 import city.gui.views.CityViewBuilding;
-import city.gui.views.CityViewBusStop;
 import city.interfaces.BusPassenger;
 import city.interfaces.BusStop;
 
@@ -33,11 +30,6 @@ public class BusStopBuilding extends Building implements BusStop {
 	}
 	
 	// Getters
-	
-	public BusStopBuilding(String name) {
-		super(name, new BusStopPanel(Color.black), new CityViewBusStop(1, 1));
-	};
-	
 	@Override
 	public List<BusPassenger> getWaitingList() {
 		return waitingList;

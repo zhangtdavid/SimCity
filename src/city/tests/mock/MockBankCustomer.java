@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
@@ -63,6 +65,18 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 
 	@Override
 	public BANK_SERVICE getService() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
 	}

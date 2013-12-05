@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Map;
 
@@ -162,5 +163,17 @@ public class MockRestaurantZhangCook extends MockRole implements RestaurantZhang
 	public boolean getWaitingToCheckStand() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -132,7 +132,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		try {
 			if(restaurantClosing) {
 				if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() <= 0) {
-					super.setInactive();
+					setInactive();
 					restaurantClosing = false;
 					return true;
 				}
@@ -403,6 +403,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	@Override
 	public void setActive() {
 		super.setActive();
+		thisGui.setVisible(true);
 		runScheduler();
 	}
 	
@@ -419,6 +420,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 				return;
 			}
 		}
+		thisGui.setVisible(false);
 		super.setInactive();
 	}
 	

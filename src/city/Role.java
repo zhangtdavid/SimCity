@@ -1,5 +1,7 @@
 package city;
 
+import java.beans.PropertyChangeSupport;
+
 import city.interfaces.Person;
 
 /**
@@ -19,10 +21,12 @@ public abstract class Role implements RoleInterface {
 	private boolean activity;
 	private BuildingInterface workplace; // FOR OCCUPATIONS - the building where the role works. used for transportation and banking.
 	private AnimationInterface animation;
+	private PropertyChangeSupport propertyChangeSupport;
 	
 	// Constructor
 	
 	public Role() {
+		propertyChangeSupport = new PropertyChangeSupport(this);
 		active = false;
 		activity = false;
 	}
@@ -76,6 +80,16 @@ public abstract class Role implements RoleInterface {
     public boolean getActivity() {
     	return activity;
     }
+    
+    @Override
+    public PropertyChangeSupport getPropertyChangeSupport() {
+    	return propertyChangeSupport;
+    }
+    
+	@Override
+	public String getStateString() {
+		return "Not Implemented";
+	}	
 	
 	// Setters
 	
@@ -107,22 +121,26 @@ public abstract class Role implements RoleInterface {
 	
 	@Override
 	public void setActive() {
+		getPropertyChangeSupport().firePropertyChange(ACTIVE, this.active, true);
 		this.active = true;
 		setActivityBegun();
 	}
 	
 	@Override
 	public void setInactive() {
+		getPropertyChangeSupport().firePropertyChange(ACTIVE, this.active, false);
 		this.active = false;
 	}
 	
 	@Override
 	public void setActivityBegun() {
+		getPropertyChangeSupport().firePropertyChange(ACTIVITY, this.activity, true);
 		this.activity = true;
 	}
 	
 	@Override
 	public void setActivityFinished() {
+		getPropertyChangeSupport().firePropertyChange(ACTIVITY, this.activity, false);
 		this.activity = false;
 	}
 	

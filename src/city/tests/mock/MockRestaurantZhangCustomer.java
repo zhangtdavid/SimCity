@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
@@ -189,5 +191,17 @@ public class MockRestaurantZhangCustomer extends MockRole implements RestaurantZ
 	public void setMoney(int newMoney) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
