@@ -90,8 +90,10 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
-				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
-				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+					((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+					((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				}
 			}
 			x = vehicle.getXPos();
 			y = vehicle.getYPos();
@@ -104,8 +106,10 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null) {
-				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
-				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+					((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+					((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				}
 			}
 			x = vehicle.getXPos();
 			y = vehicle.getYPos();
