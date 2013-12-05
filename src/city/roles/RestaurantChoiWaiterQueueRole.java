@@ -57,7 +57,6 @@ public class RestaurantChoiWaiterQueueRole extends RestaurantChoiWaiterBase {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiWaiterRole " + this.getPerson().getName(), msg);
     }
 }

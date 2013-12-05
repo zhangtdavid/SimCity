@@ -95,6 +95,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		yDestination = destination.getCityViewBuilding().getY();
 		endRoad = Application.CityMap.findClosestRoad(destination);
 		atDestination = false;
+		atDestinationRoad = false;
 		this.car.print("In Destination: " + endRoad);
 	}
 	

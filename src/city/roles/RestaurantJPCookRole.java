@@ -287,7 +287,6 @@ public class RestaurantJPCookRole extends JobRole implements RestaurantJPCook {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCookRole " + this.getPerson().getName(), msg);
     }
 	

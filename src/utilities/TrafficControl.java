@@ -11,7 +11,7 @@ import city.gui.CityRoad;
 public class TrafficControl implements ActionListener {
 	List<CityRoad> roads;
 	Timer stopLightTimer = new Timer(3000, this);
-	
+
 	public TrafficControl(List<CityRoad> roads) {
 		this.roads = roads;
 		stopLightTimer.start();
@@ -40,5 +40,26 @@ public class TrafficControl implements ActionListener {
 			}
 		}
 		stopLightTimer.restart();
+	}
+
+	public CityRoad getRoadAt(int x, int y) {
+		for(CityRoad r : roads) {
+			if(r.contains(x, y))
+				return r;
+		}
+		return null;
+	}
+
+	public CityRoad getClosestRoad(int x, int y) {
+		double closestDistance = 10000000;
+		CityRoad closestRoad = null;
+		for(CityRoad r : roads) {
+			double distance = Math.sqrt((double)(Math.pow(r.getX() - x, 2) + Math.pow(r.getY() - y, 2)));
+			if( distance < closestDistance) {
+				closestDistance = distance;
+				closestRoad = r;
+			}
+		}
+		return closestRoad;
 	}
 }

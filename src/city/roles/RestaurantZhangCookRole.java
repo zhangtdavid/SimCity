@@ -429,7 +429,6 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	@Override
 	public void print(String msg) {
 		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
-		super.print(msg);
     }
 	
 	@Override

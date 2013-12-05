@@ -300,7 +300,6 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCashierRole " + this.getPerson().getName(), msg);
     }
 

@@ -458,7 +458,6 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterBaseRole " + this.getPerson().getName(), msg);
     }
 	

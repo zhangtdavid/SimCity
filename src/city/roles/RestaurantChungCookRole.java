@@ -524,7 +524,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCookRole " + this.getPerson().getName(), msg);
     }
     

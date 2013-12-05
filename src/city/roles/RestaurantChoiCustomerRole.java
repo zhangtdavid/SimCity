@@ -582,7 +582,6 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCustomerRole " + this.getPerson().getName(), msg);
     }
 

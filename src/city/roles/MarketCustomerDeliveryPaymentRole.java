@@ -136,7 +136,6 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryPaymentRole " + this.getPerson().getName(), msg);
     }
 }

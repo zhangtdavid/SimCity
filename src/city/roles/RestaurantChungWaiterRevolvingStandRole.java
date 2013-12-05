@@ -59,7 +59,6 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterRevolvingStandRole " + this.getPerson().getName(), msg);
     }
 }

@@ -217,7 +217,6 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankTellerRole " + this.getPerson().getName(), msg);
     }
 	
