@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
@@ -94,5 +96,17 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	public void removeOrderFromList(Transaction transaction) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

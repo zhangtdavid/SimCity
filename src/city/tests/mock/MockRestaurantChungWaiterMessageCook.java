@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
@@ -145,6 +147,18 @@ public class MockRestaurantChungWaiterMessageCook extends MockRole implements Re
 	public void removeCustomerFromList(WCustomer c) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 //	@Override

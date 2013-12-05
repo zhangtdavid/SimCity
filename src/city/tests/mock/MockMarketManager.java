@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Map;
 
@@ -111,6 +112,18 @@ public class MockMarketManager extends MockRole implements MarketManager {
 
 	@Override
 	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
 	}
