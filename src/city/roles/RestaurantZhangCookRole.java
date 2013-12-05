@@ -403,6 +403,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	@Override
 	public void setActive() {
 		super.setActive();
+		thisGui.setVisible(true);
 		runScheduler();
 	}
 	

@@ -449,6 +449,13 @@ public abstract class RestaurantZhangWaiterBase extends Role implements Restaura
 		}
 		super.setInactive();
 	}
+	
+	@Override
+	public void setActive() {
+		super.setActive();
+		thisGui.setVisible(true);
+		runScheduler();
+	}
 
 	// Utilities
 	

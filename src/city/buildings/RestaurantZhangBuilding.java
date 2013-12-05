@@ -83,7 +83,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(c)) {
 				RestaurantZhangCustomerAnimation anim = new RestaurantZhangCustomerAnimation(c); 
 				c.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addOccupyingRole(c, anim);
@@ -99,7 +98,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
@@ -116,7 +114,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantZhangWaiterAnimation anim = new RestaurantZhangWaiterAnimation(w, waiters.size() * 30 + 80, 200); 
 				w.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
@@ -138,7 +135,6 @@ public class RestaurantZhangBuilding extends RestaurantBuildingBase implements R
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantZhangCookAnimation anim = new RestaurantZhangCookAnimation(c);
 				c.setAnimation(anim);
-				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addOccupyingRole(c, anim);

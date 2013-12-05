@@ -465,6 +465,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	@Override
 	public void setActive() {
 		super.setActive();
+		customerAnimation.setVisible(true);
 		msgGotHungry();
 	}
 	
