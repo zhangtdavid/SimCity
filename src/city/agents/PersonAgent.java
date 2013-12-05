@@ -392,19 +392,19 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.setAcquired();
 		homeAnimation.verifyFood();  // give animation instructions
 		try{ 
-			//atDestination.acquire(); //and freeze
+			if(!homeAnimation.getBeingTested()) // this is for testing, and has no impact for real-runs.
+			atDestination.acquire(); //and freeze
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to refrigerator");
 			e.printStackTrace();
 		}
-		//??? why does below exist
-		//homeAnimation.setCoords(homeAnimation.getDestination()[0], homeAnimation.getDestination()[1]);
-		
+
 		//BTW function was intentionally designed to combine these 3 steps into 1 action.
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
-			//atDestination.acquire(); //and freeze
+			if(!homeAnimation.getBeingTested()) // this is for testing, and has no impact for real-runs.
+			atDestination.acquire(); //and freeze
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to stove/table");
 			e.printStackTrace();

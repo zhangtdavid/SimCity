@@ -65,13 +65,13 @@ public class MarketCustomerTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding", null, null));
 
-		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
-		market = new MarketBuilding("Market1", marketPanel);
+		marketPanel = new MarketPanel(Color.blue);
+		market = new MarketBuilding("Market1", marketPanel, null);
 
 		
-		housePanel = new HousePanel(Color.black, new Dimension(500,500));
+		housePanel = new HousePanel(Color.black);
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);

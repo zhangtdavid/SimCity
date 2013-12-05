@@ -1,16 +1,13 @@
 package city.tests;
 
-import java.awt.Color;
 import java.util.Date;
 
 import city.Application;
 import city.Application.BUILDING;
 import city.agents.PersonAgent;
 import city.animations.AptResidentAnimation;
-import city.animations.HouseResidentAnimation;
 import city.buildings.ApartmentBuilding;
 import city.gui.buildings.AptPanel;
-import city.gui.buildings.HousePanel;
 import city.gui.views.CityViewBuilding;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
@@ -42,15 +39,11 @@ public class AptAnimationTest {
 		person.addRole(resident);
 		resident.setLandlord(landlord);
 		
-		house = new ApartmentBuilding("Apartment", landlord/*, hp, aptCityViewBuilding*/);
+		house = new ApartmentBuilding("Apartment", landlord, hp, aptCityViewBuilding);
 		Application.CityMap.clearMap();
-		Application.CityMap.restaurantNumber = 0; // TODO remove, part of David's debugging code
 		Application.CityMap.addBuilding(BUILDING.house,house); // TODO incorporate a base class? rename house as residence 
 		person.setHome(house);
 		
 		// Set up test environment
 	}
-	
-
-	
 }

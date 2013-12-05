@@ -22,7 +22,7 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	MockRestaurantChoiWaiterQueue waiter1; 
 	MockRestaurantChoiWaiterDirect waiter2;
 	RestaurantChoi b;
-	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white, new Dimension(0,0));
+	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white);
 	
 	
 	public void setUp() throws Exception{

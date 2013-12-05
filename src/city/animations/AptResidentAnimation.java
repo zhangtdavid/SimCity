@@ -12,6 +12,7 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	Person person = null;
 	Command command = Command.noCommand;
 	int xDestination, yDestination;
+	public boolean beingTested = false;
 	
 	//Constructor
 	public AptResidentAnimation(Person p){
@@ -77,5 +78,10 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	public void setCoords(int x, int y) {
 		xPos = x;
 		yPos = y;
+	}
+
+	@Override
+	public boolean getBeingTested() {
+		return this.beingTested ;
 	}
 }

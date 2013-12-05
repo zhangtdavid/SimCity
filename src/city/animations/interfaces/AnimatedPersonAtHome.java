@@ -43,10 +43,11 @@ public interface AnimatedPersonAtHome {
 	 */
 	public abstract void goOutside(); // to person's door
 
-
 	
     // Getters
     public int[] getDestination();
+
+	public boolean getBeingTested();
     // Setters
 	/**
 	 * Notifies the animation that it's OK to release the semaphore one time after animation is complete.

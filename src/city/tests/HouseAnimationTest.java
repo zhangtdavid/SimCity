@@ -159,8 +159,20 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.verifyFood();
 		assertEquals("Command of home Animation should be ToRef", homeAnimation.getCommand(), Command.ToRef.toString());
 		homeAnimation.setCoords(HousePanel.HRX, HousePanel.HRY); // at refrigerator
-		homeAnimation.updatePosition(); // now no longer has command toRef...?
-		//assertEquals("Command of home Animation should be ToStove", homeAnimation.getCommand(), Command.ToStove.toString());
+		homeAnimation.updatePosition(); // now done with going to refrigerator.
+		
+		homeAnimation.setAcquired(); // then the person would tell the animation to cookAndEatFood after acquiring the semaphore...
+		homeAnimation.cookAndEatFood(); 
+		assertEquals("Command of home animation should be ToStove", homeAnimation.getCommand(), Command.ToStove.toString()); // state confirmed
+		homeAnimation.setCoords(HousePanel.HSX, HousePanel.HSY);
+		homeAnimation.updatePosition(); // update command to toTable
+		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // state confirmed
+		homeAnimation.setCoords(HousePanel.HTX, HousePanel.HTY);
+		homeAnimation.updatePosition();
+		System.out.println(homeAnimation.getCommand());
+		assertEquals("Command of home animation should be noCommand", homeAnimation.getCommand(), Command.noCommand.toString()); // state confirmed. Done!
+		
+		
 		
 	}
 }

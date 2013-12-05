@@ -17,7 +17,7 @@ public class BankTellerTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		BankBuilding b = new BankBuilding("Bank");
+		BankBuilding b = new BankBuilding("Bank", null, null);
 		this.customer = new MockBankCustomer();
 		this.manager = new MockBankManager();
 		b.setManager(manager);
