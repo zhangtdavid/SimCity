@@ -93,6 +93,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 		return destination;
 	}
 	
+	@Override
+	public String getStateString() {
+		return myState.toString();
+	}
+	
 	// Setters
 	
 	@Override

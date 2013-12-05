@@ -31,10 +31,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public BankCustomerRole(Building bus, Bank b) {
 		building = b;
 		business = bus;
+		st = STATE.none;
 	}
 	
 	public BankCustomerRole(Bank b) {
 		building = b;
+		st = STATE.none;
 	}
 	
 	
@@ -160,6 +162,11 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	@Override
 	public Application.BANK_SERVICE getService() {
 		return service;
+	}
+	
+	@Override
+	public String getStateString() {
+		return this.st.toString();
 	}
 	
 	// Setters
