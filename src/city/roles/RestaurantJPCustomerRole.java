@@ -318,7 +318,6 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCustomerRole " + this.getPerson().getName(), msg);
     }
 }

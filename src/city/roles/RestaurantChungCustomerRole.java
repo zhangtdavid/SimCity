@@ -436,7 +436,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //	=====================================================================
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungCustomerRole " + this.getPerson().getName(), msg);
     }
 

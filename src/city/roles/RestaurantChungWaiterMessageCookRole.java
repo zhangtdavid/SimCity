@@ -42,7 +42,6 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungWaiterMessageCookRole " + this.getPerson().getName(), msg);
     }
 }

@@ -416,7 +416,6 @@ public class RestaurantChungHostRole extends Role implements RestaurantChungHost
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHUNG, "RestaurantChungHostRole " + this.getPerson().getName(), msg);
     }
 	

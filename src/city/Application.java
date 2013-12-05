@@ -136,26 +136,6 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		// Sidewalks
-		ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
-		nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
-		nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
-		nonSidewalkArea.add(new Rectangle(2, 4, 2, 8)); // Topmid left
-		nonSidewalkArea.add(new Rectangle(14, 6, 2, 10)); // Topmid center
-		nonSidewalkArea.add(new Rectangle(26, 4, 2, 12)); // Topmid right
-		nonSidewalkArea.add(new Rectangle(6, 14, 10, 2)); // Center left
-		nonSidewalkArea.add(new Rectangle(18, 14, 10, 2)); // Center right
-		nonSidewalkArea.add(new Rectangle(2, 14, 2, 12)); // Bottommid left
-		nonSidewalkArea.add(new Rectangle(14, 18, 2, 8)); // Bottommid center
-		nonSidewalkArea.add(new Rectangle(26, 18, 2, 8)); // Bottommid right
-		nonSidewalkArea.add(new Rectangle(2, 26, 10, 2)); // Bottom left
-		nonSidewalkArea.add(new Rectangle(14, 26, 14, 2)); // Bottom right
-		nonSidewalkArea.add(new Rectangle(6, 6, 6, 6)); // Top left square
-		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
-		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
-		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
-		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
-		
 		// Create roads
 		// North roads
 		for(int i = 375; i >= 100; i -= 25) {
@@ -301,6 +281,26 @@ public class Application {
 		}
 		trafficControl = new TrafficControl(roads);
 		
+		// Sidewalks
+		ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
+		nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
+		nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
+		nonSidewalkArea.add(new Rectangle(2, 4, 2, 8)); // Topmid left
+		nonSidewalkArea.add(new Rectangle(14, 6, 2, 10)); // Topmid center
+		nonSidewalkArea.add(new Rectangle(26, 4, 2, 12)); // Topmid right
+		nonSidewalkArea.add(new Rectangle(6, 14, 10, 2)); // Center left
+		nonSidewalkArea.add(new Rectangle(18, 14, 10, 2)); // Center right
+		nonSidewalkArea.add(new Rectangle(2, 14, 2, 12)); // Bottommid left
+		nonSidewalkArea.add(new Rectangle(14, 18, 2, 8)); // Bottommid center
+		nonSidewalkArea.add(new Rectangle(26, 18, 2, 8)); // Bottommid right
+		nonSidewalkArea.add(new Rectangle(2, 26, 10, 2)); // Bottom left
+		nonSidewalkArea.add(new Rectangle(14, 26, 14, 2)); // Bottom right
+		nonSidewalkArea.add(new Rectangle(6, 6, 6, 6)); // Top left square
+		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
+		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
+		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
+		//sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(350, 0, "Bus Stop 1", Color.white, bsp1);
@@ -318,7 +318,7 @@ public class Application {
 		createBuilding(bsp3, cityViewBusStop3, busStop3);
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(50, 425, "Bus Stop 4", Color.white, bsp4);
+		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(75, 425, "Bus Stop 4", Color.white, bsp4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		createBuilding(bsp4, cityViewBusStop4, busStop4);
 		
@@ -427,6 +427,7 @@ public class Application {
 		rzb1.addOccupyingRole(p4r1Zhang);
 		p4Zhang.setOccupation(p4r1Zhang);
 
+/*	
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
 		// Create panels
 		RestaurantTimmsPanel rtp1 = new RestaurantTimmsPanel(Color.GRAY);
@@ -517,7 +518,8 @@ public class Application {
 		RestaurantTimmsWaiterRole p4r1Timms = new RestaurantTimmsWaiterRole(rtb, 0, 100); // TODO Change shift times
 		rtb.addOccupyingRole(p4r1Timms);
 		p4Timms.setOccupation(p4r1Timms);
-
+*/
+/*
 		// RESTAURANTCHOI----------------------------------------------------------------------------
 		MarketPanel marketPanelChoi1 = new MarketPanel(Color.black);
 		CityViewMarket cityViewMarketChoi1 = new CityViewMarket(250, 450, "Choi Market 1", Color.orange, marketPanelChoi1);
@@ -678,17 +680,18 @@ public class Application {
 		mainFrame.cityView.addAnimation(c10AnimChoi);
 
 		p0Choi.setCar(c0Choi);
-//		p1Choi.setCar(c1Choi);
-//		p2Choi.setCar(c2Choi);
-//		p3Choi.setCar(c3Choi);
-//		p4Choi.setCar(c4Choi);
-//		p5Choi.setCar(c5Choi);
+		p1Choi.setCar(c1Choi);
+		p2Choi.setCar(c2Choi);
+		p3Choi.setCar(c3Choi);
+		p4Choi.setCar(c4Choi);
+		p5Choi.setCar(c5Choi);
 		p6Choi.setCar(c6Choi);
 		p7Choi.setCar(c7Choi);
 		p8Choi.setCar(c8Choi);
 		p9Choi.setCar(c9Choi);
 		p10Choi.setCar(c10Choi);
-		
+*/
+/*	
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
@@ -780,7 +783,8 @@ public class Application {
 		p4r1Chung.setPerson(p4Chung);		
 		restaurantChungBuilding1.addOccupyingRole(p4r1Chung);
 		p4Chung.setOccupation(p4r1Chung);
-
+*/
+/*
 		//RESTAURANTJP------------------------------------------------------------------------
 		RestaurantJPPanel restaurantJPPanel1 = new RestaurantJPPanel(Color.DARK_GRAY);
 		CityViewRestaurant cityViewRestaurantJP1 = new CityViewRestaurant(400, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, restaurantJPPanel1); 
@@ -861,7 +865,7 @@ public class Application {
 		RestaurantJPWaiterRole p4r1JP = new RestaurantJPWaiterRole(restaurantJPBuilding1, 0, 100); // TODO Change shift times
 		restaurantJPBuilding1.addOccupyingRole(p4r1JP);
 		p4JP.setOccupation(p4r1JP);
-		
+*/
 		// Wait for stuff to get set up
 		try {
 			Thread.sleep(5000);
@@ -878,6 +882,66 @@ public class Application {
 		p2Zhang.startThread();
 		p3Zhang.startThread();
 		p4Zhang.startThread();
+
+/*
+		c0Timms.startThread();
+		c1Timms.startThread();
+		c2Timms.startThread();
+		c3Timms.startThread();
+		c4Timms.startThread();
+		p0Timms.startThread();
+		p1Timms.startThread();
+		p2Timms.startThread();
+		p3Timms.startThread();
+		p4Timms.startThread();
+*/
+/*
+		p0Choi.startThread();
+		p1Choi.startThread();
+		p2Choi.startThread();
+		p3Choi.startThread();
+		p4Choi.startThread();
+		p5Choi.startThread();
+		p6Choi.startThread();
+		p7Choi.startThread();
+		p8Choi.startThread();
+		p9Choi.startThread();
+		p10Choi.startThread();
+		c0Choi.startThread();
+		c1Choi.startThread();
+		c2Choi.startThread();
+		c3Choi.startThread();
+		c4Choi.startThread();
+		c5Choi.startThread();
+		c6Choi.startThread();
+		c7Choi.startThread();
+		c8Choi.startThread();
+		c9Choi.startThread();
+		c10Choi.startThread();
+*/
+/*
+		p0Chung.startThread();
+		p1Chung.startThread();
+		p2Chung.startThread();
+		p3Chung.startThread();
+		p4Chung.startThread();
+		c0Chung.startThread();
+		c1Chung.startThread();
+		c2Chung.startThread();
+		c3Chung.startThread();
+		c4Chung.startThread();
+*/
+/*
+		p0JP1.startThread();
+		p1JP.startThread();
+		p2JP.startThread();
+		p3JP.startThread();
+		p4JP.startThread();
+		c1JP.startThread();
+		c2JP.startThread();
+		c3JP.startThread();
+		c4JP.startThread();
+*/
 	}
 	
 	public static DataModel getModel() {

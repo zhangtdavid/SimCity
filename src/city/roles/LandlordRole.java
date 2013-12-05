@@ -86,7 +86,6 @@ public class LandlordRole extends Role implements Landlord {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.HOUSE, "LandlordRole " + this.getPerson().getName(), msg);
     }
 	

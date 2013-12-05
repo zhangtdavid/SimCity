@@ -758,7 +758,8 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 		
-		return disposition;
+//		return disposition;
+		return true;
 	}
 	
 	/**

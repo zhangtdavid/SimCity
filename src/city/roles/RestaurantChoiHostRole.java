@@ -270,7 +270,6 @@ public class RestaurantChoiHostRole extends Role implements RestaurantChoiHost{
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiHostRole " + this.getPerson().getName(), msg);
     }
 }

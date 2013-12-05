@@ -289,7 +289,6 @@ public class MarketCashierRole extends Role implements MarketCashier {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCashierRole " + this.getPerson().getName(), msg);
     }
 	

@@ -238,7 +238,6 @@ public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost
 	
 	@Override
 	public void print(String msg) {
-		super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangHostRole " + this.getPerson().getName(), msg);
     }
 

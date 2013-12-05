@@ -248,7 +248,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerRole " + this.getPerson().getName(), msg);
     }
 }

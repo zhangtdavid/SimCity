@@ -254,7 +254,6 @@ public class MarketManagerRole extends Role implements MarketManager {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketManagerRole " + this.getPerson().getName(), msg);
     }
 	

@@ -70,7 +70,6 @@ public class RestaurantChoiWaiterDirectRole extends RestaurantChoiWaiterBase {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiWaiter2Role " + this.getPerson().getName(), msg);
     }
 	
