@@ -152,8 +152,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 					currentSidewalk = nextSidewalk;
 				break;
 			}
-//			if(nextSidewalk.getX() == xPos && nextSidewalk.getY() == yPos)
-//				currentSidewalk = nextSidewalk;
 			if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
 			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());

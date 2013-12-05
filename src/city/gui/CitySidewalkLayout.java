@@ -121,7 +121,7 @@ public class CitySidewalkLayout {
 			for(int i = 0; i < height; i++) {
 				for(int j = 0; j < width; j++) {
 					if(sidewalkGrid[i][j] == currentSidewalk) {
-						if(j >= width - 2)
+						if(j >= width - 1)
 							return null;
 						else
 							return sidewalkGrid[i][j + 1];
@@ -137,7 +137,7 @@ public class CitySidewalkLayout {
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
 				if(sidewalkGrid[i][j] == currentSidewalk) {
-					if(j >= width - 2)
+					if(j >= width - 1)
 						return null;
 					else
 						return sidewalkGrid[i][j + 1];
@@ -189,7 +189,7 @@ public class CitySidewalkLayout {
 			for(int i = 0; i < height; i++) {
 				for(int j = 0; j < width; j++) {
 					if(sidewalkGrid[i][j] == currentSidewalk) {
-						if(i >= height - 2)
+						if(i >= height - 1)
 							return null;
 						else
 							return sidewalkGrid[i + 1][j];
@@ -205,7 +205,7 @@ public class CitySidewalkLayout {
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
 				if(sidewalkGrid[i][j] == currentSidewalk) {
-					if(i >= height - 2)
+					if(i >= height - 1)
 						return null;
 					else
 						return sidewalkGrid[i + 1][j];
@@ -234,6 +234,7 @@ public class CitySidewalkLayout {
 		for(CitySidewalk currentSidewalk : potentialSidewalks) {
 			if(currentSidewalk == null)
 				continue;
+			System.out.println(potentialSidewalks.indexOf(currentSidewalk));
 			double distance = Math.sqrt((double)(Math.pow(targetSidewalk.getX() - currentSidewalk.getX(), 2) + Math.pow(targetSidewalk.getY() - currentSidewalk.getY(), 2)));
 			if( distance < closestDistance) {
 				closestDistance = distance;
