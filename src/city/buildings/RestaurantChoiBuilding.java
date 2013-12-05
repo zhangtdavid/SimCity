@@ -62,7 +62,7 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		bankConnection = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		this.setCityViewBuilding(cityBuilding);
 		//this.setCashOnSite(cash_on_site);	
 		//set up tables

@@ -479,6 +479,11 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 		return state;
 	}
 	
+	@Override
+	public String getStateString() {
+		return state.toString();
+	}
+	
 	// Setters
 	
 	@Override

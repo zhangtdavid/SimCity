@@ -11,6 +11,8 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
@@ -21,7 +23,7 @@ import city.Application.FOOD_ITEMS;
 import city.Role;
 import city.abstracts.RestaurantBuildingBase.FoodOrderState;
 import city.abstracts.RestaurantBuildingInterface.Food;
-import city.animations.RestaurantChungCookAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedCook;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.interfaces.MarketCustomerDelivery;
@@ -32,6 +34,7 @@ import city.interfaces.RestaurantChungWaiter;
 public class RestaurantChungCookRole extends Role implements RestaurantChungCook {
 //  Data
 //  ===================================================================== 
+	public EventLog log = new EventLog();
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
     
@@ -47,9 +50,10 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 
 	RestaurantChungRevolvingStand orderStand;
 
-	public List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // list shared with the restaurant cashier
-    public List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
-    public List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
+    private List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
+
+    private List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // List of each marketCustomerDelivery role that is created for each order to the market
+    private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); // Holds MarketOrder and state
 
 	WorkingState workingState = WorkingState.Working;
             
@@ -76,7 +80,8 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  ---------------------------------------------------------------
 	@Override
     public void msgHereIsAnOrder(RestaurantChungWaiter w, String choice, int table) {
-        print("Cook received msgHereIsAnOrder");
+        print("RestaurantChungCook received msgHereIsAnOrder from RestaurantChungWaiter");
+		log.add(new LoggedEvent("RestaurantChungCook received msgHereIsAnOrder from RestaurantChungWaiter. For " + choice));
         orders.add(new RestaurantChungOrder(w, choice, table, OrderState.Pending));
         stateChanged();
     }
@@ -85,28 +90,32 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  ---------------------------------------------------------------        
 	@Override
     public void msgSelfLowFoodsIdentified() {
+        print("RestaurantChungCook received msgSelfLowFoodsIdentified");
         stateChanged();
     }
     
 	@Override
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
         o.s = OrderState.DoneCooking;
-        print("Done cooking");
+        print("RestaurantChungCook done cooking");
+		log.add(new LoggedEvent("RestaurantChungCook received msgSelfDoneCooking."));
         stateChanged();
     }
     
 	@Override
     public void msgSelfDonePlating(RestaurantChungOrder o) {
         o.s = OrderState.DonePlating;
-        print("Done plating");
-       stateChanged();
+        print("RestaurantChungCook done plating");
+		log.add(new LoggedEvent("RestaurantChungCook received msgSelfDonePlating."));
+        stateChanged();
     }
 
 //  Market Delivery Person
 //  ---------------------------------------------------------------
 	@Override
     public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-        print("Cook received msgOrderIsReady");
+        print("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
+		log.add(new LoggedEvent("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson."));
         MyMarketOrder mo = findMarketOrder(id);
         removeMarketOrder(mo);
         
@@ -121,6 +130,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
     
 //    public void msgCannotFulfill(int id, Map<FOOD_ITEMS, Integer> unfulfilledItems) {
 //        print("Cook received msgCannotFulfill");
+//		log.add(new LoggedEvent("Cook received msgHereIsOrderDelivery."));
 ////                MarketOrder mo = findMarketOrder(id);
 //        Map<FOOD_ITEMS, Integer> tempItems = new HashMap<FOOD_ITEMS, Integer>();
 //        
@@ -141,21 +151,24 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //	---------------------------------------------------------------
 	@Override
 	public void msgAnimationAtCookHome() {
-		print("Cook at Cook Home");
+		print("RestaurantChungCook at Cook Home");
+		log.add(new LoggedEvent("RestaurantChungCook received msgAnimationAtCookHome."));
 		atCookHome.release();
 		stateChanged();
 	}
 	
 	@Override
 	public void msgAnimationAtGrill() {
-		print("Cook at Grill");
+		print("RestaurantChungCook at Grill");
+		log.add(new LoggedEvent("RestaurantChungCook received msgAnimationAtGrill."));
 		atGrill.release();
 		stateChanged();
 	}
 	
 	@Override
 	public void msgAnimationAtPlating() {
-		print("Cook at Plating");
+		print("RestaurantChungCook at Plating");
+		log.add(new LoggedEvent("RestaurantChungCook received msgAnimationAtPlating."));
 		atPlating.release();
 		stateChanged();
 	}
@@ -193,7 +206,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
                 }
             }
             
-            if (orders.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
+//            if (orders.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
             
             synchronized(orders) {
                 for (RestaurantChungOrder o : orders) {
@@ -266,6 +279,9 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             //nothing to do. So return false to main loop of abstract agent
             //and wait.
     	}
+		
+		print("end of scheduler");
+		
         return blocking;
     }
 
@@ -275,20 +291,19 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  ---------------------------------------------------------------
     private void identifyFoodThatIsLow() {
         print("Identifying food that is low");                
-        Map<FOOD_ITEMS, Integer> normal = new HashMap<FOOD_ITEMS, Integer>();                
+        Map<FOOD_ITEMS, Integer> lowFoods = new HashMap<FOOD_ITEMS, Integer>();                
         int numLow = 0;
         
         for (FOOD_ITEMS i: restaurant.getFoods().keySet()) {
             if (restaurant.getFoods().get(i).s == FoodOrderState.None && (restaurant.getFoods().get(i).amount <= restaurant.getFoods().get(i).low)) {
-                normal.put(i, restaurant.getFoods().get(i).capacity - restaurant.getFoods().get(i).amount);
+            	lowFoods.put(i, restaurant.getFoods().get(i).capacity - restaurant.getFoods().get(i).amount);
                 restaurant.getFoods().get(i).s = FoodOrderState.Pending;
                 numLow++;
             }
-            else normal.put(i, 0);
+            else lowFoods.put(i, 0);
         }
 
-            
-        if (numLow > 0) marketOrders.add(new MyMarketOrder(new MarketOrder(normal)));
+        if (numLow > 0) marketOrders.add(new MyMarketOrder(new MarketOrder(lowFoods)));
         
         msgSelfLowFoodsIdentified();
             
@@ -316,8 +331,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         for (FOOD_ITEMS i: o.order.orderItems.keySet()) {
             print("Order: " + i + " " + o.order.orderItems.get(i));
         }
-                
-        MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);  // TODO change this to a lookup of markets in city directory
+         
+        MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);
+        print(restaurant.toString());
+        print(o.order.toString());
+        print(restaurant.getRestaurantChungCashier().toString());
+        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
         MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setPerson(super.getPerson());
@@ -348,13 +367,13 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
             }
             return;
         }
-
+        
         cookIt(o);
     }
     
     private void cookIt(final RestaurantChungOrder o) {
         o.s = OrderState.Cooking;
-        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
+        final RestaurantChungAnimatedCook cookGui = this.getAnimation(RestaurantChungAnimatedCook.class);
         cookGui.DoGoToGrill(o.choice);
 //		try {
 //			atGrill.acquire();
@@ -362,11 +381,11 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-        DoCookIt();
+        print("Cooking");
         cooking = true;
         timer.schedule(new TimerTask() {
-            public void run() {
-                Food f = restaurant.getFoods().get(o.choice);
+        	public void run() {
+                Food f = restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice));
                 f.amount--;
                 print(o.choice + " amount after cooking " + f.amount);
                 cooking = false;
@@ -380,12 +399,12 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //        		}
             }
         },
-        restaurant.getFoods().get(o.choice).cookingTime*100);
+        restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice)).cookingTime*100);
     }
     
     private void plateIt(final RestaurantChungOrder o) {
         o.s = OrderState.Plating;
-        final RestaurantChungCookAnimation cookGui = this.getAnimation(RestaurantChungCookAnimation.class);
+        final RestaurantChungAnimatedCook cookGui = this.getAnimation(RestaurantChungAnimatedCook.class);
         cookGui.DoGoToPlating(o.choice);
 //		try {
 //			atPlating.acquire();
@@ -393,7 +412,7 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-		DoPlateIt();
+        print("Plating");
         plating = true;
         timer2.schedule(new TimerTask() {
             public void run() {
@@ -423,22 +442,26 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
         w.msgOutOfItem(o.choice, o.table);
     }
 
-//  Animations
-//        =====================================================================
-    // The animation DoXYZ() routines
-    private void DoCookIt() {
-        print("Cooking");
-    }
-    
-    private void DoPlateIt() {
-        print("Plating");
-    }
-
 //  Getters
 //  =====================================================================   
 	@Override
 	public RestaurantChungRevolvingStand getRevolvingStand() {
 		return orderStand;
+	}
+
+	@Override
+	public List<RestaurantChungOrder> getOrders() {
+		return orders;
+	}
+	
+	@Override
+	public List<Role> getMarketCustomerDeliveryRoles() {
+		return marketCustomerDeliveryRoles;
+	}
+	
+	@Override
+	public List<MyMarketOrder> getMarketOrders() {
+		return marketOrders;
 	}
 	
 //  Setters
@@ -507,12 +530,20 @@ public class RestaurantChungCookRole extends Role implements RestaurantChungCook
 //  Classes
 //  ===================================================================== 
     public class MyMarketOrder{
-    	MarketOrder order;
-        MarketOrderState s;
+    	private MarketOrder order;
+        private MarketOrderState s;
         
         public MyMarketOrder(MarketOrder o) {
         	order = new MarketOrder(o);
             s = MarketOrderState.Pending;
         }
+        
+        public MarketOrder getOrder() {
+			return order;
+		}
+        
+        public MarketOrderState getMarketOrderState() {
+        	return s;
+		}
     }
 }

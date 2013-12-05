@@ -46,6 +46,7 @@ public class MarketBuilding extends Building implements Market {
 		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
+
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
 		inventory.put(FOOD_ITEMS.pizza, 50);
@@ -57,8 +58,8 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.pizza, (10)/2);
 		prices.put(FOOD_ITEMS.salad, (6)/2);
 		prices.put(FOOD_ITEMS.steak, (16)/2);
-		
-		bankCustomer = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+
+		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		
 		super.setCash(1000);
 	}

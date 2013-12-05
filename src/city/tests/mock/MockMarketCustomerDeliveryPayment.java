@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketTransaction;
@@ -55,6 +57,18 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
 	}

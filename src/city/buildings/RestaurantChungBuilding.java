@@ -53,7 +53,7 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 		this.setCustomerRoleName("city.roles.RestaurantChungCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		orderStand = new RestaurantChungRevolvingStand();
-		bankCustomer = (new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))));
+		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		
         // Add items and their cooking times to a map
 		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
@@ -103,21 +103,22 @@ public class RestaurantChungBuilding extends RestaurantBuildingBase implements R
 
 //	Setters
 //	=====================================================================	
+	//Only used in testing, usually set in addOccupyingRole() call
 	@Override
 	public void setRestaurantChungHost(RestaurantChungHost host) {
 		this.host = host;
 	}
 	
 	@Override
-	public void setRestaurantChungHost(RestaurantChungCashier cashier) {
+	public void setRestaurantChungCashier(RestaurantChungCashier cashier) {
 		this.cashier = cashier;
 	}
 	
 	@Override
-	public void setRestaurantChungHost(RestaurantChungCook cook) {
+	public void setRestaurantChungCook(RestaurantChungCook cook) {
 		this.cook = cook;
 	}
-	
+		
 //	Utilities
 //	=====================================================================	
 	@Override

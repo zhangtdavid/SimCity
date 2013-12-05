@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import utilities.LoggedEvent;
@@ -191,5 +192,17 @@ public class MockRestaurantZhangWaiterRegular extends MockRole implements Restau
 	public boolean getOnBreak() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

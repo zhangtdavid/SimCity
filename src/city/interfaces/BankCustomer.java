@@ -10,7 +10,7 @@ public interface BankCustomer extends RoleInterface {
 	// Data
 	
 	public static enum SERVICE {createAcct, withdraw};
-	public static enum STATE {entering, requestService, inProgress, exit};
+	public static enum STATE {none, entering, requestService, inProgress, exit};
 	
 	// Constructor
 	

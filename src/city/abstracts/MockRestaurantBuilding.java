@@ -30,7 +30,7 @@ public class MockRestaurantBuilding extends MockBuilding implements RestaurantBu
 	}
 
 	@Override
-	public void updateFoodQuantity(FOOD_ITEMS f, int i) {
+	public void setFoodQuantity(FOOD_ITEMS f, int i) {
 		// TODO Auto-generated method stub
 		
 	}

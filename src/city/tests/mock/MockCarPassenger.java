@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import city.BuildingInterface;
 import city.abstracts.MockRole;
 import city.interfaces.Car;
@@ -39,6 +41,18 @@ public class MockCarPassenger extends MockRole implements CarPassenger {
 
 	@Override
 	public Car getCar() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
 	}

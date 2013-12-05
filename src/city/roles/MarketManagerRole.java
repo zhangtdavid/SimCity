@@ -217,6 +217,11 @@ public class MarketManagerRole extends Role implements MarketManager {
 	public WorkingState getWorkingState() {
 		return workingState;
 	}
+	
+	@Override
+	public String getStateString() {
+		return workingState.toString();
+	}
 
 //  Setters
 //	=====================================================================

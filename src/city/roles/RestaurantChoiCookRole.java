@@ -380,10 +380,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	
 	@Override
 	public void hackNoFood() {
-		building.updateFoodQuantity(FOOD_ITEMS.chicken, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.pizza, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.salad, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.steak, 0);
+		building.setFoodQuantity(FOOD_ITEMS.chicken, 0);
+		building.setFoodQuantity(FOOD_ITEMS.pizza, 0);
+		building.setFoodQuantity(FOOD_ITEMS.salad, 0);
+		building.setFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
 	
 	/* TODO THIS IS FOR MARKET INTEGRATION
