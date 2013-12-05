@@ -10,6 +10,10 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
+
+import utilities.DataModel;
 import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
@@ -74,12 +78,9 @@ import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
-
-
 public class Application {
 
 	private static MainFrame mainFrame;
-	private static List<Person> people = new ArrayList<Person>();
 	private static Timer timer = new Timer();
 	private static Date date = new Date(0);
 
@@ -91,7 +92,8 @@ public class Application {
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
-	static List<CityRoad> roads = new ArrayList<CityRoad>();
+	private static List<CityRoad> roads = new ArrayList<CityRoad>();
+	private static final DataModel model = new DataModel();
 
 	/**
 	 * Main routine to start the program.
@@ -101,6 +103,11 @@ public class Application {
 	 */
 	public static void main(String[] args) {
 		// Open the animation GUI
+		try {
+			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 		mainFrame = new MainFrame();
 
 		// Load a scenario
@@ -110,7 +117,7 @@ public class Application {
 		TimerTask tt = new TimerTask() {
 			public void run() {
 				date.setTime(date.getTime() + HALF_HOUR);
-				for (Person p : people) {
+				for (Person p : model.getPeople()) {
 					p.setDate(date);
 				}
 			}
@@ -330,17 +337,17 @@ public class Application {
 		houseBuildingZhang1.setLandlord(p0r1Zhang);
 		p0Zhang.setHome(houseBuildingZhang1);
 		p0r1Zhang.setActive();
-		people.add(p0Zhang);
+		model.addPerson(p0Zhang);
 
 		// Create people
 		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
 		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date);
 		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date);
-		people.add(p1Zhang);
-		people.add(p2Zhang);
-		people.add(p3Zhang);
-		people.add(p4Zhang);
+		model.addPerson(p1Zhang);
+		model.addPerson(p2Zhang);
+		model.addPerson(p3Zhang);
+		model.addPerson(p4Zhang);
 		p1Zhang.setHome(houseBuildingZhang1);
 		p2Zhang.setHome(houseBuildingZhang1);
 		p3Zhang.setHome(houseBuildingZhang1);
@@ -421,17 +428,17 @@ public class Application {
 		p0Timms.setHome(rhb1Timms);
 		p0Timms.setCash(10);
 		p0r1Timms.setActive();
-		people.add(p0Timms);
+		model.addPerson(p0Timms);
 
 		// Create people
 		PersonAgent p1Timms = new PersonAgent("Cashier 1 Timms", date);
 		PersonAgent p2Timms = new PersonAgent("Cook 1 Timms", date);
 		PersonAgent p3Timms = new PersonAgent("Host 1 Timms", date);
 		PersonAgent p4Timms = new PersonAgent("Waiter 1 Timms", date);
-		people.add(p1Timms);
-		people.add(p2Timms);
-		people.add(p3Timms);
-		people.add(p4Timms);
+		model.addPerson(p1Timms);
+		model.addPerson(p2Timms);
+		model.addPerson(p3Timms);
+		model.addPerson(p4Timms);
 		p1Timms.setHome(rhb1Timms);
 		p2Timms.setHome(rhb1Timms);
 		p3Timms.setHome(rhb1Timms);
@@ -507,7 +514,7 @@ public class Application {
 		rhb1Choi.setLandlord(p0r1Choi);
 		p0Choi.setHome(rhb1Choi);
 		p0r1Choi.setActive();
-		people.add(p0Choi);
+		model.addPerson(p0Choi);
 
 		// Create people
 		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date);
@@ -521,16 +528,16 @@ public class Application {
 		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date);
 		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date);
 
-		people.add(p1Choi);
-		people.add(p2Choi);
-		people.add(p3Choi);
-		people.add(p4Choi);
-		people.add(p5Choi);
-		people.add(p6Choi);
-		people.add(p7Choi);
-		people.add(p8Choi);
-		people.add(p9Choi);
-		people.add(p10Choi);
+		model.addPerson(p1Choi);
+		model.addPerson(p2Choi);
+		model.addPerson(p3Choi);
+		model.addPerson(p4Choi);
+		model.addPerson(p5Choi);
+		model.addPerson(p6Choi);
+		model.addPerson(p7Choi);
+		model.addPerson(p8Choi);
+		model.addPerson(p9Choi);
+		model.addPerson(p10Choi);
 
 		p1Choi.setHome(rhb1Choi);
 		p2Choi.setHome(rhb1Choi);
@@ -678,17 +685,17 @@ public class Application {
 		houseBuildingChung1.setLandlord(p0r1Chung);
 		p0Chung.setHome(houseBuildingChung1);
 		p0r1Chung.setActive();
-		people.add(p0Chung);
+		model.addPerson(p0Chung);
 
 		// Create people
 		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date);
 		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date);
 		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date);
 		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date);
-		people.add(p1Chung);
-		people.add(p2Chung);
-		people.add(p3Chung);
-		people.add(p4Chung);
+		model.addPerson(p1Chung);
+		model.addPerson(p2Chung);
+		model.addPerson(p3Chung);
+		model.addPerson(p4Chung);
 		p1Chung.setHome(houseBuildingChung1);
 		p2Chung.setHome(houseBuildingChung1);
 		p3Chung.setHome(houseBuildingChung1);
@@ -764,17 +771,17 @@ public class Application {
 		houseBuildingJP1.setLandlord(p0r1JP1);
 		p0JP1.setHome(houseBuildingJP1);
 		p0r1JP1.setActive();
-		people.add(p0JP1);
+		model.addPerson(p0JP1);
 		
 		// Create people
 		PersonAgent p1JP = new PersonAgent("Cashier 1 JP", date);
 		PersonAgent p2JP = new PersonAgent("Cook 1 JP", date);
 		PersonAgent p3JP = new PersonAgent("Host 1 JP", date);
 		PersonAgent p4JP = new PersonAgent("Waiter 1 JP", date);
-		people.add(p1JP);
-		people.add(p2JP);
-		people.add(p3JP);
-		people.add(p4JP);
+		model.addPerson(p1JP);
+		model.addPerson(p2JP);
+		model.addPerson(p3JP);
+		model.addPerson(p4JP);
 
 		p1JP.setHome(houseBuildingJP1);
 		p2JP.setHome(houseBuildingJP1);
@@ -905,6 +912,10 @@ public class Application {
 		p2JP.startThread();
 		p3JP.startThread();
 		p4JP.startThread();
+	}
+	
+	public static DataModel getModel() {
+		return model;
 	}
 
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
