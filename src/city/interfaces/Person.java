@@ -8,6 +8,7 @@ import city.AgentInterface;
 import city.Application;
 import city.RoleInterface;
 import city.abstracts.ResidenceBuildingInterface;
+import city.animations.interfaces.AnimatedPersonAtHome;
 
 public interface Person extends AgentInterface {
 
@@ -55,6 +56,9 @@ public interface Person extends AgentInterface {
 	public ArrayList<RoleInterface> getRoles();
 	public STATES getState();
 	public PropertyChangeSupport getPropertyChangeSupport();
+	public int getRoomNumber();
+	public AnimatedPersonAtHome getAnimationAtHome();
+	public void setOccupation(RoleInterface r);
 	
 	// Setters
 	
@@ -63,12 +67,13 @@ public interface Person extends AgentInterface {
 	public void setDate(Date d);
 	public void setHome(ResidenceBuildingInterface h);
 	public void setName(String n);
-	public void setOccupation(RoleInterface r);
+	public void setRoomNumber(int i);
+	public void setHomeAnimation(AnimatedPersonAtHome anim);
 	
 	// Utilities
 	
 	public void addRole(RoleInterface r);
-	
-	// Classes
+	public void acquireSemaphoreFromAnimation();
+	public void releaseSemaphoreFromAnimation();
 	
 }

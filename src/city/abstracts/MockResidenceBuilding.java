@@ -74,17 +74,17 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	public void setFood(Map<FOOD_ITEMS, Integer> items) {
 		this.foodItems = items;
 	}
-	
-	// Utilities
 
 	@Override
-	public void addResident(Resident r) {
+	public void setTotalCurrentMaintenance(int m) {
 		// TODO Auto-generated method stub
 		
 	}
 
+	// Utilities
+	
 	@Override
-	public void setTotalCurrentMaintenance(int m) {
+	public void addResident(Resident r) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -99,5 +99,4 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 		// TODO Auto-generated method stub
 		
 	}
-
 }

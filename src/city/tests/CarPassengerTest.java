@@ -1,23 +1,33 @@
 package city.tests;
 
+import java.awt.Color;
+
+import junit.framework.TestCase;
 import city.agents.CarAgent;
-import city.buildings.BusStopBuilding;
+import city.buildings.RestaurantZhangBuilding;
+import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.views.CityViewRestaurant;
 import city.roles.CarPassengerRole;
 import city.tests.animations.mock.MockAnimatedCar;
 import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
 
 public class CarPassengerTest extends TestCase {
-	MockPerson person = new MockPerson("PersonName"); 
-	BusStopBuilding destination = new BusStopBuilding("BusStop1");
-	CarAgent car = new CarAgent(destination);
-	CarPassengerRole passenger = new CarPassengerRole(car, destination);
-	MockAnimatedCar anim = new MockAnimatedCar(car);
-	
+	MockPerson person;
+	RestaurantZhangPanel RestaurantZhangPanel = new RestaurantZhangPanel(Color.black);
+	RestaurantZhangBuilding destination;
+	CarAgent car;
+	CarPassengerRole passenger;
+	MockAnimatedCar anim;
+
 	public void setUp() throws Exception {
 		super.setUp();
-		passenger.setPerson(person);
+		person = new MockPerson("PersonName");
+		destination = new RestaurantZhangBuilding("RestZ", RestaurantZhangPanel, new CityViewRestaurant(0, 0, "City View RestZ", Color.black, RestaurantZhangPanel));
+		car = new CarAgent(destination);
+		anim = new MockAnimatedCar(car);
 		car.setAnimation(anim);
+		passenger = new CarPassengerRole(car, destination);
+		passenger.setPerson(person);
 	}
 
 	public void testOneNormalCarPassengerScenario() {

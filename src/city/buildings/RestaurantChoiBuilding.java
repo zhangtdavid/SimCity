@@ -10,9 +10,9 @@ import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
 import utilities.RestaurantChoiTable;
 import city.Animation;
+import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.Application;
 import city.Role;
 import city.RoleInterface;
 import city.abstracts.RestaurantBuildingBase;
@@ -50,7 +50,6 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 	public RestaurantChoiRevolvingStand rs;
 	public RestaurantChoiTable t;
 	public Bank bank;
-	public BankCustomerRole bankConnection; 
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor
@@ -62,9 +61,8 @@ public class RestaurantChoiBuilding extends RestaurantBuildingBase implements Re
 		this.setCustomerRoleName("city.roles.RestaurantChoiCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantChoiCustomerAnimation");
 		this.panel = panel;
-		bankConnection = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		this.setBankCustomer(new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))));
 		this.setCityViewBuilding(cityBuilding);
-		//this.setCashOnSite(cash_on_site);	
 		//set up tables
 		// Add items and their data times to a map
 

@@ -3,6 +3,8 @@ package city.agents;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
@@ -24,6 +26,7 @@ public class BusAgent extends Agent implements Bus {
 	private BusStop nextStop; // Stop the bus is going to
 	private int earnedMoney = 0; // Amount of fare the bus earned
 	private Semaphore atDestination = new Semaphore(0, true);
+	private Timer timer = new Timer();
 	
 	// Constructor
 	
@@ -146,6 +149,18 @@ public class BusAgent extends Agent implements Bus {
 				passengerList.add(new MyBusPassenger(bp)); // Add this passenger to the passengerList
 				bp.msgBusIsHere(this); // Message this passenger to get on
 			}
+		}
+		// Wait for bus
+		timer.schedule(new TimerTask() {
+			public void run() {
+				print("Finished waiting for passengers");
+				atDestination.release();
+			}
+		}, (long)2000);
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
 		}
 		// If no passengers were picked up
 		if(passengersPickedUp == false) {

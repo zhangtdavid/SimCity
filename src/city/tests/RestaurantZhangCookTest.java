@@ -1,7 +1,6 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangMenu;
@@ -16,7 +15,7 @@ import city.tests.mock.MockPerson;
 import city.tests.mock.MockRestaurantZhangWaiterRegular;
 
 public class RestaurantZhangCookTest extends TestCase {
-	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
+	RestaurantZhangCookRole cook = new RestaurantZhangCookRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);
 	RestaurantZhangMenu menu = new RestaurantZhangMenu();
 	RestaurantZhangRevolvingStand stand = new RestaurantZhangRevolvingStand();
 	MockRestaurantZhangAnimatedCook anim = new MockRestaurantZhangAnimatedCook(cook);
@@ -28,7 +27,7 @@ public class RestaurantZhangCookTest extends TestCase {
 		cook.setPerson(new MockPerson("Cook"));
 		cook.setRevolvingStand(stand);
 		cook.setAnimation(anim);
-		cook.setMenuTimes(menu, cook.getWorkplace(RestaurantZhangBuilding.class).foods);
+		cook.setMenuTimes(menu, cook.getWorkplace(RestaurantZhangBuilding.class).getFoods());
 		waiter.setPerson(new MockPerson("Waiter"));
 	}
 

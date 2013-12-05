@@ -31,17 +31,4 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		// TODO Auto-generated method stub
 		
 	}
-
-	@Override
-	public void goToSleep() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void cookAndEatFood() {
-		Person p = (Person) this.getAgent();
-		p.guiAtDestination(); // Reply immediately since this is a mock
-	}
-
 }

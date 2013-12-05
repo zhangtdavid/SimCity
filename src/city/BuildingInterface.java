@@ -4,6 +4,7 @@ import java.util.HashMap;
 
 import city.gui.BuildingCard;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.Person;
 
 public interface BuildingInterface {
 	

@@ -1,9 +1,11 @@
 package city.interfaces;
 
+import java.util.List;
 import java.util.Map;
 
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungRevolvingStand;
+import city.Role;
 import city.RoleInterface;
 import city.Application.FOOD_ITEMS;
 import city.abstracts.RestaurantBuildingInterface.Food;
@@ -26,7 +28,9 @@ public interface RestaurantChungCook extends RoleInterface {
 	
 	// Getters
 	RestaurantChungRevolvingStand getRevolvingStand();
-	
+	List<RestaurantChungOrder> getOrders();
+	List<Role> getMarketCustomerDeliveryRoles();
+	List<MyMarketOrder> getMarketOrders();	
 	// Setters
 	public void setRevolvingStand(RestaurantChungRevolvingStand stand);
 

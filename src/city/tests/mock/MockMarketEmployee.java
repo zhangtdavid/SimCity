@@ -1,5 +1,6 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
 import java.util.Map;
 
 import utilities.EventLog;
@@ -127,6 +128,18 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 	public void msgAnimationAtCounter() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import utilities.RestaurantJPMenuClass;
 import city.abstracts.MockRole;
@@ -56,6 +58,18 @@ public class MockRestaurantJPCustomer extends MockRole implements RestaurantJPCu
 	public void msgHereIsYourFood() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

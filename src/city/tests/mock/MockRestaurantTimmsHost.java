@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import city.abstracts.MockRole;
 import city.interfaces.RestaurantTimmsCustomer;
@@ -35,6 +37,18 @@ public class MockRestaurantTimmsHost extends MockRole implements RestaurantTimms
 	public void msgAskForBreak(RestaurantTimmsWaiter w) {
 		log.add(new LoggedEvent("Received msgAskForBreak from Waiter."));
 
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

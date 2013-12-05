@@ -14,34 +14,32 @@ import city.Animation;
 import city.gui.BuildingCard;
 
 /**
- * A House contains:
- * - Refrigerator
- * - Stove
- * - Table
- * - Bed
- * One person lives in a house.
- * Some people own their own houses. (One person one house?)
+ * A House contains: - Refrigerator - Stove - Table - Bed One person lives in a
+ * house. Some people own their own houses. (One person one house?)
  */
-public class HousePanel extends BuildingCard implements ActionListener{
-	
+public class HousePanel extends ResidenceBasePanel{
+
 	/**
 	 * what does this do?
 	 */
 	private static final long serialVersionUID = -9051230986691103443L;
-	
-	//Data
+	// Data
+	private int panelX;
+	private int panelY;
+	public static final int HDX = 250;
+	public static final int HDY = 490;
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-	static final int HRX = -10; // house refrigerator
-	static final int HRY = 100;
-	static final int HSX = -10; // house stove
-	static final int HSY = 250;
-	static final int HTX = -10; // house table
-	static final int HTY = 400;
-	static final int HBXi = 490; // initial house bed
-	static final int HBYi = 50;
-	static final int HBYint = 100; // y-Interval for house beds
+	public static final int HRX = -10; // house refrigerator
+	public static final int HRY = 100;
+	public static final int HSX = -10; // house stove
+	public static final int HSY = 250;
+	public static final int HTX = -10; // house table
+	public static final int HTY = 400;
+	public static final int HBXi = 490; // initial house bed
+	public static final int HBYi = 50;
+	public static final int HBYint = 100; // y-Interval for house beds
 	// every house has 1 bed regardless of how many people there are; already furnished!
 	static final int NUMBER_OF_BEDS = 1;
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250, 490x350, 490x450. (5 max)
@@ -55,10 +53,9 @@ public class HousePanel extends BuildingCard implements ActionListener{
     	Timer timer = new Timer(delayMS, this);
     	timer.start();
 	}
-	
-	 public void paintComponent(Graphics graphics) {
-	        Graphics2D graphics2D = (Graphics2D)graphics;
 
+	public void paintComponent(Graphics graphics) {
+		Graphics2D graphics2D = (Graphics2D) graphics;
 	        // Clear the screen by painting a rectangle the size of the frame
 	        graphics2D.setColor(Color.getHSBColor((float)37, (float).53, (float).529)); // nice subtle gray
 	        graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
@@ -80,19 +77,37 @@ public class HousePanel extends BuildingCard implements ActionListener{
 	            }
 	        }
 
-	        // Draw each visible element after updating their positions
-	        // TODO generates concurrent modification exception
-	        for(Animation animation : animations) {
-	            if (animation.getVisible()) {
-	                animation.draw(graphics2D);
-	            }
-	        }
-	    }
-	    
-	    public void addVisualizationElement(Animation ve) {
-	    	animations.add(ve);
-	    }
 
-	@Override
-	public void actionPerformed(ActionEvent arg0) {repaint();}
+		// Draw static elements (furniture)
+		graphics.setColor(Color.CYAN); // Refrig
+		graphics.fillRect(HRX, HRY, WIDTH, WIDTH);
+		graphics.setColor(Color.RED); // Stove
+		graphics.fillRect(HSX, HSY, WIDTH, WIDTH);
+		graphics.setColor(Color.DARK_GRAY); // Table
+		graphics.fillRect(HTX, HTY, WIDTH, WIDTH);
+		graphics.setColor(Color.BLACK); // Bed (1 for houses)
+		graphics.fillRect(HBXi, HBYi, WIDTH, WIDTH);
+		graphics.setColor(Color.orange); // Bed (1 for houses)
+		graphics.fillRect(HDX, HDY, WIDTH, WIDTH);
+
+		// Update the position of each visible element
+		for (Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.updatePosition();
+			}
+		}
+
+		// Draw each visible element after updating their positions
+		// TODO generates concurrent modification exception
+		for (Animation animation : animations) {
+			if (animation.getVisible()) {
+				animation.draw(graphics2D);
+			}
+		}
+	}
+
+	//TODO remove?
+	public void addVisualizationElement(Animation ve) {
+		animations.add(ve);
+	}
 }

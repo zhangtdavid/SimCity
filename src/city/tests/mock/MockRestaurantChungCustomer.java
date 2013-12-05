@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
@@ -145,6 +147,18 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	public void setRestaurant(RestaurantChung r) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 //	@Override

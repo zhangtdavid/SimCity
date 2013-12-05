@@ -1,5 +1,7 @@
 package city.tests.mock;
 
+import java.beans.PropertyChangeSupport;
+
 import utilities.LoggedEvent;
 import utilities.RestaurantJPTableClass;
 import city.abstracts.MockRole;
@@ -55,5 +57,17 @@ public class MockRestaurantJPWaiter extends MockRole implements RestaurantJPWait
 	public void msgOrderIsReady(String choice, RestaurantJPTableClass table) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

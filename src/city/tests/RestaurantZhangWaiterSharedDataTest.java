@@ -1,7 +1,6 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
@@ -33,7 +32,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
+		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);
 		waiter.setPerson(new MockPerson("Waiter"));
 		anim = new MockRestaurantZhangAnimatedWaiter(waiter); 
 		host = new MockRestaurantZhangHost();

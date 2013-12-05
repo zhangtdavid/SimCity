@@ -23,6 +23,7 @@ public class LandlordRole extends Role implements Landlord {
 	
 	public LandlordRole(){
 		super();
+		if(landlordRes == null){} // kill warning
 	}
 	
 	// Messages

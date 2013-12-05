@@ -4,11 +4,13 @@ import java.util.HashMap;
 
 import city.gui.BuildingCard;
 import city.gui.views.CityViewBuilding;
+import city.interfaces.Person;
 
 /**
  * The base class for all SimCity201 Buildings.
  * 
- * Buildings are coded for restaurants, banks, markets, homes, bus stops.
+ * Buildings are coded for restaurants, banks, markets, bus stops.
+ * For homes, see ResidenceBuildingBase, which extends Building.
  */
 public abstract class Building implements BuildingInterface {
 	
@@ -59,11 +61,14 @@ public abstract class Building implements BuildingInterface {
 		return customerAnimationInterfaceName;
 	}
 	
+
+	
 	@Override
 	public <T extends AnimationInterface> T getOccupyingRoleAnimation(RoleInterface r, Class<T> type) {
 		return type.cast(occupyingRoles.get(r));
 	}
 	
+
 	@Override
 	public CityViewBuilding getCityViewBuilding() {
 		return cityViewBuilding;

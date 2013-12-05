@@ -24,7 +24,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	protected MainFrame mainframe;
 	public List<CityViewBuilding> statics = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
 	public List<CityViewBuilding> movings = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
-	public ArrayList<AnimationInterface> animations = new ArrayList<AnimationInterface>();
+	public List<AnimationInterface> animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 	protected Color background;
 	protected Timer timer;
 
@@ -47,8 +47,10 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 				c.paint(g);
 			}
 		}
-		for (AnimationInterface a : animations) {
-			a.draw((Graphics2D) g);
+		synchronized(animations) {
+			for (AnimationInterface a : animations) {
+				a.draw((Graphics2D) g);
+			}
 		}
 		synchronized(statics) {
 			for (CityViewBuilding c:statics) {

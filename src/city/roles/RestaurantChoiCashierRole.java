@@ -52,11 +52,12 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
+		building.getBankCustomer().setPerson(this.getPerson());
+		roles.add((Role) building.getBankCustomer());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-		building.bankConnection.setPerson(this.getPerson());
-		roles.add((Role) building.bankConnection); // TODO clean up
+		
 	}
-	
+
 	public RestaurantChoiCashierRole(){ // for testing mechanics
 		super();
 		FOOD_COST.put(FOOD_ITEMS.steak, 16);
@@ -155,7 +156,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		/*	synchronized(marketBills){
 					for(int i = 0; i < markets.size(); i++){
 						if(marketBills.get(markets.get(i)) > 0){  // double rounding problems? we'll see
-							System.out.println(marketBills.get(markets.get(i)));
+							print(marketBills.get(markets.get(i)));
 							//if we don't have enough money, get money from the bank
 							//assume the restaurant is successful and has unlimited money for the quarter
 							if(money < marketBills.get(markets.get(i)) && moneyIncoming == NOT_IN_TRANSIT){
@@ -164,7 +165,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 								return true;
 							}else if(money > marketBills.get(markets.get(i))){ // if has to pay and can pay
 								payMarketBill(markets.get(i), marketBills.get(markets.get(i)));
-								System.out.println("paying bill");
+								print("paying bill");
 								return true;
 							}
 						}
@@ -192,9 +193,9 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 			}
 		}
 		if(building.getCash() > RestaurantChoi.DEPOSIT_THRESHOLD){
-			System.out.println("before depositing: " + building.getCash());
+			print("before depositing: " + building.getCash());
 			this.depositMoney();
-			System.out.println("after depositing: " + building.getCash());
+			print("after depositing: " + building.getCash());
 		}
 		if(building.getCash() < RestaurantChoi.WITHDRAW_THRESHOLD) this.getMoney();
 		return blocking;
@@ -213,7 +214,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	}
 
 	private void returnChange(Check ch) {
-		System.out.println("Received customer payment of " + ch.getPayment());
+		print("Received customer payment of " + ch.getPayment());
 		int change = ch.getPayment()-ch.getBill();
 		building.setCash(building.getCash()+ch.getBill());
 		ch.getca().msgHeresYourChange(change);
@@ -259,7 +260,8 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	@Override 
 	public void setBanker(Banker b){
 		restaurantBanker = b; // only one banker (we can trust...) TODO fix so that this matches with bank in simcity201
-    }
+    } // fixed in setBankCustomer (2 below)
+    
 
 	@Override
     public void addMarket(Market m){
@@ -291,7 +293,7 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 
 	private void depositMoney() {
 		int toDep=building.getCash()-RestaurantChoi.DAILY_CAPITAL;
-		this.building.bankConnection.setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
+		this.building.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, toDep, Application.TRANSACTION_TYPE.business);
 		building.setCash(building.getCash()-toDep);
 	}
 
@@ -304,7 +306,6 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 	// Classes
 	
 	public class Check {
-
 		public final static int RECEIVED = 0;
 		public final static int GIVEN_TO_WAITER = 1;
 		public final static int GET_PAID = 2;
@@ -357,7 +358,6 @@ public class RestaurantChoiCashierRole extends Role implements RestaurantChoiCas
 		public void setwa(RestaurantChoiWaiter wa) {
 			this.wa = wa;
 		}
-
 	}
 
 }
