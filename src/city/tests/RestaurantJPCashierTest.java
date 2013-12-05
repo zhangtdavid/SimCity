@@ -2,12 +2,11 @@ package city.tests;
 
 import junit.framework.TestCase;
 import city.buildings.RestaurantJPBuilding;
-import city.gui.buildings.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantJPCook;
-import city.tests.mock.MockRestaurantJPCustomer;
-import city.tests.mock.MockRestaurantJPWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantJPCook;
+import city.tests.mocks.MockRestaurantJPCustomer;
+import city.tests.mocks.MockRestaurantJPWaiter;
 
 public class RestaurantJPCashierTest extends TestCase
 {
@@ -26,7 +25,7 @@ public class RestaurantJPCashierTest extends TestCase
 	public void setUp() throws Exception{
 		super.setUp();
 		MockPerson person = new MockPerson("JP's Cashier");
-		RestaurantJPBuilding b = new RestaurantJPBuilding("JP's restaurant", new RestaurantJPPanel(null, null), null);
+		RestaurantJPBuilding b = new RestaurantJPBuilding("JP's restaurant", null, null);
 		cashier = new RestaurantJPCashierRole(b, 0, 12);
 		cashier.setPerson(person);
 		customer = new MockRestaurantJPCustomer("mockcustomer");		

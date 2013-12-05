@@ -5,14 +5,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
 
-import city.Animation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-import city.gui.views.CityViewBuilding;
+import city.bases.Animation;
+import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
 	
 	// Data
+	public enum STOPLIGHTTYPE{HORIZONTALON, HORIZONTALOFF, VERTICALON, VERTICALOFF};
 	
 	protected int xVelocity;
 	protected int yVelocity;
@@ -25,6 +26,8 @@ public class CityRoad extends CityViewBuilding {
 	protected Animation vehicle = null;
 	protected CityRoad nextRoad;
 	protected boolean isHorizontal;
+	protected boolean isRedLight = false;
+	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
 	
 	// Constructor
 	
@@ -43,10 +46,33 @@ public class CityRoad extends CityViewBuilding {
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
 	}
 	
+	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc, STOPLIGHTTYPE spotLightType) {
+		super(xo, yo, lc);
+		width = w;
+		height = h;
+		xVelocity = xv;
+		yVelocity = yv;
+		xOrigin = xo;
+		yOrigin = yo;
+		isHorizontal = ish;
+		laneColor = lc;
+		isRedLight = true;
+		this.stopLightType = spotLightType;
+
+		//Make the lane surface
+		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
+	}
+	
 	// Paint stuff
 	
 	@Override
 	public void paint( Graphics g2 ) {
+		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
+			laneColor = Color.green;
+		}
+		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
+			laneColor = Color.red;
+		}
 		g2.setColor( laneColor );
 		((Graphics2D) g2).fill( rectangle );
 		
@@ -64,8 +90,10 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
-				((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
-				((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+					((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+					((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				}
 			}
 			x = vehicle.getXPos();
 			y = vehicle.getYPos();
@@ -78,8 +106,10 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null) {
-				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
-				((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+					((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
+					((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
+				}
 			}
 			x = vehicle.getXPos();
 			y = vehicle.getYPos();
@@ -124,6 +154,14 @@ public class CityRoad extends CityViewBuilding {
 		return isHorizontal;
 	}
 	
+	public boolean isRedLight() {
+		return isRedLight;
+	}
+	
+	public STOPLIGHTTYPE getStopLightType() {
+		return stopLightType;
+	}
+	
 	// Setters
 	
 	public void setNextRoad( CityRoad r ) {
@@ -136,5 +174,10 @@ public class CityRoad extends CityViewBuilding {
 			return true;
 		}
 		return false;
+	}
+	
+	public void setStopLightType(STOPLIGHTTYPE newType) {
+		stopLightType = newType;
+		isRedLight = true;
 	}
 }

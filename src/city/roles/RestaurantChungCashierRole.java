@@ -13,17 +13,18 @@ import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.Application;
 import city.Application.FOOD_ITEMS;
-import city.Role;
+import city.bases.JobRole;
+import city.bases.Role;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCashier;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiter;
+import city.buildings.interfaces.Market;
+import city.buildings.interfaces.RestaurantChung;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.RestaurantChungCashier;
+import city.roles.interfaces.RestaurantChungCustomer;
+import city.roles.interfaces.RestaurantChungHost;
+import city.roles.interfaces.RestaurantChungWaiter;
 
-public class RestaurantChungCashierRole extends Role implements RestaurantChungCashier {
+public class RestaurantChungCashierRole extends JobRole implements RestaurantChungCashier {
 //	Data
 //	=====================================================================	
 	public EventLog log = new EventLog();
@@ -91,6 +92,8 @@ public class RestaurantChungCashierRole extends Role implements RestaurantChungC
 //	---------------------------------------------------------------
 	@Override
 	public void msgAddMarketOrder(Market m, MarketOrder o) {
+		print("Cashier received msgAddMarketOrder");
+		log.add(new LoggedEvent("Cashier received msgAddMarketOrder."));
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
 	}

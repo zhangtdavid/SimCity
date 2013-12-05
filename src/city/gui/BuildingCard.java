@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.swing.JPanel;
 
-import city.Animation;
+import city.bases.interfaces.AnimationInterface;
 
 public class BuildingCard extends JPanel {
 
@@ -16,7 +16,7 @@ public class BuildingCard extends JPanel {
 	public int panelX;
 	public int panelY;
 	public final int delayMS = 5;
-	public List<Animation> animations = new ArrayList<Animation>();
+	public List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
 	public Color background;
 
 	public static final int CARD_WIDTH = 500, CARD_HEIGHT = 500;
@@ -39,14 +39,14 @@ public class BuildingCard extends JPanel {
 
 	public void animate() {
 		// Update the position of each visible element
-		for(Animation animation : animations) {
+		for(AnimationInterface animation : animations) {
 			if (animation.getVisible()) {
 				animation.updatePosition();
 			}
 		}
 	}
 
-	public void addVisualizationElement(Animation ve) {
+	public void addVisualizationElement(AnimationInterface ve) {
 		animations.add(ve);
 	}
 }

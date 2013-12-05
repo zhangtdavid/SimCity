@@ -3,11 +3,11 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.bases.Animation;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 public class RestaurantTimmsWaiterAnimation extends Animation implements RestaurantTimmsAnimatedWaiter {
 	

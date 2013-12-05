@@ -5,11 +5,11 @@ import trace.AlertTag;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 import utilities.RestaurantChungRevolvingStand;
-import city.abstracts.RestaurantChungWaiterBase;
-import city.abstracts.RestaurantChungWaiterBase.WCustomer.OrderStatus;
+import utilities.RestaurantChungWaiterBase;
+import utilities.RestaurantChungWaiterBase.WCustomer.OrderStatus;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.RestaurantChung;
+import city.buildings.interfaces.RestaurantChung;
 
 /**
  * Restaurant Waiter Agent

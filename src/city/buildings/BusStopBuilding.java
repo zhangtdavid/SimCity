@@ -5,13 +5,13 @@ import java.util.Collections;
 import java.util.List;
 
 import city.Application;
-import city.Building;
-import city.RoleInterface;
+import city.bases.Building;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.BusStop;
 import city.gui.CityRoad;
-import city.gui.buildings.BusStopPanel;
-import city.gui.views.CityViewBusStop;
-import city.interfaces.BusPassenger;
-import city.interfaces.BusStop;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.BusStopPanel;
+import city.roles.interfaces.BusPassenger;
 
 public class BusStopBuilding extends Building implements BusStop {
 	
@@ -24,27 +24,12 @@ public class BusStopBuilding extends Building implements BusStop {
 	
 	// Constructor
 	
-	public BusStopBuilding(String name, BusStopPanel panel, CityViewBusStop cityBuilding) {
-		super(name);
-		this.setPanel(panel);
-		this.setCityViewBuilding(cityBuilding);
-		roadLocatedOn = Application.CityMap.findClosestRoad(this);
-	}
-	
-	BusStopBuilding(String name, BusStopBuilding nextStop, BusStopBuilding previousStop) {
-		super(name);
-		this.nextStop = nextStop; // Assign the nextStop argument to this stop's nextStop
-		nextStop.previousStop = this; // Assign the nextStop's previousStop to this
-		this.previousStop = previousStop; // Assign the previousStop argument to this stop's previousStop
-		previousStop.nextStop = this; // Assign the previousStop's nextStop to this
+	public BusStopBuilding(String name, BusStopPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		roadLocatedOn = Application.CityMap.findClosestRoad(this);
 	}
 	
 	// Getters
-	
-	public BusStopBuilding(String name) {
-		super(name);
-	}
 	
 	@Override
 	public List<BusPassenger> getWaitingList() {

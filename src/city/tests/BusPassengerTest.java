@@ -1,26 +1,46 @@
 package city.tests;
 
+import java.awt.Color;
+
+import junit.framework.TestCase;
 import city.agents.BusAgent;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
+import city.gui.exteriors.CityViewBusStop;
+import city.gui.interiors.BusStopPanel;
 import city.roles.BusPassengerRole;
-import city.tests.animations.mock.MockAnimatedBus;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.tests.animations.mocks.MockAnimatedBus;
+import city.tests.mocks.MockPerson;
 
 public class BusPassengerTest extends TestCase {
-	BusStopBuilding start = new BusStopBuilding("Start");
-	BusStopBuilding destination = new BusStopBuilding("destination");
+	BusStopPanel startPanel = new BusStopPanel(Color.black);
+	CityViewBusStop cityViewBusStopStart;
+	BusStopBuilding start;
+	
+	BusStopPanel destinationPanel = new BusStopPanel(Color.black);
+	CityViewBusStop cityViewBusStopDestination;
+	BusStopBuilding destination;
 	
 	MockPerson person = new MockPerson("PersonName"); 
-	BusPassengerRole passenger = new BusPassengerRole(destination, start);
+	BusPassengerRole passenger;
 	
-	BusAgent bus = new BusAgent(start, destination);
+	BusAgent bus;
 	
-	AnimatedBus anim = new MockAnimatedBus(bus);
+	AnimatedBus anim;
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		
+		cityViewBusStopStart = new CityViewBusStop(1, 1, "Start Stop", Color.black, startPanel);
+		start = new BusStopBuilding("Start", startPanel, cityViewBusStopStart);
+		
+		cityViewBusStopDestination = new CityViewBusStop(1, 1, "Destination Stop", Color.black, destinationPanel);
+		destination = new BusStopBuilding("destination", destinationPanel, cityViewBusStopDestination);
+		
+		passenger = new BusPassengerRole(destination, start);
+		
+		bus = new BusAgent(start, destination);
+		anim = new MockAnimatedBus(bus);
 		bus.setAnimation(anim);
 		passenger.setPerson(person);
 		start.setNextStop(destination);

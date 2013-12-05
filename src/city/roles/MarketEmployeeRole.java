@@ -9,16 +9,15 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
-import city.Role;
+import city.bases.JobRole;
 import city.buildings.MarketBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomer;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.MarketEmployee;
-import city.interfaces.RestaurantChungCustomer.AgentEvent;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.MarketEmployee;
 
-public class MarketEmployeeRole extends Role implements MarketEmployee {
+public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 //  Data
 //	=====================================================================
 	public EventLog log = new EventLog();
@@ -304,6 +303,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 	@Override
 	public MarketEmployeeEvent getMarketEmployeeEvent() {
 		return event;
+	}
+	
+	@Override
+	public String getStateString() {
+		return state.toString();
 	}
 	
 //  Setters

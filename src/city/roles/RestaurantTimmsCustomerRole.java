@@ -9,13 +9,13 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
-import city.Role;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
+import city.bases.Role;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant customer agent.
@@ -271,6 +271,11 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	@Override
 	public Application.FOOD_ITEMS getOrderItem() {
 		return orderItem.getItem();
+	}
+	
+	@Override
+	public String getStateString() {
+		return this.state.toString();
 	}
 	
 	// Setters

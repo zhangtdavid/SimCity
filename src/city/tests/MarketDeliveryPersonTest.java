@@ -1,26 +1,25 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
-import city.gui.buildings.MarketPanel;
+import city.gui.interiors.MarketPanel;
 import city.roles.MarketDeliveryPersonRole;
-import city.tests.mock.MockMarketCashier;
-import city.tests.mock.MockMarketCustomer;
-import city.tests.mock.MockMarketCustomerDelivery;
-import city.tests.mock.MockMarketCustomerDeliveryPayment;
-import city.tests.mock.MockMarketEmployee;
-import city.tests.mock.MockMarketManager;
-import city.tests.mock.MockPerson;
-import junit.framework.TestCase;
+import city.tests.mocks.MockMarketCashier;
+import city.tests.mocks.MockMarketCustomer;
+import city.tests.mocks.MockMarketCustomerDelivery;
+import city.tests.mocks.MockMarketCustomerDeliveryPayment;
+import city.tests.mocks.MockMarketEmployee;
+import city.tests.mocks.MockMarketManager;
+import city.tests.mocks.MockPerson;
 
 public class MarketDeliveryPersonTest extends TestCase {
 	
@@ -56,10 +55,10 @@ public class MarketDeliveryPersonTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
-		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding"));
+		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding", null, null));
 
-		marketPanel = new MarketPanel(Color.blue, new Dimension(500, 500));
-		market = new MarketBuilding("Market1", marketPanel);
+		marketPanel = new MarketPanel(Color.blue);
+		market = new MarketBuilding("Market1", marketPanel, null);
 		
 		cashierPerson = new MockPerson("Cashier"); 
 		cashier = new MockMarketCashier();

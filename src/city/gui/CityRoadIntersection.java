@@ -3,9 +3,10 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Hashtable;
+import java.util.List;
 
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
@@ -63,23 +64,9 @@ public class CityRoadIntersection extends CityRoad {
 				atIntersection = false;
 				return;
 			}
-
+			
 			// Find which connecting road is the closest
-			synchronized(nextRoads) {
-				double closestDistance = 1000000;
-				for(CityRoad r : nextRoads) {
-					CityRoad tempRoad = r;
-					while(tempRoad.getNextRoad().getClass() != CityRoadIntersection.class) {
-						tempRoad = tempRoad.getNextRoad();
-					}
-					double distance = Math.sqrt((double)(Math.pow(tempRoad.getX() - ((CarAnimation) vehicle).getEndRoad().getX(), 2) 
-							+ Math.pow(tempRoad.getY() - ((CarAnimation) vehicle).getEndRoad().getY(), 2)));
-					if(distance < closestDistance) {
-						closestDistance = distance;
-						thisNextRoad = r;
-					}
-				}
-			}
+						thisNextRoad = findBestRoad(this, ((CarAnimation) vehicle).getEndRoad());
 
 			// If the next road is clear, move it to the road
 			if(thisNextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
@@ -120,21 +107,8 @@ public class CityRoadIntersection extends CityRoad {
 			}
 
 			// Find which connecting road is the closest
-			synchronized(nextRoads) {
-				double closestDistance = 1000000;
-				for(CityRoad r : nextRoads) {
-					CityRoad tempRoad = r;
-					while(tempRoad.getNextRoad().getClass() != CityRoadIntersection.class) {
-						tempRoad = tempRoad.getNextRoad();
-					}
-					double distance = Math.sqrt((double)(Math.pow(tempRoad.getX() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getX(), 2) 
-							+ Math.pow(tempRoad.getY() - ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn().getY(), 2)));
-					if(distance < closestDistance) {
-						closestDistance = distance;
-						thisNextRoad = r;
-					}
-				}
-			}
+			thisNextRoad = findBestRoad(this, ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn());
+			
 			// If the next road is clear, move it to the road
 			if(thisNextRoad.vehicle == null) {
 				((BusAnimation) vehicle).setXPos(vehicle.getXPos() + thisNextRoad.xVelocity);
@@ -180,5 +154,37 @@ public class CityRoadIntersection extends CityRoad {
 	@Override
 	public void setNextRoad( CityRoad r ) {
 		nextRoads.add(r);
+	}
+	
+	/*
+	 * Returns a road that will result in the correct destination from the given intersection
+	 */
+	private CityRoad findBestRoad(CityRoadIntersection intersection, CityRoad destinationRoad) {
+		Hashtable<CityRoad, CityRoad> possibleRoads = new Hashtable<CityRoad, CityRoad>();
+		for(int i = 0; i < intersection.getNextRoads().size(); i++) {
+			possibleRoads.put(intersection.getNextRoads().get(i), intersection.getNextRoads().get(i));
+		}
+		int counter = 0;
+		while(counter <= 1000) {
+			counter++;
+			ArrayList<CityRoad> keys = new ArrayList<CityRoad>(possibleRoads.keySet());
+			for(CityRoad r : keys) {
+				if(r.equals(destinationRoad)) // Check if this road is the destination road
+					return possibleRoads.get(r); // Return the road it should be on from the original intersection
+				if(r.getNextRoad().getClass() != CityRoadIntersection.class) { // Iterate on a road if it's not an intersection
+					possibleRoads.put(r.getNextRoad(), possibleRoads.get(r)); // Put the next road in the hashtable to be explored
+					possibleRoads.remove(r); // Remove the road from the hashtable
+				} else if(r.getNextRoad().getClass() == CityRoadIntersection.class) { // Iterate on a road if it's an intersection
+					if(r.getNextRoad().equals(destinationRoad)) // Check if this intersection is the destination road
+						return possibleRoads.get(r); // Return the road it should be on from the original intersection
+					for(CityRoad intersectionRoads : ((CityRoadIntersection)r.getNextRoad()).getNextRoads()) { // Iterate through all next roads of this intersection
+						possibleRoads.put(intersectionRoads, possibleRoads.get(r)); // put next roads into the hashtable
+					}
+					possibleRoads.remove(r); // remove the road from the hashtable
+				}
+			}
+		}
+		
+		return null;
 	}
 }

@@ -9,12 +9,12 @@ import java.awt.event.MouseListener;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import javax.swing.Timer;
 
 import javax.swing.JPanel;
+import javax.swing.Timer;
 
-import city.AnimationInterface;
-import city.gui.views.CityViewBuilding;
+import city.bases.interfaces.AnimationInterface;
+import city.gui.exteriors.CityViewBuilding;
 
 
 
@@ -24,7 +24,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	protected MainFrame mainframe;
 	public List<CityViewBuilding> statics = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
 	public List<CityViewBuilding> movings = Collections.synchronizedList(new ArrayList<CityViewBuilding>());
-	public ArrayList<AnimationInterface> animations = new ArrayList<AnimationInterface>();
+	public List<AnimationInterface> animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 	protected Color background;
 	protected Timer timer;
 
@@ -47,8 +47,10 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 				c.paint(g);
 			}
 		}
-		for (AnimationInterface a : animations) {
-			a.draw((Graphics2D) g);
+		synchronized(animations) {
+			for (AnimationInterface a : animations) {
+				a.draw((Graphics2D) g);
+			}
 		}
 		synchronized(statics) {
 			for (CityViewBuilding c:statics) {
@@ -72,7 +74,6 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public void addStatic(CityViewBuilding c) {
 		statics.add(c);
-		System.out.println(c.toString());
 	}
 
 	public int getStaticsSize() {
@@ -85,6 +86,10 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public void addAnimation(AnimationInterface anim) {
 		animations.add(anim);
+	}
+	
+	public void removeAnimation(AnimationInterface a) {
+		animations.remove(a);
 	}
 
 	public void actionPerformed(ActionEvent e) {

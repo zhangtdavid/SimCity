@@ -10,18 +10,18 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import city.Role;
+import city.bases.JobRole;
 import city.buildings.RestaurantChungBuilding;
-import city.interfaces.RestaurantChung;
-import city.interfaces.RestaurantChungCustomer;
-import city.interfaces.RestaurantChungHost;
-import city.interfaces.RestaurantChungWaiter;
+import city.buildings.interfaces.RestaurantChung;
+import city.roles.interfaces.RestaurantChungCustomer;
+import city.roles.interfaces.RestaurantChungHost;
+import city.roles.interfaces.RestaurantChungWaiter;
 
 /**
  * Restaurant Host Agent
  */
 //A Host is the manager of a restaurant who sees that all is proceeded as he wishes.
-public class RestaurantChungHostRole extends Role implements RestaurantChungHost {	
+public class RestaurantChungHostRole extends JobRole implements RestaurantChungHost {	
 	public EventLog log = new EventLog();
 
 	RestaurantChung restaurant;

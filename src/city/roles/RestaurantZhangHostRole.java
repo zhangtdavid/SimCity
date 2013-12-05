@@ -9,16 +9,16 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantZhangTable;
-import city.Building;
-import city.Role;
-import city.interfaces.RestaurantZhangCustomer;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
+import city.bases.Building;
+import city.bases.JobRole;
+import city.roles.interfaces.RestaurantZhangCustomer;
+import city.roles.interfaces.RestaurantZhangHost;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
 /**
  * Restaurant Host Agent
  */
-public class RestaurantZhangHostRole extends Role implements RestaurantZhangHost {
+public class RestaurantZhangHostRole extends JobRole implements RestaurantZhangHost {
 
 	// Data
 	

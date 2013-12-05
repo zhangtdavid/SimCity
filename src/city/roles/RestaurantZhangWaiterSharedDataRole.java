@@ -4,8 +4,8 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangTable;
-import city.Building;
-import city.abstracts.RestaurantZhangWaiterBase;
+import utilities.RestaurantZhangWaiterBase;
+import city.bases.Building;
 
 public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBase {
 	

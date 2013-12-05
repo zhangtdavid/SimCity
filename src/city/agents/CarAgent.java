@@ -4,11 +4,13 @@ import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Agent;
-import city.BuildingInterface;
+import city.agents.interfaces.Car;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedCar;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
+import city.bases.Agent;
+import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.RoleInterface;
+import city.roles.interfaces.CarPassenger;
 
 public class CarAgent extends Agent implements Car {
 
@@ -17,15 +19,28 @@ public class CarAgent extends Agent implements Car {
 	private CAREVENT myEvent = CAREVENT.NONE; // Event for car
 	private CarPassenger carPassenger; // Current passenger
 	private BuildingInterface destination; // Destination to go to
-	private AnimatedCar animation; // GUI for animations
+	private Person personOwner; // The owner of the car (whether or not the owner is the passenger)
+	private RoleInterface roleOwner;
 	
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
-	public CarAgent(BuildingInterface currentLocation) { // Sets all variables to null
+	public CarAgent(BuildingInterface currentLocation, Person o) { // Sets all variables to null
 		super();
+		personOwner = o;
+		roleOwner = null;
 		carPassenger = null;
 		destination = currentLocation;
+		o.setCar(this);
+	}
+	
+	public CarAgent(BuildingInterface currentLocation, RoleInterface o) { // Sets all variables to null
+		super();
+		personOwner = null;
+		roleOwner = o;
+		carPassenger = null;
+		destination = currentLocation;
+		// o.setCar(this); // TODO maybe?
 	}
 	
 	// Messages
@@ -72,7 +87,7 @@ public class CarAgent extends Agent implements Car {
 	
 	private void goToDestination() { // Call to GUI to go to destination, goes to sleep and then woken up by GUI
 		print("Going to drive");
-		animation.goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
+		((AnimatedCar) this.getAnimation()).goToDestination(destination); // This will call a msg to the GUI, which will animate and then call msgImAtCarDestination() on this car
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -109,17 +124,25 @@ public class CarAgent extends Agent implements Car {
 		return destination;
 	}
 	
-	// Setters
-	
-	public void setAnimation(AnimatedCar anim) {
-		animation = anim;
+	/**
+	 * Returns the actual owner, or if it belongs to a role, the person owning the role
+	 */
+	@Override
+	public Person getOwner() {
+		if (personOwner != null) {
+			return personOwner;
+		} else {
+			return roleOwner.getPerson();
+		}
 	}
+	
+	// Setters
 	
 	// Utilities
 
 	@Override
 	public void print(String msg) {
-        AlertLog.getInstance().logMessage(AlertTag.CAR, "BusAgent " + this.getName(), msg);
+        AlertLog.getInstance().logMessage(AlertTag.CAR, "CarAgent " + this.getName(), msg);
     }
 	
 	// Classes

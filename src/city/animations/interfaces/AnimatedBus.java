@@ -1,8 +1,8 @@
 package city.animations.interfaces;
 
-import city.AnimationInterface;
-import city.Building;
-import city.interfaces.BusStop;
+import city.bases.Building;
+import city.bases.interfaces.AnimationInterface;
+import city.buildings.interfaces.BusStop;
 
 public interface AnimatedBus extends AnimationInterface {
 	

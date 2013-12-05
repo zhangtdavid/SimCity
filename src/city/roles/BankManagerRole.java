@@ -5,29 +5,29 @@ import java.util.List;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
+import city.bases.JobRole;
 import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankManager;
-import city.interfaces.BankTeller;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankManager;
+import city.roles.interfaces.BankTeller;
 
-public class BankManagerRole extends Role implements BankManager {
+public class BankManagerRole extends JobRole implements BankManager {
 	
 	// Data
 
 	public BankBuilding building;
-	private List<MyTeller> myTellers = new ArrayList<MyTeller>();
-	private List<BankCustomer> customers = new ArrayList<BankCustomer>();
+	public List<MyTeller> myTellers = new ArrayList<MyTeller>();
+	public List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private boolean wantsInactive = false;
 	
 	// Constructor
 
-	public BankManagerRole (BankBuilding b, int shiftStart, int shiftEnd){
-		building = b;
+	public BankManagerRole (Bank b, int shiftStart, int shiftEnd){
+		building = (BankBuilding) b;
 		this.setWorkplace(b);
 		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
@@ -77,8 +77,6 @@ public class BankManagerRole extends Role implements BankManager {
 				stateChanged();
 			}
 		}
-		myTellers.add(new MyTeller(t));
-		stateChanged();
 	}
 	
 	@Override
@@ -110,7 +108,7 @@ public class BankManagerRole extends Role implements BankManager {
 	@Override
 	public boolean runScheduler() {
 		
-		if(wantsInactive && building.manager != this && customers.size() == 0){
+		if(wantsInactive && building.getManager() != this && customers.size() == 0){
 			super.setInactive();
 			wantsInactive = false;
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
@@ -125,10 +123,6 @@ public class BankManagerRole extends Role implements BankManager {
 			}
 		}	
 		for(BankTask bT : bankTasks){
-				if(bT.t == TYPE.atmDeposit){
-					atmDeposit(bT);
-					return true;
-				}
 				if(bT.t == TYPE.deposit){
 					Deposit(bT);
 					return true;
@@ -145,7 +139,6 @@ public class BankManagerRole extends Role implements BankManager {
 							}
 						}
 					}
-					print("account not found");
 				}	
 				if(bT.t == TYPE.acctCreate){
 					CreateAccount(bT);
@@ -162,38 +155,29 @@ public class BankManagerRole extends Role implements BankManager {
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
 	}
-
-	private void atmDeposit(BankTask bT){
-		print("ATM Deposit");
-		for(Account a : building.accounts){
-			if(a.acctNum == bT.acctNum){
-				print("Balance before deposit: " + bT.money);
-				a.balance += bT.money;
-				print("Balance after deposit: " + bT.money);
-				bankTasks.remove(bT);
-				bT.bc.msgDepositCompleted();
-				return;
-			}
-		}
-	}
 	
 	private void Deposit(BankTask bT){
 		print("Deposit");
-		for(Account a : building.getAccounts()){
+		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){		
 				a.balance += bT.money;
 				bankTasks.remove(bT);
-				bT.teller.msgTransactionSuccessful();
+				if(bT.teller != null)
+					bT.teller.msgTransactionSuccessful();
+				else
+					bT.bc.msgDepositCompleted();
 			}
 		}
+		Loan temp = null;
 		for(Loan l : building.loans){
 			if(l.acctNum == bT.acctNum){
 				if (l.remaining > 0) 
 					PayLoan(l);
 				else 
-					building.loans.remove(l);
+					temp = l;
 			}
 		}
+		building.loans.remove(temp);
 	}
 	
 	private void Withdraw(BankTask bT){
@@ -241,12 +225,14 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	@Override
 	public void setInactive(){
-		if(building.manager != this && customers.size() == 0){
+		if(building.getManager() != this && customers.size() == 0){
 			super.setInactive();
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}
-		else
+		else{
 			wantsInactive = true;
+			stateChanged();
+		}
 	}
 	
 	// Utilities

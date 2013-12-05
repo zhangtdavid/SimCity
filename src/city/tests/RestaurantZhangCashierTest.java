@@ -1,17 +1,16 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangCashierRole;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangCustomer;
-import city.tests.mock.MockRestaurantZhangWaiterRegular;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangCustomer;
+import city.tests.mocks.MockRestaurantZhangWaiterRegular;
 
 public class RestaurantZhangCashierTest extends TestCase {
 	RestaurantZhangCashierRole cashier;
@@ -24,7 +23,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		cashier = new RestaurantZhangCashierRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
+		cashier = new RestaurantZhangCashierRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);
 		cashier.setPerson(new MockPerson("Person"));
 		waiter = new MockRestaurantZhangWaiterRegular();
 		customer = new MockRestaurantZhangCustomer();

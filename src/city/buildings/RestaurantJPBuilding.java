@@ -3,17 +3,14 @@ package city.buildings;
 import java.util.Vector;
 
 import utilities.RestaurantJPRevolvingStand;
-import city.RoleInterface;
-import city.abstracts.RestaurantBuildingBase;
 import city.animations.RestaurantJPCookAnimation;
 import city.animations.RestaurantJPCustomerAnimation;
 import city.animations.RestaurantJPWaiterAnimation;
-import city.gui.buildings.RestaurantJPPanel;
-import city.gui.views.CityViewRestaurant;
-import city.interfaces.RestaurantJP;
-import city.interfaces.RestaurantJPCashier;
-import city.interfaces.RestaurantJPCustomer;
-import city.interfaces.RestaurantJPWaiter;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.RestaurantJP;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.RestaurantJPPanel;
 import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPCustomerRole;
@@ -21,8 +18,11 @@ import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantZhangCashierRole;
+import city.roles.interfaces.RestaurantJPCashier;
+import city.roles.interfaces.RestaurantJPCustomer;
+import city.roles.interfaces.RestaurantJPWaiter;
 
-public class RestaurantJPBuilding extends RestaurantBuildingBase implements RestaurantJP {
+public class RestaurantJPBuilding extends RestaurantBuilding implements RestaurantJP {
 	
 	// Data
 	
@@ -30,10 +30,8 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 	public RestaurantJPCashier cashier;
 	public RestaurantJPHostRole host;
 	public int seatedCustomers = 0;
-	public int funds = 2000;
 	int customerCounter = 0;
 	int waiterCounter = 0;
-	RestaurantJPPanel panel;
 	RestaurantJPRevolvingStand orderStand = new RestaurantJPRevolvingStand();
 	
 	// Constructor
@@ -51,12 +49,11 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 
 	// Constructor
 	
-	public RestaurantJPBuilding(String name, RestaurantJPPanel panel, CityViewRestaurant cvr2) {
-		super(name);
+	public RestaurantJPBuilding(String name, RestaurantJPPanel panel, CityViewBuilding cityBuilding) {
+		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
-		this.panel = panel;
-		this.setCityViewBuilding(cvr2);
+		setCash(2000);
 	}
 	
 	// Utilities
@@ -71,7 +68,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				customerCounter++;
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				customers.add(c);
 				super.addOccupyingRole(c, anim);
 			}
@@ -83,7 +80,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				waiterCounter++;
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
 			}
@@ -95,7 +92,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				RestaurantJPWaiterAnimation anim = new RestaurantJPWaiterAnimation(w, waiterCounter); 
 				w.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				waiters.add(w);
 				super.addOccupyingRole(w, anim);
 			}
@@ -114,7 +111,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 				RestaurantJPCookAnimation anim = new RestaurantJPCookAnimation(c);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
-				panel.addVisualizationElement(anim);
+				this.getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addOccupyingRole(c, anim);
 			}

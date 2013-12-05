@@ -4,19 +4,19 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
-import city.Building;
-import city.Role;
-import city.buildings.BankBuilding;
-import city.interfaces.Bank;
-import city.interfaces.BankCustomer;
-import city.interfaces.BankTeller;
+import city.bases.Building;
+import city.bases.Role;
+import city.bases.interfaces.BuildingInterface;
+import city.buildings.interfaces.Bank;
+import city.roles.interfaces.BankCustomer;
+import city.roles.interfaces.BankTeller;
 
 public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	
 	private Bank building;
-	private Building business;
+	private BuildingInterface business = null;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
 	private int netTransaction = 0;
@@ -28,13 +28,15 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	// Constructor
 	
-	public BankCustomerRole(Building bus, BankBuilding b) {
+	public BankCustomerRole(BuildingInterface bus, Bank b) {
 		building = b;
 		business = bus;
+		st = STATE.none;
 	}
 	
 	public BankCustomerRole(Bank b) {
 		building = b;
+		st = STATE.none;
 	}
 	
 	
@@ -75,12 +77,15 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgLoanGranted(int loanMoney){
 		print("LoanGranted message received");
 		netTransaction += loanMoney;
+		st = STATE.exit;
 		stateChanged();
 	}
 	
 	@Override
 	public void msgTransactionDenied(){
 		print("TransactionDenied message received");
+		netTransaction = 0;
+		st = STATE.exit;
 		stateChanged();
 		//more to come...
 	}
@@ -126,8 +131,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 
 	private void AskForService(){
-		if(building == null)
-			print("Null building. what the fuck");
 		st = STATE.inProgress;
 		building.getManager().msgNeedService(this);
 	}
@@ -148,7 +151,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		if(service != Application.BANK_SERVICE.atmDeposit)
 			t.msgDoneAndLeaving();
 		if(depositType == Application.TRANSACTION_TYPE.business)
-			business.setCash(building.getCash() + netTransaction);
+			getBusiness().setCash(business.getCash() + netTransaction);
 		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
@@ -157,8 +160,19 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Getters
 	
+	
 	@Override
-	public Application.BANK_SERVICE getService() {
+	public String getStateString() {
+		return this.st.toString();
+	}
+	
+	@Override
+	public BuildingInterface getBusiness() {
+		return business;
+	}
+	
+	@Override
+	public BANK_SERVICE getService() {
 		return service;
 	}
 	
@@ -174,12 +188,17 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		super.setActive();
 	}
 	
+	public void setBusiness(Building business) {
+		this.business = business;
+	}
+	
 	// Utilities
 	
 	@Override
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
     }
+	
 	
 	// Classes 
 	

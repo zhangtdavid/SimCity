@@ -13,16 +13,16 @@ import trace.AlertTag;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
 import city.Application.FOOD_ITEMS;
-import city.Role;
-import city.abstracts.RestaurantBuildingBase.FoodOrderState;
-import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
+import city.bases.JobRole;
+import city.bases.RestaurantBuilding.FoodOrderState;
+import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.RestaurantChoiBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantChoiCook;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantChoiCook;
 
-public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
+public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCook {
 
 	// Data
 	
@@ -113,7 +113,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	public void msgFoodReceived(int choice, int amount, Market m) {
 		synchronized(foods){
 			foods.get(choice).amount+=amount;
-			System.out.println("Received " + amount + " of item " + choice);
+			print("Received " + amount + " of item " + choice);
 			foods.get(choice).amountOrdered = 0; // mark the order as none.
 			synchronized(markets){
 				if(amount < foods.get(choice).amountOrdered){ // if you don't get as many as you ordered
@@ -206,14 +206,14 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 			o.setState(RestaurantChoiOrder.READY_FOR_PICKUP);
 		}
 		o.getWaiter().msgOrderComplete(o); //send this to waiter!
-		System.out.println("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
+		print("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
 	}
 
 	private boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.CHECKING);
 		}
-		System.out.println("Checking if I have ingredients");
+		print("Checking if I have ingredients");
 		//this is the internal food object corresponding to the choice in order (below).
 		Food tempFood = building.getFoods().get(o.getChoice());
 		if(tempFood.amount <= tempFood.low){
@@ -225,7 +225,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					marketIndex++;
 					outOfcounter++;
 					if(outOfcounter == markets.size()){
-						System.out.println("Out of choice " + tempFood + " permanently (All markets out)");
+						print("Out of choice " + tempFood + " permanently (All markets out)");
 						return false;
 					}
 				}
@@ -239,7 +239,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 					//MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
 				}
 				tempFood.s = FoodOrderState.Pending;
-				System.out.println("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.item);
+				print("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.item);
 			}
 		}
 		if(tempFood.amount == 0){ // if we happen to be at 0 of the stock...
@@ -250,7 +250,7 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 			return false;
 		} // this is so we don't get to negative amount
 		o.setState(RestaurantChoiOrder.TO_COOK);
-		System.out.println("Can cook item");
+		print("Can cook item");
 		return true;
 	}
 
@@ -380,10 +380,10 @@ public class RestaurantChoiCookRole extends Role implements RestaurantChoiCook {
 	
 	@Override
 	public void hackNoFood() {
-		building.updateFoodQuantity(FOOD_ITEMS.chicken, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.pizza, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.salad, 0);
-		building.updateFoodQuantity(FOOD_ITEMS.steak, 0);
+		building.setFoodQuantity(FOOD_ITEMS.chicken, 0);
+		building.setFoodQuantity(FOOD_ITEMS.pizza, 0);
+		building.setFoodQuantity(FOOD_ITEMS.salad, 0);
+		building.setFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
 	
 	/* TODO THIS IS FOR MARKET INTEGRATION

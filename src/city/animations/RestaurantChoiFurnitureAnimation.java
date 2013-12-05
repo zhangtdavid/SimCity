@@ -1,9 +1,10 @@
 package city.animations;
 
-import java.awt.*;
+import java.awt.Color;
+import java.awt.Graphics2D;
 
-import city.Animation;
 import city.animations.interfaces.RestaurantChoiAnimatedFurniture;
+import city.bases.Animation;
 
 public class RestaurantChoiFurnitureAnimation extends Animation implements RestaurantChoiAnimatedFurniture  {
 

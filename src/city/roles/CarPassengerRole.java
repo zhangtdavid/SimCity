@@ -2,10 +2,10 @@ package city.roles;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.BuildingInterface;
-import city.Role;
-import city.interfaces.Car;
-import city.interfaces.CarPassenger;
+import city.agents.interfaces.Car;
+import city.bases.Role;
+import city.bases.interfaces.BuildingInterface;
+import city.roles.interfaces.CarPassenger;
 
 public class CarPassengerRole extends Role implements CarPassenger {
 	
@@ -91,6 +91,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	@Override
 	public BuildingInterface getDestination() {
 		return destination;
+	}
+	
+	@Override
+	public String getStateString() {
+		return myState.toString();
 	}
 	
 	// Setters

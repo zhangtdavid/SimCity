@@ -6,10 +6,10 @@ import java.util.TimeZone;
 
 import trace.AlertLog;
 import trace.AlertTag;
-import city.Role;
-import city.abstracts.ResidenceBuildingBase;
-import city.interfaces.Landlord;
-import city.interfaces.Resident;
+import city.bases.ResidenceBuilding;
+import city.bases.Role;
+import city.roles.interfaces.Landlord;
+import city.roles.interfaces.Resident;
 
 public class ResidentRole extends Role implements Resident {
 
@@ -18,7 +18,7 @@ public class ResidentRole extends Role implements Resident {
 	private STATE rstate = STATE.none;
 	private Landlord landlord;
 	private Date rentLastPaid;
-	private ResidenceBuildingBase house;
+	private ResidenceBuilding house;
 
 	// Constructor
 
@@ -34,7 +34,7 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public boolean runScheduler() {
 		if(rstate == STATE.needToPayRent){
-			System.out.println("need to pay rent!");
+			print("need to pay rent!");
 			payRent();
 			return true;
 		}
@@ -51,7 +51,7 @@ public class ResidentRole extends Role implements Resident {
 			// pay maintenance if needed
 			this.getPerson().setCash( (this.getPerson().getCash() - (house.getTotalCurrentMaintenance() / house.getResidents().size())) ); // lose $ for maintenance;
 		}
-		System.out.println(rentLastPaid.getTime());
+		//print(""+rentLastPaid.getTime()); // for debugging
 		rentLastPaid = this.getPerson().getDate();
 		this.setInactive(); // step out of resident role
 	}
@@ -102,7 +102,7 @@ public class ResidentRole extends Role implements Resident {
 	}
 
 	@Override
-	public void setResidence(ResidenceBuildingBase b) {
+	public void setResidence(ResidenceBuilding b) {
 		house = b;
 	}
 

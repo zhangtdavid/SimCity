@@ -19,20 +19,20 @@ import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Application.FOOD_ITEMS;
-import city.Building;
-import city.Role;
-import city.abstracts.RestaurantBuildingBase;
-import city.abstracts.RestaurantBuildingInterface.Food;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
+import city.bases.Building;
+import city.bases.JobRole;
+import city.bases.RestaurantBuilding;
+import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
-import city.interfaces.Market;
-import city.interfaces.MarketCustomerDelivery;
-import city.interfaces.RestaurantZhangCashier;
-import city.interfaces.RestaurantZhangCook;
-import city.interfaces.RestaurantZhangHost;
-import city.interfaces.RestaurantZhangWaiter;
+import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantZhangCashier;
+import city.roles.interfaces.RestaurantZhangCook;
+import city.roles.interfaces.RestaurantZhangHost;
+import city.roles.interfaces.RestaurantZhangWaiter;
 
-public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook {
+public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangCook {
 
 	// Data
 	
@@ -132,7 +132,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 		try {
 			if(restaurantClosing) {
 				if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() <= 0) {
-					super.setInactive();
+					setInactive();
 					restaurantClosing = false;
 					return true;
 				}
@@ -226,7 +226,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 			}
 			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).capacity - cookInventory.get(o.choice).amount, markets.get(0));
 			cookInvoiceList.add(tempInvoice);
-			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBuildingBase.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
+			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
 			marketCustomerDeliveryList.add(tempDeliveryRole);
 			tempDeliveryRole.setActive();
 			stateChanged();
@@ -403,6 +403,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 	@Override
 	public void setActive() {
 		super.setActive();
+		thisGui.setVisible(true);
 		runScheduler();
 	}
 	
@@ -419,6 +420,7 @@ public class RestaurantZhangCookRole extends Role implements RestaurantZhangCook
 				return;
 			}
 		}
+		thisGui.setVisible(false);
 		super.setInactive();
 	}
 	

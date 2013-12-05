@@ -1,24 +1,23 @@
 package city.tests;
 
 import java.awt.Color;
-import java.awt.Dimension;
 
 import junit.framework.TestCase;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
-import city.abstracts.RestaurantZhangWaiterBase;
-import city.abstracts.RestaurantZhangWaiterBase.MyCustomer;
+import utilities.RestaurantZhangWaiterBase;
+import utilities.RestaurantZhangWaiterBase.MyCustomer;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.buildings.RestaurantZhangPanel;
+import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.mock.MockRestaurantZhangAnimatedWaiter;
-import city.tests.mock.MockPerson;
-import city.tests.mock.MockRestaurantZhangCashier;
-import city.tests.mock.MockRestaurantZhangCook;
-import city.tests.mock.MockRestaurantZhangCustomer;
-import city.tests.mock.MockRestaurantZhangHost;
+import city.tests.animations.mocks.MockRestaurantZhangAnimatedWaiter;
+import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantZhangCashier;
+import city.tests.mocks.MockRestaurantZhangCook;
+import city.tests.mocks.MockRestaurantZhangCustomer;
+import city.tests.mocks.MockRestaurantZhangHost;
 
 public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 	RestaurantZhangWaiterSharedDataRole waiter;
@@ -33,7 +32,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 
 	public void setUp() throws Exception {
 		super.setUp();
-		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black, new Dimension()), null), 0, 100);
+		waiter = new RestaurantZhangWaiterSharedDataRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);
 		waiter.setPerson(new MockPerson("Waiter"));
 		anim = new MockRestaurantZhangAnimatedWaiter(waiter); 
 		host = new MockRestaurantZhangHost();

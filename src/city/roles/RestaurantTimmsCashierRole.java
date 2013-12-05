@@ -8,21 +8,22 @@ import trace.AlertTag;
 import utilities.MarketTransaction;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
-import city.Role;
-import city.RoleInterface;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
+import city.bases.JobRole;
+import city.bases.Role;
+import city.bases.interfaces.RoleInterface;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.buildings.RestaurantTimmsBuilding.Check.State;
-import city.interfaces.MarketCustomerDeliveryPayment;
-import city.interfaces.RestaurantTimms;
-import city.interfaces.RestaurantTimmsCashier;
-import city.interfaces.RestaurantTimmsCustomer;
-import city.interfaces.RestaurantTimmsWaiter;
+import city.buildings.interfaces.RestaurantTimms;
+import city.roles.interfaces.MarketCustomerDeliveryPayment;
+import city.roles.interfaces.RestaurantTimmsCashier;
+import city.roles.interfaces.RestaurantTimmsCustomer;
+import city.roles.interfaces.RestaurantTimmsWaiter;
 
 /**
  * Restaurant cashier agent.
  */
-public class RestaurantTimmsCashierRole extends Role implements RestaurantTimmsCashier {
+public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTimmsCashier {
 	
 	// Data
 	
