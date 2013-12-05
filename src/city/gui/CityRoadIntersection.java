@@ -4,13 +4,9 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.util.Hashtable;
-import java.util.Iterator;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Map;
-import java.util.Set;
-
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 

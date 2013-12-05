@@ -9,6 +9,7 @@ import java.util.List;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import utilities.TrafficControl;
 import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
@@ -28,6 +29,7 @@ import city.gui.BuildingCard;
 import city.gui.CityRoad;
 import city.gui.CityRoadIntersection;
 import city.gui.MainFrame;
+import city.gui.CityRoad.STOPLIGHTTYPE;
 import city.gui.buildings.BankPanel;
 import city.gui.buildings.BusStopPanel;
 import city.gui.buildings.HousePanel;
@@ -90,6 +92,8 @@ public class Application {
 	public static enum BUILDING {bank, busStop, house, market, restaurant};
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
+	
+	public static TrafficControl trafficControl;
 
 	/**
 	 * Main routine to start the program.
@@ -158,7 +162,7 @@ public class Application {
 		for(int i = 375; i >= 125; i-=25) {
 			if(i == 250)
 				continue;
-			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.red);
+			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
@@ -166,7 +170,7 @@ public class Application {
 		for(int i = 350; i >= 100; i -= 25) {
 			if(i == 225)
 				continue;
-			CityRoad tempRoad = new CityRoad(i, 250, 25, 25, -1, 0, true, Color.orange);
+			CityRoad tempRoad = new CityRoad(i, 250, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
 			mainFrame.cityView.addMoving(tempRoad);
 		}
@@ -194,9 +198,11 @@ public class Application {
 		for(int i = 0; i < roads.size() - 1; i++) {
 			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
 				roads.get(i).setNextRoad(intersectionNorth);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
 				continue;
 			} else if(roads.get(i).getY() == intersectionNorth.getY() + 25 && roads.get(i).getX() == intersectionNorth.getX()) { // Set nextRoad of road to south of north intersection
 				roads.get(i).setNextRoad(intersectionNorth);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
 				continue;
 			} else if(roads.get(i).getX() == intersectionNorth.getX() - 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to west of north intersection
 				intersectionNorth.setNextRoad(roads.get(i));
@@ -204,6 +210,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getY() == intersectionWest.getY() - 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to north of west intersection
 				roads.get(i).setNextRoad(intersectionWest);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
 				continue;
 			} else if(roads.get(i).getY() == intersectionWest.getY() + 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to south of west intersection
 				intersectionWest.setNextRoad(roads.get(i));
@@ -211,6 +218,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
 				roads.get(i).setNextRoad(intersectionWest);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
 				continue;
 			} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
 				intersectionSouth.setNextRoad(roads.get(i));
@@ -218,6 +226,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getX() == intersectionSouth.getX() - 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to west of south intersection
 				roads.get(i).setNextRoad(intersectionSouth);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
 				continue;
 			} else if(roads.get(i).getX() == intersectionSouth.getX() + 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to east of south intersection
 				intersectionSouth.setNextRoad(roads.get(i));
@@ -233,6 +242,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getY() == intersectionEast.getY() + 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to south of east intersection
 				roads.get(i).setNextRoad(intersectionEast);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
 				continue;
 			} else if(roads.get(i).getY() == intersectionCenter.getY() - 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to north of center intersection
 				intersectionCenter.setNextRoad(roads.get(i));
@@ -240,6 +250,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getX() == intersectionCenter.getX() + 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to east of center intersection
 				roads.get(i).setNextRoad(intersectionCenter);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
 				continue;
 			} else if(roads.get(i).getX() == intersectionCenter.getX() - 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to west of center intersection
 				intersectionCenter.setNextRoad(roads.get(i));
@@ -247,6 +258,7 @@ public class Application {
 				continue;
 			} else if(roads.get(i).getY() == intersectionCenter.getY() + 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to south of center intersection
 				roads.get(i).setNextRoad(intersectionCenter);
+				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
 				continue;
 			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 125) { // Last road in the outer loop
 				roads.get(i).setNextRoad(roads.get(0));
@@ -256,6 +268,7 @@ public class Application {
 			if(roads.get(i).getClass() != CityRoadIntersection.class)
 				roads.get(i).setNextRoad(roads.get(i+1));
 		}
+		trafficControl = new TrafficControl(roads);
 
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
