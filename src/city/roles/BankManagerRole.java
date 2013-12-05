@@ -6,6 +6,7 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Role;
+import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
 import city.interfaces.Bank;
@@ -17,16 +18,16 @@ public class BankManagerRole extends Role implements BankManager {
 	
 	// Data
 
-	public Bank building;
-	private List<MyTeller> myTellers = new ArrayList<MyTeller>();
-	private List<BankCustomer> customers = new ArrayList<BankCustomer>();
+	public BankBuilding building;
+	public List<MyTeller> myTellers = new ArrayList<MyTeller>();
+	public List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private boolean wantsInactive = false;
 	
 	// Constructor
 
 	public BankManagerRole (Bank b, int shiftStart, int shiftEnd){
-		building = b;
+		building = (BankBuilding) b;
 		this.setWorkplace(b);
 		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
@@ -76,8 +77,6 @@ public class BankManagerRole extends Role implements BankManager {
 				stateChanged();
 			}
 		}
-		myTellers.add(new MyTeller(t));
-		stateChanged();
 	}
 	
 	@Override
@@ -124,10 +123,6 @@ public class BankManagerRole extends Role implements BankManager {
 			}
 		}	
 		for(BankTask bT : bankTasks){
-				if(bT.t == TYPE.atmDeposit){
-					atmDeposit(bT);
-					return true;
-				}
 				if(bT.t == TYPE.deposit){
 					Deposit(bT);
 					return true;
@@ -144,7 +139,6 @@ public class BankManagerRole extends Role implements BankManager {
 							}
 						}
 					}
-					print("account not found");
 				}	
 				if(bT.t == TYPE.acctCreate){
 					CreateAccount(bT);
@@ -161,38 +155,29 @@ public class BankManagerRole extends Role implements BankManager {
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
 	}
-
-	private void atmDeposit(BankTask bT){
-		print("ATM Deposit");
-		for(Account a : building.accounts){
-			if(a.acctNum == bT.acctNum){
-				print("Balance before deposit: " + bT.money);
-				a.balance += bT.money;
-				print("Balance after deposit: " + bT.money);
-				bankTasks.remove(bT);
-				bT.bc.msgDepositCompleted();
-				return;
-			}
-		}
-	}
 	
 	private void Deposit(BankTask bT){
 		print("Deposit");
-		for(Account a : building.getAccounts()){
+		for(Account a : building.accounts){
 			if(a.acctNum == bT.acctNum){		
 				a.balance += bT.money;
 				bankTasks.remove(bT);
-				bT.teller.msgTransactionSuccessful();
+				if(bT.teller != null)
+					bT.teller.msgTransactionSuccessful();
+				else
+					bT.bc.msgDepositCompleted();
 			}
 		}
+		Loan temp = null;
 		for(Loan l : building.loans){
 			if(l.acctNum == bT.acctNum){
 				if (l.remaining > 0) 
 					PayLoan(l);
 				else 
-					building.loans.remove(l);
+					temp = l;
 			}
 		}
+		building.loans.remove(temp);
 	}
 	
 	private void Withdraw(BankTask bT){
@@ -244,8 +229,10 @@ public class BankManagerRole extends Role implements BankManager {
 			super.setInactive();
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
 		}
-		else
+		else{
 			wantsInactive = true;
+			stateChanged();
+		}
 	}
 	
 	// Utilities

@@ -6,7 +6,6 @@ import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Building;
 import city.Role;
-import city.buildings.BankBuilding;
 import city.interfaces.Bank;
 import city.interfaces.BankCustomer;
 import city.interfaces.BankTeller;
@@ -16,7 +15,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Data
 	
 	private Bank building;
-	private Building business;
+	private Building business = null;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
 	private int netTransaction = 0;
@@ -77,12 +76,15 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgLoanGranted(int loanMoney){
 		print("LoanGranted message received");
 		netTransaction += loanMoney;
+		st = STATE.exit;
 		stateChanged();
 	}
 	
 	@Override
 	public void msgTransactionDenied(){
 		print("TransactionDenied message received");
+		netTransaction = 0;
+		st = STATE.exit;
 		stateChanged();
 		//more to come...
 	}
@@ -128,8 +130,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 
 	private void AskForService(){
-		if(building == null)
-			print("Null building. what the fuck");
 		st = STATE.inProgress;
 		building.getManager().msgNeedService(this);
 	}
@@ -150,7 +150,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		if(service != Application.BANK_SERVICE.atmDeposit)
 			t.msgDoneAndLeaving();
 		if(depositType == Application.TRANSACTION_TYPE.business)
-			business.setCash(building.getCash() + netTransaction);
+			getBusiness().setCash(business.getCash() + netTransaction);
 		else if (depositType == Application.TRANSACTION_TYPE.personal)
 			this.getPerson().setCash(this.getPerson().getCash() + netTransaction);
 		netTransaction = 0;
@@ -159,16 +159,15 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Getters
 	
-	@Override
-	public Application.BANK_SERVICE getService() {
-		return service;
-	}
 	
 	@Override
 	public String getStateString() {
 		return this.st.toString();
 	}
 	
+	public Building getBusiness() {
+		return business;
+	}
 	// Setters
 	
 	@Override
@@ -182,12 +181,17 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		stateChanged();
 	}
 	
+	public void setBusiness(Building business) {
+		this.business = business;
+	}
+	
 	// Utilities
 	
 	@Override
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
     }
+	
 	
 	// Classes 
 	

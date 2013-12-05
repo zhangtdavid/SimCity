@@ -132,10 +132,10 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 			}
 		}
 		}
-		if(building.funds > 2000){
-			building.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, building.funds - 2000, TRANSACTION_TYPE.business);
+		if(building.getCash() > 2000){
+			building.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, building.getCash() - 2000, TRANSACTION_TYPE.business);
 			roles.add((Role) building.getBankCustomer());
-			building.funds -= (building.funds - 2000);
+			building.setCash(2000);
 		}
 		
 		boolean blocking = false;
@@ -166,14 +166,14 @@ public class RestaurantJPCashierRole extends Role implements RestaurantJPCashier
 	}
 	private void ChargeIt(MyBill b) {
 		if(b.m == null){
-			building.funds += b.tab;
+			building.setCash(building.getCash() + b.tab);
 			synchronized(Bills){
 				Bills.remove(b);
 			}
 		}
 		if(b.w == null){
-			if(building.funds >= b.tab){
-				building.funds -= b.tab;
+			if(building.getCash() >= b.tab){
+				building.setCash(building.getCash() - b.tab);
 				//b.m.msgChargePaid(b.choice);
 			}
 			else

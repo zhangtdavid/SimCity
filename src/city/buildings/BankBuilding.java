@@ -115,8 +115,8 @@ public class BankBuilding extends Building implements Bank {
 
 	public static class Account {
 		public int acctNum;
-		public double balance;
-		public Account(int num, double money){
+		public int balance;
+		public Account(int num, int money){
 			balance = money;
 			acctNum = num;
 		}

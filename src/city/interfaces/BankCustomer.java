@@ -1,6 +1,5 @@
 package city.interfaces;
 
-import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.TRANSACTION_TYPE;
 import city.RoleInterface;
@@ -31,8 +30,6 @@ public interface BankCustomer extends RoleInterface {
 	// Actions
 	
 	// Getters
-	
-	public Application.BANK_SERVICE getService();
 	
 	// Setters
 	

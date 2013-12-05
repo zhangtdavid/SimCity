@@ -30,7 +30,6 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 	public RestaurantJPCashier cashier;
 	public RestaurantJPHostRole host;
 	public int seatedCustomers = 0;
-	public int funds = 2000;
 	int customerCounter = 0;
 	int waiterCounter = 0;
 	RestaurantJPRevolvingStand orderStand = new RestaurantJPRevolvingStand();
@@ -54,6 +53,7 @@ public class RestaurantJPBuilding extends RestaurantBuildingBase implements Rest
 		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
+		setCash(2000);
 	}
 	
 	// Utilities
