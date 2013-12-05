@@ -36,7 +36,7 @@ public class MockPerson extends MockAgent implements Person {
 	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
 	private Semaphore atDestination = new Semaphore(0, true);
 	private AnimatedPerson animation;
-	private STATE state; 
+	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
 	
@@ -54,7 +54,7 @@ public class MockPerson extends MockAgent implements Person {
 		this.date = new Date(startDate.getTime());
 		// this.lastAteAtRestaurant = new Date(startDate.getTime());
 		// this.lastWentToSleep = new Date(startDate.getTime());
-		this.state = STATE.none;
+		this.state = STATES.none;
 		this.cash = 0;
 		this.hasEaten = false;
 		
@@ -73,7 +73,7 @@ public class MockPerson extends MockAgent implements Person {
 		this.date = new Date(0);
 		// this.lastAteAtRestaurant = new Date(0);
 		// this.lastWentToSleep = new Date(0);
-		this.state = STATE.none;
+		this.state = STATES.none;
 		this.cash = 0;
 		this.hasEaten = false;
 		
@@ -152,7 +152,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 	
 	@Override
-	public STATE getState() {
+	public STATES getState() {
 		return this.state;
 	}
 
