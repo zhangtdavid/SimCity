@@ -205,18 +205,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 
 	}
 
-	@Override
-	public void goToSleep() {
-		// TODO Auto-generated method stub
-
-	}
-
-	@Override
-	public void cookAndEatFood() {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void print(String msg) {
 		AlertLog.getInstance().logMessage(AlertTag.BANK, "PersonAnimationTest", msg);
 	}
