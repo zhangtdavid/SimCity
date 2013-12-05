@@ -306,6 +306,11 @@ public class MarketEmployeeRole extends Role implements MarketEmployee {
 		return event;
 	}
 	
+	@Override
+	public String getStateString() {
+		return state.toString();
+	}
+	
 //  Setters
 //	=====================================================================
 	@Override
