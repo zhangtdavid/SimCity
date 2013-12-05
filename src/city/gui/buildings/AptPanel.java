@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -23,29 +22,30 @@ public class AptPanel extends ResidenceBasePanel {
 
 	private static final long serialVersionUID = -9051230986691103443L;
 
+	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250,
+	// 490x350, 490x450. (5 max)
 	// Data
-	private int panelX;
-	private int panelY;
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-	// static furniture assets
-	public static final int APT_REFRIG[][] = { { 100, 0 }, { 100, 100 }, { 100, 200 },
-			{ 100, 300 }, { 100, 400 } }; // apt refrigerator coords
-	public static final int APT_STOVE[][] = { { 200, 0 }, { 200, 100 }, { 200, 200 },
-			{ 200, 300 }, { 200, 400 } }; // same for stove, & for below,
-											// self-explanatory
-	public static final int APT_TABLE[][] = { { 300, 0 }, { 300, 100 }, { 300, 200 },
-			{ 300, 300 }, { 300, 400 } };
-	public static final int APT_BED[][] = { { 490, 40 }, { 490, 140 }, { 490, 240 },
-			{ 490, 340 }, { 490, 440 } };
+	public static final int APT_REFRIG[][] = { { 100, 0 }, { 100, 100 },
+			{ 100, 200 }, { 100, 300 }, { 100, 400 } }; // apt refrigerator
+														// coords
+	public static final int APT_STOVE[][] = { { 200, 0 }, { 200, 100 },
+			{ 200, 200 }, { 200, 300 }, { 200, 400 } }; // same for stove, & for
+														// below,
+														// self-explanatory
+	public static final int APT_TABLE[][] = { { 300, 0 }, { 300, 100 },
+			{ 300, 200 }, { 300, 300 }, { 300, 400 } };
+	public static final int APT_BED[][] = { { 490, 40 }, { 490, 140 },
+			{ 490, 240 }, { 490, 340 }, { 490, 440 } };
 	public static final int ADX = -10;
 	public static final int ADY = 490;
+	static final int ABYint = 100; // y-Interval for apt beds
 	// every apt has 5 beds regardless of how many people there are; already
 	// furnished!
-	public static final int NUMBER_OF_BEDS = 5; // could also refer to
-											// AptBuilding.NUMBER_OF_BEDS if
-											// desired
+	static final int NUMBER_OF_BEDS = 5; 
+	// could also refer to AptBuilding.NUMBER_OF_BEDS if desired
 
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250,
 	// 490x350, 490x450. (5 max)
@@ -53,6 +53,11 @@ public class AptPanel extends ResidenceBasePanel {
 	// Constructor
 	public AptPanel(Color color) {
 		super(color);
+
+		setVisible(true);
+
+		Timer timer = new Timer(delayMS, this);
+		timer.start();
 	}
 
 	public void paintComponent(Graphics graphics) {
@@ -61,10 +66,9 @@ public class AptPanel extends ResidenceBasePanel {
 		// Clear the screen by painting a rectangle the size of the frame
 		graphics2D.setColor(Color.getHSBColor((float) 37, (float) .53,
 				(float) .529)); // nice subtle gray
-		graphics2D.fillRect(0, 0, panelX, panelY);
+		graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
-		// Draw static elements (furniture); everyone gets their own stuff in
-		// apartments.
+		// Draw static elements (furniture)
 		graphics.setColor(Color.CYAN); // Refrig: cyan
 		for (int i = 0; i < NUMBER_OF_BEDS; i++)
 			graphics.fillRect(APT_REFRIG[i][0], APT_REFRIG[i][1], WIDTH, WIDTH);
@@ -80,9 +84,7 @@ public class AptPanel extends ResidenceBasePanel {
 		graphics.setColor(Color.BLACK); // door: black
 		graphics.fillRect(ADX, ADY, WIDTH, WIDTH);
 		// now draw lines dividing the rooms
-		graphics.drawLine(50, 0, 50, 50); // begin vertical lines. Maybe replace
-											// these with thicker objects e.g.
-											// rects?
+		graphics.drawLine(50, 0, 50, 50); 
 		graphics.drawLine(50, 100, 50, 150);
 		graphics.drawLine(50, 200, 50, 250);
 		graphics.drawLine(50, 300, 50, 350);
@@ -90,8 +92,7 @@ public class AptPanel extends ResidenceBasePanel {
 		graphics.drawLine(50, 100, 50, 500);
 		graphics.drawLine(50, 200, 50, 500);
 		graphics.drawLine(50, 300, 50, 500);
-		graphics.drawLine(50, 400, 50, 500); // begin horizontal lines (can skip
-												// one because top line is OK)
+		graphics.drawLine(50, 400, 50, 500); 
 
 		// Update the position of each visible element
 		for (Animation animation : animations) {

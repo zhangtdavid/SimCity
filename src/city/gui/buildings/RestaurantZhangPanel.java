@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -39,7 +38,7 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 		Graphics2D graphics2D = (Graphics2D)graphics;
 		// Clear the screen by painting a rectangle the size of the frame
 		graphics2D.setColor(background);
-		graphics2D.fillRect(0, 0, panelX, panelY);
+		graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 		graphics.setColor(Color.black);
 		graphics.fillRect(20, 10, 40, 460);
 		graphics.setColor(Color.GRAY);

@@ -1,7 +1,6 @@
 package city.gui.buildings;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
@@ -18,15 +17,11 @@ public class BusStopPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
 
-	private int panelX;
-	private int panelY;
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
-	public BusStopPanel(Color color, Dimension panelDimension) {
+	public BusStopPanel(Color color) {
 		super(color);
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;
 
 		setVisible(true);
 
@@ -43,7 +38,7 @@ public class BusStopPanel extends BuildingCard implements ActionListener {
 		Graphics2D graphics2D = (Graphics2D)graphics;
 		// Clear the screen by painting a rectangle the size of the frame
 		graphics2D.setColor(background);
-		graphics2D.fillRect(0, 0, panelX, panelY);
+		graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
 		// Update the position of each visible element
 		for(Animation animation : animations) {

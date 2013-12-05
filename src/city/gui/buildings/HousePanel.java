@@ -56,11 +56,27 @@ public class HousePanel extends ResidenceBasePanel{
 
 	public void paintComponent(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D) graphics;
+	        // Clear the screen by painting a rectangle the size of the frame
+	        graphics2D.setColor(Color.getHSBColor((float)37, (float).53, (float).529)); // nice subtle gray
+	        graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
+	        
+	        // Draw static elements (furniture)
+	        graphics.setColor(Color.CYAN); // Refrig 
+	        graphics.fillRect(HRX,HRY,WIDTH,WIDTH);
+	        graphics.setColor(Color.RED); // Stove
+	        graphics.fillRect(HSX,HSY,WIDTH,WIDTH);
+	        graphics.setColor(Color.DARK_GRAY); // Table
+	        graphics.fillRect(HTX,HTY,WIDTH,WIDTH);
+	        graphics.setColor(Color.BLACK); // Bed (1 for houses)
+	        graphics.fillRect(HBXi,HBYi,WIDTH,WIDTH);
+	        
+	        // Update the position of each visible element
+	        for(Animation animation : animations) {
+	        	if (animation.getVisible()) {
+	                animation.updatePosition();
+	            }
+	        }
 
-		// Clear the screen by painting a rectangle the size of the frame
-		graphics2D.setColor(Color.getHSBColor((float) 37, (float) .53,
-				(float) .529)); // nice subtle gray
-		graphics2D.fillRect(0, 0, panelX, panelY);
 
 		// Draw static elements (furniture)
 		graphics.setColor(Color.CYAN); // Refrig

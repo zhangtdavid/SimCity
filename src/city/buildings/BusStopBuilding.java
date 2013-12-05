@@ -35,7 +35,7 @@ public class BusStopBuilding extends Building implements BusStop {
 	// Getters
 	
 	public BusStopBuilding(String name) {
-		super(name, new BusStopPanel(Color.black, new Dimension(1, 1)), new CityViewBusStop(1, 1));
+		super(name, new BusStopPanel(Color.black), new CityViewBusStop(1, 1));
 	};
 	
 	@Override
