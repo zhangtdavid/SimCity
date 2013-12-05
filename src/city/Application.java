@@ -870,20 +870,20 @@ public class Application {
 */
 		// Wait for stuff to get set up
 		try {
-			Thread.sleep(5000);
+			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
 		// Start threads for RestaurantZhang
-		c0Zhang.startThread();
-		c1Zhang.startThread();
-		c2Zhang.startThread();
-		c3Zhang.startThread();
-		c4Zhang.startThread();
-		p0Zhang.startThread();
-		p1Zhang.startThread();
-		p2Zhang.startThread();
-		p3Zhang.startThread();
-		p4Zhang.startThread();
+//		c0Zhang.startThread();
+//		c1Zhang.startThread();
+//		c2Zhang.startThread();
+//		c3Zhang.startThread();
+//		c4Zhang.startThread();
+//		p0Zhang.startThread();
+//		p1Zhang.startThread();
+//		p2Zhang.startThread();
+//		p3Zhang.startThread();
+//		p4Zhang.startThread();
 
 /*
 		c0Timms.startThread();
@@ -944,7 +944,7 @@ public class Application {
 		c3JP.startThread();
 		c4JP.startThread();
 */
-		PersonAnimationTest testPersonAnimation = new PersonAnimationTest(busStop1, sidewalks);
+		PersonAnimationTest testPersonAnimation = new PersonAnimationTest(busStop2, sidewalks);
 		mainFrame.cityView.addAnimation(testPersonAnimation);
 	}
 	

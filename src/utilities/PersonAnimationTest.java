@@ -20,11 +20,15 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	private int xPos, yPos;
 	private int xDestination, yDestination;
 
-	private BuildingInterface currentBuilding;
+	private BuildingInterface currentBuilding = null;
 	private BuildingInterface destinationBuilding = null;
 	private CitySidewalk startingSidewalk = null;
 	private CitySidewalk endSidewalk = null;
-	private CitySidewalkLayout sidewalks;
+	private CitySidewalk currentSidewalk = null;
+	private CitySidewalkLayout sidewalks = null;
+
+	private static enum DIRECTIONOFTRAVEL{NORTH, SOUTH, EAST, WEST}; 
+	private DIRECTIONOFTRAVEL directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
 
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = false;
@@ -40,10 +44,10 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 
 	@Override
 	public void updatePosition() {
-		// TODO Auto-generated method stub
 		// Getting on the first road
-		if(startingSidewalk != null) {
-			if(startingSidewalk.setCurrentOccupant(this) == false && startingSidewalk.getCurrentOccupant() != this) {
+		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
+			if(startingSidewalk.setCurrentOccupant(this) == false && startingSidewalk.getCurrentOccupant() != this 
+					&& sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -55,20 +59,118 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				yPos++;
 			else if (yPos > startingSidewalk.getY())
 				yPos--;
-			if(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())
-				startingSidewalk = null;
 			return;
 		}
+		// Traveling along sidewalks
+		if(atDestinationRoad == false) {
+			if(startingSidewalk != null) {
+				currentSidewalk = startingSidewalk;
+				startingSidewalk = null;
+			}
+			CitySidewalk nextSidewalk = null;
+			switch(directionOfTravel) {
+			case NORTH:
+				System.out.println("North");
+				nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
+				if(nextSidewalk == null) { 
+					if(endSidewalk.getX() > xPos) {
+						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					}
+					else if(endSidewalk.getX() < xPos) {
+						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					}
+					else
+						atDestinationRoad = true;
+				} else {
+					yPos--;
+				}
+				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() >= yPos)
+					currentSidewalk = nextSidewalk;
+				break;
+			case EAST:
+				System.out.println("East");
+				nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
+				if(nextSidewalk == null) { 
+					if(endSidewalk.getY() > yPos) {
+						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					}
+					else if(endSidewalk.getY() < yPos) {
+						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					}
+					else
+						atDestinationRoad = true;
+				} else {
+					xPos++;
+				}
+				if(nextSidewalk.getX() <= xPos && nextSidewalk.getY() == yPos)
+					currentSidewalk = nextSidewalk;
+				break;
+			case SOUTH:
+				nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
+				if(nextSidewalk == null) { 
+					if(endSidewalk.getX() > xPos) {
+						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					}
+					else if(endSidewalk.getX() < xPos) {
+						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					}
+					else
+						atDestinationRoad = true;
+				} else {
+					yPos++;
+				}
 
-		if(xPos < xDestination) {
-			xPos++;
-		} else if(xPos > xDestination) {
-			xPos--;
-		} else if(yPos < yDestination) {
-			yPos++;
-		} else if(yPos > yDestination) {
-			yPos--;
+				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() <= yPos)
+					currentSidewalk = nextSidewalk;
+				break;
+			case WEST:
+				xPos--;
+				nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
+				if(nextSidewalk == null) { 
+					if(endSidewalk.getY() > yPos) {
+						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					}
+					else if(endSidewalk.getY() < yPos) {
+						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
+						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					}
+					else
+						atDestinationRoad = true;
+				} else {
+					xPos--;
+				}
+				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)
+					currentSidewalk = nextSidewalk;
+				break;
+			}
+//			if(nextSidewalk.getX() == xPos && nextSidewalk.getY() == yPos)
+//				currentSidewalk = nextSidewalk;
+			if(currentSidewalk == endSidewalk)
+				atDestinationRoad = true;
+			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
+			System.out.println("Nextsidewalk: " + nextSidewalk.getX() + " " + nextSidewalk.getY());
+			System.out.println("Current Position:  " + xPos + " " + yPos);
 		}
+		// Finished walking to sidewalk, walk into building
+		if(atDestinationRoad == true) {
+			if (xPos < xDestination)
+				xPos++;
+			else if (xPos > xDestination)
+				xPos--;
+
+			if (yPos < yDestination)
+				yPos++;
+			else if (yPos > yDestination)
+				yPos--;
+		}
+		//
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
@@ -80,17 +182,19 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	public void draw(Graphics2D g) {
 		// TODO Auto-generated method stub
 		g.setColor(Color.blue);
-		g.fillRect(xPos, yPos, 12, 12);
+		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
 	}
 
 	public void goToDestination(BuildingInterface destination) {
 		destinationBuilding = destination;
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		startingSidewalk.setCurrentOccupant(this);
+		currentSidewalk = startingSidewalk;
 		xDestination = destination.getCityViewBuilding().getX();
 		yDestination = destination.getCityViewBuilding().getY();
 		endSidewalk = sidewalks.getClosestSidewalk(destination.getCityViewBuilding().getX(), destination.getCityViewBuilding().getY());
 		atDestination = false;
+		atDestinationRoad = false;
 		print("Going to destination " + destination.getName());
 	}
 
