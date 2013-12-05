@@ -214,6 +214,34 @@ public class CitySidewalkLayout {
 		}
 		return null;
 	}
+	
+//	public List<CitySidewalk> getAllConnectedSidewalks(CitySidewalk parentSidewalk) {
+//		List<CitySidewalk>
+//		for(int i = 0; i < height; i++) {
+//			for(int j = 0; j < width; j++) {
+//				if(sidewalkGrid[i][j] == parentSidewalk) {
+//					if(i - 1 >= 0)
+//						
+//				}
+//			}
+//		}
+//		return null;
+//	}
+	
+	public CitySidewalk getSidewalkClosestTo(CitySidewalk targetSidewalk, List<CitySidewalk> potentialSidewalks) {
+		double closestDistance = 10000000;
+		CitySidewalk closestSidewalk = potentialSidewalks.get(0);
+		for(CitySidewalk currentSidewalk : potentialSidewalks) {
+			if(currentSidewalk == null)
+				continue;
+			double distance = Math.sqrt((double)(Math.pow(targetSidewalk.getX() - currentSidewalk.getX(), 2) + Math.pow(targetSidewalk.getY() - currentSidewalk.getY(), 2)));
+			if( distance < closestDistance) {
+				closestDistance = distance;
+				closestSidewalk = currentSidewalk;
+			}
+		}
+		return closestSidewalk;
+	}
 
 	// Setters
 

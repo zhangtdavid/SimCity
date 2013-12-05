@@ -2,6 +2,8 @@ package utilities;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -71,20 +73,21 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 			switch(directionOfTravel) {
 			case NORTH:
 				System.out.println("North");
-				nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getX() > xPos) {
-						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					}
-					else if(endSidewalk.getX() < xPos) {
-						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					yPos--;
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() >= yPos)
 					currentSidewalk = nextSidewalk;
@@ -130,7 +133,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 					currentSidewalk = nextSidewalk;
 				break;
 			case WEST:
-				xPos--;
 				nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
 				if(nextSidewalk == null) { 
 					if(endSidewalk.getY() > yPos) {
