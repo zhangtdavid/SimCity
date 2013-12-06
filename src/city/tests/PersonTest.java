@@ -10,6 +10,7 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.agents.interfaces.Person.STATES;
+import city.animations.HouseResidentAnimation;
 import city.bases.interfaces.RoleInterface;
 import city.tests.animations.mocks.MockAnimatedPerson;
 import city.tests.mocks.MockBank;
@@ -52,7 +53,7 @@ public class PersonTest extends TestCase {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		super.setUp();
-		
+		HouseResidentAnimation.beingTested = true;
 		// Set up application environment
 		date = new Date(0);
 		bankCityViewBuilding =  new MockCityViewBuilding();

@@ -7,6 +7,7 @@ import java.awt.event.ActionListener;
 import javax.swing.Timer;
 
 import city.agents.interfaces.Person;
+import city.bases.Animation;
 import city.gui.BuildingCard;
 
 public abstract class ResidenceBasePanel extends BuildingCard implements
@@ -19,9 +20,7 @@ public abstract class ResidenceBasePanel extends BuildingCard implements
 
 	// Constructor
 	public ResidenceBasePanel(Color color) {
-		super(color);/*
-		panelX = panelDimension.width;
-		panelY = panelDimension.height;*/
+		super(color);
 		setVisible(true);
 		Timer timer = new Timer(delayMS, this);
 		timer.start();

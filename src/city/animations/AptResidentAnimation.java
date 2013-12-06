@@ -13,6 +13,7 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	Command command = Command.noCommand;
 	int xDestination, yDestination;
 	public boolean beingTested;
+	private boolean isAtHome;
 	
 	//Constructor
 	public AptResidentAnimation(Person p){
@@ -89,5 +90,10 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	public void setGraphicStatus(String in) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public void setAtHome() {
+		isAtHome = true;		
 	}
 }

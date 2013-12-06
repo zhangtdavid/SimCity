@@ -5,7 +5,6 @@ import java.awt.Graphics2D;
 import java.util.Timer;
 import java.util.TimerTask;
 
-import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
@@ -68,7 +67,7 @@ public class HouseResidentAnimation extends Animation implements
 
 		//More standard animations.
 		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
-			System.out.println(command.toString());
+
 			//entering or leaving a building must begin with setting yourself to enter your room.
 			if (command == Command.ToRoomEntrance) {
 				//for a house, do nothing
@@ -129,8 +128,10 @@ public class HouseResidentAnimation extends Animation implements
 
 				} else { // if you're in a test, skip the timer; skip the
 							// stationary phase
-					command = Command.noCommand;
 					person.print("Skipped timer; done eating");
+					status = "";
+					leaving = true;
+					command = Command.noCommand;
 				}
 			}
 		}
@@ -219,6 +220,10 @@ public class HouseResidentAnimation extends Animation implements
 	public boolean getBeingTested() {
 		return HouseResidentAnimation.beingTested;
 	}
+	
+	public String getStatus() {
+		return this.status;
+	}
 
 	// Setters (for testing)
 	@Override
@@ -235,5 +240,9 @@ public class HouseResidentAnimation extends Animation implements
 	@Override
 	public void setGraphicStatus(String in){
 		
+	}
+	@Override
+	public void setAtHome() {
+		isAtHome = true;
 	}
 }

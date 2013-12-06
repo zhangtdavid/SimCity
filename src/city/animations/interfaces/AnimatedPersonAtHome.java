@@ -1,6 +1,5 @@
 package city.animations.interfaces;
 
-import city.Application.FOOD_ITEMS;
 
 public interface AnimatedPersonAtHome {
 	// Data
@@ -59,6 +58,8 @@ public interface AnimatedPersonAtHome {
 	public void setCoords(int x, int y);
 
 	public void setGraphicStatus(String in);
+
+	public abstract void setAtHome();
 
     // Utilities
 

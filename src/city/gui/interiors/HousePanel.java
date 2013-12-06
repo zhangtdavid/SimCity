@@ -3,6 +3,7 @@ package city.gui.interiors;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -72,20 +73,17 @@ public class HousePanel extends ResidenceBasePanel {
 		graphics.fillRect(HDX, HDY, WIDTH, WIDTH);
 
 		// Update the position of each visible element
+		// Draw each visible element after updating their positions
+        animate();
+
 		for (Animation animation : animations) {
 			if (animation.getVisible()) {
 				animation.updatePosition();
-			}
-		}
-
-		// Draw each visible element after updating their positions
-		// TODO generates concurrent modification exception
-		for (Animation animation : animations) {
-			if (animation.getVisible()) {
 				animation.draw(graphics2D);
 			}
 		}
 	}
+
 
 	// TODO remove?
 	public void addVisualizationElement(Animation ve) {

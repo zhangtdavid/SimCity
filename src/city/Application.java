@@ -366,6 +366,10 @@ public class Application {
 		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1);
 		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
+		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500);
+		apartmentBuildingZhang1.addFood(FOOD_ITEMS.salad, 500);
+		apartmentBuildingZhang1.addFood(FOOD_ITEMS.pizza, 500);
+		apartmentBuildingZhang1.addFood(FOOD_ITEMS.steak, 500); // this prevents him from going to the market (testing house animation)
 		
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);

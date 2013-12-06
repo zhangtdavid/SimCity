@@ -97,4 +97,10 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 		
 	}
 
+	@Override
+	public void setAtHome() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

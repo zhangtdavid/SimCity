@@ -56,7 +56,8 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	@Override
 	public void addOccupyingRole(RoleInterface ri) { 
 		// you can put any role the person has into this for house; I just get the person through it.
-		addOccupyingPerson(ri.getPerson());
+		if(!this.allPersons.containsKey(ri.getPerson())) // this prevents duplicates
+		addOccupyingPerson(ri.getPerson()); // if you already are in this home, just use the one you have before!
 	}
 
 	/**
@@ -71,6 +72,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		HouseResidentAnimation anim = new HouseResidentAnimation(p); // this is disposed of every time the person leaves.
 		p.setHomeAnimation(anim); // set the person's home animation to this.
 		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
+		if(!anim.getBeingTested())
 		panel.addVisualizationElement(anim);
 		
 	}

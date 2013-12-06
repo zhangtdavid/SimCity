@@ -239,11 +239,10 @@ public class PersonAgent extends Agent implements Person {
 		}
 
 		if (state == STATES.goingToSleep) {
+			System.out.println("fuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
 			if (processTransportationArrival()) {
 				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
-				
-				homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
-				
+				actGoToBed();
 				setState(STATES.atSleep);
 				return false;
 			}
@@ -389,7 +388,6 @@ public class PersonAgent extends Agent implements Person {
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToCook);
 		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
-		
 	}
 	
 	/**
@@ -445,12 +443,36 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
-		// TODO this shouldn't transport them home if they're already at home
+		//TODO this shouldn't transport them home if they're already at home
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+//		this.hasEaten = false;
+//		lastWentToSleep = this.getDate();
+		processTransportationDeparture((BuildingInterface) home);
+		setState(STATES.goingToSleep);
+		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
+	}
+
+	/**
+	 * Once the person is home, moves to the bed before sleeping. From actGoToSleep
+	 * (Upon arrival)
+	 * @throws InterruptedException
+	 */
+	private void actGoToBed() throws InterruptedException{
+		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22222@@@@@@@@@@@22");
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
-		processTransportationDeparture((BuildingInterface) home);
 		lastWentToSleep = this.getDate();
-		setState(STATES.goingToSleep);
+		homeAnimation.setAtHome();
+		homeAnimation.setAcquired(); // tell the animation we're going to lock ourselves...
+		homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
+		try{ 
+			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+				atDestination.acquire(); //and freeze
+			}
+		}catch(Exception e){
+			print("Something bad happened while trying to acquire while going to stove/table");
+			e.printStackTrace();
+		}
 	}
 	
 	//=========//
@@ -691,7 +713,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		//print(this.state.toString());
 		if (car != null && carPassengerRole != null) {
 			if(!carPassengerRole.getActive()) {
 				removeRole(carPassengerRole);
