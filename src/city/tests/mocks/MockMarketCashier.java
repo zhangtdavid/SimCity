@@ -19,7 +19,6 @@ import city.roles.interfaces.MarketEmployee;
 import city.tests.bases.mocks.MockRole;
 
 public class MockMarketCashier extends MockRole implements MarketCashier {
-
 	public EventLog log = new EventLog();
 	public Market market;
 	
@@ -30,44 +29,44 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	@Override
 	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgNewDeliveryPerson from Market Manager"));		
-		System.out.println("Market Cashier received msgNewDeliveryPerson from Market Manager");		
+		log.add(new LoggedEvent("MarketCashier received msgNewDeliveryPerson from Market"));		
+		System.out.println("MarketCashier received msgNewDeliveryPerson from Market");		
 	}
 
 	@Override
 	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market Manager"));		
-		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market Manager");		
+		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market"));		
+		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market");		
 	}
 	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill for In Person Customer from Market Employee"));		
-		System.out.println("Market Cashier received msgComputeBill for In Person Customer from Market Employee");	
+		log.add(new LoggedEvent("MarketCashier received msgComputeBill for In Person Customer from MarketEmployee"));		
+		System.out.println("MarketCashier received msgComputeBill for In Person Customer from MarketEmployee");	
 	}
 
 	@Override
 	public void msgHereIsPayment(int id, int money) {
-		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Market Customer for " + money));		
-		System.out.println("Market Cashier received msgHereIsPayment from Market Customer for " + money);			
+		log.add(new LoggedEvent("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money));		
+		System.out.println("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money);			
 	}
 
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill for Delivery Customer from Market Employee"));		
-		System.out.println("Market Cashier received msgComputeBill for Delivery Customer from Market Employee");			
+		log.add(new LoggedEvent("MarketCashier received msgComputeBill for MarketCustomerDelivery from MarketEmployee"));		
+		System.out.println("MarketCashier received msgComputeBill for MarketCustomerDelivery from MarketEmployee");			
 	}
 
 	@Override
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Market Delivery Person"));		
-		System.out.println("Market Cashier received msgDeliveringItems from Market Delivery Person");	
+		log.add(new LoggedEvent("MarketCashier received msgDeliveringItems from MarketDeliveryPerson"));		
+		System.out.println("MarketCashier received msgDeliveringItems from MarketDeliveryPerson");	
 	}
 
 	@Override
 	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person"));		
-		System.out.println("Market Cashier received msgFinishedDeliveringItems from Market Delivery Person");			
+		log.add(new LoggedEvent("MarketCashier received msgFinishedDeliveringItems from MarketDeliveryPerson"));		
+		System.out.println("MarketCashier received msgFinishedDeliveringItems from MarketDeliveryPerson");			
 	}
 
 	@Override

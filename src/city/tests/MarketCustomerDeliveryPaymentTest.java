@@ -9,6 +9,7 @@ import java.util.Map;
 import junit.framework.TestCase;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
@@ -19,7 +20,6 @@ import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.MarketCustomerDeliveryPaymentRole;
-import city.roles.interfaces.MarketCashier.TransactionState;
 import city.tests.mocks.MockMarketCashier;
 import city.tests.mocks.MockMarketCustomer;
 import city.tests.mocks.MockMarketCustomerDelivery;
@@ -109,6 +109,10 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 		manager.setPerson(managerPerson);
 		manager.market = market;
 		
+		market.setCashier(cashier);
+		market.setManager(manager);
+		market.addEmployee(employee);
+		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
 		orderItems.put(FOOD_ITEMS.pizza, 5);
@@ -116,6 +120,7 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
 		order = new MarketOrder(orderItems);
+		marketTransactions.add(new MarketTransaction(market, order)); // models restaurantCashier getting addMarketOrder msg from restaurantCook 
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();
 		collectedItemsAll.put(FOOD_ITEMS.chicken, 5);
@@ -140,28 +145,20 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
 		assertEquals("Market money should be 1000. It's " + market.getCash() + "instead", market.getCash(), 1000);
 		
-//		customerDeliveryPayment.msgComputeBill(employee, customer, orderItems, collectedItemsAll, order.orderId);
-//		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
-//		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
-//		assertEquals("Cashier should have 1 transaction.", cashier.getTransactions().size(), 1);
-//		assertTrue("Cashier transactions should contain a transaction with state == Pending.", cashier.getTransactions().get(0).getTransactionState() == TransactionState.Pending);
-//				
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == Calculating.", cashier.getTransactions().get(0).getTransactionState() == TransactionState.Calculating);
-//		assertEquals("Cashier transactions should contain a transaction with bill for 110", cashier.getTransactions().get(0).getBill(), 110);
-//		assertEquals("Customer log should have 1 entry.", customer.log.size(), 1);
-//		assertTrue("Customer log should have \"Customer received msgHereIsOrderandBill\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsOrderandBill"));
-//
-//		cashier.msgHereIsPayment(order.orderId, 110);
-//		assertEquals("Cashier log should have 2 entries.", cashier.log.size(), 2);
-//		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
-//		assertEquals("Cashier payment variable should be 110.00. It's " + cashier.getTransactions().get(0).getPayment() + "instead", cashier.getTransactions().get(0).getPayment(), 110);
-//		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment.", cashier.getTransactions().get(0).getTransactionState() == TransactionState.ReceivedPayment);	
-//		
-//		cashier.runScheduler();
-//		assertEquals("Customer log should have 2 entries.", customer.log.size(), 2);
-//		assertTrue("Customer log should have \"Customer received msgPaymentReceived from Market Cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgPaymentReceived from Market Cashier"));
-//		assertEquals("Market money should be 1110.00. It's " + market.getCash() + "instead", market.getCash(), 1110);
-//		assertEquals("Cashier should have 0 transactions.", cashier.getTransactions().size(), 0);		
+		customerDeliveryPayment.msgHereIsBill(110, 0);
+		assertEquals("CustomerDeliveryPayment log should have 1 entry. It doesn't", customerDeliveryPayment.log.size(), 1);
+		assertTrue("CustomerDeliveryPayment log should have \"MarketCustomerDeliveryPayment received msgHereIsBill\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), customerDeliveryPayment.log.containsString("MarketCustomerDeliveryPayment received msgHereIsBill"));
+		assertEquals("CustomerDeliveryPayment should have 1 marketTransaction. It doesn't", customerDeliveryPayment.getMarketTransactions().size(), 1);
+		assertTrue("CustomerDeliveryPayment transactions should contain a transaction with state == Processing. It doesn't.", customerDeliveryPayment.getMarketTransactions().get(0).getMarketTransactionState() == MarketTransactionState.Processing);
+	
+		customerDeliveryPayment.runScheduler();
+		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), cashier.log.containsString("MarketCashier received msgHereIsPayment"));
+		assertEquals("RestaurantChung money should be 890. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 890);
+		assertTrue("CustomerDeliveryPayment transactions should contain a transaction with state == WaitingForConfirmation. It doesn't.", customerDeliveryPayment.getMarketTransactions().get(0).getMarketTransactionState() == MarketTransactionState.WaitingForConfirmation);
+		
+		customerDeliveryPayment.msgPaymentReceived(0);
+		assertEquals("CustomerDeliveryPayment log should have 2 entries. It doesn't", customerDeliveryPayment.log.size(), 2);
+		assertTrue("CustomerDeliveryPayment log should have \"MarketCustomerDeliveryPayment received msgPaymentReceived\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), customerDeliveryPayment.log.containsString("MarketCustomerDeliveryPayment received msgPaymentReceived"));
 	}
 }

@@ -50,14 +50,15 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	public void setActive(){
 		super.setActive();
 		state = MarketCustomerState.Ordering;
+		stateChanged();
 	}
 	
 //  Messages
 //	=====================================================================	
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
-		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
+		log.add(new LoggedEvent("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson."));
+		System.out.println("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson.");
 		if (order.orderId == id) {
 	        for (FOOD_ITEMS item: collectedItems.keySet()) {
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
