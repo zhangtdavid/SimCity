@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -33,6 +34,8 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = false;
+	
+	private Stack<CitySidewalk>sidewalkPath;
 
 	public PersonAnimationTest(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
@@ -68,7 +71,18 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
 			}
-			List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
+			if(xPos < currentSidewalk.getX())
+				xPos++;
+			else if(xPos > currentSidewalk.getX())
+				xPos--;
+			else if(yPos < currentSidewalk.getY())
+				yPos++;
+			else if(yPos > currentSidewalk.getY())
+				yPos--;
+			else {
+				currentSidewalk = sidewalkPath.pop();
+			}
+			/*List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
 			CitySidewalk nextSidewalk = null;
 			switch(directionOfTravel) {
 			case NORTH:
@@ -163,12 +177,12 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
 				break;
-			}
+			}*/
 			if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
-			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
-			System.out.println("Nextsidewalk: " + nextSidewalk.getX() + " " + nextSidewalk.getY());
-			System.out.println("Current Position:  " + xPos + " " + yPos);
+//			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
+//			System.out.println("Nextsidewalk: " + nextSidewalk.getX() + " " + nextSidewalk.getY());
+//			System.out.println("Current Position:  " + xPos + " " + yPos);
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
@@ -207,6 +221,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		endSidewalk = sidewalks.getClosestSidewalk(destination.getCityViewBuilding().getX(), destination.getCityViewBuilding().getY());
 		atDestination = false;
 		atDestinationRoad = false;
+		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
 		print("Going to destination " + destination.getName());
 	}
 

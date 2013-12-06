@@ -3,10 +3,14 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
+import java.util.Stack;
 import java.util.TreeSet;
 
+import utilities.CitySidewalkAStar;
 import utilities.TrafficControl;
 import city.bases.interfaces.AnimationInterface;
 
@@ -217,7 +221,7 @@ public class CitySidewalkLayout {
 		}
 		return null;
 	}
-	
+
 	public CitySidewalk getSidewalkClosestTo(CitySidewalk targetSidewalk, List<CitySidewalk> potentialSidewalks) {
 		double closestDistance = 10000000;
 		CitySidewalk closestSidewalk = potentialSidewalks.get(0);
@@ -240,12 +244,60 @@ public class CitySidewalkLayout {
 	}
 
 	// A Star
-	public List<CitySidewalk> getBestPath(CitySidewalk startingSidewalk, CitySidewalk endingSidewalk) {
-		List<CitySidewalk> listToReturn = new ArrayList<CitySidewalk>();
-		PriorityQueue<CitySidewalk> openList = new PriorityQueue<CitySidewalk>();
-		TreeSet<CitySidewalk> closedSet = new TreeSet<CitySidewalk>();
-	
-//		openList.add(arg0)
+	public Stack<CitySidewalk> getBestPath(CitySidewalk startingSidewalk, CitySidewalk endingSidewalk) {
+		System.out.println("Finding best path");
+		Stack<CitySidewalk> listToReturn = new Stack<CitySidewalk>();
+		PriorityQueue<CitySidewalkAStar> openList = new PriorityQueue<CitySidewalkAStar>(1, CitySidewalkAStar.CitySidewalkAStarNameComparator);
+		HashSet<CitySidewalk> closedSet = new HashSet<CitySidewalk>();
+
+		openList.add(new CitySidewalkAStar(null, startingSidewalk, endingSidewalk, 0));
+
+		while(!openList.isEmpty()) {
+//			System.out.println(openList.peek().getSidewalk().getX() + " " + openList.peek().getSidewalk().getY());
+			CitySidewalkAStar currentAStar = openList.remove();
+			closedSet.add(currentAStar.getSidewalk());
+			// Found the solution
+			if(currentAStar.getSidewalk() == endingSidewalk) {
+				CitySidewalkAStar iterator = currentAStar; // Iterator of previous sidewalks
+				do {
+					listToReturn.add(iterator.getSidewalk());
+					iterator = iterator.getPreviousAStarSidewalk();
+				} while(iterator != null);
+				return listToReturn;
+			}
+			// Explore next paths
+			List<CitySidewalkAStar> possibleAStars = new ArrayList<CitySidewalkAStar>();
+			for(int i = 0; i < 4; i++) {
+				CitySidewalk possibleSidewalk;
+				switch(i) {
+				case 0:
+					possibleSidewalk = getSidewalkNorth(currentAStar.getSidewalk());
+					break;
+				case 1:
+					possibleSidewalk = getSidewalkEast(currentAStar.getSidewalk());
+					break;
+				case 2:
+					possibleSidewalk = getSidewalkSouth(currentAStar.getSidewalk());
+					break;
+				case 3:
+					possibleSidewalk = getSidewalkWest(currentAStar.getSidewalk());
+					break;
+				default:
+					possibleSidewalk = null;
+					break;
+				}
+				if(possibleSidewalk != null) {
+					possibleAStars.add(new CitySidewalkAStar(currentAStar, possibleSidewalk, endingSidewalk, currentAStar.getNumMovesFromStart() + 1));
+				}
+			}
+			for(CitySidewalkAStar i : possibleAStars) {
+				if(!closedSet.contains(i.getSidewalk())) {
+					openList.add(i);
+				}
+			}
+		}
 		return null;
 	}
+
+
 }
