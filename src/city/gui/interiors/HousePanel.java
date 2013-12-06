@@ -66,9 +66,9 @@ public class HousePanel extends ResidenceBasePanel {
 		graphics.fillRect(HSX, HSY, WIDTH, WIDTH);
 		graphics.setColor(Color.DARK_GRAY); // Table
 		graphics.fillRect(HTX, HTY, WIDTH, WIDTH);
-		graphics.setColor(Color.BLACK); // Bed (1 for houses)
-		graphics.fillRect(HBXi, HBYi, WIDTH, WIDTH);
 		graphics.setColor(Color.orange); // Bed (1 for houses)
+		graphics.fillRect(HBXi, HBYi, WIDTH, WIDTH);
+		graphics.setColor(Color.white); // Door (1 for houses)
 		graphics.fillRect(HDX, HDY, WIDTH, WIDTH);
 
 		// Update the position of each visible element

@@ -21,6 +21,7 @@ import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
+import city.animations.HouseResidentAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
@@ -361,13 +362,15 @@ public class Application {
 //		HouseBuilding houseBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, housePanelZhang1, cityViewHouseZhang1);
 //		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
 		
-		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529)); // TODO change this back to aptpanel after I finish it.
 		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1);
-		ApartmentBuilding apartmentBuildingZhang1 = new ApartmentBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
+		HouseResidentAnimation homeAnimation = new HouseResidentAnimation(p0Zhang);
+		p0Zhang.setHomeAnimation(homeAnimation);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
@@ -390,10 +393,10 @@ public class Application {
 		p4Zhang.setHome(apartmentBuildingZhang1);
 
 		// Give people cars
-//		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
-//		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
-//		c0Zhang.setAnimation(c0AnimZhang);
-//		mainFrame.cityView.addAnimation(c0AnimZhang);
+		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
+		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
+		c0Zhang.setAnimation(c0AnimZhang);
+		mainFrame.cityView.addAnimation(c0AnimZhang);
 		CarAgent c1Zhang = new CarAgent(busStop2, p1Zhang);
 		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, busStop2);
 		c1Zhang .setAnimation(c1AnimZhang);
@@ -855,16 +858,16 @@ public class Application {
 		} catch (InterruptedException e) {}
 
 		// Start threads for RestaurantZhang
-		// c0Zhang.startThread();
+		c0Zhang.startThread();/*
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();
-		c4Zhang.startThread();
-		p0Zhang.startThread();
+		c4Zhang.startThread();*/
+		p0Zhang.startThread();/*
 		p1Zhang.startThread();
 		p2Zhang.startThread();
 		p3Zhang.startThread();
-		p4Zhang.startThread();
+		p4Zhang.startThread();*/
 
 	}
 	

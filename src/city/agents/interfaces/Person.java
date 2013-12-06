@@ -81,6 +81,5 @@ public interface Person extends AgentInterface {
 	
 	public void addRole(RoleInterface r);
 	public void acquireSemaphoreFromAnimation();
-	public void releaseSemaphoreFromAnimation();
 	
 }

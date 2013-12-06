@@ -34,10 +34,8 @@ public class HouseResidentAnimation extends Animation implements
 		person = p;
 		xDestination = HousePanel.HDX;
 		xDestination = HousePanel.HDY;
-		xPos = HousePanel.HDX; // the door is in the front center bottom of the
-								// house panel
-		yPos = HousePanel.HDY; // so start from a little outside the door (drawn
-								// from top to bottom, so can't see)
+		xPos = HousePanel.HDX; 
+		yPos = HousePanel.HDY+10;
 	}
 
 	// Update position (Drawing)
@@ -59,6 +57,7 @@ public class HouseResidentAnimation extends Animation implements
 				&& personSemaphoreIsAcquired) {
 			if(command == Command.noCommand){ // if the person isn't doing anything...
 				command = Command.ToDoor; // by default, we'll push the person to the door.
+				
 			}
 			if (command == Command.ToRoomEntrance) {
 				//for a house, do nothing
@@ -66,22 +65,23 @@ public class HouseResidentAnimation extends Animation implements
 			} else if (command == Command.ToDoor) { // ToDoor: leave
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
-					person.releaseSemaphoreFromAnimation();
+					person.guiAtDestination();
 					person.print("Semaphore released, at door"); // test output
+					// msg person if needed here.
 				}
-				command = Command.AtDoor;
+				command = Command.AtDoor; //AtDoor is a dead end command; just wait for person to tell you what to do after.
 				//TODO IF necessary, msg person that now stepping out of the building?
 			} else if (command == Command.ToBed) { // ToBed: sleep
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
-					person.releaseSemaphoreFromAnimation();
+					person.guiAtDestination();
 					person.print("Semaphore released, at bed"); // test output
 				}
 				command = Command.InBed;
 			} else if (command == Command.ToRef) { // ToRef: look for food
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){
-					person.releaseSemaphoreFromAnimation();
+					person.guiAtDestination();
 					person.print("Semaphore released, at refrigerator"); // test output
 				}
 				person.print("At refrigerator");
@@ -113,7 +113,7 @@ public class HouseResidentAnimation extends Animation implements
 							person.print("Done eating");
 							personSemaphoreIsAcquired = false; 
 							// now unlock semaphore and end.
-							person.releaseSemaphoreFromAnimation();
+							person.guiAtDestination();
 							person.print("Semaphore released, at table, eating now (timer)");
 						}
 					}, 4000);

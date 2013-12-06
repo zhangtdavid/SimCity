@@ -239,12 +239,6 @@ public class MockPerson extends MockAgent implements Person {
 	}
 
 	@Override
-	public void releaseSemaphoreFromAnimation() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		// TODO Auto-generated method stub
 		return null;

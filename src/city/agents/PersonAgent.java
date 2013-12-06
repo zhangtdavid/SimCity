@@ -223,23 +223,27 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == STATES.goingToCook) {
-			if (processTransportationArrival()) {
+			if (processTransportationArrival()) { // this takes a person home with the intent of cooking
+				System.out.println("state is going to cook");
+				//upon arrival (now at home)
+				System.out.println("telling home animation to go to room");
 				setState(STATES.atCooking);
-				actCookAndEatFood();
+				homeAnimation.goToRoom(roomNumber); // goes to person's room entrance. for houses, goes to door.
+				actCookAndEatFood(); // goes to refrig, stove, table, back to room entrance.
 				return true;
 			}
 		}
 
 		if (state == STATES.atCooking) {
-			state = pickDailyTask();
+			state = pickDailyTask();  //this tells the person what to do after eating? idk ~Ryan
 			performDailyTaskAction();
 			return true;
 		}
 
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
-				homeAnimation.goToRoom(this.roomNumber); // first, person goes to his own room
-				homeAnimation.goToSleep(); // now, person may crash (figuratively, as in go to bed!)
+				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
+				homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
 				setState(STATES.atSleep);
 				return false;
 			}
@@ -383,6 +387,8 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToCook);
+		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
+		
 	}
 	
 	/**
@@ -396,15 +402,17 @@ public class PersonAgent extends Agent implements Person {
 		homeAnimation.verifyFood();  // give animation instructions
 		try{ 
 			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				//System.out.println("not being tested");
 				atDestination.acquire(); //and freeze
 			}
 		}catch(Exception e){
 			print("Something bad happened while trying to acquire while going to refrigerator");
 			e.printStackTrace();
 		}
-
-		//BTW function was intentionally designed to combine these 3 steps into 1 action.
+		//if the function is here and getBeingTested() == false, 
+		//then that means the gui sent guiAtDestination, releasing the semaphore
+		
+		//BTW function was intentionally designed to combine these 3 gui steps into 1 action.
+		
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
@@ -623,12 +631,7 @@ public class PersonAgent extends Agent implements Person {
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void releaseSemaphoreFromAnimation(){
-		atDestination.release();
-	}
-	
+
 	@Override
 	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
@@ -678,6 +681,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private boolean processTransportationArrival() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		//print(this.state.toString());
 		if (car != null && carPassengerRole != null) {
 			if(!carPassengerRole.getActive()) {
 				removeRole(carPassengerRole);
