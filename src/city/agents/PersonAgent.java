@@ -224,9 +224,7 @@ public class PersonAgent extends Agent implements Person {
 		}
 		if (state == STATES.goingToCook) {
 			if (processTransportationArrival()) { // this takes a person home with the intent of cooking
-				System.out.println("state is going to cook");
 				//upon arrival (now at home)
-				System.out.println("telling home animation to go to room");
 				setState(STATES.atCooking);
 				homeAnimation.goToRoom(roomNumber); // goes to person's room entrance. for houses, goes to door.
 				actCookAndEatFood(); // goes to refrig, stove, table, back to room entrance.
@@ -243,12 +241,14 @@ public class PersonAgent extends Agent implements Person {
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
 				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
+				System.out.println("in method sleep");
 				homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
 				setState(STATES.atSleep);
 				return false;
 			}
 		}
 		if (state == STATES.atSleep) {
+			System.out.println("AT SLEEP");
 			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
@@ -398,21 +398,10 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		homeAnimation.setAcquired();
-		homeAnimation.verifyFood();  // give animation instructions
-		try{ 
-			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				atDestination.acquire(); //and freeze
-			}
-		}catch(Exception e){
-			print("Something bad happened while trying to acquire while going to refrigerator");
-			e.printStackTrace();
-		}
-		//if the function is here and getBeingTested() == false, 
-		//then that means the gui sent guiAtDestination, releasing the semaphore
-		
-		//BTW function was intentionally designed to combine these 3 gui steps into 1 action.
-		
+		//if the function is here and getBeingTested() == false... 
+		//...then that means the gui sent guiAtDestination, releasing the semaphore
+		//BTW function was intentionally designed to combine 3 gui steps into 1 action.
+		//The person definitely knows that he has food in the refrigerator.
 		homeAnimation.setAcquired(); // repeat
 		homeAnimation.cookAndEatFood();
 		try{ 
