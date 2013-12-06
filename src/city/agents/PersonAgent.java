@@ -29,7 +29,6 @@ import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.animations.interfaces.AnimatedPersonAtHome.Command;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
@@ -240,7 +239,7 @@ public class PersonAgent extends Agent implements Person {
 							e.printStackTrace();
 						} // goes to refrig, stove, table, back to room entrance.
 					}
-				}, 400); //TODO change this to 4000 in apt
+				}, 4000); 
 				homeAnimation.setAcquired();
 				if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
 					atDestination.acquire(); //and freeze
@@ -267,7 +266,7 @@ public class PersonAgent extends Agent implements Person {
 							e.printStackTrace();
 						} 
 					}
-				}, 400); // TODO change this to 4000 in apt
+				}, 4000); // TODO change this to 4000 in apt
 				homeAnimation.setAcquired(); 
 				if (!homeAnimation.getBeingTested()) {
 					atDestination.acquire();
@@ -280,23 +279,18 @@ public class PersonAgent extends Agent implements Person {
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
 				if (shouldWakeUp()) {
+					setState(STATES.atSleep);
 					homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room exit
 					timer.schedule(new TimerTask() {
 						public void run() {
 							homeAnimation.goOutside(); // now the building may be exited.
-							setState(STATES.atSleep);
+
 						}
-					}, 400); // TODO change this to 4000 in apt
+					}, 4000); // TODO change this to 4000 in apt
 					homeAnimation.setAcquired(); 
 					if (!homeAnimation.getBeingTested()) {
 						atDestination.acquire();
 					}
-					
-					
-					
-					
-					
-
 					state = pickDailyTask();
 					performDailyTaskAction();
 					return true;
@@ -471,23 +465,23 @@ public class PersonAgent extends Agent implements Person {
 	}
 	
 	/**
-	 * Takes the person home and allows them to "sleep" until awakened for work.
-	 * 
-	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
+	 * Takes the person home w/ intent to sleep.
 	 * 
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
 		//TODO this shouldn't transport them home if they're already at home
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToSleep);
 		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
 	}
 
 	/**
-	 * Once the person is home, moves to the bed before sleeping. From actGoToSleep
-	 * (Upon arrival)
+	 * Once the person is home, moves to the bed before sleeping. 
+	 * From actGoToSleep (after arrival at home)
+	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
 	 * @throws InterruptedException
 	 */
 	private void actGoToBed() throws InterruptedException{

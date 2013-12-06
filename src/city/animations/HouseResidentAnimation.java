@@ -160,6 +160,7 @@ public class HouseResidentAnimation extends Animation implements
 		yDestination = HousePanel.HDY + 10;
 		leaving = false;
 		isAtHome = false;
+		person.guiAtDestination();
 	}
 
 	@Override
