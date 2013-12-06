@@ -5,7 +5,6 @@ import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RestaurantBuildingInterface;
-import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.gui.BuildingCard;
 import city.gui.exteriors.CityViewBuilding;
 import city.roles.interfaces.BankCustomer;
@@ -26,8 +25,8 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 	public RestaurantBuilding(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
 		
-        // Add items and their cooking times to a map
-		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10));
+        // Add items and their cooking times to a map		
+		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10)); // item, cookingTime, amount, low, capacity, price, orderSate
 		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));
 		addFood(FOOD_ITEMS.salad, new Food("salad", 3, 6, 5, 10, 6));
 		addFood(FOOD_ITEMS.steak, new Food("steak", 12, 6, 5, 10, 16));        
@@ -68,7 +67,7 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 	@Override
 	public void incrementFoodQuantity(Map<FOOD_ITEMS, Integer> receivedItems) {
         for (FOOD_ITEMS s: receivedItems.keySet()) {
-        	foods.get(s).amount += receivedItems.get(s);
+        	foods.get(s).setAmount(foods.get(s).getAmount() + receivedItems.get(s));
         }		
 	}
 	
@@ -77,7 +76,7 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 	 */
 	@Override
 	public void setFoodQuantity(FOOD_ITEMS f, int i) {
-		foods.get(f).amount = i;
+		foods.get(f).setAmount(i);
 	}
 
 	public void setBankCustomer(BankCustomer bankCustomer) {

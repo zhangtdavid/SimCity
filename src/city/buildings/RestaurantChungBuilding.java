@@ -6,7 +6,6 @@ import java.util.List;
 import utilities.RestaurantChungRevolvingStand;
 import city.Application;
 import city.Application.BUILDING;
-import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
