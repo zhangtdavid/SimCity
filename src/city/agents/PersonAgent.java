@@ -458,7 +458,6 @@ public class PersonAgent extends Agent implements Person {
 	 * @throws InterruptedException
 	 */
 	private void actGoToBed() throws InterruptedException{
-		System.out.println("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22222@@@@@@@@@@@22");
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
 		lastWentToSleep = this.getDate();

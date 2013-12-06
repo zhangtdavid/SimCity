@@ -363,7 +363,7 @@ public class Application {
 //		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
 		
 		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529)); // TODO change this back to aptpanel after I finish it.
-		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1);
+		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(75, 225, "Zhang Landlord House", Color.gray, apartmentPanelZhang1);
 		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500);
