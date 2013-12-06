@@ -134,7 +134,7 @@ public class CitySidewalkLayout {
 		}
 		return null;
 	}
-	
+
 	public CitySidewalk getSidewalkEast(CitySidewalk parentSidewalk) {
 		CitySidewalk currentSidewalk = parentSidewalk;
 		for(int i = 0; i < height; i++) {
@@ -168,7 +168,7 @@ public class CitySidewalkLayout {
 		}
 		return null;
 	}
-	
+
 	public CitySidewalk getSidewalkNorth(CitySidewalk parentSidewalk) {
 		CitySidewalk currentSidewalk = parentSidewalk;
 		for(int i = 0; i < height; i++) {
@@ -202,7 +202,7 @@ public class CitySidewalkLayout {
 		}
 		return null;
 	}
-	
+
 	public CitySidewalk getSidewalkSouth(CitySidewalk parentSidewalk) {
 		CitySidewalk currentSidewalk = parentSidewalk;
 		for(int i = 0; i < height; i++) {
@@ -238,13 +238,13 @@ public class CitySidewalkLayout {
 	public void setRoads(TrafficControl newRoads) {
 		roads = newRoads;
 	}
-	
+
 	// A Star
 	public List<CitySidewalk> getBestPath(CitySidewalk startingSidewalk, CitySidewalk endingSidewalk) {
 		List<CitySidewalk> listToReturn = new ArrayList<CitySidewalk>();
 		PriorityQueue<CitySidewalk> openList = new PriorityQueue<CitySidewalk>();
 		TreeSet<CitySidewalk> closedSet = new TreeSet<CitySidewalk>();
-		
+	
 //		openList.add(arg0)
 		return null;
 	}
