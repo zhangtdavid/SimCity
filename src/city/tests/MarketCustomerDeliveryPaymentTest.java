@@ -19,14 +19,13 @@ import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.MarketCustomerDeliveryPaymentRole;
-import city.roles.interfaces.MarketCashier.TransactionState;
-import city.tests.mocks.MockMarketCashier;
-import city.tests.mocks.MockMarketCustomer;
-import city.tests.mocks.MockMarketCustomerDelivery;
-import city.tests.mocks.MockMarketDeliveryPerson;
-import city.tests.mocks.MockMarketEmployee;
-import city.tests.mocks.MockMarketManager;
-import city.tests.mocks.MockPerson;
+import city.tests.roles.mocks.MockMarketCashier;
+import city.tests.roles.mocks.MockMarketCustomer;
+import city.tests.roles.mocks.MockMarketCustomerDelivery;
+import city.tests.roles.mocks.MockMarketDeliveryPerson;
+import city.tests.roles.mocks.MockMarketEmployee;
+import city.tests.roles.mocks.MockMarketManager;
+import city.tests.agents.mocks.MockPerson;
 
 public class MarketCustomerDeliveryPaymentTest extends TestCase {
 	Bank bank;
