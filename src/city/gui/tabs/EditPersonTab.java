@@ -12,15 +12,19 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 
 import javax.swing.BoxLayout;
+import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
 import javax.swing.ImageIcon;
 import javax.swing.JButton;
+import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
 import javax.swing.JList;
@@ -68,6 +72,13 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private DataModel dataModel;
 	private DefaultListModel<Person> peopleListModel;
 	private DefaultListModel<RoleInterface> roleListModel;
+	private DefaultComboBoxModel<String> jobComboBoxModel;
+	private DefaultComboBoxModel<BuildingInterface> workplaceComboBoxModel;
+	private Person personSelectedFromList; // Needed so that we can deactivate old listeners
+	private RoleInterface roleSelectedFromList;
+	private String jobSelectedFromComboBox;
+	private BuildingInterface workplaceSelectedFromComboBox;
+	
 	private JScrollPane scrollPeople;
 	private JList<Person> listPeople;
 	private JPanel panelName;
@@ -82,12 +93,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private JPanel panelState;
 	private JLabel labelState;
 	private JLabel labelStateValue;
-	private Person listPeopleSelection; // Needed so that we can deactivate old listeners
 	private JPanel panelRoles;
 	private JScrollPane scrollRoles;
 	private JList<RoleInterface> listRoles;
 	private JLabel labelRoles;
-	private RoleInterface listRolesSelection;
 	private JPanel panelRoleState;
 	private JLabel labelRoleState;
 	private JLabel labelRoleStateValue;
@@ -102,19 +111,37 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private JButton btnHouse;
 	private JButton btnWork;
 	private JButton btnHasHouse;
-	private JPanel panelShift;
-	private JLabel lblShift;
-	private JLabel lblShiftStart;
-	private JLabel lblShiftEnd;
-	private JSpinner spnShiftStart;
-	private JSpinner spnShiftEnd;
+	private JPanel panelShift1;
+	private JLabel labelShift1;
+	private JLabel labelStart1;
+	private JLabel labelEnd1;
+	private JSpinner spinnerStart1;
+	private JSpinner spinnerEnd1;
 	private JPanel panelSalary;
-	private JLabel lblRoleSalary;
-	private JLabel labelRoleSalaryValue;
-	private JPanel panelRoleControl;
-	private JButton btnRoleRevert;
-	private JButton btnRoleSave;
+	private JLabel labelSalary;
+	private JLabel labelSalaryValue;
+	private JPanel panelRoleRevertSave;
+	private JButton buttonRoleRevert;
+	private JButton buttonRoleSave;
 	private JButton btnHasJob;
+	private JPanel panelJob;
+	private JComboBox<String> comboBoxJob;
+	private JLabel labelJob;
+	private JPanel panelWorkplace;
+	private JLabel labelWorkplace;
+	private JComboBox<BuildingInterface> comboBoxWorkplace;
+	private JPanel panelShift2;
+	private JLabel labelShift2;
+	private JLabel labelStart2;
+	private JSpinner spinnerStart2;
+	private JLabel labelEnd2;
+	private JSpinner spinnerEnd2;
+	private JPanel panelAdd;
+	private JButton buttonAdd;
+	private JPanel panelNewJob;
+	private JPanel panelEditJob;
+	private JLabel label;
+	private JPanel panel;
 	
 	//============================================================================//
 	// Constructor        
@@ -143,10 +170,45 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		// The DataModel allows the list objects to auto-update
 		this.dataModel = Application.getModel();
 		this.dataModel.getPropertyChangeSupport().addPropertyChangeListener(DataModel.PEOPLE, this);
+		this.dataModel.getPropertyChangeSupport().addPropertyChangeListener(DataModel.BUILDINGS, this);
 		
 		// The ListModel is an object which stores what the JList displays
 		this.peopleListModel = new DefaultListModel<Person>();
 		this.roleListModel = new DefaultListModel<RoleInterface>();
+		
+		// The ComboBoxModel is an object which stores what the ComboBox displays
+		this.jobComboBoxModel = new DefaultComboBoxModel<String>();
+		this.workplaceComboBoxModel = new DefaultComboBoxModel<BuildingInterface>();
+		jobComboBoxModel.addElement("city.roles.BankManagerRole");
+		jobComboBoxModel.addElement("city.roles.BankTellerRole");
+		jobComboBoxModel.addElement("city.roles.MarketCashierRole");
+		jobComboBoxModel.addElement("city.roles.MarketDeliveryPersonRole");
+		jobComboBoxModel.addElement("city.roles.MarketEmployeeRole");
+		jobComboBoxModel.addElement("city.roles.MarketManagerRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChoiCashierRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChoiCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChoiHostRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChoiWaiterDirectRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChoiWaiterQueueRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChungCashierRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChungCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChungHostRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChungWaiterMessageCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantChungWaiterRevolvingStandRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantJPCashierRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantJPCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantJPHostRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantJPWaiterRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantJPWaiterSharedDataRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantTimmsCashierRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantTimmsCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantTimmsHostRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantTimmsWaiterRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantZhangCashierRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantZhangCookRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantZhangHostRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantZhangWaiterRegularRole");
+		jobComboBoxModel.addElement("city.roles.RestaurantZhangWaiterSharedDataRole");
 		
 		//--------------------------------------//
 		// Person list         
@@ -170,18 +232,20 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 			 */
 			public void valueChanged(ListSelectionEvent arg0) {
 				if (listPeople.getSelectedValue() != null) {
-					if (listPeopleSelection != null) {
+					if (personSelectedFromList != null) {
 						// Remove the listener from the previous selection
-						listPeopleSelection.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
+						personSelectedFromList.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
 					}
-					updatePersonFormValues(listPeople.getSelectedValue());
-					listPeople.getSelectedValue().getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
-					listPeopleSelection = listPeople.getSelectedValue();
-					toggleRoleEditorAvailability(false);
-					setRoleFormBlank();
+					personSelectedFromList = listPeople.getSelectedValue();
+					personSelectedFromList.getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
+					updatePersonValues();
 				} else {
-					setPersonFormBlank();
+					setEditPersonBlank();
 				}
+				toggleEditJob(false);
+				toggleNewJob(false);
+				setEditJobBlank();
+				setNewJobBlank();
 			}
 		});
 		listPeople.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -214,8 +278,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         panelState.setPreferredSize(new Dimension(300, 20));
         panelState.setMinimumSize(new Dimension(300, 20));
         panelState.setMaximumSize(new Dimension(300, 20));
-        add(panelState);
         panelState.setLayout(new BoxLayout(panelState, BoxLayout.X_AXIS));
+        add(panelState);
         
         labelState = new JLabel("State");
         labelState.setBorder(new EmptyBorder(0, 10, 0, 10));
@@ -238,8 +302,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         panelName.setMaximumSize(new Dimension(300, 30));
         panelName.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
         panelName.setPreferredSize(new Dimension(300, 30));
-        add(panelName);
         panelName.setLayout(new BoxLayout(panelName, BoxLayout.X_AXIS));
+        add(panelName);
         
         labelName = new JLabel("Name");
         labelName.setPreferredSize(new Dimension(70, 14));
@@ -252,8 +316,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         textName.setPreferredSize(new Dimension(200, 20));
         textName.setMinimumSize(new Dimension(200, 20));
         textName.setMaximumSize(new Dimension(200, 20));
-        panelName.add(textName);
         textName.setColumns(10);
+        panelName.add(textName);
         
         // Create the cash control
         panelCash = new JPanel();
@@ -261,8 +325,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         panelCash.setPreferredSize(new Dimension(300, 30));
         panelCash.setMinimumSize(new Dimension(300, 30));
         panelCash.setMaximumSize(new Dimension(300, 30));
-        add(panelCash);
         panelCash.setLayout(new BoxLayout(panelCash, BoxLayout.X_AXIS));
+        add(panelCash);
         
         labelCash = new JLabel("Cash");
         labelCash.setPreferredSize(new Dimension(70, 14));
@@ -282,7 +346,6 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		// Person buttons 1        
 		//--------------------------------------//
         
-        // Create the revert/save controls
         panelControl = new JPanel();
         panelControl.setPreferredSize(new Dimension(300, 30));
         panelControl.setMinimumSize(new Dimension(300, 30));
@@ -290,49 +353,43 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         panelControl.setLayout(new BoxLayout(panelControl, BoxLayout.X_AXIS));
         add(panelControl);
         
+        // Revert
         btnRevert = new JButton("Revert");
         btnRevert.setFocusable(false);
         btnRevert.addActionListener(new ActionListener() {
-        	/**
-        	 * When the revert button is clicked, this code loads the current data about the person
-        	 */
         	public void actionPerformed(ActionEvent arg0) {
-        		if (!listPeople.isSelectionEmpty())
-        			updatePersonFormValues(listPeopleSelection);
+        		updatePersonValues();
         	}
         });
         btnRevert.setAlignmentX(Component.RIGHT_ALIGNMENT);
         panelControl.add(btnRevert);
         
+        // Save
         btnSave = new JButton("Save");
         btnSave.setFocusable(false);
         btnSave.addActionListener(new ActionListener() {
-        	/**
-        	 * When the save button is clicked, this code saves the changed data about the person
-        	 */
         	public void actionPerformed(ActionEvent arg0) {
-        		if (!listPeople.isSelectionEmpty())
-        			saveChangedPerson(listPeopleSelection);
+        		saveChangedPerson();
         	}
         });
         btnSave.setAlignmentX(Component.RIGHT_ALIGNMENT);
         panelControl.add(btnSave);
         
-        // House link
+        // See House
 		btnHouse = new JButton("See House");
 		btnHouse.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
-        		Application.getMainFrame().CP.editBuildingsTab.displayBuilding(listPeopleSelection.getHome());
+        		Application.getMainFrame().CP.editBuildingsTab.displayBuilding(personSelectedFromList.getHome());
 			}
 		});
 		btnHouse.setAlignmentX(Component.RIGHT_ALIGNMENT);
 		panelControl.add(btnHouse);
 		
-		// Work link
+		// See Work
 		btnWork = new JButton("See Work");
 		btnWork.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
-				Application.getMainFrame().CP.editBuildingsTab.displayBuilding(listPeopleSelection.getOccupation().getWorkplace(BuildingInterface.class));
+				Application.getMainFrame().CP.editBuildingsTab.displayBuilding(personSelectedFromList.getOccupation().getWorkplace(BuildingInterface.class));
 			}
 		});
 		btnWork.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -354,13 +411,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnHasCar = new JButton(nocar);
         btnHasCar.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		if (btnHasCar.getIcon().equals(car)) {
-        			btnHasCar.setIcon(nocar);
-        		} else {
-        			btnHasCar.setIcon(car);
-        		}
-        		if (!listPeople.isSelectionEmpty())
-        			togglePersonCar(listPeopleSelection);
+        		togglePersonCar();
         	}
         });
         btnHasCar.setFocusable(false);
@@ -377,13 +428,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnHasHouse = new JButton(house);
         btnHasHouse.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		if (btnHasHouse.getIcon().equals(house)) {
-        			btnHasHouse.setIcon(apartment);
-        		} else {
-        			btnHasHouse.setIcon(house);
-        		}
-        		if (!listPeople.isSelectionEmpty())
-        			togglePersonHome(listPeopleSelection);
+        		togglePersonHome();
         	}
         });
         btnHasHouse.setFocusable(false);
@@ -400,13 +445,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnHasJob = new JButton(job);
         btnHasJob.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		if (btnHasJob.getIcon().equals(job)) {
-        			btnHasJob.setIcon(nojob);
-        		} else {
-        			btnHasJob.setIcon(job);
-        		}
-        		if (!listPeople.isSelectionEmpty())
-        			togglePersonJob(listPeopleSelection);
+        		togglePersonJob();
         	}
         });
         btnHasJob.setFocusable(false);
@@ -459,14 +498,19 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 			 */
 			public void valueChanged(ListSelectionEvent arg0) {
 				if (listRoles.getSelectedValue() != null) {
-					if (listRolesSelection != null) {
+					if (roleSelectedFromList != null) {
 						// Remove the listener from the previous selection
-						listRolesSelection.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
+						roleSelectedFromList.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
 					}
-					updateRoleFormValues(listRoles.getSelectedValue());
-					listRoles.getSelectedValue().getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
-					listRolesSelection = listRoles.getSelectedValue();
-				} 
+					roleSelectedFromList = listRoles.getSelectedValue();
+					roleSelectedFromList.getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
+					updateRoleValues();
+				}  else {
+					toggleEditJob(false);
+					setEditJobBlank();
+				}
+				toggleNewJob(false);
+				setNewJobBlank();
 			}
 		});
         listRoles.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
@@ -548,102 +592,275 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         labelRoleActivityValue.setFont(getFont().deriveFont(Font.BOLD));
         panelRoleActivity.add(labelRoleActivityValue);
         
-        // Create role salary area
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+		// Edit role 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        
+        panelEditJob = new JPanel();
+        panelEditJob.setLayout(new BoxLayout(panelEditJob, BoxLayout.Y_AXIS));
+        add(panelEditJob);
+
+		//--------------------------------------//
+		// Salary
+		//--------------------------------------//
+
         panelSalary = new JPanel();
         panelSalary.setSize(new Dimension(300, 20));
         panelSalary.setMinimumSize(new Dimension(300, 20));
         panelSalary.setMaximumSize(new Dimension(300, 20));
-        add(panelSalary);
         panelSalary.setLayout(new BoxLayout(panelSalary, BoxLayout.X_AXIS));
+        panelEditJob.add(panelSalary);
         
-        lblRoleSalary = new JLabel("Salary");
-        lblRoleSalary.setPreferredSize(new Dimension(100, 16));
-        lblRoleSalary.setMinimumSize(new Dimension(100, 16));
-        lblRoleSalary.setMaximumSize(new Dimension(100, 16));
-        lblRoleSalary.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelSalary.add(lblRoleSalary);
+        labelSalary = new JLabel("Salary");
+        labelSalary.setPreferredSize(new Dimension(100, 16));
+        labelSalary.setMinimumSize(new Dimension(100, 16));
+        labelSalary.setMaximumSize(new Dimension(100, 16));
+        labelSalary.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelSalary.add(labelSalary);
         
-        labelRoleSalaryValue = new JLabel("null");
-        labelRoleSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelSalary.add(labelRoleSalaryValue);
-        
-		//--------------------------------------//
-		// Role form
-		//--------------------------------------//
-        
-        // Create role shift editor
-        panelShift = new JPanel();
-        panelShift.setPreferredSize(new Dimension(300, 30));
-        panelShift.setMinimumSize(new Dimension(300, 30));
-        panelShift.setMaximumSize(new Dimension(300, 30));
-        add(panelShift);
-        panelShift.setLayout(new BoxLayout(panelShift, BoxLayout.X_AXIS));
-        
-        lblShift = new JLabel("Shift");
-        lblShift.setPreferredSize(new Dimension(100, 16));
-        lblShift.setMinimumSize(new Dimension(100, 16));
-        lblShift.setMaximumSize(new Dimension(100, 16));
-        lblShift.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelShift.add(lblShift);
-        
-        lblShiftStart = new JLabel("Start");
-        lblShiftStart.setBorder(new EmptyBorder(0, 0, 0, 5));
-        panelShift.add(lblShiftStart);
-        
-        spnShiftStart = new JSpinner();
-        spnShiftStart.setPreferredSize(new Dimension(40, 20));
-        spnShiftStart.setMinimumSize(new Dimension(40, 20));
-        spnShiftStart.setMaximumSize(new Dimension(40, 20));
-        panelShift.add(spnShiftStart);
-        
-        lblShiftEnd = new JLabel("End");
-        lblShiftEnd.setBorder(new EmptyBorder(0, 15, 0, 5));
-        panelShift.add(lblShiftEnd);
-        
-        spnShiftEnd = new JSpinner();
-        spnShiftEnd.setPreferredSize(new Dimension(40, 20));
-        spnShiftEnd.setMinimumSize(new Dimension(40, 20));
-        spnShiftEnd.setMaximumSize(new Dimension(40, 20));
-        panelShift.add(spnShiftEnd);
+        labelSalaryValue = new JLabel("null");
+        labelSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
+        panelSalary.add(labelSalaryValue);
         
 		//--------------------------------------//
-		// Role buttons 1
+		// Shift
 		//--------------------------------------//
         
-        panelRoleControl = new JPanel();
-        panelRoleControl.setPreferredSize(new Dimension(300, 30));
-        panelRoleControl.setMinimumSize(new Dimension(300, 30));
-        panelRoleControl.setMaximumSize(new Dimension(300, 30));
-        add(panelRoleControl);
-        panelRoleControl.setLayout(new BoxLayout(panelRoleControl, BoxLayout.X_AXIS));
+        panelShift1 = new JPanel();
+        panelEditJob.add(panelShift1);
+        panelShift1.setPreferredSize(new Dimension(300, 30));
+        panelShift1.setMinimumSize(new Dimension(300, 30));
+        panelShift1.setMaximumSize(new Dimension(300, 30));
+        panelShift1.setLayout(new BoxLayout(panelShift1, BoxLayout.X_AXIS));
         
-        btnRoleRevert = new JButton("Revert");
-        btnRoleRevert.addActionListener(new ActionListener() {
+        labelShift1 = new JLabel("Shift");
+        labelShift1.setPreferredSize(new Dimension(100, 16));
+        labelShift1.setMinimumSize(new Dimension(100, 16));
+        labelShift1.setMaximumSize(new Dimension(100, 16));
+        labelShift1.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelShift1.add(labelShift1);
+        
+        labelStart1 = new JLabel("Start");
+        labelStart1.setBorder(new EmptyBorder(0, 0, 0, 5));
+        panelShift1.add(labelStart1);
+        
+        spinnerStart1 = new JSpinner();
+        spinnerStart1.setPreferredSize(new Dimension(40, 20));
+        spinnerStart1.setMinimumSize(new Dimension(40, 20));
+        spinnerStart1.setMaximumSize(new Dimension(40, 20));
+        panelShift1.add(spinnerStart1);
+        
+        labelEnd1 = new JLabel("End");
+        labelEnd1.setBorder(new EmptyBorder(0, 15, 0, 5));
+        panelShift1.add(labelEnd1);
+        
+        spinnerEnd1 = new JSpinner();
+        spinnerEnd1.setPreferredSize(new Dimension(40, 20));
+        spinnerEnd1.setMinimumSize(new Dimension(40, 20));
+        spinnerEnd1.setMaximumSize(new Dimension(40, 20));
+        panelShift1.add(spinnerEnd1);
+        
+		//--------------------------------------//
+		// Revert/Save
+		//--------------------------------------//
+        
+        panelRoleRevertSave = new JPanel();
+        panelRoleRevertSave.setPreferredSize(new Dimension(300, 30));
+        panelRoleRevertSave.setMinimumSize(new Dimension(300, 30));
+        panelRoleRevertSave.setMaximumSize(new Dimension(300, 30));
+        panelRoleRevertSave.setLayout(new BoxLayout(panelRoleRevertSave, BoxLayout.X_AXIS));
+        panelEditJob.add(panelRoleRevertSave);
+        
+        buttonRoleRevert = new JButton("Revert");
+        buttonRoleRevert.setFocusable(false);
+        buttonRoleRevert.setAlignmentX(Component.RIGHT_ALIGNMENT);
+        buttonRoleRevert.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		updateRoleFormValues(listRolesSelection);
+        		updateRoleValues();
         	}
         });
-        btnRoleRevert.setFocusable(false);
-        btnRoleRevert.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        panelRoleControl.add(btnRoleRevert);
+        panelRoleRevertSave.add(buttonRoleRevert);
         
-        btnRoleSave = new JButton("Save");
-        btnRoleSave.addActionListener(new ActionListener() {
+        buttonRoleSave = new JButton("Save");
+        buttonRoleSave.setFocusable(false);
+        buttonRoleSave.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		saveChangedJobRole((JobRole) listRolesSelection);
+        		saveChangedJob((JobRole) roleSelectedFromList);
         	}
         });
-        btnRoleSave.setFocusable(false);
-        panelRoleControl.add(btnRoleSave);
+        panelRoleRevertSave.add(buttonRoleSave);
+        
+		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+		// New role 
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
+        
+        panelNewJob = new JPanel();
+        panelNewJob.setPreferredSize(new Dimension(300, 145));
+        panelNewJob.setMinimumSize(new Dimension(300, 145));
+        panelNewJob.setMaximumSize(new Dimension(300, 145));
+        panelNewJob.setLayout(new BoxLayout(panelNewJob, BoxLayout.Y_AXIS));
+        add(panelNewJob);
+        
+        panel = new JPanel();
+        panel.setBorder(new EmptyBorder(5, 0, 0, 0));
+        panel.setPreferredSize(new Dimension(300, 25));
+        panel.setMinimumSize(new Dimension(300, 25));
+        panel.setMaximumSize(new Dimension(300, 25));
+        panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+        panelNewJob.add(panel);
+        
+        label = new JLabel("New Job");
+        label.setPreferredSize(new Dimension(140, 20));
+        label.setMinimumSize(new Dimension(140, 20));
+        label.setMaximumSize(new Dimension(140, 20));
+        label.setBorder(new EmptyBorder(0, 10, 0, 10));
+        label.setFont(getFont().deriveFont(Font.BOLD));
+        panel.add(label);
         
 		//--------------------------------------//
+		// Job
+		//--------------------------------------//
+        
+        panelJob = new JPanel();
+        panelJob.setPreferredSize(new Dimension(300, 30));
+        panelJob.setMinimumSize(new Dimension(300, 30));
+        panelJob.setMaximumSize(new Dimension(300, 30));
+        panelJob.setLayout(new BoxLayout(panelJob, BoxLayout.X_AXIS));
+        panelNewJob.add(panelJob);
+        
+        labelJob = new JLabel("Job");
+        labelJob.setBorder(new EmptyBorder(0, 10, 0, 10));
+        labelJob.setMaximumSize(new Dimension(100, 16));
+        labelJob.setMinimumSize(new Dimension(100, 16));
+        labelJob.setPreferredSize(new Dimension(100, 16));
+        panelJob.add(labelJob);
+        
+        comboBoxJob = new JComboBox<String>(jobComboBoxModel);
+        comboBoxJob.setFocusable(false);
+        comboBoxJob.setPreferredSize(new Dimension(190, 20));
+        comboBoxJob.setMinimumSize(new Dimension(190, 20));
+        comboBoxJob.setMaximumSize(new Dimension(190, 20));
+        comboBoxJob.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		jobSelectedFromComboBox = (String) comboBoxJob.getSelectedItem();
+        		updateWorkplaceValues();
+        	}
+        });
+        panelJob.add(comboBoxJob);
+        
+		//--------------------------------------//
+		// Workplace
+		//--------------------------------------//
+        
+        panelWorkplace = new JPanel();
+        panelWorkplace.setPreferredSize(new Dimension(300, 30));
+        panelWorkplace.setMaximumSize(new Dimension(300, 30));
+        panelWorkplace.setMinimumSize(new Dimension(300, 30));
+        panelWorkplace.setLayout(new BoxLayout(panelWorkplace, BoxLayout.X_AXIS));
+        panelNewJob.add(panelWorkplace);
+        
+        labelWorkplace = new JLabel("Workplace");
+        labelWorkplace.setBorder(new EmptyBorder(0, 10, 0, 10));
+        labelWorkplace.setPreferredSize(new Dimension(100, 16));
+        labelWorkplace.setMinimumSize(new Dimension(100, 16));
+        labelWorkplace.setMaximumSize(new Dimension(100, 16));
+        panelWorkplace.add(labelWorkplace);
+        
+        comboBoxWorkplace = new JComboBox<BuildingInterface>(workplaceComboBoxModel);
+        comboBoxWorkplace.setPreferredSize(new Dimension(190, 20));
+        comboBoxWorkplace.setMinimumSize(new Dimension(190, 20));
+        comboBoxWorkplace.setMaximumSize(new Dimension(190, 20));
+        comboBoxWorkplace.setFocusable(false);
+        comboBoxWorkplace.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		workplaceSelectedFromComboBox = (BuildingInterface) comboBoxWorkplace.getSelectedItem();
+        	}
+        });
+        comboBoxWorkplace.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 17900884575341448L;
+			@Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (renderer instanceof JLabel && value instanceof BuildingInterface) {
+                    ((JLabel) renderer).setText(((BuildingInterface) value).getName());
+                }
+                return renderer;
+            }
+        });
+        panelWorkplace.add(comboBoxWorkplace);
+        
+		//--------------------------------------//
+		// Shift
+		//--------------------------------------//
+        
+        panelShift2 = new JPanel();
+        panelShift2.setPreferredSize(new Dimension(300, 30));
+        panelShift2.setMaximumSize(new Dimension(300, 30));
+        panelShift2.setMinimumSize(new Dimension(300, 30));
+        panelShift2.setLayout(new BoxLayout(panelShift2, BoxLayout.X_AXIS));
+        panelNewJob.add(panelShift2);
+        
+        labelShift2 = new JLabel("Shift");
+        labelShift2.setPreferredSize(new Dimension(100, 16));
+        labelShift2.setMinimumSize(new Dimension(100, 16));
+        labelShift2.setMaximumSize(new Dimension(100, 16));
+        labelShift2.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelShift2.add(labelShift2);
+        
+        labelStart2 = new JLabel("Start");
+        labelStart2.setBorder(new EmptyBorder(0, 0, 0, 5));
+        panelShift2.add(labelStart2);
+        
+        spinnerStart2 = new JSpinner();
+        spinnerStart2.setPreferredSize(new Dimension(40, 20));
+        spinnerStart2.setMinimumSize(new Dimension(40, 20));
+        spinnerStart2.setMaximumSize(new Dimension(40, 20));
+        panelShift2.add(spinnerStart2);
+        
+        labelEnd2 = new JLabel("End");
+        labelEnd2.setBorder(new EmptyBorder(0, 15, 0, 5));
+        panelShift2.add(labelEnd2);
+        
+        spinnerEnd2 = new JSpinner();
+        spinnerEnd2.setPreferredSize(new Dimension(40, 20));
+        spinnerEnd2.setMinimumSize(new Dimension(40, 20));
+        spinnerEnd2.setMaximumSize(new Dimension(40, 20));
+        spinnerEnd2.setValue(12);
+        panelShift2.add(spinnerEnd2);
+        
+		//--------------------------------------//
+		// Add
+		//--------------------------------------//
+        
+        panelAdd = new JPanel();
+        panelAdd.setPreferredSize(new Dimension(300, 30));
+        panelAdd.setMinimumSize(new Dimension(300, 30));
+        panelAdd.setMaximumSize(new Dimension(300, 30));
+        panelAdd.setLayout(new BoxLayout(panelAdd, BoxLayout.X_AXIS));
+        panelNewJob.add(panelAdd);
+        
+        buttonAdd = new JButton("Add");
+        buttonAdd.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		saveNewJob();
+        	}
+        });
+        buttonAdd.setFocusable(false);
+        buttonAdd.setAlignmentX(1.0f);
+        panelAdd.add(buttonAdd);
+        
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 		// Finish setup
-		//--------------------------------------//
+        //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 		
-        // Disable the buttons until a list item is selected
-        toggleButtonAvailability(false);
-        // Disable the role editor until an occupation is selected
-        toggleRoleEditorAvailability(false);
+        // Make sure that there is a building shown (if one exists) for whatever role is selected
+        jobSelectedFromComboBox = (String) comboBoxJob.getSelectedItem();
+        // Disable the buttons until a Person is selected
+        toggleButtons(false);
+        // Disable the job editor until a JobRole is selected
+        toggleEditJob(false);
+        // Disable the new job form
+        toggleNewJob(false);
 	}
 	
 	//============================================================================//
@@ -674,16 +891,24 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
                     peopleListModel.addElement((Person) evt.getNewValue());
                 }
             }
+            // A building has been added or removed from the combo box list
+            if (DataModel.BUILDINGS.equals(evt.getPropertyName())) {
+            	// Rather than updating the model directly, use this method.
+            	// For some reason you can't iterate over the whole model. Since we need to show/hide
+            	// buildings based on which role is selected, that is a problem.
+            	updateWorkplaceValues();
+            }
         }
-        if (evt.getSource() == listPeopleSelection) {
+        if (evt.getSource() == personSelectedFromList) {
         	if (Person.STATE.equals(evt.getPropertyName())) {
-        		updatePersonFormValues(listPeopleSelection);
+        		updatePersonValues();
         	}
         	if (Person.ROLES.equals(evt.getPropertyName())) {
                 if (evt.getOldValue() != null && evt.getNewValue() == null) {
                     roleListModel.removeElement(evt.getOldValue());
-                    if (listRolesSelection == evt.getOldValue()) {
-                    	setRoleFormBlank();
+                    if (roleSelectedFromList == evt.getOldValue()) {
+                    	toggleEditJob(false);
+                    	setEditJobBlank();
                     }
                 } else if (evt.getOldValue() == null && evt.getNewValue() != null) {
                     roleListModel.addElement((RoleInterface) evt.getNewValue());
@@ -708,48 +933,88 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	// Saves
 	//--------------------------------------//
 	
-	private void saveChangedPerson(Person p) {
-		p.setName(textName.getText());
+	/**
+	 * When the save button is clicked, this code saves the changed data about the person
+	 */
+	private void saveChangedPerson() {
+		personSelectedFromList.setName(textName.getText());
 		try {
 			textCash.commitEdit();
 		} catch (ParseException e) {}
-		p.setCash(Integer.parseInt(textCash.getValue().toString()));
+		personSelectedFromList.setCash(Integer.parseInt(textCash.getValue().toString()));
 		listPeople.repaint();
 	}
 	
-	private void saveChangedJobRole(JobRoleInterface r) {
+	private void saveChangedJob(JobRoleInterface r) {
 		try {
-			spnShiftStart.commitEdit();
-			spnShiftEnd.commitEdit();
+			spinnerStart1.commitEdit();
+			spinnerEnd1.commitEdit();
 		} catch (ParseException e) {}
-		r.setShift(Integer.parseInt(spnShiftStart.getValue().toString()), Integer.parseInt(spnShiftEnd.getValue().toString()));
+		r.setShift((Integer) spinnerStart1.getValue(), (Integer) spinnerEnd1.getValue());
+	}
+	
+	private void saveNewJob() {
+		if (jobSelectedFromComboBox != null && workplaceSelectedFromComboBox != null) {
+			try {
+				spinnerStart2.commitEdit();
+				spinnerEnd2.commitEdit();
+			} catch (ParseException e) {}
+			try {
+				Class<?> c0 = Class.forName(jobSelectedFromComboBox);
+				Class<?> c1 = Class.forName(workplaceSelectedFromComboBox.getBuildingClassName());
+				Constructor<?> r0 = c0.getConstructor(c1, Integer.TYPE, Integer.TYPE);
+				JobRole j0 = (JobRole) r0.newInstance(workplaceSelectedFromComboBox, (Integer) spinnerStart2.getValue(), (Integer) spinnerEnd2.getValue());
+				personSelectedFromList.setOccupation(j0);
+			} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+				e.printStackTrace();
+			}
+			btnHasJob.setIcon(job);
+			toggleNewJob(false);
+			setNewJobBlank();
+		}
 	}
 	
 	//--------------------------------------//
 	// Toggle button handlers
 	//--------------------------------------//
 	
-	private void togglePersonCar(Person p) {
-		if (p.getCar() == null) {
-			CarAgent c = new CarAgent(p.getHome(), p);
-			CarAnimation ca = new CarAnimation(c, p.getHome());
+	private void togglePersonCar() {
+		if (personSelectedFromList.getCar() == null) {
+			CarAgent c = new CarAgent(personSelectedFromList.getHome(), personSelectedFromList);
+			CarAnimation ca = new CarAnimation(c, personSelectedFromList.getHome());
 			c.setAnimation(ca);
 			Application.getMainFrame().cityView.addAnimation(ca);
+			btnHasCar.setIcon(car);
 		} else {
-			p.getCar().stopThread();
-			CarAnimation ca = (CarAnimation) p.getCar().getAnimation();
+			personSelectedFromList.getCar().stopThread();
+			CarAnimation ca = (CarAnimation) personSelectedFromList.getCar().getAnimation();
 			Application.getMainFrame().cityView.removeAnimation(ca);
-			p.setCar(null);
+			personSelectedFromList.setCar(null);
+			btnHasCar.setIcon(nocar);
 		}
 	}
 	
-	private void togglePersonHome(Person p) {
-		// TODO
+	private void togglePersonHome() { // TODO
+		if (btnHasHouse.getIcon().equals(house)) {
+			btnHasHouse.setIcon(apartment);
+		} else {
+			btnHasHouse.setIcon(house);
+		}
+		//listPeopleSelection;
 		return;
 	}
 	
-	private void togglePersonJob(Person p) {
-		// TODO
+	private void togglePersonJob() {
+		Person p = personSelectedFromList;
+		if (p.getOccupation() != null) {
+			p.setOccupation(null);
+			// Must check to see if it worked (can't remove while active)
+			if (p.getOccupation() == null)
+				btnHasJob.setIcon(nojob);
+		} else {
+			setNewJobBlank();
+			toggleNewJob(true);
+		}
 		return;
 	}
 	
@@ -761,7 +1026,12 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	// Update forms
 	//--------------------------------------//
     
-	private void updatePersonFormValues(Person p) {
+	/**
+	 * When a new Person is selected (or the selected person changes) this code updates the data
+	 * When the revert button is clicked, this code loads the current data about the person
+	 */
+	private void updatePersonValues() {
+		Person p = personSelectedFromList;
 		labelStateValue.setText(p.getState().toString());
 		textName.setText(p.getName());
 		textCash.setValue(p.getCash());
@@ -789,25 +1059,37 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		for (RoleInterface r : p.getRoles()) {
 			roleListModel.addElement(r);
 		}
-		toggleButtonAvailability(true);
+		toggleButtons(true);
 	}
 	
-	private void updateRoleFormValues(RoleInterface r) {
+	private void updateRoleValues() {
+		RoleInterface r = roleSelectedFromList;
 		labelRoleStateValue.setText(r.getStateString());
 		labelRoleActiveValue.setText(String.valueOf(r.getActive()));
 		labelRoleActivityValue.setText(String.valueOf(r.getActivity()));
 		if (r instanceof JobRoleInterface) {
 			JobRoleInterface jr = (JobRole) r;
-			toggleRoleEditorAvailability(true);
-			labelRoleSalaryValue.setText(currencyFormat.format(jr.getSalary()));
+			toggleEditJob(true);
+			labelSalaryValue.setText(currencyFormat.format(jr.getSalary()));
 			try {
-				spnShiftStart.commitEdit();
-				spnShiftEnd.commitEdit();
+				spinnerStart1.commitEdit();
+				spinnerEnd1.commitEdit();
 			} catch (ParseException e) {}
-			spnShiftStart.setValue(jr.getShiftStart());
-			spnShiftEnd.setValue(jr.getShiftEnd());
+			spinnerStart1.setValue(jr.getShiftStart());
+			spinnerEnd1.setValue(jr.getShiftEnd());
 		} else {
-			toggleRoleEditorAvailability(false);
+			toggleEditJob(false);
+		}
+	}
+	
+	private void updateWorkplaceValues() {
+		workplaceComboBoxModel.removeAllElements();
+		if (jobSelectedFromComboBox != null) {
+			for (BuildingInterface b : Application.CityMap.getBuildings()) {
+				if (b.getWorkerRoleClassNames().contains(jobSelectedFromComboBox)) {
+					workplaceComboBoxModel.addElement(b);
+				}
+			}
 		}
 	}
 	
@@ -815,7 +1097,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	// Blank forms
 	//--------------------------------------//
 	
-	private void setPersonFormBlank() {
+	private void setEditPersonBlank() {
 		labelStateValue.setText("null");
 		textName.setText("");
 		textCash.setText("");
@@ -823,45 +1105,54 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		btnHasHouse.setIcon(house);
 		btnHasJob.setIcon(nojob);
 		roleListModel.clear();
-		toggleButtonAvailability(false);
-		setRoleFormBlank();
+		toggleButtons(false);
+		setEditJobBlank();
 	}
 	
-	private void setRoleFormBlank() {
+	private void setEditJobBlank() {
 		labelRoleStateValue.setText("null");
 		labelRoleActiveValue.setText("null");
 		labelRoleActivityValue.setText("null");
-		labelRoleSalaryValue.setText("null");
-		toggleRoleEditorAvailability(false);
+		labelSalaryValue.setText("null");
+		toggleEditJob(false);
+	}
+	
+	private void setNewJobBlank() {
+		// Currently nothing to set
+		return;
 	}
 	
 	//--------------------------------------//
 	// Toggle views
 	//--------------------------------------//
 	
-	private void toggleButtonAvailability(boolean b) {
+	private void toggleButtons(boolean b) {
 		btnRevert.setEnabled(b);
 		btnSave.setEnabled(b);
+		btnHouse.setEnabled(false);
+		btnWork.setEnabled(false);
 		btnHasCar.setEnabled(b);
 		btnHasHouse.setEnabled(false);
 		btnHasJob.setEnabled(b);
-		btnHouse.setEnabled(false);
-		btnWork.setEnabled(false);
-		if (b && listPeopleSelection != null) {
-			if (listPeopleSelection.getHome() != null) {
+		
+		if (b && personSelectedFromList != null) {
+			if (personSelectedFromList.getHome() != null) {
 				btnHouse.setEnabled(b);
 				btnHasHouse.setEnabled(b);
 			}
-			if (listPeopleSelection.getOccupation() != null) {
+			if (personSelectedFromList.getOccupation() != null) {
 				btnWork.setEnabled(b);
 			}
 		}
 	}
 	
-	private void toggleRoleEditorAvailability(boolean b) {
-		panelSalary.setVisible(b);
-		panelShift.setVisible(b);
-		panelRoleControl.setVisible(b);
+	private void toggleEditJob(boolean b) {
+		panelEditJob.setVisible(b);
+	}
+	
+	private void toggleNewJob(boolean b) {
+		updateWorkplaceValues();
+		panelNewJob.setVisible(b);
 	}
 
 }

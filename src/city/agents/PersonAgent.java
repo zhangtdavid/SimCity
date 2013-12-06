@@ -122,8 +122,13 @@ public class PersonAgent extends Agent implements Person {
 		// Go to work	
 		if (state == STATES.goingToWork) {
 			if (processTransportationArrival()) {
-				occupation.setActive();
-				setState(STATES.atWork);
+				// The occupation could have been removed while going to work
+				if (occupation != null) {
+					occupation.setActive();
+					setState(STATES.atWork);
+				} else {
+					setState(STATES.leavingWork);
+				}
 				return true;
 			}
 		} else if (shouldGoToWork()) {
@@ -133,7 +138,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Leave work and go to daily tasks
 		if (state == STATES.leavingWork) {
-			if (!occupation.getActive()) {
+			if (occupation == null || !occupation.getActive()) {
 				state = pickDailyTask();
 				performDailyTaskAction();
 				return true;
@@ -540,8 +545,20 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setOccupation(JobRoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		occupation = r;
-		if (r != null) { addRole(r); }
+		if (r != null) {
+			// Giving an occupation
+			this.occupation = r;
+			this.addRole(r);
+		} else {
+			// Taking away an occupation
+			if (this.occupation.getActive()) {
+				// The occupation should not be working when it is removed
+				throw new IllegalStateException();
+			} else {
+				removeRole(occupation);
+				occupation = null;
+			}
+		}
 	}
 	
 	@Override
