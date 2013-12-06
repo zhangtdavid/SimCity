@@ -241,8 +241,9 @@ public class PersonAgent extends Agent implements Person {
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
 				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
-				System.out.println("in method sleep");
+				
 				homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
+				
 				setState(STATES.atSleep);
 				return false;
 			}
@@ -394,6 +395,7 @@ public class PersonAgent extends Agent implements Person {
 	/**
 	 * Has the person cook and eat a meal at home.
 	 * Assume they are already at home when this is called
+	 * IMPORTANT: also assumes there is food in the refrigerator.
 	 * @throws InterruptedException 
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
@@ -402,8 +404,27 @@ public class PersonAgent extends Agent implements Person {
 		//...then that means the gui sent guiAtDestination, releasing the semaphore
 		//BTW function was intentionally designed to combine 3 gui steps into 1 action.
 		//The person definitely knows that he has food in the refrigerator.
-		homeAnimation.setAcquired(); // repeat
-		homeAnimation.cookAndEatFood();
+		homeAnimation.setAcquired(); // tell the animation we're going to lock ourselves...
+		FOOD_ITEMS toEat = null;
+		HashMap<FOOD_ITEMS, Integer> foodNew = new HashMap<FOOD_ITEMS, Integer>();
+		if(this.home.getFoodItems().get(FOOD_ITEMS.chicken) > 0){
+			toEat = FOOD_ITEMS.chicken;
+			foodNew.put(FOOD_ITEMS.chicken, this.home.getFoodItems().get(FOOD_ITEMS.chicken)-1); // lower # of chicken by 1
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.salad) > 0){
+			toEat = FOOD_ITEMS.salad;
+			foodNew.put(FOOD_ITEMS.salad, this.home.getFoodItems().get(FOOD_ITEMS.salad)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.pizza) > 0){
+			toEat = FOOD_ITEMS.pizza;
+			foodNew.put(FOOD_ITEMS.pizza, this.home.getFoodItems().get(FOOD_ITEMS.pizza)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.steak) > 0){
+			toEat = FOOD_ITEMS.steak;
+			foodNew.put(FOOD_ITEMS.steak, this.home.getFoodItems().get(FOOD_ITEMS.steak)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		} // if all these returned 0, how did we even get here??? impossible.
+		homeAnimation.cookAndEatFood(toEat.toString());
 		try{ 
 			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
 				atDestination.acquire(); //and freeze

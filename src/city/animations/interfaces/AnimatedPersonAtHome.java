@@ -1,5 +1,7 @@
 package city.animations.interfaces;
 
+import city.Application.FOOD_ITEMS;
+
 public interface AnimatedPersonAtHome {
 	// Data
 	public static enum Command {noCommand, AtDoor, InBed, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable, StationaryAtRef}; // r=residence; w=walking
@@ -30,7 +32,7 @@ public interface AnimatedPersonAtHome {
 	 * (To be called after verifyFood().)
 	 * This animation takes Person to the stove with item, (then timer - cook)
 	 */
-	public abstract void cookAndEatFood(); // to person's stove and table
+	public abstract void cookAndEatFood(String in); // to person's stove and table
 	
 	/**
 	 * Moves the person to the entrance of his room. Mostly meant for situations with rooms (apts)
@@ -56,7 +58,8 @@ public interface AnimatedPersonAtHome {
 	
 	public void setCoords(int x, int y);
 
-    
+	public void setGraphicStatus(String in);
+
     // Utilities
 
 	

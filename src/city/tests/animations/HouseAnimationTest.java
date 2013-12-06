@@ -177,7 +177,7 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.updatePosition(); // now done with going to refrigerator.
 		
 		homeAnimation.setAcquired(); // then the person would tell the animation to cookAndEatFood after acquiring the semaphore...
-		homeAnimation.cookAndEatFood(); 
+		homeAnimation.cookAndEatFood(FOOD_ITEMS.steak.toString()); 
 		assertEquals("Command of home animation should be ToStove", homeAnimation.getCommand(), Command.ToStove.toString()); // STATES confirmed
 		homeAnimation.setCoords(HousePanel.HSX, HousePanel.HSY);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
