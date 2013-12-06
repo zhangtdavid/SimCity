@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.Comparator;
 
 import city.bases.interfaces.AnimationInterface;
 import city.gui.exteriors.CityViewBuilding;
@@ -57,4 +58,16 @@ public class CitySidewalk extends CityViewBuilding {
 		}
 		return false;
 	}
+	
+//	// Utilities
+//	
+//	public int compareTo(CitySidewalk rhs) {
+//		
+//	}
+//	
+//	public static Comparator<CitySidewalk> CitySidewalkComparator = new Comparator<CitySidewalk>() {
+//		public int compare(CitySidewalk sidewalk1, CitySidewalk sidewalk2) {
+//			String
+//		}
+//	}
 }

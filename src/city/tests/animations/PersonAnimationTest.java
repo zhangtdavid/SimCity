@@ -2,6 +2,8 @@ package city.tests.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.ArrayList;
+import java.util.List;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -66,91 +68,102 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
 			}
+			List<CitySidewalk> potentialSidewalks = new ArrayList<CitySidewalk>();
 			CitySidewalk nextSidewalk = null;
 			switch(directionOfTravel) {
 			case NORTH:
 				System.out.println("North");
-				nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getX() > xPos) {
-						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					}
-					else if(endSidewalk.getX() < xPos) {
-						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					yPos--;
+					System.out.println("Chose north");
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					System.out.println("Chose east");
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					System.out.println("Chose west");
+					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() >= yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case EAST:
 				System.out.println("East");
-				nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getY() > yPos) {
-						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					}
-					else if(endSidewalk.getY() < yPos) {
-						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					xPos++;
+					System.out.println("Chose east");
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					System.out.println("Chose north");
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					System.out.println("Chose south");
+					break;
 				}
 				if(nextSidewalk.getX() <= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case SOUTH:
-				nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getX() > xPos) {
-						nextSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					}
-					else if(endSidewalk.getX() < xPos) {
-						nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				System.out.println("South");
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
 					yPos++;
+					System.out.println("Chose south");
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
+					System.out.println("Chose east");
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
+					System.out.println("Chose west");
+					break;
 				}
-
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() <= yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case WEST:
-				xPos--;
-				nextSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
-				if(nextSidewalk == null) { 
-					if(endSidewalk.getY() > yPos) {
-						nextSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					}
-					else if(endSidewalk.getY() < yPos) {
-						nextSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
-						directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					}
-					else
-						atDestinationRoad = true;
-				} else {
+				System.out.println("West");
+				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
+				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
+				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
+				switch(potentialSidewalks.indexOf(nextSidewalk)) {
+				case 0:
+					System.out.println("Chose west");
 					xPos--;
+					break;
+				case 1:
+					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
+					System.out.println("Chose south");
+					break;
+				case 2:
+					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
+					System.out.println("Chose north");
+					break;
 				}
 				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			}
-//			if(nextSidewalk.getX() == xPos && nextSidewalk.getY() == yPos)
-//				currentSidewalk = nextSidewalk;
 			if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
 			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
