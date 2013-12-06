@@ -23,9 +23,13 @@ public class HouseResidentAnimation extends Animation implements
 	public static boolean beingTested;
 	private int xDestination, yDestination;
 	private Person person = null;
-	private String orderIcon = "";
+	private String status = "";
 	private Command command = Command.noCommand;
 	private boolean personSemaphoreIsAcquired;
+	@SuppressWarnings("unused")
+	private boolean isAtHome; // to know whether to move the graphic out, or to bring it in
+	private boolean leaving;
+	private String foodToEat;
 	public Timer timer = new Timer(); // set public for testing (can set timer
 										// events as activated)
 
@@ -33,11 +37,9 @@ public class HouseResidentAnimation extends Animation implements
 	public HouseResidentAnimation(Person p) {
 		person = p;
 		xDestination = HousePanel.HDX;
-		xDestination = HousePanel.HDY;
-		xPos = HousePanel.HDX; // the door is in the front center bottom of the
-								// house panel
-		yPos = HousePanel.HDY; // so start from a little outside the door (drawn
-								// from top to bottom, so can't see)
+		yDestination = HousePanel.HDY+10;
+		xPos = HousePanel.HDX; 
+		yPos = HousePanel.HDY+10;
 	}
 
 	// Update position (Drawing)
@@ -53,75 +55,85 @@ public class HouseResidentAnimation extends Animation implements
 		else if (yPos > yDestination)
 			yPos--;
 
-		// MSG back to Person
-		// the boolean exists so we don't release the semaphore more than once, hopefully.
-		if (xPos == xDestination && yPos == yDestination
-				&& personSemaphoreIsAcquired) {
-			if(command == Command.noCommand){ // if the person isn't doing anything...
-				command = Command.ToDoor; // by default, we'll push the person to the door.
-			}
+		/*Note that if leaving == true, the semaphore has been released
+		This means that this animation can be interrupted, beautiful!
+		e.g. after you eat, gui will head towards room entrance
+		but will get interrupted by GoToSleep, which sets semaphore again.
+		and if there's truly nothing to do in the house after, gui leaves!*/
+		if(xPos == xDestination && yDestination == yPos && leaving){
+			if(command == Command.noCommand)  
+				this.goToRoom(person.getRoomNumber()); // go to room first
+			else goOutside(); // now go outside
+		}
+
+		//More standard animations.
+		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
+
+			//entering or leaving a building must begin with setting yourself to enter your room.
 			if (command == Command.ToRoomEntrance) {
 				//for a house, do nothing
+				status = "";
 				command = Command.noCommand;
-			} else if (command == Command.ToDoor) { // ToDoor: leave
+				
+				//going to bed
+			} else if (command == Command.ToBed) {
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
-					person.releaseSemaphoreFromAnimation();
-					person.print("Semaphore released, at door"); // test output
-				}
-				command = Command.AtDoor;
-				//TODO IF necessary, msg person that now stepping out of the building?
-			} else if (command == Command.ToBed) { // ToBed: sleep
-				personSemaphoreIsAcquired = false;
-				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
-					person.releaseSemaphoreFromAnimation();
+					person.guiAtDestination();
 					person.print("Semaphore released, at bed"); // test output
 				}
 				command = Command.InBed;
+				status = "zzz";				
+				//cook and eat food: 1st, go to refrigerator
 			} else if (command == Command.ToRef) { // ToRef: look for food
-				personSemaphoreIsAcquired = false;
+				command = Command.StationaryAtRef;
 				if(!beingTested){
-					person.releaseSemaphoreFromAnimation();
-					person.print("Semaphore released, at refrigerator"); // test output
+					person.print("At refrigerator"); // test output
 				}
 				person.print("At refrigerator");
-				command = Command.noCommand;
+				this.cookAndEatFood(foodToEat);
+				
+				//has left refrigerator, to stove
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
 				command = Command.StationaryAtStove;
-				
+				status = "Cooking " + foodToEat;
 				if (!beingTested) { // in practical conditions
 					timer.schedule(new TimerTask() { // timer untested. but its counterpart (instant) works (see below)
 						public void run() {
-							command = Command.ToTable;
+							cookAndEatFood(foodToEat);
 							person.print("Done cooking");
 						}
 					}, 3000);
-					
 				} else { // if you're in a test, skip the timer.
-					command = Command.ToTable;
-					cookAndEatFood();
+					cookAndEatFood(foodToEat);
 					person.print("Skipped timer; done cooking");
 				}
-				//do not set command to noCommand because we want to go straight to table.
+
+				//has left stove with food, to table
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				command = Command.StationaryAtTable;
-				
+				status = "Eating " + foodToEat;
 				if (!beingTested) { // in practical conditions
 					timer.schedule(new TimerTask() { // see above timer with regards to testing
 						public void run() {
-							command = Command.noCommand; // back to person
 							person.print("Done eating");
-							personSemaphoreIsAcquired = false; 
-							// now unlock semaphore and end.
-							person.releaseSemaphoreFromAnimation();
+							status = "";
+							// release semaphore now
+							personSemaphoreIsAcquired = false;  
+							person.guiAtDestination();
 							person.print("Semaphore released, at table, eating now (timer)");
+							//send him outside now.
+							leaving = true;
+							command = Command.noCommand;
 						}
 					}, 4000);
 
 				} else { // if you're in a test, skip the timer; skip the
 							// stationary phase
-					command = Command.noCommand;
 					person.print("Skipped timer; done eating");
+					status = "";
+					leaving = true;
+					command = Command.noCommand;
 				}
 			}
 		}
@@ -135,63 +147,68 @@ public class HouseResidentAnimation extends Animation implements
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, AnimatedPerson.WIDTH, AnimatedPerson.WIDTH);
-		g.setColor(Color.BLACK);
-		g.drawString(orderIcon, xPos, yPos + 10); // draw the orderIcon for the
-													// person; often will be "".
+		g.setColor(Color.WHITE);
+		g.drawString(status, xPos, yPos - 8); // draw string (status)
 	}
 
 	// Movement
 
 	@Override
 	public void goOutside() {
-		command = Command.ToDoor;
+		// if we really want to go outside (i.e. leave the house)
 		xDestination = HousePanel.HDX;
-		yDestination = HousePanel.HDY;
+		yDestination = HousePanel.HDY + 10;
+		leaving = false;
+		isAtHome = false;
+		person.guiAtDestination();
 	}
 
 	@Override
 	public void goToSleep() {
+		isAtHome = true;
+		leaving = false;
 		command = Command.ToBed;
-		xDestination = HousePanel.HBXi;
+		xDestination = HousePanel.HBXi-20;
 		yDestination = HousePanel.HBYi;
 	}
 
 	@Override
 	public void verifyFood() {
 		command = Command.ToRef;
-		xDestination = HousePanel.HRX;
+		xDestination = HousePanel.HRX+20;
 		yDestination = HousePanel.HRY;
 	}
 
 	@Override
-	public void cookAndEatFood() {
-		if (command == Command.ToTable) { 
+	public void cookAndEatFood(String in) {
+		foodToEat = in; // use this for setOrderIcon and stuff.
+		isAtHome = true;
+		if (command == Command.StationaryAtStove) { // sent here from stove
+			command = Command.ToTable;
+			status = "Going to eat " + foodToEat;
 			// get here after calling this 2nd time
 			// basically self-message
-			xDestination = HousePanel.HTX;
+			xDestination = HousePanel.HTX+20;
 			yDestination = HousePanel.HTY;
-		} else {
+		} else if(command == Command.StationaryAtRef){ // sent here from refrig
 			command = Command.ToStove;
-			xDestination = HousePanel.HSX;
+			status = "Found "  + foodToEat;
+			xDestination = HousePanel.HSX+20;
 			yDestination = HousePanel.HSY;
+		} else { // sent here from PersonAgent's desires
+			verifyFood();
 		}
 	}
 
 	@Override
 	public void goToRoom(int roomNo) {
+		status = "";
+		isAtHome = true;
 		command = Command.ToRoomEntrance;
-		// this does nothing for persons who live in houses.
+		xDestination = HousePanel.HDX;
+		yDestination = HousePanel.HDY-40;
+		// this does almost nothing for persons who live in houses.
 	}
-
-	/**
-	 * Moves the person to table to eat food. After cookAndEatFood(). This
-	 * animation takes Person to the table with item (then timer - eat).
-	 */
-	/*
-	 * @Override public void cookAndEatFoodPart2(){ xDestination =
-	 * AnimatedPerson.RES_KITCHEN_TABLE[0]; xDestination =
-	 * AnimatedPerson.RES_KITCHEN_TABLE[1]; }
-	 */
 
 	// Getters (for testing)
 	public String getCommand() {
@@ -201,6 +218,15 @@ public class HouseResidentAnimation extends Animation implements
 	@Override
 	public int[] getDestination() {
 		return new int[] { xDestination, yDestination };
+	}
+
+	@Override
+	public boolean getBeingTested() {
+		return HouseResidentAnimation.beingTested;
+	}
+	
+	public String getStatus() {
+		return this.status;
 	}
 
 	// Setters (for testing)
@@ -214,9 +240,14 @@ public class HouseResidentAnimation extends Animation implements
 	public void setAcquired() {
 		personSemaphoreIsAcquired = true;
 	}
-
+	
 	@Override
-	public boolean getBeingTested() {
-		return HouseResidentAnimation.beingTested;
+	public void setGraphicStatus(String in){
+		status = in;
+	}
+	
+	@Override
+	public void setAtHome() {
+		isAtHome = true;
 	}
 }

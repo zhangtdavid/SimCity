@@ -8,7 +8,7 @@ import city.gui.BuildingCard;
 public class CityViewMarket extends CityViewBuilding{	
 	public CityViewMarket(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
-		setRectangle(new Rectangle(x, y, 20, 20));
+		setRectangle(new Rectangle(x, y, 25, 25));
 	}
 
 	@Override

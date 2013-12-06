@@ -13,6 +13,7 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	Command command = Command.noCommand;
 	int xDestination, yDestination;
 	public boolean beingTested;
+	private boolean isAtHome;
 	
 	//Constructor
 	public AptResidentAnimation(Person p){
@@ -38,13 +39,13 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
-	public void cookAndEatFood() {
+	public void cookAndEatFood(String in) {
 		// TODO Auto-generated method stub
 		
 	}
-
+	
 	@Override
 	public void goOutside() {
 		// TODO Auto-generated method stub
@@ -83,5 +84,16 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 	@Override
 	public boolean getBeingTested() {
 		return this.beingTested ;
+	}
+
+	@Override
+	public void setGraphicStatus(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAtHome() {
+		isAtHome = true;		
 	}
 }

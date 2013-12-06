@@ -38,7 +38,7 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 	}
 
 	@Override
-	public void cookAndEatFood() {
+	public void cookAndEatFood(String in) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -89,6 +89,18 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 	public boolean getBeingTested() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void setGraphicStatus(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAtHome() {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
