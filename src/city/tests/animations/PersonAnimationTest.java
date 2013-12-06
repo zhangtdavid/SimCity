@@ -72,7 +72,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 			CitySidewalk nextSidewalk = null;
 			switch(directionOfTravel) {
 			case NORTH:
-				System.out.println("North");
+				// System.out.println("North");
 				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
@@ -80,22 +80,22 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					yPos--;
-					System.out.println("Chose north");
+					// System.out.println("Chose north");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					System.out.println("Chose east");
+					// System.out.println("Chose east");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					System.out.println("Chose west");
+					// System.out.println("Chose west");
 					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() >= yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case EAST:
-				System.out.println("East");
+				// System.out.println("East");
 				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
@@ -103,22 +103,22 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					xPos++;
-					System.out.println("Chose east");
+					// System.out.println("Chose east");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					System.out.println("Chose north");
+					// System.out.println("Chose north");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					System.out.println("Chose south");
+					// System.out.println("Chose south");
 					break;
 				}
 				if(nextSidewalk.getX() <= xPos && nextSidewalk.getY() == yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case SOUTH:
-				System.out.println("South");
+				// System.out.println("South");
 				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkEast(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
@@ -126,38 +126,38 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
 					yPos++;
-					System.out.println("Chose south");
+					// System.out.println("Chose south");
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.EAST;
-					System.out.println("Chose east");
+					// System.out.println("Chose east");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.WEST;
-					System.out.println("Chose west");
+					// System.out.println("Chose west");
 					break;
 				}
 				if(nextSidewalk.getX() == xPos && nextSidewalk.getY() <= yPos)
 					currentSidewalk = nextSidewalk;
 				break;
 			case WEST:
-				System.out.println("West");
+				// System.out.println("West");
 				potentialSidewalks.add(sidewalks.getSidewalkWest(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkSouth(currentSidewalk));
 				potentialSidewalks.add(sidewalks.getSidewalkNorth(currentSidewalk));
 				nextSidewalk = sidewalks.getSidewalkClosestTo(endSidewalk, potentialSidewalks);
 				switch(potentialSidewalks.indexOf(nextSidewalk)) {
 				case 0:
-					System.out.println("Chose west");
+					// System.out.println("Chose west");
 					xPos--;
 					break;
 				case 1:
 					directionOfTravel = DIRECTIONOFTRAVEL.SOUTH;
-					System.out.println("Chose south");
+					// System.out.println("Chose south");
 					break;
 				case 2:
 					directionOfTravel = DIRECTIONOFTRAVEL.NORTH;
-					System.out.println("Chose north");
+					// System.out.println("Chose north");
 					break;
 				}
 				if(nextSidewalk.getX() >= xPos && nextSidewalk.getY() == yPos)
@@ -166,9 +166,9 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 			}
 			if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
-			System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
-			System.out.println("Nextsidewalk: " + nextSidewalk.getX() + " " + nextSidewalk.getY());
-			System.out.println("Current Position:  " + xPos + " " + yPos);
+			// System.out.println("Currentsidewalk: " + currentSidewalk.getX() + " " + currentSidewalk.getY());
+			// System.out.println("Nextsidewalk: " + nextSidewalk.getX() + " " + nextSidewalk.getY());
+			// System.out.println("Current Position:  " + xPos + " " + yPos);
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {

@@ -9,7 +9,9 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
 import java.util.concurrent.Semaphore;
 
@@ -66,7 +68,7 @@ public class PersonAgent extends Agent implements Person {
 	private Date lastAteAtRestaurant;
 	private Date lastWentToSleep;
 	private String name;
-	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
+	private List<RoleInterface> roles = Collections.synchronizedList(new ArrayList<RoleInterface>());
 	private Semaphore atDestination = new Semaphore(0, true);
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
 	private STATES state; 
@@ -273,13 +275,15 @@ public class PersonAgent extends Agent implements Person {
 		//----------------/
 		
 		boolean blocking = false;
-		for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
-			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
+		synchronized(roles) {
+			for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
 			}
-			break;
 		}
 		
 		// Scheduler disposition
@@ -503,7 +507,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 	@Override
-	public ArrayList<RoleInterface> getRoles() {
+	public List<RoleInterface> getRoles() {
 		return roles;
 	}
 	
@@ -647,8 +651,45 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
+		RoleInterface i;
+		Iterator<RoleInterface> itr = roles.iterator();
+		while(itr.hasNext()) {
+			i = itr.next();
+			if (i.getClass().equals(r.getClass())) {
+				System.out.println("FOUND-----------------"); // TODO
+				itr.remove();
+			}
+		}
 		roles.add(r);
 		getPropertyChangeSupport().firePropertyChange(ROLES, null, r);
+	}
+	
+	@Override
+	public void forceSleep() {
+		synchronized(roles) {
+			for (RoleInterface r : roles) {
+				r.setInactive();
+			}
+		}
+		if (carPassengerRole != null) {
+			roles.remove(carPassengerRole);
+			carPassengerRole = null;
+		}
+		if (busPassengerRole != null) {
+			roles.remove(busPassengerRole);
+			busPassengerRole = null;
+		}
+		if (restaurantCustomerRole != null) {
+			roles.remove(restaurantCustomerRole);
+			restaurantCustomerRole = null;
+		}
+		if (marketCustomerRole != null) {
+			roles.remove(marketCustomerRole);
+			marketCustomerRole = null;
+		}
+		try {
+			actGoToSleep();
+		} catch (InterruptedException e) {}
 	}
 	
 	private void removeRole(RoleInterface r) {
@@ -663,7 +704,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		// print(Thread.currentThread().getStackTrace()[1].getMethodName()); TODO
 		if (car != null) {
 			carPassengerRole = new CarPassengerRole(car, destination);
 			carPassengerRole.setActive();
@@ -692,7 +733,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @param s the state to select on arrival
 	 */
 	private boolean processTransportationArrival() {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		// print(Thread.currentThread().getStackTrace()[1].getMethodName()); TODO
 		if (car != null && carPassengerRole != null) {
 			if(!carPassengerRole.getActive()) {
 				removeRole(carPassengerRole);

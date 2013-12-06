@@ -67,6 +67,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private final ImageIcon apartment = new ImageIcon(EditPersonTab.class.getResource("/icons/apartment.png"));
 	private final ImageIcon job = new ImageIcon(EditPersonTab.class.getResource("/icons/job.png"));
 	private final ImageIcon nojob = new ImageIcon(EditPersonTab.class.getResource("/icons/nojob.png"));
+	private final ImageIcon sleep = new ImageIcon(EditPersonTab.class.getResource("/icons/sleep.png"));
+	private final ImageIcon terminateWithExtremePrejudice = new ImageIcon(EditPersonTab.class.getResource("/icons/terminate.png"));
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
 	
 	private DataModel dataModel;
@@ -142,6 +144,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private JPanel panelEditJob;
 	private JLabel label;
 	private JPanel panel;
+	private JButton btnSleep;
+	private JButton btnTerminate;
 	
 	//============================================================================//
 	// Constructor        
@@ -457,6 +461,42 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnHasJob.setMinimumSize(new Dimension(55, 40));
         btnHasJob.setMaximumSize(new Dimension(55, 40));
         panelToggles.add(btnHasJob);
+        
+        // Sleep toggle
+        btnSleep = new JButton(sleep);
+        btnSleep.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		personSelectedFromList.forceSleep();
+        	}
+        });
+        btnSleep.setPreferredSize(new Dimension(55, 40));
+        btnSleep.setMinimumSize(new Dimension(55, 40));
+        btnSleep.setMaximumSize(new Dimension(55, 40));
+        btnSleep.setMargin(new Insets(2, 2, 2, 2));
+        btnSleep.setHorizontalTextPosition(SwingConstants.RIGHT);
+        btnSleep.setHorizontalAlignment(SwingConstants.LEFT);
+        btnSleep.setFocusable(false);
+        btnSleep.setEnabled(false);
+        btnSleep.setAlignmentX(0.5f);
+        panelToggles.add(btnSleep);
+        
+        // Terminate
+        btnTerminate = new JButton(terminateWithExtremePrejudice);
+        btnTerminate.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		// TODO
+        	}
+        });
+        btnTerminate.setPreferredSize(new Dimension(55, 40));
+        btnTerminate.setMinimumSize(new Dimension(55, 40));
+        btnTerminate.setMaximumSize(new Dimension(55, 40));
+        btnTerminate.setMargin(new Insets(2, 2, 2, 2));
+        btnTerminate.setHorizontalTextPosition(SwingConstants.RIGHT);
+        btnTerminate.setHorizontalAlignment(SwingConstants.LEFT);
+        btnTerminate.setFocusable(false);
+        btnTerminate.setEnabled(false);
+        btnTerminate.setAlignmentX(0.5f);
+        panelToggles.add(btnTerminate);
         
 		//--------------------------------------//
 		// Roles list      
@@ -1134,6 +1174,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		btnHasCar.setEnabled(b);
 		btnHasHouse.setEnabled(false);
 		btnHasJob.setEnabled(false);
+		btnSleep.setEnabled(b);
+		btnTerminate.setEnabled(b);
 		
 		if (b && personSelectedFromList != null) {
 			if (personSelectedFromList.getHome() != null) {

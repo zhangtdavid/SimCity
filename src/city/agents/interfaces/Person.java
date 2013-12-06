@@ -1,8 +1,8 @@
 package city.agents.interfaces;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import city.Application;
 import city.animations.interfaces.AnimatedPersonAtHome;
@@ -59,7 +59,7 @@ public interface Person extends AgentInterface {
 	public JobRoleInterface getOccupation();
 	public Resident getResidentRole();
 	public RoleInterface getRestaurantCustomerRole();
-	public ArrayList<RoleInterface> getRoles();
+	public List<RoleInterface> getRoles();
 	public STATES getState();
 	public PropertyChangeSupport getPropertyChangeSupport();
 	public int getRoomNumber();
@@ -82,5 +82,6 @@ public interface Person extends AgentInterface {
 	public void addRole(RoleInterface r);
 	public void acquireSemaphoreFromAnimation();
 	public void releaseSemaphoreFromAnimation();
+	public void forceSleep();
 	
 }

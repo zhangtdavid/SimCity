@@ -269,4 +269,10 @@ public class MockPerson extends MockAgent implements Person {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void forceSleep() {
+		// TODO Auto-generated method stub
+		
+	}
 }
