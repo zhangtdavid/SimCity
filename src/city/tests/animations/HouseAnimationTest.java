@@ -20,8 +20,8 @@ import city.gui.interiors.HousePanel;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
 import city.tests.animations.mocks.MockAnimatedPerson;
-import city.tests.mocks.MockBusStop;
-import city.tests.mocks.MockCityViewBuilding;
+import city.tests.buildings.mocks.MockBusStop;
+import city.tests.roles.mocks.MockCityViewBuilding;
 
 public class HouseAnimationTest extends TestCase {
 	

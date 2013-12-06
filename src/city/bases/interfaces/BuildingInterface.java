@@ -1,5 +1,6 @@
 package city.bases.interfaces;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import city.gui.BuildingCard;
@@ -26,7 +27,9 @@ public interface BuildingInterface {
 	public <T extends AnimationInterface> T getOccupyingRoleAnimation(RoleInterface r, Class<T> type);
 	public CityViewBuilding getCityViewBuilding();
 	public BuildingCard getPanel();
-	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles(); 
+	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles();
+	public ArrayList<String> getWorkerRoleClassNames();
+	public String getBuildingClassName();
 	
 	// Setters
 	
@@ -35,11 +38,13 @@ public interface BuildingInterface {
 	public void setCustomerAnimationName(String c);
 	public void setCityViewBuilding(CityViewBuilding b);
 	public void setPanel(BuildingCard b);
+	public void setBuildingClassName(String s);
 	
 	// Utilities 
 	
 	public void addOccupyingRole(RoleInterface r);
 	public void addOccupyingRole(RoleInterface r, AnimationInterface a);
+	public void addWorkerRoleName(String r);
 	public void removeOccupyingRole(RoleInterface r);
 	public boolean occupyingRoleExists(RoleInterface r);
 }
