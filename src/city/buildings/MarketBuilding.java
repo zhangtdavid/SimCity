@@ -62,6 +62,12 @@ public class MarketBuilding extends Building implements Market {
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		
 		super.setCash(1000);
+		
+		this.addWorkerRoleName("city.roles.MarketCashierRole");
+		this.addWorkerRoleName("city.roles.MarketDeliveryPersonRole");
+		this.addWorkerRoleName("city.roles.MarketEmployeeRole");
+		this.addWorkerRoleName("city.roles.MarketManagerRole");
+		this.setBuildingClassName("city.buildings.interfaces.Market");
 	}
 
 //  Getters

@@ -14,7 +14,6 @@ import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.animations.interfaces.RestaurantTimmsAnimatedCustomer;
 import city.animations.interfaces.RestaurantTimmsAnimatedWaiter;
 import city.bases.JobRole;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.interfaces.RestaurantTimms;
 import city.roles.interfaces.RestaurantTimmsCustomer;
 import city.roles.interfaces.RestaurantTimmsWaiter;
@@ -51,7 +50,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 * @param homePosition the index of the waiter, giving him a position to stand in when not working
 	 */
-	public RestaurantTimmsWaiterRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
+	public RestaurantTimmsWaiterRole(RestaurantTimms b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);

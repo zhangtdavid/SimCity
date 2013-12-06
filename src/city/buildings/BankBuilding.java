@@ -29,12 +29,13 @@ public class BankBuilding extends Building implements Bank {
 	public Date loanLastPaid;
 	public HashMap<Role, Animation> allRoles = new HashMap<Role, Animation>();
 	
-
-	
 	// Constructor
 	
 	public BankBuilding(String name, BankPanel panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
+		this.addWorkerRoleName("city.roles.BankManagerRole");
+		this.addWorkerRoleName("city.roles.BankTellerRole");
+		this.setBuildingClassName("city.buildings.interfaces.Bank");
 	}
 	
 	// Getters

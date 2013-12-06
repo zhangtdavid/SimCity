@@ -43,4 +43,14 @@ public class DataModel {
         people.remove(p);
         getPropertyChangeSupport().firePropertyChange(PEOPLE, p, null);
     }
+    
+    public void addBuilding(BuildingInterface b) {
+    	buildings.add(b);
+    	getPropertyChangeSupport().firePropertyChange(BUILDINGS, null, b);
+    }
+    
+    public void removeBuilding(BuildingInterface b) {
+       	buildings.remove(b);
+        getPropertyChangeSupport().firePropertyChange(BUILDINGS, b, null);
+    }
 }

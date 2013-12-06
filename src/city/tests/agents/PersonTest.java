@@ -24,6 +24,10 @@ import city.tests.roles.mocks.MockCityViewBuilding;
 import city.tests.roles.mocks.MockGenericJob;
 
 public class PersonTest extends TestCase {
+	
+	// IDEAS FOR TESTING
+	// - What happens if the occupation is removed on the way to work?
+	// 
 
 	// Application
 	private Date date;

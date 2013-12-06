@@ -62,6 +62,13 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
         
         setCash(1000);
+        
+		this.addWorkerRoleName("city.roles.RestaurantChungCashierRole");
+		this.addWorkerRoleName("city.roles.RestaurantChungCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantChungHostRole");
+		this.addWorkerRoleName("city.roles.RestaurantChungWaiterMessageCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantChungWaiterRevolvingStandRole");
+		this.setBuildingClassName("city.buildings.interfaces.RestaurantChung");
 	}
 	
 //	Getters

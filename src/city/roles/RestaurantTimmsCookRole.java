@@ -16,7 +16,6 @@ import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.bases.JobRole;
 import city.bases.Role;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.InternalMarketOrder;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
@@ -36,7 +35,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	
 	private Integer speed;
 	private Timer timer = new Timer();
-	private RestaurantTimmsBuilding rtb; 
+	private RestaurantTimms rtb; 
 	private List<Role> roles = new ArrayList<Role>(); // For market orders
 	private MarketCustomerDelivery marketCustomerDeliveryRole;
 	private static final int MARKET_ORDER_SIZE = 5;
@@ -51,7 +50,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
+	public RestaurantTimmsCookRole(RestaurantTimms b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);

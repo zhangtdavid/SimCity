@@ -942,6 +942,7 @@ public class Application {
 				list.add(b);
 				map.put(type, list);
 			}
+			model.addBuilding(b);
 			return b;
 		}
 
@@ -1007,8 +1008,15 @@ public class Application {
 		}
 
 		public static void clearMap() {
-
 			map.clear();
+		}
+		
+		public static ArrayList<BuildingInterface> getBuildings() {
+			ArrayList<BuildingInterface> list = new ArrayList<BuildingInterface>();
+			for (List<BuildingInterface> l : map.values()) {
+				list.addAll(l);
+			}
+			return list;
 		}
 	}
 
