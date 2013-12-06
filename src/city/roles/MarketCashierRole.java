@@ -12,6 +12,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application;
 import city.Application.FOOD_ITEMS;
+import city.agents.interfaces.Person;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
@@ -262,6 +263,12 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	
 //  Setters
 //	=====================================================================	
+	@Override
+	public void setPerson(Person p) {
+		super.setPerson(p);
+		market.getBankCustomer().setPerson(this.getPerson());
+	}
+	
 	@Override
 	public void setMarket(Market market) {
 		this.market = market;

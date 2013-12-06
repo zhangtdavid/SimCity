@@ -41,7 +41,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public void msgHereIsBill(int bill, int id) {
 		log.add(new LoggedEvent("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
-		System.out.println("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
+		print("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.s = MarketTransactionState.Processing;
 		mt.bill = bill;
@@ -51,7 +51,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
-		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
+		print("Market customerDelivery received msgPaymentReceived from Market Cashier.");
 		//	MarketTransaction mt = findMarketTransaction(id);
 		//	removeMarketTransactionFromList(mt); // this might have cause when cashier is adding to the list
 	}

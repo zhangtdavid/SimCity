@@ -56,12 +56,12 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 
         // Add items and their cooking times to a map
-		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
-		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));
-		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
-		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
+		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10));
+		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));
+		super.addFood(FOOD_ITEMS.salad, new Food("salad", 3, 6, 5, 10, 6));
+		super.addFood(FOOD_ITEMS.steak, new Food("steak", 12, 6, 5, 10, 16));
         
-        setCash(1000);
+        super.setCash(1000);
 	}
 	
 //	Getters

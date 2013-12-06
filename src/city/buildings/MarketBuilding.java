@@ -60,6 +60,7 @@ public class MarketBuilding extends Building implements Market {
 		prices.put(FOOD_ITEMS.steak, (16)/2);
 
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		bankCustomer.setActive();
 		
 		super.setCash(1000);
 	}

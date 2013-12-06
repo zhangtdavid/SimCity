@@ -17,6 +17,7 @@ import city.buildings.interfaces.RestaurantChung;
 import city.roles.RestaurantChungCookRole;
 import city.roles.interfaces.RestaurantChungCook.MarketOrderState;
 import city.tests.animations.mocks.MockRestaurantChungAnimatedCook;
+import city.tests.mocks.MockBankManager;
 import city.tests.mocks.MockPerson;
 import city.tests.mocks.MockRestaurantChungCashier;
 import city.tests.mocks.MockRestaurantChungCustomer;
@@ -34,10 +35,11 @@ import city.tests.mocks.MockRestaurantChungWaiterRevolvingStand;
  */
 public class RestaurantChungCookTest extends TestCase {
 	Bank bank;
-
 	RestaurantChung restaurantChung;
-
 	Market market;
+	
+//	MockPerson bankManagerPerson;
+//	MockBankManager bankManager;
 	
 	MockPerson cashierPerson;
 	MockRestaurantChungCashier cashier;
@@ -78,11 +80,14 @@ public class RestaurantChungCookTest extends TestCase {
 		market = new MarketBuilding("Market", null, null);
 		CityMap.addBuilding(BUILDING.market, market);
 
+//		bankManagerPerson = new MockPerson("BankManager");
+//		bankManager = new MockBankManager();
+//		bankManager.setPerson(bankManagerPerson);
+//		
 		cashierPerson = new MockPerson("Cashier");
-		cashier = new MockRestaurantChungCashier();
+		cashier = new MockRestaurantChungCashier(restaurantChung);
 		cashier.setPerson(cashierPerson);
 		cashier.setMarketCustomerDeliveryPaymentPerson();
-//		cashier.market = market;
 		
 		cookPerson = new MockPerson("Cook");
 		cook = new RestaurantChungCookRole(restaurantChung, 0, 12);
@@ -153,7 +158,7 @@ public class RestaurantChungCookTest extends TestCase {
 			e.printStackTrace();
 		}
 		
-		cook.runScheduler();	
+		cook.runScheduler();
 	}
 	
 //	public void testOneNormalCustomerScenario()	{
@@ -185,6 +190,7 @@ public class RestaurantChungCookTest extends TestCase {
 //		assertEquals("Cashier money should be 515.99. It's " + cashier.money + "instead", cashier.money, 515.99);
 //		
 //		cashier.runScheduler();
+	
 //		assertTrue("Cashier transactions should contain a transaction with state == Done. It doesn't.",
 //		cashier.transactions.get(0).getTransactionState() == TransactionState.Done);
 //		assertEquals("Cashier should give 0.00 in change. It doesn't", cashier.transactions.get(0).payment-cashier.transactions.get(0).price, 0.0);

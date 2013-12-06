@@ -1,14 +1,24 @@
 package city.tests;
 
 import junit.framework.TestCase;
+import city.Application.BUILDING;
+import city.Application.CityMap;
+import city.buildings.BankBuilding;
+import city.buildings.MarketBuilding;
+import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.gui.interiors.MarketPanel;
 import city.gui.interiors.RestaurantChungPanel;
 import city.roles.RestaurantChungCashierRole;
+import city.roles.RestaurantChungCookRole;
+import city.roles.interfaces.RestaurantChungCashier.TransactionState;
+import city.tests.animations.mocks.MockRestaurantChungAnimatedCook;
+import city.tests.mocks.MockBankManager;
 import city.tests.mocks.MockMarket;
 import city.tests.mocks.MockPerson;
+import city.tests.mocks.MockRestaurantChungCashier;
 import city.tests.mocks.MockRestaurantChungCook;
 import city.tests.mocks.MockRestaurantChungCustomer;
 import city.tests.mocks.MockRestaurantChungHost;
@@ -24,13 +34,12 @@ import city.tests.mocks.MockRestaurantChungWaiterRevolvingStand;
  * @author Monroe Ekilah
  */
 public class RestaurantChungCashierTest extends TestCase {
-	RestaurantChungPanel restaurantChungPanel;
 	RestaurantChung restaurantChung;
-
-	MarketPanel marketPanel;
 	Market market;
-	
 	Bank bank;
+
+	MockPerson bankManagerPerson;
+	MockBankManager bankManager;
 	
 	MockPerson cashierPerson;
 	RestaurantChungCashierRole cashier;
@@ -44,13 +53,14 @@ public class RestaurantChungCashierTest extends TestCase {
 	MockPerson hostPerson;
 	MockRestaurantChungHost host;
 	
-	MockPerson waiterMessageCookPerson;
+	MockPerson waiterMCPerson;
 	MockRestaurantChungWaiterMessageCook waiterMC;
 	
-	MockPerson waiterRevolvingStandPerson;	
+	MockPerson waiterRSPerson;	
 	MockRestaurantChungWaiterRevolvingStand waiterRS;
 	
-//	MockCustomer abnormCustomer;
+	MockPerson abnormCustomerPerson;
+	MockRestaurantChungCustomer abnormCustomer;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -58,103 +68,145 @@ public class RestaurantChungCashierTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+
+		// Bank must come first so the restaurant and market can create bankCustomerRoles
+		bank = new BankBuilding("Bank", null, null);	
+		CityMap.addBuilding(BUILDING.bank, bank);
+		
+		restaurantChung = new RestaurantChungBuilding("RestaurantChung", null, null);
+		CityMap.addBuilding(BUILDING.restaurant, restaurantChung);
+		
+		market = new MarketBuilding("Market", null, null);
+		CityMap.addBuilding(BUILDING.market, market);
+		
+		bankManagerPerson = new MockPerson("BankManager");
+		bankManager = new MockBankManager();
+		bankManager.setPerson(bankManagerPerson);
+		
+		cashierPerson = new MockPerson("Cashier");
 		cashier = new RestaurantChungCashierRole(restaurantChung, 0, 12);
+		cashier.setPerson(cashierPerson);
+		cashier.setMarketCustomerDeliveryPaymentPerson();
+		
+		cookPerson = new MockPerson("Cook");
 		cook = new MockRestaurantChungCook();
+		cook.setPerson(cookPerson);
+
+		customerPerson = new MockPerson("Customer"); 
 		customer = new MockRestaurantChungCustomer();
+		customer.setPerson(customerPerson);
+		
+		hostPerson = new MockPerson("Host"); 
 		host = new MockRestaurantChungHost();
+		host.setPerson(hostPerson);
+		
+		waiterMCPerson = new MockPerson("WaiterMC"); 
 		waiterMC = new MockRestaurantChungWaiterMessageCook();
+		waiterMC.setPerson(waiterMCPerson);
+		
+		waiterRSPerson = new MockPerson("WaiterRS");
 		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
-		market = new MockMarket("Market");
+		waiterRS.setPerson(waiterRSPerson);
+		
+		abnormCustomerPerson = new MockPerson("AbnormCustomer"); 
+		abnormCustomer = new MockRestaurantChungCustomer();
+		abnormCustomer.setPerson(abnormCustomerPerson);
+		
+		bank.setManager(bankManager);
+
+		restaurantChung.setRestaurantChungCashier(cashier);
+		restaurantChung.setRestaurantChungCook(cook);
+		restaurantChung.setRestaurantChungHost(host);
 	}	
 	/**
 	 * This tests the cashier under very simple terms: one customer is ready to pay the exact bill.
 	 */
-//	public void testOneNormalCustomerScenario()	{
-//		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
-//		assertEquals("Customer should have an empty log. It doesn't", customer.log.size(), 0);
-//		assertEquals("WaiterMessageCook should have an empty log. It doesn't", waiterMC.log.size(), 0);
-//		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);
-//
-//		cashier.msgComputeBill(waiterMC, customer, "Steak");
-//		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
-//		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
-//		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
-//		assertTrue("Cashier transactions should contain a transaction with state == Pending. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.Pending);
-//		
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == Calculating. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.Calculating);
-//		assertEquals("Cashier transactions should contain a transaction with price 15.99", cashier.transactions.get(0).price, 15.99);
-//		assertEquals("Waiter log should have 1 entry. It doesn't", waiter.log.size(), 1);
-//		assertTrue("Waiter log should have \"Waiter received msgHereIsBill\". The last event logged is " + waiter.log.getLastLoggedEvent().toString(), waiter.log.containsString("Waiter received msgHereIsBill"));
-//		
-//		cashier.msgHereIsPayment(customer, 16);
-//		assertEquals("Cashier log should have 2 entries. It doesn't", cashier.log.size(), 2);
-//		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
-//		assertEquals("Cashier payment variable should be 15.99. It's " + cashier.transactions.get(0).payment + "instead", cashier.transactions.get(0).payment, 15.99);
-//		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.ReceivedPayment);	
-//		assertEquals("Cashier money should be 515.99. It's " + cashier.money + "instead", cashier.money, 515.99);
-//		
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == Done. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.Done);
-//		assertEquals("Cashier should give 0.00 in change. It doesn't", cashier.transactions.get(0).payment-cashier.transactions.get(0).price, 0.0);
-//
-//		assertEquals("Customer log should have 1 entry. It doesn't", 1, customer.log.size());
-//		assertTrue("Customer log should have \"Customer received msgHereIsChange from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsChange from cashier"));
-//
-//		cashier.runScheduler();
-//		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);		
-//	}
-//	
-//	public void testOneAbnormalCustomerScenario() {
-//		assertEquals("Cashier should have 500.0. It doesn't", cashier.money, 500.0);
-//		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
-//		assertEquals("Customer should have an empty log. It doesn't", abnormCustomer.log.size(), 0);
-//		assertEquals("Waiter should have an empty log. It doesn't", waiter.log.size(), 0);
-//		assertEquals("Host should have an empty log. It doesn't", host.log.size(), 0);
-//		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);
-//				
-//		cashier.msgComputeBill(waiter, abnormCustomer, "Steak");
-//		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
-//		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
-//		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
-//		assertTrue("Cashier transactions should contain a transaction with state == Pending. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.Pending);
-//		
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == Calculating. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.Calculating);
-//		assertEquals("Cashier transactions should contain a transaction with price 15.99", cashier.transactions.get(0).price, 15.99);
-//		assertEquals("Waiter log should have 1 entry. It doesn't", waiter.log.size(), 1);
-//		assertTrue("Waiter log should have \"Waiter received msgHereIsBill\". The last event logged is " + waiter.log.getLastLoggedEvent().toString(), waiter.log.containsString("Waiter received msgHereIsBill"));
-//		
-//		cashier.msgHereIsPayment(abnormCustomer, 0.0);
-//		assertEquals("Cashier log should have 2 entries. It doesn't", cashier.log.size(), 2);
-//		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
-//		assertEquals("Cashier payment variable should be 0.0. It's " + cashier.transactions.get(0).payment + "instead", cashier.transactions.get(0).payment, 0.0);
-//		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.ReceivedPayment);	
-//		assertEquals("Cashier should have 500.0. It doesn't", cashier.money, 500.0);
-//		
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == InsufficientPayment. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.InsufficientPayment);
-//
-//		assertEquals("Abnorm Customer log should have 1 entry. It doesn't", abnormCustomer.log.size(), 1); // TODO Something is up here
-//		assertTrue("Abnorm Customer log should have \"Customer received msgHereIsChange from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsChange from cashier"));
-//
-//		cashier.runScheduler();
-//		assertTrue("Cashier transactions should contain a transaction with state == NotifiedHost. It doesn't.",
-//		cashier.transactions.get(0).getTransactionState() == TransactionState.NotifiedHost);
-//		assertEquals("Host log should have 1 entry. It doesn't", host.log.size(), 1);
-//		assertTrue("Host log should have \"Host received msgFlakeAlert\". The last event logged is " + host.log.getLastLoggedEvent().toString(), host.log.containsString("Host received msgFlakeAlert"));
-//		assertEquals("Cashier should note 15.99 in debt. It doesn't", cashier.transactions.get(0).price-cashier.transactions.get(0).payment, 15.99);
-//		assertEquals("Cashier should still have 1 transaction. It doesn't", cashier.transactions.size(), 1);
-//	}
-//	
+	public void testOneNormalCustomerScenario()	{
+		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
+		assertEquals("Customer should have an empty log. It doesn't", customer.log.size(), 0);
+		assertEquals("WaiterMessageCook should have an empty log. It doesn't", waiterMC.log.size(), 0);
+		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);
+
+		cashier.msgComputeBill(waiterMC, customer, "steak");
+		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
+		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
+		assertTrue("Cashier transactions should contain a transaction with state == Pending. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.Pending);
+		
+		cashier.runScheduler();
+		assertTrue("Cashier transactions should contain a transaction with state == Calculating. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.Calculating);
+		assertEquals("Cashier transactions should contain a transaction with price 16", cashier.transactions.get(0).getPrice(), 16);
+		assertEquals("Waiter log should have 1 entry. It doesn't", waiterMC.log.size(), 1);
+		assertTrue("Waiter log should have \"Waiter received msgHereIsBill\". The last event logged is " + waiterMC.log.getLastLoggedEvent().toString(), waiterMC.log.containsString("Waiter received msgHereIsBill"));
+		
+		cashier.msgHereIsPayment(customer, 16);
+		assertEquals("Cashier log should have 2 entries. It doesn't", cashier.log.size(), 2);
+		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
+		assertEquals("Cashier payment variable should be 16. It's " + cashier.transactions.get(0).getPayment() + "instead", cashier.transactions.get(0).getPayment(), 16);
+		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.ReceivedPayment);	
+		assertEquals("Cashier money should be 1016. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 1016);
+		
+		cashier.runScheduler();
+		assertTrue("Cashier transactions should contain a transaction with state == Done. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.Done);
+		assertEquals("Cashier should give 0 in change. It doesn't", cashier.transactions.get(0).getPayment()-cashier.transactions.get(0).getPrice(), 0);
+
+		assertEquals("Customer log should have 1 entry. It doesn't", 1, customer.log.size());
+		assertTrue("Customer log should have \"Customer received msgHereIsChange from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsChange from cashier"));
+
+		cashier.runScheduler();
+		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);		
+	}
+	
+	public void testOneAbnormalCustomerScenario() {
+		assertEquals("Cashier should have 500.0. It doesn't", restaurantChung.getCash(), 1000);
+		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
+		assertEquals("Customer should have an empty log. It doesn't", abnormCustomer.log.size(), 0);
+		assertEquals("Waiter should have an empty log. It doesn't", waiterMC.log.size(), 0);
+		assertEquals("Host should have an empty log. It doesn't", host.log.size(), 0);
+		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.transactions.size(), 0);
+				
+		cashier.msgComputeBill(waiterMC, abnormCustomer, "steak");
+		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
+		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.transactions.size(), 1);
+		assertTrue("Cashier transactions should contain a transaction with state == Pending. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.Pending);
+		
+		cashier.runScheduler();
+		assertTrue("Cashier transactions should contain a transaction with state == Calculating. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.Calculating);
+		assertEquals("Cashier transactions should contain a transaction with price 16", cashier.transactions.get(0).getPrice(), 16);
+		assertEquals("Waiter log should have 1 entry. It doesn't", waiterMC.log.size(), 1);
+		assertTrue("Waiter log should have \"Waiter received msgHereIsBill\". The last event logged is " + waiterMC.log.getLastLoggedEvent().toString(), waiterMC.log.containsString("Waiter received msgHereIsBill"));
+		
+		cashier.msgHereIsPayment(abnormCustomer, 0);
+		assertEquals("Cashier log should have 2 entries. It doesn't", cashier.log.size(), 2);
+		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgHereIsPayment"));
+		assertEquals("Cashier payment variable should be 0. It's " + cashier.transactions.get(0).getPayment() + "instead", cashier.transactions.get(0).getPayment(), 0);
+		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.ReceivedPayment);	
+		assertEquals("Cashier should have 1000. It doesn't", restaurantChung.getCash(), 1000);
+		
+		cashier.runScheduler();
+		assertTrue("Cashier transactions should contain a transaction with state == InsufficientPayment. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.InsufficientPayment);
+
+		assertEquals("Abnorm Customer log should have 1 entry. It doesn't", abnormCustomer.log.size(), 1); // TODO Something is up here
+		assertTrue("Abnorm Customer log should have \"Customer received msgHereIsChange from cashier\". The last event logged is " + abnormCustomer.log.getLastLoggedEvent().toString(), abnormCustomer.log.containsString("Customer received msgHereIsChange from cashier"));
+
+		cashier.runScheduler();
+		assertTrue("Cashier transactions should contain a transaction with state == NotifiedHost. It doesn't.",
+		cashier.transactions.get(0).getTransactionState() == TransactionState.NotifiedHost);
+		assertEquals("Host log should have 1 entry. It doesn't", host.log.size(), 1);
+		assertTrue("Host log should have \"Host received msgFlakeAlert\". The last event logged is " + host.log.getLastLoggedEvent().toString(), host.log.containsString("Host received msgFlakeAlert"));
+		assertEquals("Cashier should note 16 in debt. It doesn't", cashier.transactions.get(0).getPrice()-cashier.transactions.get(0).getPayment(), 16);
+		assertEquals("Cashier should still have 1 transaction. It doesn't", cashier.transactions.size(), 1);
+	}
+
 //	public void testOneNormalAndOneAbnormalCustomerScenario() {
 //		//setUp() runs first before this test!
 //		assertEquals("Cashier should have 500.0. It doesn't", cashier.money, 500.0);

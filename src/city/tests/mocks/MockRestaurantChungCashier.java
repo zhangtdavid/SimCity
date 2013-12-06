@@ -1,13 +1,18 @@
 package city.tests.mocks;
 
 import java.beans.PropertyChangeSupport;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import city.bases.Role;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
+import city.roles.MarketCustomerDeliveryPaymentRole;
 import city.roles.RestaurantChungCashierRole.Transaction;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantChungCashier;
@@ -25,29 +30,37 @@ import city.tests.bases.mocks.MockRole;
 public class MockRestaurantChungCashier extends MockRole implements RestaurantChungCashier {
 	public EventLog log = new EventLog();
 	public Market market;
+	public List<Role> roles = new ArrayList<Role>();
+	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	
+	public MockRestaurantChungCashier(RestaurantChung restaurant) {
+		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		roles.get(0).setActive();
+		roles.add((Role) restaurant.getBankCustomer());
+		roles.get(1).setActive();
+	}
 
 	@Override
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
-		log.add(new LoggedEvent("RestaurantChungCustomer received msgComputeBill from RestaurantChungWaiter"));		
-		System.out.println("RestaurantChungCustomer received msgComputeBill from RestaurantChungWaiter");			
+		log.add(new LoggedEvent("RestaurantChungCashier received msgComputeBill from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungCashier received msgComputeBill from RestaurantChungWaiter");			
 	}
 
 	@Override
 	public void msgHereIsPayment(RestaurantChungCustomer c, int bill) {
-		log.add(new LoggedEvent("RestaurantChungCustomer received msgHereIsPayment from RestaurantChungCustomer"));		
-		System.out.println("RestaurantChungCustomer received msgHereIsPayment from RestaurantChungCustomer");			
+		log.add(new LoggedEvent("RestaurantChungCashier received msgHereIsPayment from RestaurantChungCustomer"));		
+		System.out.println("RestaurantChungCashier received msgHereIsPayment from RestaurantChungCustomer");			
 	}
 
 	@Override
 	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o) {
-		log.add(new LoggedEvent("RestaurantChungCustomer received msgAddMarketOrder from RestaurantChungCook"));		
-		System.out.println("RestaurantChungCustomer received msgAddMarketOrder from RestaurantChungCook");
+		log.add(new LoggedEvent("RestaurantChungCashier received msgAddMarketOrder from RestaurantChungCook"));		
+		System.out.println("RestaurantChungCashier received msgAddMarketOrder from RestaurantChungCook");
 	}
 
 	@Override
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
-		// TODO Auto-generated method stub
-		return null;
+		return (MarketCustomerDeliveryPayment) roles.get(0);
 	}
 	
 	@Override
