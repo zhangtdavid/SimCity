@@ -11,6 +11,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
@@ -27,6 +29,7 @@ import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.interfaces.AnimatedPersonAtHome;
+import city.animations.interfaces.AnimatedPersonAtHome.Command;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
@@ -73,6 +76,7 @@ public class PersonAgent extends Agent implements Person {
 	private int cash;
 	private boolean hasEaten;
 	private PropertyChangeSupport propertyChangeSupport;
+	private Timer timer = new Timer();
 	
 	// Constructor
 	
@@ -227,7 +231,20 @@ public class PersonAgent extends Agent implements Person {
 				//upon arrival (now at home)
 				setState(STATES.atCooking);
 				homeAnimation.goToRoom(roomNumber); // goes to person's room entrance. for houses, goes to door.
-				actCookAndEatFood(); // goes to refrig, stove, table, back to room entrance.
+				//without much work, this lets the animation get to his room's entrance, THEN lets him go to cook.
+				timer.schedule(new TimerTask() { // see above timer with regards to testing
+					public void run() {
+						try {
+							actCookAndEatFood();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} // goes to refrig, stove, table, back to room entrance.
+					}
+				}, 400); //TODO change this to 4000 in apt
+				homeAnimation.setAcquired();
+				if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+					atDestination.acquire(); //and freeze
+				}
 				return true;
 			}
 		}
@@ -239,20 +256,47 @@ public class PersonAgent extends Agent implements Person {
 		}
 
 		if (state == STATES.goingToSleep) {
-			System.out.println("fuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuuu");
 			if (processTransportationArrival()) {
 				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
-				actGoToBed();
-				setState(STATES.atSleep);
+				timer.schedule(new TimerTask() {
+					public void run() {
+						try {
+							actGoToBed();
+							setState(STATES.atSleep);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} 
+					}
+				}, 400); // TODO change this to 4000 in apt
+				homeAnimation.setAcquired(); 
+				if (!homeAnimation.getBeingTested()) {
+					atDestination.acquire();
+				}
 				return false;
 			}
 		}
 		if (state == STATES.atSleep) {
-			System.out.println("AT SLEEP");
 			// Some people don't have jobs. This will ensure that they eventually wake up and do daily tasks.
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
 				if (shouldWakeUp()) {
+					homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room exit
+					timer.schedule(new TimerTask() {
+						public void run() {
+							homeAnimation.goOutside(); // now the building may be exited.
+							setState(STATES.atSleep);
+						}
+					}, 400); // TODO change this to 4000 in apt
+					homeAnimation.setAcquired(); 
+					if (!homeAnimation.getBeingTested()) {
+						atDestination.acquire();
+					}
+					
+					
+					
+					
+					
+
 					state = pickDailyTask();
 					performDailyTaskAction();
 					return true;
@@ -402,7 +446,6 @@ public class PersonAgent extends Agent implements Person {
 		//...then that means the gui sent guiAtDestination, releasing the semaphore
 		//BTW function was intentionally designed to combine 3 gui steps into 1 action.
 		//The person definitely knows that he has food in the refrigerator.
-		homeAnimation.setAcquired(); // tell the animation we're going to lock ourselves...
 		FOOD_ITEMS toEat = null;
 		HashMap<FOOD_ITEMS, Integer> foodNew = new HashMap<FOOD_ITEMS, Integer>();
 		if(this.home.getFoodItems().get(FOOD_ITEMS.chicken) > 0){
@@ -423,14 +466,6 @@ public class PersonAgent extends Agent implements Person {
 			this.home.setFood(foodNew); // and set this as your choice to eat.
 		} // if all these returned 0, how did we even get here??? impossible.
 		homeAnimation.cookAndEatFood(toEat.toString());
-		try{ 
-			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				atDestination.acquire(); //and freeze
-			}
-		}catch(Exception e){
-			print("Something bad happened while trying to acquire while going to stove/table");
-			e.printStackTrace();
-		}
 		this.hasEaten = true;
 		// The scheduler will pick up the atDestination and continue the program
 	}
@@ -445,8 +480,6 @@ public class PersonAgent extends Agent implements Person {
 	private void actGoToSleep() throws InterruptedException {
 		//TODO this shouldn't transport them home if they're already at home
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-//		this.hasEaten = false;
-//		lastWentToSleep = this.getDate();
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToSleep);
 		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
@@ -460,18 +493,8 @@ public class PersonAgent extends Agent implements Person {
 	private void actGoToBed() throws InterruptedException{
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
-		lastWentToSleep = this.getDate();
-		homeAnimation.setAtHome();
-		homeAnimation.setAcquired(); // tell the animation we're going to lock ourselves...
+		lastWentToSleep = this.getDate(); 
 		homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
-		try{ 
-			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				atDestination.acquire(); //and freeze
-			}
-		}catch(Exception e){
-			print("Something bad happened while trying to acquire while going to stove/table");
-			e.printStackTrace();
-		}
 	}
 	
 	//=========//

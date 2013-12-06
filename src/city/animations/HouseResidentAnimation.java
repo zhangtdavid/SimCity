@@ -26,6 +26,7 @@ public class HouseResidentAnimation extends Animation implements
 	private String status = "";
 	private Command command = Command.noCommand;
 	private boolean personSemaphoreIsAcquired;
+	@SuppressWarnings("unused")
 	private boolean isAtHome; // to know whether to move the graphic out, or to bring it in
 	private boolean leaving;
 	private String foodToEat;
@@ -71,6 +72,7 @@ public class HouseResidentAnimation extends Animation implements
 			//entering or leaving a building must begin with setting yourself to enter your room.
 			if (command == Command.ToRoomEntrance) {
 				//for a house, do nothing
+				status = "";
 				command = Command.noCommand;
 				
 				//going to bed
@@ -81,7 +83,7 @@ public class HouseResidentAnimation extends Animation implements
 					person.print("Semaphore released, at bed"); // test output
 				}
 				command = Command.InBed;
-				
+				status = "zzz";				
 				//cook and eat food: 1st, go to refrigerator
 			} else if (command == Command.ToRef) { // ToRef: look for food
 				command = Command.StationaryAtRef;
@@ -153,7 +155,7 @@ public class HouseResidentAnimation extends Animation implements
 
 	@Override
 	public void goOutside() {
-		// if we really want to go outside
+		// if we really want to go outside (i.e. leave the house)
 		xDestination = HousePanel.HDX;
 		yDestination = HousePanel.HDY + 10;
 		leaving = false;
@@ -162,8 +164,8 @@ public class HouseResidentAnimation extends Animation implements
 
 	@Override
 	public void goToSleep() {
-		leaving = false;
 		isAtHome = true;
+		leaving = false;
 		command = Command.ToBed;
 		xDestination = HousePanel.HBXi-20;
 		yDestination = HousePanel.HBYi;
@@ -199,11 +201,12 @@ public class HouseResidentAnimation extends Animation implements
 
 	@Override
 	public void goToRoom(int roomNo) {
+		status = "";
 		isAtHome = true;
 		command = Command.ToRoomEntrance;
 		xDestination = HousePanel.HDX;
 		yDestination = HousePanel.HDY-40;
-		// this does nothing for persons who live in houses.
+		// this does almost nothing for persons who live in houses.
 	}
 
 	// Getters (for testing)
@@ -239,8 +242,9 @@ public class HouseResidentAnimation extends Animation implements
 	
 	@Override
 	public void setGraphicStatus(String in){
-		
+		status = in;
 	}
+	
 	@Override
 	public void setAtHome() {
 		isAtHome = true;
