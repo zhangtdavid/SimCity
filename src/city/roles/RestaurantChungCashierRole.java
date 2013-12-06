@@ -310,7 +310,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			w = w2;
 			c = customer;
 			choice = order;
-			price = restaurant.getFoods().get(FOOD_ITEMS.valueOf(choice)).price;
+			price = restaurant.getFoods().get(FOOD_ITEMS.valueOf(choice)).getPrice();
 			payment = 0;
 			s = state;
 		}

@@ -27,22 +27,80 @@ public interface RestaurantBuildingInterface extends BuildingInterface {
 	// Classes
 	
     public class Food {
-        public String item;
-        public int cookingTime;
-        public int amount;
-        public int low;
-        public int capacity;
-        public int price;
-        public FoodOrderState s;
+        private String item;
+        private int cookingTime;
+        private int amount;
+        private int low;
+        private int capacity;
+        private int price;
+        private FoodOrderState s;
         
         public Food(String item, int cookingTime, int amount, int low, int capacity, int price) {
-            this.item = item;
-            this.cookingTime = cookingTime;
-            this.amount = amount;
-            this.low = low;
-            this.capacity = capacity;
-            this.price = price;
-            this.s = FoodOrderState.None;
+            this.setItem(item);
+            this.setCookingTime(cookingTime);
+            this.setAmount(amount);
+            this.setLow(low);
+            this.setCapacity(capacity);
+            this.setPrice(price);
+            this.setFoodOrderState(FoodOrderState.None);
         }
+
+        // Getters
+		public String getItem() {
+			return item;
+		}
+
+		public int getCookingTime() {
+			return cookingTime;
+		}
+		
+		public int getAmount() {
+			return amount;
+		}
+		
+		public int getLow() {
+			return low;
+		}
+		
+		public int getCapacity() {
+			return capacity;
+		}
+		
+		public int getPrice() {
+			return price;
+		}
+		
+		public FoodOrderState getFoodOrderState() {
+			return s;
+		}
+		
+		// Setters
+		public void setItem(String item) {
+			this.item = item;
+		}
+
+		public void setCookingTime(int cookingTime) {
+			this.cookingTime = cookingTime;
+		}
+
+		public void setAmount(int amount) {
+			this.amount = amount;
+		}
+
+		public void setLow(int low) {
+			this.low = low;
+		}
+
+		public void setCapacity(int capacity) {
+			this.capacity = capacity;
+		}
+
+		public void setPrice(int price) {
+			this.price = price;
+		}
+
+		public void setFoodOrderState(FoodOrderState s) {
+			this.s = s;
+		}
     }	
 }
