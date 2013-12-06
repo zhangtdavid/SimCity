@@ -1133,15 +1133,21 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		btnWork.setEnabled(false);
 		btnHasCar.setEnabled(b);
 		btnHasHouse.setEnabled(false);
-		btnHasJob.setEnabled(b);
+		btnHasJob.setEnabled(false);
 		
 		if (b && personSelectedFromList != null) {
 			if (personSelectedFromList.getHome() != null) {
 				btnHouse.setEnabled(b);
 				btnHasHouse.setEnabled(b);
+				btnHasJob.setEnabled(b);
 			}
 			if (personSelectedFromList.getOccupation() != null) {
 				btnWork.setEnabled(b);
+				if (personSelectedFromList.getOccupation().getActive()) {
+					btnHasJob.setEnabled(false);
+				} else {
+					btnHasJob.setEnabled(true);
+				}
 			}
 		}
 	}
