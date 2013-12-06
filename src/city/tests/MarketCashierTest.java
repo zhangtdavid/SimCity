@@ -149,7 +149,7 @@ public class MarketCashierTest extends TestCase {
 		cashier.runScheduler();
 		assertEquals("Customer log should have 2 entries.", customer.log.size(), 2);
 		assertTrue("Customer log should have \"Customer received msgPaymentReceived from Market Cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgPaymentReceived from Market Cashier"));
-		assertEquals("Market money should be 1110.00. It's " + market.getCash() + "instead", market.getCash(), 1110);
+		assertEquals("Market money should be 1110. It's " + market.getCash() + "instead", market.getCash(), 1110);
 		assertEquals("Cashier should have 0 transactions.", cashier.getTransactions().size(), 0);		
 	}
 	
