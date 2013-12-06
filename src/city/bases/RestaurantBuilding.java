@@ -5,6 +5,7 @@ import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RestaurantBuildingInterface;
+import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.gui.BuildingCard;
 import city.gui.exteriors.CityViewBuilding;
 import city.roles.interfaces.BankCustomer;
@@ -24,6 +25,13 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 
 	public RestaurantBuilding(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
+		
+        // Add items and their cooking times to a map
+		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10));
+		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));
+		addFood(FOOD_ITEMS.salad, new Food("salad", 3, 6, 5, 10, 6));
+		addFood(FOOD_ITEMS.steak, new Food("steak", 12, 6, 5, 10, 16));        
+        setCash(1000);
 	}
     
     // Messages
