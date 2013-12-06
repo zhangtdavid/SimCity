@@ -1,6 +1,5 @@
 package city.tests;
 
-import java.awt.Color;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,9 +12,6 @@ import city.bases.RestaurantBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChungBuilding;
-import city.gui.exteriors.CityViewRestaurant;
-import city.gui.interiors.MarketPanel;
-import city.gui.interiors.RestaurantChungPanel;
 import city.roles.MarketCustomerDeliveryRole;
 import city.roles.interfaces.MarketCustomerDelivery.MarketCustomerState;
 import city.tests.mocks.MockMarketCashier;
@@ -27,10 +23,7 @@ import city.tests.mocks.MockMarketManager;
 import city.tests.mocks.MockPerson;
 
 public class MarketCustomerDeliveryTest extends TestCase {	
-	MarketPanel marketPanel;	
 	MarketBuilding market;
-	
-	RestaurantChungPanel restaurantChungPanel;	
 	RestaurantBuilding restaurant;
 	
 	MockPerson cashierPerson;
@@ -64,11 +57,9 @@ public class MarketCustomerDeliveryTest extends TestCase {
 		super.setUp();
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding", null, null));
 		
-		marketPanel = new MarketPanel(Color.blue);
-		market = new MarketBuilding("Market1", marketPanel, null);
+		market = new MarketBuilding("Market1", null, null);
 
-		restaurantChungPanel = new RestaurantChungPanel(Color.red);
-		restaurant = new RestaurantChungBuilding("RestuarantChung", restaurantChungPanel, new CityViewRestaurant(0, 0));
+		restaurant = new RestaurantChungBuilding("RestuarantChung", null, null);
 
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
@@ -155,6 +146,9 @@ public class MarketCustomerDeliveryTest extends TestCase {
 		customerDelivery.msgHereIsOrderDelivery(collectedItemsAll, 0);
 		assertEquals("CustomerDelivery log should have 1 entry.", customerDelivery.log.size(), 1);
 		assertTrue("CustomerDelivery log should have \"MarketCustomerDelivery received msgHereIsOrderDelivery\". The last event logged is " + customerDelivery.log.getLastLoggedEvent().toString(), customerDelivery.log.containsString("MarketCustomerDelivery received msgHereIsOrderDelivery"));
+		for (FOOD_ITEMS item: restaurant.getFoods().keySet()) {
+			assertTrue("restaurant.foods should be original amount + collectedItemsAll.", restaurant.getFoods().get(item).getAmount() == 6+collectedItemsAll.get(item));
+		}
 	}
 }
 

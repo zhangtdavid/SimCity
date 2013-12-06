@@ -65,6 +65,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	        }
 	        restaurant.incrementFoodQuantity(receivedItems);
 		}
+		// Should notify parent cook role that order was received so it can be removed from the cook's list of roles
 		super.setInactive(); // set role inactive after receiving order
 	}
 	
