@@ -85,7 +85,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		Transaction t = findTransaction(c);
 		t.payment = money;
 		restaurant.setCash(restaurant.getCash() + money);
-		System.out.println("RESTAURANT CASH: " + restaurant.getCash());
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
@@ -118,9 +117,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			}
 			break;
 		}
-		
-		// TODO handle nested actions
-		
+				
 		if (workingState == WorkingState.GoingOffShift) {
 			if (restaurant.getRestaurantChungCashier() != this)
 				workingState = WorkingState.NotWorking;
@@ -254,12 +251,12 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: t.order.orderItems.keySet()) {
-        	tempBill += t.order.orderItems.get(item)*t.market.getPrices().get(item);
+        for (FOOD_ITEMS item: t.getOrder().orderItems.keySet()) {
+        	tempBill += t.getOrder().orderItems.get(item)*t.getMarket().getPrices().get(item);
         }
 
-        if (tempBill == t.bill)
-        	return t.bill;
+        if (tempBill == t.getBill())
+        	return t.getBill();
         
 		return -1;
 	}
@@ -277,7 +274,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction t: marketTransactions) {
-			if(t.order.orderId == id) {
+			if(t.getOrder().orderId == id) {
 				return t;
 			}
 		}
