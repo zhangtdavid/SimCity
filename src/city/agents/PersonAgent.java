@@ -273,7 +273,7 @@ public class PersonAgent extends Agent implements Person {
 							e.printStackTrace();
 						} 
 					}
-				}, 4000); // TODO change this to 4000 in apt
+				}, 400); // TODO change this to 4000 in apt
 				homeAnimation.setAcquired(); 
 				if (!homeAnimation.getBeingTested()) {
 					atDestination.acquire();

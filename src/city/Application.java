@@ -358,7 +358,7 @@ public class Application {
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
 		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529)); // this is now a house, because I just finished house.
-		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1); 
+		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(75,225, "Zhang Landlord House", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
 		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
@@ -866,12 +866,12 @@ public class Application {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
-		//c0Zhang.startThread();
+		c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();
 		c4Zhang.startThread();
-		//p0Zhang.startThread();
+		p0Zhang.startThread();
 		/*
 		p1Zhang.startThread();
 		p2Zhang.startThread();
