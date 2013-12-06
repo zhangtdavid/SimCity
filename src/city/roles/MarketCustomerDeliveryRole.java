@@ -48,9 +48,8 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	@Override
 	public void setActive(){
-		// this.setActivityBegun();
-        state = MarketCustomerState.Ordering;
-        runScheduler(); // direct call to scheduler necessary for nested roles
+		super.setActive();
+		state = MarketCustomerState.Ordering;
 	}
 	
 //  Messages

@@ -334,16 +334,16 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         }
          
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);
-        print(restaurant.toString());
-        print(o.order.toString());
-        print(restaurant.getRestaurantChungCashier().toString());
-        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
+//        print(restaurant.toString());
+//        print(o.order.toString());
+//        print(restaurant.getRestaurantChungCashier().toString());
+//        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
         MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setPerson(super.getPerson());
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
     	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
-        marketCustomerDelivery.setActive();
+//        marketCustomerDelivery.setActive();
         return;
     }
     
