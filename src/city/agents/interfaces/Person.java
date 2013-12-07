@@ -5,7 +5,7 @@ import java.util.Date;
 import java.util.List;
 
 import city.Application;
-import city.animations.interfaces.AnimatedPersonAtHome;
+import city.animations.interfaces.AnimatedPerson;
 import city.bases.interfaces.AgentInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
@@ -63,7 +63,7 @@ public interface Person extends AgentInterface {
 	public STATES getState();
 	public PropertyChangeSupport getPropertyChangeSupport();
 	public int getRoomNumber();
-	public AnimatedPersonAtHome getAnimationAtHome();
+	public AnimatedPerson getAnimation();
 	
 	// Setters
 	
@@ -73,15 +73,13 @@ public interface Person extends AgentInterface {
 	public void setHome(ResidenceBuildingInterface h);
 	public void setName(String n);
 	public void setRoomNumber(int i);
-	public void setHomeAnimation(AnimatedPersonAtHome anim);
+	public void setAnimation(AnimatedPerson a);
 	public void setOccupation(JobRoleInterface r);
 	public void setResidentRole(Resident r);
 	
 	// Utilities
 	
 	public void addRole(RoleInterface r);
-	public void acquireSemaphoreFromAnimation();
-	public void releaseSemaphoreFromAnimation();
 	public void forceSleep();
 	public void printViaRole(String role, String msg);
 	

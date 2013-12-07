@@ -8,7 +8,6 @@ import java.util.concurrent.Semaphore;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
-import city.animations.interfaces.AnimatedPersonAtHome;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
@@ -223,19 +222,7 @@ public class MockPerson extends MockAgent implements Person {
 	}
 
 	@Override
-	public void setHomeAnimation(AnimatedPersonAtHome anim) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public AnimatedPersonAtHome getAnimationAtHome() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void acquireSemaphoreFromAnimation() {
+	public void setAnimation(AnimatedPerson anim) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -266,12 +253,6 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void forceSleep() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void releaseSemaphoreFromAnimation() {
 		// TODO Auto-generated method stub
 		
 	}

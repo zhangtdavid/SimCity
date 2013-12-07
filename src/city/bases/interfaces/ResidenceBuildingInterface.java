@@ -34,6 +34,7 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 	// Utilities
 
 	public void addFood(FOOD_ITEMS f, int i);
+	public void removeFood(FOOD_ITEMS f, int i);
 	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems);
 	public boolean occupyingPersonExists(Person p);
 	public void removeOccupyingPerson(Person r);

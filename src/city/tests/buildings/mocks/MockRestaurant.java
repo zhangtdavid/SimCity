@@ -9,8 +9,8 @@ public class MockRestaurant extends MockRestaurantBuilding {
 
 	public MockRestaurant(String name) {
 		super(name);
-		this.setCustomerRoleName("city.tests.mock.MockRestaurantCustomer");
-		this.setCustomerAnimationName("city.tests.animations.mock.MockRestaurantAnimatedCustomer");
+		this.setCustomerRoleName("city.tests.roles.mocks.MockRestaurantCustomer");
+		this.setCustomerAnimationName("city.tests.animations.mocks.MockRestaurantAnimatedCustomer");
 	}
 
 }

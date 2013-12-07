@@ -2,16 +2,23 @@ package city.tests.animations.mocks;
 
 import java.awt.Graphics2D;
 
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
-import city.buildings.interfaces.BusStop;
 import city.tests.bases.mocks.MockAnimation;
 
 public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson {
 	
-	public MockAnimatedPerson() {
-		// TODO Auto-generated constructor stub
-		
+	// Data
+	
+	private Person person = null;
+	
+	// Constructor
+	
+	public MockAnimatedPerson(Person p) {
+		this.person = p;
 	}
+	
+	// Abstract
 
 	@Override
 	public void updatePosition() {
@@ -24,9 +31,71 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		// TODO Auto-generated method stub
 		
 	}
+	
+	// Actions
 
 	@Override
-	public void goToBusStop(BusStop b) {
+	public void goToSleep() {
+		person.guiAtDestination();
+	}
+
+	@Override
+	public void verifyFood() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cookAndEatFood(String in) {
+		person.guiAtDestination();
+	}
+
+	@Override
+	public void goToRoom(int roomNo) {
+		person.guiAtDestination();
+	}
+
+	@Override
+	public void goOutside() {
+		person.guiAtDestination();
+	}
+
+	// Getters
+	
+	@Override
+	public int[] getDestination() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	// Setters
+
+	@Override
+	public void setCoords(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGraphicStatus(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAtHome() {
 		// TODO Auto-generated method stub
 		
 	}

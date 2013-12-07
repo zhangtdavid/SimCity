@@ -1,5 +1,6 @@
 package city.tests.buildings.mocks;
 
+import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
@@ -59,6 +60,12 @@ public class MockHouse extends MockResidenceBuilding implements House {
 	public boolean getIsFull() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void removeFood(FOOD_ITEMS f, int i) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }
