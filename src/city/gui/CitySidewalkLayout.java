@@ -88,19 +88,6 @@ public class CitySidewalkLayout {
 			}
 		}
 		return false;
-		/*AnimationInterface currentVehicle = roads.getClosestRoad(x - x % 25, y - y % 25).getVehicle();
-		if(currentVehicle == null)
-			return false;
-		Rectangle vehicleRect = new Rectangle(0, 0, 1, 1);
-		vehicleRect = new Rectangle(currentVehicle.getXPos(), currentVehicle.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
-		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
-		Rectangle sidewalkRect = new Rectangle(currentSidewalk.getX(), currentSidewalk.getY(), (int)sidewalkSize, (int)sidewalkSize);
-		if(vehicleRect.intersects(sidewalkRect)) {
-			return true;
-		}
-		else {
-			return false;
-		}*/
 	}
 
 	public List<AnimationInterface> getAllWalkers() {

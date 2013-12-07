@@ -70,8 +70,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		}
 		// Traveling along sidewalks
 		if(atDestinationRoad == false) {
-//			if(sidewalks.isCarAt(currentSidewalk.getX(), currentSidewalk.getY()))
-//				return;
 			if(startingSidewalk != null) {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;

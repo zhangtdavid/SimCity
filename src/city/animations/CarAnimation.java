@@ -45,6 +45,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			if(startingRoad.setVehicle(this) == false && startingRoad.getVehicle() != this) {
 				return;
 			}
+			if(startingRoad.isWalkerAt(xPos, yPos)) {
+				return;
+			}
 			if (xPos < startingRoad.getX() && !startingRoad.getHorizontal())
 				xPos++;
 			else if (xPos > startingRoad.getX() && !startingRoad.getHorizontal())
@@ -59,7 +62,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		}
 		// Getting on the destination road
 		if(atDestinationRoad == true) {
-			if(endRoad.isWalkerAt((xPos + xDestination) / 2, (yPos + yDestination)/ 2)) {
+			if(endRoad.isWalkerAt(xPos, yPos)) {
 				return;
 			}
 			if (xPos < xDestination)
