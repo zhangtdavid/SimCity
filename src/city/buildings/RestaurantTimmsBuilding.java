@@ -73,6 +73,12 @@ public class RestaurantTimmsBuilding extends RestaurantBuilding implements Resta
 			item.setState(State.inStock);
 			restaurantMenu.add(item);
 		}
+		
+		this.addWorkerRoleName("city.roles.RestaurantTimmsCashierRole");
+		this.addWorkerRoleName("city.roles.RestaurantTimmsCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantTimmsHostRole");
+		this.addWorkerRoleName("city.roles.RestaurantTimmsWaiterRole");
+		this.setBuildingClassName("city.buildings.interfaces.RestaurantTimms");
 	}
 	
 	//=========//

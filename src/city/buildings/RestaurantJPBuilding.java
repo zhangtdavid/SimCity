@@ -54,6 +54,13 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 		this.setCustomerRoleName("city.roles.RestaurantJPCustomerRole");
 		this.setCustomerAnimationName("city.animations.RestaurantJPCustomerAnimation");
 		setCash(2000);
+		
+		this.addWorkerRoleName("city.roles.RestaurantJPCashierRole");
+		this.addWorkerRoleName("city.roles.RestaurantJPCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantJPHostRole");
+		this.addWorkerRoleName("city.roles.RestaurantJPWaiterRole");
+		this.addWorkerRoleName("city.roles.RestaurantJPWaiterSharedDataRole");
+		this.setBuildingClassName("city.buildings.interfaces.RestaurantJP");
 	}
 	
 	// Utilities

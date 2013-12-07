@@ -13,6 +13,7 @@ import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.Application;
 import city.Application.FOOD_ITEMS;
+import city.agents.interfaces.Person;
 import city.bases.JobRole;
 import city.bases.Role;
 import city.buildings.RestaurantChungBuilding;
@@ -48,8 +49,9 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
 		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
-//		roles.get(0).setActive();
+		roles.get(0).setActive();
 		roles.add((Role) restaurant.getBankCustomer());
+		roles.get(1).setActive();
 	}
 
 //	Activity
@@ -83,7 +85,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		Transaction t = findTransaction(c);
 		t.payment = money;
 		restaurant.setCash(restaurant.getCash() + money);
-		System.out.println("RESTAURANT CASH: " + restaurant.getCash());
 		t.s = TransactionState.ReceivedPayment;
 		stateChanged();
 	}
@@ -116,9 +117,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			}
 			break;
 		}
-		
-		// TODO handle nested actions
-		
+				
 		if (workingState == WorkingState.GoingOffShift) {
 			if (restaurant.getRestaurantChungCashier() != this)
 				workingState = WorkingState.NotWorking;
@@ -175,6 +174,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 //  Actions
 //	=====================================================================	
 	private void depositMoney() {
+		print(restaurant.getBankCustomer().toString());
 		restaurant.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, restaurant.getCash()-1000, Application.TRANSACTION_TYPE.business);
 		// TODO how does this work with different bank customer instances when the account number is tied to the role?
 	}
@@ -208,8 +208,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	private void notifyHostOfFlake(Transaction t) {
 		print("Notifying host of flake");
 		t.s = TransactionState.NotifiedHost;
-		host.msgFlakeAlert(t.c, t.price-t.payment);
-		
+		restaurant.getRestaurantChungHost().msgFlakeAlert(t.c, t.price-t.payment);
 	}
 	
 //	Getters
@@ -221,6 +220,13 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	
 //	Setters
 //	=====================================================================		
+	@Override
+	public void setPerson(Person p) {
+		super.setPerson(p);
+		roles.get(0).setPerson(this.getPerson());
+		roles.get(1).setPerson(this.getPerson());
+	}
+	
 	@Override
 	public void setRestaurant(RestaurantChung restaurant) {
 		this.restaurant = restaurant;
@@ -245,12 +251,12 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: t.order.orderItems.keySet()) {
-        	tempBill += t.order.orderItems.get(item)*t.market.getPrices().get(item);
+        for (FOOD_ITEMS item: t.getOrder().orderItems.keySet()) {
+        	tempBill += t.getOrder().orderItems.get(item)*t.getMarket().getPrices().get(item);
         }
 
-        if (tempBill == t.bill)
-        	return t.bill;
+        if (tempBill == t.getBill())
+        	return t.getBill();
         
 		return -1;
 	}
@@ -268,7 +274,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction t: marketTransactions) {
-			if(t.order.orderId == id) {
+			if(t.getOrder().orderId == id) {
 				return t;
 			}
 		}
@@ -304,7 +310,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			w = w2;
 			c = customer;
 			choice = order;
-			price = restaurant.getFoods().get(choice).price;
+			price = restaurant.getFoods().get(FOOD_ITEMS.valueOf(choice)).getPrice();
 			payment = 0;
 			s = state;
 		}

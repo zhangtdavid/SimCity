@@ -69,6 +69,13 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
     	//foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
         //foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
         //foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak"))); //TODO david? this doesn't work anymore (error)
+    	
+		this.addWorkerRoleName("city.roles.RestaurantZhangCashierRole");
+		this.addWorkerRoleName("city.roles.RestaurantZhangCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantZhangHostRole");
+		this.addWorkerRoleName("city.roles.RestaurantZhangWaiterRegularRole");
+		this.addWorkerRoleName("city.roles.RestaurantZhangWaiterSharedDataRole");
+		this.setBuildingClassName("city.buildings.interfaces.RestaurantZhang");
 	}
 	
 	// Utilities

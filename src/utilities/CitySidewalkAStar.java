@@ -68,17 +68,6 @@ public class CitySidewalkAStar {
 				return -1;
 			else
 				return 0;
-			
-//			if(CitySidewalkAStar1.getHeuristicScore() > CitySidewalkAStar2.getHeuristicScore())
-//				return 1;
-//			else if(CitySidewalkAStar1.getHeuristicScore() < CitySidewalkAStar2.getHeuristicScore())
-//				return -1;
-//			else if(CitySidewalkAStar1.getNumMovesFromStart() > CitySidewalkAStar2.getNumMovesFromStart())
-//				return 1;
-//			else if(CitySidewalkAStar1.getNumMovesFromStart() < CitySidewalkAStar2.getNumMovesFromStart())
-//				return -1;
-//			else
-//				return 0;
 		}
 
 	};

@@ -30,7 +30,7 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
 	static final int CPY = -20;	
 	static final int DISHES_X = 480; // dishes
 	static final int DISHES_Y = 250;
-	static final int WIDTH = 30; // width of everything
+	static final int WIDTH = 30; // width of all furniture
 	//TODO add cashier, waiter/cook/customer waiting locations
 	//TODO add bootup - cook shouldn't just pop up in the middle of the room on arrival... Or should he?
 	

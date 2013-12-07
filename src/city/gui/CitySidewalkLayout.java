@@ -253,7 +253,6 @@ public class CitySidewalkLayout {
 		openList.add(new CitySidewalkAStar(null, startingSidewalk, endingSidewalk, 0));
 
 		while(!openList.isEmpty()) {
-//			System.out.println(openList.peek().getSidewalk().getX() + " " + openList.peek().getSidewalk().getY());
 			CitySidewalkAStar currentAStar = openList.remove();
 			closedSet.add(currentAStar.getSidewalk());
 			// Found the solution

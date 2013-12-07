@@ -122,9 +122,9 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         
         for (FOOD_ITEMS i: marketOrder.keySet()) {
             Food f = findFood(i.toString());
-            f.amount += marketOrder.get(i);
-            print("New Inventory: " + f.item + " " + f.amount);
-            f.s = FoodOrderState.None;
+            f.setAmount(f.getAmount() + marketOrder.get(i));
+            print("New Inventory: " + f.getItem() + " " + f.getAmount());
+            f.setFoodOrderState(FoodOrderState.None);
         }
         stateChanged();
     }
@@ -296,9 +296,9 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         int numLow = 0;
         
         for (FOOD_ITEMS i: restaurant.getFoods().keySet()) {
-            if (restaurant.getFoods().get(i).s == FoodOrderState.None && (restaurant.getFoods().get(i).amount <= restaurant.getFoods().get(i).low)) {
-            	lowFoods.put(i, restaurant.getFoods().get(i).capacity - restaurant.getFoods().get(i).amount);
-                restaurant.getFoods().get(i).s = FoodOrderState.Pending;
+            if (restaurant.getFoods().get(i).getFoodOrderState() == FoodOrderState.None && (restaurant.getFoods().get(i).getAmount() <= restaurant.getFoods().get(i).getLow())) {
+            	lowFoods.put(i, restaurant.getFoods().get(i).getCapacity() - restaurant.getFoods().get(i).getAmount());
+                restaurant.getFoods().get(i).setFoodOrderState(FoodOrderState.Pending);
                 numLow++;
             }
             else lowFoods.put(i, 0);
@@ -320,12 +320,12 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         for (FOOD_ITEMS i: o.order.orderItems.keySet()) {
             if (o.order.orderItems.get(i) > 0) {
                 Food f = findFood(i.toString());
-                f.s = FoodOrderState.Ordered;
+                f.setFoodOrderState(FoodOrderState.Ordered);
             }
         }
 
         for (FOOD_ITEMS i: restaurant.getFoods().keySet()) {
-            print("Current Inventory: " + i + " " + restaurant.getFoods().get(i).amount);
+            print("Current Inventory: " + i + " " + restaurant.getFoods().get(i).getAmount());
         }
 
         
@@ -334,16 +334,16 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         }
          
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);
-        print(restaurant.toString());
-        print(o.order.toString());
-        print(restaurant.getRestaurantChungCashier().toString());
-        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
+//        print(restaurant.toString());
+//        print(o.order.toString());
+//        print(restaurant.getRestaurantChungCashier().toString());
+//        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
         MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setPerson(super.getPerson());
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
     	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
-        marketCustomerDelivery.setActive();
+//        marketCustomerDelivery.setActive();
         return;
     }
     
@@ -359,7 +359,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         // If out of food
         identifyFoodThatIsLow();
         
-        if (f.amount == 0) {
+        if (f.getAmount() == 0) {
                 // sets all orders of the same item to cancelled
             for (int i = 0; i < orders.size(); i++) {
                 if (orders.get(i).choice == o.choice) {
@@ -387,8 +387,8 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         timer.schedule(new TimerTask() {
         	public void run() {
                 Food f = restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice));
-                f.amount--;
-                print(o.choice + " amount after cooking " + f.amount);
+                f.setAmount(f.getAmount() - 1);
+                print(o.choice + " amount after cooking " + f.getAmount());
                 cooking = false;
                 msgSelfDoneCooking(o);
                 cookGui.DoReturnToCookHome();
@@ -400,7 +400,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //        		}
             }
         },
-        restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice)).cookingTime*100);
+        restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice)).getCookingTime()*100);
     }
     
     private void plateIt(final RestaurantChungOrder o) {
@@ -487,7 +487,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 	@Override
     public Food findFood(String choice) {
         for(Food f: restaurant.getFoods().values()){
-            if(f.item.equals(choice)) {
+            if(f.getItem().equals(choice)) {
                 return f;
             }
         }

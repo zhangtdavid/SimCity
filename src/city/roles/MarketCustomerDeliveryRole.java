@@ -48,23 +48,24 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	@Override
 	public void setActive(){
-		// this.setActivityBegun();
-        state = MarketCustomerState.Ordering;
-        runScheduler(); // direct call to scheduler necessary for nested roles
+		super.setActive();
+		state = MarketCustomerState.Ordering;
+		stateChanged();
 	}
 	
 //  Messages
 //	=====================================================================	
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
-		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
+		log.add(new LoggedEvent("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson."));
+		System.out.println("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson.");
 		if (order.orderId == id) {
 	        for (FOOD_ITEMS item: collectedItems.keySet()) {
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
 	        restaurant.incrementFoodQuantity(receivedItems);
 		}
+		// Should notify parent cook role that order was received so it can be removed from the cook's list of roles
 		super.setInactive(); // set role inactive after receiving order
 	}
 	

@@ -6,7 +6,6 @@ import java.util.List;
 import utilities.RestaurantChungRevolvingStand;
 import city.Application;
 import city.Application.BUILDING;
-import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungCashierAnimation;
 import city.animations.RestaurantChungCookAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
@@ -54,14 +53,6 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		orderStand = new RestaurantChungRevolvingStand();
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
-
-        // Add items and their cooking times to a map
-		super.addFood(FOOD_ITEMS.chicken, new Food("chicken", 10, 6, 5, 10, 16));
-		super.addFood(FOOD_ITEMS.pizza, new Food("pizza", 15, 6, 5, 10, 12));
-		super.addFood(FOOD_ITEMS.salad, new Food("salad", 5, 6, 5, 10, 6));
-		super.addFood(FOOD_ITEMS.steak, new Food("steak", 20, 6, 5, 10, 10));
-        
-        setCash(1000);
 	}
 	
 //	Getters

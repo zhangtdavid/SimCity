@@ -9,8 +9,12 @@ import java.util.Calendar;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.LinkedList;
+import java.util.List;
 import java.util.TimeZone;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
@@ -66,13 +70,14 @@ public class PersonAgent extends Agent implements Person {
 	private Date lastAteAtRestaurant;
 	private Date lastWentToSleep;
 	private String name;
-	private ArrayList<RoleInterface> roles = new ArrayList<RoleInterface>();
+	private List<RoleInterface> roles = Collections.synchronizedList(new ArrayList<RoleInterface>());
 	private Semaphore atDestination = new Semaphore(0, true);
 	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
 	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
 	private PropertyChangeSupport propertyChangeSupport;
+	private Timer timer = new Timer();
 	
 	// Constructor
 	
@@ -122,8 +127,13 @@ public class PersonAgent extends Agent implements Person {
 		// Go to work	
 		if (state == STATES.goingToWork) {
 			if (processTransportationArrival()) {
-				occupation.setActive();
-				setState(STATES.atWork);
+				// The occupation could have been removed while going to work
+				if (occupation != null) {
+					occupation.setActive();
+					setState(STATES.atWork);
+				} else {
+					setState(STATES.leavingWork);
+				}
 				return true;
 			}
 		} else if (shouldGoToWork()) {
@@ -133,7 +143,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		// Leave work and go to daily tasks
 		if (state == STATES.leavingWork) {
-			if (!occupation.getActive()) {
+			if (occupation == null || !occupation.getActive()) {
 				state = pickDailyTask();
 				performDailyTaskAction();
 				return true;
@@ -223,22 +233,51 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == STATES.goingToCook) {
-			if (processTransportationArrival()) {
+			if (processTransportationArrival()) { // this takes a person home with the intent of cooking
+				//upon arrival (now at home)
 				setState(STATES.atCooking);
-				actCookAndEatFood();
+				homeAnimation.goToRoom(roomNumber); // goes to person's room entrance. for houses, goes to door.
+				//without much work, this lets the animation get to his room's entrance, THEN lets him go to cook.
+				timer.schedule(new TimerTask() { // see above timer with regards to testing
+					public void run() {
+						try {
+							actCookAndEatFood();
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} // goes to refrig, stove, table, back to room entrance.
+					}
+				}, 400); 
+				homeAnimation.setAcquired();
+				if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
+					atDestination.acquire(); //and freeze
+				}
 				return true;
 			}
 		}
+
 		if (state == STATES.atCooking) {
-			state = pickDailyTask();
+			state = pickDailyTask();  //this tells the person what to do after eating? idk ~Ryan
 			performDailyTaskAction();
 			return true;
 		}
+
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
-				homeAnimation.goToRoom(this.roomNumber); // first, person goes to his own room
-				homeAnimation.goToSleep(); // now, person may crash (figuratively, as in go to bed!)
-				setState(STATES.atSleep);
+				homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room
+				timer.schedule(new TimerTask() {
+					public void run() {
+						try {
+							actGoToBed();
+							setState(STATES.atSleep);
+						} catch (InterruptedException e) {
+							e.printStackTrace();
+						} 
+					}
+				}, 4000); // TODO change this to 4000 in apt
+				homeAnimation.setAcquired(); 
+				if (!homeAnimation.getBeingTested()) {
+					atDestination.acquire();
+				}
 				return false;
 			}
 		}
@@ -247,6 +286,18 @@ public class PersonAgent extends Agent implements Person {
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
 				if (shouldWakeUp()) {
+					setState(STATES.atSleep);
+					homeAnimation.goToRoom(this.roomNumber); // First, person goes to his own room exit
+					timer.schedule(new TimerTask() {
+						public void run() {
+							homeAnimation.goOutside(); // now the building may be exited.
+
+						}
+					}, 4000); // TODO change this to 4000 in apt
+					homeAnimation.setAcquired(); 
+					if (!homeAnimation.getBeingTested()) {
+						atDestination.acquire();
+					}
 					state = pickDailyTask();
 					performDailyTaskAction();
 					return true;
@@ -268,13 +319,15 @@ public class PersonAgent extends Agent implements Person {
 		//----------------/
 		
 		boolean blocking = false;
-		for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
-			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
+		synchronized(roles) {
+			for (RoleInterface r : roles) if (r.getActive() && r.getActivity()) {
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity) {
+					r.setActivityFinished();
+				}
+				break;
 			}
-			break;
 		}
 		
 		// Scheduler disposition
@@ -381,56 +434,70 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToCook);
+		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
 	}
 	
 	/**
 	 * Has the person cook and eat a meal at home.
 	 * Assume they are already at home when this is called
+	 * IMPORTANT: also assumes there is food in the refrigerator.
 	 * @throws InterruptedException 
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		homeAnimation.setAcquired();
-		homeAnimation.verifyFood();  // give animation instructions
-		try{ 
-			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				//System.out.println("not being tested");
-				atDestination.acquire(); //and freeze
-			}
-		}catch(Exception e){
-			print("Something bad happened while trying to acquire while going to refrigerator");
-			e.printStackTrace();
-		}
-
-		//BTW function was intentionally designed to combine these 3 steps into 1 action.
-		homeAnimation.setAcquired(); // repeat
-		homeAnimation.cookAndEatFood();
-		try{ 
-			if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-				atDestination.acquire(); //and freeze
-			}
-		}catch(Exception e){
-			print("Something bad happened while trying to acquire while going to stove/table");
-			e.printStackTrace();
-		}
+		//if the function is here and getBeingTested() == false... 
+		//...then that means the gui sent guiAtDestination, releasing the semaphore
+		//BTW function was intentionally designed to combine 3 gui steps into 1 action.
+		//The person definitely knows that he has food in the refrigerator.
+		FOOD_ITEMS toEat = null;
+		HashMap<FOOD_ITEMS, Integer> foodNew = new HashMap<FOOD_ITEMS, Integer>();
+		if(this.home.getFoodItems().get(FOOD_ITEMS.chicken) > 0){
+			toEat = FOOD_ITEMS.chicken;
+			foodNew.put(FOOD_ITEMS.chicken, this.home.getFoodItems().get(FOOD_ITEMS.chicken)-1); // lower # of chicken by 1
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.salad) > 0){
+			toEat = FOOD_ITEMS.salad;
+			foodNew.put(FOOD_ITEMS.salad, this.home.getFoodItems().get(FOOD_ITEMS.salad)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.pizza) > 0){
+			toEat = FOOD_ITEMS.pizza;
+			foodNew.put(FOOD_ITEMS.pizza, this.home.getFoodItems().get(FOOD_ITEMS.pizza)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		}else if(this.home.getFoodItems().get(FOOD_ITEMS.steak) > 0){
+			toEat = FOOD_ITEMS.steak;
+			foodNew.put(FOOD_ITEMS.steak, this.home.getFoodItems().get(FOOD_ITEMS.steak)-1);
+			this.home.setFood(foodNew); // and set this as your choice to eat.
+		} // if all these returned 0, how did we even get here??? impossible.
+		homeAnimation.cookAndEatFood(toEat.toString());
 		this.hasEaten = true;
 		// The scheduler will pick up the atDestination and continue the program
 	}
 	
 	/**
-	 * Takes the person home and allows them to "sleep" until awakened for work.
-	 * 
-	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
+	 * Takes the person home w/ intent to sleep.
 	 * 
 	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
-		// TODO this shouldn't transport them home if they're already at home
+		//TODO this shouldn't transport them home if they're already at home
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+
+		processTransportationDeparture((BuildingInterface) home);
+		setState(STATES.goingToSleep);
+		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
+	}
+
+	/**
+	 * Once the person is home, moves to the bed before sleeping. 
+	 * From actGoToSleep (after arrival at home)
+	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
+	 * @throws InterruptedException
+	 */
+	private void actGoToBed() throws InterruptedException{
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.hasEaten = false;
-		processTransportationDeparture((BuildingInterface) home);
-		lastWentToSleep = this.getDate();
-		setState(STATES.goingToSleep);
+		lastWentToSleep = this.getDate(); 
+		homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
 	}
 	
 	//=========//
@@ -498,7 +565,7 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 	@Override
-	public ArrayList<RoleInterface> getRoles() {
+	public List<RoleInterface> getRoles() {
 		return roles;
 	}
 	
@@ -521,7 +588,7 @@ public class PersonAgent extends Agent implements Person {
     public PropertyChangeSupport getPropertyChangeSupport() {
         return propertyChangeSupport;
     }
-	
+
 	@Override
 	public AnimatedPersonAtHome getAnimationAtHome(){
 		return homeAnimation;
@@ -540,8 +607,20 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void setOccupation(JobRoleInterface r) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		occupation = r;
-		if (r != null) { addRole(r); }
+		if (r != null) {
+			// Giving an occupation
+			this.occupation = r;
+			this.addRole(r);
+		} else {
+			// Taking away an occupation
+			if (this.occupation.getActive()) {
+				// The occupation should not be working when it is removed
+				throw new IllegalStateException();
+			} else {
+				removeRole(occupation);
+				occupation = null;
+			}
+		}
 	}
 	
 	@Override
@@ -621,17 +700,49 @@ public class PersonAgent extends Agent implements Person {
 			e.printStackTrace();
 		}
 	}
-	
-	@Override
-	public void releaseSemaphoreFromAnimation(){
-		atDestination.release();
-	}
-	
+
 	@Override
 	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
+		RoleInterface i;
+		Iterator<RoleInterface> itr = roles.iterator();
+		while(itr.hasNext()) {
+			i = itr.next();
+			if (i.getClass().equals(r.getClass())) {
+				System.out.println("FOUND-----------------"); // TODO
+				itr.remove();
+			}
+		}
 		roles.add(r);
 		getPropertyChangeSupport().firePropertyChange(ROLES, null, r);
+	}
+	
+	@Override
+	public void forceSleep() {
+		synchronized(roles) {
+			for (RoleInterface r : roles) {
+				r.setInactive();
+			}
+		}
+		if (carPassengerRole != null) {
+			roles.remove(carPassengerRole);
+			carPassengerRole = null;
+		}
+		if (busPassengerRole != null) {
+			roles.remove(busPassengerRole);
+			busPassengerRole = null;
+		}
+		if (restaurantCustomerRole != null) {
+			roles.remove(restaurantCustomerRole);
+			restaurantCustomerRole = null;
+		}
+		if (marketCustomerRole != null) {
+			roles.remove(marketCustomerRole);
+			marketCustomerRole = null;
+		}
+		try {
+			actGoToSleep();
+		} catch (InterruptedException e) {}
 	}
 	
 	private void removeRole(RoleInterface r) {
@@ -646,7 +757,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		// print(Thread.currentThread().getStackTrace()[1].getMethodName()); TODO
 		if (car != null) {
 			carPassengerRole = new CarPassengerRole(car, destination);
 			carPassengerRole.setActive();
@@ -675,7 +786,7 @@ public class PersonAgent extends Agent implements Person {
 	 * @param s the state to select on arrival
 	 */
 	private boolean processTransportationArrival() {
-		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		// print(Thread.currentThread().getStackTrace()[1].getMethodName()); TODO
 		if (car != null && carPassengerRole != null) {
 			if(!carPassengerRole.getActive()) {
 				removeRole(carPassengerRole);
@@ -831,8 +942,7 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 		
-//		return disposition;
-		return true;
+		return disposition;
 	}
 	
 	/**
@@ -920,5 +1030,10 @@ public class PersonAgent extends Agent implements Person {
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
     }
+
+	@Override
+	public void releaseSemaphoreFromAnimation() {
+		//has debug/test purposes.	
+	}
 
 }

@@ -1,5 +1,6 @@
 package city.bases;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import city.bases.interfaces.AnimationInterface;
@@ -25,6 +26,8 @@ public abstract class Building implements BuildingInterface {
 	private HashMap<RoleInterface, AnimationInterface> occupyingRoles = new HashMap<RoleInterface, AnimationInterface>(); // Stores all roles currently inside the building, along with their animations
 	private CityViewBuilding cityViewBuilding; // The representation of this building in the GUI's map
 	private BuildingCard panel; // The representation of this building's interior
+	private ArrayList<String> workerRoleClasses = new ArrayList<String>(); // The classes which work in this type of building
+	private String buildingClassName;
 	
 	// Constructor
 
@@ -33,6 +36,7 @@ public abstract class Building implements BuildingInterface {
 		this.cash = 0;
 		this.setPanel(panel);
 		this.setCityViewBuilding(cityBuilding);
+		this.setBuildingClassName("city.bases.interfaces.BuildingInterface");
 	}
     
     // Messages
@@ -63,13 +67,15 @@ public abstract class Building implements BuildingInterface {
 		return customerAnimationInterfaceName;
 	}
 	
-
+	@Override
+	public ArrayList<String> getWorkerRoleClassNames() {
+		return workerRoleClasses;
+	}
 	
 	@Override
 	public <T extends AnimationInterface> T getOccupyingRoleAnimation(RoleInterface r, Class<T> type) {
 		return type.cast(occupyingRoles.get(r));
 	}
-	
 
 	@Override
 	public CityViewBuilding getCityViewBuilding() {
@@ -84,6 +90,11 @@ public abstract class Building implements BuildingInterface {
 	@Override
 	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles() {
 		return occupyingRoles;
+	}
+	
+	@Override
+	public String getBuildingClassName() {
+		return buildingClassName;
 	}
 	
 	// Setters
@@ -113,6 +124,11 @@ public abstract class Building implements BuildingInterface {
 		this.panel = b;
 	}
 	
+	@Override
+	public void setBuildingClassName(String s) {
+		this.buildingClassName = s;
+	}
+	
 	// Utilities 
 	
 	@Override
@@ -131,6 +147,11 @@ public abstract class Building implements BuildingInterface {
 	@Override
 	public boolean occupyingRoleExists(RoleInterface r) {
 		return occupyingRoles.containsKey(r);
+	}
+	
+	@Override
+	public void addWorkerRoleName(String r) {
+		workerRoleClasses.add(r);
 	}
 
 }

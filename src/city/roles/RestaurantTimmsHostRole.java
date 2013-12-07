@@ -30,7 +30,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsHostRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
+	public RestaurantTimmsHostRole(RestaurantTimms b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);

@@ -12,6 +12,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application;
 import city.Application.FOOD_ITEMS;
+import city.agents.interfaces.Person;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
@@ -63,16 +64,16 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 //	---------------------------------------------------------------
 	@Override
 	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgNewDeliveryPerson from Market."));
-		System.out.println("Market Cashier received msgNewDeliveryPerson from Market.");
+		log.add(new LoggedEvent("MarketCashier received msgNewDeliveryPerson from Market."));
+		System.out.println("MarketCashier received msgNewDeliveryPerson from Market.");
 		deliveryPeople.add(new MyDeliveryPerson(d));
 		stateChanged();
 	}
 	
 	@Override
 	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market."));
-		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market.");
+		log.add(new LoggedEvent("MarketCashier received msgRemoveDeliveryPerson from Market."));
+		System.out.println("MarketCashier received msgRemoveDeliveryPerson from Market.");
 		MyDeliveryPerson dp = findDeliveryPerson(d);
 		deliveryPeople.remove(dp);
 		stateChanged();
@@ -82,8 +83,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 //	---------------------------------------------------------------
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
-		System.out.println("Market Cashier received msgComputeBill from Employee.");
+		log.add(new LoggedEvent("MarketCashier received msgComputeBill from MarketEmployee."));
+		System.out.println("MarketCashier received msgComputeBill from MarketEmployee.");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
 			stateChanged();			
@@ -93,8 +94,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market Cashier received msgComputeBill from Employee."));
-		System.out.println("Market Cashier received msgComputeBill from Employee");
+		log.add(new LoggedEvent("MarketCashier received msgComputeBill from MarketEmployee."));
+		System.out.println("MarketCashier received msgComputeBill from MarketEmployee");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
 			stateChanged();			
@@ -106,8 +107,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 //	---------------------------------------------------------------	
 	@Override
 	public void msgHereIsPayment(int id, int money) {
-		log.add(new LoggedEvent("Market Cashier received msgHereIsPayment from Customer Payment for " + money));
-		System.out.println("Market Cashier received msgHereIsPayment from Customer Payment for " + money);
+		log.add(new LoggedEvent("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money));
+		System.out.println("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money);
 		Transaction t = findTransaction(id);
 		t.payment = money;
 		t.s = TransactionState.ReceivedPayment;		
@@ -262,6 +263,12 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	
 //  Setters
 //	=====================================================================	
+	@Override
+	public void setPerson(Person p) {
+		super.setPerson(p);
+		market.getBankCustomer().setPerson(this.getPerson());
+	}
+	
 	@Override
 	public void setMarket(Market market) {
 		this.market = market;

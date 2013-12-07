@@ -9,7 +9,6 @@ import utilities.MarketTransaction;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.bases.JobRole;
 import city.bases.Role;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.buildings.RestaurantTimmsBuilding.Check.State;
 import city.buildings.interfaces.RestaurantTimms;
@@ -18,9 +17,6 @@ import city.roles.interfaces.RestaurantTimmsCashier;
 import city.roles.interfaces.RestaurantTimmsCustomer;
 import city.roles.interfaces.RestaurantTimmsWaiter;
 
-/**
- * Restaurant cashier agent.
- */
 public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTimmsCashier {
 	
 	// Data
@@ -28,7 +24,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	private int moneyCollected;
 	private int moneyOwed;
 	private boolean shiftOver;
-	private RestaurantTimmsBuilding rtb; 
+	private RestaurantTimms rtb; 
 	
 	private List<Role> roles = new ArrayList<Role>(); // For market orders
 	
@@ -44,7 +40,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsCashierRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd){
+	public RestaurantTimmsCashierRole(RestaurantTimms b, int shiftStart, int shiftEnd){
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);
