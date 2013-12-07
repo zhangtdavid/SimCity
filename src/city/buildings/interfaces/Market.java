@@ -34,12 +34,17 @@ public interface Market extends BuildingInterface {
 	public BankCustomer getBankCustomer();
 	public List<MyMarketEmployee> getEmployees();
 	public List<MyDeliveryPerson> getDeliveryPeople();
+	public List<MyMarketCustomer> getCustomers();
 	
 	// Setters
 	public void setManager(MarketManager manager);
 	public void setCashier(MarketCashier cashier);
 	Map<FOOD_ITEMS, Integer> getInventory();
 	Map<FOOD_ITEMS, Integer> getPrices();
+	
+	// Utilities
+	public MyMarketEmployee findEmployee(MarketEmployee me);
+	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd);
 	
 	// Classes
 	public class MyDeliveryPerson {
@@ -175,8 +180,4 @@ public interface Market extends BuildingInterface {
 			this.orderId = orderId;
 		}
 	}
-
-	List<MyMarketCustomer> getCustomers();
-	MyMarketEmployee findEmployee(MarketEmployee me);
-	MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd);
 }

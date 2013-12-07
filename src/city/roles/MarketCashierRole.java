@@ -58,7 +58,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("MarketCashier received msgComputeBill from MarketEmployee."));
-		System.out.println("MarketCashier received msgComputeBill from MarketEmployee.");
+		print("MarketCashier received msgComputeBill from MarketEmployee.");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
 			stateChanged();			
@@ -69,7 +69,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> order, Map<FOOD_ITEMS, Integer> collectedItems, int id) {
 		log.add(new LoggedEvent("MarketCashier received msgComputeBill from MarketEmployee."));
-		System.out.println("MarketCashier received msgComputeBill from MarketEmployee");
+		print("MarketCashier received msgComputeBill from MarketEmployee");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, cPay, order, collectedItems, id));		
 			stateChanged();			
@@ -82,7 +82,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public void msgHereIsPayment(int id, int money) {
 		log.add(new LoggedEvent("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money));
-		System.out.println("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money);
+		print("MarketCashier received msgHereIsPayment from MarketCustomerDeliveryPayment for " + money);
 		Transaction t = findTransaction(id);
 		t.payment = money;
 		t.s = TransactionState.ReceivedPayment;		
@@ -94,7 +94,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Delivery Person."));
-		System.out.println("Market Cashier received msgDeliveringItems from Delivery Person.");
+		print("Market Cashier received msgDeliveringItems from Delivery Person.");
 		MyDeliveryPerson dp = market.findDeliveryPerson(d);
 		dp.setAvailable(false);
 	}
@@ -102,7 +102,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public void msgFinishedDeliveringItems(MarketDeliveryPerson d, int id) {
 		log.add(new LoggedEvent("Market Cashier received msgFinishedDeliveringItems from Delivery Person."));
-		System.out.println("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
+		print("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
 		Transaction t = findTransaction(id);
 		transactions.remove(t);
 		MyDeliveryPerson dp = market.findDeliveryPerson(d);
@@ -117,6 +117,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		// Role Scheduler
 		boolean blocking = false;
 		if (market.getBankCustomer().getActive() && market.getBankCustomer().getActivity()) {
+			print("here");
 			blocking  = true;
 			boolean activity = market.getBankCustomer().runScheduler();
 			if (!activity) {
@@ -170,7 +171,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 //  Actions
 //	=====================================================================	
 	private void depositMoney() {
-		market.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-1000, Application.TRANSACTION_TYPE.business);
+		market.getBankCustomer().setActive(Application.BANK_SERVICE.atmDeposit, market.getCash()-500, Application.TRANSACTION_TYPE.business);
 	}
 	
 	private void computeBill(Transaction t) {
