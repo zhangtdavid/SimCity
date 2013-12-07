@@ -52,7 +52,7 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 
 	@Override
 	public Map<FOOD_ITEMS, Integer> getFoodItems(Person p) {
-		return allFoodItems .get(p);
+		return allFoodItems.get(p);
 	}
 	
 	// Setters

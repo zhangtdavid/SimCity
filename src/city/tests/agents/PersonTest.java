@@ -90,6 +90,14 @@ public class PersonTest extends TestCase {
 		workplaceCityViewBuilding = new MockCityViewBuilding();
 		workplace.setCityViewBuilding(workplaceCityViewBuilding);
 		house = new MockHouse("MockHouse");
+		
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
+		items.put(FOOD_ITEMS.salad, 0);
+		items.put(FOOD_ITEMS.chicken, 0);
+		items.put(FOOD_ITEMS.steak, 0);
+		items.put(FOOD_ITEMS.pizza, 0); //ryan addition due to hashmap edit
+		house.setFood(person, items);
+		
 		car = new MockCar("MockCar");
 		bus = new MockBus("MockBus");
 	}
@@ -383,7 +391,8 @@ public class PersonTest extends TestCase {
 		person.getMarketCustomerRole().setInactive();
 		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 4);
-		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		outcome = person.runScheduler();
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		
+		outcome = person.runScheduler();
 		
 		// Person should be going to sleep
 		assertEquals("Person scheduler should continue running", true, outcome);
@@ -586,7 +595,8 @@ public class PersonTest extends TestCase {
 		person.getMarketCustomerRole().setInactive();
 		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 4);
-		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		outcome = person.runScheduler();
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		
+		outcome = person.runScheduler();
 		
 		// Person should be going to sleep
 		assertEquals("Person scheduler should continue running", true, outcome);

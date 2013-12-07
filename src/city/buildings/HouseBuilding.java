@@ -3,6 +3,7 @@ package city.buildings;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
 import city.animations.PersonAnimation;
 import city.bases.Animation;
@@ -48,6 +49,12 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		if (residents.isEmpty()) {
 			// ONLY ONE PERSON PER HOUSE~!
 			this.residents.add(resident);
+			HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
+			items.put(FOOD_ITEMS.salad, 1);
+			items.put(FOOD_ITEMS.chicken, 1);
+			items.put(FOOD_ITEMS.steak, 1);
+			items.put(FOOD_ITEMS.pizza, 1); // should we be putting 1 food item for each person on addition? TODO
+			this.setFood(resident.getPerson(), items);
 		} else {
 			// System.out.println("Someone already lives in this house (capacity = 1)");
 		}
