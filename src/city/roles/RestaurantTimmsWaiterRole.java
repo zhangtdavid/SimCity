@@ -65,28 +65,28 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void msgWantBreak() {
-		print("msgWantBreak");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.wantsBreak = true;
 		stateChanged();
 	}
 	
 	@Override
 	public void msgAllowBreak(Boolean r) {
-		print("msgAllowBreak - " + r.toString());
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.wantsBreak = r;
 		waiterHover.release();
 	}
 	
 	@Override
 	public void msgSeatCustomer(RestaurantTimmsCustomer c, int n) {
-		print("msgSeatCustomer");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		customers.add(new InternalCustomer(c, n, InternalCustomer.State.seat));
 		stateChanged();
 	}
 	
 	@Override
 	public void msgWantFood(RestaurantTimmsCustomer c) {
-		print("msgWantFood");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		InternalCustomer customer = findCustomer(c);
 		customer.setState(InternalCustomer.State.order);
 		stateChanged();
@@ -94,7 +94,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void msgOrderFood(RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
-		print("msgOrderFood");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		InternalCustomer customer = findCustomer(c);
 		customer.setStockItem(s);
 		customer.setState(InternalCustomer.State.hasOrdered);
@@ -103,7 +103,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void msgOrderPlaced(RestaurantTimmsCustomer c, Boolean inStock) {
-		print("msgOrderPlaced");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		InternalCustomer customer = findCustomer(c);
 		if (inStock) {
 			customer.setState(InternalCustomer.State.makingFood);
@@ -116,7 +116,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void msgFoodReady(RestaurantTimmsCustomer c) {
-		print("msgFoodReady");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		InternalCustomer customer = findCustomer(c);
 		customer.setState(InternalCustomer.State.foodReady);
 		stateChanged();
@@ -124,13 +124,13 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void msgCheckReady() {
-		print("msgCheckReady");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		waiterHover.release();
 	}
 	
 	@Override
 	public void msgDoNotWantFood(RestaurantTimmsCustomer c) {
-		print("msgDoNotWantFood");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		InternalCustomer customer = findCustomer(c);
 		customer.setState(InternalCustomer.State.none);
 		waiterHover.release();
@@ -138,25 +138,25 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void guiAtCustomer() {
-		print("guiAtCustomer");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atCustomer.release();
 	}
 	
 	@Override
 	public void guiAtTable() {
-		print("guiAtTable");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atTable.release();
 	}
 	
 	@Override
 	public void guiAtKitchen() {
-		print("guiAtKitchen");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atKitchen.release();
 	}
 	
 	@Override
 	public void guiAtHome() {
-		print("guiAtHome");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atHome.release();
 	}
 	
@@ -260,7 +260,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	}
 	
 	private void actSeatCustomer(InternalCustomer c) throws InterruptedException {
-		print("actSeatCustomer");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToCustomer(c.getCustomer().getAnimation(RestaurantTimmsAnimatedCustomer.class));
 		atCustomer.acquire();
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToTable(c.getTableNumber(), null);
@@ -270,7 +270,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	}
 	
 	private void actGoToHome() throws InterruptedException {
-		print("actGoToHome");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		int homePosition = rtb.getWaiterIndex(this);
 		RestaurantTimmsAnimatedWaiter animation = this.getAnimation(RestaurantTimmsAnimatedWaiter.class);
 		animation.goToHome(homePosition);
@@ -278,7 +278,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	}
 	
 	private void actTakeOrder(InternalCustomer c) throws InterruptedException {
-		print("actTakeOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		RestaurantTimmsCustomer customer = c.getCustomer();
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToTable(c.getTableNumber(), null);
 		atTable.acquire();
@@ -287,7 +287,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	}
 	
 	private void actPlaceOrder(InternalCustomer c) throws InterruptedException {
-		print("actPlaceOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		RestaurantTimmsCustomer customer = c.getCustomer();
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToKitchen(rtb.getCook().getAnimation(RestaurantTimmsAnimatedCook.class));
 		atKitchen.acquire();
@@ -296,7 +296,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	}
 	
 	private void actDeliverOrder(InternalCustomer c) throws InterruptedException {
-		print("actDeliverOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		RestaurantTimmsCustomer customer = c.getCustomer();
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).goToKitchen(rtb.getCook().getAnimation(RestaurantTimmsAnimatedCook.class));
 		atKitchen.acquire();
@@ -325,6 +325,7 @@ public class RestaurantTimmsWaiterRole extends JobRole implements RestaurantTimm
 	
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.addWaiter(this);
 		shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedWaiter.class).setVisible(true);

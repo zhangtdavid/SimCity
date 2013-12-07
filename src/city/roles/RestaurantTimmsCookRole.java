@@ -65,14 +65,14 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 
 	@Override
 	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
-		print("msgCookOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.addOrder(new Order(w, c, s));
 		stateChanged();
 	}
 	
 	@Override
 	public void msgPickUpOrder(RestaurantTimmsCustomer c) {
-		print("msgPickUpOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Order order = null;
 		for (Order o : rtb.getOrders()) {
 			if (o.getCustomer() == c) {
@@ -150,7 +150,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	// Actions
 	
 	private Boolean actConfirmOrder(Order o) {
-		print("actConfirmOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Order order = o;
 		if (checkStore(order.getItem())) {
 			decrementMenuItem(order.getItem(), 1);
@@ -164,7 +164,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	}
 	
 	private void actCookOrder(final Order o) {
-		print("actCookOrder - " + o.getItem().toString());
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		o.setState(Order.State.cooking);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -176,7 +176,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	}
 	
 	private void actOrderFromMarket(HashMap<FOOD_ITEMS, Integer> order) {
-		print("actOrderFromMarket");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		// Add the order to the restaurant's list
 		MarketOrder marketOrder = new MarketOrder(order);
@@ -212,6 +212,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.setCook(this);
 		shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedCook.class).setVisible(true);
