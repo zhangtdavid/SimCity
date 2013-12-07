@@ -379,7 +379,8 @@ public class Application {
 		//this is literally the only place this works right now for some reason
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
 		CityViewApt cityViewHouseZhang1 = new CityViewApt(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
-		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
+		//if you want to see house animation, try (75,225) for location (: and uncomment lines 869, 874.
+		//if you dont want this to block the road just move it to (325,325) or something
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
@@ -453,7 +454,7 @@ public class Application {
 		// Create waiter
 		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
 		rzb1.addOccupyingRole(p4r1Zhang);
-		p4Zhang.setOccupation(p4r1Zhang); // TODO UNCOMMENT THIS after i test multiple people in apartment animation 
+		p4Zhang.setOccupation(p4r1Zhang); 
 
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
 		// Create panels
