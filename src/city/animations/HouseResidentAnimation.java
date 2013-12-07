@@ -11,8 +11,7 @@ import city.animations.interfaces.AnimatedPersonAtHome;
 import city.bases.Animation;
 import city.gui.interiors.HousePanel;
 
-public class HouseResidentAnimation extends Animation implements
-		AnimatedPersonAtHome {
+public class HouseResidentAnimation extends Animation implements AnimatedPersonAtHome {
 
 	// Data
 
@@ -31,7 +30,7 @@ public class HouseResidentAnimation extends Animation implements
 	private boolean leaving;
 	private String foodToEat;
 	public Timer timer = new Timer(); // set public for testing (can set timer
-										// events as activated)
+	// events as activated)
 
 	// Constructor
 	public HouseResidentAnimation(Person p) {
@@ -74,7 +73,7 @@ public class HouseResidentAnimation extends Animation implements
 				//for a house, do nothing
 				status = "";
 				command = Command.noCommand;
-				
+
 				//going to bed
 			} else if (command == Command.ToBed) {
 				personSemaphoreIsAcquired = false;
@@ -92,7 +91,7 @@ public class HouseResidentAnimation extends Animation implements
 				}
 				person.print("At refrigerator");
 				this.cookAndEatFood(foodToEat);
-				
+
 				//has left refrigerator, to stove
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
 				command = Command.StationaryAtStove;
@@ -129,7 +128,7 @@ public class HouseResidentAnimation extends Animation implements
 					}, 4000);
 
 				} else { // if you're in a test, skip the timer; skip the
-							// stationary phase
+					// stationary phase
 					person.print("Skipped timer; done eating");
 					status = "";
 					leaving = true;
@@ -224,7 +223,7 @@ public class HouseResidentAnimation extends Animation implements
 	public boolean getBeingTested() {
 		return HouseResidentAnimation.beingTested;
 	}
-	
+
 	public String getStatus() {
 		return this.status;
 	}
@@ -240,12 +239,12 @@ public class HouseResidentAnimation extends Animation implements
 	public void setAcquired() {
 		personSemaphoreIsAcquired = true;
 	}
-	
+
 	@Override
 	public void setGraphicStatus(String in){
 		status = in;
 	}
-	
+
 	@Override
 	public void setAtHome() {
 		isAtHome = true;

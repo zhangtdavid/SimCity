@@ -36,7 +36,7 @@ import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
-import city.buildings.interfaces.Apartment;
+import city.buildings.interfaces.Apt;
 import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.BusStop;
 import city.buildings.interfaces.House;
@@ -96,7 +96,7 @@ public class PersonAgent extends Agent implements Person {
 		this.lastWentToSleep = new Date(startDate.getTime());
 		this.setState(STATES.none);
 		this.cash = 0;
-		this.hasEaten = false;
+		this.hasEaten = false;  // TOOD SET FALSE
 		
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
 		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank))); // TODO Get replace with correct constructor
@@ -246,7 +246,7 @@ public class PersonAgent extends Agent implements Person {
 							e.printStackTrace();
 						} // goes to refrig, stove, table, back to room entrance.
 					}
-				}, 400); 
+				}, 1000); 
 				homeAnimation.setAcquired();
 				if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
 					atDestination.acquire(); //and freeze
@@ -273,7 +273,7 @@ public class PersonAgent extends Agent implements Person {
 							e.printStackTrace();
 						} 
 					}
-				}, 4000); // TODO change this to 4000 in apt
+				}, 1000); // TODO change this to 4000 in apt
 				homeAnimation.setAcquired(); 
 				if (!homeAnimation.getBeingTested()) {
 					atDestination.acquire();
@@ -291,9 +291,8 @@ public class PersonAgent extends Agent implements Person {
 					timer.schedule(new TimerTask() {
 						public void run() {
 							homeAnimation.goOutside(); // now the building may be exited.
-
 						}
-					}, 4000); // TODO change this to 4000 in apt
+					}, 1000); // TODO change this to 4000 in apt
 					homeAnimation.setAcquired(); 
 					if (!homeAnimation.getBeingTested()) {
 						atDestination.acquire();
@@ -434,6 +433,7 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToCook);
+		//this.getRoles().get(0); // perhaps use this instead of residentRole?
 		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
 	}
 	
@@ -653,12 +653,12 @@ public class PersonAgent extends Agent implements Person {
 		
 		//set home
 		home = h;
-		
+		h.addResident(this.getResidentRole());
 		//Set animation for inside home. Both inherit the same type, so it's A-OK	
 		if(h instanceof House){
 			homeAnimation = new HouseResidentAnimation(this); 
 		}
-		else if(h instanceof Apartment){
+		else if(h instanceof Apt){
 			homeAnimation = new AptResidentAnimation(this);
 		}			
 	}

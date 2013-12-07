@@ -211,6 +211,7 @@ public class TraceTab extends JPanel {
 		toggleRestaurantTimms.setSelected(false);
 		toggleRestaurantZhang.setSelected(false);
 		mainFrame.tracePanel.hideAllAlerts();
+
 	}
 	
 }
