@@ -226,6 +226,28 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	}
 	
 	/**
+	 * Convenient function to change the display state of alerts with a given {@link AlertTag}.
+	 * @param tag The tag whose alerts you may or may not want to see.
+	 * @param b Whether or not you want to see those alerts.
+	 */
+	public void toggleAlertsWithTag(AlertTag tag, boolean b) {
+		if (b) {
+			this.visibleTags.add(tag);
+		} else {
+			this.visibleTags.remove(tag);
+		}
+		filterTracePanel();
+	}
+	
+	/**
+	 * Hides all the alerts from the trace panel
+	 */
+	public void hideAllAlerts() {
+		this.visibleTags.clear();
+		filterTracePanel();
+	}
+	
+	/**
 	 * Enables Alerts to be displayed for all Tag values in {@link AlertTag}.
 	 * Convenience method.
 	 */
