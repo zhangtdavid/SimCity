@@ -72,6 +72,8 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
+			currentBuilding = destinationBuilding;
+			destinationBuilding = null;
 			car.msgAtDestination();
 		}
 	}
@@ -96,7 +98,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		endRoad = Application.CityMap.findClosestRoad(destination);
 		atDestination = false;
 		atDestinationRoad = false;
-		this.car.print("In Destination: " + endRoad);
+		this.car.print("Going to destination " + destination);
 	}
 	
 	// Getters

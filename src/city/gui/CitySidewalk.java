@@ -58,16 +58,4 @@ public class CitySidewalk extends CityViewBuilding {
 		}
 		return false;
 	}
-	
-//	// Utilities
-//	
-//	public int compareTo(CitySidewalk rhs) {
-//		
-//	}
-//	
-//	public static Comparator<CitySidewalk> CitySidewalkComparator = new Comparator<CitySidewalk>() {
-//		public int compare(CitySidewalk sidewalk1, CitySidewalk sidewalk2) {
-//			String
-//		}
-//	}
 }

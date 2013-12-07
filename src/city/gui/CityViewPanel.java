@@ -8,10 +8,22 @@ import java.awt.event.MouseMotionListener;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.animations.interfaces.AnimatedCar;
+import city.bases.Building;
 import city.bases.interfaces.AnimationInterface;
+import city.bases.interfaces.BuildingInterface;
+import city.buildings.BankBuilding;
+import city.buildings.RestaurantChoiBuilding;
+import city.buildings.RestaurantChungBuilding;
+import city.buildings.RestaurantJPBuilding;
+import city.buildings.RestaurantTimmsBuilding;
+import city.buildings.RestaurantZhangBuilding;
+import city.gui.exteriors.CityViewBank;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.exteriors.CityViewRestaurant;
+import city.gui.interiors.BankPanel;
 import city.gui.interiors.RestaurantChoiPanel;
 import city.gui.interiors.RestaurantChungPanel;
 import city.gui.interiors.RestaurantJPPanel;
@@ -21,13 +33,14 @@ import city.gui.interiors.RestaurantZhangPanel;
 public class CityViewPanel extends CityPanel implements MouseMotionListener {
 
 	private static final long serialVersionUID = 3622803906501755529L;
-	
+
 	public static final int CITY_WIDTH = 500, CITY_HEIGHT = 500;
 	boolean addingObject = false;
-	CityViewBuilding temp;
-	
+
+	private static NewBuilding temp;
+
 	String name = "City Panel";
-	
+
 	public CityViewPanel(MainFrame mf) {
 		super(mf);
 		this.setPreferredSize(new Dimension(CITY_WIDTH, CITY_HEIGHT));
@@ -37,34 +50,43 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		background = new Color(128, 64, 0);
 		addMouseListener(this);
 		addMouseMotionListener(this);
+		temp = new NewBuilding(null, null);
 	}
-	
+
 	public void mouseClicked(MouseEvent arg0) {
-		
+
 	}
-	
+
 	public void mouseEntered(MouseEvent arg0) {
-		
+
 	}
-	
+
 	public void mouseExited(MouseEvent arg0) {
-		
+
 	}
-	
+
 	public void mousePressed(MouseEvent arg0) {
 		if (addingObject) {
 			//make sure we aren't overlapping anything
 			for (CityViewBuilding c: statics) {
-				if (c.equals(temp))
+				if (c.equals(temp.getCityViewBuilding()))
 					continue;
-				if (c.getRectangle().intersects(temp.getRectangle())) {
+				if (c.getRectangle().intersects(temp.getCityViewBuilding().getRectangle())) {
+					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
+					return;
+				}
+			}
+			for (CityViewBuilding c: movings) {
+				if (c.equals(temp.getCityViewBuilding()))
+					continue;
+				if (c.getRectangle().intersects(temp.getCityViewBuilding().getRectangle())) {
 					AlertLog.getInstance().logError(AlertTag.GENERAL_CITY, this.name, "Can't add building, location obstructed!");
 					return;
 				}
 			}
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
-			mainframe.buildingView.addView(temp.getBuilding(), temp.getID());
+			createBuilding(temp.getCityViewBuilding().getBuilding(), temp.getCityViewBuilding(), temp.getBuilding());
 			temp = null;
 		}
 		for (CityViewBuilding c: statics) {
@@ -83,36 +105,115 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			}
 		}
 	}
-	
+
 	public void mouseReleased(MouseEvent arg0) {
 
 	}
-	
+
 	public void addObject(CityViewBuilding.BUILDINGTYPE type) {
 		if (addingObject)
 			return;
 		addingObject = true;
 		switch (type) {
-		case RESTAURANTZHANG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)); break;
-		case RESTAURANTCHOI: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)); break;
-		case RESTAURANTJP: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)); break;
-		case RESTAURANTTIMMS: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)); break;
-		case RESTAURANTCHUNG: temp = new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)); break;
-		// TODO BankBranch c0e51d580a4
-		// case BANK: temp = new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(mainframe, Color.green, new Dimension(500, 500))); break;
+		case RESTAURANTZHANG:
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)));
+			temp.setBuilding(new RestaurantZhangBuilding("RestaurantZhang " + statics.size(),
+					(RestaurantZhangPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case RESTAURANTCHOI:
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)));
+			temp.setBuilding(new RestaurantChoiBuilding("RestaurantChoi " + statics.size(),
+					(RestaurantChoiPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case RESTAURANTJP:
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)));
+			temp.setBuilding(new RestaurantJPBuilding("RestaurantJP " + statics.size(),
+					(RestaurantJPPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case RESTAURANTTIMMS:
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantJPPanel(Color.yellow)));
+			temp.setBuilding(new RestaurantTimmsBuilding("RestaurantTimms " + statics.size(),
+					(RestaurantTimmsPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case RESTAURANTCHUNG:
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)));
+			temp.setBuilding(new RestaurantChungBuilding("RestaurantChung " + statics.size(),
+					(RestaurantChungPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case BANK: 
+			temp.setCityViewBuilding(new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(Color.green)));
+			temp.setBuilding(new BankBuilding("RestaurantChung " + statics.size(),
+					(BankPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 		default: return;
 		}
-		addStatic(temp);
+		addStatic(temp.getCityViewBuilding());
 	}
 
 	public void mouseDragged(MouseEvent arg0) {
-		
+
 	}
 
 	public void mouseMoved(MouseEvent arg0) {
 		if (addingObject) {
-			temp.setPosition(arg0.getPoint());
+			int newX = (int)(arg0.getPoint().getX() - arg0.getPoint().getX() % 25);
+			int newY = (int)(arg0.getPoint().getY() - arg0.getPoint().getY() % 25);
+
+			if(newX < 25)
+				newX = 25;
+			else if(newX > 425)
+				newX = 425;
+
+			if(newY < 25)
+				newY = 25;
+			else if(newY > 425)
+				newY = 425;
+
+			if(newX == 25 && (newY == 25 || newY == 425))
+				newX = 50;
+			else if(newX == 425 && (newY == 25 || newY == 425))
+				newX = 400;
+
+			temp.getCityViewBuilding().setPosition(newX, newY);
 		}
 	}
 	
+	private void createBuilding(BuildingCard panel, CityViewBuilding cityView, BuildingInterface building) {
+		Application.getMainFrame().buildingView.addView(panel, cityView.getID());
+		if(building.getClass().getName().contains("Restaurant")) {
+			CityMap.addBuilding(BUILDING.restaurant, building);
+		} else if(building.getClass().getName().contains("Bank")) {
+			CityMap.addBuilding(BUILDING.bank, building);
+		} else if(building.getClass().getName().contains("Market")) {
+			CityMap.addBuilding(BUILDING.market, building);
+		} else if(building.getClass().getName().contains("BusStop")) {
+			CityMap.addBuilding(BUILDING.busStop, building);
+		} else if(building.getClass().getName().contains("House")) {
+			CityMap.addBuilding(BUILDING.house, building);
+		}
+	}
+
+	private class NewBuilding {
+		private CityViewBuilding cityViewBuilding;
+		private BuildingInterface building;
+		NewBuilding(CityViewBuilding cityViewBuilding, BuildingInterface building) {
+			this.cityViewBuilding = cityViewBuilding;
+			this.building = building;
+		}
+
+		CityViewBuilding getCityViewBuilding() {
+			return cityViewBuilding;
+		}
+
+		BuildingInterface getBuilding() {
+			return building;
+		}
+
+		void setCityViewBuilding(CityViewBuilding newCityViewBuilding) {
+			cityViewBuilding = newCityViewBuilding;
+		}
+
+		void setBuilding(BuildingInterface newBuilding) {
+			building = newBuilding;
+		}
+	}
 }

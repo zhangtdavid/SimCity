@@ -114,10 +114,10 @@ public abstract class CityViewBuilding {
 		rectangle.setLocation(getX(), y);
 	}
 
-	public void setPosition(Point p) {
-		this.x = p.x;
-		this.y = p.y;
-		rectangle.setLocation(p);
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+		rectangle.setLocation(x, y);
 	}
 
 	public void setID(String iD) {
