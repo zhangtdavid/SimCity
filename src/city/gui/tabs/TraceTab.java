@@ -111,59 +111,9 @@ public class TraceTab extends JPanel implements ActionListener {
 		this.add(toggleRestaurantJP, c);
 		c.gridx = 0; c.gridy = gridBagYPos++;
 		this.add(toggleRestaurantTimms, c);
-
-//		addRestaurantZhang = new JButton("Add RestaurantZhang");
-//		addRestaurantZhang.addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addRestaurantZhang, c);
-//
-//		addRestaurantChoi = new JButton("Add RestaurantChoi");
-//		addRestaurantChoi.addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addRestaurantChoi, c);
-//
-//		addRestaurantJP = new JButton("Add RestaurantJP");
-//		addRestaurantJP .addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addRestaurantJP, c);
-//
-//		addRestaurantTimms = new JButton("Add RestaurantTimms");
-//		addRestaurantTimms.addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addRestaurantTimms, c);
-//
-//		addRestaurantChung = new JButton("Add RestaurantChung");
-//		addRestaurantChung.addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addRestaurantChung, c);
-//
-//		addBank = new JButton("Add Bank");
-//		addBank.addActionListener(this);
-//		c.gridx = 0; c.gridy = gridBagYPos++;
-//		//		add(addBank, c);
 	}
 
 	public void actionPerformed(ActionEvent e) {
-//		if (e.getSource().equals(addRestaurantZhang)) {
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTZHANG);
-//			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantZhang");
-//		} else if (e.getSource().equals(addRestaurantChoi)) {
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHOI);
-//			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChoi");
-//		} else if (e.getSource().equals(addRestaurantJP)) {
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTJP);
-//			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantJP");
-//		} else if (e.getSource().equals(addRestaurantTimms)) {
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTTIMMS);
-//			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantTimms");
-//		} else if (e.getSource().equals(addRestaurantChung)) {
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.RESTAURANTCHUNG);
-//			AlertLog.getInstance().logInfo(AlertTag.RESTAURANT, this.name, "Adding New RestaurantChung");
-//		} else if (e.getSource().equals(addBank)) {
-//			AlertLog.getInstance().logInfo(AlertTag.BANK, this.name, "Adding New Bank");
-//			mainframe.cityView.addObject(CityViewBuilding.BuildingType.BANK);
-//		}
-		// TOGGLES
 		if(e.getSource().equals(toggleBank)) {
 			if(toggleBank.isSelected())
 				mainframe.tracePanel.showAlertsWithTag(AlertTag.BANK);
