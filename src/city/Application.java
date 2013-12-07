@@ -69,6 +69,7 @@ import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
+import city.roles.RestaurantZhangWaiterSharedDataRole;
 import city.tests.animations.PersonAnimationTest;
 
 public class Application {
@@ -97,6 +98,9 @@ public class Application {
 	 * 
 	 * When the program is started, this is the first call. It opens the GUI window, loads
 	 * configuration files, and causes the program to run.
+	 * 
+	 * MAC USERS: You may get javax.swing.UnsupportedLookAndFeelException:
+	 * [The Microsoft Windows Look and Feel - com.sun.java.swing.plaf.windows.WindowsLookAndFeel] not supported on this platform
 	 */
 	public static void main(String[] args) {
 		// Open the animation GUI
@@ -374,7 +378,7 @@ public class Application {
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
@@ -399,7 +403,7 @@ public class Application {
 		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
 		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date);
-		PersonAgent p4Zhang = new PersonAgent(/*Waiter*/"Tenant 1 Zhang", date);
+		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date);
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
@@ -447,9 +451,9 @@ public class Application {
 		p3Zhang.setOccupation(p3r1Zhang);
 
 		// Create waiter
-		//RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
-		//rzb1.addOccupyingRole(p4r1Zhang);
-		//p4Zhang.setOccupation(p4r1Zhang); // TODO UNCOMMENT THIS after i test multiple people in apartment animation 
+		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
+		rzb1.addOccupyingRole(p4r1Zhang);
+		p4Zhang.setOccupation(p4r1Zhang); // TODO UNCOMMENT THIS after i test multiple people in apartment animation 
 
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
 		// Create panels
@@ -725,6 +729,8 @@ public class Application {
 		CityViewHouse cityViewHouseChung1 = new CityViewHouse(425,250, "Chung House" + (mainFrame.cityView.getStaticsSize()), Color.gray, housePanelChung1);
 		HouseBuilding houseBuildingChung1 = new HouseBuilding("Chung House", null, housePanelChung1, cityViewHouseChung1);
 		createBuilding(housePanelChung1, cityViewHouseChung1, houseBuildingChung1);
+
+
 		
 		// Create landlord
 		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date);
@@ -887,13 +893,13 @@ public class Application {
 		c2Zhang.startThread();
 		c3Zhang.startThread();
 		c4Zhang.startThread();
-		//p0Zhang.startThread();
+		p0Zhang.startThread();
 		
 		p1Zhang.startThread();
 		p2Zhang.startThread();
 		p3Zhang.startThread();
 
-//		p4Zhang.startThread();
+		p4Zhang.startThread();
 //		c0Timms.startThread();
 //		c1Timms.startThread();
 //		c2Timms.startThread();
@@ -927,11 +933,11 @@ public class Application {
 //		c8Choi.startThread();
 //		c9Choi.startThread();
 //		c10Choi.startThread();
-		p0Chung.startThread();
-		p1Chung.startThread();
-		p2Chung.startThread();
-		p3Chung.startThread();
-		p4Chung.startThread();
+//		p0Chung.startThread();
+//		p1Chung.startThread();
+//		p2Chung.startThread();
+//		p3Chung.startThread();
+//		p4Chung.startThread();
 		c0Chung.startThread();
 		c1Chung.startThread();
 		c2Chung.startThread();

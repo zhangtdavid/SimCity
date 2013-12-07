@@ -22,7 +22,6 @@ public class HousePanel extends ResidenceBasePanel {
 	 */
 	private static final long serialVersionUID = -9051230986691103443L;
 	// Data
-
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 	public static final int HDX = 250;
@@ -36,9 +35,6 @@ public class HousePanel extends ResidenceBasePanel {
 	public static final int HBXi = 490; // initial house bed
 	public static final int HBYi = 50;
 	public static final int HBYint = 100; // y-Interval for house beds
-	// every house has 1 bed regardless of how many people there are; already
-	// furnished!
-	static final int NUMBER_OF_BEDS = 1;
 
 	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250,
 	// 490x350, 490x450. (5 max)

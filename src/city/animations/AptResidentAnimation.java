@@ -53,22 +53,12 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 		but will get interrupted by GoToSleep, which sets semaphore again.
 		and if there's truly nothing to do in the house after, gui leaves!*/
 		if(xPos == xDestination && yDestination == yPos && leaving){
-			if(command == Command.noCommand)  
-				this.goToRoom(person.getRoomNumber()); // go to room first
-			else goOutside(); // now go outside
+			goOutside(); // now go outside
 		}
 
 		//More standard animations.
 		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
-
-			//entering or leaving a building must begin with setting yourself to enter your room.
-			if (command == Command.ToRoomEntrance) {
-				//for an apartment, do nothing
-				status = "";
-				command = Command.noCommand;
-
-				//going to bed
-			} else if (command == Command.ToBed) {
+			if (command == Command.ToBed) {
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
 					person.guiAtDestination();
@@ -114,8 +104,6 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 							personSemaphoreIsAcquired = false;  
 							person.guiAtDestination();
 							person.print("Semaphore released, at table, eating now (timer)");
-							//send him outside now.
-							leaving = true;
 							command = Command.noCommand;
 						}
 					}, 4000);
@@ -124,7 +112,6 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 					// stationary phase
 					person.print("Skipped timer; done eating");
 					status = "";
-					leaving = true;
 					command = Command.noCommand;
 				}
 			}
@@ -142,19 +129,6 @@ public class AptResidentAnimation extends Animation implements AnimatedPersonAtH
 		g.setColor(Color.WHITE);
 		g.drawString(status, xPos, yPos - 8); // draw string (status)
 	}
-	
-	/**
-	 * This should really be called upon entrance or exit of the Apartment with timer to wait. ALWAYS; otherwise the person will be walking through walls
-	 */
-	@Override
-	public void goToRoom(int roomNo) {
-		status = "";
-		isAtHome = true;
-		command = Command.ToRoomEntrance;
-		xDestination = AptPanel.APT_ROOMS[person.getRoomNumber()-1][0]; // this is just outside the room's entrance.
-		yDestination = AptPanel.APT_ROOMS[person.getRoomNumber()-1][1];
-	}
-
 	// Movement
 
 	

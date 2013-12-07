@@ -19,14 +19,14 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	// Data
 	private HousePanel panel; // reference to main gui
 	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
-
+	public static final int NUMBER_OF_BEDS = 1;
+	
 	// Constructor
 
 	public HouseBuilding(String name, Landlord l, HousePanel panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
 		//Perhaps I should eliminate the landlord requirement, and have that be added separately? :/
 		this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
-		this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation"); // TODO why?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
 	}
@@ -56,7 +56,8 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	// Utilities
 
 	@Override
-	public void addOccupyingRole(RoleInterface ri) { 
+	public void addOccupyingRole(RoleInterface ri) {
+		//has nothing to do with role
 		// you can put any role the person has into this for house; I just get the person through it.
 		if(!this.allPersons.containsKey(ri.getPerson())){ // this prevents duplicates
 			addOccupyingPerson(ri.getPerson()); // if you already are in this home, just use the one you have before!
@@ -78,7 +79,6 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		allPersons.put(p, anim);
 		if(!anim.getBeingTested())
 			panel.addVisualizationElement(anim);
-
 	}
 
 }

@@ -49,7 +49,9 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 			xPos++;
 		else if (xPos > xDestination)
 			xPos--;
-		if (yPos < yDestination)
+		if(yPos>450 && xPos != xDestination){ // this makes the animation look good.
+			yPos--;
+		}else if (yPos < yDestination)
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
@@ -60,22 +62,14 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		but will get interrupted by GoToSleep, which sets semaphore again.
 		and if there's truly nothing to do in the house after, gui leaves!*/
 		if(xPos == xDestination && yDestination == yPos && leaving){
-			if(command == Command.noCommand)  
-				this.goToRoom(person.getRoomNumber()); // go to room first
-			else goOutside(); // now go outside
+			goOutside(); // now go outside
 		}
 
 		//More standard animations.
 		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
 
-			//entering or leaving a building must begin with setting yourself to enter your room.
-			if (command == Command.ToRoomEntrance) {
-				//for a house, do nothing
-				status = "";
-				command = Command.noCommand;
-
-				//going to bed
-			} else if (command == Command.ToBed) {
+			//if going to bed
+			if (command == Command.ToBed) {
 				personSemaphoreIsAcquired = false;
 				if(!beingTested){ // if not in a test (real run), do the semaphore stuff.
 					person.guiAtDestination();
@@ -120,10 +114,8 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 							// release semaphore now
 							personSemaphoreIsAcquired = false;  
 							person.guiAtDestination();
-							person.print("Semaphore released, at table, eating now (timer)");
-							//send him outside now.
-							leaving = true;
-							command = Command.noCommand;
+							person.print("Semaphore released, at table, done eating (timer)");
+							command = Command.noCommand; // leave him hangin'
 						}
 					}, 4000);
 
@@ -131,7 +123,6 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 					// stationary phase
 					person.print("Skipped timer; done eating");
 					status = "";
-					leaving = true;
 					command = Command.noCommand;
 				}
 			}
@@ -197,16 +188,6 @@ public class HouseResidentAnimation extends Animation implements AnimatedPersonA
 		} else { // sent here from PersonAgent's desires
 			verifyFood();
 		}
-	}
-
-	@Override
-	public void goToRoom(int roomNo) {
-		status = "";
-		isAtHome = true;
-		command = Command.ToRoomEntrance;
-		xDestination = HousePanel.HDX;
-		yDestination = HousePanel.HDY-40;
-		// this does almost nothing for persons who live in houses.
 	}
 
 	// Getters (for testing)

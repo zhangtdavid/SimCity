@@ -44,12 +44,6 @@ public class MockHouseResidentAnimation extends Animation implements AnimatedPer
 	}
 
 	@Override
-	public void goToRoom(int roomNo) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void goOutside() {
 		// TODO Auto-generated method stub
 		

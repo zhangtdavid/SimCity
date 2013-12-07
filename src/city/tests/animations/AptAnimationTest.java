@@ -150,8 +150,6 @@ public class AptAnimationTest extends TestCase{
 		assertEquals("xPos was just set to door's x", homeAnimation.getXPos(), AptPanel.APT_DOOR[person.getRoomNumber()-1][0]);
 		assertEquals("yPos was just set to door's y", homeAnimation.getYPos(), AptPanel.APT_DOOR[person.getRoomNumber()-1][1]);
 		assertEquals("Person's homeAnimation should have STATES noCommand before I tell it to go to room", homeAnimation.getCommand(), "noCommand");
-		homeAnimation.goToRoom(0); // for a house, this does nothing but change your STATES
-		assertEquals("Command of home Animation should be ToRoom", homeAnimation.getCommand(), Command.ToRoomEntrance.toString());
 		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
 		
 		//Now go to bed to sleep.

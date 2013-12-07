@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.bases.Animation;
+import city.buildings.AptBuilding;
 
 /**
  * An apartment contains: - 5 Refrigerators - 5 Stoves - 5 Tables - 5 Beds Up to
@@ -26,26 +27,17 @@ public class AptPanel extends ResidenceBasePanel {
 
 	//Access tip: [roomNumber-1][x=0||y=1]
 	public static final int APT_REFRIG[][] = { { 100, 0 }, { 100, 100 },
-			{ 100, 200 }, { 100, 300 }, { 100, 400 } }; // apt refrigerator
-														// coords
+			{ 100, 200 }, { 100, 300 }, { 100, 400 } };
+	// apt refrigerator coords
 	public static final int APT_STOVE[][] = { { 200, 0 }, { 200, 100 },
-			{ 200, 200 }, { 200, 300 }, { 200, 400 } }; // same for stove, & for
-														// below,
-														// self-explanatory
+			{ 200, 200 }, { 200, 300 }, { 200, 400 } };
 	public static final int APT_TABLE[][] = { { 300, 0 }, { 300, 100 },
 			{ 300, 200 }, { 300, 300 }, { 300, 400 } };
 	public static final int APT_BED[][] = { { 490, 40 }, { 490, 140 },
 			{ 490, 240 }, { 490, 340 }, { 490, 440 } };
-	public static final int APT_ROOMS[][] = {{20,70}, {20,170}, {20,270}, {20,370}, {20,470}};
 	public static final int APT_DOOR[][] = {{-10, 70}, {-10, 170}, {-10, 270}, {-10, 370}, {-10, 470}};
-	static final int ABYint = 100; // y-Interval for apt beds
 	// every apt has 5 beds regardless of how many people there are; already
 	// furnished!
-	static final int NUMBER_OF_BEDS = 5; 
-	// could also refer to AptBuilding.NUMBER_OF_BEDS if desired
-
-	// in aptbuilding, first bed is at 490x50, next is 490x150, 490x250,
-	// 490x350, 490x450. (5 max)
 
 	// Constructor
 	public AptPanel(Color color) {
@@ -67,7 +59,7 @@ public class AptPanel extends ResidenceBasePanel {
 
 		// Draw static elements (furniture)
 	
-		for (int i = 0; i < NUMBER_OF_BEDS; i++){
+		for (int i = 0; i < AptBuilding.NUMBER_OF_BEDS; i++){
 			graphics.setColor(Color.CYAN); // Refrig: cyan
 			graphics.fillRect(APT_REFRIG[i][0], APT_REFRIG[i][1], WIDTH, WIDTH);
 			graphics.setColor(Color.RED); // Stove: red

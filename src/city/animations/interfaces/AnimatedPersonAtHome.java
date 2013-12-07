@@ -3,7 +3,7 @@ package city.animations.interfaces;
 
 public interface AnimatedPersonAtHome {
 	// Data
-	public static enum Command {noCommand, AtDoor, InBed, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable, StationaryAtRef}; // r=residence; w=walking
+	public static enum Command {noCommand, AtDoor, InBed, ToBed, ToRef, ToStove, ToTable, ToDoor, StationaryAtRef, StationaryAtStove, StationaryAtTable};
 	public static enum OrderIcon {Steak, Chicken, Pizza, Salad}; // could use strings or something on Person's side instead
     public static final int WIDTH = 20; // Person is a 20x20 rect, standard.
 
@@ -32,12 +32,6 @@ public interface AnimatedPersonAtHome {
 	 * This animation takes Person to the stove with item, (then timer - cook)
 	 */
 	public abstract void cookAndEatFood(String in); // to person's stove and table
-	
-	/**
-	 * Moves the person to the entrance of his room. Mostly meant for situations with rooms (apts)
-	 * @param roomNo
-	 */
-	public abstract void goToRoom(int roomNo);
 	
 	/**
 	 * Moves the person to the door so he can go outside (and leave the house)
