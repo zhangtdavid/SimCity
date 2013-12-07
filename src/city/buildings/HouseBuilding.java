@@ -32,7 +32,11 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	}
 
 	// Getters
-
+	@Override
+	public boolean getIsFull() {
+		return !residents.isEmpty();
+	}
+	
 	// Setters
 
 	/**
@@ -76,4 +80,5 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 			panel.addVisualizationElement(anim);
 
 	}
+
 }

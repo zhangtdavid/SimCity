@@ -55,4 +55,10 @@ public class MockApartment extends MockResidenceBuilding implements Apt {
 		
 	}
 
+	@Override
+	public boolean getIsFull() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

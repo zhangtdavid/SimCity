@@ -31,7 +31,10 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	}
 
 	// Getters
-
+	@Override
+	public boolean getIsFull() {
+		return !residents.isEmpty();
+	}
 	// Setters
 
 	@Override
@@ -72,5 +75,5 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 			panel.addVisualizationElement(anim);
 
 	}
-
+	
 }

@@ -22,7 +22,6 @@ import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-import city.animations.HouseResidentAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
@@ -51,18 +50,6 @@ import city.gui.interiors.HousePanel;
 import city.gui.interiors.RestaurantTimmsPanel;
 import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.LandlordRole;
-import city.roles.RestaurantChoiCashierRole;
-import city.roles.RestaurantChoiCookRole;
-import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiWaiterQueueRole;
-import city.roles.RestaurantChungCashierRole;
-import city.roles.RestaurantChungCookRole;
-import city.roles.RestaurantChungHostRole;
-import city.roles.RestaurantChungWaiterMessageCookRole;
-import city.roles.RestaurantJPCashierRole;
-import city.roles.RestaurantJPCookRole;
-import city.roles.RestaurantJPHostRole;
-import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCookRole;
 import city.roles.RestaurantTimmsHostRole;
@@ -70,8 +57,6 @@ import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.PersonAnimationTest;
 
 public class Application {
 

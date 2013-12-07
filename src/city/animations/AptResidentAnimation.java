@@ -8,9 +8,7 @@ import java.util.TimerTask;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedPersonAtHome;
-import city.animations.interfaces.AnimatedPersonAtHome.Command;
 import city.bases.Animation;
-import city.gui.interiors.AptPanel;
 import city.gui.interiors.AptPanel;
 
 public class AptResidentAnimation extends Animation implements AnimatedPersonAtHome{
