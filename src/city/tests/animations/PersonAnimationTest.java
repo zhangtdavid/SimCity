@@ -8,6 +8,7 @@ import java.util.Stack;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import utilities.CitySidewalkAStar;
 import city.Application;
 import city.Application.BUILDING;
 import city.animations.interfaces.AnimatedPerson;
@@ -85,6 +86,35 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				if(sidewalkPath.peek().setCurrentOccupant(this)) {
 					currentSidewalk.setCurrentOccupant(null);
 					currentSidewalk = sidewalkPath.pop();
+				} else {
+					CitySidewalk possibleSidewalk;
+					sidewalkPath.push(currentSidewalk);
+					for(int i = 0; i < 4; i++) {
+						switch(i) {
+						case 0:
+							possibleSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
+							break;
+						case 1:
+							possibleSidewalk = sidewalks.getSidewalkEast(currentSidewalk);
+							break;
+						case 2:
+							possibleSidewalk = sidewalks.getSidewalkSouth(currentSidewalk);
+							break;
+						case 3:
+							possibleSidewalk = sidewalks.getSidewalkWest(currentSidewalk);
+							break;
+						default:
+							possibleSidewalk = null;
+							break;
+						}
+						if(possibleSidewalk == null)
+							continue;
+						if(possibleSidewalk.setCurrentOccupant(this)) {
+							currentSidewalk.setCurrentOccupant(null);
+							currentSidewalk = possibleSidewalk;
+							break;
+						}
+					}
 				}
 			} else if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
