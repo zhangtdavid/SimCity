@@ -254,7 +254,7 @@ public class PersonTest extends TestCase {
 		// TODO (and do this everywhere) assertEquals("The RestaurantBuilding should know that the person's RestaurantCustomer is gone", 0, restaurant.getOccupyingRoles().size());
 		assertEquals("Person should have exactly five roles", 5, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassenger, MarketCustomer
 		assertEquals("The MarketBuilding should be aware of the soon-to-arrive person's MarketCustomer", 1, market.getOccupyingRoles().size()); // TODO and do this for bank, house, occupation, etc.
-		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().orderItems.size());
+		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().getOrderItems().size());
 		
 		// Run the scheduler for person.
 		// - The car should leave

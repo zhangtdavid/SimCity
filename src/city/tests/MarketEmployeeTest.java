@@ -132,7 +132,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertTrue("Employee state should be None.", employee.getMarketEmployeeState() == MarketEmployeeState.None);
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
     		assertTrue("market.inventory should be 50.", market.getInventory().get(item) == 50);
         }
         
@@ -147,20 +147,20 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("Customer log should have 1 entry.", customer.log.size(), 1);
 		assertTrue("Customer log should have \"Customer received msgWhatWouldYouLike\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgWhatWouldYouLike"));
 
-		employee.msgHereIsMyOrder(customer, order.orderItems, order.orderId);
+		employee.msgHereIsMyOrder(customer, order.getOrderItems(), order.getOrderId());
 		assertEquals("Employee log should have 2 entries.", employee.log.size(), 2);
 		assertTrue("Employee log should have \"Employee received msgHereIsMyOrder\". The last event logged is actually " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsMyOrder"));
 		assertTrue("Employee event should be OrderReceived.", employee.getMarketEmployeeEvent() == MarketEmployeeEvent.OrderReceived);
-		assertTrue("employee.orderId should be order.orderId.", employee.getOrderId() == order.orderId);
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-    		assertTrue("employee.orderItems should be order.orderItems.", employee.getOrder().get(item) == order.orderItems.get(item));
+		assertTrue("employee.orderId should be order.orderId.", employee.getOrderId() == order.getOrderId());
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.orderItems should be order.orderItems.", employee.getOrder().get(item) == order.getOrderItems().get(item));
         }
 		
 		employee.runScheduler();
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-    		assertTrue("employee.collectedItems should be order.orderItems.", employee.getCollectedItems().get(item) == order.orderItems.get(item));
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.collectedItems should be order.orderItems.", employee.getCollectedItems().get(item) == order.getOrderItems().get(item));
         }
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
     		assertTrue("market.inventory should be market.inventory - order.orderItems.", market.getInventory().get(item) == 45);
         }
 		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
@@ -179,7 +179,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertTrue("Employee state should be None.", employee.getMarketEmployeeState() == MarketEmployeeState.None);
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
     		assertTrue("market.inventory should be 50.", market.getInventory().get(item) == 50);
         }
 
@@ -196,20 +196,20 @@ public class MarketEmployeeTest extends TestCase {
 		assertTrue("Manager log should have \"Manager received msgWhatWouldCustomerDeliveryLike\". The last "
 				+ " logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgWhatWouldCustomerDeliveryLike"));
 
-		employee.msgHereIsCustomerDeliveryOrder(order.orderItems, order.orderId);
+		employee.msgHereIsCustomerDeliveryOrder(order.getOrderItems(), order.getOrderId());
 		assertEquals("Employee log should have 2 entries.", employee.log.size(), 2);
 		assertTrue("Employee log should have \"Employee received msgHereIsCustomerDeliveryOrder\". The last event logged is actually " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsCustomerDeliveryOrder"));
 		assertTrue("Employee event should be OrderReceived.", employee.getMarketEmployeeEvent() == MarketEmployeeEvent.OrderReceived);
-		assertTrue("employee.orderId should be order.orderId.", employee.getOrderId()== order.orderId);
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-    		assertTrue("employee.orderItems should be order.orderItems.", employee.getOrder().get(item) == order.orderItems.get(item));
+		assertTrue("employee.orderId should be order.orderId.", employee.getOrderId()== order.getOrderId());
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.orderItems should be order.orderItems.", employee.getOrder().get(item) == order.getOrderItems().get(item));
         }
 		
 		employee.runScheduler();
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-    		assertTrue("employee.collectedItems should be order.orderItems.", employee.getCollectedItems().get(item) == order.orderItems.get(item));
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.collectedItems should be order.orderItems.", employee.getCollectedItems().get(item) == order.getOrderItems().get(item));
         }
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
     		assertTrue("market.inventory should be market.inventory - order.orderItems.", market.getInventory().get(item) == 45);
         }
 		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);

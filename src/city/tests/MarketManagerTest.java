@@ -157,7 +157,7 @@ public class MarketManagerTest extends TestCase {
 		assertEquals("CustomerDeliveryPayment should have an empty log.", customerDeliveryPayment.log.size(), 0);
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
 
-		manager.msgIWouldLikeToPlaceADeliveryOrder(customerDelivery, customerDeliveryPayment, order.orderItems, order.orderId);
+		manager.msgIWouldLikeToPlaceADeliveryOrder(customerDelivery, customerDeliveryPayment, order.getOrderItems(), order.getOrderId());
 		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceADeliveryOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceADeliveryOrder"));
 		assertEquals("Manager should have 1 customer in customer list.", market.getCustomers().size(), 1);

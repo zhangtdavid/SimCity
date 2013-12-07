@@ -16,7 +16,6 @@ import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
-import utilities.RestaurantChungRevolvingStand;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
@@ -48,8 +47,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 	boolean waitingToCheckStand = false;
 	
 	RestaurantChung restaurant;
-
-	RestaurantChungRevolvingStand orderStand;
 
     private List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
 
@@ -184,15 +181,24 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 		boolean blocking = false;
 		if (!cooking && !plating) {
     		// Role Scheduler
-			for (Role r : marketCustomerDeliveryRoles) if (r.getActive() && r.getActivity()) {
-				blocking  = true;
-				boolean activity = r.runScheduler();
-				if (!activity) {
-					r.setActivityFinished();
+			for (Role r : marketCustomerDeliveryRoles) {
+				if (r.getActive() && r.getActivity()) {
+					blocking  = true;
+					boolean activity = r.runScheduler();
+					if (!activity) {
+						r.setActivityFinished();
+					}
+					break;
 				}
-				break;
+				// The role becomes inactive when the order is fulfilled, cook should remove the role from its list
+				else if (!r.getActive()) {
+					MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
+					removeMarketOrderFromList(mo);
+					marketCustomerDeliveryRoles.remove(r);
+					break;
+				}
 			}
-    		
+						    		
     		if (workingState == WorkingState.GoingOffShift) {
     			if (restaurant.getRestaurantChungCook() != this)
     				workingState = WorkingState.NotWorking;
@@ -225,7 +231,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 				timer.schedule(new TimerTask() {
 					public void run() {
 						waitingToCheckStand = false;
-						RestaurantChungOrder newOrder = orderStand.remove();
+						RestaurantChungOrder newOrder = restaurant.getOrderStand().remove();
 						if(newOrder != null) {
 							print("Found an item on the stand");
 							orders.add(newOrder);
@@ -254,7 +260,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
                 }
             }
 
-
             synchronized(orders) {
                 for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.DonePlating) {
@@ -281,8 +286,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             //and wait.
     	}
 		
-		print("end of scheduler");
-		
         return blocking;
     }
 
@@ -307,18 +310,14 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         if (numLow > 0) marketOrders.add(new MyMarketOrder(new MarketOrder(lowFoods)));
         
         msgSelfLowFoodsIdentified();
-            
-//                for (int i = 0; i < marketOrders.size(); i++) {
-//                        print("MARKET ORDER STATE: " + marketOrders.get(i).s.toString());
-//                }
     }
     
     private void orderFoodThatIsLow(MyMarketOrder o) {
         print("Ordering food that is low");
         o.s = MarketOrderState.Ordered;
         
-        for (FOOD_ITEMS i: o.order.orderItems.keySet()) {
-            if (o.order.orderItems.get(i) > 0) {
+        for (FOOD_ITEMS i: o.order.getOrderItems().keySet()) {
+            if (o.order.getOrderItems().get(i) > 0) {
                 Food f = findFood(i.toString());
                 f.setFoodOrderState(FoodOrderState.Ordered);
             }
@@ -329,22 +328,17 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         }
 
         
-        for (FOOD_ITEMS i: o.order.orderItems.keySet()) {
-            print("Order: " + i + " " + o.order.orderItems.get(i));
+        for (FOOD_ITEMS i: o.order.getOrderItems().keySet()) {
+            print("Order: " + i + " " + o.order.getOrderItems().get(i));
         }
          
         MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);
-//        print(restaurant.toString());
-//        print(o.order.toString());
-//        print(restaurant.getRestaurantChungCashier().toString());
-//        print(restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment().toString());
         MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(restaurant, o.order, restaurant.getRestaurantChungCashier().getMarketCustomerDeliveryPayment());
     	marketCustomerDelivery.setMarket(selectedMarket);
         marketCustomerDelivery.setPerson(super.getPerson());
+        marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
     	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
-//        marketCustomerDelivery.setActive();
-        return;
     }
     
     private void removeMarketOrder(MyMarketOrder o) {
@@ -446,11 +440,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //  Getters
 //  =====================================================================   
 	@Override
-	public RestaurantChungRevolvingStand getRevolvingStand() {
-		return orderStand;
-	}
-
-	@Override
 	public List<RestaurantChungOrder> getOrders() {
 		return orders;
 	}
@@ -463,13 +452,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 	@Override
 	public List<MyMarketOrder> getMarketOrders() {
 		return marketOrders;
-	}
-	
-//  Setters
-//  =====================================================================       
-	@Override
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
-		orderStand = stand;
 	}
 	
 //  Utilities
@@ -497,7 +479,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 	@Override
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
-            if(o.order.orderId == id) {
+            if(o.order.getOrderId() == id) {
                 return o;
             }
         }

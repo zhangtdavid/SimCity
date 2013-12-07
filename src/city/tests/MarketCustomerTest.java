@@ -167,7 +167,7 @@ public class MarketCustomerTest extends TestCase {
 		assertEquals("Employee log should have 1 entry.", employee.log.size(), 1);
 		assertTrue("Employee log should have \"Employee received msgHereIsMyOrder\". The last event logged is actually " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsMyOrder"));
 
-		customer.msgHereIsOrderandBill(collectedItemsAll, 110, order.orderId);
+		customer.msgHereIsOrderandBill(collectedItemsAll, 110, order.getOrderId());
 		assertEquals("Customer log should have 2 entries.", customer.log.size(), 2);
 		assertTrue("Customer log should have \"Customer received msgHereIsOrderandBill\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsOrderandBill"));
 		assertTrue("Customer event should be OrderReady.", customer.getMarketCustomerEvent() == MarketCustomerEvent.OrderReady);

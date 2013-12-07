@@ -76,18 +76,6 @@ public class MockRestaurantChungCook extends MockRole implements RestaurantChung
 	}
 
 	@Override
-	public RestaurantChungRevolvingStand getRevolvingStand() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
 		// TODO Auto-generated method stub
 		return null;

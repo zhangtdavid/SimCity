@@ -3,6 +3,7 @@ package city.buildings.interfaces;
 import java.util.Collection;
 import java.util.List;
 
+import utilities.RestaurantChungRevolvingStand;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.bases.interfaces.RestaurantBuildingInterface;
 import city.gui.interiors.RestaurantChungPanel;
@@ -180,4 +181,5 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	}
 
 	void decrementNumWaitingCustomers();
+	RestaurantChungRevolvingStand getOrderStand();
 }

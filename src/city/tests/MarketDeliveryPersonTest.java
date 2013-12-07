@@ -130,14 +130,14 @@ public class MarketDeliveryPersonTest extends TestCase {
 		assertEquals("DeliveryPerson should have an empty log.", deliveryPerson.log.size(), 0);
 		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.getCustomerDelivery() == null);
 
-		deliveryPerson.msgDeliverOrder(customerDelivery, collectedItemsAll, order.orderId);
+		deliveryPerson.msgDeliverOrder(customerDelivery, collectedItemsAll, order.getOrderId());
 		assertEquals("DeliveryPerson log should have 1 entry.", deliveryPerson.log.size(), 1);
 		assertTrue("DeliveryPerson log should have \"DeliveryPerson received msgDeliverOrder\". The last event logged is " + deliveryPerson.log.getLastLoggedEvent().toString(), deliveryPerson.log.containsString("DeliveryPerson received msgDeliverOrder"));
 		assertTrue("DeliveryPerson customerDelivery should be customerDelivery.", deliveryPerson.getCustomerDelivery() == customerDelivery);
 		for (FOOD_ITEMS item: collectedItemsAll.keySet()) {
 			assertTrue("deliveryPerson.collectedItems should be collectedItemsAll.", deliveryPerson.getCollectedItems().get(item) == collectedItemsAll.get(item));
 		}
-		assertTrue("deliveryPerson.orderId should be order.orderId.", deliveryPerson.getOrderId() == order.orderId);
+		assertTrue("deliveryPerson.orderId should be order.orderId.", deliveryPerson.getOrderId() == order.getOrderId());
 		
 		deliveryPerson.runScheduler();
 //		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1); // next actions execute too quickly

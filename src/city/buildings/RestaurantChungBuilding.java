@@ -113,6 +113,11 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	}
 	
 	@Override
+	public RestaurantChungRevolvingStand getOrderStand() {
+		return orderStand;
+	}
+	
+	@Override
 	public int getNumWaitingCustomers() {
 		return numWaitingCustomers;
 	}
@@ -189,7 +194,6 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				anim.setVisible(true); // TODO set this in setActive()
 				getPanel().addVisualizationElement(anim);
 				cook = c;
-				c.setRevolvingStand(orderStand);
 				super.addOccupyingRole(c, anim);
 			}
 		}
