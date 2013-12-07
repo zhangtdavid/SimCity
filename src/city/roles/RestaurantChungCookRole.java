@@ -194,7 +194,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 			}
     		
     		if (workingState == WorkingState.GoingOffShift) {
-    			if (restaurant.getRestaurantChungCashier() != this)
+    			if (restaurant.getRestaurantChungCook() != this)
     				workingState = WorkingState.NotWorking;
     		}
     		

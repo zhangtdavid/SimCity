@@ -45,21 +45,14 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	}
 
 //	Activity
-//	=====================================================================
-//	// TODO schung 99c0f4da25
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
+//	=====================================================================	
 	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
 	}
 	
 //  Messages
-//	=====================================================================	
-	
+//	=====================================================================
 //	Market
 //	---------------------------------------------------------------
 	@Override
