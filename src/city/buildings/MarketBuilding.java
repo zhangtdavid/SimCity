@@ -23,6 +23,7 @@ import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.MarketCashier;
+import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.MarketDeliveryPerson;
 import city.roles.interfaces.MarketEmployee;
 import city.roles.interfaces.MarketManager;
@@ -33,8 +34,9 @@ public class MarketBuilding extends Building implements Market {
 	private MarketManager manager;
 	private MarketCashier cashier;
 	private BankCustomer bankCustomer;
-	private List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
+	private List<MyMarketEmployee> employees;
 	private List<MyDeliveryPerson> deliveryPeople;
+	private List<MyMarketCustomer> customers;
 	
 	public static final int WORKER_SALARY = 500;
 	
@@ -48,7 +50,9 @@ public class MarketBuilding extends Building implements Market {
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
 		
+		employees = Collections.synchronizedList(new ArrayList<MyMarketEmployee>());
 		deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
+		customers = Collections.synchronizedList(new ArrayList<MyMarketCustomer>());
 
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
@@ -101,13 +105,18 @@ public class MarketBuilding extends Building implements Market {
 	}
 	
 	@Override
-	public List<MarketEmployee> getEmployees() {
+	public List<MyMarketEmployee> getEmployees() {
 		return employees;
 	}
 	
 	@Override
 	public List<MyDeliveryPerson> getDeliveryPeople() {
 		return deliveryPeople;
+	}
+	
+	@Override
+	public List<MyMarketCustomer> getCustomers() {
+		return customers;
 	}
 	
 	@Override
@@ -176,9 +185,8 @@ public class MarketBuilding extends Building implements Market {
 	
 	// Add
 	@Override
-	public void addEmployee(MarketEmployee employee) {
-		employees.add(employee);
-		manager.msgNewEmployee(employee);
+	public void addEmployee(MarketEmployee e) {
+		employees.add(new MyMarketEmployee(e));
 	}
 	
 	@Override
@@ -188,9 +196,9 @@ public class MarketBuilding extends Building implements Market {
 	
 	// Remove
 	@Override
-	public void removeEmployee(MarketEmployee employee) {
-		employees.remove(employee);
-		manager.msgRemoveEmployee(employee);		
+	public void removeEmployee(MarketEmployee e) {
+		MyMarketEmployee me = findEmployee(e);
+		employees.remove(me);	
 	}
 	
 	@Override
@@ -201,10 +209,30 @@ public class MarketBuilding extends Building implements Market {
 	
 	// Find
 	@Override
+	public MyMarketEmployee findEmployee(MarketEmployee me) {
+		for(MyMarketEmployee e : employees ){
+			if(e.getEmployee() == me) {
+				return e;
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d) {
 		for(MyDeliveryPerson t : deliveryPeople){
 			if(t.getDeliveryPerson() == d) {
 				return t;		
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
+		for(MyMarketCustomer c : customers ){
+			if(c.getCustomerDelivery() == cd) {
+				return c;		
 			}
 		}
 		return null;
