@@ -24,6 +24,7 @@ public class AptPanel extends ResidenceBasePanel {
 	private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
+	//Access tip: [roomNumber-1][x=0||y=1]
 	public static final int APT_REFRIG[][] = { { 100, 0 }, { 100, 100 },
 			{ 100, 200 }, { 100, 300 }, { 100, 400 } }; // apt refrigerator
 														// coords
@@ -35,10 +36,8 @@ public class AptPanel extends ResidenceBasePanel {
 			{ 300, 200 }, { 300, 300 }, { 300, 400 } };
 	public static final int APT_BED[][] = { { 490, 40 }, { 490, 140 },
 			{ 490, 240 }, { 490, 340 }, { 490, 440 } };
-	public static final int APT_ROOM_JUST_OUTSIDE[][] = {{20,70}, {20,170}, {20,270}, {20,370}, {20,470}};
-	public static final int APT_ROOM_JUST_INSIDE[][] =  {{60,70}, {60,170}, {60,270}, {60,370}, {60,470}};
-	public static final int ADX = -10;
-	public static final int ADY = 480;
+	public static final int APT_ROOMS[][] = {{20,70}, {20,170}, {20,270}, {20,370}, {20,470}};
+	public static final int APT_DOOR[][] = {{-10, 70}, {-10, 170}, {-10, 270}, {-10, 370}, {-10, 470}};
 	static final int ABYint = 100; // y-Interval for apt beds
 	// every apt has 5 beds regardless of how many people there are; already
 	// furnished!
@@ -67,46 +66,43 @@ public class AptPanel extends ResidenceBasePanel {
 		graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
 		// Draw static elements (furniture)
-		
-		graphics.setColor(Color.CYAN); // Refrig: cyan
-		for (int i = 0; i < NUMBER_OF_BEDS; i++)
+	
+		for (int i = 0; i < NUMBER_OF_BEDS; i++){
+			graphics.setColor(Color.CYAN); // Refrig: cyan
 			graphics.fillRect(APT_REFRIG[i][0], APT_REFRIG[i][1], WIDTH, WIDTH);
-		graphics.setColor(Color.RED); // Stove: red
-		for (int i = 0; i < NUMBER_OF_BEDS; i++)
+			graphics.setColor(Color.RED); // Stove: red
+			
 			graphics.fillRect(APT_STOVE[i][0], APT_STOVE[i][1], WIDTH, WIDTH);
-		graphics.setColor(Color.DARK_GRAY); // Table: dark gray
-		for (int i = 0; i < NUMBER_OF_BEDS; i++)
+			graphics.setColor(Color.DARK_GRAY); // Table: dark gray
+			
 			graphics.fillRect(APT_TABLE[i][0], APT_TABLE[i][1], WIDTH, WIDTH);
-		graphics.setColor(Color.ORANGE); // bed: orange
-		for (int i = 0; i < NUMBER_OF_BEDS; i++)
+			graphics.setColor(Color.ORANGE); // bed: orange
+			
 			graphics.fillRect(APT_BED[i][0], APT_BED[i][1], WIDTH, WIDTH);
-		graphics.setColor(Color.WHITE); // door: white
-		graphics.fillRect(ADX, ADY, WIDTH, WIDTH);
+			graphics.setColor(Color.WHITE); // door: white
+			
+			graphics.fillRect(APT_DOOR[i][0], APT_DOOR[i][1], WIDTH, WIDTH);
+		}
 		// now draw lines dividing the rooms
 		graphics.setColor(Color.YELLOW);
-		graphics.drawLine(50, 0, 50, 50); 
-		graphics.drawLine(50, 100, 50, 150);
-		graphics.drawLine(50, 200, 50, 250);
-		graphics.drawLine(50, 300, 50, 350);
-		graphics.drawLine(50, 400, 50, 450); // end vertical lines
-		graphics.drawLine(50, 100, 500, 100);
-		graphics.drawLine(50, 200, 500, 200);
-		graphics.drawLine(50, 300, 500, 300);
-		graphics.drawLine(50, 400, 500, 400); //end horizontal lines
+		graphics.drawLine(0, 100, 500, 100);
+		graphics.drawLine(0, 200, 500, 200);
+		graphics.drawLine(0, 300, 500, 300);
+		graphics.drawLine(0, 400, 500, 400); //end horizontal lines
 
-		// Update the position of each visible element
+		animate();
+		// Update and draw the position of each visible element
 		for (Animation animation : animations) {
-			if (animation.getVisible()) {
-				animation.updatePosition();
+			if(animation!=null){
+				if (animation.getVisible()) {
+					animation.updatePosition();
+					animation.draw(graphics2D);
+				}
 			}
 		}
-
-		// Draw each visible element after updating their positions
-		// TODO generates concurrent modification exception
-		for (Animation animation : animations) {
-			if (animation.getVisible()) {
-				animation.draw(graphics2D);
-			}
-		}
+	}
+	// TODO removal of this makes the house not animate at all. keeping it results it in not doing anything if not focused.
+	public void addVisualizationElement(Animation ve) {
+		animations.add(ve);
 	}
 }

@@ -22,13 +22,13 @@ import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
+import city.animations.AptResidentAnimation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-import city.animations.HouseResidentAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
-import city.buildings.ApartmentBuilding;
+import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
 import city.buildings.HouseBuilding;
@@ -42,6 +42,7 @@ import city.gui.CityRoad.STOPLIGHTTYPE;
 import city.gui.CityRoadIntersection;
 import city.gui.CitySidewalkLayout;
 import city.gui.MainFrame;
+import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBank;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.exteriors.CityViewBusStop;
@@ -57,18 +58,10 @@ import city.gui.interiors.RestaurantChungPanel;
 import city.gui.interiors.RestaurantTimmsPanel;
 import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.LandlordRole;
-import city.roles.RestaurantChoiCashierRole;
-import city.roles.RestaurantChoiCookRole;
-import city.roles.RestaurantChoiHostRole;
-import city.roles.RestaurantChoiWaiterQueueRole;
 import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterMessageCookRole;
-import city.roles.RestaurantJPCashierRole;
-import city.roles.RestaurantJPCookRole;
-import city.roles.RestaurantJPHostRole;
-import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCookRole;
 import city.roles.RestaurantTimmsHostRole;
@@ -76,7 +69,6 @@ import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
-import city.roles.RestaurantZhangWaiterSharedDataRole;
 import city.tests.animations.PersonAnimationTest;
 
 public class Application {
@@ -381,10 +373,10 @@ public class Application {
 		//rchoi edit: if you're wondering why this is in the middle of the road, it's because of a car error when someone wants to go to where he's already at by driving
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
-		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529)); // this is now a house, because I just finished house.
-		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, apartmentPanelZhang1); 
+		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
-		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		AptBuilding apartmentBuildingZhang1 = new AptBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500); //
@@ -394,12 +386,12 @@ public class Application {
 
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
-		HouseResidentAnimation homeAnimation = new HouseResidentAnimation(p0Zhang);
+		p0Zhang.setHome(apartmentBuildingZhang1); // gives resident role here?
+		AptResidentAnimation homeAnimation = new AptResidentAnimation(p0Zhang);
 		p0Zhang.setHomeAnimation(homeAnimation);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
-		p0Zhang.setHome(apartmentBuildingZhang1);
 		p0r1Zhang.setActive();
 		model.addPerson(p0Zhang);
 
@@ -407,7 +399,7 @@ public class Application {
 		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
 		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date);
-		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date);
+		PersonAgent p4Zhang = new PersonAgent(/*Waiter*/"Tenant 1 Zhang", date);
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
@@ -455,9 +447,9 @@ public class Application {
 		p3Zhang.setOccupation(p3r1Zhang);
 
 		// Create waiter
-		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
-		rzb1.addOccupyingRole(p4r1Zhang);
-		p4Zhang.setOccupation(p4r1Zhang);
+		//RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
+		//rzb1.addOccupyingRole(p4r1Zhang);
+		//p4Zhang.setOccupation(p4r1Zhang); // TODO UNCOMMENT THIS after i test multiple people in apartment animation 
 
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
 		// Create panels
@@ -890,7 +882,7 @@ public class Application {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
-		//c0Zhang.startThread();
+		c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();

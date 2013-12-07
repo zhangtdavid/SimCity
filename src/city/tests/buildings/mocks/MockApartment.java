@@ -3,10 +3,10 @@ package city.tests.buildings.mocks;
 import city.agents.interfaces.Person;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
-import city.buildings.interfaces.Apartment;
+import city.buildings.interfaces.Apt;
 import city.tests.bases.mocks.MockResidenceBuilding;
 
-public class MockApartment extends MockResidenceBuilding implements Apartment {
+public class MockApartment extends MockResidenceBuilding implements Apt {
 
 	public MockApartment(String name) {
 		super(name);
@@ -53,6 +53,12 @@ public class MockApartment extends MockResidenceBuilding implements Apartment {
 	public void addOccupyingPerson(Person p) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public boolean getIsFull() {
+		// TODO Auto-generated method stub
+		return false;
 	}
 
 }

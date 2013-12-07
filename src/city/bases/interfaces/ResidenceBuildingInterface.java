@@ -20,6 +20,7 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 	public Map<FOOD_ITEMS, Integer> getFoodItems();
 	public <T extends AnimationInterface> T getOccupyingPersonAnimation(Person r, Class<T> type);
 	public String getHomeAnimationName();
+	public boolean getIsFull();
 	
 	// Setters
 

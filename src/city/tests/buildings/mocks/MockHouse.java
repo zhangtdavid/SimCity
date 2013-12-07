@@ -55,4 +55,10 @@ public class MockHouse extends MockResidenceBuilding implements House {
 		
 	}
 
+	@Override
+	public boolean getIsFull() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }
