@@ -127,6 +127,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("MarketCustomerDelivery", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryRole " + this.getPerson().getName(), msg);
     }
 }

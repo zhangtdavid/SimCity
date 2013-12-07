@@ -275,4 +275,10 @@ public class MockPerson extends MockAgent implements Person {
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void printViaRole(String role, String msg) {
+		// TODO Auto-generated method stub
+		
+	}
 }

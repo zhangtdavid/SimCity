@@ -32,6 +32,7 @@ public class RestaurantZhangWaiterSharedDataRole extends RestaurantZhangWaiterBa
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantZhangWaiterSharedData", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangWaiterSharedDataRole " + this.getPerson().getName(), msg);
     }
 	

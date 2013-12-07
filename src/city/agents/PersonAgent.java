@@ -1031,6 +1031,11 @@ public class PersonAgent extends Agent implements Person {
 		AlertLog.getInstance().logMessage(Integer.toString(this.hashCode()), this.name, msg);
         AlertLog.getInstance().logMessage(AlertTag.PERSON, "PersonAgent " + this.name, msg);
     }
+	
+	@Override
+	public void printViaRole(String role, String msg) {
+		AlertLog.getInstance().logMessage(Integer.toString(this.hashCode()), role, msg);
+    }
 
 	@Override
 	public void releaseSemaphoreFromAnimation() {

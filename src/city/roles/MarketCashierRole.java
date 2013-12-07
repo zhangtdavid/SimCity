@@ -296,6 +296,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("MarketCashier", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCashierRole " + this.getPerson().getName(), msg);
     }
 	

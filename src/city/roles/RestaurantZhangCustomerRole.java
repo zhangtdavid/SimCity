@@ -479,6 +479,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantZhangCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCustomerRole " + this.getPerson().getName(), msg);
     }
 }

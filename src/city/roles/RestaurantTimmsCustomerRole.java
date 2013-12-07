@@ -302,6 +302,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCustomerRole " + this.getPerson().getName(), msg);
     }
 }

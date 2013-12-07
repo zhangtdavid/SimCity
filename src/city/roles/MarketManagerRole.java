@@ -254,6 +254,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("MarketManager", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketManagerRole " + this.getPerson().getName(), msg);
     }
 	

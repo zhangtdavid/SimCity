@@ -30,6 +30,7 @@ public class RestaurantZhangWaiterRegularRole extends RestaurantZhangWaiterBase 
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantZhangWaiterRegular", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangWaiterRegularRole " + this.getPerson().getName(), msg);
     }
 }

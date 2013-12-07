@@ -148,6 +148,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsHost", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsHostRole " + this.getPerson().getName(), msg);
     }
 

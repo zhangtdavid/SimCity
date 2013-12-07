@@ -197,6 +197,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("BankCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
     }
 	

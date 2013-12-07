@@ -114,6 +114,7 @@ public class ResidentRole extends Role implements Resident {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("Resident", msg);
         AlertLog.getInstance().logMessage(AlertTag.HOUSE, "ResidentRole " + this.getPerson().getName(), msg);
     }
 

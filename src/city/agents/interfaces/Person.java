@@ -83,5 +83,6 @@ public interface Person extends AgentInterface {
 	public void acquireSemaphoreFromAnimation();
 	public void releaseSemaphoreFromAnimation();
 	public void forceSleep();
+	public void printViaRole(String role, String msg);
 	
 }

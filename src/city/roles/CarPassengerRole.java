@@ -111,6 +111,7 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("CarPassenger", msg);
         AlertLog.getInstance().logMessage(AlertTag.CAR, "CarPassengerRole " + this.getPerson().getName(), msg);
     }
 	
