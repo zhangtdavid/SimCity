@@ -59,15 +59,26 @@ public class CitySidewalkAStar {
 		public int compare(CitySidewalkAStar CitySidewalkAStar1, CitySidewalkAStar CitySidewalkAStar2) {
 
 			if(CitySidewalkAStar1.getFinalScore() > CitySidewalkAStar2.getFinalScore())
-				return -1;
+				return 1;
 			else if(CitySidewalkAStar1.getFinalScore() < CitySidewalkAStar2.getFinalScore())
-				return 1;
-			else if(CitySidewalkAStar1.getNumMovesFromStart() > CitySidewalkAStar2.getNumMovesFromStart())
 				return -1;
-			else if(CitySidewalkAStar1.getNumMovesFromStart() < CitySidewalkAStar2.getNumMovesFromStart())
+			else if(CitySidewalkAStar1.getNumMovesFromStart() > CitySidewalkAStar2.getNumMovesFromStart())
 				return 1;
+			else if(CitySidewalkAStar1.getNumMovesFromStart() < CitySidewalkAStar2.getNumMovesFromStart())
+				return -1;
 			else
 				return 0;
+			
+//			if(CitySidewalkAStar1.getHeuristicScore() > CitySidewalkAStar2.getHeuristicScore())
+//				return 1;
+//			else if(CitySidewalkAStar1.getHeuristicScore() < CitySidewalkAStar2.getHeuristicScore())
+//				return -1;
+//			else if(CitySidewalkAStar1.getNumMovesFromStart() > CitySidewalkAStar2.getNumMovesFromStart())
+//				return 1;
+//			else if(CitySidewalkAStar1.getNumMovesFromStart() < CitySidewalkAStar2.getNumMovesFromStart())
+//				return -1;
+//			else
+//				return 0;
 		}
 
 	};
