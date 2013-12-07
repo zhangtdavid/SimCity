@@ -142,6 +142,9 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	}
 	
 	@Override
-	public abstract void addResident(Resident r);	
+	public abstract void addResident(Resident r);
+	
+	@Override
+	public abstract void removeResident(Resident r);
 
 }

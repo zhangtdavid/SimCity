@@ -8,6 +8,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BUILDING;
+import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
@@ -174,12 +175,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	}
 
 	@Override
-	public void setAcquired() {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setCoords(int x, int y) {
 		// TODO Auto-generated method stub
 		
@@ -192,7 +187,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	}
 
 	@Override
-	public void setAtHome() {
+	public void setPerson(Person p) {
 		// TODO Auto-generated method stub
 		
 	}

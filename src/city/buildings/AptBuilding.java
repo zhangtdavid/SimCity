@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.agents.interfaces.Person;
-import city.animations.AptResidentAnimation;
 import city.bases.Animation;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.RoleInterface;
@@ -31,23 +30,30 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	}
 
 	// Getters
+	
 	@Override
 	public boolean getIsFull() {
 		return !residents.isEmpty();
 	}
+	
 	// Setters
 
+	// Utilities
+	
 	@Override
 	public void addResident(Resident r) {
 		if(residents.size() < Apt.NUMBER_OF_BEDS) {
 			residents.add(r);
-			r.getPerson().setRoomNumber(residents.size()); // could be one of 1~5 inclusive\
-		}else{
-			r.getPerson().print("This apartment is full (5 residents); cannot live here right now");
+			r.getPerson().setRoomNumber(residents.size());
+		} else {
+			throw new IllegalStateException("This apartment is full (5 residents)");
 		}
 	}
-
-	// Utilities
+	
+	@Override
+	public void removeResident(Resident r) {
+		this.residents.remove(r);
+	}
 
 	@Override
 	public void addOccupyingRole(RoleInterface r) {

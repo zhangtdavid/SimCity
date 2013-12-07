@@ -16,6 +16,7 @@ import city.roles.interfaces.Resident;
 public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Data
+	
 	private HousePanel panel; // reference to main gui
 	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
 
@@ -31,6 +32,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	}
 
 	// Getters
+	
 	@Override
 	public boolean getIsFull() {
 		return !residents.isEmpty();
@@ -38,21 +40,24 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	
 	// Setters
 
+	// Utilities
+	
 	/**
-	 * This adds a Resident to a list of residents who live in this house. (1
-	 * person lives in this house)
+	 * This adds a Resident to a list of residents who live in this house. (only 1 person may live in a house)
 	 */
 	@Override
-	public void addResident(Resident resident) {
+	public void addResident(Resident r) {
 		if (residents.isEmpty()) {
-			// ONLY ONE PERSON PER HOUSE~!
-			this.residents.add(resident);
+			this.residents.add(r);
 		} else {
-			// System.out.println("Someone already lives in this house (capacity = 1)");
+			throw new IllegalStateException("Only one person at a time may live in a house.");
 		}
 	}
-
-	// Utilities
+	
+	@Override
+	public void removeResident(Resident r) {
+		this.residents.remove(r);
+	}
 
 	@Override
 	public void addOccupyingRole(RoleInterface ri) { 

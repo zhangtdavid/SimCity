@@ -27,12 +27,12 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	private String status = "";
 	private boolean personSemaphoreIsAcquired;
 	private String foodToEat;
-	private boolean isAtHome;
 	
 	// Constructor
 	
-	public PersonAnimation(Person p) {
-		this.person = p;
+	public PersonAnimation() {
+		super();
+		this.person = null; // Expects to have this set immediately after creation
 		this.xDestination = HousePanel.HDX;
 		this.yDestination = HousePanel.HDY+10;
 		this.xPos = HousePanel.HDX; 
@@ -43,6 +43,10 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	
 	@Override
 	public void updatePosition() {
+		
+		if (person == null) {
+			throw new IllegalStateException("PersonAnimation does not have a Person object.");
+		}
 		
 		// Movement
 		
@@ -129,7 +133,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 		xDestination = HousePanel.HDX;
 		yDestination = HousePanel.HDY + 10;
 		leaving = false;
-		isAtHome = false;
 		person.guiAtDestination();
 	}
 
@@ -138,7 +141,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	 */
 	@Override
 	public void goToSleep() {
-		isAtHome = true;
 		leaving = false;
 		command = Command.ToBed;
 		xDestination = HousePanel.HBXi-20;
@@ -166,7 +168,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	@Override
 	public void cookAndEatFood(String in) {
 		foodToEat = in; // use this for setOrderIcon and stuff.
-		isAtHome = true;
 		if (command == Command.StationaryAtStove) { // sent here from stove
 			command = Command.ToTable;
 			status = "Going to eat " + foodToEat;
@@ -191,7 +192,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	@Override
 	public void goToRoom(int roomNo) {
 		status = "";
-		isAtHome = true;
 		command = Command.ToRoomEntrance;
 		xDestination = HousePanel.HDX;
 		yDestination = HousePanel.HDY-40;
@@ -227,10 +227,10 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	public void setGraphicStatus(String in){
 		status = in;
 	}
-
+	
 	@Override
-	public void setAtHome() {
-		isAtHome = true;
+	public void setPerson(Person p) {
+		this.person = p;
 	}
 
 }

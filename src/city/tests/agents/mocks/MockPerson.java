@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
+import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
@@ -259,6 +260,12 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void printViaRole(String role, String msg) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setCurrentLocation(BuildingInterface b) {
 		// TODO Auto-generated method stub
 		
 	}

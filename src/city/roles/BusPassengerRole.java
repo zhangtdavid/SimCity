@@ -17,8 +17,6 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	private Bus myBus;
 	private BusStop busStopToWaitAt;
 	private BusStop destination;
-	// public AnimatedBus animation;
-	// private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	

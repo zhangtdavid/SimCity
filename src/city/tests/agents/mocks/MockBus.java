@@ -12,11 +12,17 @@ import city.tests.bases.mocks.MockAgent;
 
 public class MockBus extends MockAgent implements Bus {
 
+	// Data
+	
 	public EventLog log = new EventLog();
 
+	// Constructor
+	
 	public MockBus(String name) {
 		super();
 	}
+	
+	// Messages
 	
 	@Override
 	public void msgImOnBus(BusPassenger busPassengerRole, BusStop destination) {
@@ -42,6 +48,8 @@ public class MockBus extends MockAgent implements Bus {
 		
 	}
 
+	// Getters
+	
 	@Override
 	public BUSSTATE getState() {
 		// TODO Auto-generated method stub

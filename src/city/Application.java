@@ -385,10 +385,7 @@ public class Application {
 		apartmentBuildingZhang1.addFood(FOOD_ITEMS.steak, 500); // this prevents him from going to the market (testing house animation)
 
 		// Create landlord
-		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
-		p0Zhang.setHome(apartmentBuildingZhang1); // gives resident role here?
-		PersonAnimation animation = new PersonAnimation(p0Zhang);
-		p0Zhang.setAnimation(animation);
+		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
@@ -396,18 +393,14 @@ public class Application {
 		model.addPerson(p0Zhang);
 
 		// Create people
-		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
-		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
-		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date);
-		PersonAgent p4Zhang = new PersonAgent(/*Waiter*/"Tenant 1 Zhang", date);
+		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p4Zhang = new PersonAgent("Tenant 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
 		model.addPerson(p4Zhang);
-		p1Zhang.setHome(apartmentBuildingZhang1);
-		p2Zhang.setHome(apartmentBuildingZhang1);
-		p3Zhang.setHome(apartmentBuildingZhang1);
-		p4Zhang.setHome(apartmentBuildingZhang1);
 
 		// Give people cars
 		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
@@ -472,30 +465,23 @@ public class Application {
 		}
 
 		// Create landlord
-		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date);
+		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date, new PersonAnimation(), rhb1Timms);
 		LandlordRole p0r1Timms = new LandlordRole();
 		p0Timms.addRole(p0r1Timms);
-
 		rhb1Timms.setLandlord(p0r1Timms);
-		p0Timms.setHome(rhb1Timms);
 		p0Timms.setCash(10);
 		p0r1Timms.setActive();
 		model.addPerson(p0Timms);
 
-
 		// Create people
-		PersonAgent p1Timms = new PersonAgent("Cashier 1 Timms", date);
-		PersonAgent p2Timms = new PersonAgent("Cook 1 Timms", date);
-		PersonAgent p3Timms = new PersonAgent("Host 1 Timms", date);
-		PersonAgent p4Timms = new PersonAgent("Waiter 1 Timms", date);
+		PersonAgent p1Timms = new PersonAgent("Cashier 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p2Timms = new PersonAgent("Cook 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p3Timms = new PersonAgent("Host 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p4Timms = new PersonAgent("Waiter 1 Timms", date, new PersonAnimation(), rhb1Timms);
 		model.addPerson(p1Timms);
 		model.addPerson(p2Timms);
 		model.addPerson(p3Timms);
 		model.addPerson(p4Timms);
-		p1Timms.setHome(rhb1Timms);
-		p2Timms.setHome(rhb1Timms);
-		p3Timms.setHome(rhb1Timms);
-		p4Timms.setHome(rhb1Timms);
 
 		// Give people cars
 		CarAgent c0Timms = new CarAgent(busStop3, p0Timms);
@@ -727,30 +713,23 @@ public class Application {
 		createBuilding(housePanelChung1, cityViewHouseChung1, houseBuildingChung1);
 		
 		// Create landlord
-		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date);
-		System.out.println(p0Chung);
-		System.out.println(p0Chung.getCash());
+		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), houseBuildingChung1);
 		p0Chung.setCash(50); // TODO remove later
 		LandlordRole p0r1Chung = new LandlordRole();
 		p0Chung.addRole(p0r1Chung);
 		houseBuildingChung1.setLandlord(p0r1Chung);
-		p0Chung.setHome(houseBuildingChung1);
 		p0r1Chung.setActive();
 		model.addPerson(p0Chung);
 
 		// Create people
-		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date);
-		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date);
-		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date);
-		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date);
+		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
+		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
+		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
+		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
 		model.addPerson(p1Chung);
 		model.addPerson(p2Chung);
 		model.addPerson(p3Chung);
 		model.addPerson(p4Chung);
-		p1Chung.setHome(houseBuildingChung1);
-		p2Chung.setHome(houseBuildingChung1);
-		p3Chung.setHome(houseBuildingChung1);
-		p4Chung.setHome(houseBuildingChung1);
 
 		// Give people cars
 		CarAgent c0Chung = new CarAgent(busStop1, p0Chung);

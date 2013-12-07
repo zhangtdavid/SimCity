@@ -10,20 +10,21 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 	
 	// Data
 	
-	private Person person = null;
+	private Person person;
 	
 	// Constructor
 	
-	public MockAnimatedPerson(Person p) {
-		this.person = p;
+	public MockAnimatedPerson() {
+		this.person = null;  // Expects to have this set immediately after creation
 	}
 	
 	// Abstract
 
 	@Override
 	public void updatePosition() {
-		// TODO Auto-generated method stub
-		
+		if (person == null) {
+			throw new IllegalStateException("PersonAnimation does not have a Person object.");
+		}
 	}
 
 	@Override
@@ -95,8 +96,7 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 	}
 
 	@Override
-	public void setAtHome() {
-		// TODO Auto-generated method stub
-		
+	public void setPerson(Person p) {
+		this.person = p;
 	}
 }

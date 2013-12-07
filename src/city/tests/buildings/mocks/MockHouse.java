@@ -5,6 +5,7 @@ import city.agents.interfaces.Person;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 import city.buildings.interfaces.House;
+import city.roles.interfaces.Resident;
 import city.tests.bases.mocks.MockResidenceBuilding;
 
 public class MockHouse extends MockResidenceBuilding implements House {
@@ -64,6 +65,12 @@ public class MockHouse extends MockResidenceBuilding implements House {
 
 	@Override
 	public void removeFood(FOOD_ITEMS f, int i) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeResident(Resident r) {
 		// TODO Auto-generated method stub
 		
 	}
