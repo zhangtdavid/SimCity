@@ -956,7 +956,7 @@ public class Application {
 //		c3JP.startThread();
 //		c4JP.startThread();
 		
-		for(int j = 0; j < 10; j++) {
+		for(int j = 0; j < 50; j++) {
 			PersonAnimationTest testPersonAnimation = new PersonAnimationTest(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks, "Walker " + j);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
 			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));

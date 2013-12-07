@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Stack;
 
 import trace.AlertLog;
@@ -53,7 +54,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
 			if(startingSidewalk.setCurrentOccupant(this) == false 
-					&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
+					/*&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())*/) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -98,7 +99,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 					CitySidewalk possibleSidewalk;
 					sidewalkPath.push(currentSidewalk);
 					for(int i = 0; i < 4; i++) {
-						switch(i) {
+						switch(new Random().nextInt(4)) {
 						case 0:
 							possibleSidewalk = sidewalks.getSidewalkNorth(currentSidewalk);
 							break;
@@ -117,6 +118,10 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 						}
 						if(possibleSidewalk == null)
 							continue;
+						if(sidewalks.isCarAt(possibleSidewalk.getX(), possibleSidewalk.getY())) {
+							sidewalkPath.pop();
+							break;
+						}
 						if(possibleSidewalk.setCurrentOccupant(this)) {
 							currentSidewalk.setCurrentOccupant(null);
 							currentSidewalk = possibleSidewalk;

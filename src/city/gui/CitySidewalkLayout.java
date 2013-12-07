@@ -12,6 +12,8 @@ import java.util.TreeSet;
 
 import utilities.CitySidewalkAStar;
 import utilities.TrafficControl;
+import city.animations.BusAnimation;
+import city.animations.CarAnimation;
 import city.bases.interfaces.AnimationInterface;
 
 public class CitySidewalkLayout {
@@ -79,7 +81,12 @@ public class CitySidewalkLayout {
 		AnimationInterface currentVehicle = roads.getClosestRoad(x - x % 25, y - y % 25).getVehicle();
 		if(currentVehicle == null)
 			return false;
-		Rectangle vehicleRect = new Rectangle(currentVehicle.getXPos(), currentVehicle.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+		Rectangle vehicleRect = new Rectangle(0, 0, 1, 1);
+		if(currentVehicle.getClass() == BusAnimation.class) {
+			vehicleRect = new Rectangle(((BusAnimation)(currentVehicle)).getXPos(), ((BusAnimation)(currentVehicle)).getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+		} else if(currentVehicle.getClass() == CarAnimation.class) {
+			vehicleRect = new Rectangle(((CarAnimation)(currentVehicle)).getXPos(), ((CarAnimation)(currentVehicle)).getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+		}
 		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
 		Rectangle sidewalkRect = new Rectangle(currentSidewalk.getX(), currentSidewalk.getY(), (int)sidewalkSize, (int)sidewalkSize);
 		if(vehicleRect.intersects(sidewalkRect))

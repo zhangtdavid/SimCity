@@ -60,6 +60,7 @@ public class TrafficControl implements ActionListener {
 				closestRoad = r;
 			}
 		}
+		System.out.println(closestDistance + " " + closestRoad.getX() + " " + closestRoad.getY() + " " + x + " " + y);
 		return closestRoad;
 	}
 }
