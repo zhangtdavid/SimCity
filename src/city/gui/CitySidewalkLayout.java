@@ -118,6 +118,7 @@ public class CitySidewalkLayout {
 			parentSidewalk.sidewalkColor = Color.magenta;
 			parentSidewalk.setCrosswalk(true);
 			parentSidewalk.setCorrespondingStoplight(correspondingStoplight);
+			correspondingStoplight.addIntersectionSidewalk(parentSidewalk);
 			return true;
 		}
 		return false;

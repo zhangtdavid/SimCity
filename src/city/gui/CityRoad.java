@@ -4,6 +4,8 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
 import city.Application;
 import city.animations.BusAnimation;
@@ -29,6 +31,8 @@ public class CityRoad extends CityViewBuilding {
 	protected boolean isHorizontal;
 	protected boolean isRedLight = false;
 	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
+	
+	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
 	
 	// Constructor
 	
@@ -83,6 +87,10 @@ public class CityRoad extends CityViewBuilding {
 		double y = 0;
 		double vWidth = 0;
 		double vHeight = 0;
+		for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
+			if(sidewalksAtIntersection.getCurrentOccupant() != null)
+				return;
+		}
 //		if(Application.sidewalks != null) {
 //			if(xVelocity > 0) {
 //				Application.sidewalks.get
@@ -169,6 +177,10 @@ public class CityRoad extends CityViewBuilding {
 		return stopLightType;
 	}
 	
+	public List<CitySidewalk> getIntersectionSidewalks() {
+		return intersectionSidewalks;
+	}
+	
 	// Setters
 	
 	public void setNextRoad( CityRoad r ) {
@@ -186,5 +198,10 @@ public class CityRoad extends CityViewBuilding {
 	public void setStopLightType(STOPLIGHTTYPE newType) {
 		stopLightType = newType;
 		isRedLight = true;
+	}
+
+	public void addIntersectionSidewalk(CitySidewalk intersectionSidewalk) {
+		if(!intersectionSidewalks.contains(intersectionSidewalk))
+			intersectionSidewalks.add(intersectionSidewalk);
 	}
 }
