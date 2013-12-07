@@ -4,7 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.agents.interfaces.Person;
-import city.animations.AptResidentAnimation;
+import city.animations.PersonAnimation;
 import city.bases.Animation;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.RoleInterface;
@@ -25,7 +25,6 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	public AptBuilding(String name, Landlord l, AptPanel panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
 		this.setLandlord(l);
-		this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation"); // TODO why?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
 	}
@@ -67,12 +66,11 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	 */
 	@Override
 	public void addOccupyingPerson(Person p) {
-		AptResidentAnimation anim = new AptResidentAnimation(p); // this is disposed of every time the person leaves.
-		p.setHomeAnimation(anim); // set the person's home animation to this.
+		PersonAnimation anim = new PersonAnimation(p); // this is disposed of every time the person leaves.
+		p.setAnimation(anim); // set the person's home animation to this.
 		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
 		allPersons.put(p, anim);
-		if(!anim.getBeingTested())
-			panel.addVisualizationElement(anim);
+		panel.addVisualizationElement(anim);
 	}
 	
 }

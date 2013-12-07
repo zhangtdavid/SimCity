@@ -10,7 +10,6 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.agents.interfaces.Person.STATES;
-import city.animations.HouseResidentAnimation;
 import city.bases.interfaces.RoleInterface;
 import city.tests.agents.mocks.MockBus;
 import city.tests.agents.mocks.MockCar;
@@ -28,7 +27,8 @@ public class PersonTest extends TestCase {
 	
 	// IDEAS FOR TESTING
 	// - What happens if the occupation is removed on the way to work?
-	// 
+	// - Test taking away an occupation
+	// - Test forcing sleep
 
 	// Application
 	private Date date;
@@ -57,7 +57,7 @@ public class PersonTest extends TestCase {
 		System.out.println(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		super.setUp();
-		HouseResidentAnimation.beingTested = true;
+		
 		// Set up application environment
 		date = new Date(0);
 		bankCityViewBuilding =  new MockCityViewBuilding();
@@ -84,7 +84,7 @@ public class PersonTest extends TestCase {
 		
 		// Set up test environment
 		person = new PersonAgent("Person", date);
-		animation = new MockAnimatedPerson();
+		animation = new MockAnimatedPerson(person);
 		workplace = new MockWorkplace("MockWorkplace");
 		workplaceCityViewBuilding = new MockCityViewBuilding();
 		workplace.setCityViewBuilding(workplaceCityViewBuilding);
@@ -259,7 +259,7 @@ public class PersonTest extends TestCase {
 		// TODO (and do this everywhere) assertEquals("The RestaurantBuilding should know that the person's RestaurantCustomer is gone", 0, restaurant.getOccupyingRoles().size());
 		assertEquals("Person should have exactly five roles", 5, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassenger, MarketCustomer
 		assertEquals("The MarketBuilding should be aware of the soon-to-arrive person's MarketCustomer", 1, market.getOccupyingRoles().size()); // TODO and do this for bank, house, occupation, etc.
-		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().orderItems.size());
+		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().getOrderItems().size());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -745,7 +745,7 @@ public class PersonTest extends TestCase {
 		person.setCash(0);
 		person.setAnimation(animation);
 		animation.setAgent(person);
-		person.getHome().addFood(FOOD_ITEMS.chicken, 4);
+		person.getHome().addFood(FOOD_ITEMS.chicken, 5); // One item will be removed after cooking, need 4 to stop from going to market next
 		
 		// Preconditions
 		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
@@ -765,7 +765,7 @@ public class PersonTest extends TestCase {
 		outcome = person.runScheduler();
 		outcome = person.runScheduler();
 		
-		// Person should be going to a market
+		// Person should be cooking
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should be cooking", Person.STATES.atCooking, person.getState());
 		

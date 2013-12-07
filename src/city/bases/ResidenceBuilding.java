@@ -99,10 +99,7 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	public void setHomeAnimationName(String c){
 		this.homeAnimationInterfaceName = c;
 	}
-	
-	
-	
-	
+
 	// Utilities
 	
 	@Override
@@ -131,6 +128,11 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	@Override
 	public void addFood(FOOD_ITEMS f, int i) {
 		this.foodItems.put(f, (foodItems.get(f) + i));
+	}
+	
+	@Override
+	public void removeFood(FOOD_ITEMS f, int i) {
+		this.foodItems.put(f, (foodItems.get(f) - i));
 	}
 	
 	@Override

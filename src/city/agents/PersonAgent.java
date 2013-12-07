@@ -13,8 +13,6 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.TimeZone;
-import java.util.Timer;
-import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
@@ -28,18 +26,14 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.animations.AptResidentAnimation;
-import city.animations.HouseResidentAnimation;
-import city.animations.interfaces.AnimatedPersonAtHome;
+import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
-import city.buildings.interfaces.Apt;
 import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.BusStop;
-import city.buildings.interfaces.House;
 import city.buildings.interfaces.Market;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
@@ -72,12 +66,11 @@ public class PersonAgent extends Agent implements Person {
 	private String name;
 	private List<RoleInterface> roles = Collections.synchronizedList(new ArrayList<RoleInterface>());
 	private Semaphore atDestination = new Semaphore(0, true);
-	private AnimatedPersonAtHome homeAnimation; // animation for the person's home, whether it's a house or apt
+	private AnimatedPerson animation; // animation for the person's home, whether it's a house or apt
 	private STATES state; 
 	private int cash;
 	private boolean hasEaten;
 	private PropertyChangeSupport propertyChangeSupport;
-	private Timer timer = new Timer();
 
 	// Constructor
 
@@ -233,32 +226,19 @@ public class PersonAgent extends Agent implements Person {
 			}
 		}
 		if (state == STATES.goingToCook) {
-			if (processTransportationArrival()) { // this takes a person home with the intent of cooking
-				//upon arrival (now at home)
-				setState(STATES.atCooking);
-				actCookAndEatFood(); 
-				homeAnimation.setAcquired();
-				if(!homeAnimation.getBeingTested()){ // this is for testing, and has no impact for real-runs.
-					atDestination.acquire(); //and freeze
-				}
+			if (processTransportationArrival()) {
+				actCookAndEatFood();
 				return true;
 			}
 		}
-
 		if (state == STATES.atCooking) {
 			state = pickDailyTask();  //this tells the person what to do after eating? idk ~Ryan
 			performDailyTaskAction();
 			return true;
 		}
-
 		if (state == STATES.goingToSleep) {
 			if (processTransportationArrival()) {
 				actGoToBed();
-				setState(STATES.atSleep);
-				homeAnimation.setAcquired(); 
-				if (!homeAnimation.getBeingTested()) {
-					atDestination.acquire();
-				}
 				return false;
 			}
 		}
@@ -267,12 +247,7 @@ public class PersonAgent extends Agent implements Person {
 			// This will also ensure that no roles can run while the person is sleeping.
 			if (occupation == null) {
 				if (shouldWakeUp()) {
-					setState(STATES.atSleep);
-					homeAnimation.goOutside(); // now the building may be exited.
-					homeAnimation.setAcquired(); 
-					if (!homeAnimation.getBeingTested()) {
-						atDestination.acquire();
-					}
+					actWakeUp();
 					state = pickDailyTask();
 					performDailyTaskAction();
 					return true;
@@ -421,45 +396,34 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	private void actCookAndEatFood() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		//if the function is here and getBeingTested() == false... 
-		//...then that means the gui sent guiAtDestination, releasing the semaphore
-		//BTW function was intentionally designed to combine 3 gui steps into 1 action.
-		//The person definitely knows that he has food in the refrigerator.
+		
+		setState(STATES.atCooking);
+		// Pick a food item to eat from the refrigerator
+		List<FOOD_ITEMS> list = new ArrayList<FOOD_ITEMS>();
+		list.addAll(this.home.getFoodItems().keySet());
+		Collections.shuffle(list);
 		FOOD_ITEMS toEat = null;
-		HashMap<FOOD_ITEMS, Integer> foodNew = new HashMap<FOOD_ITEMS, Integer>();
-		if(this.home.getFoodItems().get(FOOD_ITEMS.chicken) > 0){
-			toEat = FOOD_ITEMS.chicken;
-			foodNew.put(FOOD_ITEMS.chicken, this.home.getFoodItems().get(FOOD_ITEMS.chicken)-1); // lower # of chicken by 1
-			this.home.setFood(foodNew); // and set this as your choice to eat.
-		}else if(this.home.getFoodItems().get(FOOD_ITEMS.salad) > 0){
-			toEat = FOOD_ITEMS.salad;
-			foodNew.put(FOOD_ITEMS.salad, this.home.getFoodItems().get(FOOD_ITEMS.salad)-1);
-			this.home.setFood(foodNew); // and set this as your choice to eat.
-		}else if(this.home.getFoodItems().get(FOOD_ITEMS.pizza) > 0){
-			toEat = FOOD_ITEMS.pizza;
-			foodNew.put(FOOD_ITEMS.pizza, this.home.getFoodItems().get(FOOD_ITEMS.pizza)-1);
-			this.home.setFood(foodNew); // and set this as your choice to eat.
-		}else if(this.home.getFoodItems().get(FOOD_ITEMS.steak) > 0){
-			toEat = FOOD_ITEMS.steak;
-			foodNew.put(FOOD_ITEMS.steak, this.home.getFoodItems().get(FOOD_ITEMS.steak)-1);
-			this.home.setFood(foodNew); // and set this as your choice to eat.
-		} // if all these returned 0, how did we even get here??? impossible.
-		homeAnimation.cookAndEatFood(toEat.toString());
+		for (FOOD_ITEMS i : list) {
+			if (this.home.getFoodItems().get(i) > 0) {
+				toEat = i;
+				break;
+			}
+		}
+		this.home.removeFood(toEat, 1);
+		// Cooks the food and eats it
+		animation.cookAndEatFood(toEat.toString());
+		atDestination.acquire();
 		this.hasEaten = true;
-		// The scheduler will pick up the atDestination and continue the program
 	}
 
 	/**
 	 * Takes the person home w/ intent to sleep.
-	 * 
-	 * @throws InterruptedException 
 	 */
 	private void actGoToSleep() throws InterruptedException {
 		//TODO this shouldn't transport them home if they're already at home
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-
-		processTransportationDeparture((BuildingInterface) home);
 		setState(STATES.goingToSleep);
+		processTransportationDeparture((BuildingInterface) home);
 		home.addOccupyingRole(this.residentRole); // put in any role; it'll just take the person inside anyways.
 	}
 
@@ -469,11 +433,19 @@ public class PersonAgent extends Agent implements Person {
 	 * Sets hasEaten to false, since it's effectively the beginning of a new day.
 	 * @throws InterruptedException
 	 */
-	private void actGoToBed() throws InterruptedException{
+	private void actGoToBed() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		animation.goToSleep();
+		atDestination.acquire();
 		this.hasEaten = false;
-		lastWentToSleep = this.getDate(); 
-		homeAnimation.goToSleep(); // Now, person may crash (figuratively, as in go to bed!)
+		this.lastWentToSleep = this.getDate(); 
+		setState(STATES.atSleep);
+	}
+	
+	private void actWakeUp() throws InterruptedException {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		animation.goOutside();
+		atDestination.acquire();
 	}
 
 	//=========//
@@ -566,8 +538,8 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 	@Override
-	public AnimatedPersonAtHome getAnimationAtHome(){
-		return homeAnimation;
+	public AnimatedPerson getAnimation(){
+		return animation;
 	}
 
 	//=========//
@@ -587,7 +559,7 @@ public class PersonAgent extends Agent implements Person {
 			// Giving an occupation
 			this.occupation = r;
 			this.addRole(r);
-		} else {
+		} else if (this.occupation != null) {
 			// Taking away an occupation
 			if (this.occupation.getActive()) {
 				// The occupation should not be working when it is removed
@@ -600,9 +572,9 @@ public class PersonAgent extends Agent implements Person {
 	}
 
 	@Override
-	public void setHomeAnimation(AnimatedPersonAtHome a){
+	public void setAnimation(AnimatedPerson a){
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		homeAnimation = a;
+		animation = a;
 	}
 
 	@Override
@@ -621,22 +593,21 @@ public class PersonAgent extends Agent implements Person {
 
 	/**
 	 * This method sets Home for the PersonAgent.
+	 * 
 	 * @param h is a ResidenceBuildingInterface; that is, it can be a Home or an Apartment.
 	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-
-		//set home
-		home = h;
-		h.addResident(this.getResidentRole());
-		//Set animation for inside home. Both inherit the same type, so it's A-OK	
-		if(h instanceof House){
-			homeAnimation = new HouseResidentAnimation(this); 
-		}
-		else if(h instanceof Apt){
-			homeAnimation = new AptResidentAnimation(this);
-		}			
+		this.home = h;
+		this.home.addResident(this.getResidentRole());
+//		//Set animation for inside home. Both inherit the same type, so it's A-OK	
+//		if(h instanceof House){
+//			animation = new HouseResidentAnimation(this); 
+//		}
+//		else if(h instanceof Apt){
+//			animation = new AptResidentAnimation(this);
+//		}			
 	}
 
 	@Override
@@ -668,16 +639,6 @@ public class PersonAgent extends Agent implements Person {
 	//===========//
 
 	@Override
-	public void acquireSemaphoreFromAnimation(){
-		try {
-			atDestination.acquire();
-		} catch (InterruptedException e) {
-			System.out.println("Could not acquire atDestination: ");
-			e.printStackTrace();
-		}
-	}
-
-	@Override
 	public void addRole(RoleInterface r) {
 		r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 		RoleInterface i;
@@ -685,7 +646,6 @@ public class PersonAgent extends Agent implements Person {
 		while(itr.hasNext()) {
 			i = itr.next();
 			if (i.getClass().equals(r.getClass())) {
-				System.out.println("FOUND-----------------"); // TODO
 				itr.remove();
 			}
 		}
@@ -1011,11 +971,6 @@ public class PersonAgent extends Agent implements Person {
 	@Override
 	public void printViaRole(String role, String msg) {
 		AlertLog.getInstance().logMessage(Integer.toString(this.hashCode()), role, msg);
-	}
-
-	@Override
-	public void releaseSemaphoreFromAnimation() {
-		//has debug/test purposes.	
 	}
 
 }

@@ -8,6 +8,7 @@ import city.buildings.interfaces.Market;
 import city.gui.interiors.MarketPanel;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.MarketCashier;
+import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.MarketDeliveryPerson;
 import city.roles.interfaces.MarketEmployee;
 import city.roles.interfaces.MarketManager;
@@ -92,13 +93,13 @@ public class MockMarket extends MockBuilding implements Market {
 	}
 
 	@Override
-	public List<MarketEmployee> getEmployees() {
+	public List<MyMarketEmployee> getEmployees() {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<MarketDeliveryPerson> getDeliveryPeople() {
+	public List<MyDeliveryPerson> getDeliveryPeople() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,6 +112,30 @@ public class MockMarket extends MockBuilding implements Market {
 
 	@Override
 	public Map<FOOD_ITEMS, Integer> getPrices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MyMarketCustomer> getCustomers() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyMarketEmployee findEmployee(MarketEmployee me) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
 		// TODO Auto-generated method stub
 		return null;
 	}

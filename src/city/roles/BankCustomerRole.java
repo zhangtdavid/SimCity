@@ -54,7 +54,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgDepositCompleted() {
 		print("DepositCompleted message received");
 		st = STATE.exit;
-	    //stateChanged();
+//	    stateChanged();
 	}
 	
 	@Override
@@ -126,6 +126,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void DirectDeposit(){
 		st = STATE.inProgress;
 		netTransaction -= amount;
+		print(Integer.toString(netTransaction));
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
 	

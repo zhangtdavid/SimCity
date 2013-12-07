@@ -22,9 +22,9 @@ import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
-import city.animations.AptResidentAnimation;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
+import city.animations.PersonAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
@@ -377,10 +377,10 @@ public class Application {
 		//rchoi edit: if you're wondering why this is in the middle of the road, it's because of a car error when someone wants to go to where he's already at by driving
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
-		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewApt cityViewHouseZhang1 = new CityViewApt(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
+		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
-		AptBuilding apartmentBuildingZhang1 = new AptBuilding("Apt 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500); //
@@ -391,8 +391,8 @@ public class Application {
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
 		p0Zhang.setHome(apartmentBuildingZhang1); // gives resident role here?
-		AptResidentAnimation homeAnimation = new AptResidentAnimation(p0Zhang);
-		p0Zhang.setHomeAnimation(homeAnimation);
+		PersonAnimation animation = new PersonAnimation(p0Zhang);
+		p0Zhang.setAnimation(animation);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
@@ -883,7 +883,6 @@ public class Application {
 //		restaurantJPBuilding1.addOccupyingRole(p4r1JP);
 //		p4JP.setOccupation(p4r1JP);
 
-
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
@@ -893,13 +892,11 @@ public class Application {
 		c2Zhang.startThread();
 		c3Zhang.startThread();
 		c4Zhang.startThread();
-		p0Zhang.startThread();
-		
+		p0Zhang.startThread();/*
 		p1Zhang.startThread();
 		p2Zhang.startThread();
 		p3Zhang.startThread();
-
-		p4Zhang.startThread();
+		p4Zhang.startThread();*/
 //		c0Timms.startThread();
 //		c1Timms.startThread();
 //		c2Timms.startThread();
@@ -910,6 +907,7 @@ public class Application {
 //		p2Timms.startThread();
 //		p3Timms.startThread();
 //		p4Timms.startThread();
+
 
 //		p0Choi.startThread();
 //		p1Choi.startThread();
@@ -922,6 +920,7 @@ public class Application {
 //		p8Choi.startThread();
 //		p9Choi.startThread();
 //		p10Choi.startThread();
+		
 //		c0Choi.startThread();
 //		c1Choi.startThread();
 //		c2Choi.startThread();
@@ -933,16 +932,19 @@ public class Application {
 //		c8Choi.startThread();
 //		c9Choi.startThread();
 //		c10Choi.startThread();
-//		p0Chung.startThread();
-//		p1Chung.startThread();
-//		p2Chung.startThread();
-//		p3Chung.startThread();
-//		p4Chung.startThread();
+		/*
 		c0Chung.startThread();
 		c1Chung.startThread();
 		c2Chung.startThread();
 		c3Chung.startThread();
 		c4Chung.startThread();
+		
+		p0Chung.startThread();
+		p1Chung.startThread();
+		p2Chung.startThread();
+		p3Chung.startThread();
+		p4Chung.startThread();*/
+		
 //		p0JP1.startThread();
 //		p1JP.startThread();
 //		p2JP.startThread();

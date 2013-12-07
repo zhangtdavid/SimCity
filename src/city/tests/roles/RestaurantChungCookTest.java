@@ -15,9 +15,12 @@ import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.RestaurantChungCookRole;
+import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.MarketCustomerDelivery.MarketCustomerState;
 import city.roles.interfaces.RestaurantChungCook.MarketOrderState;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.animations.mocks.MockRestaurantChungAnimatedCook;
+import city.tests.roles.mocks.MockMarketManager;
 import city.tests.roles.mocks.MockRestaurantChungCashier;
 import city.tests.roles.mocks.MockRestaurantChungCustomer;
 import city.tests.roles.mocks.MockRestaurantChungHost;
@@ -56,8 +59,14 @@ public class RestaurantChungCookTest extends TestCase {
 	MockPerson waiterRSPerson;	
 	MockRestaurantChungWaiterRevolvingStand waiterRS;
 	
+	MockPerson marketManagerPerson;
+	MockMarketManager marketManager;
+	
 	Map<FOOD_ITEMS, Integer> orderItems;
 	MarketOrder order;
+	
+	Map<FOOD_ITEMS, Integer> collectedItemsAll;
+	Map<FOOD_ITEMS, Integer> collectedItemsPartial;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -103,9 +112,15 @@ public class RestaurantChungCookTest extends TestCase {
 		waiterRS = new MockRestaurantChungWaiterRevolvingStand();
 		waiterRS.setPerson(waiterRSPerson);
 		
+		marketManagerPerson = new MockPerson("MarketManager");
+		marketManager = new MockMarketManager();
+		marketManager.setPerson(marketManagerPerson);	
+		
 		restaurantChung.setRestaurantChungCashier(cashier);
 		restaurantChung.setRestaurantChungCook(cook);
 		restaurantChung.setRestaurantChungHost(host);
+		
+		market.setManager(marketManager);
 		
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
@@ -114,6 +129,18 @@ public class RestaurantChungCookTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.steak, 5);
 
 		order = new MarketOrder(orderItems);
+		
+		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();
+		collectedItemsAll.put(FOOD_ITEMS.chicken, 5);
+		collectedItemsAll.put(FOOD_ITEMS.pizza, 5);
+		collectedItemsAll.put(FOOD_ITEMS.salad, 5);
+		collectedItemsAll.put(FOOD_ITEMS.steak, 5);
+		
+		collectedItemsPartial = new HashMap<FOOD_ITEMS, Integer>();
+		collectedItemsPartial.put(FOOD_ITEMS.chicken, 3);
+		collectedItemsPartial.put(FOOD_ITEMS.pizza, 3);
+		collectedItemsPartial.put(FOOD_ITEMS.salad, 3);
+		collectedItemsPartial.put(FOOD_ITEMS.steak, 3);		
 	}	
 	/**
 	 * This tests the cook ordering food when low.
@@ -144,7 +171,7 @@ public class RestaurantChungCookTest extends TestCase {
 		assertTrue("Cook marketOrders should contain a marketOrder with state == Pending.", cook.getMarketOrders().get(0).getMarketOrderState() == MarketOrderState.Pending);
 
 		try {
-			Thread.sleep(2100);
+			Thread.sleep(3000);
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -153,5 +180,24 @@ public class RestaurantChungCookTest extends TestCase {
 		cook.runScheduler();
 		assertTrue("Cook marketOrders should contain a marketOrder with state == Ordered.", cook.getMarketOrders().get(0).getMarketOrderState() == MarketOrderState.Ordered);
 		assertEquals("Cook should have 1 marketCustomerDeliveryRole.", cook.getMarketCustomerDeliveryRoles().size(), 1);
+		assertTrue("MarketCustomerDeliveryRole should have state == Ordering.", ((MarketCustomerDelivery) cook.getMarketCustomerDeliveryRoles().get(0)).getState() == MarketCustomerState.Ordering);
+
+		cook.runScheduler();
+		assertTrue("MarketCustomerDeliveryRole should have state == None.", ((MarketCustomerDelivery) cook.getMarketCustomerDeliveryRoles().get(0)).getState() == MarketCustomerState.None);
+		
+		((MarketCustomerDelivery) cook.getMarketCustomerDeliveryRoles().get(0)).msgHereIsOrderDelivery(collectedItemsAll, 1);
+
+		cook.runScheduler();
+		
+		// Account for checking order stand time
+		try {
+			Thread.sleep(6000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		cook.runScheduler();
+		assertEquals("Cook should have 0 marketCustomerDeliveryRole.", cook.getMarketCustomerDeliveryRoles().size(), 0);		
 	}	
 }

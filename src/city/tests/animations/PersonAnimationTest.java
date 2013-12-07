@@ -2,8 +2,6 @@ package city.tests.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Stack;
 
 import trace.AlertLog;
@@ -13,7 +11,6 @@ import city.Application.BUILDING;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
-import city.buildings.interfaces.BusStop;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
 
@@ -124,13 +121,74 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		print("Going to destination " + destination.getName());
 	}
 
-	@Override
-	public void goToBusStop(BusStop b) {
-		// TODO Auto-generated method stub
-
-	}
-
 	public void print(String msg) {
 		AlertLog.getInstance().logMessage(AlertTag.BANK, "PersonAnimationTest", msg);
+	}
+
+	@Override
+	public void goToSleep() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void verifyFood() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void cookAndEatFood(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+
+	@Override
+	public void goOutside() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int[] getDestination() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getCommand() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getStatus() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setCoords(int x, int y) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setGraphicStatus(String in) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAtHome() {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setAcquired() {
+		// TODO Auto-generated method stub
+		
 	}
 }

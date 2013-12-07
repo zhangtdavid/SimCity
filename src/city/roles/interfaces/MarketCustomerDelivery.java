@@ -2,6 +2,7 @@ package city.roles.interfaces;
 
 import java.util.Map;
 
+import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.bases.RestaurantBuilding;
 import city.bases.interfaces.RestaurantBuildingInterface;
@@ -24,19 +25,17 @@ public interface MarketCustomerDelivery extends RoleInterface {
 	
 	// Actions
 	
-	// Getters
-	
+	// Getters	
 	public Market getMarket();
 	public RestaurantBuildingInterface getRestaurant();
+	MarketCustomerState getState();
+	MarketOrder getOrder();
 	
 	// Setters
-	
 	public void setRestaurant(RestaurantBuilding restaurant);
 	public void setMarket(MarketBuilding selectedMarket);
-
-	MarketCustomerState getState();
-
 	void setState(MarketCustomerState state);
+
 	
 	// Utilities
 	
