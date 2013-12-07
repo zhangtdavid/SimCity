@@ -31,9 +31,9 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = false;
-	
+
 	private Stack<CitySidewalk>sidewalkPath;
-	
+
 	private String name;
 
 	public PersonAnimationTest(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks, String name) {
@@ -50,8 +50,8 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
-			if(startingSidewalk.setCurrentOccupant(this) == false //&& startingSidewalk.getCurrentOccupant() != this 
-					/*&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())*/) {
+			if(startingSidewalk.setCurrentOccupant(this) == false 
+					&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -82,8 +82,10 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 			else if(yPos > currentSidewalk.getY())
 				yPos--;
 			else if(!sidewalkPath.isEmpty()) {
-				currentSidewalk.setCurrentOccupant(null);
-				currentSidewalk = sidewalkPath.pop();
+				if(sidewalkPath.peek().setCurrentOccupant(this)) {
+					currentSidewalk.setCurrentOccupant(null);
+					currentSidewalk = sidewalkPath.pop();
+				}
 			} else if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
 		}
