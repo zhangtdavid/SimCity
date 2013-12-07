@@ -60,7 +60,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		// you can put any role the person has into this for house; I just get the person through it.
 		if(!this.allPersons.containsKey(ri.getPerson())){ // this prevents duplicates
 			addOccupyingPerson(ri.getPerson()); // if you already are in this home, just use the one you have before!
-		}
+		} // 
 	}
 
 	/**
