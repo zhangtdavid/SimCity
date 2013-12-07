@@ -76,7 +76,7 @@ public class CitySidewalkLayout {
 	public boolean isCarAt(int x, int y) {
 		if(roads == null)
 			return false;
-		AnimationInterface currentVehicle = roads.getClosestRoad(x, y).getVehicle();
+		AnimationInterface currentVehicle = roads.getClosestRoad(x - x % 25, y - y % 25).getVehicle();
 		if(currentVehicle == null)
 			return false;
 		Rectangle vehicleRect = new Rectangle(currentVehicle.getXPos(), currentVehicle.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
