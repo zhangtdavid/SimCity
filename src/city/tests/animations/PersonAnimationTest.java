@@ -54,7 +54,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
 			if(startingSidewalk.setCurrentOccupant(this) == false 
-					/*&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())*/) {
+					&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -70,8 +70,8 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		}
 		// Traveling along sidewalks
 		if(atDestinationRoad == false) {
-			if(sidewalks.isCarAt(currentSidewalk.getX(), currentSidewalk.getY()))
-				return;
+//			if(sidewalks.isCarAt(currentSidewalk.getX(), currentSidewalk.getY()))
+//				return;
 			if(startingSidewalk != null) {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
@@ -120,12 +120,15 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 							continue;
 						if(sidewalks.isCarAt(possibleSidewalk.getX(), possibleSidewalk.getY())) {
 							sidewalkPath.pop();
-							break;
+							return;
 						}
 						if(possibleSidewalk.setCurrentOccupant(this)) {
 							currentSidewalk.setCurrentOccupant(null);
 							currentSidewalk = possibleSidewalk;
 							break;
+						} else {
+							sidewalkPath.pop();
+							return;
 						}
 					}
 				}
@@ -178,6 +181,16 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	public void goToBusStop(BusStop b) {
 		// TODO Auto-generated method stub
 
+	}
+	
+	@Override
+	public int getXPos() {
+		return xPos;
+	}
+
+	@Override
+	public int getYPos() {
+		return yPos;
 	}
 
 	public void print(String msg) {

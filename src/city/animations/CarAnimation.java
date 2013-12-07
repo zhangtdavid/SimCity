@@ -59,6 +59,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		}
 		// Getting on the destination road
 		if(atDestinationRoad == true) {
+			if(endRoad.isWalkerAt((xPos + xDestination) / 2, (yPos + yDestination)/ 2)) {
+				return;
+			}
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)

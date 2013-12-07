@@ -78,21 +78,42 @@ public class CitySidewalkLayout {
 	public boolean isCarAt(int x, int y) {
 		if(roads == null)
 			return false;
-		AnimationInterface currentVehicle = roads.getClosestRoad(x - x % 25, y - y % 25).getVehicle();
+		List<AnimationInterface> allVehicles = roads.getAllVehicles();
+		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
+		Rectangle sidewalkRect = new Rectangle(currentSidewalk.getX(), currentSidewalk.getY(), (int)sidewalkSize, (int)sidewalkSize);
+		for(AnimationInterface a : allVehicles) {
+			Rectangle vehicleRect = new Rectangle(a.getXPos(), a.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+			if(vehicleRect.intersects(sidewalkRect)) {
+				return true;
+			}
+		}
+		return false;
+		/*AnimationInterface currentVehicle = roads.getClosestRoad(x - x % 25, y - y % 25).getVehicle();
 		if(currentVehicle == null)
 			return false;
 		Rectangle vehicleRect = new Rectangle(0, 0, 1, 1);
-		if(currentVehicle.getClass() == BusAnimation.class) {
-			vehicleRect = new Rectangle(((BusAnimation)(currentVehicle)).getXPos(), ((BusAnimation)(currentVehicle)).getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
-		} else if(currentVehicle.getClass() == CarAnimation.class) {
-			vehicleRect = new Rectangle(((CarAnimation)(currentVehicle)).getXPos(), ((CarAnimation)(currentVehicle)).getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
-		}
+		vehicleRect = new Rectangle(currentVehicle.getXPos(), currentVehicle.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
 		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
 		Rectangle sidewalkRect = new Rectangle(currentSidewalk.getX(), currentSidewalk.getY(), (int)sidewalkSize, (int)sidewalkSize);
-		if(vehicleRect.intersects(sidewalkRect))
+		if(vehicleRect.intersects(sidewalkRect)) {
 			return true;
-		else
+		}
+		else {
 			return false;
+		}*/
+	}
+
+	public List<AnimationInterface> getAllWalkers() {
+		List<AnimationInterface> listToReturn = new ArrayList<AnimationInterface>();
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				if(sidewalkGrid[i][j] == null)
+					continue;
+				if(sidewalkGrid[i][j].getCurrentOccupant() != null)
+					listToReturn.add(sidewalkGrid[i][j].getCurrentOccupant());
+			}
+		}
+		return listToReturn;
 	}
 
 	public List<CityRoad> getBorderingRoads(CitySidewalk parentSidewalk) {
@@ -292,6 +313,13 @@ public class CitySidewalkLayout {
 					isAnIntersection(sidewalkGrid[i][j]);
 			}
 		}
+	}
+
+	public boolean isWalkerAt(int x, int y) {
+		if(getClosestSidewalk(x, y).getCurrentOccupant() == null)
+			return false;
+		else
+			return true;
 	}
 
 	// A Star

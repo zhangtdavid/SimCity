@@ -335,7 +335,7 @@ public class Application {
 		
 		// Create buildings
 		BankPanel bankPanel1 = new BankPanel(Color.green);
-		CityViewBank cityViewBank1 = new CityViewBank(450, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
+		CityViewBank cityViewBank1 = new CityViewBank(425, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
 		BankBuilding bankBuilding1 = new BankBuilding("BankBuilding", bankPanel1, cityViewBank1);
 		createBuilding(bankPanel1, cityViewBank1, bankBuilding1);
 
@@ -726,7 +726,7 @@ public class Application {
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
-		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(450, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
+		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
 		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
 		createBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
 		
@@ -956,7 +956,7 @@ public class Application {
 //		c3JP.startThread();
 //		c4JP.startThread();
 		
-		for(int j = 0; j < 50; j++) {
+		for(int j = 0; j < 30; j++) {
 			PersonAnimationTest testPersonAnimation = new PersonAnimationTest(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks, "Walker " + j);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
 			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
