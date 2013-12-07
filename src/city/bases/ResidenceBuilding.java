@@ -22,6 +22,7 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	private Landlord landlord;
 	private int rent = 5;
 	private int totalCurrentMaintenance = 0;
+	private Map<Person, Map<FOOD_ITEMS, Integer>> allFoodItems= new HashMap<Person, Map<FOOD_ITEMS, Integer>>();
 	private Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
 	protected List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	private String homeAnimationInterfaceName;     // The interface name of the animation that interacts with this building as a tenant

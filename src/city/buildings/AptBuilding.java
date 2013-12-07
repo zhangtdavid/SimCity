@@ -73,7 +73,6 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 		allPersons.put(p, anim);
 		if(!anim.getBeingTested())
 			panel.addVisualizationElement(anim);
-
 	}
 	
 }
