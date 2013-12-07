@@ -97,6 +97,10 @@ public class AlertLog {
 		this.sendAlert(AlertLevel.MESSAGE, tag, name, message);
 	}
 	
+	public void logMessage(String s, String name, String message) {
+		this.sendAlert(AlertLevel.MESSAGE, s, name, message);
+	}
+	
 	/**
 	 * Logs a debug alert using {@link #sendAlert}.
 	 * @param tag the {@link AlertTag} saying what group type this alert is tagged as.
@@ -126,6 +130,31 @@ public class AlertLog {
 
 		//Make the alert.  Also prints to std out/err.
 		Alert alert = new Alert(level, tag, name, message, date);
+		if (this.printedAlertLevels.contains(level)) {
+			if (level == AlertLevel.ERROR) {
+				System.err.println(alert);
+			} else {
+				System.out.println(alert);
+			}
+		}
+		this.alerts.add(alert);
+		
+		//Notify all people who have told me they want to listen for alerts.
+		for(AlertListener al:this.registeredAlertListeners) {
+			al.alertOccurred(alert);
+		}
+	}
+	
+	public void sendAlert(AlertLevel level, String s, String name, String message) {		
+//		StackTraceElement[] s = new RuntimeException().getStackTrace();
+//		String className = s[1].getClassName();
+
+//		String senderClassName = new Throwable().getStackTrace()[1].getClassName();
+
+		Date date = new Date();	//Timestamp
+
+		//Make the alert.  Also prints to std out/err.
+		Alert alert = new Alert(level, s, name, message, date);
 		if (this.printedAlertLevels.contains(level)) {
 			if (level == AlertLevel.ERROR) {
 				System.err.println(alert);

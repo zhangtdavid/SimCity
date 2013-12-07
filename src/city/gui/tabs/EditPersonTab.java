@@ -61,6 +61,8 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	// Data       
     //============================================================================//
 	
+	private final MainFrame mainFrame;
+	
 	private final ImageIcon car = new ImageIcon(EditPersonTab.class.getResource("/icons/car.png"));
 	private final ImageIcon nocar = new ImageIcon(EditPersonTab.class.getResource("/icons/nocar.png"));
 	private final ImageIcon house = new ImageIcon(EditPersonTab.class.getResource("/icons/home.png"));
@@ -161,6 +163,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 		this.setVisible(true);
 	    this.currencyFormat.setRoundingMode(RoundingMode.DOWN);
 	    this.currencyFormat.setParseIntegerOnly(true);
+	    this.mainFrame = mf;
 
 		// Set up the JPanel
 		this.setComponentOrientation(ComponentOrientation.LEFT_TO_RIGHT);
@@ -239,9 +242,11 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 					if (personSelectedFromList != null) {
 						// Remove the listener from the previous selection
 						personSelectedFromList.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
+						mainFrame.personTracePanel.toggleAlertsWithOString(Integer.toString(personSelectedFromList.hashCode()), false);
 					}
 					personSelectedFromList = listPeople.getSelectedValue();
 					personSelectedFromList.getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
+					mainFrame.personTracePanel.toggleAlertsWithOString(Integer.toString(personSelectedFromList.hashCode()), true);
 					updatePersonValues();
 				} else {
 					setEditPersonBlank();

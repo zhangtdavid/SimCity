@@ -48,6 +48,7 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	private List<Alert> newAlerts = Collections.synchronizedList(new ArrayList<Alert>());
 	private Set<AlertLevel> visibleLevels = Collections.synchronizedSet(EnumSet.allOf(AlertLevel.class));
 	private Set<AlertTag> visibleTags = Collections.synchronizedSet(EnumSet.noneOf(AlertTag.class));
+	private List<String> visibleOStrings = Collections.synchronizedList(new ArrayList<String>());
 
 	Dimension size;
 	Style errorStyle;
@@ -121,7 +122,7 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	 * @see {@link #hideAlertsWithTag(AlertTag)}
 	 */
 	private boolean isAlertVisible(Alert alert) {
-		if(visibleLevels.contains(alert.level) && visibleTags.contains(alert.tag)) {
+		if(visibleLevels.contains(alert.level) && (visibleOStrings.contains(alert.OString) || visibleTags.contains(alert.tag))) {
 			return true;
 		} else {
 			return false;
@@ -181,7 +182,7 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		List<Alert> alerts = AlertLog.getInstance().getAlerts();	//Get all the alerts from the log
 		Collections.sort(alerts);									//Sort them (they end up sorted by timestamp)
 		for(Alert alert:alerts) {
-			if(visibleTags.contains(alert.tag) && visibleLevels.contains(alert.level)) {
+			if((visibleOStrings.contains(alert.OString) || visibleTags.contains(alert.tag)) && visibleLevels.contains(alert.level)) {
 				newAlerts.add(alert);
 				//System.out.println("Adding Alert: " + alert.name + alert.level + alert.tag);
 			}
@@ -215,6 +216,11 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		this.visibleTags.add(tag);
 		filterTracePanel();
 	}
+	
+	public void showAlertsWithOString(String s) {
+		this.visibleOStrings.add(s);
+		filterTracePanel();
+	}
 
 	/**
 	 * Makes Alerts with a given {@link AlertTag} not show up in the trace panel.
@@ -222,6 +228,11 @@ public class TracePanel extends JScrollPane implements AlertListener {
 	 */
 	public void hideAlertsWithTag(AlertTag tag) {
 		this.visibleTags.remove(tag);
+		filterTracePanel();
+	}
+	
+	public void hideAlertsWithTagObject(String s) {
+		this.visibleOStrings.remove(s);
 		filterTracePanel();
 	}
 	
@@ -239,11 +250,21 @@ public class TracePanel extends JScrollPane implements AlertListener {
 		filterTracePanel();
 	}
 	
+	public void toggleAlertsWithOString(String s, boolean b) {
+		if (b) {
+			this.visibleOStrings.add(s);
+		} else {
+			this.visibleOStrings.remove(s);
+		}
+		filterTracePanel();
+	}
+	
 	/**
 	 * Hides all the alerts from the trace panel
 	 */
 	public void hideAllAlerts() {
 		this.visibleTags.clear();
+		this.visibleOStrings.clear();
 		filterTracePanel();
 	}
 	

@@ -20,12 +20,13 @@ public class MainFrame extends JFrame {
 	public final static int BUILDINGVIEWY = 500;
 	public final static int CONTROLPANELX = 300;
 	public final static int CONTROLPANELY = 700;
-	public final static int TRACEPANELX = 1000;
+	public final static int TRACEPANELX = 500;
 	public final static int TRACEPANELY = 190;
 
 	public CityViewPanel cityView;
 	public BuildingView buildingView;
 	public TracePanel tracePanel;
+	public TracePanel personTracePanel;
 	public CityControlPanel CP;
 	GridBagConstraints c = new GridBagConstraints();
 
@@ -51,6 +52,11 @@ public class MainFrame extends JFrame {
 		tracePanel.showAlertsForAllLevels();
 		tracePanel.showAlertsForAllTags();
 		tracePanel.setDimension(new Dimension(TRACEPANELX, TRACEPANELY));
+		// Set up the person trace panel
+		personTracePanel = new TracePanel();
+		personTracePanel.showAlertsForAllLevels();
+		personTracePanel.hideAllAlerts();
+		personTracePanel.setDimension(new Dimension(TRACEPANELX, TRACEPANELY));
 		// Set up the city control panel
 		CP = new CityControlPanel(this);
 		CP.setPreferredSize(new Dimension(CONTROLPANELX, CONTROLPANELY));
@@ -63,6 +69,7 @@ public class MainFrame extends JFrame {
 		c.gridx = 0; c.gridy = 0;
 		c.gridwidth = CITYVIEWX/100; c.gridheight = CITYVIEWY/100;
 		this.add(cityView, c);
+		this.add(cityView, c);
 
 		c.gridx = 5; c.gridy = 0;
 		c.gridwidth = BUILDINGVIEWX/100; c.gridheight = BUILDINGVIEWY/100;
@@ -71,11 +78,16 @@ public class MainFrame extends JFrame {
 		c.gridx = 10; c.gridy = 0;
 		c.gridwidth = CONTROLPANELX/100; c.gridheight = CONTROLPANELY/100;
 		this.add(CP, c);
-		//		
+
 		c.gridx = 0; c.gridy = 5;
 		c.gridwidth = TRACEPANELX/100; c.gridheight = TRACEPANELY/100;
 		c.fill = GridBagConstraints.BOTH;
 		this.add(tracePanel, c);
+		
+		c.gridx = 5; c.gridy = 5;
+		c.gridwidth = TRACEPANELX/100; c.gridheight = TRACEPANELY/100;
+		c.fill = GridBagConstraints.BOTH;
+		this.add(personTracePanel, c);
 
 		// Set up the window
 		this.setTitle("SimCity201");

@@ -15,6 +15,7 @@ public class Alert implements Comparable<Alert> {
 	public final AlertLevel level;
 	
 	public final AlertTag tag;
+	public final String OString;
 	
 	/** Displayed in the message */
 	public final String name;
@@ -28,6 +29,16 @@ public class Alert implements Comparable<Alert> {
 	public Alert(AlertLevel level, AlertTag tag, String sender, String message, Date date) {
 		this.level = level;
 		this.tag = tag;
+		this.OString = null;
+		this.name = sender;
+		this.message = message;
+		this.date = date;
+	}
+	
+	public Alert(AlertLevel level, String s, String sender, String message, Date date) {
+		this.level = level;
+		this.tag = null;
+		this.OString = s;
 		this.name = sender;
 		this.message = message;
 		this.date = date;
