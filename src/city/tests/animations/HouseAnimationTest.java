@@ -102,7 +102,7 @@ public class HouseAnimationTest extends TestCase {
 		foods.put(FOOD_ITEMS.salad, 0);
 		foods.put(FOOD_ITEMS.steak, 0);
 		foods.put(FOOD_ITEMS.pizza, 0); // there is no other food in the refrigerator
-		house.setFood(foods);
+		house.setFood(person, foods);
 		PersonAnimation.beingTested = true;
 	}
 	
@@ -112,10 +112,10 @@ public class HouseAnimationTest extends TestCase {
 		System.out.println("");
 		
 		//sanity background check
-		assertEquals("There should be 5 chickens in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.chicken), 5);
-		assertEquals("There should be 0 steaks in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.steak), 0);
-		assertEquals("There should be 0 pizzas in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.pizza), 0);
-		assertEquals("There should be 0 salads in the refrigerator of the house", (int)house.getFoodItems().get(FOOD_ITEMS.salad), 0);
+		assertEquals("There should be 5 chickens in the refrigerator of the house", (int)house.getFoodItems(person).get(FOOD_ITEMS.chicken), 5);
+		assertEquals("There should be 0 steaks in the refrigerator of the house", (int)house.getFoodItems(person).get(FOOD_ITEMS.steak), 0);
+		assertEquals("There should be 0 pizzas in the refrigerator of the house", (int)house.getFoodItems(person).get(FOOD_ITEMS.pizza), 0);
+		assertEquals("There should be 0 salads in the refrigerator of the house", (int)house.getFoodItems(person).get(FOOD_ITEMS.salad), 0);
 		assertEquals("Person should not have eaten", false, person.getHasEaten());
 		assertTrue("Person should have a ResidentRole", person.getResidentRole() != null);
 		assertTrue("Person should have a BankCustomerRole", person.getBankCustomerRole() != null);

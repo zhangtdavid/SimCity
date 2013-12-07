@@ -63,7 +63,7 @@ public class MockHouse extends MockResidenceBuilding implements House {
 	}
 
 	@Override
-	public void removeFood(FOOD_ITEMS f, int i) {
+	public void removeFood(Person p, FOOD_ITEMS f, int i) {
 		// TODO Auto-generated method stub
 		
 	}

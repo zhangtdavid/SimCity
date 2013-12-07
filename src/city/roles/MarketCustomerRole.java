@@ -76,7 +76,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
         for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
-        this.getPerson().getHome().addFood(receivedItems);
+        this.getPerson().getHome().setFood(this.getPerson(), receivedItems);
         this.bill = bill;
 		stateChanged();
 	}

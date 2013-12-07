@@ -62,8 +62,9 @@ public class MockApartment extends MockResidenceBuilding implements Apt {
 		return false;
 	}
 
+
 	@Override
-	public void removeFood(FOOD_ITEMS f, int i) {
+	public void removeFood(Person p, FOOD_ITEMS f, int i) {
 		// TODO Auto-generated method stub
 		
 	}

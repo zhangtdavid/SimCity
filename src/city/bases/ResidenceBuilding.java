@@ -23,21 +23,21 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	private int rent = 5;
 	private int totalCurrentMaintenance = 0;
 	private Map<Person, Map<FOOD_ITEMS, Integer>> allFoodItems= new HashMap<Person, Map<FOOD_ITEMS, Integer>>();
-	private Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
 	protected List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
 	private String homeAnimationInterfaceName;     // The interface name of the animation that interacts with this building as a tenant
-	private HashMap<Person, AnimationInterface> occupyingPersons = new HashMap<Person, AnimationInterface>(); //Since the animations in homes aren't role-bound, need a Person counterpart of above.
+	private HashMap<Person, AnimationInterface> occupyingPersons = new HashMap<Person, AnimationInterface>(); 
+	//Since the animations in homes aren't role-bound, need a Person counterpart of above.
 
 	
 	// Constructor 
 	
 	public ResidenceBuilding(String name, BuildingCard panel ,CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
-		
+		/*
 		// TODO should we really be giving every home one of every food item upon instantiation?
         for (FOOD_ITEMS s: FOOD_ITEMS.values()) {
         	foodItems.put(s, 1); // Add delivered food items to inventory
-        }	
+        }*/	
     }
 
 	// Getters
@@ -63,8 +63,8 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	}
 	
 	@Override
-	public Map<FOOD_ITEMS, Integer> getFoodItems() {
-		return foodItems;
+	public Map<FOOD_ITEMS, Integer> getFoodItems(Person p) {
+		return allFoodItems.get(p);
 	}
 	
 	@Override
@@ -100,6 +100,11 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 		this.homeAnimationInterfaceName = c;
 	}
 
+	@Override
+	public void setFood(Person p, Map<FOOD_ITEMS, Integer> items) {
+		this.allFoodItems.put(p, items);
+	}
+	
 	// Utilities
 	
 	@Override
@@ -119,30 +124,15 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	public boolean occupyingPersonExists(Person p) {
 		return occupyingPersons.containsKey(p);
 	}
-	
+
 	@Override
-	public void setFood(Map<FOOD_ITEMS, Integer> items) {
-		this.foodItems = items;
+	public void removeFood(Person p, FOOD_ITEMS f, int i) {
+		Map<FOOD_ITEMS, Integer> temp = allFoodItems.get(p);
+		temp.put(f, temp.get(f)-i); // -i from the choice
+		allFoodItems.put(p, temp); // put in the new map into allFoodItems
 	}
 
 	@Override
-	public void addFood(FOOD_ITEMS f, int i) {
-		this.foodItems.put(f, (foodItems.get(f) + i));
-	}
-	
-	@Override
-	public void removeFood(FOOD_ITEMS f, int i) {
-		this.foodItems.put(f, (foodItems.get(f) - i));
-	}
-	
-	@Override
-	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
-        for (FOOD_ITEMS s: receivedItems.keySet()) {
-        	foodItems.put(s, foodItems.get(s)+receivedItems.get(s)); // Add delivered food items to restaurant inventory
-        }		
-	}
-	
-	@Override
-	public abstract void addResident(Resident r);	
+	public abstract void addResident(Resident r);
 
 }

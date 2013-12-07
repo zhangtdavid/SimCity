@@ -384,11 +384,6 @@ public class Application {
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
-		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500); //
-		apartmentBuildingZhang1.addFood(FOOD_ITEMS.salad, 500); //
-		apartmentBuildingZhang1.addFood(FOOD_ITEMS.pizza, 500); //
-		apartmentBuildingZhang1.addFood(FOOD_ITEMS.steak, 500); // this prevents him from going to the market (testing house animation)
-
 		// Create landlord
 		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
 		p0Zhang.setHome(apartmentBuildingZhang1); // gives resident role here?
@@ -399,7 +394,7 @@ public class Application {
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
 		p0r1Zhang.setActive();
 		model.addPerson(p0Zhang);
-
+		
 		// Create people
 		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
@@ -413,6 +408,19 @@ public class Application {
 		p2Zhang.setHome(apartmentBuildingZhang1);
 		p3Zhang.setHome(apartmentBuildingZhang1);
 		p4Zhang.setHome(apartmentBuildingZhang1);
+		
+		//Give people basically inf. food
+
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 500);
+		temp.put(FOOD_ITEMS.salad, 500);
+		temp.put(FOOD_ITEMS.pizza, 500);
+		temp.put(FOOD_ITEMS.steak, 500);
+		apartmentBuildingZhang1.setFood(p0Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p1Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p2Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p3Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 
 		// Give people cars
 		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);

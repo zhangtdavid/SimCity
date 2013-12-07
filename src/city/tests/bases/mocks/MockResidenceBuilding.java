@@ -7,6 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import city.Application.FOOD_ITEMS;
+import city.agents.interfaces.Person;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.roles.interfaces.Landlord;
 import city.roles.interfaces.Resident;
@@ -18,18 +19,13 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	private Landlord landlord;
 	private int rent = 5;
 	private int totalCurrentMaintenance = 0;
-	private Map<FOOD_ITEMS, Integer> foodItems = new HashMap<FOOD_ITEMS, Integer>();
 	protected List<Resident> residents = Collections.synchronizedList(new ArrayList<Resident>());
+	private Map<Person, Map<FOOD_ITEMS, Integer>> allFoodItems = new HashMap<Person, Map<FOOD_ITEMS, Integer>>();
 	
 	// Constructor
 
 	public MockResidenceBuilding(String name) {
 		super(name);
-		
-		// We need some zero quantity of every food item to prevent null pointers when adding food
-        for (FOOD_ITEMS f: FOOD_ITEMS.values()) {
-        	foodItems.put(f, 0); 
-        }	
 	}
 	
 	// Getters
@@ -55,8 +51,8 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	}
 
 	@Override
-	public Map<FOOD_ITEMS, Integer> getFoodItems() {
-		return foodItems;
+	public Map<FOOD_ITEMS, Integer> getFoodItems(Person p) {
+		return allFoodItems .get(p);
 	}
 	
 	// Setters
@@ -72,8 +68,8 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	}
 	
 	@Override
-	public void setFood(Map<FOOD_ITEMS, Integer> items) {
-		this.foodItems = items;
+	public void setFood(Person p, Map<FOOD_ITEMS, Integer> items) {
+		this.allFoodItems.put(p, items);
 	}
 
 	@Override
@@ -86,17 +82,6 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	
 	@Override
 	public void addResident(Resident r) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void addFood(FOOD_ITEMS f, int i) {
-		this.foodItems.put(f, (foodItems.get(f) + i));
-	}
-
-	@Override
-	public void addFood(Map<FOOD_ITEMS, Integer> receivedItems) {
 		// TODO Auto-generated method stub
 		
 	}

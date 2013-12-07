@@ -42,9 +42,9 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 			this.xPos = HousePanel.HDX; 
 			this.yPos = HousePanel.HDY+10;
 		}else if(p.getHome() instanceof Apt){ // or apartment
-			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0];
+			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
 			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0];
+			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
 			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
 		}
 	}

@@ -401,16 +401,16 @@ public class PersonAgent extends Agent implements Person {
 		setState(STATES.atCooking);
 		// Pick a food item to eat from the refrigerator
 		List<FOOD_ITEMS> list = new ArrayList<FOOD_ITEMS>();
-		list.addAll(this.home.getFoodItems().keySet());
+		list.addAll(this.home.getFoodItems(this).keySet());
 		Collections.shuffle(list);
 		FOOD_ITEMS toEat = null;
 		for (FOOD_ITEMS i : list) {
-			if (this.home.getFoodItems().get(i) > 0) {
+			if (this.home.getFoodItems(this).get(i) > 0) {
 				toEat = i;
 				break;
 			}
 		}
-		this.home.removeFood(toEat, 1);
+		this.home.removeFood(this, toEat, 1);
 		// Cooks the food and eats it
 		animation.cookAndEatFood(toEat.toString());
 		if(!PersonAnimation.beingTested)
@@ -892,8 +892,8 @@ public class PersonAgent extends Agent implements Person {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		boolean disposition = true;
 		int items = 0;
-		for (FOOD_ITEMS i : home.getFoodItems().keySet()) {
-			items = items + home.getFoodItems().get(i);
+		for (FOOD_ITEMS i : home.getFoodItems(this).keySet()) {
+			items = items + home.getFoodItems(this).get(i);
 			if (items > 3) { 
 				disposition = false;
 				break;
