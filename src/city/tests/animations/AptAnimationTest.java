@@ -6,7 +6,7 @@ import city.Application;
 import city.Application.BUILDING;
 import city.agents.PersonAgent;
 import city.animations.AptResidentAnimation;
-import city.buildings.ApartmentBuilding;
+import city.buildings.AptBuilding;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.AptPanel;
 import city.roles.LandlordRole;
@@ -27,7 +27,7 @@ public class AptAnimationTest {
 	// Being tested
 	private PersonAgent person;
 	private AptResidentAnimation homeAnimation;
-	private ApartmentBuilding house;
+	private AptBuilding house;
 
 	public void setUp() throws Exception {
 		date = new Date(0);
@@ -38,7 +38,7 @@ public class AptAnimationTest {
 		person.addRole(resident);
 		resident.setLandlord(landlord);
 		
-		house = new ApartmentBuilding("Apartment", landlord, hp, aptCityViewBuilding);
+		house = new AptBuilding("Apartment", landlord, hp, aptCityViewBuilding);
 		Application.CityMap.clearMap();
 		Application.CityMap.addBuilding(BUILDING.house,house); // TODO incorporate a base class? rename house as residence 
 		person.setHome(house);

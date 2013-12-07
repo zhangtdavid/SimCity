@@ -4,28 +4,27 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.agents.interfaces.Person;
-import city.animations.HouseResidentAnimation;
+import city.animations.AptResidentAnimation;
 import city.bases.Animation;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.RoleInterface;
-import city.buildings.interfaces.House;
+import city.buildings.interfaces.Apt;
 import city.gui.exteriors.CityViewBuilding;
-import city.gui.interiors.HousePanel;
+import city.gui.interiors.AptPanel;
 import city.roles.interfaces.Landlord;
 import city.roles.interfaces.Resident;
 
-public class HouseBuilding extends ResidenceBuilding implements House {
+public class AptBuilding extends ResidenceBuilding implements Apt {
 
 	// Data
-	private HousePanel panel; // reference to main gui
+	public AptPanel panel; //reference to main gui
 	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
 
 	// Constructor
 
-	public HouseBuilding(String name, Landlord l, HousePanel panel, CityViewBuilding cityBuilding) {
+	public AptBuilding(String name, Landlord l, AptPanel panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
-		//Perhaps I should eliminate the landlord requirement, and have that be added separately? :/
-		this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
+		this.setLandlord(l);
 		this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation"); // TODO why?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
@@ -35,28 +34,25 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Setters
 
-	/**
-	 * This adds a Resident to a list of residents who live in this house. (1
-	 * person lives in this house)
-	 */
 	@Override
-	public void addResident(Resident resident) {
-		if (residents.isEmpty()) {
-			// ONLY ONE PERSON PER HOUSE~!
-			this.residents.add(resident);
-		} else {
-			// System.out.println("Someone already lives in this house (capacity = 1)");
+	public void addResident(Resident r) {
+		if(residents.size() < Apt.NUMBER_OF_BEDS) {
+			residents.add(r);
+			r.getPerson().setRoomNumber(residents.size()); // could be one of 1~5 inclusive\
+		}else{
+			r.getPerson().print("This apartment is full (5 residents); cannot live here right now");
 		}
 	}
 
 	// Utilities
 
 	@Override
-	public void addOccupyingRole(RoleInterface ri) { 
+	public void addOccupyingRole(RoleInterface r) {
 		// you can put any role the person has into this for house; I just get the person through it.
-		if(!this.allPersons.containsKey(ri.getPerson())){ // this prevents duplicates
-			addOccupyingPerson(ri.getPerson()); // if you already are in this home, just use the one you have before!
+		if(!this.allPersons.containsKey(r.getPerson())){ // this prevents duplicates
+			addOccupyingPerson(r.getPerson());
 		}
+		// if you already are in this home, just use the one you have before!
 	}
 
 	/**
@@ -68,7 +64,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	 */
 	@Override
 	public void addOccupyingPerson(Person p) {
-		HouseResidentAnimation anim = new HouseResidentAnimation(p); // this is disposed of every time the person leaves.
+		AptResidentAnimation anim = new AptResidentAnimation(p); // this is disposed of every time the person leaves.
 		p.setHomeAnimation(anim); // set the person's home animation to this.
 		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
 		allPersons.put(p, anim);
@@ -76,4 +72,5 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 			panel.addVisualizationElement(anim);
 
 	}
+
 }

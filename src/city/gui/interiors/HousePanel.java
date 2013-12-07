@@ -85,7 +85,7 @@ public class HousePanel extends ResidenceBasePanel {
 	}
 
 
-	// TODO remove?
+	// TODO removal of this makes the house not animate at all. keeping it results it in not doing anything if not focused.
 	public void addVisualizationElement(Animation ve) {
 		animations.add(ve);
 	}
