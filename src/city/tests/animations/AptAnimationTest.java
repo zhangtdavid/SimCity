@@ -10,8 +10,7 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.animations.AptResidentAnimation;
-import city.animations.HouseResidentAnimation;
-import city.animations.interfaces.AnimatedPersonAtHome.Command;
+import city.animations.interfaces.AnimatedPerson.Command;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.gui.exteriors.CityViewApt;
@@ -23,7 +22,6 @@ import city.roles.ResidentRole;
 import city.tests.animations.mocks.MockAnimatedPerson;
 import city.tests.buildings.mocks.MockBusStop;
 import city.tests.roles.mocks.MockCityViewBuilding;
-
 
 public class AptAnimationTest extends TestCase{
 

@@ -4,7 +4,6 @@ import java.util.HashMap;
 import java.util.Map;
 
 import city.agents.interfaces.Person;
-import city.animations.HouseResidentAnimation;
 import city.bases.Animation;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.RoleInterface;
@@ -67,18 +66,16 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	 * Needed to have Person p instead of RoleInterface because it's not a
 	 * Resident that's doing all the cooking and sleeping, it's a Person.
 	 * 
-	 * @param p
-	 *            The person to move within the house.
+	 * @param p The person to move within the house.
 	 */
 	@Override
 	public void addOccupyingPerson(Person p) {
-		HouseResidentAnimation anim = new HouseResidentAnimation(p); // this is disposed of every time the person leaves.
-		p.setHomeAnimation(anim); // set the person's home animation to this.
-		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
-		allPersons.put(p, anim);
-		if(!anim.getBeingTested())
-			panel.addVisualizationElement(anim);
-
+//		HouseResidentAnimation anim = new HouseResidentAnimation(p); // this is disposed of every time the person leaves.
+//		p.setHomeAnimation(anim); // set the person's home animation to this.
+//		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
+//		allPersons.put(p, anim);
+//		if(!anim.getBeingTested())
+//			panel.addVisualizationElement(anim);
 	}
 
 }

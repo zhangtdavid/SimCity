@@ -67,13 +67,12 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	 */
 	@Override
 	public void addOccupyingPerson(Person p) {
-		AptResidentAnimation anim = new AptResidentAnimation(p); // this is disposed of every time the person leaves.
-		p.setHomeAnimation(anim); // set the person's home animation to this.
-		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
-		allPersons.put(p, anim);
-		if(!anim.getBeingTested())
-			panel.addVisualizationElement(anim);
-
+//		AptResidentAnimation anim = new AptResidentAnimation(p); // this is disposed of every time the person leaves.
+//		p.setHomeAnimation(anim); // set the person's home animation to this.
+//		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
+//		allPersons.put(p, anim);
+//		if(!anim.getBeingTested())
+//			panel.addVisualizationElement(anim);
 	}
 	
 }
