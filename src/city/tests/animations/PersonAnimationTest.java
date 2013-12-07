@@ -85,8 +85,9 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				yPos--;
 			else if(!sidewalkPath.isEmpty()) {
 				if(sidewalkPath.peek().getCorrespondingStoplight() != null) {
-					if(sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
-							sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF) {
+					if((sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
+							sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF) &&
+							!currentSidewalk.isCrosswalk()) {
 						return;
 					}
 				}

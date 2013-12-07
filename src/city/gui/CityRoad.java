@@ -87,16 +87,11 @@ public class CityRoad extends CityViewBuilding {
 		double y = 0;
 		double vWidth = 0;
 		double vHeight = 0;
+		// Check for pedestrians at intersection
 		for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
 			if(sidewalksAtIntersection.getCurrentOccupant() != null)
 				return;
 		}
-//		if(Application.sidewalks != null) {
-//			if(xVelocity > 0) {
-//				Application.sidewalks.get
-//			}
-//		TODO If the current road is a stoplight, check the next road for occupants, use a function like areOccupantsAtRoad(this);
-//		}
 		if(vehicle instanceof CarAnimation) {
 			vehicle = (CarAnimation) vehicle;
 			if(((CarAnimation) vehicle).getEndRoad() == this) {
