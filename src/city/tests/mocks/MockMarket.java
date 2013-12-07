@@ -98,7 +98,7 @@ public class MockMarket extends MockBuilding implements Market {
 	}
 
 	@Override
-	public List<MarketDeliveryPerson> getDeliveryPeople() {
+	public List<MyDeliveryPerson> getDeliveryPeople() {
 		// TODO Auto-generated method stub
 		return null;
 	}
@@ -111,6 +111,12 @@ public class MockMarket extends MockBuilding implements Market {
 
 	@Override
 	public Map<FOOD_ITEMS, Integer> getPrices() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d) {
 		// TODO Auto-generated method stub
 		return null;
 	}

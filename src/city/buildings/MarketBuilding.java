@@ -1,6 +1,7 @@
 package city.buildings;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -33,7 +34,7 @@ public class MarketBuilding extends Building implements Market {
 	private MarketCashier cashier;
 	private BankCustomer bankCustomer;
 	private List<MarketEmployee> employees = new ArrayList<MarketEmployee>();
-	private List<MarketDeliveryPerson> deliveryPeople = new ArrayList<MarketDeliveryPerson>();
+	private List<MyDeliveryPerson> deliveryPeople;
 	
 	public static final int WORKER_SALARY = 500;
 	
@@ -46,6 +47,8 @@ public class MarketBuilding extends Building implements Market {
 		super(name, panel, cityBuilding);
 		this.setCustomerRoleName("city.roles.MarketCustomerRole");
 		this.setCustomerAnimationName("city.animations.MarketCustomerAnimation");
+		
+		deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
 
 		// initializes all items in the inventory to 50
 		inventory.put(FOOD_ITEMS.chicken, 50);
@@ -103,7 +106,7 @@ public class MarketBuilding extends Building implements Market {
 	}
 	
 	@Override
-	public List<MarketDeliveryPerson> getDeliveryPeople() {
+	public List<MyDeliveryPerson> getDeliveryPeople() {
 		return deliveryPeople;
 	}
 	
@@ -115,7 +118,7 @@ public class MarketBuilding extends Building implements Market {
 	@Override
 	public Map<FOOD_ITEMS, Integer> getPrices() {
 		return prices;
-	}
+	}	
 	
 //  Setters
 //	=====================================================================	
@@ -171,7 +174,7 @@ public class MarketBuilding extends Building implements Market {
 		}
 	}
 	
-	// Employee
+	// Add
 	@Override
 	public void addEmployee(MarketEmployee employee) {
 		employees.add(employee);
@@ -179,21 +182,31 @@ public class MarketBuilding extends Building implements Market {
 	}
 	
 	@Override
+	public void addDeliveryPerson(MarketDeliveryPerson d) {
+		deliveryPeople.add(new MyDeliveryPerson(d));
+	}
+	
+	// Remove
+	@Override
 	public void removeEmployee(MarketEmployee employee) {
 		employees.remove(employee);
 		manager.msgRemoveEmployee(employee);		
 	}
 	
-	// Delivery Person
 	@Override
-	public void addDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
-		deliveryPeople.add(deliveryPerson);
-		cashier.msgNewDeliveryPerson(deliveryPerson);
+	public void removeDeliveryPerson(MarketDeliveryPerson d) {
+		MyDeliveryPerson dp = findDeliveryPerson(d);
+		deliveryPeople.remove(dp);
 	}
 	
+	// Find
 	@Override
-	public void removeDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
-		deliveryPeople.remove(deliveryPerson);
-		cashier.msgRemoveDeliveryPerson(deliveryPerson);		
+	public MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d) {
+		for(MyDeliveryPerson t : deliveryPeople){
+			if(t.getDeliveryPerson() == d) {
+				return t;		
+			}
+		}
+		return null;
 	}
 }

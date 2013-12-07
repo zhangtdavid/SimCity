@@ -33,7 +33,6 @@ import city.roles.interfaces.RestaurantChungCook;
 import city.roles.interfaces.RestaurantChungCustomer;
 import city.roles.interfaces.RestaurantChungHost;
 import city.roles.interfaces.RestaurantChungWaiter;
-import city.roles.interfaces.RestaurantChungHost.CustomerState;
 
 public class RestaurantChungBuilding extends RestaurantBuilding implements RestaurantChung {
 //	Data

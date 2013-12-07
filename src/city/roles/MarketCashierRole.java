@@ -16,6 +16,7 @@ import city.agents.interfaces.Person;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
+import city.buildings.interfaces.Market.MyDeliveryPerson;
 import city.roles.interfaces.MarketCashier;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.MarketCustomerDelivery;
@@ -32,7 +33,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	private WorkingState workingState = WorkingState.Working;
 	
 	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	private List<MyDeliveryPerson> deliveryPeople = Collections.synchronizedList(new ArrayList<MyDeliveryPerson>());
 
 //	Constructor
 //	=====================================================================
@@ -52,26 +52,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	}
 	
 //  Messages
-//	=====================================================================
-//	Market
-//	---------------------------------------------------------------
-	@Override
-	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("MarketCashier received msgNewDeliveryPerson from Market."));
-		System.out.println("MarketCashier received msgNewDeliveryPerson from Market.");
-		deliveryPeople.add(new MyDeliveryPerson(d));
-		stateChanged();
-	}
-	
-	@Override
-	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("MarketCashier received msgRemoveDeliveryPerson from Market."));
-		System.out.println("MarketCashier received msgRemoveDeliveryPerson from Market.");
-		MyDeliveryPerson dp = findDeliveryPerson(d);
-		deliveryPeople.remove(dp);
-		stateChanged();
-	}
-	
+//	=====================================================================	
 //	Employee
 //	---------------------------------------------------------------
 	@Override
@@ -114,8 +95,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Delivery Person."));
 		System.out.println("Market Cashier received msgDeliveringItems from Delivery Person.");
-		MyDeliveryPerson dp = findDeliveryPerson(d);
-		dp.available = false;
+		MyDeliveryPerson dp = market.findDeliveryPerson(d);
+		dp.setAvailable(false);
 	}
 	
 	@Override
@@ -124,8 +105,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		System.out.println("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
 		Transaction t = findTransaction(id);
 		transactions.remove(t);
-		MyDeliveryPerson dp = findDeliveryPerson(d);
-		dp.available = true;
+		MyDeliveryPerson dp = market.findDeliveryPerson(d);
+		dp.setAvailable(true);
 	}
 	
 //  Scheduler
@@ -154,8 +135,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.PendingDelivery) {
-					for(MyDeliveryPerson dt : deliveryPeople ){
-						if(dt.available == true) {
+					for(MyDeliveryPerson dt : market.getDeliveryPeople()){
+						if(dt.getAvailable() == true) {
 							assignDelivery(t, dt);
 							return true;
 						}
@@ -222,8 +203,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			if(t.bill == t.payment) {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
 				market.setCash(market.getCash() + t.payment);
-				for(MyDeliveryPerson dt : deliveryPeople ) {
-					if(dt.available == true) {
+				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
+					if(dt.getAvailable() == true) {
 						assignDelivery(t, dt);
 					}
 				}
@@ -234,7 +215,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	
 	private void assignDelivery(Transaction t, MyDeliveryPerson dt) {
 		t.s = TransactionState.Delivering;
-		dt.deliveryPerson.msgDeliverOrder(t.customerDelivery, t.collectedItems, t.orderId);
+		dt.getDeliveryPerson().msgDeliverOrder(t.customerDelivery, t.collectedItems, t.orderId);
 	}
 	
 //  Getters
@@ -247,11 +228,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public List<Transaction> getTransactions() {
 		return transactions;
-	}
-	
-	@Override	
-	public List<MyDeliveryPerson> getDeliveryPeople() {
-		return deliveryPeople;
 	}
 	
 //  Setters
@@ -278,15 +254,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		return null;
 	}
 	
-	private MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d) {
-		for(MyDeliveryPerson t : deliveryPeople){
-			if(t.deliveryPerson == d) {
-				return t;		
-			}
-		}
-		return null;
-	}
-	
 	@Override
 	public void print(String msg) {
         super.print(msg);
@@ -294,22 +261,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
     }
 	
 //  Classes 
-//	=====================================================================	
-	public class MyDeliveryPerson {
-		MarketDeliveryPerson deliveryPerson;
-		private boolean available;
-		
-		public MyDeliveryPerson(MarketDeliveryPerson d) {
-			deliveryPerson = d;
-			available = true;
-		}
-		
-		// Getters
-		public boolean getAvailable() {
-			return available;
-		}
-	}
-	
+//	=====================================================================		
 	public class Transaction {
 		private MarketEmployee employee;
 		private MarketCustomer customer;

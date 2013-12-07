@@ -8,7 +8,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.buildings.interfaces.Market;
-import city.roles.MarketCashierRole.MyDeliveryPerson;
 import city.roles.MarketCashierRole.Transaction;
 import city.roles.interfaces.MarketCashier;
 import city.roles.interfaces.MarketCustomer;
@@ -25,18 +24,6 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 	public MockMarketCashier() {
 		// TODO Auto-generated method stub
 		
-	}
-
-	@Override
-	public void msgNewDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("MarketCashier received msgNewDeliveryPerson from Market"));		
-		System.out.println("MarketCashier received msgNewDeliveryPerson from Market");		
-	}
-
-	@Override
-	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d) {
-		log.add(new LoggedEvent("Market Cashier received msgRemoveDeliveryPerson from Market"));		
-		System.out.println("Market Cashier received msgRemoveDeliveryPerson from Market");		
 	}
 	
 	@Override
@@ -77,12 +64,6 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 
 	@Override
 	public List<Transaction> getTransactions() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<MyDeliveryPerson> getDeliveryPeople() {
 		// TODO Auto-generated method stub
 		return null;
 	}

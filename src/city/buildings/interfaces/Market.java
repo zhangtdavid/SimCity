@@ -21,7 +21,7 @@ public interface Market extends BuildingInterface {
 	public void addDeliveryPerson(MarketDeliveryPerson deliveryPerson);
 	public void removeDeliveryPerson(MarketDeliveryPerson deliveryPerson);
 
-	//  Getters
+	// Getters
 	public MarketPanel getMarketPanel();
 	public MarketManager getMarketManager();
 	public MarketCashier getMarketCashier();
@@ -29,12 +29,42 @@ public interface Market extends BuildingInterface {
 	public MarketCashier getCashier();
 	public BankCustomer getBankCustomer();
 	public List<MarketEmployee> getEmployees();
-	public List<MarketDeliveryPerson> getDeliveryPeople();
+	public List<MyDeliveryPerson> getDeliveryPeople();
 	
-	//	Setters
+	// Setters
 	public void setManager(MarketManager manager);
 	public void setCashier(MarketCashier cashier);
 	Map<FOOD_ITEMS, Integer> getInventory();
 	Map<FOOD_ITEMS, Integer> getPrices();
+	
+	// Classes
+	public class MyDeliveryPerson {
+		private MarketDeliveryPerson deliveryPerson;
+		private boolean available;
+		
+		public MyDeliveryPerson(MarketDeliveryPerson d) {
+			deliveryPerson = d;
+			available = true;
+		}
+		
+		// Getters
+		public MarketDeliveryPerson getDeliveryPerson() {
+			return deliveryPerson;
+		}
+		
+		public boolean getAvailable() {
+			return available;
+		}
+		
+		// Setters
+		public void setDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
+			this.deliveryPerson = deliveryPerson;
+		}
+		
+		public void setAvailable(boolean available) {
+			this.available = available;
+		}
+	}
 
+	MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d);
 }
