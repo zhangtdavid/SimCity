@@ -84,5 +84,9 @@ public class MainFrame extends JFrame {
 		this.setBounds(50, 50, WINDOWX, WINDOWY);
 		this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 	}
+	
+	public void setDisplayDate(String s) {
+		this.setTitle("SimCity201 - " + s);
+	}
 
 }

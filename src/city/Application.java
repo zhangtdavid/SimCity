@@ -2,11 +2,14 @@ package city;
 
 import java.awt.Color;
 import java.awt.Rectangle;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
+import java.util.TimeZone;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -98,9 +101,12 @@ public class Application {
 		parseConfig();
 
 		// Start the simulation
+		final DateFormat df = new SimpleDateFormat("MMMM dd HHmm");
+		df.setTimeZone(TimeZone.getTimeZone("UTC"));
 		TimerTask tt = new TimerTask() {
 			public void run() {
 				date.setTime(date.getTime() + HALF_HOUR);
+				mainFrame.setDisplayDate(df.format(date));
 				for (Person p : model.getPeople()) {
 					p.setDate(date);
 				}
@@ -904,7 +910,7 @@ public class Application {
 	public static MainFrame getMainFrame() {
 		return mainFrame;
 	}
-
+	
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
