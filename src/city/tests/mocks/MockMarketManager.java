@@ -8,8 +8,6 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.buildings.interfaces.Market;
-import city.roles.MarketManagerRole.MyMarketCustomer;
-import city.roles.MarketManagerRole.MyMarketEmployee;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
@@ -21,18 +19,6 @@ public class MockMarketManager extends MockRole implements MarketManager {
 	
 	public EventLog log = new EventLog();
 	public Market market;
-	
-	@Override
-	public void msgNewEmployee(MarketEmployee e) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgRemoveEmployee(MarketEmployee e) {
-		// TODO Auto-generated method stub
-		
-	}
 	
 	public MockMarketManager() {
 		// TODO Auto-generated method stub
@@ -85,33 +71,8 @@ public class MockMarketManager extends MockRole implements MarketManager {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
-	@Override
-	public List<MyMarketEmployee> getEmployees() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<MyMarketCustomer> getCustomers() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	@Override
 	public WorkingState getWorkingState() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MyMarketEmployee findEmployee(MarketEmployee me) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
 		// TODO Auto-generated method stub
 		return null;
 	}

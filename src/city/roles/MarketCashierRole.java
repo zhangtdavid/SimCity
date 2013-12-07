@@ -214,8 +214,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	}
 	
 	private void assignDelivery(Transaction t, MyDeliveryPerson dt) {
-		t.s = TransactionState.Delivering;
 		dt.getDeliveryPerson().msgDeliverOrder(t.customerDelivery, t.collectedItems, t.orderId);
+		t.s = TransactionState.Delivering;
 	}
 	
 //  Getters
