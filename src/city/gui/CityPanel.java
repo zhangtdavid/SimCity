@@ -13,6 +13,7 @@ import java.util.List;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
+import city.Application;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.exteriors.CityViewBuilding;
 
@@ -30,7 +31,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public CityPanel(MainFrame mf) {
 		mainframe = mf;
-		timer = new Timer(5, this);
+		timer = new Timer(((Double) (Application.INTERVAL * 0.01)).intValue(), this);
 		timer.start();
 	}
 
