@@ -33,22 +33,25 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	private boolean atDestination = false;
 	
 	private Stack<CitySidewalk>sidewalkPath;
+	
+	private String name;
 
-	public PersonAnimationTest(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
+	public PersonAnimationTest(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks, String name) {
 		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
 		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
 		currentBuilding = startingBuilding;
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		this.sidewalks = sidewalks;
-		goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
+		this.name = name;
+		//goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
 	}
 
 	@Override
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
-			if(startingSidewalk.setCurrentOccupant(this) == false && startingSidewalk.getCurrentOccupant() != this 
-					&& sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
+			if(startingSidewalk.setCurrentOccupant(this) == false //&& startingSidewalk.getCurrentOccupant() != this 
+					/*&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())*/) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -78,9 +81,10 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 				yPos++;
 			else if(yPos > currentSidewalk.getY())
 				yPos--;
-			else if(!sidewalkPath.isEmpty())
+			else if(!sidewalkPath.isEmpty()) {
+				currentSidewalk.setCurrentOccupant(null);
 				currentSidewalk = sidewalkPath.pop();
-			else if(currentSidewalk == endSidewalk)
+			} else if(currentSidewalk == endSidewalk)
 				atDestinationRoad = true;
 		}
 		// Finished walking to sidewalk, walk into building
@@ -99,6 +103,7 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
+			print("At Destination");
 			goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
 		}
 	}
@@ -131,6 +136,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	}
 
 	public void print(String msg) {
-		AlertLog.getInstance().logMessage(AlertTag.BANK, "PersonAnimationTest", msg);
+		AlertLog.getInstance().logMessage(AlertTag.BANK, name, msg);
 	}
 }

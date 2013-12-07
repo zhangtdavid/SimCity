@@ -86,6 +86,25 @@ public class CitySidewalkLayout {
 			return false;
 	}
 
+	public boolean isAnIntersection(CitySidewalk parentSidewalk) {
+		
+		
+		return false;
+	}
+	
+//	public CityRoad getClosestRoad(int x, int y) {
+//		double closestDistance = 10000000;
+//		CityRoad closestRoad = null;
+//		for(CityRoad r : roads) {
+//			double distance = Math.sqrt((double)(Math.pow(r.getX() - x, 2) + Math.pow(r.getY() - y, 2)));
+//			if( distance < closestDistance) {
+//				closestDistance = distance;
+//				closestRoad = r;
+//			}
+//		}
+//		return closestRoad;
+//	}
+	
 	public CitySidewalk getSidewalkWest(int x, int y) {
 		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
 		if(currentSidewalk == null) {
