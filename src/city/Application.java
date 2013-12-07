@@ -377,10 +377,10 @@ public class Application {
 		//rchoi edit: if you're wondering why this is in the middle of the road, it's because of a car error when someone wants to go to where he's already at by driving
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
-		HousePanel apartmentPanelZhang1 = new HousePanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try 75,225 for location (: and uncomment lines 869, 874.
-		HouseBuilding apartmentBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		apartmentBuildingZhang1.addFood(FOOD_ITEMS.chicken, 500); //
@@ -892,11 +892,11 @@ public class Application {
 		c2Zhang.startThread();
 		c3Zhang.startThread();
 		c4Zhang.startThread();
-		p0Zhang.startThread();/*
+		p0Zhang.startThread();
 		p1Zhang.startThread();
 		p2Zhang.startThread();
 		p3Zhang.startThread();
-		p4Zhang.startThread();*/
+		p4Zhang.startThread();
 //		c0Timms.startThread();
 //		c1Timms.startThread();
 //		c2Timms.startThread();
