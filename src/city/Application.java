@@ -96,7 +96,7 @@ public class Application {
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
 	
-	static CitySidewalkLayout sidewalks;
+	public static CitySidewalkLayout sidewalks;
 	
 	private static final DataModel model = new DataModel();
 
@@ -310,6 +310,7 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
 		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		sidewalks.setRoads(trafficControl);
 		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);

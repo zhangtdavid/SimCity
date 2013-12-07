@@ -15,6 +15,7 @@ import city.animations.interfaces.AnimatedPerson;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.interfaces.BusStop;
+import city.gui.CityRoad;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
 
@@ -83,6 +84,12 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 			else if(yPos > currentSidewalk.getY())
 				yPos--;
 			else if(!sidewalkPath.isEmpty()) {
+				if(sidewalkPath.peek().getCorrespondingStoplight() != null) {
+					if(sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
+							sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF) {
+						return;
+					}
+				}
 				if(sidewalkPath.peek().setCurrentOccupant(this)) {
 					currentSidewalk.setCurrentOccupant(null);
 					currentSidewalk = sidewalkPath.pop();

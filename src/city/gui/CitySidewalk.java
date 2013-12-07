@@ -15,6 +15,9 @@ public class CitySidewalk extends CityViewBuilding {
 	protected int velocity;
 	protected double size;
 	protected Color sidewalkColor;
+	
+	protected boolean isCrosswalk = false;
+	protected CityRoad correspondingStoplight = null;
 
 	volatile protected AnimationInterface currentOccupant = null;
 
@@ -47,6 +50,14 @@ public class CitySidewalk extends CityViewBuilding {
 	public AnimationInterface getCurrentOccupant() {
 		return currentOccupant;
 	}
+	
+	public boolean isCrosswalk() {
+		return isCrosswalk;
+	}
+
+	public CityRoad getCorrespondingStoplight() {
+		return correspondingStoplight;
+	}
 
 	// Setters
 
@@ -56,5 +67,13 @@ public class CitySidewalk extends CityViewBuilding {
 			return true;
 		}
 		return false;
+	}
+	
+	public void setCrosswalk(boolean b) {
+		isCrosswalk = b;
+	}
+
+	public void setCorrespondingStoplight(CityRoad correspondingStoplight) {
+		this.correspondingStoplight = correspondingStoplight;
 	}
 }
