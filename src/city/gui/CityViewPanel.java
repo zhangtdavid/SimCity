@@ -87,7 +87,9 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			AlertLog.getInstance().logInfo(AlertTag.GENERAL_CITY, this.name, "Building successfully added");
 			addingObject = false;
 			createBuilding(temp.getCityViewBuilding().getBuilding(), temp.getCityViewBuilding(), temp.getBuilding());
-			temp = null;
+			temp.setCityViewBuilding(null);
+			temp.setBuilding(null);
+			System.out.println("aospidnfoiasdnfoiasdnfiosda");
 		}
 		for (CityViewBuilding c: statics) {
 			if (c.contains(arg0.getX(), arg0.getY())) {
@@ -131,7 +133,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 					(RestaurantJPPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTTIMMS:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantJPPanel(Color.yellow)));
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)));
 			temp.setBuilding(new RestaurantTimmsBuilding("RestaurantTimms " + statics.size(),
 					(RestaurantTimmsPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
@@ -142,8 +144,9 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			break;
 		case BANK: 
 			temp.setCityViewBuilding(new CityViewBank(-100, -100, "Bank " + (statics.size()), Color.green, new BankPanel(Color.green)));
-			temp.setBuilding(new BankBuilding("RestaurantChung " + statics.size(),
+			temp.setBuilding(new BankBuilding("Bank " + statics.size(),
 					(BankPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
 		default: return;
 		}
 		addStatic(temp.getCityViewBuilding());
@@ -172,8 +175,8 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 				newX = 50;
 			else if(newX == 425 && (newY == 25 || newY == 425))
 				newX = 400;
-
-			temp.getCityViewBuilding().setPosition(newX, newY);
+			if(temp.getCityViewBuilding() != null)
+				temp.getCityViewBuilding().setPosition(newX, newY);
 		}
 	}
 	
