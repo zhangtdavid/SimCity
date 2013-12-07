@@ -4,6 +4,7 @@ import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import utilities.LoggedEvent;
+import city.buildings.interfaces.Bank;
 import city.roles.BankManagerRole.BankTask;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BankManager;
@@ -11,6 +12,8 @@ import city.roles.interfaces.BankTeller;
 import city.tests.bases.mocks.MockRole;
 
 public class MockBankManager extends MockRole implements BankManager {
+
+	public Bank building;
 
 	public MockBankManager() {
 		// TODO Auto-generated method stub

@@ -251,8 +251,8 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public int checkBill(MarketTransaction t) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: t.getOrder().orderItems.keySet()) {
-        	tempBill += t.getOrder().orderItems.get(item)*t.getMarket().getPrices().get(item);
+        for (FOOD_ITEMS item: t.getOrder().getOrderItems().keySet()) {
+        	tempBill += t.getOrder().getOrderItems().get(item)*t.getMarket().getPrices().get(item);
         }
 
         if (tempBill == t.getBill())
@@ -274,7 +274,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction t: marketTransactions) {
-			if(t.getOrder().orderId == id) {
+			if(t.getOrder().getOrderId() == id) {
 				return t;
 			}
 		}

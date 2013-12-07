@@ -1,7 +1,10 @@
 package city.buildings;
 
 import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Collections;
 import java.util.List;
+import java.util.Vector;
 
 import utilities.RestaurantChungRevolvingStand;
 import city.Application;
@@ -38,12 +41,16 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	private RestaurantChungCashier cashier;
 	private RestaurantChungCook cook;
 	private BankCustomer bankCustomer;
-	private List<RestaurantChungWaiter> waiters = new ArrayList<RestaurantChungWaiter>();
-	private List<RestaurantChungCustomer> customers = new ArrayList<RestaurantChungCustomer>();
+	private List<MyWaiter> waiters;
+	private List<MyCustomer> customers;
+	private Collection<Table> tables;
 	
 	private RestaurantChungRevolvingStand orderStand;
 	
+	private int numWaitingCustomers = 0; // Used to keep track of customers' positions in line
+	
 	public static final int WORKER_SALARY = 500;
+	public static final int NUM_TABLES = 4;
 	
 //	Constructor
 //	=====================================================================
@@ -53,6 +60,14 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 		this.setCustomerAnimationName("city.animations.RestaurantChungCustomerAnimation");
 		orderStand = new RestaurantChungRevolvingStand();
 		bankCustomer = new BankCustomerRole(this, (Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		waiters = Collections.synchronizedList(new ArrayList<MyWaiter>());
+		customers = Collections.synchronizedList(new ArrayList<MyCustomer>());
+		
+		// make some tables
+		tables = new Vector<Table>(NUM_TABLES);
+		for (int i = 1; i < NUM_TABLES+1; i++) {
+			tables.add(new Table(i));
+		}
 	}
 	
 //	Getters
@@ -83,15 +98,30 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	}
 	
 	@Override
-	public List<RestaurantChungWaiter> getWaiters() {
+	public List<MyWaiter> getWaiters() {
 		return waiters;
 	}
 	
 	@Override
-	public List<RestaurantChungCustomer> getCustomers() {
+	public List<MyCustomer> getCustomers() {
 		return customers;
 	}
 
+	@Override
+	public Collection<Table> getTables() {
+		return tables;
+	}
+	
+	@Override
+	public RestaurantChungRevolvingStand getOrderStand() {
+		return orderStand;
+	}
+	
+	@Override
+	public int getNumWaitingCustomers() {
+		return numWaitingCustomers;
+	}
+	
 //	Setters
 //	=====================================================================	
 	//Only used in testing, usually set in addOccupyingRole() call
@@ -109,6 +139,11 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	public void setRestaurantChungCook(RestaurantChungCook cook) {
 		this.cook = cook;
 	}
+	
+	@Override
+	public void setNumWaitingCustomers(int num) {
+		numWaitingCustomers = num;
+	}
 		
 //	Utilities
 //	=====================================================================	
@@ -122,7 +157,7 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()
 				getPanel().addVisualizationElement(anim);
-				customers.add(c);
+				customers.add(new MyCustomer(c, numWaitingCustomers++));
 				super.addOccupyingRole(c, anim);
 				host.msgIWantToEat(c);
 			}
@@ -159,7 +194,6 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				anim.setVisible(true); // TODO set this in setActive()
 				getPanel().addVisualizationElement(anim);
 				cook = c;
-				c.setRevolvingStand(orderStand);
 				super.addOccupyingRole(c, anim);
 			}
 		}
@@ -175,22 +209,74 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 			}
 		}
 	}
-		
+	
+	// Add
 	@Override
 	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
-		waiters.add(w);
+		waiters.add(new MyWaiter(w));
 		w.setAnimation(anim);
 		anim.setVisible(true); // TODO set this in setActive()
 		getPanel().addVisualizationElement(anim);
     	for (int i = 0; i < 9; i++) {
     		anim.addTable(RestaurantChungPanel.TABLEX+((i%3)*RestaurantChungPanel.TABLEGAP), RestaurantChungPanel.TABLEY+((i/3)*RestaurantChungPanel.TABLEGAP));
     	}	
-		host.msgNewWaiter(w);
+	}
+	
+	// Remove
+	@Override
+	public void removeWaiter(RestaurantChungWaiter w) {
+		MyWaiter mw = findWaiter(w);
+		waiters.remove(mw);	
 	}
 	
 	@Override
-	public void removeWaiter(RestaurantChungWaiter waiter) {
-		waiters.remove(waiter);
-		host.msgRemoveWaiter(waiter);		
+	public void removeCustomerFromList(MyCustomer c) {
+		for(int i = 0; i < customers.size(); i ++) {
+			if(customers.get(i) == c) {
+				customers.remove(c);
+			}
+		}
+	}
+	
+	// Find
+	@Override
+	public MyWaiter findWaiter(RestaurantChungWaiter w) {
+		for(MyWaiter waiter : waiters ){
+			if(waiter.getRestaurantChungWaiter() == w) {
+				return waiter;
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public MyCustomer findCustomer(RestaurantChungCustomer ca) {
+		for(MyCustomer customer : customers ){
+			if(customer.getRestaurantChungCustomer() == ca) {
+				return customer;		
+			}
+		}
+		return null;
+	}
+	
+	@Override
+	public Table findTable(int t) {
+		for (Table table : tables) {
+			if (table.getTableNumber() == t) {
+				return table;
+			}
+		}
+		return null;
+	}
+	
+	// Other
+	@Override
+	public void incrementNumWaitingCustomers() {
+		numWaitingCustomers++;
+	}
+	
+	@Override
+	public void decrementNumWaitingCustomers() {
+		numWaitingCustomers--;
 	}
 }

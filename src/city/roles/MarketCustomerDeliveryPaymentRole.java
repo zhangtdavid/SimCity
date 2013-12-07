@@ -74,7 +74,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	private void pay(MarketTransaction mt) {
 		int payment = checkBill(mt);
 		if (payment != -1) {
-			market.getCashier().msgHereIsPayment(mt.getOrder().orderId, payment);
+			market.getCashier().msgHereIsPayment(mt.getOrder().getOrderId(), payment);
 			restaurant.setCash(restaurant.getCash()-payment);
 	    	mt.setMarketTransactionState(MarketTransactionState.WaitingForConfirmation);
 		}
@@ -108,8 +108,8 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: mt.getOrder().orderItems.keySet()) {
-        	tempBill += mt.getOrder().orderItems.get(item)*market.getPrices().get(item);
+        for (FOOD_ITEMS item: mt.getOrder().getOrderItems().keySet()) {
+        	tempBill += mt.getOrder().getOrderItems().get(item)*market.getPrices().get(item);
         }
 
         if (tempBill == mt.getBill())
@@ -121,7 +121,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction mt : marketTransactions){
-			if(mt.getOrder().orderId == id) {
+			if(mt.getOrder().getOrderId() == id) {
 				return mt;		
 			}
 		}

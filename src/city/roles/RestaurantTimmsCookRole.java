@@ -184,7 +184,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 		rtb.addMarketOrder(internalMarketOrder);
 		
 		// Say that we're ordering the food
-		for (FOOD_ITEMS i : marketOrder.orderItems.keySet()) {
+		for (FOOD_ITEMS i : marketOrder.getOrderItems().keySet()) {
 			for (MenuItem m : rtb.getMenuItems()) {
 				if (m.getItem() == i) {
 					m.setState(State.onOrder);
