@@ -8,6 +8,9 @@ import java.util.TimerTask;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Animation;
+import city.buildings.interfaces.Apt;
+import city.buildings.interfaces.House;
+import city.gui.interiors.AptPanel;
 import city.gui.interiors.HousePanel;
 
 public class PersonAnimation extends Animation implements AnimatedPerson { // needs code standard review
@@ -33,10 +36,17 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	
 	public PersonAnimation(Person p) {
 		this.person = p;
-		this.xDestination = HousePanel.HDX;
-		this.yDestination = HousePanel.HDY+10;
-		this.xPos = HousePanel.HDX; 
-		this.yPos = HousePanel.HDY+10;
+		if(p.getHome() instanceof House){ //house
+			this.xDestination = HousePanel.HDX;
+			this.yDestination = HousePanel.HDY+10;
+			this.xPos = HousePanel.HDX; 
+			this.yPos = HousePanel.HDY+10;
+		}else if(p.getHome() instanceof Apt){ // or apartment
+			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0];
+			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
+			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0];
+			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
+		}
 	}
 	
 	// Abstract implementors
@@ -45,12 +55,11 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	public void updatePosition() {
 		
 		// Movement
-		
 		if (xPos < xDestination)
 			xPos++;
 		else if (xPos > xDestination)
 			xPos--;
-		if(yPos > 480)
+		if(person.getHome() instanceof House && yPos > 480)
 			yPos--;
 		else if (yPos < yDestination)
 			yPos++;
@@ -128,20 +137,24 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, AnimatedPerson.WIDTH, AnimatedPerson.WIDTH);
 		g.setColor(Color.WHITE);
-		g.drawString(status, xPos, yPos - 8); // draw string (status)
+		g.drawString(status, xPos, yPos - 6); // draw string (status)
 	} 
 
 	// Actions
 	
 	/**
-	 * Moves the person to the door so he can go outside (and leave the house)
+	 * Moves the person to the door so he can "go outside" (and leave the house)
 	 */
 	@Override
 	public void goOutside() {
 		setAcquired();
-		// if we really want to go outside (i.e. leave the house)
+		if(person.getHome() instanceof House){
 		xDestination = HousePanel.HDX;
 		yDestination = HousePanel.HDY + 10;
+		}else if(person.getHome() instanceof Apt){
+			xDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-10;
+			yDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];	
+		}
 		leaving = false;
 		isAtHome = false;
 		person.guiAtDestination();
@@ -156,8 +169,13 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 		isAtHome = true;
 		leaving = false;
 		command = Command.ToBed;
-		xDestination = HousePanel.HBXi-20;
-		yDestination = HousePanel.HBYi;
+		if(person.getHome() instanceof House){
+			xDestination = HousePanel.HBXi-20;
+			yDestination = HousePanel.HBYi;
+		}else if(person.getHome() instanceof Apt){
+			xDestination = AptPanel.APT_BED[person.getRoomNumber()-1][0]-20;
+			yDestination = AptPanel.APT_BED[person.getRoomNumber()-1][1];
+		}
 	}
 
 	/**
@@ -169,8 +187,13 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	@Override
 	public void verifyFood() {
 		command = Command.ToRef;
-		xDestination = HousePanel.HRX+20;
-		yDestination = HousePanel.HRY;
+		if(person.getHome() instanceof House){
+			xDestination = HousePanel.HRX+20;
+			yDestination = HousePanel.HRY;
+		}else if(person.getHome() instanceof Apt){
+			xDestination = AptPanel.APT_REFRIG[person.getRoomNumber()-1][0];
+			yDestination = AptPanel.APT_REFRIG[person.getRoomNumber()-1][1]+20;
+		}
 	}
 
 	/**
@@ -187,13 +210,23 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 			status = "Going to eat " + foodToEat;
 			// get here after calling this 2nd time
 			// basically self-message
-			xDestination = HousePanel.HTX+20;
-			yDestination = HousePanel.HTY;
+			if(person.getHome() instanceof House){
+				xDestination = HousePanel.HTX+20;
+				yDestination = HousePanel.HTY;
+			}else if(person.getHome() instanceof Apt){
+				xDestination = AptPanel.APT_TABLE[person.getRoomNumber()-1][0];
+				yDestination = AptPanel.APT_TABLE[person.getRoomNumber()-1][1]+20;
+			}
 		} else if(command == Command.StationaryAtRef){ // sent here from refrig
 			command = Command.ToStove;
 			status = "Found "  + foodToEat;
-			xDestination = HousePanel.HSX+20;
-			yDestination = HousePanel.HSY;
+			if(person.getHome() instanceof House){
+				xDestination = HousePanel.HSX+20;
+				yDestination = HousePanel.HSY;
+			}else if(person.getHome() instanceof Apt){
+				xDestination = AptPanel.APT_STOVE[person.getRoomNumber()-1][0];
+				yDestination = AptPanel.APT_STOVE[person.getRoomNumber()-1][1]+20;
+			}
 		} else { // sent here from PersonAgent's desires
 			setAcquired();
 			verifyFood();

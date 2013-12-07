@@ -70,7 +70,8 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 		p.setAnimation(anim); // set the person's home animation to this.
 		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
 		allPersons.put(p, anim);
-		panel.addVisualizationElement(anim);
+		if(!PersonAnimation.beingTested)
+			panel.addVisualizationElement(anim);
 	}
 	
 }

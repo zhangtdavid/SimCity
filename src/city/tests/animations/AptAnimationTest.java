@@ -99,9 +99,7 @@ public class AptAnimationTest extends TestCase{
 		foods.put(FOOD_ITEMS.steak, 0);
 		foods.put(FOOD_ITEMS.pizza, 0); // there is no other food in the refrigerator
 		apt.setFood(foods);
-//		AptResidentAnimation.beingTested = true; // turn off timers and semaphores
-//		HouseResidentAnimation.beingTested = true;
-//		System.out.println(homeAnimation.getBeingTested());
+		PersonAnimation.beingTested = true;
 		// Set up test environment
 	}
 	
@@ -120,7 +118,7 @@ public class AptAnimationTest extends TestCase{
 		assertTrue("Person should have a ResidentRole", person.getResidentRole() != null);
 		assertTrue("Person should have a BankCustomerRole", person.getBankCustomerRole() != null);
 		assertEquals("Person should have a home that is a house", apt, person.getHome());
-		//assertTrue("Person should have a home animation (the one we set)", person.getHomeAnimation() != null);//TODO fix this
+		assertTrue("Person should have a home animation (the one we set)", person.getAnimation() != null);
 
 		//person hasn't eaten yet. Let's make him check the refrigerator. Actually we'll do that after we test a few things...
 		assertEquals("Person shouldn't've eaten", person.getHasEaten(), false);
