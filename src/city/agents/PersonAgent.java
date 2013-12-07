@@ -26,6 +26,7 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
+import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
@@ -412,6 +413,7 @@ public class PersonAgent extends Agent implements Person {
 		this.home.removeFood(toEat, 1);
 		// Cooks the food and eats it
 		animation.cookAndEatFood(toEat.toString());
+		if(!PersonAnimation.beingTested)
 		atDestination.acquire();
 		this.hasEaten = true;
 	}
