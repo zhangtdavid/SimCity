@@ -27,7 +27,6 @@ import city.animations.CarAnimation;
 import city.animations.PersonAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
-import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
@@ -1093,18 +1092,4 @@ public class Application {
 		}
 	}
 
-	/**
-	 * Probably could be better named, but sets all the foods in the refrig to FOOD_ITEM, 0, so you don't get null pointers when iterating through it
-	 * You shouldn't have to use this, I built it into setHome() so it's done automatically.
-	 * @param person 
-	 * @param house 
-	 */
-	public static void preventFoodNullPointers(Person person, ResidenceBuilding house) {
-		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
-		items.put(FOOD_ITEMS.salad, 1);
-		items.put(FOOD_ITEMS.chicken, 1);
-		items.put(FOOD_ITEMS.steak, 1);
-		items.put(FOOD_ITEMS.pizza, 1); 
-		house.setFood(person, items);
-	}
 }

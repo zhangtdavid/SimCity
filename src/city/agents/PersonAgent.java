@@ -29,7 +29,6 @@ import city.agents.interfaces.Person;
 import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
-import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
@@ -601,7 +600,6 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
-		Application.preventFoodNullPointers(this, (ResidenceBuilding)h); //when you test with homes, you should set food manually.
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.home = h;
 		this.home.addResident(this.getResidentRole());
