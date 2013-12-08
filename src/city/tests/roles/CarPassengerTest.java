@@ -76,7 +76,7 @@ public class CarPassengerTest extends TestCase {
 		// Step 5: Run the car's scheduler
 		assertTrue("CarAgent scheduler should have returned true. It didn't", car.runScheduler());
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.getCar(), car);
-		assertEquals("CarPassenger's destination should be null. It isn't", passenger.getDestination(), null);
+		assertEquals("CarPassenger's destination shouldn't be null. It isn't", passenger.getDestination(), destination);
 		assertEquals("CarPassenger's state should be DRIVING. Instead it's: " + passenger.getState().name(), passenger.getState(), CarPassengerRole.CarPassengerState.DRIVING);
 		assertEquals("CarPassenger's event should be ATDESTINATION. Instead it's: " + passenger.getEvent().name(), passenger.getEvent(), CarPassengerRole.CarPassengerEvent.ATDESTINATION);
 		assertEquals("CarAgent's passenger should be null. It isn't", car.getPassenger(), null);
@@ -86,7 +86,7 @@ public class CarPassengerTest extends TestCase {
 		// Step 6: Run the passenger's scheduler
 		assertTrue("CarPassenger scheduler should have returned true. It didn't", passenger.runScheduler());
 		assertEquals("CarPassenger should have a car, but doesn't", passenger.getCar(), car);
-		assertEquals("CarPassenger's destination should be null. It isn't", passenger.getDestination(), null);
+		assertEquals("CarPassenger's destination should be set. It isn't", passenger.getDestination(), destination);
 		assertEquals("CarPassenger's state should be NOTDRIVING. Instead it's: " + passenger.getState().name(), passenger.getState(), CarPassengerRole.CarPassengerState.NOTDRIVING);
 		assertEquals("CarPassenger's event should be NONE. Instead it's: " + passenger.getEvent().name(), passenger.getEvent(), CarPassengerRole.CarPassengerEvent.NONE);
 		assertEquals("CarAgent's passenger should be null. It isn't", car.getPassenger(), null);
