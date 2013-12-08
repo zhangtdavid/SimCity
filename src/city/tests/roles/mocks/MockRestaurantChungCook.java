@@ -94,18 +94,6 @@ public class MockRestaurantChungCook extends MockRole implements RestaurantChung
 	}
 
 	@Override
-	public void removeOrderFromList(RestaurantChungOrder order) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeMarketOrderFromList(MyMarketOrder order) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public List<RestaurantChungOrder> getOrders() {
 		// TODO Auto-generated method stub
 		return null;
