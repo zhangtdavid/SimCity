@@ -100,7 +100,7 @@ public class Application {
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
-	public static enum BUILDING {bank, busStop, house, market, restaurant};
+	public static enum BUILDING {bank, busStop, house, market, restaurant, apartment};
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
@@ -975,6 +975,8 @@ public class Application {
 			CityMap.addBuilding(BUILDING.busStop, building);
 		} else if(building.getClass().getName().contains("House")) {
 			CityMap.addBuilding(BUILDING.house, building);
+		} else if(building.getClass().getName().contains("Apt")) {
+			CityMap.addBuilding(BUILDING.apartment, building);
 		}
 	}
 
@@ -1014,6 +1016,11 @@ public class Application {
 		case APT:
 			cityViewBuilding = new CityViewApt(x, y, "Apartment " + (mainFrame.cityView.statics.size()), Color.darkGray, new AptPanel(Color.darkGray));
 			building = new AptBuilding("Apartment " + mainFrame.cityView.statics.size(), null, (AptPanel)cityViewBuilding.getBuilding(), cityViewBuilding);
+			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
+			return building;
+		case HOUSE:
+			cityViewBuilding = new CityViewHouse(x, y, "House " + (mainFrame.cityView.statics.size()), Color.pink, new HousePanel(Color.pink));
+			building = new HouseBuilding("House " + mainFrame.cityView.statics.size(), null, (HousePanel)cityViewBuilding.getBuilding(), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTZHANG:
