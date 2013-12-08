@@ -601,7 +601,7 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
-		Application.preventFoodNullPointers(this, (ResidenceBuilding)h);
+		Application.preventFoodNullPointers(this, (ResidenceBuilding)h); //when you test with homes, you should set food manually.
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.home = h;
 		this.home.addResident(this.getResidentRole());

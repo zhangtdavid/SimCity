@@ -422,8 +422,7 @@ public class Application {
 		p3Zhang.setHome(apartmentBuildingZhang1);
 		p4Zhang.setHome(apartmentBuildingZhang1);
 		
-		//Give people basically inf. food
-
+		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
 		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 500);
 		temp.put(FOOD_ITEMS.salad, 500);
@@ -1104,13 +1103,19 @@ public class Application {
 			return list;
 		}
 	}
-	public static void preventFoodNullPointers(Person person, ResidenceBuilding house){
+
+	/**
+	 * Probably could be better named, but sets all the foods in the refrig to FOOD_ITEM, 0, so you don't get null pointers when iterating through it
+	 * You shouldn't have to use this, I built it into setHome() so it's done automatically.
+	 * @param person 
+	 * @param house 
+	 */
+	public static void preventFoodNullPointers(Person person, ResidenceBuilding house) {
 		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
-		items.put(FOOD_ITEMS.salad, 0);
-		items.put(FOOD_ITEMS.chicken, 0);
-		items.put(FOOD_ITEMS.steak, 0);
-		items.put(FOOD_ITEMS.pizza, 0); //ryan addition due to hashmap edit
+		items.put(FOOD_ITEMS.salad, 1);
+		items.put(FOOD_ITEMS.chicken, 1);
+		items.put(FOOD_ITEMS.steak, 1);
+		items.put(FOOD_ITEMS.pizza, 1); 
 		house.setFood(person, items);
 	}
-
 }
