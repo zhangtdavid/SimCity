@@ -1,5 +1,6 @@
 package city.roles.interfaces;
 
+import java.util.HashMap;
 import java.util.Map;
 
 import utilities.MarketOrder;
@@ -8,15 +9,18 @@ import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
 
 public interface MarketCustomer extends RoleInterface {
+	
 	// Data
+	
 	public enum MarketCustomerState {None, WaitingForService, WaitingForOrder, Paying};
 	public enum MarketCustomerEvent {ArrivedAtMarket, ArrivedAtEntrance, AskedForOrder, OrderReady, PaymentReceived};
 	
 	// Constructor
 	
 	// Messages
+	
 	public void msgWhatWouldYouLike(MarketEmployee e, int loc);
-	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id);
+	public void msgHereIsOrderandBill(HashMap<FOOD_ITEMS, Integer> collectedItems, int bill, int id);
 	public void msgPaymentReceived();
 	public void msgAnimationFinishedLeaveMarket();
 	public void msgAnimationAtCounter();
@@ -30,17 +34,19 @@ public interface MarketCustomer extends RoleInterface {
 	
 	public Market getMarket();
 	public MarketOrder getOrder();
-	MarketEmployee getEmployee();
-	Map<FOOD_ITEMS, Integer> getReceivedItems();
-	int getLoc();
-	int getBill();
-	MarketCustomerEvent getMarketCustomerEvent();
-	MarketCustomerState getMarketCustomerState();
+	public MarketEmployee getEmployee();
+	public Map<FOOD_ITEMS, Integer> getReceivedItems();
+	public int getLoc();
+	public int getBill();
+	public MarketCustomerEvent getMarketCustomerEvent();
+	public MarketCustomerState getMarketCustomerState();
 	
 	// Setters
+	
 	public void setMarket(Market market);
 	
 	// Utilities
+	
 	public int checkBill();
 	
 	// Classes

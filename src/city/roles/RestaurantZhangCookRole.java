@@ -457,13 +457,13 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			// amount = amount_;
 			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();
 			switch(food_) {
-			case "Steak":
+			case "steak":
 				invoice.put(FOOD_ITEMS.steak, amount_);
 				break;
-			case "Chicken":
+			case "chicken":
 				invoice.put(FOOD_ITEMS.chicken, amount_);
 				break;
-			case "Pizza":
+			case "pizza":
 				invoice.put(FOOD_ITEMS.pizza, amount_);
 				break;
 			}

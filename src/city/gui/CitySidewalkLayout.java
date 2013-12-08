@@ -12,6 +12,8 @@ import java.util.TreeSet;
 
 import utilities.CitySidewalkAStar;
 import utilities.TrafficControl;
+import city.animations.BusAnimation;
+import city.animations.CarAnimation;
 import city.bases.interfaces.AnimationInterface;
 
 public class CitySidewalkLayout {
@@ -76,14 +78,65 @@ public class CitySidewalkLayout {
 	public boolean isCarAt(int x, int y) {
 		if(roads == null)
 			return false;
-		AnimationInterface currentVehicle = roads.getClosestRoad(x, y).getVehicle();
-		Rectangle vehicleRect = new Rectangle(currentVehicle.getXPos(), currentVehicle.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+		List<AnimationInterface> allVehicles = roads.getAllVehicles();
 		CitySidewalk currentSidewalk = getClosestSidewalk(x, y);
 		Rectangle sidewalkRect = new Rectangle(currentSidewalk.getX(), currentSidewalk.getY(), (int)sidewalkSize, (int)sidewalkSize);
-		if(vehicleRect.intersects(sidewalkRect))
+		for(AnimationInterface a : allVehicles) {
+			Rectangle vehicleRect = new Rectangle(a.getXPos(), a.getYPos(), (int)(sidewalkSize * 2), (int)(sidewalkSize * 2));
+			if(vehicleRect.intersects(sidewalkRect)) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	public List<AnimationInterface> getAllWalkers() {
+		List<AnimationInterface> listToReturn = new ArrayList<AnimationInterface>();
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				if(sidewalkGrid[i][j] == null)
+					continue;
+				if(sidewalkGrid[i][j].getCurrentOccupant() != null)
+					listToReturn.add(sidewalkGrid[i][j].getCurrentOccupant());
+			}
+		}
+		return listToReturn;
+	}
+
+	public List<CityRoad> getBorderingRoads(CitySidewalk parentSidewalk) {
+		if(roads == null)
+			return null;
+		List<CityRoad> listToReturn = new ArrayList<CityRoad>(4);
+		listToReturn.add(roads.getRoadAt(parentSidewalk.getX(), parentSidewalk.getY() + ((int)(parentSidewalk.size + 1) * 2)));
+		listToReturn.add(roads.getRoadAt(parentSidewalk.getX() + ((int)(parentSidewalk.size + 1) * 2), parentSidewalk.getY()));
+		listToReturn.add(roads.getRoadAt(parentSidewalk.getX(), parentSidewalk.getY() - ((int)(parentSidewalk.size) * 2 + 1)));
+		listToReturn.add(roads.getRoadAt(parentSidewalk.getX() - ((int)(parentSidewalk.size) * 2 + 1), parentSidewalk.getY()));
+		return listToReturn;
+	}
+
+	public boolean isAnIntersection(CitySidewalk parentSidewalk) {
+		List<CityRoad> borderingRoads = getBorderingRoads(parentSidewalk);
+		boolean hasIntersection = false;
+		boolean hasStoplight = false;
+		CityRoad correspondingStoplight = null;
+		for(CityRoad r : borderingRoads) {
+			if(r == null)
+				continue;
+			if(r.isRedLight()) {
+				hasStoplight = true;
+				correspondingStoplight = r;
+			}
+			if(r.getClass() == CityRoadIntersection.class)
+				hasIntersection = true;
+		}
+		if(hasIntersection && hasStoplight) {
+			parentSidewalk.sidewalkColor = Color.magenta;
+			parentSidewalk.setCrosswalk(true);
+			parentSidewalk.setCorrespondingStoplight(correspondingStoplight);
+			correspondingStoplight.addIntersectionSidewalk(parentSidewalk);
 			return true;
-		else
-			return false;
+		}
+		return false;
 	}
 
 	public CitySidewalk getSidewalkWest(int x, int y) {
@@ -241,11 +294,23 @@ public class CitySidewalkLayout {
 
 	public void setRoads(TrafficControl newRoads) {
 		roads = newRoads;
+		for(int i = 0; i < height; i++) {
+			for(int j = 0; j < width; j++) {
+				if(sidewalkGrid[i][j] != null)
+					isAnIntersection(sidewalkGrid[i][j]);
+			}
+		}
+	}
+
+	public boolean isWalkerAt(int x, int y) {
+		if(getClosestSidewalk(x, y).getCurrentOccupant() == null)
+			return false;
+		else
+			return true;
 	}
 
 	// A Star
 	public Stack<CitySidewalk> getBestPath(CitySidewalk startingSidewalk, CitySidewalk endingSidewalk) {
-		System.out.println("Finding best path");
 		Stack<CitySidewalk> listToReturn = new Stack<CitySidewalk>();
 		PriorityQueue<CitySidewalkAStar> openList = new PriorityQueue<CitySidewalkAStar>(1, CitySidewalkAStar.CitySidewalkAStarNameComparator);
 		HashSet<CitySidewalk> closedSet = new HashSet<CitySidewalk>();

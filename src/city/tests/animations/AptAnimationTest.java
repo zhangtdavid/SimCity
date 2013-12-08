@@ -9,7 +9,7 @@ import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
-import city.animations.AptResidentAnimation;
+import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson.Command;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
@@ -31,7 +31,6 @@ public class AptAnimationTest extends TestCase{
 	private AptPanel hp; // does nothing, no gui really pops out...
 	private CityViewApt houseCityViewBuilding; // does nothing, no gui really pops out...
 	private BankPanel bp;
-	private MockAnimatedPerson animation;
 	private LandlordRole landlord;
 	private ResidentRole resident;
 	private BankBuilding bank;	
@@ -43,7 +42,7 @@ public class AptAnimationTest extends TestCase{
 
 	// Being tested
 	private PersonAgent person;
-	private AptResidentAnimation homeAnimation;
+	private PersonAnimation homeAnimation;
 	private AptBuilding apt;
 
 	public void setUp() throws Exception {
@@ -82,15 +81,12 @@ public class AptAnimationTest extends TestCase{
 		houseCityViewBuilding = new CityViewApt(10, 10);
 		person = new PersonAgent("MovingPerson", date);
 		person.setCash(0); // so he doesn't go to market or restaurant
-		animation = new MockAnimatedPerson();
 		person.setRoomNumber(1);
-		homeAnimation = new AptResidentAnimation(person);
+		homeAnimation = new PersonAnimation(person);
 		resident.setPerson(person);
 		person.addRole(resident);
-		person.setAnimation(animation);
-		person.setHomeAnimation(homeAnimation);
+		person.setAnimation(homeAnimation);
 		resident.setLandlord(landlord);
-		//person.setOccupation(null); // jobless, but is landlord TODO why doesn't this work now? no jobless people?
 
 		//And the house, which is the real deal.
 		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
@@ -98,14 +94,12 @@ public class AptAnimationTest extends TestCase{
 		apt.setCityViewBuilding(houseCityViewBuilding);
 		person.setHome(apt);
 		HashMap<FOOD_ITEMS, Integer> foods = new HashMap<FOOD_ITEMS, Integer>();
-		foods.put(FOOD_ITEMS.chicken, 5); // put one chicken in the refrigerator to eat.
+		foods.put(FOOD_ITEMS.chicken, 5); // put 5 chickens in the refrigerator to eat.
 		foods.put(FOOD_ITEMS.salad, 0);
 		foods.put(FOOD_ITEMS.steak, 0);
 		foods.put(FOOD_ITEMS.pizza, 0); // there is no other food in the refrigerator
-		apt.setFood(foods);
-		AptResidentAnimation.beingTested = true; // turn off timers and semaphores
-		HouseResidentAnimation.beingTested = true;
-		System.out.println(homeAnimation.getBeingTested());
+		apt.setFood(person, foods);
+		PersonAnimation.beingTested = true;
 		// Set up test environment
 	}
 	
@@ -116,16 +110,15 @@ public class AptAnimationTest extends TestCase{
 		System.out.println("");
 		
 		//sanity background check
-		assertEquals("There should be 5 chickens in the refrigerator of the house", (int)apt.getFoodItems().get(FOOD_ITEMS.chicken), 5);
-		assertEquals("There should be 0 steaks in the refrigerator of the house", (int)apt.getFoodItems().get(FOOD_ITEMS.steak), 0);
-		assertEquals("There should be 0 pizzas in the refrigerator of the house", (int)apt.getFoodItems().get(FOOD_ITEMS.pizza), 0);
-		assertEquals("There should be 0 salads in the refrigerator of the house", (int)apt.getFoodItems().get(FOOD_ITEMS.salad), 0);
+		assertEquals("There should be 5 chickens in the refrigerator of the house", (int)apt.getFoodItems(person).get(FOOD_ITEMS.chicken), 5);
+		assertEquals("There should be 0 steaks in the refrigerator of the house", (int)apt.getFoodItems(person).get(FOOD_ITEMS.steak), 0);
+		assertEquals("There should be 0 pizzas in the refrigerator of the house", (int)apt.getFoodItems(person).get(FOOD_ITEMS.pizza), 0);
+		assertEquals("There should be 0 salads in the refrigerator of the house", (int)apt.getFoodItems(person).get(FOOD_ITEMS.salad), 0);
 		assertEquals("Person should not have eaten", false, person.getHasEaten());
 		assertTrue("Person should have a ResidentRole", person.getResidentRole() != null);
 		assertTrue("Person should have a BankCustomerRole", person.getBankCustomerRole() != null);
-		//assertEquals("Person should have 3 roles", person.getRoles().size(), 3); // TODO see first TODO
 		assertEquals("Person should have a home that is a house", apt, person.getHome());
-		assertTrue("Person should have a home animation (the one we set)", person.getAnimationAtHome() != null);
+		assertTrue("Person should have a home animation (the one we set)", person.getAnimation() != null);
 
 		//person hasn't eaten yet. Let's make him check the refrigerator. Actually we'll do that after we test a few things...
 		assertEquals("Person shouldn't've eaten", person.getHasEaten(), false);
@@ -148,8 +141,6 @@ public class AptAnimationTest extends TestCase{
 		assertEquals("xPos was just set to door's x", homeAnimation.getXPos(), AptPanel.APT_DOOR[person.getRoomNumber()-1][0]);
 		assertEquals("yPos was just set to door's y", homeAnimation.getYPos(), AptPanel.APT_DOOR[person.getRoomNumber()-1][1]);
 		assertEquals("Person's homeAnimation should have STATES noCommand before I tell it to go to room", homeAnimation.getCommand(), "noCommand");
-		homeAnimation.goToRoom(0); // for a house, this does nothing but change your STATES
-		assertEquals("Command of home Animation should be ToRoom", homeAnimation.getCommand(), Command.ToRoomEntrance.toString());
 		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
 		
 		//Now go to bed to sleep.

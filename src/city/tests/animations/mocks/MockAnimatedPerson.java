@@ -51,10 +51,6 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		person.guiAtDestination();
 	}
 
-	@Override
-	public void goToRoom(int roomNo) {
-		person.guiAtDestination();
-	}
 
 	@Override
 	public void goOutside() {
@@ -98,5 +94,11 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
+	}
+
+	@Override
+	public void setAcquired() {
+		// TODO Auto-generated method stub
+		
 	}
 }

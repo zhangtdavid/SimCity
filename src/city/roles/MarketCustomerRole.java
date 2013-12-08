@@ -28,7 +28,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private MarketOrder order;
 
-	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
+	private HashMap<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	private int loc; // stall number of employee
 	private int bill;
 
@@ -69,14 +69,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	@Override
-	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
+	public void msgHereIsOrderandBill(HashMap<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
 		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
         for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
-        this.getPerson().getHome().addFood(receivedItems);
+        this.getPerson().getHome().setFood(this.getPerson(), receivedItems);
         this.bill = bill;
 		stateChanged();
 	}

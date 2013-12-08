@@ -1,6 +1,7 @@
 package city.tests.agents;
 
 import java.util.Date;
+import java.util.HashMap;
 
 import junit.framework.TestCase;
 import city.Application;
@@ -90,6 +91,14 @@ public class PersonTest extends TestCase {
 		workplace = new MockWorkplace("MockWorkplace");
 		workplaceCityViewBuilding = new MockCityViewBuilding();
 		workplace.setCityViewBuilding(workplaceCityViewBuilding);
+
+//		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
+//		items.put(FOOD_ITEMS.salad, 0);
+//		items.put(FOOD_ITEMS.chicken, 0);
+//		items.put(FOOD_ITEMS.steak, 0);
+//		items.put(FOOD_ITEMS.pizza, 0); //ryan addition due to hashmap edit
+//		house.setFood(person, items);
+
 		car = new MockCar("MockCar");
 		bus = new MockBus("MockBus");
 	}
@@ -284,7 +293,9 @@ public class PersonTest extends TestCase {
 		// Force the market interaction to end. Simulate the addition of food. Run the scheduler for person.
 		// - The person should see that shopping is done and leave
 		person.getMarketCustomerRole().setInactive();
-		person.getHome().addFood(FOOD_ITEMS.chicken, 4); // Not a realistic order, but enough to prevent us from going to the market again
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 4);
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again
 		outcome = person.runScheduler();
 		
 		// Test that the person has properly left the market and is going home to sleep
@@ -384,7 +395,9 @@ public class PersonTest extends TestCase {
 		outcome = person.runScheduler();
 		outcome = person.runScheduler();
 		person.getMarketCustomerRole().setInactive();
-		person.getHome().addFood(FOOD_ITEMS.chicken, 4); // Not a realistic order, but enough to prevent us from going to the market again
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 4);
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		
 		outcome = person.runScheduler();
 		
 		// Person should be going to sleep
@@ -586,7 +599,9 @@ public class PersonTest extends TestCase {
 		outcome = person.runScheduler();
 		outcome = person.runScheduler();
 		person.getMarketCustomerRole().setInactive();
-		person.getHome().addFood(FOOD_ITEMS.chicken, 4); // Not a realistic order, but enough to prevent us from going to the market again
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 4);
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again		
 		outcome = person.runScheduler();
 		
 		// Person should be going to sleep
@@ -751,7 +766,9 @@ public class PersonTest extends TestCase {
 		person.setCash(0);
 		person.setAnimation(animation);
 		animation.setAgent(person);
-		person.getHome().addFood(FOOD_ITEMS.chicken, 5); // One item will be removed after cooking, need 4 to stop from going to market next
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 5);// One item will be removed after cooking, need 4 to stop from going to market next
+		person.getHome().setFood(person, temp); // Not a realistic order, but enough to prevent us from going to the market again 
 		
 		// Preconditions
 		assertEquals("Person's state should be STATE.none", Person.STATES.none, person.getState());
