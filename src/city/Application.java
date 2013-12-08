@@ -96,7 +96,7 @@ public class Application {
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
-	public static enum BUILDING {bank, busStop, house, market, restaurant};
+	public static enum BUILDING {bank, busStop, house, apartment, market, restaurant};
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
@@ -377,11 +377,15 @@ public class Application {
 		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
 		createBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
 		
+		AptPanel unoccupiedAptPanel1 = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewApt unoccupiedAptView1 = new CityViewApt(100, 100, "Unoccupied Apt", Color.BLUE, unoccupiedAptPanel1);
+		AptBuilding unoccupiedAptBuilding = new AptBuilding("Unoccupied Apt", null, unoccupiedAptPanel1, unoccupiedAptView1);
+		createBuilding(unoccupiedAptPanel1, unoccupiedAptView1, unoccupiedAptBuilding);
+		
 		MarketPanel marketPanel1 = new MarketPanel(Color.black);
 		CityViewMarket cityViewMarket1 = new CityViewMarket(150, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
 		MarketBuilding marketBuilding1 = new MarketBuilding("MarketBuilding1", marketPanel1, cityViewMarket1);
 		createBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
-		
 
 		RestaurantZhangPanel restaurantZhangPanel1 = new RestaurantZhangPanel(Color.DARK_GRAY);
 		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(150, 325, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, restaurantZhangPanel1);
@@ -987,6 +991,10 @@ public class Application {
 		return mainFrame;
 	}
 	
+	public static Date getDate() {
+		return new Date(date.getTime());
+	}
+	
 	public static void createBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
@@ -1000,6 +1008,8 @@ public class Application {
 			CityMap.addBuilding(BUILDING.busStop, building);
 		} else if(building.getClass().getName().contains("House")) {
 			CityMap.addBuilding(BUILDING.house, building);
+		} else if(building.getClass().getName().contains("Apt")) {
+			CityMap.addBuilding(BUILDING.apartment, building);
 		}
 	}
 
