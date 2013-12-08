@@ -194,6 +194,5 @@ public class MarketDeliveryPersonTest extends TestCase {
 		deliveryPerson.runScheduler();
 		assertEquals("DeliveryPerson should be inactive.", deliveryPerson.getActive(), false);
 	}
-	
 }
 

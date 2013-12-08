@@ -7,13 +7,12 @@ import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
 import city.roles.MarketCashierRole.Transaction;
-import city.roles.interfaces.MarketCashier.WorkingState;
 
 public interface MarketCashier extends RoleInterface {
 
 	// Data
 	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public enum TransactionState {Pending, Calculating, ReceivedPayment, PendingDelivery, Delivering};
+	public enum TransactionState {Pending, Calculating, ReceivedPayment, Delivering};
 	
 	// Constructor
 	

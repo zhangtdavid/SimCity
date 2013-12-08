@@ -136,18 +136,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
-				if (t.s == TransactionState.PendingDelivery) {
-					for(MyDeliveryPerson dt : market.getDeliveryPeople()){
-						if(dt.getAvailable() == true) {
-							assignDelivery(t, dt);
-							return true;
-						}
-					}
-				}
-			}
-		}	
-		synchronized(transactions) {
-			for (Transaction t : transactions) {
 				if (t.s == TransactionState.Pending) {
 					computeBill(t);
 					return true;
@@ -194,7 +182,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	private void processPayment(Transaction t) {
 		// TODO handle non norm when payment is not enough
 		// TODO manage giving change
-		t.s = TransactionState.PendingDelivery;
 		
 		if (t.customer != null){
 			t.customer.msgPaymentReceived();
@@ -205,6 +192,11 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			if(t.bill == t.payment) {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
 				market.setCash(market.getCash() + t.payment);
+				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
+					if(dt.getAvailable() == true && dt.getDeliveryPerson().getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
+						assignDelivery(t, dt);
+					}
+				}
 			}
 
 		}
