@@ -378,7 +378,7 @@ public class Application {
 		
 
 		RestaurantZhangPanel restaurantZhangPanel1 = new RestaurantZhangPanel(Color.DARK_GRAY);
-		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(150, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, restaurantZhangPanel1);
+		CityViewRestaurant cityViewRestaurantZhang1 = new CityViewRestaurant(150, 325, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.magenta, restaurantZhangPanel1);
 		RestaurantZhangBuilding rzb1 = new RestaurantZhangBuilding("RestaurantZhang1", restaurantZhangPanel1, cityViewRestaurantZhang1);
 		restaurantZhangPanel1.setTables(rzb1.tables);
 		createBuilding(restaurantZhangPanel1, cityViewRestaurantZhang1, rzb1);
@@ -426,26 +426,26 @@ public class Application {
 		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 */
 		// Give people cars
-		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
-		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
-		c0Zhang.setAnimation(c0AnimZhang);
-		mainFrame.cityView.addAnimation(c0AnimZhang);
-		CarAgent c1Zhang = new CarAgent(busStop2, p1Zhang);
-		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, busStop2);
-		c1Zhang .setAnimation(c1AnimZhang);
-		mainFrame.cityView.addAnimation(c1AnimZhang);
-		CarAgent c2Zhang = new CarAgent(busStop2, p2Zhang);
-		CarAnimation c2AnimZhang = new CarAnimation(c2Zhang, busStop2);
-		c2Zhang.setAnimation(c2AnimZhang);
-		mainFrame.cityView.addAnimation(c2AnimZhang);
-		CarAgent c3Zhang = new CarAgent(busStop2, p3Zhang);
-		CarAnimation c3AnimZhang = new CarAnimation(c3Zhang, busStop2);
-		c3Zhang.setAnimation(c3AnimZhang);
-		mainFrame.cityView.addAnimation(c3AnimZhang);
-		CarAgent c4Zhang = new CarAgent(busStop2, p4Zhang);
-		CarAnimation c4AnimZhang = new CarAnimation(c4Zhang, busStop2);
-		c4Zhang.setAnimation(c4AnimZhang);
-		mainFrame.cityView.addAnimation(c4AnimZhang);
+//		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
+//		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
+//		c0Zhang.setAnimation(c0AnimZhang);
+//		mainFrame.cityView.addAnimation(c0AnimZhang);
+//		CarAgent c1Zhang = new CarAgent(busStop2, p1Zhang);
+//		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, busStop2);
+//		c1Zhang .setAnimation(c1AnimZhang);
+//		mainFrame.cityView.addAnimation(c1AnimZhang);
+//		CarAgent c2Zhang = new CarAgent(busStop2, p2Zhang);
+//		CarAnimation c2AnimZhang = new CarAnimation(c2Zhang, busStop2);
+//		c2Zhang.setAnimation(c2AnimZhang);
+//		mainFrame.cityView.addAnimation(c2AnimZhang);
+//		CarAgent c3Zhang = new CarAgent(busStop2, p3Zhang);
+//		CarAnimation c3AnimZhang = new CarAnimation(c3Zhang, busStop2);
+//		c3Zhang.setAnimation(c3AnimZhang);
+//		mainFrame.cityView.addAnimation(c3AnimZhang);
+//		CarAgent c4Zhang = new CarAgent(busStop2, p4Zhang);
+//		CarAnimation c4AnimZhang = new CarAnimation(c4Zhang, busStop2);
+//		c4Zhang.setAnimation(c4AnimZhang);
+//		mainFrame.cityView.addAnimation(c4AnimZhang);
 
 		// Create cashier
 		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100);
@@ -897,15 +897,15 @@ public class Application {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
-		c0Zhang.startThread();
-		c1Zhang.startThread();
-		c2Zhang.startThread();
-		c3Zhang.startThread();
-		c4Zhang.startThread();
-		p0Zhang.startThread();
-		p1Zhang.startThread();
-		p2Zhang.startThread();
-		p3Zhang.startThread();
+//		c0Zhang.startThread();
+//		c1Zhang.startThread();
+//		c2Zhang.startThread();
+//		c3Zhang.startThread();
+//		c4Zhang.startThread();
+//		p0Zhang.startThread();
+//		p1Zhang.startThread();
+//		p2Zhang.startThread();
+//		p3Zhang.startThread();
 		p4Zhang.startThread();
 //		c0Timms.startThread();
 //		c1Timms.startThread();
@@ -964,9 +964,10 @@ public class Application {
 //		c2JP.startThread();
 //		c3JP.startThread();
 //		c4JP.startThread();
-		
-		for(int j = 0; j < 30; j++) {
-			WalkerAnimation testPersonAnimation = new WalkerAnimation(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
+//		
+		for(int j = 0; j < 70; j++) {
+			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
+			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
 			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
 		}

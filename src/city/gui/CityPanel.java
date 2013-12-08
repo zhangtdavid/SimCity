@@ -31,7 +31,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public CityPanel(MainFrame mf) {
 		mainframe = mf;
-		timer = new Timer(((Double) (Application.INTERVAL * 0.01)).intValue(), this);
+		timer = new Timer(((Double) (Application.INTERVAL * 0.005)).intValue(), this);
 		timer.start();
 	}
 
@@ -50,7 +50,8 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 		}
 		synchronized(animations) {
 			for (AnimationInterface a : animations) {
-				a.draw((Graphics2D) g);
+				if(a.getVisible())
+					a.draw((Graphics2D) g);
 			}
 		}
 		synchronized(statics) {
