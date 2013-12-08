@@ -174,19 +174,19 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 	public void getOffBus() {
 		int startingX = xPos = busPassenger.getBus().getAnimation().getXPos();
 		int startingY = yPos = busPassenger.getBus().getAnimation().getYPos();
-		if(startingX > busPassenger.getDestination().getCityViewBuilding().getX() + 2)
+		if(startingX > busPassenger.getBusStopDestination().getCityViewBuilding().getX() + 2)
 			startingX -= (int)(sidewalks.getSidewalkSize());
-		else if(startingX < busPassenger.getDestination().getCityViewBuilding().getX() - 2)
+		else if(startingX < busPassenger.getBusStopDestination().getCityViewBuilding().getX() - 2)
 			startingX += 25;
-		if(startingY > busPassenger.getDestination().getCityViewBuilding().getY() + 2)
+		if(startingY > busPassenger.getBusStopDestination().getCityViewBuilding().getY() + 2)
 			startingY -= (int)(sidewalks.getSidewalkSize());
-		else if(startingY <busPassenger.getDestination().getCityViewBuilding().getY() - 2)
+		else if(startingY <busPassenger.getBusStopDestination().getCityViewBuilding().getY() - 2)
 			startingY += 25;
 		startingSidewalk = sidewalks.getClosestSidewalk(startingX, startingY);
 		startingSidewalk.setCurrentOccupant(this);
 		currentSidewalk = startingSidewalk;
-		this.xDestination = busPassenger.getDestination().getCityViewBuilding().getX();
-		this.yDestination = busPassenger.getDestination().getCityViewBuilding().getY();
+		this.xDestination = busPassenger.getBusStopDestination().getCityViewBuilding().getX();
+		this.yDestination = busPassenger.getBusStopDestination().getCityViewBuilding().getY();
 		endSidewalk = sidewalks.getClosestSidewalk(xDestination, yDestination);
 		atDestination = false;
 		atDestinationRoad = false;

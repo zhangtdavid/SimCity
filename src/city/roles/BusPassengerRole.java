@@ -22,15 +22,17 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	private BUSPASSENGEREVENT myEvent = BUSPASSENGEREVENT.NONE;
 	private Bus myBus;
 	private BusStop busStopToWaitAt;
-	private BusStop destination;
+	private BusStop busStopDestination;
+	private BuildingInterface destination;
 	private AnimatedBusPassenger animation;
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	
-	public BusPassengerRole(BusStop dest, BusStop stopToWaitAt) {
-		destination = dest;
+	public BusPassengerRole(BusStop destinationBusStop, BusStop stopToWaitAt, BuildingInterface destination) {
+		busStopDestination = destinationBusStop;
 		busStopToWaitAt = stopToWaitAt;
+		this.destination = destination;
 	}
 	
 	// Messages
@@ -88,7 +90,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Actions
 	
 	private void getOnBus() {
-		print("Getting on bus " + myBus.getName() + " at stop " + destination.getName() + " to go to " + destination.getName());
+		print("Getting on bus " + myBus.getName() + " at stop " + busStopDestination.getName() + " to go to " + busStopDestination.getName());
 		animation.goToBus();
 		try {
 			atDestination.acquire();
@@ -98,11 +100,11 @@ public class BusPassengerRole extends Role implements BusPassenger {
 		this.getPerson().setCash(this.getPerson().getCash() - Bus.BUS_FARE);
 		busStopToWaitAt.removeFromWaitingList(this);
 		myState = BUSPASSENGERSTATE.ONBUS;
-		myBus.msgImOnBus(this, destination);
+		myBus.msgImOnBus(this, busStopDestination);
 	}
 	
 	private void getOffBus() {
-		print("Getting off bus " + myBus.getName() + " at stop " + destination.getName());
+		print("Getting off bus " + myBus.getName() + " at stop " + busStopDestination.getName());
 		animation.getOffBus();
 		try {
 			atDestination.acquire();
@@ -118,8 +120,8 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	// Getters
 	
 	@Override
-	public BuildingInterface getDestination() {
-		return destination;
+	public BuildingInterface getBusStopDestination() {
+		return busStopDestination;
 	}
 	
 	@Override
@@ -145,6 +147,11 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	@Override
 	public String getStateString() {
 		return myState.toString();
+	}
+	
+	@Override
+	public BuildingInterface getDestination() {
+		return destination;
 	}
 	
 	// Setters

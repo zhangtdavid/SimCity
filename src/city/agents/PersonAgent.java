@@ -741,7 +741,7 @@ public class PersonAgent extends Agent implements Person {
 				carPassengerRole.setActive();
 				carPassengerRole.setPerson(this);
 				this.addRole(carPassengerRole);
-			} else if(this.cash > (Bus.BUS_FARE * 10)) { // Only goes to bus if he has 10 times the amount of bus fare in cash
+			} else if(this.cash <= (Bus.BUS_FARE * 10)) { // Only goes to bus if he has 10 times the amount of bus fare in cash
 				BusStop b = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, this);
 				BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
 				walkerRole = new WalkerRole(b);
@@ -760,7 +760,7 @@ public class PersonAgent extends Agent implements Person {
 				// atDestination.acquire();
 				// Note: bus stop should set person's location to "null" when they get on the bus
 				setCurrentLocation(b);
-				busPassengerRole = new BusPassengerRole(d, b);
+				busPassengerRole = new BusPassengerRole(d, b, destination);
 				busPassengerRole.setPerson(this);
 				busPassengerRole.setActive();
 				this.addRole(busPassengerRole);
@@ -812,9 +812,25 @@ public class PersonAgent extends Agent implements Person {
 				}
 			} else if (busPassengerRole != null && busPassengerRole != null) {
 				if(!busPassengerRole.getActive()) {
-					setCurrentLocation(busPassengerRole.getDestination());
+					BuildingInterface destination = busPassengerRole.getDestination();
+					setCurrentLocation(busPassengerRole.getBusStopDestination());
 					removeRole(busPassengerRole);
 					busPassengerRole = null;
+					// Walk to the place you want to go
+					walkerRole = new WalkerRole(destination);
+					AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
+					walkerAnimation.setVisible(true);
+					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+					walkerRole.setAnimation(walkerAnimation);
+					walkerRole.setPerson(this);
+					this.addRole(walkerRole);
+					walkerRole.setActive();
+					try {
+						atDestination.acquire();
+					} catch (InterruptedException e) {
+						e.printStackTrace();
+					}
+					this.removeRole(walkerRole);
 					return true;
 				}
 			}
