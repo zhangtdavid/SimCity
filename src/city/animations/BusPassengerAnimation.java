@@ -3,19 +3,15 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
-import java.util.Stack;
 
-import city.animations.interfaces.AnimatedWalker;
-import city.bases.Animation;
+import city.animations.interfaces.AnimatedBusPassenger;
 import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
-import city.roles.BusPassengerRole;
 import city.roles.interfaces.BusPassenger;
-import city.roles.interfaces.Walker;
 
-public class BusPassengerAnimation extends WalkerAnimation implements AnimatedWalker {
+public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBusPassenger {
 
 	private BusPassenger busPassenger;
 	
@@ -144,7 +140,8 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedWa
 		g.setColor(Color.green);
 		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
 	}
-
+	
+	@Override
 	public void goToBus() {
 		startingSidewalk = sidewalks.getClosestSidewalk(busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX(),
 				busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY());
@@ -167,6 +164,7 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedWa
 		this.setVisible(true);
 	}
 	
+	@Override
 	public void getOffBus() {
 		int startingX = xPos = busPassenger.getBus().getAnimation().getXPos();
 		int startingY = yPos = busPassenger.getBus().getAnimation().getYPos();
