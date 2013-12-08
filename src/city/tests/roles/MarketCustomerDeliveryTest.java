@@ -67,6 +67,7 @@ public class MarketCustomerDeliveryTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();
@@ -140,7 +141,7 @@ public class MarketCustomerDeliveryTest extends TestCase {
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceADeliveryOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceADeliveryOrder"));
 		assertTrue("CustomerDelivery runScheduler() should return false", !customerDelivery.runScheduler());
 		
-		customerDelivery.msgHereIsOrderDelivery(collectedItemsAll, 4);
+		customerDelivery.msgHereIsOrderDelivery(collectedItemsAll, 0);
 		assertEquals("CustomerDelivery log should have 1 entry.", customerDelivery.log.size(), 1);
 		assertTrue("CustomerDelivery log should have \"MarketCustomerDelivery received msgHereIsOrderDelivery\". The last event logged is " + customerDelivery.log.getLastLoggedEvent().toString(), customerDelivery.log.containsString("MarketCustomerDelivery received msgHereIsOrderDelivery"));
 		for (FOOD_ITEMS item: restaurant.getFoods().keySet()) {

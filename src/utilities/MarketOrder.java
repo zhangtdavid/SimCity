@@ -34,4 +34,9 @@ public class MarketOrder {
 	public int getOrderId() {
 		return orderId;
 	}
+	
+	// Setters
+	public static void setCurrentID(int currentID) {
+		MarketOrder.currentID = currentID;
+	}
 }
