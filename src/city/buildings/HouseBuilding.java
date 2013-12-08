@@ -21,6 +21,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		this.setLandlord(l); // WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE // TODO Perhaps I should eliminate the landlord requirement, and have that be added separately?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
+
 	}
 
 	// Getters

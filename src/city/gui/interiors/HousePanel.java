@@ -10,6 +10,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.bases.Animation;
+import city.bases.interfaces.AnimationInterface;
 
 /**
  * A House contains: - Refrigerator - Stove - Table - Bed One person lives in a
@@ -17,9 +18,7 @@ import city.bases.Animation;
  */
 public class HousePanel extends ResidenceBasePanel {
 
-	/**
-	 * what does this do?
-	 */
+
 	private static final long serialVersionUID = -9051230986691103443L;
 	// Data
 	private final int delayMS = 5;
@@ -79,10 +78,7 @@ public class HousePanel extends ResidenceBasePanel {
 			}
 		}
 	}
-
-
-	// TODO removal of this makes the house not animate at all. keeping it results it in not doing anything if not focused.
-	public void addVisualizationElement(Animation ve) {
-		animations.add(ve);
+	public void addVisualizationElement(AnimationInterface ve) {
+		animations.add((Animation) ve);
 	}
 }

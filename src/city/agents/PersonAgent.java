@@ -25,9 +25,9 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
+import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
@@ -105,14 +105,13 @@ public class PersonAgent extends Agent implements Person {
 		this.cash = 0;
 		this.hasEaten = false;
 		this.home = residence;
-		this.currentLocation = residence;
+		this.currentLocation = null;
 		this.animation = animation;
 		this.lastAteAtRestaurant = new Date(startDate.getTime());
 		this.lastWentToSleep = new Date(startDate.getTime());
 		this.date = new Date(startDate.getTime());
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		this.setState(STATES.none);
-		this.animation.setPerson(this);
 
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
 		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
@@ -120,6 +119,7 @@ public class PersonAgent extends Agent implements Person {
 		this.addRole(bankCustomerRole);
 		
 		residence.addResident(residentRole);
+		this.animation.setPerson(this);
 	}
 
 	//==========//
@@ -633,7 +633,11 @@ public class PersonAgent extends Agent implements Person {
 			this.home.removeResident(this.getResidentRole());
 		}
 		this.home = h;
-		this.home.addResident(this.getResidentRole());		
+		this.home.addResident(this.getResidentRole());
+		animation.setVisible(true); // see below
+		this.home.getPanel().addVisualizationElement(animation); // this and the above line "animates" the person at home, but doesn't DRAW it.
+		
+		
 	}
 
 	@Override
@@ -728,6 +732,10 @@ public class PersonAgent extends Agent implements Person {
 	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
+		if(currentLocation == this.getHome()){ // if you're at home and want to leave, tell animation to leave
+			this.animation.goOutside();
+			atDestination.acquire();
+		}
 		if (currentLocation != destination) {
 			if (car != null) {
 				setCurrentLocation(null);
