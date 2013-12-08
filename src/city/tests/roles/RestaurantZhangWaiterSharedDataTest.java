@@ -141,11 +141,11 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter's break status should be notOnBreak. It's instead " + waiter.getBreakStatus(), RestaurantZhangWaiterBase.breakStatus.notOnBreak, waiter.getBreakStatus());
 		
 		// Step 7, run the scheduler
-		waiter.msgHereIsMyChoice(customer, "Steak");
+		waiter.msgHereIsMyChoice(customer, "steak");
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be ordered. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.ordered, waiter.getCustomerList().get(0).state);
 		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter asked what I would like"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
@@ -157,7 +157,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be orderCooking. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.orderCooking, waiter.getCustomerList().get(0).state);
 		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter asked what I would like"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
@@ -166,11 +166,11 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertTrue("Order stand should have an order in it. It doesn't", !revolvingStand.RestaurantZhangOrderList.isEmpty());
 
 		// Step 9, get food from cook msg
-		waiter.msgOrderIsReady("Steak", table);
+		waiter.msgOrderIsReady("steak", table);
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be orderReady. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.orderReady, waiter.getCustomerList().get(0).state);
 		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter asked what I would like"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
@@ -182,20 +182,20 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be orderReady. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.eating, waiter.getCustomerList().get(0).state);
-		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food Steak"));
+		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food steak"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
 		assertTrue("Waiter's checkList should be empty. It isn't", waiter.getCheckList().isEmpty());
 		assertEquals("Waiter's break status should be notOnBreak. It's instead " + waiter.getBreakStatus(), RestaurantZhangWaiterBase.breakStatus.notOnBreak, waiter.getBreakStatus());
-		assertTrue("Customer's log is wrong. It reads " + customer.log.getLastLoggedEvent(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food Steak"));
+		assertTrue("Customer's log is wrong. It reads " + customer.log.getLastLoggedEvent(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food steak"));
 
 		// Step 11, get finished eating msg from customer
-		waiter.msgHereWasMyOrder(customer, "Steak");
+		waiter.msgHereWasMyOrder(customer, "steak");
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be doneEating. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.doneEating, waiter.getCustomerList().get(0).state);
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
 		assertTrue("Waiter's checkList should be empty. It isn't", waiter.getCheckList().isEmpty());
@@ -206,23 +206,23 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be waitingForCheck. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.waitingForCheck, waiter.getCustomerList().get(0).state);
-		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food Steak"));
+		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food steak"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
 		assertTrue("Waiter's checkList should be empty. It isn't", waiter.getCheckList().isEmpty());
 		assertEquals("Waiter's break status should be notOnBreak. It's instead " + waiter.getBreakStatus(), RestaurantZhangWaiterBase.breakStatus.notOnBreak, waiter.getBreakStatus());
-		assertTrue("Cashier's log is wrong. It reads: " + cashier.log.getLastLoggedEvent(), cashier.log.getLastLoggedEvent().toString().contains("Making bill from Waiter for order Steak"));
-		RestaurantZhangCheck check = new RestaurantZhangCheck(waiter, customer, menu.getPrice("Steak"));
+		assertTrue("Cashier's log is wrong. It reads: " + cashier.log.getLastLoggedEvent(), cashier.log.getLastLoggedEvent().toString().contains("Making bill from Waiter for order steak"));
+		RestaurantZhangCheck check = new RestaurantZhangCheck(waiter, customer, menu.getPrice("steak"));
 
 		// Step 13, msg from cashier that check is created
 		waiter.msgHereIsWaiterCheck(check);
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be waitingForCheck. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.waitingForCheck, waiter.getCustomerList().get(0).state);
-		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food Steak"));
+		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Waiter gave me my food steak"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
 		assertEquals("Waiter's checkList should have one. It doesn'", 1, waiter.getCheckList().size());
 		assertEquals("Waiter's break status should be notOnBreak. It's instead " + waiter.getBreakStatus(), RestaurantZhangWaiterBase.breakStatus.notOnBreak, waiter.getBreakStatus());
@@ -232,7 +232,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be waitingForCheck. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.waitingForCheck, waiter.getCustomerList().get(0).state);
 		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Received check from waiter"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());
@@ -245,7 +245,7 @@ public class RestaurantZhangWaiterSharedDataTest extends TestCase {
 		assertEquals("Waiter should have one customer. It doesn't", 1, waiter.getCustomerList().size());
 		assertEquals("Waiter's customer's customer should be set. It isn't", customer, waiter.getCustomerList().get(0).customer);
 		assertEquals("Waiter's customer's table should be set. It isn't", table, waiter.getCustomerList().get(0).table);
-		assertEquals("Waiter's customer's choice should be Steak. It isn't", "Steak", waiter.getCustomerList().get(0).choice);
+		assertEquals("Waiter's customer's choice should be steak. It isn't", "steak", waiter.getCustomerList().get(0).choice);
 		assertEquals("Waiter's customer's state should be leaving. Instead it's " + waiter.getCustomerList().get(0).state, MyCustomer.STATE.leaving, waiter.getCustomerList().get(0).state);
 		assertTrue("Waiter's customer's log is incorrect. It reads: " + customer.log.getLastLoggedEvent().toString(), customer.log.getLastLoggedEvent().toString().contains("Received check from waiter"));
 		assertEquals("Waiter should have one for number of customers served. It's instead " + waiter.getNumCustomersServed(), 1, waiter.getNumCustomersServed());

@@ -26,6 +26,7 @@ import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.PersonAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
+import city.animations.WalkerAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.AptBuilding;
@@ -70,7 +71,6 @@ import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.PersonAnimationTest;
 
 public class Application {
 
@@ -89,7 +89,7 @@ public class Application {
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
 	
-	static CitySidewalkLayout sidewalks;
+	public static CitySidewalkLayout sidewalks;
 	
 	private static final DataModel model = new DataModel();
 
@@ -306,31 +306,32 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
 		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		sidewalks.setRoads(trafficControl);
 		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(350, 0, "Bus Stop 1", Color.white, bsp1);
+		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		createBuilding(bsp1, cityViewBusStop1, busStop1);
 		
 		BusStopPanel bsp2 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(0, 125, "Bus Stop 2", Color.white, bsp2);
+		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(125, 125, "Bus Stop 2", Color.white, bsp2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		createBuilding(bsp2, cityViewBusStop2, busStop2);
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(275, 275, "Bus Stop 3", Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(325, 325, "Bus Stop 3", Color.white, bsp3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		createBuilding(bsp3, cityViewBusStop3, busStop3);
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(75, 425, "Bus Stop 4", Color.white, bsp4);
+		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(125, 325, "Bus Stop 4", Color.white, bsp4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		createBuilding(bsp4, cityViewBusStop4, busStop4);
 		
 		// Create buildings
 		BankPanel bankPanel1 = new BankPanel(Color.green);
-		CityViewBank cityViewBank1 = new CityViewBank(450, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
+		CityViewBank cityViewBank1 = new CityViewBank(425, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
 		BankBuilding bankBuilding1 = new BankBuilding("BankBuilding", bankPanel1, cityViewBank1);
 		createBuilding(bankPanel1, cityViewBank1, bankBuilding1);
 
@@ -358,7 +359,7 @@ public class Application {
 		}
 		
 		MarketPanel marketPanel1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarket1 = new CityViewMarket(125, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
+		CityViewMarket cityViewMarket1 = new CityViewMarket(150, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
 		MarketBuilding marketBuilding1 = new MarketBuilding("MarketBuilding1", marketPanel1, cityViewMarket1);
 		createBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
 		
@@ -729,7 +730,7 @@ public class Application {
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
-		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(450, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
+		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
 		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
 		createBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
 		
@@ -962,9 +963,12 @@ public class Application {
 //		c2JP.startThread();
 //		c3JP.startThread();
 //		c4JP.startThread();
-
-		PersonAnimationTest testPersonAnimation = new PersonAnimationTest(busStop2, sidewalks);
-		mainFrame.cityView.addAnimation(testPersonAnimation);
+		
+		for(int j = 0; j < 30; j++) {
+			WalkerAnimation testPersonAnimation = new WalkerAnimation(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
+			mainFrame.cityView.addAnimation(testPersonAnimation);
+			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
+		}
 	}
 	
 	public static DataModel getModel() {

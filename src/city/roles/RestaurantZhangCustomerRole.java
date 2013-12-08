@@ -45,7 +45,7 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 	 */
 	public RestaurantZhangCustomerRole(){
 		super();
-		money = Math.abs(new Random().nextInt()%40) + 5; // TODO get rid of this and replace with the actual money
+		money = Math.abs(new Random().nextInt()%40) + 25; // TODO get rid of this and replace with the actual money
 //		if(name.contains("broke")) // Hack to demo non norm scenario that customer will leave
 //			money = 0.99;
 //		if(name.contains("thief"))
@@ -292,12 +292,13 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		timer.schedule(new TimerTask() {
 			public void run() {
 				choice = customerMenu.randomChoice(money);
+				choice = "steak";
 //				if(name.contains("thief")) { // Hack to make customer steal
 //					choice = customerMenu.randomChoice(50.00);
 //				}
 //				if(name.contains("chicken")) {
-//					if(customerMenu.getMenu().containsKey("Chicken")) {
-//						choice = "Chicken";
+//					if(customerMenu.getMenu().containsKey("chicken")) {
+//						choice = "chicken";
 //					} else {
 //						choice = "None";
 //					}

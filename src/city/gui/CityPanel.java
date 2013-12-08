@@ -66,7 +66,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 				c.updatePosition();
 			}
 		}
-		synchronized(statics) {
+		synchronized(animations) {
 			for (AnimationInterface a : animations) {
 				a.updatePosition();
 			}

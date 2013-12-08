@@ -26,7 +26,9 @@ public class RestaurantZhangCashierTest extends TestCase {
 		cashier = new RestaurantZhangCashierRole(new RestaurantZhangBuilding("Building", new RestaurantZhangPanel(Color.black), null), 0, 100);
 		cashier.setPerson(new MockPerson("Person"));
 		waiter = new MockRestaurantZhangWaiterRegular();
+		waiter.setPerson(new MockPerson("Person"));
 		customer = new MockRestaurantZhangCustomer();
+		customer.setPerson(new MockPerson("Person"));
 //		market1 = new MockMarket("MockMarket1");
 //		market2 = new MockMarket("MockMarket2");
 		menu = new RestaurantZhangMenu();
@@ -43,7 +45,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 
 		// Step 1 of the test, ask for bill
-		cashier.msgComputeBill(waiter, customer, "Chicken"); //send the message from a waiter
+		cashier.msgComputeBill(waiter, customer, "chicken"); //send the message from a waiter
 		check = cashier.getPendingChecks().get(0);
 
 		// Check postconditions for step 1 and preconditions for step 2
@@ -85,7 +87,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 
 		// Step 1 of the test, ask for bill
-		cashier.msgComputeBill(waiter, customer, "Chicken"); //send the message from a waiter
+		cashier.msgComputeBill(waiter, customer, "chicken"); //send the message from a waiter
 		check = cashier.getPendingChecks().get(0);
 
 		// Check postconditions for step 1 and preconditions for step 2
@@ -117,7 +119,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 
 		// Step 3 of the test, ask for bill again
-		cashier.msgComputeBill(waiter, customer, "Chicken"); //send the message from a waiter
+		cashier.msgComputeBill(waiter, customer, "chicken"); //send the message from a waiter
 		check = cashier.getPendingChecks().get(0);
 
 		// Check postconditions for step 3 and preconditions for step 4
@@ -233,7 +235,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 
 		// Step 1 of the test, ask for bill
-		cashier.msgComputeBill(waiter, customer, "Chicken"); //send the message from a waiter
+		cashier.msgComputeBill(waiter, customer, "chicken"); //send the message from a waiter
 		check = cashier.getPendingChecks().get(0);
 
 		// Check postconditions for step 1 and preconditions for step 2
@@ -275,7 +277,7 @@ public class RestaurantZhangCashierTest extends TestCase {
 //		assertTrue("Cashier should have 0 market bills. It doesn't.", cashier.marketBills.isEmpty());
 //
 //		// Step 1 of the test, ask for bill
-//		cashier.msgComputeBill(waiter, customer, "Chicken"); //send the message from a waiter
+//		cashier.msgComputeBill(waiter, customer, "chicken"); //send the message from a waiter
 //		check = cashier.getPendingChecks().get(0);
 //
 //		// Check postconditions for step 1 and preconditions for step 2
