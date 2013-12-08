@@ -21,7 +21,6 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 		this.setLandlord(l); // WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE // TODO Perhaps I should eliminate the landlord requirement, and have that be added separately?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
-
 	}
 
 	// Getters
@@ -35,14 +34,11 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Utilities
 	
-	/**
-	 * This adds a Resident to a list of residents who live in this house. (only 1 person may live in a house)
-	 */
 	@Override
 	public void addResident(Resident r) {
 		if (!residents.contains(r)) {
 			if (residents.isEmpty()) {
-				this.residents.add(r);
+				residents.add(r);
 				super.addResident(r);
 				r.getPerson().getAnimation().setVisible(true);
 			} else {

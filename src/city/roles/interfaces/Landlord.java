@@ -1,5 +1,7 @@
 package city.roles.interfaces;
 
+import java.util.List;
+
 import city.bases.ResidenceBuilding;
 
 public interface Landlord {
@@ -18,13 +20,13 @@ public interface Landlord {
 	// Actions
 	
 	// Getters
+	public List<ResidenceBuilding> getResidences();
 	
 	// Setters
-	
 	public void setRent(int d);
+	public void setResident(Resident r);
 	
 	// Utilities
 	public void addResidence(ResidenceBuilding b);
 	public void removeResidence(ResidenceBuilding b);
-
 }

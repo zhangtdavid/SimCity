@@ -7,6 +7,7 @@ import trace.AlertTag;
 import city.bases.ResidenceBuilding;
 import city.bases.Role;
 import city.roles.interfaces.Landlord;
+import city.roles.interfaces.Resident;
 
 public class LandlordRole extends Role implements Landlord {
 
@@ -37,6 +38,10 @@ public class LandlordRole extends Role implements Landlord {
 	// Actions
 
 	// Getters
+	@Override
+	public List<ResidenceBuilding> getResidences(){
+		return this.residencesManaged;
+	}
 
 	// Setters
 	
@@ -47,6 +52,16 @@ public class LandlordRole extends Role implements Landlord {
 	public void setRent(int d) {
 		for(int i = 0; i < residencesManaged.size(); i++)
 		residencesManaged.get(i).setRent(d);		
+	}
+	
+	/**
+	 * Give the ResidentRole of the person who is to be the landlord.
+	 * @param r
+	 */
+	@Override
+	public void setResident(Resident r){
+		this.setPerson(r.getPerson()); // now, peples' payments will go to r.getPerson()! Yay $$$~!
+		r.getPerson().addRole(this); // add this landlordrole to the person, so he's aware too.
 	}
 	
 	/**
@@ -81,5 +96,7 @@ public class LandlordRole extends Role implements Landlord {
 	public void removeResidence(ResidenceBuilding b) {
 		residencesManaged.remove(b);
 	}
+
+
 	
 }

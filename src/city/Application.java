@@ -566,10 +566,10 @@ public class Application {
 		AptBuilding rhb2Choi = new AptBuilding("Apt Choi2", null, rhp2Choi, rhcv2Choi);
 		setBuilding(rhp2Choi, rhcv2Choi, rhb2Choi);
 
-		HousePanel rhp3Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		AptPanel rhp3Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//busstop4 125 325
-		CityViewHouse rhcv3Choi = new CityViewHouse(320, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
-		HouseBuilding rhb3Choi = new HouseBuilding("House Choi1", null, rhp3Choi, rhcv3Choi);
+		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
+		AptBuilding rhb3Choi = new AptBuilding("Apt Choi1", null, rhp3Choi, rhcv3Choi);
 		setBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 
 		// Create landlord

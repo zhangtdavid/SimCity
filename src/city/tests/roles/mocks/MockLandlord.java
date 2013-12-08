@@ -58,4 +58,15 @@ public class MockLandlord extends MockRole implements Landlord{
 		
 	}
 
+	@Override
+	public List<ResidenceBuilding> getResidences() {
+		return null;		
+	}
+
+	@Override
+	public void setResident(Resident r) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

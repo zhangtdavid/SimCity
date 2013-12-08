@@ -9,6 +9,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.bases.Animation;
+import city.bases.interfaces.AnimationInterface;
 import city.buildings.AptBuilding;
 
 /**
@@ -85,16 +86,14 @@ public class AptPanel extends ResidenceBasePanel {
 		animate();
 		// Update and draw the position of each visible element
 		for (Animation animation : animations) {
-			if(animation!=null){
 				if (animation.getVisible()) {
 					animation.updatePosition();
 					animation.draw(graphics2D);
 				}
-			}
 		}
 	}
 	// TODO removal of this makes the house not animate at all. keeping it results it in not doing anything if not focused.
-	public void addVisualizationElement(Animation ve) {
-		animations.add(ve);
+	public void addVisualizationElement(AnimationInterface ve) {
+		animations.add((Animation)ve);
 	}
 }

@@ -27,16 +27,22 @@ import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
+import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
+import city.buildings.AptBuilding;
+import city.buildings.interfaces.Apt;
 import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.BusStop;
+import city.buildings.interfaces.House;
 import city.buildings.interfaces.Market;
+import city.gui.interiors.AptPanel;
 import city.roles.BankCustomerRole;
 import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
+import city.roles.LandlordRole;
 import city.roles.MarketCustomerRole;
 import city.roles.ResidentRole;
 import city.roles.interfaces.BankCustomer;
@@ -637,7 +643,12 @@ public class PersonAgent extends Agent implements Person {
 		this.home = h;
 		this.home.addResident(this.getResidentRole());
 		animation.setVisible(true); // see below
+		if(animation != null && this.home.getPanel() != null)
 		this.home.getPanel().addVisualizationElement(animation); // this and the above line "animates" the person at home, but doesn't DRAW it.
+		else
+			System.out.println("You're probably testing, because this house or apartment panel is null, or the animation is null.");
+
+		
 	}
 
 	@Override
@@ -719,7 +730,7 @@ public class PersonAgent extends Agent implements Person {
 //	}
 	
 	@Override
-	public void terminateWithExtremePrejudice() {
+	public void terminateWithExtremePrejudice() { // TODO i guess this has to be tested too...
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		// Get rid of the person's car
@@ -728,21 +739,56 @@ public class PersonAgent extends Agent implements Person {
 			car = null;
 		}
 		
-		// If the person is a landlord...
-		//     If the person is a landlord of their own home...
-		//         If it's a house, just remove the house's landlord
-		//         If it's an apartment, set anyone else (who isn't this person) to be the landlord
-		//     If the person is a landlord of a different residence.
-		//         Set anyone else to be the landlord
+		// If the person is a landlord... CHECK
+		//     If the person is a landlord of their own home... CHECK
+		//         If it's a house, just remove the house's landlord. CHECK
+		//         If it's an apartment, set anyone else (who isn't this person) to be the landlord. CHECK
+		//     If the person is a landlord of a different residence. CHECK
+		//         Set anyone else to be the landlord CHECK; and if he's the only person who lives in an apt, landlord = null. ~rchoi
 		for (RoleInterface i : roles) {
 			if (i instanceof Landlord) {
-				// TODO for Ryan
+				for(ResidenceBuilding j : ((Landlord) i).getResidences()){ // check all residences managed by person
+					if(this.getHome() == j)	{ // Does landlord live in this residencebuilding?
+						//is it an apartment?
+						if(this.getHome() instanceof Apt){
+						int toDel=0;
+						for(int k = 0; k < j.getResidents().size(); k++){ // find index of person
+							if(j.getResidents().get(k).equals(this.residentRole)){ // found index
+								toDel = k;
+							}
+						}
+						for(int k = toDel; k < j.getResidents().size()-1; k++){ // starting from the index to the rest of the list
+							//shift everyone down a room, and change their room#s.
+							j.getResidents().get(k+1).getPerson().setRoomNumber(k); // decrement next person's room # 
+							//refrigerators are key-valued to Person, so no need to fiddle with it in the loop.
+							//bed and stove navigation are done in person, based off Room Number. so, done.
+							//basically we shift everyone below him up a room.
+						}
+						//re-assign landlord to index 0 resident. Recycle the current landlord and just repoint it
+						//the building already knows the landlord's pointer. the landlord role and person need to know now, because of $ flow.
+						((Landlord)i).setResident(j.getResidents().get(0)); // this method takes it deeper, to the person.
+						
+						//is it a house?
+						}else if(this.getHome() instanceof House){ 
+							// if he landlords his own house, house points to a landlord that's null. simple
+							j.setLandlord(null);
+						}
+					}else{
+						//if he landlords houses he doesn't live in? We've already deleted the one he does live in, if he lives in it.
+						//This time, set getResidents(0) to be landlord. EZ
+						if(j.getResidents().size() > 1) // if he's not the only person who lives in it,
+							((Landlord)i).setResident(j.getResidents().get(0));
+						else j.setLandlord(null); // if he's the only person who lives there, set landlord to null.
+					}
+					
+				}
 			}
 		}
 		
 		// Remove the person from their residence
 		this.getHome().removeResident(residentRole);
 		this.roles.remove(residentRole);
+		this.getHome().setFood(this, null);
 		
 		// Notify all the person's roles that the person is dead
 		for (RoleInterface i : roles) {
@@ -753,7 +799,7 @@ public class PersonAgent extends Agent implements Person {
 		roles.clear();
 		Application.getModel().removePerson(this);
 		this.stopThread();
-		print("Goodbye, cruel world!");
+		print("Goodbye, cruel world! (git blame: CSCI 201)");
 	}
 
 	private void removeRole(RoleInterface r) {

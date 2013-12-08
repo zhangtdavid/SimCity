@@ -27,23 +27,24 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	
 	@Override
 	public boolean getIsFull() {
-		return !residents.isEmpty();
+		return residents.size() == 5;
 	}
 	
 	// Setters
 
 	// Utilities
-	
+
 	@Override
 	public void addResident(Resident r) {
 		if (!residents.contains(r)) {
-			if(residents.size() <= AptBuilding.NUMBER_OF_BEDS) {
+			if (residents.size() <= AptBuilding.NUMBER_OF_BEDS) {
 				residents.add(r);
 				super.addResident(r);
-			}else{
+				r.getPerson().getAnimation().setVisible(true);
+			} else {
 				throw new IllegalStateException("Only five people at a time may live in an apartment.");
 			}
 		}
 	}
-	
+
 }
