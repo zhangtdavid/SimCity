@@ -50,12 +50,6 @@ public class MockMarketCustomerDeliveryPayment extends MockRole implements Marke
 	}
 
 	@Override
-	public void removeMarketTransactionFromList(MarketTransaction transaction) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		// TODO Auto-generated method stub
 		return null;

@@ -11,6 +11,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
@@ -125,7 +126,16 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		if (restaurant.getCash() > 1000)
 			depositMoney();
 		
-		// Scheduler disposition		
+		// Scheduler disposition
+		
+		synchronized(marketTransactions) {
+			for (MarketTransaction t : marketTransactions) {
+				if (t.getMarketTransactionState() == MarketTransactionState.Done) {
+					marketTransactions.remove(t);
+					return true;
+				}
+			}
+		}		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.Pending) {

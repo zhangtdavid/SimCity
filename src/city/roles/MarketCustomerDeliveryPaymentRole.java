@@ -52,8 +52,8 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	public void msgPaymentReceived(int id) {
 		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgPaymentReceived from MarketCashier."));
 		print("MarketCustomerDeliveryPayment received msgPaymentReceived from MarketCashier.");
-		//	MarketTransaction mt = findMarketTransaction(id);
-		//	removeMarketTransactionFromList(mt); // this might have cause when cashier is adding to the list
+		MarketTransaction mt = findMarketTransaction(id);
+    	mt.setMarketTransactionState(MarketTransactionState.Done);
 	}
 	
 //  Scheduler
@@ -126,16 +126,6 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public void removeMarketTransactionFromList(MarketTransaction transaction) {
-		for(MarketTransaction mt: marketTransactions) {
-			if(mt == transaction) {
-				marketTransactions.remove(mt);
-				return;
-			}
-		}
 	}
 	
 	@Override
