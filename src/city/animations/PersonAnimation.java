@@ -24,44 +24,45 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	private Command command = Command.noCommand;
 	private Timer timer = new Timer();
 	
-	// TODO what are these?
-	private boolean leaving;
-	private String status = "";
-	private boolean personSemaphoreIsAcquired;
-	private String foodToEat;
-	private boolean isAtHome;
+	private boolean leaving; // in process of leaving the house.
+	private String status = ""; // like orderIcon, a string above the person. 
+	private boolean personSemaphoreIsAcquired; // knows that a release must happen
+	private String foodToEat; // food, for status.
+	private boolean isAtHome; // knows to restrict movement for aesthetics
 	
 	// Constructor
 	
 	public PersonAnimation() {
 		super();
-		this.person = null; // Expects to have this set immediately after creation
-		this.xDestination = HousePanel.HDX;
-		this.yDestination = HousePanel.HDY+10;
-		this.xPos = HousePanel.HDX; 
-		this.yPos = HousePanel.HDY+10;
+		this.person = null; // Expects to have this set immediately after creation!!!!!!!!!!!!!!!!!!!!!!
+		this.xDestination = -20;
+		this.yDestination = -20;
+		this.xPos = -20; 
+		this.yPos = -20;
 		
-// TODO
-//		if(p.getHome() instanceof House){ //house
-//			this.xDestination = HousePanel.HDX;
-//			this.yDestination = HousePanel.HDY+10;
-//			this.xPos = HousePanel.HDX; 
-//			this.yPos = HousePanel.HDY+10;
-//		}else if(p.getHome() instanceof Apt){ // or apartment
-//			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
-//			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-//			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
-//			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-//		}
 	}
 	
 	// Abstract implementors
 	
 	@Override
 	public void updatePosition() {
-		
 		if (person == null) {
 			throw new IllegalStateException("PersonAnimation does not have a Person object.");
+		}
+
+		// Base case
+		if(!isAtHome && !personSemaphoreIsAcquired){
+			if(person.getHome() instanceof House){ //house
+				this.xDestination = HousePanel.HDX;
+				this.yDestination = HousePanel.HDY+20;
+				this.xPos = HousePanel.HDX; 
+				this.yPos = HousePanel.HDY+20;
+			}else if(person.getHome() instanceof Apt){ // or apartment
+				this.xDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-20;
+				this.yDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];
+				this.xPos = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-20;
+				this.yPos = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];
+			}
 		}
 		
 		// Movement
@@ -69,7 +70,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 			xPos++;
 		else if (xPos > xDestination)
 			xPos--;
-		if(person.getHome() instanceof House && yPos > 480)
+		if(person.getHome() instanceof House && yPos > 450 && xPos != xDestination && leaving)
 			yPos--;
 		else if (yPos < yDestination)
 			yPos++;
@@ -77,8 +78,13 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 			yPos--;
 		
 		// Processing
-		
-		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
+		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired) {
+			if(command == Command.ToDoor){
+				//At door; can exit building now
+				personSemaphoreIsAcquired = false;
+				person.guiAtDestination();
+				command = Command.noCommand;
+			}
 			if (command == Command.ToBed) {
 				// Going to bed
 				personSemaphoreIsAcquired = false;
@@ -100,7 +106,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 							cookAndEatFood(foodToEat);
 							person.print("Done cooking");
 						}
-					}, 3000);
+					}, 1000);
 				//has left stove with food, to table
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				command = Command.StationaryAtTable;
@@ -117,7 +123,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 							leaving = true;
 							command = Command.noCommand;
 						}
-					}, 4000);
+					}, 1000);
 			}
 		}
 	}
@@ -145,9 +151,9 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 			xDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-10;
 			yDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];	
 		}
-		leaving = false;
+		leaving = true;
 		isAtHome = false;
-		person.guiAtDestination();
+		command = Command.ToDoor;
 	}
 
 	/**

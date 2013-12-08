@@ -25,7 +25,6 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
@@ -43,6 +42,7 @@ import city.roles.ResidentRole;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BusPassenger;
 import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.Landlord;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.Resident;
 
@@ -104,7 +104,8 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		this.cash = 0;
 		this.hasEaten = false;
-		this.currentLocation = residence;
+		this.home = residence;
+		this.currentLocation = null;
 		this.animation = animation;
 		animation.setPerson(this);
 		this.lastAteAtRestaurant = new Date(startDate.getTime());
@@ -112,7 +113,6 @@ public class PersonAgent extends Agent implements Person {
 		this.date = new Date(startDate.getTime());
 		this.propertyChangeSupport = new PropertyChangeSupport(this);
 		this.setState(STATES.none);
-		this.animation.setPerson(this);
 
 		residentRole = new ResidentRole(new Date(startDate.getTime()));
 		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
@@ -121,6 +121,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		residence.addResident(residentRole);
 		this.setHome(residence);
+		this.animation.setPerson(this);//TODO
 	}
 
 	//==========//
@@ -633,8 +634,10 @@ public class PersonAgent extends Agent implements Person {
 		if (this.home != null) {
 			this.home.removeResident(this.getResidentRole()); // remove from past home
 		}
-		this.home = h; // set new home
-		this.home.addResident(this.getResidentRole());		
+		this.home = h;
+		this.home.addResident(this.getResidentRole());
+		animation.setVisible(true); // see below
+		this.home.getPanel().addVisualizationElement(animation); // this and the above line "animates" the person at home, but doesn't DRAW it.
 	}
 
 	@Override
@@ -687,32 +690,70 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 
+//	@Override
+//	public void forceSleep() {
+//		synchronized(roles) {
+//			for (RoleInterface r : roles) {
+//				r.setInactive();
+//			}
+//		}
+//		if (carPassengerRole != null) {
+//			roles.remove(carPassengerRole);
+//			carPassengerRole = null;
+//		}
+//		if (busPassengerRole != null) {
+//			roles.remove(busPassengerRole);
+//			busPassengerRole = null;
+//		}
+//		if (restaurantCustomerRole != null) {
+//			roles.remove(restaurantCustomerRole);
+//			restaurantCustomerRole = null;
+//		}
+//		if (marketCustomerRole != null) {
+//			roles.remove(marketCustomerRole);
+//			marketCustomerRole = null;
+//		}
+//		try {
+//			actGoToSleep();
+//		} catch (InterruptedException e) {}
+//	}
+	
 	@Override
-	public void forceSleep() {
-		synchronized(roles) {
-			for (RoleInterface r : roles) {
-				r.setInactive();
+	public void terminateWithExtremePrejudice() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		// Get rid of the person's car
+		if (car != null) {
+			car.stopThread();
+			car = null;
+		}
+		
+		// If the person is a landlord...
+		//     If the person is a landlord of their own home...
+		//         If it's a house, just remove the house's landlord
+		//         If it's an apartment, set anyone else (who isn't this person) to be the landlord
+		//     If the person is a landlord of a different residence.
+		//         Set anyone else to be the landlord
+		for (RoleInterface i : roles) {
+			if (i instanceof Landlord) {
+				// TODO for Ryan
 			}
 		}
-		if (carPassengerRole != null) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
+		
+		// Remove the person from their residence
+		this.getHome().removeResident(residentRole);
+		this.roles.remove(residentRole);
+		
+		// Notify all the person's roles that the person is dead
+		for (RoleInterface i : roles) {
+			i.definitelyDead();
 		}
-		if (busPassengerRole != null) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-		}
-		if (restaurantCustomerRole != null) {
-			roles.remove(restaurantCustomerRole);
-			restaurantCustomerRole = null;
-		}
-		if (marketCustomerRole != null) {
-			roles.remove(marketCustomerRole);
-			marketCustomerRole = null;
-		}
-		try {
-			actGoToSleep();
-		} catch (InterruptedException e) {}
+		
+		// Final steps
+		roles.clear();
+		Application.getModel().removePerson(this);
+		this.stopThread();
+		print("Goodbye, cruel world!");
 	}
 
 	private void removeRole(RoleInterface r) {
@@ -729,6 +770,10 @@ public class PersonAgent extends Agent implements Person {
 	 * @param destination the building to travel to
 	 */
 	private void processTransportationDeparture(BuildingInterface destination) throws InterruptedException {
+		if(currentLocation == this.getHome()){ // if you're at home and want to leave, tell animation to leave
+			this.animation.goOutside();
+			atDestination.acquire();
+		}
 		if (currentLocation != destination) {
 			if (car != null) {
 				setCurrentLocation(null);

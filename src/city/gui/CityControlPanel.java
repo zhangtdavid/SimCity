@@ -1,6 +1,8 @@
 package city.gui;
 
 import java.awt.Dimension;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
@@ -13,11 +15,6 @@ import city.gui.tabs.EditPersonTab;
 import city.gui.tabs.ScenariosTab;
 import city.gui.tabs.TraceTab;
 
-import java.awt.event.FocusAdapter;
-import java.awt.event.FocusEvent;
-import java.awt.event.ComponentAdapter;
-import java.awt.event.ComponentEvent;
-
 public class CityControlPanel extends JPanel {
 
 	private static final long serialVersionUID = 9166425422374406573L;
@@ -29,6 +26,7 @@ public class CityControlPanel extends JPanel {
 	public EditBuildingTab editBuildingsTab;
 	public AddPersonTab addPersonTab;
 	public EditPersonTab editPersonTab;
+	private JTabbedPane tabbedPane;
 
 	public CityControlPanel(MainFrame mf) {
 		this.mainframe = mf;
@@ -37,7 +35,7 @@ public class CityControlPanel extends JPanel {
 		this.setMinimumSize(new Dimension(MainFrame.CONTROLPANELX, MainFrame.CONTROLPANELY));
 		this.setVisible(true);
 
-		JTabbedPane tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
+		tabbedPane = new JTabbedPane(JTabbedPane.TOP, JTabbedPane.WRAP_TAB_LAYOUT);
 		tabbedPane.setFocusable(false);
 		
 		traceTab = new TraceTab(mf);
@@ -69,5 +67,9 @@ public class CityControlPanel extends JPanel {
 
 	public MainFrame getMainframe() {
 		return mainframe;
+	}
+	
+	public void displayTab(JPanel tab) {
+		tabbedPane.setSelectedComponent(tab);
 	}
 }

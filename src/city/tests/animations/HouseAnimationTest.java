@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson.Command;
@@ -194,7 +193,7 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.goOutside();
 		assertTrue("xDest = xPos", homeAnimation.getXPos() != homeAnimation.getDestination()[0]);
 		assertFalse("yDest = yPos", homeAnimation.getYPos() == homeAnimation.getDestination()[1]);
-		assertEquals("Command of home animation should be noCommand", homeAnimation.getCommand(), Command.noCommand.toString());	
+		assertEquals("Command of home animation should be ToDoor", homeAnimation.getCommand(), Command.ToDoor.toString());	
 		homeAnimation.setCoords(HousePanel.HDX, HousePanel.HDY+10);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
 		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);

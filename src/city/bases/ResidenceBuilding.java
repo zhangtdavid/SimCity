@@ -99,6 +99,7 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 		items.put(FOOD_ITEMS.pizza, 1); 
 		this.setFood(r.getPerson(), items);
 		r.getPerson().setRoomNumber(residents.size());
+
 	}
 	
 	@Override

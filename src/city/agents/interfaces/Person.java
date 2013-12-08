@@ -82,7 +82,8 @@ public interface Person extends AgentInterface {
 	// Utilities
 	
 	public void addRole(RoleInterface r);
-	public void forceSleep();
+	// public void forceSleep();
+	public void terminateWithExtremePrejudice();
 	public void printViaRole(String role, String msg);
 	
 }

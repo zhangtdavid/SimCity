@@ -763,6 +763,7 @@ public class PersonTest extends TestCase {
 		person.setCar(car);
 		person.setCash(0);
 		person.setAnimation(animation);
+		person.setCurrentLocation(person.getHome());
 		animation.setAgent(person);
 		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 5);// One item will be removed after cooking, need 4 to stop from going to market next

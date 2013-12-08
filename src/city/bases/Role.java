@@ -109,6 +109,17 @@ public abstract class Role implements RoleInterface {
 	
 	// Utilities
 	
+	/**
+	 * When the person owning this role dies, this method will be called.
+	 * You should override this method.
+	 * (For now it will just throw an error, eventually I will declare it abstract after
+	 * everyone has had time to modify their code.)
+	 */
+	@Override
+	public void definitelyDead() {
+		throw new UnsupportedOperationException("HEY YOU! OVERRIDE THIS METHOD!");
+	}
+	
 	protected void stateChanged() {
 		activity = true;
 		person.stateChanged();
