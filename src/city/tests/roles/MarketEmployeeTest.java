@@ -108,6 +108,7 @@ public class MarketEmployeeTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();

@@ -139,6 +139,8 @@ public class MarketCashierTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.pizza, 5);
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
+		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		order2 = new MarketOrder(orderItems);
 		order3 = new MarketOrder(orderItems);
@@ -296,6 +298,7 @@ public class MarketCashierTest extends TestCase {
 		
 		// Change cashiers
 		market.setCashier(cashier2);
+		cashier2.setActive();
 		cashier.runScheduler();
 		assertTrue("Cashier should have workingState == NotWorking.",  cashier.getWorkingState() == WorkingState.NotWorking);
 		

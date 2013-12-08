@@ -205,11 +205,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			if(t.bill == t.payment) {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
 				market.setCash(market.getCash() + t.payment);
-				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
-					if(dt.getAvailable() == true) {
-						assignDelivery(t, dt);
-					}
-				}
 			}
 
 		}

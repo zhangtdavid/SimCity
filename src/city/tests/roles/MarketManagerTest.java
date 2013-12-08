@@ -92,8 +92,7 @@ public class MarketManagerTest extends TestCase {
 		employee.market = market;
 		
 		market.getEmployees().add(new MyMarketEmployee(employee));
-
-		
+	
 		managerPerson = new MockPerson("Manager"); 
 		manager = new MarketManagerRole(market, 0, 12);
 		manager.setPerson(managerPerson);
@@ -105,6 +104,7 @@ public class MarketManagerTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();

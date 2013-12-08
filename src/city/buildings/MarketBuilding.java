@@ -19,6 +19,7 @@ import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.MarketPanel;
 import city.roles.BankCustomerRole;
 import city.roles.MarketCashierRole;
+import city.roles.MarketDeliveryPersonRole;
 import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
 import city.roles.interfaces.BankCustomer;
@@ -183,6 +184,20 @@ public class MarketBuilding extends Building implements Market {
 				//anim.setVisible(true);
 				//panel.addVisualizationElement(anim);
 				this.addEmployee(m);
+				m.setActive();
+				super.addOccupyingRole(m, null); // null --> anim
+			}
+		}
+		if(r instanceof MarketDeliveryPersonRole) {
+			MarketDeliveryPersonRole m = (MarketDeliveryPersonRole)r;
+			
+			if(!super.occupyingRoleExists(m)) {
+				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
+				//c.setGui(anim);	
+//				c.setAnimation(anim);
+				//anim.setVisible(true);
+				//panel.addVisualizationElement(anim);
+				this.addDeliveryPerson(m);
 				m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
 			}

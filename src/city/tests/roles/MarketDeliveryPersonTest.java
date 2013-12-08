@@ -13,6 +13,7 @@ import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
 import city.gui.interiors.MarketPanel;
 import city.roles.MarketDeliveryPersonRole;
+import city.roles.interfaces.MarketDeliveryPerson.WorkingState;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.roles.mocks.MockMarketCashier;
 import city.tests.roles.mocks.MockMarketCustomer;
@@ -40,6 +41,9 @@ public class MarketDeliveryPersonTest extends TestCase {
 	
 	MockPerson deliveryPersonPerson;
 	MarketDeliveryPersonRole deliveryPerson;
+	
+	MockPerson deliveryPersonPerson2;
+	MarketDeliveryPersonRole deliveryPerson2;
 	
 	MockPerson employeePerson;
 	MockMarketEmployee employee;
@@ -84,6 +88,13 @@ public class MarketDeliveryPersonTest extends TestCase {
 		deliveryPerson = new MarketDeliveryPersonRole(market, 0, 12);
 		deliveryPerson.setPerson(deliveryPersonPerson);
 		deliveryPerson.setMarket(market);
+		deliveryPerson.setActive();
+		
+		// Used for shift change
+		deliveryPersonPerson2 = new MockPerson("DeliveryPerson2"); 
+		deliveryPerson2 = new MarketDeliveryPersonRole(market, 12, 24);
+		deliveryPerson2.setPerson(deliveryPersonPerson2);
+		deliveryPerson2.setMarket(market);
 		
 		employeePerson = new MockPerson("Employee"); 
 		employee = new MockMarketEmployee();
@@ -98,13 +109,15 @@ public class MarketDeliveryPersonTest extends TestCase {
 		market.setCashier(cashier);
 		market.setManager(manager);
 		market.addEmployee(employee);
-		
+		market.addDeliveryPerson(deliveryPerson);
+	
 		orderItems = new HashMap<FOOD_ITEMS, Integer>();
 		orderItems.put(FOOD_ITEMS.chicken, 5);
 		orderItems.put(FOOD_ITEMS.pizza, 5);
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();
@@ -148,5 +161,39 @@ public class MarketDeliveryPersonTest extends TestCase {
 		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
 		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.getCustomerDelivery() == null);
 	}
+	
+	public void testShiftChange() {
+		deliveryPerson.msgDeliverOrder(customerDelivery, collectedItemsAll, order.getOrderId());
+		assertEquals("DeliveryPerson log should have 1 entry.", deliveryPerson.log.size(), 1);
+		assertTrue("DeliveryPerson log should have \"DeliveryPerson received msgDeliverOrder\". The last event logged is " + deliveryPerson.log.getLastLoggedEvent().toString(), deliveryPerson.log.containsString("DeliveryPerson received msgDeliverOrder"));
+		assertTrue("DeliveryPerson customerDelivery should be customerDelivery.", deliveryPerson.getCustomerDelivery() == customerDelivery);
+		for (FOOD_ITEMS item: collectedItemsAll.keySet()) {
+			assertTrue("deliveryPerson.collectedItems should be collectedItemsAll.", deliveryPerson.getCollectedItems().get(item) == collectedItemsAll.get(item));
+		}
+		assertTrue("deliveryPerson.orderId should be order.orderId.", deliveryPerson.getOrderId() == order.getOrderId());
+		
+		deliveryPerson.runScheduler();
+//		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1); // next actions execute too quickly
+//		assertTrue("Cashier log should have \"Cashier received msgDeliveringItems\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgDeliveringItems"));
+		assertEquals("CustomerDelivery log should have 1 entry.", customerDelivery.log.size(), 1);
+		assertTrue("CustomerDelivery log should have \"CustomerDelivery received msgHereIsOrderDelivery\". The last event logged is " + customerDelivery.log.getLastLoggedEvent().toString(), customerDelivery.log.containsString("CustomerDelivery received msgHereIsOrderDelivery"));
+		assertEquals("Cashier log should have 2 entries.", cashier.log.size(), 2);
+		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
+		assertTrue("DeliveryPerson customerDelivery should be null.", deliveryPerson.getCustomerDelivery() == null);
+		
+		assertTrue("DeliveryPerson should have workingState == Working.",  deliveryPerson.getWorkingState() == WorkingState.Working);
+		deliveryPerson.setInactive();
+		assertTrue("DeliveryPerson should have workingState == GoingOffShift.",  deliveryPerson.getWorkingState() == WorkingState.GoingOffShift);
+		
+		// Add another deliveryPerson
+		market.addDeliveryPerson(deliveryPerson2);
+		deliveryPerson2.setActive();
+		
+		assertEquals("DeliveryPerson should be active.", deliveryPerson.getActive(), true);
+		System.out.println(market.getDeliveryPeople().size());
+		deliveryPerson.runScheduler();
+		assertEquals("DeliveryPerson should be inactive.", deliveryPerson.getActive(), false);
+	}
+	
 }
 
