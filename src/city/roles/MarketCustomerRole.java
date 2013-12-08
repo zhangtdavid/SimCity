@@ -28,7 +28,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private MarketOrder order;
 
-	private Map<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
+	private HashMap<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
 	private int loc; // stall number of employee
 	private int bill;
 
@@ -39,7 +39,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	=====================================================================
 	public MarketCustomerRole(MarketOrder o) {
 		super(); // TODO
-        for (FOOD_ITEMS s: o.orderItems.keySet()) {
+        for (FOOD_ITEMS s: o.getOrderItems().keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
         order = o;
@@ -69,14 +69,14 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	@Override
-	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
+	public void msgHereIsOrderandBill(HashMap<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
 		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
         for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
         }
-        this.getPerson().getHome().addFood(receivedItems);
+        this.getPerson().getHome().setFood(this.getPerson(), receivedItems);
         this.bill = bill;
 		stateChanged();
 	}
@@ -151,7 +151,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	//		// TODO Auto-generated catch block
 	//		e.printStackTrace();
 	//	}
-		employee.msgHereIsMyOrder(this, order.orderItems, order.orderId);
+		employee.msgHereIsMyOrder(this, order.getOrderItems(), order.getOrderId());
 //		marketCustomerGui.DoStandInWaitingForServiceLine();		
 	}
 	
@@ -166,7 +166,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //	}
 		int payment = checkBill();
 		if (payment != -1) 
-			market.getCashier().msgHereIsPayment(order.orderId, payment);
+			market.getCashier().msgHereIsPayment(order.getOrderId(), payment);
 			this.getPerson().setCash(this.getPerson().getCash() - payment);
 	}
 	
@@ -236,8 +236,8 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public int checkBill() {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: order.orderItems.keySet()) {
-        	tempBill += order.orderItems.get(item)*market.getPrices().get(item);
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+        	tempBill += order.getOrderItems().get(item)*market.getPrices().get(item);
         }
 
         if (tempBill == bill)
@@ -248,7 +248,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
+		this.getPerson().printViaRole("MarketCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerRole " + this.getPerson().getName(), msg);
     }
 }

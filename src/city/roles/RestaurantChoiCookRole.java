@@ -102,9 +102,9 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
         
         for (FOOD_ITEMS i: marketOrder.keySet()) {
             Food f = findFood(i.toString());
-            f.amount += marketOrder.get(i);
-            print("New Inventory: " + f.item + " " + f.amount);
-            f.s = FoodOrderState.None;
+            f.setAmount(f.getAmount() + marketOrder.get(i));
+            print("New Inventory: " + f.getItem() + " " + f.getAmount());
+            f.setFoodOrderState(FoodOrderState.None);
         }
         stateChanged();
     }
@@ -216,12 +216,12 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 		print("Checking if I have ingredients");
 		//this is the internal food object corresponding to the choice in order (below).
 		Food tempFood = building.getFoods().get(o.getChoice());
-		if(tempFood.amount <= tempFood.low){
-			if(tempFood.s == FoodOrderState.None){ // if i haven't already ordered the food
+		if(tempFood.getAmount() <= tempFood.getLow()){
+			if(tempFood.getFoodOrderState() == FoodOrderState.None){ // if i haven't already ordered the food
 				//ask for food; use marketIndex, but it goes to infinity so take mod of markets.size();
 				//and we ask for the difference between the low and the capacity.
 				int outOfcounter = 0;
-				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.item) == true){ // true = Out of that food
+				while(markets.get(marketIndex%markets.size()).outOf.get(tempFood.getItem()) == true){ // true = Out of that food
 					marketIndex++;
 					outOfcounter++;
 					if(outOfcounter == markets.size()){
@@ -229,7 +229,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 						return false;
 					}
 				}
-				int t = tempFood.capacity-tempFood.low;
+				int t = tempFood.getCapacity()-tempFood.getLow();
 				synchronized(markets){
 					//markets.get(marketIndex%markets.size()).getMarket().msgHeresAnOrder(tempFood.item, tempFood.capacity-tempFood.low);
 					//give a MarketOrder to a MarketBuilding // THIS IS A NON NORM (V2)
@@ -238,11 +238,11 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 					forOrder.put(o.getChoice(), t);
 					//MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
 				}
-				tempFood.s = FoodOrderState.Pending;
-				print("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.item);
+				tempFood.setFoodOrderState(FoodOrderState.Pending);
+				print("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.getItem());
 			}
 		}
-		if(tempFood.amount == 0){ // if we happen to be at 0 of the stock...
+		if(tempFood.getAmount() == 0){ // if we happen to be at 0 of the stock...
 			synchronized(orders){
 				o.getWaiter().msgOutOfThisFood(o);
 				orders.remove(o); // if we can't cook it, remove this obj and tell waiter.
@@ -260,34 +260,34 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 		}
 		//this is the internal food object corresponding to the choice in order (below).
 		Food tempFood = building.getFoods().get(o.getChoice());
-		tempFood.amount--;
-		print("Cooking now: "+ tempFood.amount + " of item " + o.getChoice() +" left");
+		tempFood.setAmount(tempFood.getAmount() - 1);
+		print("Cooking now: "+ tempFood.getAmount() + " of item " + o.getChoice() +" left");
 		final RestaurantChoiOrder finalO = o;
 		if(o.getChoice() == FOOD_ITEMS.steak){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
-			}, tempFood.cookingTime);
+			}, tempFood.getCookingTime());
 		}else if(o.getChoice() == FOOD_ITEMS.pizza){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
-			}, tempFood.cookingTime);
+			}, tempFood.getCookingTime());
 		}else if(o.getChoice() == FOOD_ITEMS.chicken){
 			
 			timer.schedule(new TimerTask() {
 				public void run() {      
 					msgFoodsDone(finalO);
 				}
-			}, tempFood.cookingTime);
+			}, tempFood.getCookingTime());
 		}else if(o.getChoice() == FOOD_ITEMS.salad){
 			timer.schedule(new TimerTask() {
 				public void run() {
 					msgFoodsDone(finalO);
 				}
-			}, tempFood.cookingTime);
+			}, tempFood.getCookingTime());
 		}
 		return true; // <<why? lol
 	}
@@ -405,7 +405,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 	
     private Food findFood(String choice) {
         for(Food f: building.getFoods().values()){
-            if(f.item.equals(choice)) {
+            if(f.getItem().equals(choice)) {
                 return f;
             }
         }
@@ -435,7 +435,6 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
     
     @Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCookRole " + this.getPerson().getName(), msg);
     }
     

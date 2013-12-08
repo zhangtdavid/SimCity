@@ -11,30 +11,42 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
 	
-	private CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
-	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
-	private Car myCar; // Car this person is getting into
-	private BuildingInterface destination; // Building this car is going to
-	// private CarPassengerGui myGui; // GUI for animation
+	private CarPassengerState myState = CarPassengerState.NOTDRIVING; 	// State of passenger
+	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; 		// Event of passenger
+	private Car myCar; 													// Car this person is getting into
+	private BuildingInterface destination; 
 	
 	// Constructor
 	
-	public CarPassengerRole(Car c, BuildingInterface dest_) { // Pass in the person and car this role is assigned to
-		myCar = c;
-		destination = dest_;
+	/**
+	 * Constructs a CarPassengerRole for a PersonAgent. 
+	 * 
+	 * PersonAgent does not keep these roles after they're used once.
+	 * 
+	 * @param c The CarAgent that this role will be "driving"
+	 * @param destination The destination to travel to
+	 */
+	public CarPassengerRole(Car c, BuildingInterface destination) {
+		this.myCar = c;
+		this.destination = destination;
 	}
 	
 	// Messages
 
+	/**
+	 * From animation, telling this role car is ready to drive
+	 */
 	@Override
-	public void msgImAtCar() { // From animation, telling this role car is ready to drive
+	public void msgImAtCar() {
 		myEvent = CarPassengerEvent.ATCAR;
 		stateChanged();
 	}
 
+	/**
+	 * From car, telling this role he/she is at destination
+	 */
 	@Override
-	public void msgImAtDestination() { // From car, telling this role he/she is at destination
-		destination = null;
+	public void msgImAtDestination() { 
 		myEvent = CarPassengerEvent.ATDESTINATION;
 		stateChanged();
 	}
@@ -111,6 +123,7 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("CarPassenger", msg);
         AlertLog.getInstance().logMessage(AlertTag.CAR, "CarPassengerRole " + this.getPerson().getName(), msg);
     }
 	

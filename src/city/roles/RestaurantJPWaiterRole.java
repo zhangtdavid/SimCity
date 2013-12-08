@@ -38,7 +38,6 @@ public class RestaurantJPWaiterRole extends RestaurantJPWaiterBase {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPWaiterRole " + this.getPerson().getName(), msg);
     }
 }

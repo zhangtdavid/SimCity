@@ -238,7 +238,7 @@ public class RestaurantZhangHostRole extends JobRole implements RestaurantZhangH
 	
 	@Override
 	public void print(String msg) {
-		super.print(msg);
+		this.getPerson().printViaRole("RestaurantZhangHost", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangHostRole " + this.getPerson().getName(), msg);
     }
 

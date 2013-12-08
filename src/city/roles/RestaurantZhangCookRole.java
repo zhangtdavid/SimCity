@@ -213,8 +213,8 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		o.status = RestaurantZhangOrder.OrderStatus.cooking;
 		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
-		if(cookInventory.get(o.choice).amount  <= 0) {
-			print("Out of " + cookInventory.get(o.choice).item);
+		if(cookInventory.get(o.choice).getAmount()  <= 0) {
+			print("Out of " + cookInventory.get(o.choice).getItem());
 			mainMenu.remove(o.choice);
 			thisGui.removeFromPlatingArea(o.pos);
 			ordersToCook.remove(o);
@@ -224,7 +224,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 					return;
 				}
 			}
-			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).capacity - cookInventory.get(o.choice).amount, markets.get(0));
+			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).getCapacity() - cookInventory.get(o.choice).getAmount(), markets.get(0));
 			cookInvoiceList.add(tempInvoice);
 			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
 			marketCustomerDeliveryList.add(tempDeliveryRole);
@@ -232,7 +232,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			stateChanged();
 			return;
 		} else {
-			cookInventory.get(o.choice).amount--;
+			cookInventory.get(o.choice).setAmount(cookInventory.get(o.choice).getAmount() - 1);
 		}
 		// Cooking
 		thisGui.goToPlating();
@@ -249,7 +249,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				orderIsReady(tempOrder);
 			}
 		},
-		(long) cookInventory.get(tempOrder.choice).cookingTime);
+		(long) cookInventory.get(tempOrder.choice).getCookingTime());
 	}
 
 	private void orderIsReady(RestaurantZhangOrder o) {
@@ -386,7 +386,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		Iterator<Map.Entry<FOOD_ITEMS, Food>> foodIt = food.entrySet().iterator();
 		while(foodIt.hasNext()) {
 			Map.Entry<FOOD_ITEMS, Food> entry = foodIt.next();
-			cookInventory.put(entry.getValue().item, entry.getValue());
+			cookInventory.put(entry.getValue().getItem(), entry.getValue());
 		}
 	}
 
@@ -428,8 +428,8 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantZhangCook", msg);
 		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
-		super.print(msg);
     }
 	
 	@Override
@@ -457,13 +457,13 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			// amount = amount_;
 			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();
 			switch(food_) {
-			case "Steak":
+			case "steak":
 				invoice.put(FOOD_ITEMS.steak, amount_);
 				break;
-			case "Chicken":
+			case "chicken":
 				invoice.put(FOOD_ITEMS.chicken, amount_);
 				break;
-			case "Pizza":
+			case "pizza":
 				invoice.put(FOOD_ITEMS.pizza, amount_);
 				break;
 			}

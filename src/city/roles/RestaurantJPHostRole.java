@@ -219,7 +219,6 @@ public class RestaurantJPHostRole extends JobRole {
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPHostRole " + this.getPerson().getName(), msg);
     }
 

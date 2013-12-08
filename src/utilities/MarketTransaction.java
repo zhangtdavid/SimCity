@@ -9,18 +9,51 @@ import city.buildings.interfaces.Market;
  *
  */
 public class MarketTransaction {
-	public Market market;
-	public MarketOrder order;
-	public int bill;
-	public MarketTransactionState s;
+	private Market market;
+	private MarketOrder order;
+	private int bill;
+	private MarketTransactionState s;
+	public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
 	
 	public MarketTransaction (Market m, MarketOrder o) {
-		market = m;
-		order = new MarketOrder(o);
-        bill = 0;
-		s = MarketTransactionState.Pending;
+		setMarket(m);
+		setOrder(new MarketOrder(o));
+        setBill(0);
+		setMarketTransactionState(MarketTransactionState.Pending);
 	}
 	
-	public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
+	// Getters
+	public Market getMarket() {
+		return market;
+	}
+
+	public MarketOrder getOrder() {
+		return order;
+	}
+	
+	public int getBill() {
+		return bill;
+	}
+	
+	public MarketTransactionState getMarketTransactionState() {
+		return s;
+	}
+	
+	// Setters
+	public void setMarket(Market market) {
+		this.market = market;
+	}
+
+	public void setOrder(MarketOrder order) {
+		this.order = order;
+	}
+
+	public void setBill(int bill) {
+		this.bill = bill;
+	}
+
+	public void setMarketTransactionState(MarketTransactionState s) {
+		this.s = s;
+	}	
 }
 

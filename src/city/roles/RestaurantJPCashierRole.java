@@ -210,7 +210,6 @@ public class RestaurantJPCashierRole extends JobRole implements RestaurantJPCash
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCashierRole " + this.getPerson().getName(), msg);
     }
 	

@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.Map;
 
 import utilities.RestaurantChungOrder;
-import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.bases.Role;
 import city.bases.interfaces.RoleInterface;
@@ -27,12 +26,9 @@ public interface RestaurantChungCook extends RoleInterface {
 	public void msgAnimationAtPlating();
 	
 	// Getters
-	RestaurantChungRevolvingStand getRevolvingStand();
 	List<RestaurantChungOrder> getOrders();
 	List<Role> getMarketCustomerDeliveryRoles();
 	List<MyMarketOrder> getMarketOrders();	
-	// Setters
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand);
 
 	// Utilities
 	RestaurantChungWaiter findWaiter(RestaurantChungOrder order);

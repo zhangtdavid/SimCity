@@ -1,12 +1,13 @@
 package city.agents.interfaces;
 
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 
 import city.Application;
-import city.animations.interfaces.AnimatedPersonAtHome;
+import city.animations.interfaces.AnimatedPerson;
 import city.bases.interfaces.AgentInterface;
+import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
@@ -59,11 +60,11 @@ public interface Person extends AgentInterface {
 	public JobRoleInterface getOccupation();
 	public Resident getResidentRole();
 	public RoleInterface getRestaurantCustomerRole();
-	public ArrayList<RoleInterface> getRoles();
+	public List<RoleInterface> getRoles();
 	public STATES getState();
 	public PropertyChangeSupport getPropertyChangeSupport();
 	public int getRoomNumber();
-	public AnimatedPersonAtHome getAnimationAtHome();
+	public AnimatedPerson getAnimation();
 	
 	// Setters
 	
@@ -73,14 +74,15 @@ public interface Person extends AgentInterface {
 	public void setHome(ResidenceBuildingInterface h);
 	public void setName(String n);
 	public void setRoomNumber(int i);
-	public void setHomeAnimation(AnimatedPersonAtHome anim);
+	public void setAnimation(AnimatedPerson a);
 	public void setOccupation(JobRoleInterface r);
 	public void setResidentRole(Resident r);
+	public void setCurrentLocation(BuildingInterface b);
 	
 	// Utilities
 	
 	public void addRole(RoleInterface r);
-	public void acquireSemaphoreFromAnimation();
-	public void releaseSemaphoreFromAnimation();
+	public void forceSleep();
+	public void printViaRole(String role, String msg);
 	
 }

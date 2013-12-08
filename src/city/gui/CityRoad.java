@@ -4,17 +4,21 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.util.ArrayList;
+import java.util.List;
 
+import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.bases.Animation;
+import city.bases.interfaces.AnimationInterface;
 import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
-	
+
 	// Data
 	public enum STOPLIGHTTYPE{HORIZONTALON, HORIZONTALOFF, VERTICALON, VERTICALOFF};
-	
+
 	protected int xVelocity;
 	protected int yVelocity;
 	protected int xOrigin;
@@ -22,15 +26,17 @@ public class CityRoad extends CityViewBuilding {
 	protected int width;
 	protected int height;
 	protected Color laneColor;
-	
+
 	protected Animation vehicle = null;
 	protected CityRoad nextRoad;
 	protected boolean isHorizontal;
 	protected boolean isRedLight = false;
 	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
-	
+
+	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
+
 	// Constructor
-	
+
 	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc) {
 		super(xo, yo, lc);
 		width = w;
@@ -45,7 +51,7 @@ public class CityRoad extends CityViewBuilding {
 		//Make the lane surface
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
 	}
-	
+
 	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc, STOPLIGHTTYPE spotLightType) {
 		super(xo, yo, lc);
 		width = w;
@@ -62,9 +68,9 @@ public class CityRoad extends CityViewBuilding {
 		//Make the lane surface
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
 	}
-	
+
 	// Paint stuff
-	
+
 	@Override
 	public void paint( Graphics g2 ) {
 		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
@@ -75,13 +81,18 @@ public class CityRoad extends CityViewBuilding {
 		}
 		g2.setColor( laneColor );
 		((Graphics2D) g2).fill( rectangle );
-		
+
 		if(vehicle == null) 
 			return;
 		double x = 0;
 		double y = 0;
 		double vWidth = 0;
 		double vHeight = 0;
+		// Check for pedestrians at intersection
+		for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
+			if(sidewalksAtIntersection.getCurrentOccupant() != null)
+				return;
+		}
 		if(vehicle instanceof CarAnimation) {
 			vehicle = (CarAnimation) vehicle;
 			if(((CarAnimation) vehicle).getEndRoad() == this) {
@@ -90,7 +101,11 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
-				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON) && ((CarAnimation)vehicle).getXPos() == xOrigin && ((CarAnimation)vehicle).getYPos() == yOrigin)) {
+					for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
+						if(sidewalksAtIntersection.getCurrentOccupant() != null)
+							return;
+					}
 					((CarAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 					((CarAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 				}
@@ -106,7 +121,11 @@ public class CityRoad extends CityViewBuilding {
 				return;
 			}
 			if(nextRoad.vehicle == null) {
-				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON))) {
+				if(!(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON) && ((BusAnimation)vehicle).getXPos() == xOrigin && ((BusAnimation)vehicle).getYPos() == yOrigin)) {
+					for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
+						if(sidewalksAtIntersection.getCurrentOccupant() != null)
+							return;
+					}
 					((BusAnimation) vehicle).setXPos(vehicle.getXPos() + xVelocity);
 					((BusAnimation) vehicle).setYPos(vehicle.getYPos() + yVelocity);
 				}
@@ -139,35 +158,60 @@ public class CityRoad extends CityViewBuilding {
 
 	@Override
 	public void updatePosition() { };
-	
-	 // Getters
-	
+
+	// Getters
+
 	public CityRoad getNextRoad() {
 		return nextRoad;
 	}
-	
+
 	public Animation getVehicle() {
 		return vehicle;
 	}
-	
+
 	public boolean getHorizontal() {
 		return isHorizontal;
 	}
-	
+
 	public boolean isRedLight() {
 		return isRedLight;
 	}
-	
+
 	public STOPLIGHTTYPE getStopLightType() {
 		return stopLightType;
 	}
-	
+
+	public List<CitySidewalk> getIntersectionSidewalks() {
+		return intersectionSidewalks;
+	}
+
+	public boolean isWalkerAt(int x, int y) {
+		if(Application.sidewalks == null || Application.trafficControl == null)
+			return false;
+		List<AnimationInterface> walkersList = Application.sidewalks.getAllWalkers();
+		for(AnimationInterface a : walkersList) {
+			int walkerSize = (int)(Application.sidewalks.getSidewalkSize());
+			Rectangle walkerRect = new Rectangle(a.getXPos(), a.getYPos(), walkerSize, walkerSize);
+			if(walkerRect.intersects(new Rectangle(x, y, height, width)))
+				return true;
+		}
+		return false;
+		/*if(Application.sidewalks.isWalkerAt(x, y) ||
+				Application.sidewalks.isWalkerAt(x + (int)(Application.sidewalks.getSidewalkSize()), y) ||
+				Application.sidewalks.isWalkerAt(x, y + (int)(Application.sidewalks.getSidewalkSize())) ||
+				Application.sidewalks.isWalkerAt(x + (int)(Application.sidewalks.getSidewalkSize()),
+						y + (int)(Application.sidewalks.getSidewalkSize())))
+			return true;
+		else
+			return false;*/
+	}
+
 	// Setters
-	
+
 	public void setNextRoad( CityRoad r ) {
 		nextRoad = r;
 	}
-	
+
 	public boolean setVehicle( Animation v ) {
 		if(vehicle == null) {
 			vehicle = v;
@@ -175,9 +219,14 @@ public class CityRoad extends CityViewBuilding {
 		}
 		return false;
 	}
-	
+
 	public void setStopLightType(STOPLIGHTTYPE newType) {
 		stopLightType = newType;
 		isRedLight = true;
+	}
+
+	public void addIntersectionSidewalk(CitySidewalk intersectionSidewalk) {
+		if(!intersectionSidewalks.contains(intersectionSidewalk))
+			intersectionSidewalks.add(intersectionSidewalk);
 	}
 }

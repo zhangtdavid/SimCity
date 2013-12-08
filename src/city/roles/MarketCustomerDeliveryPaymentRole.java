@@ -18,7 +18,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 
 //  Data
 //	=====================================================================	
-	private EventLog log = new EventLog();
+	public EventLog log = new EventLog();
 	
 	private RestaurantBuildingInterface restaurant;
 	private Market market;
@@ -40,18 +40,18 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 //	---------------------------------------------------------------
 	@Override
 	public void msgHereIsBill(int bill, int id) {
-		log.add(new LoggedEvent("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
-		System.out.println("Market CustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
+		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
+		print("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
 		MarketTransaction mt = findMarketTransaction(id);
-    	mt.s = MarketTransactionState.Processing;
-		mt.bill = bill;
-		runScheduler(); // TODO need to fix this, change it to run when setActive
+    	mt.setMarketTransactionState(MarketTransactionState.Processing);
+		mt.setBill(bill);
+		stateChanged(); // TODO need to fix this, change it to run when setActive
 	}
 
 	@Override
 	public void msgPaymentReceived(int id) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgPaymentReceived from Market Cashier."));
-		System.out.println("Market customerDelivery received msgPaymentReceived from Market Cashier.");
+		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgPaymentReceived from MarketCashier."));
+		print("MarketCustomerDeliveryPayment received msgPaymentReceived from MarketCashier.");
 		//	MarketTransaction mt = findMarketTransaction(id);
 		//	removeMarketTransactionFromList(mt); // this might have cause when cashier is adding to the list
 	}
@@ -61,7 +61,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public boolean runScheduler() {
 		for (MarketTransaction mt : marketTransactions) {
-			if (mt.s == MarketTransactionState.Processing) {
+			if (mt.getMarketTransactionState() == MarketTransactionState.Processing) {
 				pay(mt);
 				return true;
 			}
@@ -74,9 +74,9 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	private void pay(MarketTransaction mt) {
 		int payment = checkBill(mt);
 		if (payment != -1) {
-			market.getCashier().msgHereIsPayment(mt.order.orderId, payment);
+			market.getCashier().msgHereIsPayment(mt.getOrder().getOrderId(), payment);
 			restaurant.setCash(restaurant.getCash()-payment);
-	    	mt.s = MarketTransactionState.WaitingForConfirmation;
+	    	mt.setMarketTransactionState(MarketTransactionState.WaitingForConfirmation);
 		}
 		// handle if bill is wrong
 //		else {
@@ -92,6 +92,10 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 		return market;
 	}
 	
+	public List<MarketTransaction> getMarketTransactions() {
+		return marketTransactions;
+	}
+	
 //  Setters
 //	=====================================================================	
 	@Override
@@ -104,12 +108,12 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public int checkBill(MarketTransaction mt) {
 		int tempBill = 0;
-        for (FOOD_ITEMS item: mt.order.orderItems.keySet()) {
-        	tempBill += mt.order.orderItems.get(item)*market.getPrices().get(item);
+        for (FOOD_ITEMS item: mt.getOrder().getOrderItems().keySet()) {
+        	tempBill += mt.getOrder().getOrderItems().get(item)*market.getPrices().get(item);
         }
 
-        if (tempBill == mt.bill)
-        	return mt.bill;
+        if (tempBill == mt.getBill())
+        	return mt.getBill();
         
 		return -1;
 	}	
@@ -117,7 +121,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	@Override
 	public MarketTransaction findMarketTransaction(int id) {
 		for(MarketTransaction mt : marketTransactions){
-			if(mt.order.orderId == id) {
+			if(mt.getOrder().getOrderId() == id) {
 				return mt;		
 			}
 		}
@@ -136,7 +140,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	
 	@Override
 	public void print(String msg) {
-        super.print(msg);
+		this.getPerson().printViaRole("MarketCustomerDeliveryPayment", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryPaymentRole " + this.getPerson().getName(), msg);
     }
 }

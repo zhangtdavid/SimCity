@@ -20,9 +20,6 @@ import city.roles.interfaces.RestaurantTimmsCashier;
 import city.roles.interfaces.RestaurantTimmsCustomer;
 import city.roles.interfaces.RestaurantTimmsWaiter;
 
-/**
- * Restaurant cashier agent.
- */
 public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTimmsCashier {
 	
 	// Data
@@ -76,6 +73,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	 */
 	@Override
 	public void msgComputeCheck(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, int money) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Check check = findCheck(c);
 		if (check == null) {
 			// This is the first time the customer has been here
@@ -101,6 +99,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	 */
 	@Override
 	public void msgMakePayment(RestaurantTimmsCustomer c, int money) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Check check = findCheck(c);
 		check.setAmountOffered(money);
 		print("msgMakePayment - offered $" + money + " for bill of $" + check.getAmount());
@@ -167,6 +166,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	 * @param c the queued Check object
 	 */
 	private void actComputeCheck(Check c) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		c.setState(State.unpaid);
 		print("actComputeCheck - $" + c.getAmount() + " owed.");
 		c.getWaiter().msgCheckReady();	
@@ -182,6 +182,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	 * @param c the unpaid Check object
 	 */
 	private void actAcceptPayment(Check c) {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		int change = (c.getAmountOffered() - c.getAmount());
 		if (change >= 0) {
 			print("actAcceptPayment - paid - " + c.getAmount());
@@ -221,6 +222,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.setCashier(this);
 		this.roles.add(rtb.getBankCustomer());
 		if (rtb.getBankCustomer().getActive()) {
@@ -253,6 +255,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsCashier", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCashierRole " + this.getPerson().getName(), msg);
     }
 	

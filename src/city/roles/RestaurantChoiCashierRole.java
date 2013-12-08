@@ -56,7 +56,6 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		building.getBankCustomer().setPerson(this.getPerson());
 		roles.add((Role) building.getBankCustomer());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-		
 	}
 
 	public RestaurantChoiCashierRole(){ // for testing mechanics
@@ -300,7 +299,6 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 
 	@Override
 	public void print(String msg) {
-        super.print(msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTCHOI, "RestaurantChoiCashierRole " + this.getPerson().getName(), msg);
     }
 

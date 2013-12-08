@@ -45,6 +45,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			if(startingRoad.setVehicle(this) == false && startingRoad.getVehicle() != this) {
 				return;
 			}
+			if(startingRoad.isWalkerAt(xPos, yPos)) {
+				return;
+			}
 			if (xPos < startingRoad.getX() && !startingRoad.getHorizontal())
 				xPos++;
 			else if (xPos > startingRoad.getX() && !startingRoad.getHorizontal())
@@ -59,6 +62,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		}
 		// Getting on the destination road
 		if(atDestinationRoad == true) {
+			if(endRoad.isWalkerAt(xPos, yPos)) {
+				return;
+			}
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
@@ -72,6 +78,8 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
+			currentBuilding = destinationBuilding;
+			destinationBuilding = null;
 			car.msgAtDestination();
 		}
 	}
@@ -95,7 +103,8 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		yDestination = destination.getCityViewBuilding().getY();
 		endRoad = Application.CityMap.findClosestRoad(destination);
 		atDestination = false;
-		this.car.print("In Destination: " + endRoad);
+		atDestinationRoad = false;
+		this.car.print("Going to destination " + destination);
 	}
 	
 	// Getters

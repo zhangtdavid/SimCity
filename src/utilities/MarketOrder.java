@@ -8,8 +8,8 @@ import city.Application.FOOD_ITEMS;
 public class MarketOrder {
 	public static int currentID = 0;
 	
-	public Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
-	public int orderId;
+	private Map<FOOD_ITEMS, Integer> orderItems = new HashMap<FOOD_ITEMS, Integer>();
+	private int orderId;
 	
 	public MarketOrder(Map<FOOD_ITEMS, Integer> o) {
         for (FOOD_ITEMS f: o.keySet()) {
@@ -24,5 +24,14 @@ public class MarketOrder {
         	orderItems.put(f, o.orderItems.get(f));
         }
         orderId = o.orderId;
+	}
+	
+	// Getters
+	public Map<FOOD_ITEMS, Integer> getOrderItems() {
+		return orderItems;
+	}
+	
+	public int getOrderId() {
+		return orderId;
 	}
 }

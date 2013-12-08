@@ -1,5 +1,6 @@
 package city.tests.bases.mocks;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 
 import utilities.EventLog;
@@ -129,14 +130,37 @@ public abstract class MockBuilding implements BuildingInterface {
 
 	@Override
 	public void removeOccupyingRole(RoleInterface r) {
-		// TODO Auto-generated method stub
-		
+		occupyingRoles.remove(r);
 	}
 
 	@Override
 	public boolean occupyingRoleExists(RoleInterface r) {
 		// TODO Auto-generated method stub
 		return false;
+	}
+	
+	@Override
+	public ArrayList<String> getWorkerRoleClassNames() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public String getBuildingClassName() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setBuildingClassName(String s) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void addWorkerRoleName(String r) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

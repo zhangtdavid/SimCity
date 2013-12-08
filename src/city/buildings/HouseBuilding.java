@@ -1,13 +1,6 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import city.agents.interfaces.Person;
-import city.animations.HouseResidentAnimation;
-import city.bases.Animation;
 import city.bases.ResidenceBuilding;
-import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.House;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.HousePanel;
@@ -17,61 +10,43 @@ import city.roles.interfaces.Resident;
 public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Data
-	private HousePanel panel; // reference to main gui
-	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
+	
+	private HousePanel panel;
+	public static final int NUMBER_OF_BEDS = 1;
 
 	// Constructor
-	
+
 	public HouseBuilding(String name, Landlord l, HousePanel panel, CityViewBuilding cityBuilding) {
-		super(name, panel, cityBuilding);
-		//Perhaps I should eliminate the landlord requirement, and have that be added separately? :/
-				this.setLandlord(l); // = WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE
-				// this.landlord.setResidence(this); 
-				// keep^ commented if landlord != one of the residents is an option
-				this.setHomeAnimationName("city.animations.RestaurantChoiCustomerAnimation");
-				this.panel = panel;
-				this.setCityViewBuilding(cityBuilding); 
+		super(name, panel, cityBuilding); 
+		this.setLandlord(l); // WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE // TODO Perhaps I should eliminate the landlord requirement, and have that be added separately?
+		this.panel = panel;
+		this.setCityViewBuilding(cityBuilding); 
 	}
 
 	// Getters
-
+	
+	@Override
+	public boolean getIsFull() {
+		return !residents.isEmpty();
+	}
+	
 	// Setters
 
+	// Utilities
+	
 	/**
-	 * This adds a Resident to a list of residents who live in this house. (1
-	 * person lives in this house)
+	 * This adds a Resident to a list of residents who live in this house. (only 1 person may live in a house)
 	 */
 	@Override
-	public void addResident(Resident resident) {
-		if (residents.isEmpty()) {
-			// ONLY ONE PERSON PER HOUSE~!
-			this.residents.add(resident);
-		} else {
-			// System.out.println("Someone already lives in this house (capacity = 1)");
+	public void addResident(Resident r) {
+		if (!residents.contains(r)) {
+			if (residents.isEmpty()) {
+				this.residents.add(r);
+				super.addResident(r);
+			} else {
+				throw new IllegalStateException("Only one person at a time may live in a house.");
+			}
 		}
 	}
 
-	// Utilities
-
-	@Override
-	public void addOccupyingRole(RoleInterface ri) {
-		// This doesn't apply for HouseBuilding because the PersonAgent acts as
-		// a PersonAgent in residences, not as Residents. 
-	}
-
-	/**
-	 * Needed to have Person p instead of RoleInterface because it's not a
-	 * Resident that's doing all the cooking and sleeping, it's a Person.
-	 * 
-	 * @param p
-	 *            The person to move within the house.
-	 */
-	@Override
-	public void addOccupyingPerson(Person p) {
-		HouseResidentAnimation anim = new HouseResidentAnimation(p);
-		p.setHomeAnimation(anim);
-		anim.setVisible(true);
-		panel.addVisualizationElement(anim);
-		
-	}
 }

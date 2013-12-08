@@ -321,7 +321,7 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 //	=====================================================================
 	@Override
 	public void print(String msg) {
-        super.print(msg);
+		this.getPerson().printViaRole("MarketEmployee", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketEmployeeRole " + this.getPerson().getName(), msg);
     }
 }

@@ -16,7 +16,6 @@ import city.animations.interfaces.RestaurantTimmsAnimatedCook;
 import city.bases.JobRole;
 import city.bases.Role;
 import city.buildings.MarketBuilding;
-import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.InternalMarketOrder;
 import city.buildings.RestaurantTimmsBuilding.MenuItem;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
@@ -36,7 +35,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	
 	private Integer speed;
 	private Timer timer = new Timer();
-	private RestaurantTimmsBuilding rtb; 
+	private RestaurantTimms rtb; 
 	private List<Role> roles = new ArrayList<Role>(); // For market orders
 	private MarketCustomerDelivery marketCustomerDeliveryRole;
 	private static final int MARKET_ORDER_SIZE = 5;
@@ -51,7 +50,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsCookRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
+	public RestaurantTimmsCookRole(RestaurantTimms b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);
@@ -66,14 +65,14 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 
 	@Override
 	public void msgCookOrder(RestaurantTimmsWaiter w, RestaurantTimmsCustomer c, Application.FOOD_ITEMS s) {
-		print("msgCookOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.addOrder(new Order(w, c, s));
 		stateChanged();
 	}
 	
 	@Override
 	public void msgPickUpOrder(RestaurantTimmsCustomer c) {
-		print("msgPickUpOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Order order = null;
 		for (Order o : rtb.getOrders()) {
 			if (o.getCustomer() == c) {
@@ -151,7 +150,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	// Actions
 	
 	private Boolean actConfirmOrder(Order o) {
-		print("actConfirmOrder");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Order order = o;
 		if (checkStore(order.getItem())) {
 			decrementMenuItem(order.getItem(), 1);
@@ -165,7 +164,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	}
 	
 	private void actCookOrder(final Order o) {
-		print("actCookOrder - " + o.getItem().toString());
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		o.setState(Order.State.cooking);
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -177,7 +176,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	}
 	
 	private void actOrderFromMarket(HashMap<FOOD_ITEMS, Integer> order) {
-		print("actOrderFromMarket");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		// Add the order to the restaurant's list
 		MarketOrder marketOrder = new MarketOrder(order);
@@ -185,7 +184,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 		rtb.addMarketOrder(internalMarketOrder);
 		
 		// Say that we're ordering the food
-		for (FOOD_ITEMS i : marketOrder.orderItems.keySet()) {
+		for (FOOD_ITEMS i : marketOrder.getOrderItems().keySet()) {
 			for (MenuItem m : rtb.getMenuItems()) {
 				if (m.getItem() == i) {
 					m.setState(State.onOrder);
@@ -213,6 +212,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.setCook(this);
 		shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedCook.class).setVisible(true);
@@ -253,6 +253,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsCook", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCookRole " + this.getPerson().getName(), msg);
     }
 

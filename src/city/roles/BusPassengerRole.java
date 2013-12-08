@@ -17,8 +17,6 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	private Bus myBus;
 	private BusStop busStopToWaitAt;
 	private BusStop destination;
-	// public AnimatedBus animation;
-	// private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	
@@ -134,6 +132,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("BusPassenger", msg);
         AlertLog.getInstance().logMessage(AlertTag.BUS, "BusPassengerRole " + this.getPerson().getName(), msg);
     }
 	

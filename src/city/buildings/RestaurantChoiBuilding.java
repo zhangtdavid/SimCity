@@ -78,6 +78,13 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		rand = 7+(int)Math.ceil(10*Math.random());
 		super.addFood(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 6));
+		
+		this.addWorkerRoleName("city.roles.RestaurantChoiCashierRole");
+		this.addWorkerRoleName("city.roles.RestaurantChoiCookRole");
+		this.addWorkerRoleName("city.roles.RestaurantChoiHostRole");
+		this.addWorkerRoleName("city.roles.RestaurantChoiWaiterDirectRole");
+		this.addWorkerRoleName("city.roles.RestaurantChoiWaiterQueueRole");
+		this.setBuildingClassName("city.buildings.interfaces.RestaurantChoi");
 	}
 
 	// Getters

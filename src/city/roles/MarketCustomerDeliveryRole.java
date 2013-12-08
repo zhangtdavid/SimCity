@@ -37,7 +37,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 		super(); // TODO
 		restaurant = r;
 		order = new MarketOrder(o);
-        for (FOOD_ITEMS s: o.orderItems.keySet()) {
+        for (FOOD_ITEMS s: o.getOrderItems().keySet()) {
         	receivedItems.put(s, 0); // initialize all values in receivedItems to 0
         }
         restaurantCashier = marketCustomerDeliveryPayment;
@@ -48,18 +48,18 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	@Override
 	public void setActive(){
-		// this.setActivityBegun();
-        state = MarketCustomerState.Ordering;
-        runScheduler(); // direct call to scheduler necessary for nested roles
+		super.setActive();
+		state = MarketCustomerState.Ordering;
+		stateChanged();
 	}
 	
 //  Messages
 //	=====================================================================	
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> collectedItems, int id) {
-		log.add(new LoggedEvent("Market CustomerDelivery received msgHereIsOrder from Market DeliveryPerson."));
-		System.out.println("Market customerDelivery received msgHereIsOrder from Market DeliveryPerson.");
-		if (order.orderId == id) {
+		log.add(new LoggedEvent("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson."));
+		print("MarketCustomerDelivery received msgHereIsOrderDelivery from MarketDeliveryPerson.");
+		if (order.getOrderId() == id) {
 	        for (FOOD_ITEMS item: collectedItems.keySet()) {
 	            receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map
 	        }
@@ -84,8 +84,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================	
 	private void callMarket() {
 		state = MarketCustomerState.None;
-		market.getManager().msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.orderItems, order.orderId);
-		super.setInactive(); // set role inactive after placing order
+		market.getManager().msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.getOrderItems(), order.getOrderId());
 	}
 
 //  Getters
@@ -103,6 +102,11 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 	@Override
 	public MarketCustomerState getState() {
 		return state;
+	}
+	
+	@Override
+	public MarketOrder getOrder() {
+		return order;
 	}
 	
 //  Setters
@@ -126,7 +130,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //	=====================================================================
 	@Override
 	public void print(String msg) {
-        super.print(msg);
+		this.getPerson().printViaRole("MarketCustomerDelivery", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketCustomerDeliveryRole " + this.getPerson().getName(), msg);
     }
 }

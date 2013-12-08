@@ -56,7 +56,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void msgRestaurantFull() {
-		print("msgRestaurantFull");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		 Double outcome = Math.random();
 		 // 50/50 whether customer decides to leave or stay
 		 if (outcome < 0.5) {
@@ -69,7 +69,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void msgGoToTable(RestaurantTimmsWaiter w, int position) {
-		print("msgGoToTable");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		waiter = w;
 		tableNumber = position;
 		state = State.goToTable;
@@ -78,7 +78,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void msgOrderFromWaiter() {
-		print("msgOrderFromWaiter");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (state != State.hasOrdered)
 			state = State.orderFromWaiter;
 		stateChanged();
@@ -86,7 +86,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void msgWaiterDeliveredFood(Application.FOOD_ITEMS stockItem) {
-		print("msgWaiterDeliveredFood");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.eatingItem = stockItem;
 		state = State.waiterDeliveredFood;
 		stateChanged();
@@ -94,32 +94,32 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void msgPaidCashier(int change) {
-		print("msgPaidCashier");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.getPerson().setCash(change);
 		customerHover.release();
 	}
 	
 	@Override
 	public void guiAtLine() {
-		print("guiAtLine");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atRestaurant.release();
 	}
 	
 	@Override
 	public void guiAtTable() {
-		print("guiAtTable");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atTable.release();
 	}
 	
 	@Override
 	public void guiAtCashier() {
-		print("guiAtCashier");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atCashier.release();
 	}
 	
 	@Override
 	public void guiAtExit() {
-		print("guiAtExit");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		atExit.release();
 	}
 	
@@ -166,7 +166,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	// Actions
 	
 	private void actGoToRestaurant() throws InterruptedException {
-		print("actGoToRestaurant");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToRestaurant();
 		atRestaurant.acquire();
 		rtb.getHost().msgWantSeat(this);
@@ -174,13 +174,13 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	private void actGoToTable() throws InterruptedException {
-		print("actGoToTable");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).goToTable(tableNumber);
 		atTable.acquire();
 	}
 	
 	private void actReadMenu() {
-		print("actReadMenu");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		timer.schedule(new TimerTask() {
 			public void run() {
 				waiter.msgWantFood(RestaurantTimmsCustomerRole.this);
@@ -190,7 +190,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	private void actOrderFromWaiter() throws InterruptedException {
-		print("actOrderFromWaiter");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		// If re-ordering, add the last order to the list of failed items
 		Boolean reOrder = false;
@@ -223,7 +223,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	private void actEatFood() {
-		print("actEatFood");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.getAnimation(RestaurantTimmsAnimatedCustomer.class).setPlate(eatingItem.toString());
 		timer.schedule(new TimerTask() {
 			public void run() {
@@ -236,7 +236,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	}
 	
 	private void actLeaveRestaurant() throws InterruptedException {
-		print("actLeaveRestaurant");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (state == State.longLine) {
 			// Left because line was too long
 			rtb.getHost().msgDoNotWantSeat(this);
@@ -282,6 +282,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.eatingItem = null;
 		this.orderItem = null;
 		this.state = State.goToRestaurant;
@@ -292,7 +293,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void setInactive() {
-		print("This should not happen.");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 	}
 	
 	@Override
@@ -302,6 +303,7 @@ public class RestaurantTimmsCustomerRole extends Role implements RestaurantTimms
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsCustomerRole " + this.getPerson().getName(), msg);
     }
 }

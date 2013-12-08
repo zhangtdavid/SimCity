@@ -6,7 +6,6 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
-import city.roles.MarketCashierRole.MyDeliveryPerson;
 import city.roles.MarketCashierRole.Transaction;
 
 public interface MarketCashier extends RoleInterface {
@@ -18,8 +17,6 @@ public interface MarketCashier extends RoleInterface {
 	// Constructor
 	
 	// Messages
-	public void msgNewDeliveryPerson(MarketDeliveryPerson d);
-	public void msgRemoveDeliveryPerson(MarketDeliveryPerson d);
 	public void msgComputeBill(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
 	public void msgComputeBill(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id);
 	public void msgHereIsPayment(int id, int money);
@@ -33,11 +30,9 @@ public interface MarketCashier extends RoleInterface {
 	// Getters
 	public Market getMarket();
 	List<Transaction> getTransactions();
-	List<MyDeliveryPerson> getDeliveryPeople();
 	
 	// Setters
 	public void setMarket(Market market);
-
 	
 	// Utilities
 	

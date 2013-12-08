@@ -30,7 +30,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	 * @param shiftStart the hour (0-23) that the role's shift begins
 	 * @param shiftEnd the hour (0-23) that the role's shift ends
 	 */
-	public RestaurantTimmsHostRole(RestaurantTimmsBuilding b, int shiftStart, int shiftEnd) {
+	public RestaurantTimmsHostRole(RestaurantTimms b, int shiftStart, int shiftEnd) {
 		super();
 		this.setWorkplace(b);
 		this.setSalary(RestaurantTimms.WORKER_SALARY);
@@ -44,20 +44,20 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 
 	@Override
 	public void msgWantSeat(RestaurantTimmsCustomer c) {
-		print("msgWantSeat");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.addCustomer(c, this);
 		stateChanged();
 	}
 	
 	@Override
 	public void msgDoNotWantSeat(RestaurantTimmsCustomer c) {
-		print("msgDoNotWantSeat");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.removeCustomer(c);
 	}
 	
 	@Override
 	public void msgLeaving(RestaurantTimmsCustomer c, int tableNumber) {
-		print("msgLeaving");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		for (RestaurantTimmsBuilding.Table table : rtb.getTables()) {
 			if (table.getNumber() == tableNumber) {
 				table.setUnoccupied();
@@ -68,7 +68,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	
 	@Override
 	public void msgAskForBreak(RestaurantTimmsWaiter w) {
-		print("msgAskForBreak");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		waiterWantingBreak = w;
 		stateChanged();
 	}
@@ -111,7 +111,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	// Actions
 	
 	private void actHandleBreakRequest() {
-		print("actHandleBreakRequest");
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		Integer waitersOnBreak = 0;
 		
 		for (RestaurantTimmsWaiter w : rtb.getWaiters()) {
@@ -134,6 +134,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	
 	@Override
 	public void setActive() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		rtb.setHost(this);
 		this.shiftOver = false;
 		this.getAnimation(RestaurantTimmsAnimatedHost.class).setVisible(true);
@@ -148,6 +149,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 	
 	@Override
 	public void print(String msg) {
+		this.getPerson().printViaRole("RestaurantTimmsHost", msg);
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTTIMMS, "RestaurantTimmsHostRole " + this.getPerson().getName(), msg);
     }
 
