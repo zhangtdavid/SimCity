@@ -710,7 +710,7 @@ public class PersonTest extends TestCase {
 		assertTrue("Person's BusPassengerRole should be active", person.getBusPassengerRole().getActive());
 		assertTrue("Person's BusPassengerRole should know that Person owns it", person.getBusPassengerRole().getPerson().equals(person));
 		assertEquals("Person's BusPassengerRole should be leaving from the bus stop nearest the person", CityMap.findClosestBuilding(BUILDING.busStop, person), person.getBusPassengerRole().getBusStopToWaitAt());
-		assertEquals("Person's BusPassengerRole should be riding to the bus stop nearest the person's workplace", CityMap.findClosestBuilding(BUILDING.busStop, workplace), person.getBusPassengerRole().getDestination());
+		assertEquals("Person's BusPassengerRole should be riding to the bus stop nearest the person's workplace", CityMap.findClosestBuilding(BUILDING.busStop, workplace), person.getBusPassengerRole().getBusStopDestination());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, BusPassenger
 		
 		// Run the scheduler for person.

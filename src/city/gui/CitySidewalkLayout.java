@@ -360,6 +360,7 @@ public class CitySidewalkLayout {
 				}
 			}
 		}
+		System.out.println("Could not find path");
 		return null;
 	}
 

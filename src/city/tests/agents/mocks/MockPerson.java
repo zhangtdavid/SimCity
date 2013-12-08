@@ -772,7 +772,7 @@ public class MockPerson extends MockAgent implements Person {
 				// atDestination.acquire();
 				// Note: bus stop should set person's location to "null" when they get on the bus
 				setCurrentLocation(b);
-				busPassengerRole = new BusPassengerRole(d, b);
+				busPassengerRole = new BusPassengerRole(d, b, destination);
 				busPassengerRole.setPerson(this);
 				busPassengerRole.setActive();
 				this.addRole(busPassengerRole);
@@ -806,7 +806,7 @@ public class MockPerson extends MockAgent implements Person {
 				}
 			} else if (busPassengerRole != null && busPassengerRole != null) {
 				if(!busPassengerRole.getActive()) {
-					setCurrentLocation(busPassengerRole.getDestination());
+					setCurrentLocation(busPassengerRole.getBusStopDestination());
 					removeRole(busPassengerRole);
 					busPassengerRole = null;
 					return true;

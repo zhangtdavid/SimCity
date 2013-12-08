@@ -6,6 +6,7 @@ import junit.framework.TestCase;
 import city.agents.BusAgent;
 import city.animations.interfaces.AnimatedBus;
 import city.buildings.BusStopBuilding;
+import city.buildings.RestaurantZhangBuilding;
 import city.gui.exteriors.CityViewBusStop;
 import city.gui.interiors.BusStopPanel;
 import city.roles.BusPassengerRole;
@@ -38,7 +39,7 @@ public class BusPassengerTest extends TestCase {
 		cityViewBusStopDestination = new CityViewBusStop(1, 1, "Destination Stop", Color.black, destinationPanel);
 		destination = new BusStopBuilding("destination", destinationPanel, cityViewBusStopDestination);
 		
-		passenger = new BusPassengerRole(destination, start);
+		passenger = new BusPassengerRole(destination, start, new RestaurantZhangBuilding(null, null, null));
 		passenger.setAnimation(new MockAnimatedBusPassenger(passenger));
 		
 		bus = new BusAgent(start, destination);
@@ -57,7 +58,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be NONE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.NONE, passenger.getEvent());
 		assertEquals("Passenger should have no bus. It doesn't.", null, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DRIVING, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DRIVING, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertTrue("Bus should have no passengers. It doesn't", bus.getPassengerList().isEmpty());
@@ -77,7 +78,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be ATSTOP. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.ATSTOP, passenger.getEvent());
 		assertEquals("Passenger should have no bus. It doesn't.", null, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DRIVING, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DRIVING, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertTrue("Bus should have no passengers. It doesn't", bus.getPassengerList().isEmpty());
@@ -97,7 +98,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be ATSTOP. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.ATSTOP, passenger.getEvent());
 		assertEquals("Passenger should have no bus. It doesn't.", null, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DRIVING, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DRIVING, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertTrue("Bus should have no passengers. It doesn't", bus.getPassengerList().isEmpty());
@@ -118,7 +119,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be BUSISHERE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.BUSISHERE, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be PICKINGPEOPLEUP, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.PICKINGPEOPLEUP, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.getPassengerList().size());
@@ -140,7 +141,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be BUSISHERE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.BUSISHERE, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be PICKINGPEOPLEUP, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.PICKINGPEOPLEUP, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.getPassengerList().size());
@@ -161,7 +162,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be BUSISHERE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.BUSISHERE, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DRIVING, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DRIVING, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.getPassengerList().size());
@@ -181,7 +182,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be ATDESTINATION. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.ATDESTINATION, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DROPPINGPASSENGERSOFF, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DROPPINGPASSENGERSOFF, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.getPassengerList().size());
@@ -203,7 +204,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be NONE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.NONE, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DROPPINGPASSENGERSOFF, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DROPPINGPASSENGERSOFF, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 1 passenger. It doesn't", 1, bus.getPassengerList().size());
@@ -225,7 +226,7 @@ public class BusPassengerTest extends TestCase {
 		assertEquals("Passenger event should be NONE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.NONE, passenger.getEvent());
 		assertEquals("Passenger should have a bus. It doesn't.", bus, passenger.getBus());
 		assertEquals("Passenger has the wrong starting bus stop.", start, passenger.getBusStopToWaitAt());
-		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getDestination());
+		assertEquals("Passenger has the wrong destination bus stop.", destination, passenger.getBusStopDestination());
 		assertEquals("Bus state should be DRIVING, but instead it's " + bus.getState().name(), BusAgent.BUSSTATE.DRIVING, bus.getState());
 		assertEquals("Bus event should be ATSTOP, but instead it's " + bus.getEvent().name(), BusAgent.BUSEVENT.ATSTOP, bus.getEvent());
 		assertEquals("Bus should have 0 passengers. It doesn't", 0, bus.getPassengerList().size());

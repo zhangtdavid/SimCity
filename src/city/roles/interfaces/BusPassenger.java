@@ -25,13 +25,14 @@ public interface BusPassenger extends RoleInterface {
 	
 	// Getters
 	
-	public BuildingInterface getDestination(); 
+	public BuildingInterface getBusStopDestination(); 
 	public BuildingInterface getBusStopToWaitAt();
 	public Bus getBus();
 	public BUSPASSENGERSTATE getState();
 	public BUSPASSENGEREVENT getEvent();
 	public void msgImAtDestination();
 	public void print(String string);
+	BuildingInterface getDestination();
 	
 	// Setters
 	
