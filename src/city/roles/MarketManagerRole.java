@@ -27,8 +27,6 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 
 	private boolean itemsLow;
 	
-
-
 	private WorkingState workingState = WorkingState.Working;
 	
 //	Constructor
@@ -63,7 +61,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
-			System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
+			print("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
 			market.getCustomers().add(new MyMarketCustomer(c));
 			stateChanged();
 		}
@@ -75,7 +73,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
-			System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
+			print("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
 			market.getCustomers().add(new MyMarketCustomer(c, cPay, o, id));
 			stateChanged();
 		}
@@ -86,7 +84,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee."));
-		System.out.println("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
+		print("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
 		MyMarketEmployee tempEmployee = market.findEmployee(e);
 		tempEmployee.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.GettingOrder);
 		stateChanged();
@@ -95,7 +93,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
-		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
+		print("Market Manager received msgIAmAvailableToAssist from Market Employee.");
 		MyMarketEmployee tempEmployee = market.findEmployee(e);
 		tempEmployee.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.Available);
 		stateChanged();
@@ -104,7 +102,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgItemLow() {
 		log.add(new LoggedEvent("Market Manager received msgItemLow from Market Employee."));
-		System.out.println("Market Manager received msgItemLow from Market Employee.");
+		print("Market Manager received msgItemLow from Market Employee.");
 		itemsLow = true;
 		stateChanged();
 	}

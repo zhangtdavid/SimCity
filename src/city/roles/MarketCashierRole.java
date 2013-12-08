@@ -61,7 +61,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		print("MarketCashier received msgComputeBill from MarketEmployee.");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
-			stateChanged();			
+			stateChanged();
 		}
 		// TODO inform sender of inactivity
 	}
@@ -163,7 +163,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			}
 		}
 		
-		if (workingState == WorkingState.NotWorking)
+		if (workingState == WorkingState.NotWorking && transactions.size() == 0)
 			super.setInactive();
 		
 		return blocking;
@@ -230,6 +230,11 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public List<Transaction> getTransactions() {
 		return transactions;
+	}
+	
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
 	}
 	
 //  Setters

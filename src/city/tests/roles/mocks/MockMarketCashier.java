@@ -85,4 +85,10 @@ public class MockMarketCashier extends MockRole implements MarketCashier {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public WorkingState getWorkingState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

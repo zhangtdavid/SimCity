@@ -7,6 +7,7 @@ import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
 import city.roles.MarketCashierRole.Transaction;
+import city.roles.interfaces.MarketCashier.WorkingState;
 
 public interface MarketCashier extends RoleInterface {
 
@@ -30,6 +31,7 @@ public interface MarketCashier extends RoleInterface {
 	// Getters
 	public Market getMarket();
 	List<Transaction> getTransactions();
+	WorkingState getWorkingState();
 	
 	// Setters
 	public void setMarket(Market market);
