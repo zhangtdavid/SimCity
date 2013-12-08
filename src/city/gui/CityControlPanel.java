@@ -5,12 +5,18 @@ import java.awt.Dimension;
 import javax.swing.JPanel;
 import javax.swing.JTabbedPane;
 
+import city.Application;
 import city.gui.tabs.AddBuildingTab;
 import city.gui.tabs.AddPersonTab;
 import city.gui.tabs.EditBuildingTab;
 import city.gui.tabs.EditPersonTab;
 import city.gui.tabs.ScenariosTab;
 import city.gui.tabs.TraceTab;
+
+import java.awt.event.FocusAdapter;
+import java.awt.event.FocusEvent;
+import java.awt.event.ComponentAdapter;
+import java.awt.event.ComponentEvent;
 
 public class CityControlPanel extends JPanel {
 
@@ -47,6 +53,12 @@ public class CityControlPanel extends JPanel {
 		tabbedPane.addTab("Edit Buildings", null, editBuildingsTab);
 		
 		addPersonTab = new AddPersonTab(mf);
+		addPersonTab.addComponentListener(new ComponentAdapter() {
+			@Override
+			public void componentShown(ComponentEvent arg0) {
+				Application.getMainFrame().CP.addPersonTab.prepareFormForUse();
+			}
+		});
 		tabbedPane.addTab("Add Person", null, addPersonTab);
 		
 		editPersonTab = new EditPersonTab(mf);

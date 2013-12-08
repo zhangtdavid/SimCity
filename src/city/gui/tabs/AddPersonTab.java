@@ -1,5 +1,6 @@
 package city.gui.tabs;
 
+import java.awt.BorderLayout;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
@@ -11,28 +12,29 @@ import java.text.Format;
 import java.text.NumberFormat;
 
 import javax.swing.BoxLayout;
-import javax.swing.ComboBoxModel;
+import javax.swing.ButtonGroup;
 import javax.swing.DefaultComboBoxModel;
+import javax.swing.DefaultListCellRenderer;
+import javax.swing.JButton;
+import javax.swing.JCheckBox;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
 import javax.swing.JLabel;
+import javax.swing.JList;
 import javax.swing.JPanel;
+import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.SwingConstants;
 import javax.swing.border.EmptyBorder;
 
 import utilities.DataModel;
+import city.Application;
 import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.ResidenceBuildingInterface;
 import city.gui.MainFrame;
-import java.awt.Container;
-import javax.swing.JRadioButton;
-import javax.swing.JCheckBox;
-import javax.swing.SwingConstants;
-import javax.swing.ButtonGroup;
-import javax.swing.JButton;
-import java.awt.BorderLayout;
 
-public class AddPersonTab extends JPanel implements ActionListener{
+public class AddPersonTab extends JPanel {
 
 	private static final long serialVersionUID = 9166425422374406573L;
 	
@@ -43,8 +45,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 	private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
 	
 	private DataModel dataModel;
+	private DefaultComboBoxModel<ResidenceBuildingInterface> residenceComboBoxModel;
 	private DefaultComboBoxModel<String> jobComboBoxModel;
 	private DefaultComboBoxModel<BuildingInterface> workplaceComboBoxModel;
+	private ResidenceBuildingInterface residenceSelectedFromComboBox;
 	private String jobSelectedFromComboBox;
 	private BuildingInterface workplaceSelectedFromComboBox;
 	
@@ -59,10 +63,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 	private JLabel label_2;
 	private JPanel panelJob;
 	private JLabel label_3;
-	private JComboBox<String> comboBox;
+	private JComboBox<String> cbJob;
 	private JPanel panelWorkplace;
 	private JLabel label_4;
-	private JComboBox<BuildingInterface> comboBox_1;
+	private JComboBox<BuildingInterface> cbWorkplace;
 	private JPanel panelShift;
 	private JLabel label_5;
 	private JLabel label_6;
@@ -72,16 +76,16 @@ public class AddPersonTab extends JPanel implements ActionListener{
 	private JPanel panelTitle;
 	private JLabel label_8;
 	private JPanel panelCar;
-	private JPanel panelResidence;
+	private JPanel panelRenter;
 	private JRadioButton rdbtnCar;
 	private JRadioButton rdbtnNoCar;
-	private JRadioButton rdbtnHouse;
-	private JRadioButton rdbtnApartment;
 	private JCheckBox chckbxRenter;
 	private final ButtonGroup buttonGroupCar = new ButtonGroup();
-	private final ButtonGroup buttonGroupResidence = new ButtonGroup();
 	private JPanel panelCreate;
 	private JButton btnCreate;
+	private JPanel panelResidence;
+	private JComboBox<ResidenceBuildingInterface> cbResidence;
+	private JLabel lblResidence;
 	
 	//============================================================================//
 	// Constructor        
@@ -108,6 +112,7 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
 
 		// The ComboBoxModel is an object which stores what the ComboBox displays
+		this.residenceComboBoxModel = new DefaultComboBoxModel<ResidenceBuildingInterface>();
 		this.jobComboBoxModel = new DefaultComboBoxModel<String>();
 		this.workplaceComboBoxModel = new DefaultComboBoxModel<BuildingInterface>();
 		jobComboBoxModel.addElement("city.roles.BankManagerRole");
@@ -142,7 +147,7 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		jobComboBoxModel.addElement("city.roles.RestaurantZhangWaiterSharedDataRole");
 		
 		//--------------------------------------//
-		//        
+		// Configure person 
 		//--------------------------------------//
 		
 		panelTitle = new JPanel();
@@ -160,6 +165,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		label_8.setMaximumSize(new Dimension(140, 20));
 		label_8.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelTitle.add(label_8);
+		
+		//--------------------------------------//
+		// Name    
+		//--------------------------------------//
 		
 		panelName = new JPanel();
 		panelName.setPreferredSize(new Dimension(300, 30));
@@ -183,6 +192,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		textField.setColumns(10);
 		panelName.add(textField);
 		
+		//--------------------------------------//
+		// Cash       
+		//--------------------------------------//
+		
 		panelCash = new JPanel();
 		panelCash.setPreferredSize(new Dimension(300, 30));
 		panelCash.setMinimumSize(new Dimension(300, 30));
@@ -204,6 +217,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		formattedTextField.setMaximumSize(new Dimension(200, 20));
 		formattedTextField.setColumns(10);
 		panelCash.add(formattedTextField);
+		
+		//--------------------------------------//
+		// Car       
+		//--------------------------------------//
 		
 		panelCar = new JPanel();
 		panelCar.setPreferredSize(new Dimension(300, 30));
@@ -229,6 +246,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		rdbtnNoCar.setMaximumSize(new Dimension(100, 23));
 		panelCar.add(rdbtnNoCar);
 		
+		//--------------------------------------//
+		// Residence       
+		//--------------------------------------//
+		
 		panelResidence = new JPanel();
 		panelResidence.setPreferredSize(new Dimension(300, 30));
 		panelResidence.setMinimumSize(new Dimension(300, 30));
@@ -236,31 +257,55 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		add(panelResidence);
 		panelResidence.setLayout(new BoxLayout(panelResidence, BoxLayout.X_AXIS));
 		
-		rdbtnHouse = new JRadioButton("House");
-		rdbtnHouse.setFocusable(false);
-		buttonGroupResidence.add(rdbtnHouse);
-		rdbtnHouse.setPreferredSize(new Dimension(100, 23));
-		rdbtnHouse.setMinimumSize(new Dimension(100, 23));
-		rdbtnHouse.setMaximumSize(new Dimension(100, 23));
-		rdbtnHouse.setBorder(new EmptyBorder(0, 10, 0, 0));
-		panelResidence.add(rdbtnHouse);
+		lblResidence = new JLabel("Residence");
+		lblResidence.setBorder(new EmptyBorder(0, 10, 0, 0));
+		lblResidence.setPreferredSize(new Dimension(100, 16));
+		lblResidence.setMinimumSize(new Dimension(100, 16));
+		lblResidence.setMaximumSize(new Dimension(100, 16));
+		panelResidence.add(lblResidence);
 		
-		rdbtnApartment = new JRadioButton("Apartment");
-		rdbtnApartment.setFocusable(false);
-		buttonGroupResidence.add(rdbtnApartment);
-		rdbtnApartment.setPreferredSize(new Dimension(100, 23));
-		rdbtnApartment.setMinimumSize(new Dimension(100, 23));
-		rdbtnApartment.setMaximumSize(new Dimension(100, 23));
-		panelResidence.add(rdbtnApartment);
+		cbResidence = new JComboBox<ResidenceBuildingInterface>(residenceComboBoxModel);
+		cbResidence.setFocusable(false);
+		cbResidence.setPreferredSize(new Dimension(190, 20));
+		cbResidence.setMinimumSize(new Dimension(190, 20));
+		cbResidence.setMaximumSize(new Dimension(190, 20));
+		cbResidence.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = -4988832297955832718L;
+			@Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (renderer instanceof JLabel && value instanceof BuildingInterface) {
+                    ((JLabel) renderer).setText(((BuildingInterface) value).getName());
+                }
+                return renderer;
+            }
+        });
+		panelResidence.add(cbResidence);
+		
+		//--------------------------------------//
+		// Renter       
+		//--------------------------------------//
+		
+		panelRenter = new JPanel();
+		panelRenter.setPreferredSize(new Dimension(300, 30));
+		panelRenter.setMinimumSize(new Dimension(300, 30));
+		panelRenter.setMaximumSize(new Dimension(300, 30));
+		add(panelRenter);
+		panelRenter.setLayout(new BoxLayout(panelRenter, BoxLayout.X_AXIS));
 		
 		chckbxRenter = new JCheckBox("Is a renter?");
+		chckbxRenter.setBorder(new EmptyBorder(0, 10, 0, 0));
 		chckbxRenter.setFocusable(false);
-		chckbxRenter.setPreferredSize(new Dimension(100, 23));
-		chckbxRenter.setMinimumSize(new Dimension(100, 23));
-		chckbxRenter.setMaximumSize(new Dimension(100, 23));
+		chckbxRenter.setPreferredSize(new Dimension(120, 23));
+		chckbxRenter.setMinimumSize(new Dimension(120, 23));
+		chckbxRenter.setMaximumSize(new Dimension(120, 23));
 		chckbxRenter.setHorizontalTextPosition(SwingConstants.LEFT);
 		chckbxRenter.setHorizontalAlignment(SwingConstants.LEFT);
-		panelResidence.add(chckbxRenter);
+		panelRenter.add(chckbxRenter);
+		
+		//--------------------------------------//
+		// Job Container      
+		//--------------------------------------//
 		
 		panelJobContainer = new JPanel();
 		panelJobContainer.setPreferredSize(new Dimension(300, 115));
@@ -268,6 +313,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		panelJobContainer.setMaximumSize(new Dimension(300, 115));
 		panelJobContainer.setLayout(new BoxLayout(panelJobContainer, BoxLayout.Y_AXIS));
 		add(panelJobContainer);
+		
+		//--------------------------------------//
+		// Set person's job       
+		//--------------------------------------//
 		
 		panelJobTitle = new JPanel();
 		panelJobTitle.setPreferredSize(new Dimension(300, 25));
@@ -285,6 +334,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		label_2.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelJobTitle.add(label_2);
 		
+		//--------------------------------------//
+		// Job       
+		//--------------------------------------//
+		
 		panelJob = new JPanel();
 		panelJob.setPreferredSize(new Dimension(300, 30));
 		panelJob.setMinimumSize(new Dimension(300, 30));
@@ -299,12 +352,22 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		label_3.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelJob.add(label_3);
 		
-		comboBox = new JComboBox<String>(jobComboBoxModel);
-		comboBox.setPreferredSize(new Dimension(190, 20));
-		comboBox.setMinimumSize(new Dimension(190, 20));
-		comboBox.setMaximumSize(new Dimension(190, 20));
-		comboBox.setFocusable(false);
-		panelJob.add(comboBox);
+		cbJob = new JComboBox<String>(jobComboBoxModel);
+		cbJob.setPreferredSize(new Dimension(190, 20));
+		cbJob.setMinimumSize(new Dimension(190, 20));
+		cbJob.setMaximumSize(new Dimension(190, 20));
+		cbJob.setFocusable(false);
+		cbJob.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		jobSelectedFromComboBox = (String) cbJob.getSelectedItem();
+        		updateWorkplaceComboBox();
+        	}
+        });
+		panelJob.add(cbJob);
+		
+		//--------------------------------------//
+		// Workplace       
+		//--------------------------------------//
 		
 		panelWorkplace = new JPanel();
 		panelWorkplace.setPreferredSize(new Dimension(300, 30));
@@ -320,12 +383,27 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		label_4.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelWorkplace.add(label_4);
 		
-		comboBox_1 = new JComboBox<BuildingInterface>(workplaceComboBoxModel);
-		comboBox_1.setPreferredSize(new Dimension(190, 20));
-		comboBox_1.setMinimumSize(new Dimension(190, 20));
-		comboBox_1.setMaximumSize(new Dimension(190, 20));
-		comboBox_1.setFocusable(false);
-		panelWorkplace.add(comboBox_1);
+		cbWorkplace = new JComboBox<BuildingInterface>(workplaceComboBoxModel);
+		cbWorkplace.setPreferredSize(new Dimension(190, 20));
+		cbWorkplace.setMinimumSize(new Dimension(190, 20));
+		cbWorkplace.setMaximumSize(new Dimension(190, 20));
+		cbWorkplace.setFocusable(false);
+		cbWorkplace.setRenderer(new DefaultListCellRenderer() {
+			private static final long serialVersionUID = 7112080767015019155L;
+			@Override
+            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
+                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
+                if (renderer instanceof JLabel && value instanceof BuildingInterface) {
+                    ((JLabel) renderer).setText(((BuildingInterface) value).getName());
+                }
+                return renderer;
+            }
+        });
+		panelWorkplace.add(cbWorkplace);
+		
+		//--------------------------------------//
+		// Shift        
+		//--------------------------------------//
 		
 		panelShift = new JPanel();
 		panelShift.setPreferredSize(new Dimension(300, 30));
@@ -361,6 +439,10 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		spinner_1.setMaximumSize(new Dimension(40, 20));
 		panelShift.add(spinner_1);
 		
+		//--------------------------------------//
+		// Create       
+		//--------------------------------------//
+		
 		panelCreate = new JPanel();
 		panelCreate.setBorder(new EmptyBorder(10, 10, 0, 10));
 		panelCreate.setPreferredSize(new Dimension(300, 40));
@@ -376,9 +458,59 @@ public class AddPersonTab extends JPanel implements ActionListener{
 		btnCreate.setFont(getFont().deriveFont(Font.BOLD));
 		panelCreate.add(btnCreate);
 		
+		//--------------------------------------//
+		// Finish setup
+		//--------------------------------------//
+		
+		prepareFormForUse();
+		
 	}
-
-	public void actionPerformed(ActionEvent e) {
-		// TODO Create all actions for buttons/control components here
+	
+	//============================================================================//
+	// Utilities    
+    //============================================================================//
+	
+	//--------------------------------------//
+	// Update combo boxes
+	//--------------------------------------//
+	
+	private void updateResidenceComboBox() {
+		residenceComboBoxModel.removeAllElements();
+		for (BuildingInterface b : Application.CityMap.getBuildings()) {
+			if (b instanceof ResidenceBuildingInterface) {
+				ResidenceBuildingInterface r = (ResidenceBuildingInterface) b;
+				if (!r.getIsFull()) {
+					residenceComboBoxModel.addElement(r);
+				}
+			}
+		}
 	}
+	
+	private void updateWorkplaceComboBox() {
+		workplaceComboBoxModel.removeAllElements();
+		if (jobSelectedFromComboBox != null) {
+			for (BuildingInterface b : Application.CityMap.getBuildings()) {
+				if (b.getWorkerRoleClassNames().contains(jobSelectedFromComboBox)) {
+					workplaceComboBoxModel.addElement(b);
+				}
+			}
+		}
+	}
+	
+	//--------------------------------------//
+	// Clear the form / make it ready again
+	//--------------------------------------//
+	
+	public void prepareFormForUse() {
+		textField.setText("");
+		formattedTextField.setText("");
+		buttonGroupCar.clearSelection();
+		updateResidenceComboBox();
+		chckbxRenter.setSelected(false);
+		cbJob.setSelectedIndex(0);
+		updateWorkplaceComboBox();
+		spinner.setValue(0);
+		spinner_1.setValue(0);
+	}
+	
 }

@@ -117,7 +117,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		// Role Scheduler
 		boolean blocking = false;
 		if (market.getBankCustomer().getActive() && market.getBankCustomer().getActivity()) {
-			print("here");
 			blocking  = true;
 			boolean activity = market.getBankCustomer().runScheduler();
 			if (!activity) {

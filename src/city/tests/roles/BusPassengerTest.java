@@ -11,6 +11,7 @@ import city.gui.interiors.BusStopPanel;
 import city.roles.BusPassengerRole;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.animations.mocks.MockAnimatedBus;
+import city.tests.animations.mocks.MockAnimatedBusPassenger;
 
 public class BusPassengerTest extends TestCase {
 	BusStopPanel startPanel = new BusStopPanel(Color.black);
@@ -38,6 +39,7 @@ public class BusPassengerTest extends TestCase {
 		destination = new BusStopBuilding("destination", destinationPanel, cityViewBusStopDestination);
 		
 		passenger = new BusPassengerRole(destination, start);
+		passenger.setAnimation(new MockAnimatedBusPassenger(passenger));
 		
 		bus = new BusAgent(start, destination);
 		anim = new MockAnimatedBus(bus);
@@ -132,6 +134,7 @@ public class BusPassengerTest extends TestCase {
 		assertFalse("Bus's scheduler should have returned false, but didn't", bus.runScheduler());
 		
 		// Step 4: run the passenger's scheduler
+		passenger.msgImAtDestination();
 		assertTrue("Passenger scheduler did not return true.", passenger.runScheduler());
 		assertEquals("Passenger state should be ONBUS. Instead it's " + passenger.getState().name(), BusPassengerRole.BUSPASSENGERSTATE.ONBUS, passenger.getState());
 		assertEquals("Passenger event should be BUSISHERE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.BUSISHERE, passenger.getEvent());
@@ -194,6 +197,7 @@ public class BusPassengerTest extends TestCase {
 		assertFalse("Bus's scheduler should have returned false, but didn't", bus.runScheduler());
 		
 		// Step 7 run the person's scheduler
+		passenger.msgImAtDestination();
 		assertTrue("Passenger scheduler did not return true.", passenger.runScheduler());
 		assertEquals("Passenger state should be NOTBUSSING. Instead it's " + passenger.getState().name(), BusPassengerRole.BUSPASSENGERSTATE.NOTBUSSING, passenger.getState());
 		assertEquals("Passenger event should be NONE. Instead it's " + passenger.getEvent().name(), BusPassengerRole.BUSPASSENGEREVENT.NONE, passenger.getEvent());

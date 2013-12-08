@@ -7,7 +7,9 @@ import trace.AlertTag;
 import city.Application;
 import city.agents.interfaces.Bus;
 import city.animations.BusPassengerAnimation;
+import city.animations.interfaces.AnimatedBusPassenger;
 import city.bases.Role;
+import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.interfaces.BusStop;
 import city.roles.interfaces.BusPassenger;
@@ -21,7 +23,7 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	private Bus myBus;
 	private BusStop busStopToWaitAt;
 	private BusStop destination;
-	private BusPassengerAnimation animation;
+	private AnimatedBusPassenger animation;
 	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
@@ -151,6 +153,11 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public void setActive() {
 		super.setActive();
 		msgAtWaitingStop();
+	}
+	
+	@Override
+	public void setAnimation(AnimationInterface a) {
+		animation = (AnimatedBusPassenger) a;
 	}
 	
 	// Utilities
