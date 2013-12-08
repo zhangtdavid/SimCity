@@ -1,5 +1,7 @@
 package city.roles.interfaces;
 
+import java.util.List;
+
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.bases.interfaces.RoleInterface;
@@ -9,7 +11,7 @@ import city.roles.RestaurantChungCashierRole.Transaction;
 
 public interface RestaurantChungCashier extends RoleInterface {
 	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public enum TransactionState {None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost, Done};
+	public enum TransactionState {None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost};
 
 	// Messages
 	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order);
@@ -21,7 +23,6 @@ public interface RestaurantChungCashier extends RoleInterface {
 	
 	// Setters
 	void setRestaurant(RestaurantChung restaurant);
-	void setHost(RestaurantChungHost host);
 	void setMarketCustomerDeliveryPaymentPerson();
 	void setBankCustomerPerson();
 	
@@ -29,5 +30,6 @@ public interface RestaurantChungCashier extends RoleInterface {
 	int checkBill(MarketTransaction t);
 	Transaction findTransaction(RestaurantChungCustomer c);
 	MarketTransaction findMarketTransaction(int id);
-	void removeOrderFromList(Transaction transaction);
+	List<Transaction> getTransactions();
+	List<MarketTransaction> getMarketTransactions();
 }
