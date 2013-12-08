@@ -601,17 +601,9 @@ public class PersonAgent extends Agent implements Person {
 	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
-		Application.preventFoodNullPointers(this, (ResidenceBuilding)h); //when you test with homes, you should set food manually.
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		this.home = h;
 		this.home.addResident(this.getResidentRole());
-//		//Set animation for inside home. Both inherit the same type, so it's A-OK	
-//		if(h instanceof House){
-//			animation = new HouseResidentAnimation(this); 
-//		}
-//		else if(h instanceof Apt){
-//			animation = new AptResidentAnimation(this);
-//		}			
 	}
 
 	@Override

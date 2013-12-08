@@ -29,6 +29,7 @@ import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.Building;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
+import city.bases.interfaces.ResidenceBuildingInterface;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
@@ -118,8 +119,8 @@ public class Application {
 	public static void main(String[] args) {
 		// Open the animation GUI
 		try {
-			UIManager.setLookAndFeel("com.sun.java.swing.plaf.windows.WindowsLookAndFeel");
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
+			UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+			} catch (ClassNotFoundException | InstantiationException | IllegalAccessException | UnsupportedLookAndFeelException e) {
 			e.printStackTrace();
 		}
 		mainFrame = new MainFrame();
@@ -391,7 +392,7 @@ public class Application {
 		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
 		//this is literally the only place this works right now for some reason
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewApt cityViewHouseZhang1 = new CityViewApt(75,225, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try (75,225) for location (: and uncomment lines 869, 874.
 		//if you dont want this to block the road just move it to (325,325) or something
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
@@ -485,7 +486,7 @@ public class Application {
 		
 		// Create buildings
 		AptPanel rhp1Timms = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Timms = new CityViewApt(300, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
+		CityViewApt rhcv1Timms = new CityViewApt(430, 380, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
 		AptBuilding rhb1Timms = new AptBuilding("Timms Apt", null, rhp1Timms, rhcv1Timms);
 		createBuilding(rhp1Timms, rhcv1Timms, rhb1Timms);
 
@@ -565,8 +566,8 @@ public class Application {
 
 
 		// RESTAURANTCHOI----------------------------------------------------------------------------
-		MarketPanel marketPanelChoi1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarketChoi1 = new CityViewMarket(250, 450, "Choi Market 1", Color.orange, marketPanelChoi1);
+		MarketPanel marketPanelChoi1 = new MarketPanel(Color.gray);
+		CityViewMarket cityViewMarketChoi1 = new CityViewMarket(200, 430, "Choi Market 1", Color.orange, marketPanelChoi1);
 		MarketBuilding marketBuildingChoi1 = new MarketBuilding("Choi Market 1", marketPanelChoi1, cityViewMarketChoi1);
 		createBuilding(marketPanelChoi1, cityViewMarketChoi1, marketBuildingChoi1);
 
@@ -575,10 +576,20 @@ public class Application {
 		RestaurantChoiBuilding restaurantChoiBuilding1 = new RestaurantChoiBuilding("RestaurantChoi1", restaurantChoiPanel1, cityViewRestaurantChoi1);
 		createBuilding(restaurantChoiPanel1, cityViewRestaurantChoi1, restaurantChoiBuilding1);
 		
-		HousePanel rhp1Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse rhcv1Choi = new CityViewHouse(350, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
-		HouseBuilding rhb1Choi = new HouseBuilding("Choi House", null, rhp1Choi, rhcv1Choi);
+		AptPanel rhp1Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewApt rhcv1Choi = new CityViewApt(350, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
+		AptBuilding rhb1Choi = new AptBuilding("Apt Choi1", null, rhp1Choi, rhcv1Choi);
 		createBuilding(rhp1Choi, rhcv1Choi, rhb1Choi);
+		
+		AptPanel rhp2Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewApt rhcv2Choi = new CityViewApt(380, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp2Choi);
+		AptBuilding rhb2Choi = new AptBuilding("Apt Choi2", null, rhp2Choi, rhcv2Choi);
+		createBuilding(rhp2Choi, rhcv2Choi, rhb2Choi);
+		
+		HousePanel rhp3Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
+		HouseBuilding rhb3Choi = new HouseBuilding("House Choi1", null, rhp3Choi, rhcv3Choi);
+		createBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 		
 		// Create landlord
 		PersonAgent p0Choi = new PersonAgent("Landlord Choi", date);
@@ -617,12 +628,12 @@ public class Application {
 		p3Choi.setHome(rhb1Choi);
 		p4Choi.setHome(rhb1Choi);
 
-		p5Choi.setHome(rhb1Choi);
-		p6Choi.setHome(rhb1Choi);
-		p7Choi.setHome(rhb1Choi);
-		p8Choi.setHome(rhb1Choi);
-		p9Choi.setHome(rhb1Choi);
-		p10Choi.setHome(rhb1Choi);
+		p5Choi.setHome(rhb2Choi);
+		p6Choi.setHome(rhb2Choi);
+		p7Choi.setHome(rhb2Choi);
+		p8Choi.setHome(rhb2Choi);
+		p9Choi.setHome(rhb2Choi);
+		p10Choi.setHome(rhb3Choi);
 
 
 		// Landlord
@@ -1110,12 +1121,12 @@ public class Application {
 	 * @param person 
 	 * @param house 
 	 */
-	public static void preventFoodNullPointers(Person person, ResidenceBuilding house) {
+	public static void preventFoodNullPointers(Person person, ResidenceBuildingInterface house) {
 		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
-		items.put(FOOD_ITEMS.salad, 1);
-		items.put(FOOD_ITEMS.chicken, 1);
-		items.put(FOOD_ITEMS.steak, 1);
-		items.put(FOOD_ITEMS.pizza, 1); 
+		items.put(FOOD_ITEMS.salad, 0);
+		items.put(FOOD_ITEMS.chicken, 0);
+		items.put(FOOD_ITEMS.steak, 0);
+		items.put(FOOD_ITEMS.pizza, 0); 
 		house.setFood(person, items);
 	}
 }
