@@ -121,9 +121,9 @@ public class MockPerson extends MockAgent implements Person {
 		this.addRole(bankCustomerRole);
 	}
 	//full realism
-	public MockPerson(String name, Date startDate, AnimatedPerson animation, ResidenceBuildingInterface residence) {
+	public MockPerson(String str, Date startDate, AnimatedPerson animation, ResidenceBuildingInterface residence) {
 		super();
-		this.name = name;
+		this.name = str;
 		this.cash = 0;
 		this.hasEaten = false;
 		this.home = residence;
@@ -140,7 +140,7 @@ public class MockPerson extends MockAgent implements Person {
 		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
-		
+		residentRole.setPerson(this);
 		residence.addResident(residentRole);
 	}
 
@@ -632,14 +632,14 @@ public class MockPerson extends MockAgent implements Person {
 	@Override
 	public void setCar(Car c) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		getPropertyChangeSupport().firePropertyChange(CAR, this.car, c);
+		//getPropertyChangeSupport().firePropertyChange(CAR, this.car, c);
 		car = c;
 	}
 
 	@Override
 	public void setCash(int c) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
-		getPropertyChangeSupport().firePropertyChange(CASH, this.cash, c);
+		//getPropertyChangeSupport().firePropertyChange(CASH, this.cash, c);
 		this.cash = c;
 	}
 
@@ -650,12 +650,14 @@ public class MockPerson extends MockAgent implements Person {
 	 */
 	@Override
 	public void setHome(ResidenceBuildingInterface h) {
+		this.home = h;          
+		/*
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (this.home != null) {
 			this.home.removeResident(this.getResidentRole());
 		}
 		this.home = h;
-		this.home.addResident(this.getResidentRole());		
+		this.home.addResident(this.getResidentRole());		*/
 	}
 
 	@Override
@@ -665,7 +667,7 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void setName(String n) {
-		getPropertyChangeSupport().firePropertyChange(NAME, this.name, n);
+		//getPropertyChangeSupport().firePropertyChange(NAME, this.name, n);
 		this.name = n;
 	}
 
@@ -683,7 +685,7 @@ public class MockPerson extends MockAgent implements Person {
 	 * When the state changes, let the GUI know
 	 */
 	private void setState(STATES s) {
-		getPropertyChangeSupport().firePropertyChange(STATE, this.state, s);
+		//getPropertyChangeSupport().firePropertyChange(STATE, this.state, s);
 		this.state = s;
 	}
 
@@ -693,6 +695,8 @@ public class MockPerson extends MockAgent implements Person {
 
 	@Override
 	public void addRole(RoleInterface r) {
+		roles.add(r);
+		/*
 		boolean safeToContinue = true;
 		for (RoleInterface i : roles) {
 			if (i.getClass().equals(r.getClass())) {
@@ -705,7 +709,7 @@ public class MockPerson extends MockAgent implements Person {
 			r.setPerson(this); // Order is important here. Many roles expect to have a person set.
 			roles.add(r);
 			getPropertyChangeSupport().firePropertyChange(ROLES, null, r);
-		}
+		}*/
 	}
 
 	@Override
@@ -738,7 +742,7 @@ public class MockPerson extends MockAgent implements Person {
 
 	private void removeRole(RoleInterface r) {
 		roles.remove(r);
-		getPropertyChangeSupport().firePropertyChange(ROLES, r, null);
+		//getPropertyChangeSupport().firePropertyChange(ROLES, r, null);
 	}
 
 	/**
