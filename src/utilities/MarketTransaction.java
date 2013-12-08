@@ -13,7 +13,7 @@ public class MarketTransaction {
 	private MarketOrder order;
 	private int bill;
 	private MarketTransactionState s;
-	public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
+	public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation, Done};
 	
 	public MarketTransaction (Market m, MarketOrder o) {
 		setMarket(m);
