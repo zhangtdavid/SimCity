@@ -2,10 +2,12 @@ package utilities;
 
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.swing.Timer;
 
+import city.bases.interfaces.AnimationInterface;
 import city.gui.CityRoad;
 
 public class TrafficControl implements ActionListener {
@@ -61,5 +63,14 @@ public class TrafficControl implements ActionListener {
 			}
 		}
 		return closestRoad;
+	}
+	
+	public List<AnimationInterface> getAllVehicles() {
+		List<AnimationInterface> listToReturn = new ArrayList<AnimationInterface>();
+		for(CityRoad r : roads) {
+			if(r.getVehicle() != null)
+				listToReturn.add(r.getVehicle());
+		}
+		return listToReturn;
 	}
 }
