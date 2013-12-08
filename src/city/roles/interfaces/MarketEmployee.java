@@ -42,6 +42,7 @@ public interface MarketEmployee extends RoleInterface {
 	
 	// Setters
 	public void setMarket(Market market);
+	WorkingState getWorkingState();
 	
 	// Utilities
 	

@@ -92,7 +92,7 @@ public class MarketDeliveryPersonTest extends TestCase {
 		
 		// Used for shift change
 		deliveryPersonPerson2 = new MockPerson("DeliveryPerson2"); 
-		deliveryPerson2 = new MarketDeliveryPersonRole(market, 12, 24);
+		deliveryPerson2 = new MarketDeliveryPersonRole(market, 13, 24);
 		deliveryPerson2.setPerson(deliveryPersonPerson2);
 		deliveryPerson2.setMarket(market);
 		
@@ -190,7 +190,6 @@ public class MarketDeliveryPersonTest extends TestCase {
 		deliveryPerson2.setActive();
 		
 		assertEquals("DeliveryPerson should be active.", deliveryPerson.getActive(), true);
-		System.out.println(market.getDeliveryPeople().size());
 		deliveryPerson.runScheduler();
 		assertEquals("DeliveryPerson should be inactive.", deliveryPerson.getActive(), false);
 	}
