@@ -44,5 +44,7 @@ public interface RoleInterface {
 	public void setActivityFinished();
 	
 	// Utilities
+	
+	public void definitelyDead();
 
 }
