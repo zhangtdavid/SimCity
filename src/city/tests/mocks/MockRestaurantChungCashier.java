@@ -70,12 +70,6 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void setHost(RestaurantChungHost host) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setMarketCustomerDeliveryPaymentPerson() {
 		// TODO Auto-generated method stub
 		
@@ -119,6 +113,18 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 
 	@Override
 	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Transaction> getTransactions() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<MarketTransaction> getMarketTransactions() {
 		// TODO Auto-generated method stub
 		return null;
 	}

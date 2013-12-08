@@ -32,11 +32,10 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	Timer timer = new Timer();
 	
 	private RestaurantChung restaurant;
-	private RestaurantChungHost host;
 	
 	private List<Role> roles = new ArrayList<Role>();
-	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
+	private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 
 	WorkingState workingState = WorkingState.Working;
 	
@@ -218,6 +217,16 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
 	}
 	
+	@Override
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+	
+	@Override
+	public List<MarketTransaction> getMarketTransactions() {
+		return marketTransactions;
+	}
+	
 //	Setters
 //	=====================================================================		
 	@Override
@@ -230,11 +239,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public void setRestaurant(RestaurantChung restaurant) {
 		this.restaurant = restaurant;
-	}
-	
-	@Override
-	public void setHost(RestaurantChungHost host) {
-		this.host = host;
 	}
 	
 	@Override
