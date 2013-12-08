@@ -8,7 +8,6 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.bases.ResidenceBuilding;
 import city.bases.Role;
-import city.roles.interfaces.Landlord;
 import city.roles.interfaces.Resident;
 
 public class ResidentRole extends Role implements Resident {
@@ -16,7 +15,6 @@ public class ResidentRole extends Role implements Resident {
 	// Data
 
 	private STATE rstate = STATE.none;
-	private Landlord landlord;
 	private Date rentLastPaid;
 	private ResidenceBuilding house;
 
@@ -45,7 +43,7 @@ public class ResidentRole extends Role implements Resident {
 
 	@Override
 	public void payRent() {
-		landlord.msgHeresRent(house.getRent()); // pay rent
+		this.getPerson().getHome().getLandlord().msgHeresRent(house.getRent()); // pay rent to your house's landlord
 		this.getPerson().setCash((int)(this.getPerson().getCash()-house.getRent())); // lose $ for rent
 		if(house.getTotalCurrentMaintenance() != 0) {
 			// pay maintenance if needed
@@ -70,12 +68,7 @@ public class ResidentRole extends Role implements Resident {
 		dueDate.setTime(rentLastPaid.getTime() + RENT_DUE_INTERVAL);
 		return dueDate;
 	}
-	
-	@Override
-	public boolean isLandlord() {
-		return (landlord != null);
-	}
-	
+		
 	// Setters
 	
 	@Override
@@ -104,12 +97,6 @@ public class ResidentRole extends Role implements Resident {
 	@Override
 	public void setResidence(ResidenceBuilding b) {
 		house = b;
-	}
-
-	@Override
-	public void setLandlord(Landlord l) {
-		landlord = l;
-		
 	}
 	
 	@Override

@@ -373,7 +373,7 @@ public class Application {
 //		}
 		
 		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(100, 100, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
+		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(25, 25, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
 		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
 		createBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
 		
@@ -395,7 +395,7 @@ public class Application {
 //		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
 		
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(275,275, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try (75,225) for location until #66 is fixed (: and uncomment lines 869, 874.
 		//if you dont want this to block the road just move it to (325,325) or something
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
@@ -482,7 +482,7 @@ public class Application {
 		
 		// Create buildings
 		AptPanel rhp1Timms = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Timms = new CityViewApt(300, 430, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
+		CityViewApt rhcv1Timms = new CityViewApt(430, 400, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
 		AptBuilding rhb1Timms = new AptBuilding("Timms Apartment", null, rhp1Timms, rhcv1Timms);
 		createBuilding(rhp1Timms, rhcv1Timms, rhb1Timms);
 
@@ -588,7 +588,7 @@ public class Application {
 		rhb1Choi.setLandlord(p0r1Choi);
 		p0r1Choi.setActive();
 		model.addPerson(p0Choi);
-
+		
 		// Create people
 		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date, new PersonAnimation(), rhb1Choi);
 		PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date, new PersonAnimation(),rhb1Choi);
@@ -612,21 +612,6 @@ public class Application {
 		model.addPerson(p8Choi);
 		model.addPerson(p9Choi);
 		model.addPerson(p10Choi);
-
-		p0Choi.setHome(rhb3Choi); // 1 person per house
-		
-		p1Choi.setHome(rhb1Choi); // 5 persons per apt
-		p2Choi.setHome(rhb1Choi);
-		p3Choi.setHome(rhb1Choi);
-		p4Choi.setHome(rhb1Choi);
-		p5Choi.setHome(rhb1Choi);
-		
-		p6Choi.setHome(rhb2Choi);
-		p7Choi.setHome(rhb2Choi);
-		p8Choi.setHome(rhb2Choi);
-		p9Choi.setHome(rhb2Choi);
-		p10Choi.setHome(rhb2Choi);
-
 
 		// Landlord
 		RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(restaurantChoiBuilding1, 0, 24);
@@ -912,7 +897,7 @@ public class Application {
 //		p1Zhang.startThread();
 //		p2Zhang.startThread();
 //		p3Zhang.startThread();
-		p4Zhang.startThread();
+//		p4Zhang.startThread();
 //		c0Timms.startThread();
 //		c1Timms.startThread();
 //		c2Timms.startThread();
@@ -926,18 +911,19 @@ public class Application {
 
 
 		p0Choi.startThread();
-		p1Choi.startThread();
+/*		p1Choi.startThread();
 		p2Choi.startThread();
 		p3Choi.startThread();
-		p4Choi.startThread();
+		p4Choi.startThread();*/
 //		p5Choi.startThread();
 //		p6Choi.startThread();
 //		p7Choi.startThread();
 //		p8Choi.startThread();
 //		p9Choi.startThread();
 //		p10Choi.startThread();
-		
+	
 		c0Choi.startThread();
+		/*
 		c1Choi.startThread();
 		c2Choi.startThread();
 		c3Choi.startThread();
@@ -947,7 +933,7 @@ public class Application {
 		c7Choi.startThread();
 		c8Choi.startThread();
 		c9Choi.startThread();
-		c10Choi.startThread();
+		c10Choi.startThread();*/
 		/*
 		c0Chung.startThread();
 		c1Chung.startThread();
@@ -971,12 +957,13 @@ public class Application {
 //		c3JP.startThread();
 //		c4JP.startThread();
 //		
+		/*
 		for(int j = 0; j < 70; j++) {
 			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
 			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
-		}
+		}*/
 	}
 	
 	public static DataModel getModel() {

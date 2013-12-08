@@ -43,6 +43,7 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 			if (residents.isEmpty()) {
 				this.residents.add(r);
 				super.addResident(r);
+				r.getPerson().getAnimation().setVisible(true);
 			} else {
 				throw new IllegalStateException("Only one person at a time may live in a house.");
 			}

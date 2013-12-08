@@ -86,7 +86,6 @@ public class AptAnimationTest extends TestCase{
 		person.setCash(0); // so he doesn't go to market or restaurant
 		person.setRoomNumber(1);
 		resident.setPerson(person);
-		resident.setLandlord(landlord);
 
 		//And the house, which is the real deal.
 		Application.CityMap.addBuilding(BUILDING.house,apt);

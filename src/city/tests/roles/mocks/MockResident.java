@@ -80,11 +80,6 @@ public class MockResident extends MockRole implements Resident {
 	}
 	
 	@Override
-	public boolean isLandlord() {
-		return (landlord != null);
-	}
-	
-	@Override
 	public boolean rentIsDue() {
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(this.getPerson().getDate());
@@ -92,12 +87,6 @@ public class MockResident extends MockRole implements Resident {
 		c.setTime(getRentDueDate());
 		int due = c.get(Calendar.DAY_OF_YEAR);
 		return (day >= due);
-	}
-	
-	@Override
-	public void setLandlord(Landlord l) {
-		landlord = l;
-		
 	}
 	
 	@Override

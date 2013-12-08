@@ -26,13 +26,11 @@ public interface Resident extends RoleInterface {
 	// Getters
 	
 	public Date getRentDueDate();
-	public boolean isLandlord();
 	
 	// Setters
 	
 	public void setActive();
 	public void setResidence(ResidenceBuilding b);
-	public void setLandlord(Landlord l);
 	public void setRentLastPaid(Date d);
 	
 	// Utilities

@@ -27,29 +27,6 @@ public class MockLandlord extends MockRole implements Landlord{
 		mockcash += d;	
 		}
 
-	@Override
-	public void addResident(Resident r) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void removeResident(Resident r) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void changeLandlord(Resident r) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void setResidence(ResidenceBuilding b) {
-		// TODO Auto-generated method stub
-		
-	}
 
 	@Override
 	public void setRent(int d) {
@@ -67,6 +44,18 @@ public class MockLandlord extends MockRole implements Landlord{
 	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void addResidence(ResidenceBuilding b) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void removeResidence(ResidenceBuilding b) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

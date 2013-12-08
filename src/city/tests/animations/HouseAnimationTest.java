@@ -88,7 +88,6 @@ public class HouseAnimationTest extends TestCase {
 		resident.setPerson(person);
 		//person.addRole(resident);
 		//person.setHomeAnimation(homeAnimation);
-		resident.setLandlord(landlord);
 		//person.setOccupation(null); // jobless, but is landlord TODO why doesn't this work now? no jobless people?
 		
 		//And the house, which is the real deal.

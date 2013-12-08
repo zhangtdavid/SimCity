@@ -84,7 +84,6 @@ public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 		p.setCash(0); // so he doesn't go to market or restaurant
 		p.setRoomNumber(1);
 		resident.setPerson(p);
-		resident.setLandlord(landlord);
 		
 		//b = new RestaurantChoiBuilding("ff", panel);
 		rs = new RestaurantChoiRevolvingStand();

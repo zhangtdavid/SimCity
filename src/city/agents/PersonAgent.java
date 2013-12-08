@@ -104,9 +104,9 @@ public class PersonAgent extends Agent implements Person {
 		this.name = name;
 		this.cash = 0;
 		this.hasEaten = false;
-		this.home = residence;
 		this.currentLocation = residence;
 		this.animation = animation;
+		animation.setPerson(this);
 		this.lastAteAtRestaurant = new Date(startDate.getTime());
 		this.lastWentToSleep = new Date(startDate.getTime());
 		this.date = new Date(startDate.getTime());
@@ -120,6 +120,7 @@ public class PersonAgent extends Agent implements Person {
 		this.addRole(bankCustomerRole);
 		
 		residence.addResident(residentRole);
+		this.setHome(residence);
 	}
 
 	//==========//
@@ -630,9 +631,9 @@ public class PersonAgent extends Agent implements Person {
 	public void setHome(ResidenceBuildingInterface h) {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		if (this.home != null) {
-			this.home.removeResident(this.getResidentRole());
+			this.home.removeResident(this.getResidentRole()); // remove from past home
 		}
-		this.home = h;
+		this.home = h; // set new home
 		this.home.addResident(this.getResidentRole());		
 	}
 
