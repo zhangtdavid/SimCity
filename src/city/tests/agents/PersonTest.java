@@ -11,10 +11,12 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.agents.interfaces.Person.STATES;
+import city.animations.interfaces.AnimatedBusPassenger;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.RoleInterface;
 import city.tests.agents.mocks.MockBus;
 import city.tests.agents.mocks.MockCar;
+import city.tests.animations.mocks.MockAnimatedBusPassenger;
 import city.tests.animations.mocks.MockAnimatedPerson;
 import city.tests.buildings.mocks.MockBank;
 import city.tests.buildings.mocks.MockBusStop;
@@ -728,9 +730,12 @@ public class PersonTest extends TestCase {
 		//
 		// - Rides the bus
 		// - Gets off the bus and goes to work
+		person.getBusPassengerRole().setAnimation(new MockAnimatedBusPassenger(person.getBusPassengerRole()));
 		person.getBusPassengerRole().msgBusIsHere(bus);
+		person.getBusPassengerRole().msgImAtDestination();
 		outcome = person.runScheduler();
 		person.getBusPassengerRole().msgImAtYourDestination();
+		person.getBusPassengerRole().msgImAtDestination();
 		outcome = person.runScheduler();
 		outcome = person.runScheduler();
 		
