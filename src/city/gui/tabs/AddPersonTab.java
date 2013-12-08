@@ -1,15 +1,20 @@
 package city.gui.tabs;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
-import java.text.Format;
 import java.text.NumberFormat;
+import java.text.ParseException;
 
 import javax.swing.BoxLayout;
 import javax.swing.ButtonGroup;
@@ -26,15 +31,22 @@ import javax.swing.JRadioButton;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.SwingConstants;
+import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 
 import utilities.DataModel;
 import city.Application;
+import city.agents.CarAgent;
+import city.agents.PersonAgent;
+import city.animations.CarAnimation;
+import city.animations.PersonAnimation;
+import city.bases.JobRole;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.gui.MainFrame;
+import city.roles.LandlordRole;
 
-public class AddPersonTab extends JPanel {
+public class AddPersonTab extends JPanel implements PropertyChangeListener {
 
 	private static final long serialVersionUID = 9166425422374406573L;
 	
@@ -44,6 +56,7 @@ public class AddPersonTab extends JPanel {
 	
 	private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
 	
+	private MainFrame mainFrame;
 	private DataModel dataModel;
 	private DefaultComboBoxModel<ResidenceBuildingInterface> residenceComboBoxModel;
 	private DefaultComboBoxModel<String> jobComboBoxModel;
@@ -54,7 +67,7 @@ public class AddPersonTab extends JPanel {
 	
 	private JPanel panelName;
 	private JLabel label;
-	private JTextField textField;
+	private JTextField nameField;
 	private JPanel panelCash;
 	private JLabel label_1;
 	private JFormattedTextField formattedTextField;
@@ -76,16 +89,19 @@ public class AddPersonTab extends JPanel {
 	private JPanel panelTitle;
 	private JLabel label_8;
 	private JPanel panelCar;
-	private JPanel panelRenter;
+	private JPanel panelLandlord;
 	private JRadioButton rdbtnCar;
 	private JRadioButton rdbtnNoCar;
-	private JCheckBox chckbxRenter;
+	private JCheckBox chckbxLandlord;
 	private final ButtonGroup buttonGroupCar = new ButtonGroup();
 	private JPanel panelCreate;
 	private JButton btnCreate;
 	private JPanel panelResidence;
 	private JComboBox<ResidenceBuildingInterface> cbResidence;
 	private JLabel lblResidence;
+	private JLabel lblError;
+	private JPanel panel;
+	private JCheckBox chckbxHasJob;
 	
 	//============================================================================//
 	// Constructor        
@@ -98,6 +114,7 @@ public class AddPersonTab extends JPanel {
 		//--------------------------------------//
 		
 		// Set up variables
+		this.mainFrame = mf;
 		this.setVisible(true);
 	    this.currencyFormat.setRoundingMode(RoundingMode.DOWN);
 	    this.currencyFormat.setParseIntegerOnly(true);
@@ -110,6 +127,10 @@ public class AddPersonTab extends JPanel {
 		this.setMaximumSize(new Dimension(MainFrame.CONTROLPANELX, MainFrame.CONTROLPANELY));
 		this.setMinimumSize(new Dimension(MainFrame.CONTROLPANELX, MainFrame.CONTROLPANELY));
 		this.setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
+		
+		// The DataModel allows the list objects to auto-update
+		this.dataModel = Application.getModel();
+		this.dataModel.getPropertyChangeSupport().addPropertyChangeListener(DataModel.BUILDINGS, this);
 
 		// The ComboBoxModel is an object which stores what the ComboBox displays
 		this.residenceComboBoxModel = new DefaultComboBoxModel<ResidenceBuildingInterface>();
@@ -185,12 +206,12 @@ public class AddPersonTab extends JPanel {
 		label.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelName.add(label);
 		
-		textField = new JTextField();
-		textField.setPreferredSize(new Dimension(200, 20));
-		textField.setMinimumSize(new Dimension(200, 20));
-		textField.setMaximumSize(new Dimension(200, 20));
-		textField.setColumns(10);
-		panelName.add(textField);
+		nameField = new JTextField();
+		nameField.setPreferredSize(new Dimension(200, 20));
+		nameField.setMinimumSize(new Dimension(200, 20));
+		nameField.setMaximumSize(new Dimension(200, 20));
+		nameField.setColumns(10);
+		panelName.add(nameField);
 		
 		//--------------------------------------//
 		// Cash       
@@ -211,7 +232,7 @@ public class AddPersonTab extends JPanel {
 		label_1.setBorder(new EmptyBorder(0, 10, 0, 10));
 		panelCash.add(label_1);
 		
-		formattedTextField = new JFormattedTextField((Format) null);
+		formattedTextField = new JFormattedTextField(currencyFormat);
 		formattedTextField.setPreferredSize(new Dimension(200, 20));
 		formattedTextField.setMinimumSize(new Dimension(200, 20));
 		formattedTextField.setMaximumSize(new Dimension(200, 20));
@@ -269,6 +290,11 @@ public class AddPersonTab extends JPanel {
 		cbResidence.setPreferredSize(new Dimension(190, 20));
 		cbResidence.setMinimumSize(new Dimension(190, 20));
 		cbResidence.setMaximumSize(new Dimension(190, 20));
+		cbResidence.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		residenceSelectedFromComboBox = (ResidenceBuildingInterface) cbResidence.getSelectedItem();
+        	}
+        });
 		cbResidence.setRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = -4988832297955832718L;
 			@Override
@@ -286,22 +312,38 @@ public class AddPersonTab extends JPanel {
 		// Renter       
 		//--------------------------------------//
 		
-		panelRenter = new JPanel();
-		panelRenter.setPreferredSize(new Dimension(300, 30));
-		panelRenter.setMinimumSize(new Dimension(300, 30));
-		panelRenter.setMaximumSize(new Dimension(300, 30));
-		add(panelRenter);
-		panelRenter.setLayout(new BoxLayout(panelRenter, BoxLayout.X_AXIS));
+		panelLandlord = new JPanel();
+		panelLandlord.setPreferredSize(new Dimension(300, 30));
+		panelLandlord.setMinimumSize(new Dimension(300, 30));
+		panelLandlord.setMaximumSize(new Dimension(300, 30));
+		add(panelLandlord);
+		panelLandlord.setLayout(new BoxLayout(panelLandlord, BoxLayout.X_AXIS));
 		
-		chckbxRenter = new JCheckBox("Is a renter?");
-		chckbxRenter.setBorder(new EmptyBorder(0, 10, 0, 0));
-		chckbxRenter.setFocusable(false);
-		chckbxRenter.setPreferredSize(new Dimension(120, 23));
-		chckbxRenter.setMinimumSize(new Dimension(120, 23));
-		chckbxRenter.setMaximumSize(new Dimension(120, 23));
-		chckbxRenter.setHorizontalTextPosition(SwingConstants.LEFT);
-		chckbxRenter.setHorizontalAlignment(SwingConstants.LEFT);
-		panelRenter.add(chckbxRenter);
+		chckbxLandlord = new JCheckBox("Is a landlord?");
+		chckbxLandlord.setBorder(new EmptyBorder(0, 10, 0, 0));
+		chckbxLandlord.setFocusable(false);
+		chckbxLandlord.setPreferredSize(new Dimension(120, 23));
+		chckbxLandlord.setMinimumSize(new Dimension(120, 23));
+		chckbxLandlord.setMaximumSize(new Dimension(120, 23));
+		chckbxLandlord.setHorizontalTextPosition(SwingConstants.LEFT);
+		chckbxLandlord.setHorizontalAlignment(SwingConstants.LEFT);
+		panelLandlord.add(chckbxLandlord);
+		
+		chckbxHasJob = new JCheckBox("Has a job?");
+		chckbxHasJob.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				if (chckbxHasJob.isSelected()) {
+					panelJobContainer.setVisible(true);
+				} else {
+					panelJobContainer.setVisible(false);
+				}
+			}
+		});
+		chckbxHasJob.setFocusable(false);
+		chckbxHasJob.setSelected(true);
+		chckbxHasJob.setHorizontalTextPosition(SwingConstants.LEFT);
+		chckbxHasJob.setHorizontalAlignment(SwingConstants.LEFT);
+		panelLandlord.add(chckbxHasJob);
 		
 		//--------------------------------------//
 		// Job Container      
@@ -388,6 +430,11 @@ public class AddPersonTab extends JPanel {
 		cbWorkplace.setMinimumSize(new Dimension(190, 20));
 		cbWorkplace.setMaximumSize(new Dimension(190, 20));
 		cbWorkplace.setFocusable(false);
+		cbWorkplace.addActionListener(new ActionListener() {
+        	public void actionPerformed(ActionEvent e) {
+        		workplaceSelectedFromComboBox = (BuildingInterface) cbWorkplace.getSelectedItem();
+        	}
+        });
 		cbWorkplace.setRenderer(new DefaultListCellRenderer() {
 			private static final long serialVersionUID = 7112080767015019155L;
 			@Override
@@ -444,6 +491,7 @@ public class AddPersonTab extends JPanel {
 		//--------------------------------------//
 		
 		panelCreate = new JPanel();
+		panelCreate.setFocusable(false);
 		panelCreate.setBorder(new EmptyBorder(10, 10, 0, 10));
 		panelCreate.setPreferredSize(new Dimension(300, 40));
 		panelCreate.setMaximumSize(new Dimension(300, 40));
@@ -452,11 +500,35 @@ public class AddPersonTab extends JPanel {
 		panelCreate.setLayout(new BorderLayout(0, 0));
 		
 		btnCreate = new JButton("Create");
+		btnCreate.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				createPerson();
+			}
+		});
 		btnCreate.setFocusable(false);
 		btnCreate.setHorizontalTextPosition(SwingConstants.CENTER);
 		btnCreate.setAlignmentX(Component.CENTER_ALIGNMENT);
 		btnCreate.setFont(getFont().deriveFont(Font.BOLD));
-		panelCreate.add(btnCreate);
+		panelCreate.add(btnCreate, BorderLayout.CENTER);
+		
+		//--------------------------------------//
+		// Error       
+		//--------------------------------------//
+		
+		panel = new JPanel();
+		panel.setPreferredSize(new Dimension(280, 30));
+		panel.setMinimumSize(new Dimension(280, 30));
+		panel.setMaximumSize(new Dimension(280, 30));
+		panel.setBorder(new EmptyBorder(10, 10, 0, 10));
+		panel.setLayout(new BoxLayout(panel, BoxLayout.X_AXIS));
+		add(panel);
+		
+		lblError = new JLabel("");
+		lblError.setForeground(Color.RED);
+		lblError.setPreferredSize(new Dimension(260, 20));
+		lblError.setMinimumSize(new Dimension(260, 20));
+		lblError.setMaximumSize(new Dimension(260, 20));
+		panel.add(lblError);
 		
 		//--------------------------------------//
 		// Finish setup
@@ -464,6 +536,65 @@ public class AddPersonTab extends JPanel {
 		
 		prepareFormForUse();
 		
+	}
+	
+	//============================================================================//
+	// Actions   
+    //============================================================================//
+	
+	/**
+	 * If the person is told to be a landlord, he will become the landlord of his
+	 * residence, even if that residence already has a landlord.
+	 */
+	private void createPerson() {
+		lblError.setText("");
+		try {
+			formattedTextField.commitEdit();
+			spinner.commitEdit();
+			spinner_1.commitEdit();
+		} catch (ParseException e) {}
+		if (nameField.getText().isEmpty()) {
+			lblError.setText("You must enter a name.");
+		} else if (buttonGroupCar.getSelection() == null) {
+			lblError.setText("You must select whether the person will have a car.");
+		} else if (residenceSelectedFromComboBox == null) {
+			lblError.setText("The person must have a residence.");
+		} else if (chckbxHasJob.isSelected() && jobSelectedFromComboBox == null) {
+			lblError.setText("The person must have a job.");
+		} else if (chckbxHasJob.isSelected() && workplaceSelectedFromComboBox == null ) {
+			lblError.setText("The person must have a workplace.");
+		} else {
+			PersonAgent newPerson = new PersonAgent(nameField.getText(), Application.getDate(), new PersonAnimation(), residenceSelectedFromComboBox);
+			newPerson.setCash(Integer.parseInt(formattedTextField.getValue().toString()));
+			if (rdbtnCar.isSelected()) {
+				CarAgent newCar = new CarAgent(residenceSelectedFromComboBox, newPerson);
+				CarAnimation newCarAnimation = new CarAnimation(newCar, residenceSelectedFromComboBox);
+				mainFrame.cityView.addAnimation(newCarAnimation);
+				newPerson.setCar(newCar);
+				newCar.startThread();
+			}
+			if (chckbxLandlord.isSelected()) {
+				LandlordRole newLandlord = new LandlordRole();
+				residenceSelectedFromComboBox.setLandlord(newLandlord);
+				newPerson.addRole(newLandlord);
+				newLandlord.setActive();
+			}
+			if (chckbxHasJob.isSelected()) {
+				try {
+					Class<?> c0 = Class.forName(jobSelectedFromComboBox);
+					Class<?> c1 = Class.forName(workplaceSelectedFromComboBox.getBuildingClassName());
+					Constructor<?> r0 = c0.getConstructor(c1, Integer.TYPE, Integer.TYPE);
+					JobRole j0 = (JobRole) r0.newInstance(workplaceSelectedFromComboBox, (Integer) spinner.getValue(), (Integer) spinner_1.getValue());
+					newPerson.setOccupation(j0);
+				} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
+					e.printStackTrace();
+				}
+			}
+			dataModel.addPerson(newPerson);
+			newPerson.startThread();
+			mainFrame.CP.editPersonTab.displayPerson(newPerson);
+			mainFrame.CP.displayTab(mainFrame.CP.editPersonTab);
+		}
 	}
 	
 	//============================================================================//
@@ -502,15 +633,45 @@ public class AddPersonTab extends JPanel {
 	//--------------------------------------//
 	
 	public void prepareFormForUse() {
-		textField.setText("");
-		formattedTextField.setText("");
+		nameField.setText("");
+		formattedTextField.setValue(0);
 		buttonGroupCar.clearSelection();
 		updateResidenceComboBox();
-		chckbxRenter.setSelected(false);
+		chckbxLandlord.setSelected(false);
+		chckbxHasJob.setSelected(true);
+		panelJobContainer.setVisible(true);
 		cbJob.setSelectedIndex(0);
 		updateWorkplaceComboBox();
 		spinner.setValue(0);
 		spinner_1.setValue(0);
+		lblError.setText("");
 	}
+	
+	//============================================================================//
+	// Listeners     
+    //============================================================================//
+	
+	/**
+	 * This updates the list when buildings are added and removed
+	 */
+    @Override
+    public void propertyChange(final PropertyChangeEvent evt) {
+        if (!SwingUtilities.isEventDispatchThread()) {
+            SwingUtilities.invokeLater(new Runnable() {
+                @Override
+                public void run() {
+                    propertyChange(evt);
+                }
+            });
+            return;
+        }
+        if (evt.getSource() == dataModel) {
+            // A building has been added or removed from the combo box list
+            if (DataModel.BUILDINGS.equals(evt.getPropertyName())) {
+            	updateResidenceComboBox();
+            	updateWorkplaceComboBox();
+            }
+        }
+    }
 	
 }

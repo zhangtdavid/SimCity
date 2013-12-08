@@ -99,7 +99,7 @@ public class Application {
 	public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
-	public static enum BUILDING {bank, busStop, house, market, restaurant};
+	public static enum BUILDING {bank, busStop, house, apartment, market, restaurant};
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
@@ -366,9 +366,26 @@ public class Application {
 		mainFrame.cityView.addAnimation(b1Anim);
 		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim); 
 		bus1.startThread();
+
 		
 		createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
-		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
+
+		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
+
+		
+		createBuilding(CityViewBuilding.BUILDINGTYPE.HOUSE);
+		createBuilding(CityViewBuilding.BUILDINGTYPE.APT);
+		
+//		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+//		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(100, 100, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
+//		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
+//		// createBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
+//		
+//		AptPanel unoccupiedAptPanel1 = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+//		CityViewApt unoccupiedAptView1 = new CityViewApt(100, 100, "Unoccupied Apt", Color.BLUE, unoccupiedAptPanel1);
+//		AptBuilding unoccupiedAptBuilding = new AptBuilding("Unoccupied Apt", null, unoccupiedAptPanel1, unoccupiedAptView1);
+//		// createBuilding(unoccupiedAptPanel1, unoccupiedAptView1, unoccupiedAptBuilding);
+		
 
 		//		HousePanel housePanelZhang1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//		CityViewHouse cityViewHouseZhang1 = new CityViewHouse(150, 300, "Zhang Landlord House", Color.gray, housePanelZhang1);
@@ -960,6 +977,10 @@ public class Application {
 		return mainFrame;
 	}
 
+	public static Date getDate() {
+		return new Date(date.getTime());
+	}
+	
 	public static void setBuilding(BuildingCard panel, CityViewBuilding cityView, Building building) {
 		mainFrame.cityView.addStatic(cityView);
 		mainFrame.buildingView.addView(panel, cityView.getID());
@@ -973,6 +994,8 @@ public class Application {
 			CityMap.addBuilding(BUILDING.busStop, building);
 		} else if(building.getClass().getName().contains("House")) {
 			CityMap.addBuilding(BUILDING.house, building);
+		} else if(building.getClass().getName().contains("Apt")) {
+			CityMap.addBuilding(BUILDING.apartment, building);
 		}
 	}
 
@@ -1012,6 +1035,11 @@ public class Application {
 		case APT:
 			cityViewBuilding = new CityViewApt(x, y, "Apartment " + (mainFrame.cityView.statics.size()), Color.darkGray, new AptPanel(Color.darkGray));
 			building = new AptBuilding("Apartment " + mainFrame.cityView.statics.size(), null, (AptPanel)cityViewBuilding.getBuilding(), cityViewBuilding);
+			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
+			return building;
+		case HOUSE:
+			cityViewBuilding = new CityViewHouse(x, y, "House " + (mainFrame.cityView.statics.size()), Color.darkGray, new HousePanel(Color.darkGray));
+			building = new HouseBuilding("House " + mainFrame.cityView.statics.size(), null, (HousePanel)cityViewBuilding.getBuilding(), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTZHANG:
