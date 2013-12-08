@@ -50,7 +50,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 
     private List<RestaurantChungOrder> orders = Collections.synchronizedList(new ArrayList<RestaurantChungOrder>()); // Holds orders, their states, and recipients
 
-    private List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // List of each marketCustomerDelivery role that is created for each order to the market
+    private List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>(); // List of marketCustomerDelivery roles that are created for each order to the market
     private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); // Holds MarketOrder and state
 
 	WorkingState workingState = WorkingState.Working;
@@ -102,9 +102,9 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
     
 	@Override
     public void msgSelfDonePlating(RestaurantChungOrder o) {
-        o.s = OrderState.DonePlating;
         print("RestaurantChungCook done plating");
 		log.add(new LoggedEvent("RestaurantChungCook received msgSelfDonePlating."));
+		orders.remove(o);
         stateChanged();
     }
 
@@ -115,7 +115,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         print("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
 		log.add(new LoggedEvent("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson."));
         MyMarketOrder mo = findMarketOrder(id);
-        removeMarketOrder(mo);
+        marketOrders.remove(mo);
         
         for (FOOD_ITEMS i: marketOrder.keySet()) {
             Food f = findFood(i.toString());
@@ -192,8 +192,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 				}
 				// The role becomes inactive when the order is fulfilled, cook should remove the role from its list
 				else if (!r.getActive()) {
-					MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
-					removeMarketOrderFromList(mo);
 					marketCustomerDeliveryRoles.remove(r);
 					break;
 				}
@@ -219,7 +217,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
                 for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.Cancelled) {
                         informWaiterOfCancellation(o);
-                        removeOrder(o);
+                        orders.remove(o);
                         return true;
                     }
                 }
@@ -255,15 +253,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
                 for (RestaurantChungOrder o : orders) {
                     if (o.s == OrderState.DoneCooking) {
                         plateIt(o);
-                        return true;
-                    }
-                }
-            }
-
-            synchronized(orders) {
-                for (RestaurantChungOrder o : orders) {
-                    if (o.s == OrderState.DonePlating) {
-                        removeOrder(o);
                         return true;
                     }
                 }
@@ -339,11 +328,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
     	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
-    }
-    
-    private void removeMarketOrder(MyMarketOrder o) {
-        print("removing market order");
-        removeMarketOrderFromList(o);
     }
         
 //  Cooking
@@ -426,11 +410,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         },
         500);
     }
-    
-    private void removeOrder(RestaurantChungOrder o) {
-        print("removing order");
-        removeOrderFromList(o);
-    }
 
     private void informWaiterOfCancellation(RestaurantChungOrder o) {
         RestaurantChungWaiter w = findWaiter(o);
@@ -484,24 +463,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             }
         }
         return null;
-    }
-    
-	@Override
-    public void removeOrderFromList(RestaurantChungOrder order) {
-        for(int i = 0; i < orders.size(); i++) {
-            if(orders.get(i) == order) {
-                orders.remove(order);
-            }
-        }
-    }
-        
-	@Override
-    public void removeMarketOrderFromList(MyMarketOrder order) {
-        for(int i = 0; i < marketOrders.size(); i++) {
-            if(marketOrders.get(i) == order) {
-                marketOrders.remove(order);
-            }
-        }
     }
 
 	@Override

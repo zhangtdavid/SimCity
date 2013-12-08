@@ -97,6 +97,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		log.add(new LoggedEvent("Cashier received msgAddMarketOrder."));
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
+		stateChanged();
 	}
 	
 //  Scheduler
@@ -132,7 +133,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			for (MarketTransaction t : marketTransactions) {
 				if (t.getMarketTransactionState() == MarketTransactionState.Done) {
 					marketTransactions.remove(t);
-					return true;
 				}
 			}
 		}		
@@ -151,15 +151,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 					return true;
 				}
 			}	
-		}
-		
-		synchronized(transactions) {
-			for (Transaction t : transactions) {
-				if (t.s == TransactionState.Done) {
-					removeTransaction(t);
-					return true;
-				}
-			}
 		}
 		
 		synchronized(transactions) {
@@ -202,16 +193,11 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			return;
 		}
 		
-		t.s = TransactionState.Done;
+		transactions.remove(t);
 		if (restaurant.getCash() >= (t.payment-t.price)) t.c.msgHereIsChange(t.payment-t.price);
 //		t.c.msgHereIsChange(t.payment-t.price);
 		// else, what happens when cashier does not have enough money?
 		//TODO RYAN: don't worry about it; if he gives you extra cash you don't need money to give change; imagine debit?
-	}
-	
-	private void removeTransaction(Transaction t) {
-		print("Removing order");
-		removeOrderFromList(t);
 	}
 	
 	private void notifyHostOfFlake(Transaction t) {
@@ -293,16 +279,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public void removeOrderFromList(Transaction transaction) {
-		for(Transaction t: transactions) {
-			if(t == transaction) {
-				transactions.remove(t);
-				return;
-			}
-		}
 	}
 	
 	@Override

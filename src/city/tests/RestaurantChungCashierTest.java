@@ -161,9 +161,7 @@ public class RestaurantChungCashierTest extends TestCase {
 		assertEquals("Cashier money should be 1016. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 1016);
 		
 		cashier.runScheduler();
-		assertTrue("Cashier transactions should contain a transaction with state == Done. It doesn't.",
-		cashier.getTransactions().get(0).getTransactionState() == TransactionState.Done);
-		assertEquals("Cashier should give 0 in change. It doesn't", cashier.getTransactions().get(0).getPayment()-cashier.getTransactions().get(0).getPrice(), 0);
+		assertEquals("Cashier should have 0 transaction. It doesn't", cashier.getTransactions().size(), 0);
 
 		assertEquals("Customer log should have 1 entry. It doesn't", 1, customer.log.size());
 		assertTrue("Customer log should have \"Customer received msgHereIsChange from cashier\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgHereIsChange from cashier"));

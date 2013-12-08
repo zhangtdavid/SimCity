@@ -100,12 +100,6 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void removeOrderFromList(Transaction transaction) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public PropertyChangeSupport getPropertyChangeSupport() {
 		// TODO Auto-generated method stub
 		return null;
