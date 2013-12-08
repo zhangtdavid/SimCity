@@ -32,7 +32,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	private int orderId;
 	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	private WorkingState workingState = WorkingState.Working;
+	private WorkingState workingState;
 
 //	Constructor
 //	=====================================================================
@@ -43,6 +43,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
+		workingState = WorkingState.Working;
     }
 	
 //  Activity

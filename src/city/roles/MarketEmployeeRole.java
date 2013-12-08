@@ -245,7 +245,7 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-    	if (workingState == WorkingState.GoingOffShift)
+    	if (workingState == WorkingState.Working)
     			market.getManager().msgIAmAvailableToAssist(this);
     	customer = null;
     	customerDelivery = null;
