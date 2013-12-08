@@ -46,11 +46,25 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	
 	@Override
 	public void updatePosition() {
-		
 		if (person == null) {
 			throw new IllegalStateException("PersonAnimation does not have a Person object.");
 		}
 
+		// Base case
+		if(!isAtHome && !personSemaphoreIsAcquired){
+			if(person.getHome() instanceof House){ //house
+				this.xDestination = HousePanel.HDX;
+				this.yDestination = HousePanel.HDY+20;
+				this.xPos = HousePanel.HDX; 
+				this.yPos = HousePanel.HDY+20;
+			}else if(person.getHome() instanceof Apt){ // or apartment
+				this.xDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-20;
+				this.yDestination = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];
+				this.xPos = AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-20;
+				this.yPos = AptPanel.APT_DOOR[person.getRoomNumber()-1][1];
+			}
+		}
+		
 		// Movement
 		if (xPos < xDestination)
 			xPos++;
@@ -64,8 +78,13 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 			yPos--;
 		
 		// Processing
-		
-		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired && !leaving) {
+		if (xPos == xDestination && yPos == yDestination && personSemaphoreIsAcquired) {
+			if(command == Command.ToDoor){
+				//At door; can exit building now
+				personSemaphoreIsAcquired = false;
+				person.guiAtDestination();
+				command = Command.noCommand;
+			}
 			if (command == Command.ToBed) {
 				// Going to bed
 				personSemaphoreIsAcquired = false;
@@ -134,7 +153,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 		}
 		leaving = true;
 		isAtHome = false;
-		person.guiAtDestination();
+		command = Command.ToDoor;
 	}
 
 	/**
@@ -243,17 +262,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	@Override
 	public void setPerson(Person p) {
 		this.person = p;
-		if(p.getHome() instanceof House){ //house
-			this.xDestination = HousePanel.HDX;
-			this.yDestination = HousePanel.HDY+20;
-			this.xPos = HousePanel.HDX; 
-			this.yPos = HousePanel.HDY+20;
-		}else if(p.getHome() instanceof Apt){ // or apartment
-			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-20;
-			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-20;
-			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-		}
 	}
 	
     @Override

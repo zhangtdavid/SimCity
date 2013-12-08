@@ -27,7 +27,6 @@ import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
-import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;

@@ -7,7 +7,6 @@ import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson.Command;
@@ -27,7 +26,6 @@ public class AptAnimationTest extends TestCase{
 
 	// Needed things
 	private Date date;
-	private CityViewBuilding aptCityViewBuilding; // does nothing, no gui really pops out...
 	private AptPanel hp; // does nothing, no gui really pops out...
 	private CityViewApt houseCityViewBuilding; // does nothing, no gui really pops out...
 	private BankPanel bp;
@@ -82,16 +80,18 @@ public class AptAnimationTest extends TestCase{
 		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
 		
 		homeAnimation = new PersonAnimation();
-		person = new MockPerson("MovingPerson", date, homeAnimation, apt);
-		person.setCash(0); // so he doesn't go to market or restaurant
-		person.setRoomNumber(1);
 		resident.setPerson(person);
 		resident.setLandlord(landlord);
 
 		//And the house, which is the real deal.
 		Application.CityMap.addBuilding(BUILDING.house,apt);
 		apt.setCityViewBuilding(houseCityViewBuilding);
+		person = new MockPerson("MovingPerson", date, homeAnimation, apt);
 		person.setHome(apt);
+		person.setCash(0); // so he doesn't go to market or restaurant
+		person.setRoomNumber(1);
+
+		
 		HashMap<FOOD_ITEMS, Integer> foods = new HashMap<FOOD_ITEMS, Integer>();
 		foods.put(FOOD_ITEMS.chicken, 5); // put 5 chickens in the refrigerator to eat.
 		foods.put(FOOD_ITEMS.salad, 0);
@@ -195,7 +195,7 @@ public class AptAnimationTest extends TestCase{
 		homeAnimation.goOutside();
 		assertTrue("xDest = xPos", homeAnimation.getXPos() != homeAnimation.getDestination()[0]);
 		assertFalse("yDest = yPos", homeAnimation.getYPos() == homeAnimation.getDestination()[1]);
-		assertEquals("Command of home animation should be noCommand", homeAnimation.getCommand(), Command.noCommand.toString());	
+		assertEquals("Command of home animation should be ToDoor", homeAnimation.getCommand(), Command.ToDoor.toString());	
 		homeAnimation.setCoords(AptPanel.APT_DOOR[person.getRoomNumber()-1][0]-10, AptPanel.APT_DOOR[person.getRoomNumber()-1][1]);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
 		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
