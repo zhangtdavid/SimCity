@@ -1,16 +1,29 @@
 package city.tests.roles;
 
+import java.util.Date;
+
 import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.animations.PersonAnimation;
+import city.buildings.AptBuilding;
+import city.buildings.BankBuilding;
 import city.buildings.RestaurantChoiBuilding;
+import city.gui.exteriors.CityViewApt;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.AptPanel;
+import city.gui.interiors.BankPanel;
 import city.gui.interiors.RestaurantChoiPanel;
+import city.roles.LandlordRole;
+import city.roles.ResidentRole;
 import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCashierRole.Check;
 import city.roles.interfaces.RestaurantChoiCustomer;
 import city.roles.interfaces.RestaurantChoiWaiter;
 import city.tests.agents.mocks.MockPerson;
+import city.tests.buildings.mocks.MockBusStop;
+import city.tests.roles.mocks.MockCityViewBuilding;
 import city.tests.roles.mocks.MockRestaurantChoiCustomer;
 import city.tests.roles.mocks.MockRestaurantChoiWaiterQueue;
 
@@ -23,6 +36,18 @@ public class RestaurantChoiCashierTest extends TestCase{
 	MockRestaurantChoiCustomer customer1;
 	RestaurantChoiBuilding building;
 	RestaurantChoiPanel rp;
+	private BankBuilding bank;	
+	private CityViewBuilding bankCityViewBuilding;
+	private CityViewBuilding busstopCityViewBuilding;
+	private CityViewBuilding busstopCityViewBuilding2;
+	private BankPanel bp;
+	private MockBusStop busstop;
+	private MockBusStop busstop2;
+	private LandlordRole landlord;
+	private ResidentRole resident;
+	private AptPanel hp; // does nothing, no gui really pops out...
+	private CityViewApt houseCityViewBuilding; // does nothing, no gui really pops out...
+	private AptBuilding apt;
 
 	/**
 	 * This method is run before each test. You can use it to instantiate the class variables
@@ -30,8 +55,43 @@ public class RestaurantChoiCashierTest extends TestCase{
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+		//needed things
+		bankCityViewBuilding =  new MockCityViewBuilding();
+		busstopCityViewBuilding = new MockCityViewBuilding();
+		busstopCityViewBuilding2 = new MockCityViewBuilding();
+		bank = new BankBuilding("MockBank", bp, bankCityViewBuilding);
+		busstop = new MockBusStop("busstop");
+		busstop2 = new MockBusStop("busstop2");
+		Application.CityMap.clearMap();
+		bank.setCityViewBuilding(bankCityViewBuilding);
+		busstop.setCityViewBuilding(busstopCityViewBuilding);
+		busstop2.setCityViewBuilding(busstopCityViewBuilding2);
+		busstopCityViewBuilding.setX(40);
+		busstopCityViewBuilding.setY(40);
+		busstopCityViewBuilding2.setX(80);
+		busstopCityViewBuilding2.setY(80);
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop);
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop2);
+		Application.CityMap.addBuilding(BUILDING.bank, bank);
+		resident = new ResidentRole(new Date(0));
+		landlord = new LandlordRole();
+		resident.setPerson(p);
+		landlord.setPerson(p);
 		Application.CityMap.addBuilding(BUILDING.restaurant, building);
-		p = new MockPerson("person-cashier");
+		houseCityViewBuilding = new CityViewApt(10, 10);
+		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
+		
+		p = new MockPerson("person-cashier", new Date(0), new PersonAnimation(), apt);
+		p.setCash(0); // so he doesn't go to market or restaurant
+		p.setRoomNumber(1);
+		resident.setPerson(p);
+		resident.setLandlord(landlord);
+
+		//And the house, which is the real deal.
+		Application.CityMap.addBuilding(BUILDING.house,apt);
+		apt.setCityViewBuilding(houseCityViewBuilding);
+		p.setHome(apt);
+		
 		cashier = new RestaurantChoiCashierRole(); // cashier has no name		
 		customer = new MockRestaurantChoiCustomer("mockcustomer");
 		customer1 = new MockRestaurantChoiCustomer("mockcustomer1");

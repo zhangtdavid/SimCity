@@ -19,6 +19,7 @@ import city.gui.interiors.AptPanel;
 import city.gui.interiors.BankPanel;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
+import city.tests.agents.mocks.MockPerson;
 import city.tests.buildings.mocks.MockBusStop;
 import city.tests.roles.mocks.MockCityViewBuilding;
 
@@ -40,7 +41,7 @@ public class AptAnimationTest extends TestCase{
 	private MockBusStop busstop2;
 
 	// Being tested
-	private PersonAgent person;
+	private MockPerson person;
 	private PersonAnimation homeAnimation;
 	private AptBuilding apt;
 
@@ -81,7 +82,7 @@ public class AptAnimationTest extends TestCase{
 		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
 		
 		homeAnimation = new PersonAnimation();
-		person = new PersonAgent("MovingPerson", date, homeAnimation, apt);
+		person = new MockPerson("MovingPerson", date, homeAnimation, apt);
 		person.setCash(0); // so he doesn't go to market or restaurant
 		person.setRoomNumber(1);
 		resident.setPerson(person);
@@ -97,7 +98,6 @@ public class AptAnimationTest extends TestCase{
 		foods.put(FOOD_ITEMS.steak, 0);
 		foods.put(FOOD_ITEMS.pizza, 0); // there is no other food in the refrigerator
 		apt.setFood(person, foods);
-		PersonAnimation.beingTested = true;
 		// Set up test environment
 	}
 	
@@ -128,7 +128,7 @@ public class AptAnimationTest extends TestCase{
 		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
 		assertEquals("Person's homeAnimation should have STATES noCommand", homeAnimation.getCommand(), "ToRef");
 		
-		assertEquals("Scheduler should still be true", person.runScheduler(), false);
+		assertEquals("Scheduler should return false now", person.runScheduler(), false);
 		if(outcome){} // no warning saying outcome is useless now...
 		//Fast forward time
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
@@ -176,12 +176,17 @@ public class AptAnimationTest extends TestCase{
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
 		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
 		homeAnimation.updatePosition();
-		assertEquals("Status should say Going to eat steak", "Going to eat steak", homeAnimation.getStatus()); // check status (skip "cooking");
+		assertEquals("Status should say Cooking steak", "Cooking steak", homeAnimation.getStatus()); // check status (with mockperson, can not skip "cooking");
 		
-		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // STATES confirmed
+		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.StationaryAtStove.toString()); // STATES confirmed
+		Thread.sleep(4000); // cooking
+		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // cooked; confirmed
 		homeAnimation.setCoords(AptPanel.APT_TABLE[person.getRoomNumber()-1][0], AptPanel.APT_TABLE[person.getRoomNumber()-1][1]+20);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);
-		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]);
+		assertEquals("yDest = yPos", homeAnimation.getYPos(), homeAnimation.getDestination()[1]); // teleport to the table now
+		homeAnimation.updatePosition(); // updated
+		assertEquals("Status should say Eating steak", "Eating steak", homeAnimation.getStatus()); // eating...;
+		Thread.sleep(5000); // go grab a drink				
 		homeAnimation.updatePosition();
 		assertEquals("Status should say nothing", "", homeAnimation.getStatus()); // check status (skip "cooking");
 		assertEquals("Command of home animation should be noCommand", homeAnimation.getCommand(), Command.noCommand.toString()); // STATES confirmed. Done!

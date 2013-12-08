@@ -8,7 +8,7 @@ public interface AnimatedPerson extends AnimationInterface {
 	// Data
 	
 	public static int RES_BED_INDEX = -1; // not final. Assigned when person "moves in" - gets assigned to a residence.
-	public static enum Command {noCommand, ToHome, ToBuilding, ToBusStop, ToBed, ToStove, ToRef, ToTable, ToDoor, InBed,};
+	public static enum Command {noCommand, ToHome, ToBuilding, ToBusStop, ToBed, ToStove, ToRef, ToTable, ToDoor, InBed, StationaryAtStove, StationaryAtTable};
     public static final int WIDTH = 20; // Person is a 20x20 rect, standard.
 	public static enum OrderIcon {Steak, Chicken, Pizza, Salad}; // could use strings or something on Person's side instead
 	

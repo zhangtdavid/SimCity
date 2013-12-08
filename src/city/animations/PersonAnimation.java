@@ -18,7 +18,6 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 	// Data
 	
 	private static enum Command {noCommand, AtDoor, InBed, ToBed, ToRef, ToStove, ToTable, ToDoor, ToRoomEntrance, StationaryAtStove, StationaryAtTable, StationaryAtRef};
-	public static boolean beingTested;
 	private int xDestination;
 	private int yDestination;
 	private Person person = null;
@@ -96,23 +95,16 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 			} else if (command == Command.ToStove) { // rStove: ^ then cook food
 				command = Command.StationaryAtStove;
 				status = "Cooking " + foodToEat;
-				if(!PersonAnimation.beingTested){
 					timer.schedule(new TimerTask() { // timer untested. but its counterpart (instant) works (see below)
 						public void run() {
 							cookAndEatFood(foodToEat);
 							person.print("Done cooking");
 						}
 					}, 3000);
-				}
-				else{ // being tested; skip timer
-					cookAndEatFood(foodToEat);
-					person.print("Done cooking");
-				}
 				//has left stove with food, to table
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				command = Command.StationaryAtTable;
 				status = "Eating " + foodToEat;
-				if(!PersonAnimation.beingTested){
 					timer.schedule(new TimerTask() { // see above timer with regards to testing
 						public void run() {
 							person.print("Done eating");
@@ -120,27 +112,14 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 							// release semaphore now
 							personSemaphoreIsAcquired = false;  
 							person.guiAtDestination();
-							person.print("Semaphore released, at table, eating now (timer)");
-							//send him outside now.
+							person.print("Semaphore released, done eating");
+							//leave him hangin
 							leaving = true;
 							command = Command.noCommand;
 						}
 					}, 4000);
-				}else{
-					person.print("Done eating");
-					status = "";
-					// release semaphore now
-					personSemaphoreIsAcquired = false;  
-					person.guiAtDestination();
-					person.print("Semaphore released, at table, eating now (timer)");
-					//send him outside now.
-					leaving = true;
-					command = Command.noCommand;
-				}
-				
 			}
 		}
-
 	}
 
 	@Override

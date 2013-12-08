@@ -1,36 +1,96 @@
 package city.tests.roles;
 
 import java.awt.Color;
+import java.util.Date;
 
 import junit.framework.TestCase;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
+import city.Application;
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.agents.PersonAgent;
+import city.animations.PersonAnimation;
+import city.buildings.AptBuilding;
+import city.buildings.BankBuilding;
+import city.buildings.RestaurantChoiBuilding;
 import city.buildings.interfaces.RestaurantChoi;
+import city.gui.exteriors.CityViewApt;
+import city.gui.exteriors.CityViewBuilding;
+import city.gui.interiors.AptPanel;
+import city.gui.interiors.BankPanel;
 import city.gui.interiors.RestaurantChoiPanel;
+import city.roles.LandlordRole;
+import city.roles.ResidentRole;
 import city.roles.RestaurantChoiCookRole;
 import city.tests.agents.mocks.MockPerson;
+import city.tests.buildings.mocks.MockBusStop;
+import city.tests.roles.mocks.MockCityViewBuilding;
 import city.tests.roles.mocks.MockRestaurantChoiWaiterDirect;
 import city.tests.roles.mocks.MockRestaurantChoiWaiterQueue;
 
 public class RestaurantChoiRevolvingStandCookTest extends TestCase{
 	RestaurantChoiCookRole cook;
 	RestaurantChoiRevolvingStand rs;
-	PersonAgent p;
+	MockPerson p;
 	MockRestaurantChoiWaiterQueue waiter1; 
 	MockRestaurantChoiWaiterDirect waiter2;
 	RestaurantChoi b;
 	RestaurantChoiPanel panel = new RestaurantChoiPanel(Color.white);
+	RestaurantChoiBuilding building;
+	
+	//necessary evils
+	private BankBuilding bank;	
+	private CityViewBuilding bankCityViewBuilding;
+	private CityViewBuilding busstopCityViewBuilding;
+	private CityViewBuilding busstopCityViewBuilding2;
+	private BankPanel bp;
+	private MockBusStop busstop;
+	private MockBusStop busstop2;
+	private LandlordRole landlord;
+	private ResidentRole resident;
+	private AptPanel hp; // does nothing, no gui really pops out...
+	private CityViewApt houseCityViewBuilding; // does nothing, no gui really pops out...
+	private AptBuilding apt;
+	
 	
 	
 	public void setUp() throws Exception{
+		// needed things
+		bankCityViewBuilding = new MockCityViewBuilding();
+		busstopCityViewBuilding = new MockCityViewBuilding();
+		busstopCityViewBuilding2 = new MockCityViewBuilding();
+		bank = new BankBuilding("MockBank", bp, bankCityViewBuilding);
+		busstop = new MockBusStop("busstop");
+		busstop2 = new MockBusStop("busstop2");
+		Application.CityMap.clearMap();
+		bank.setCityViewBuilding(bankCityViewBuilding);
+		busstop.setCityViewBuilding(busstopCityViewBuilding);
+		busstop2.setCityViewBuilding(busstopCityViewBuilding2);
+		busstopCityViewBuilding.setX(40);
+		busstopCityViewBuilding.setY(40);
+		busstopCityViewBuilding2.setX(80);
+		busstopCityViewBuilding2.setY(80);
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop);
+		Application.CityMap.addBuilding(BUILDING.busStop, busstop2);
+		Application.CityMap.addBuilding(BUILDING.bank, bank);
+		resident = new ResidentRole(new Date(0));
+		landlord = new LandlordRole();
+		resident.setPerson(p);
+		landlord.setPerson(p);
+		Application.CityMap.addBuilding(BUILDING.restaurant, building);
+		houseCityViewBuilding = new CityViewApt(10, 10);
+		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
+		p = new MockPerson("person", new Date(0), new PersonAnimation(), apt);
+		p.setCash(0); // so he doesn't go to market or restaurant
+		p.setRoomNumber(1);
+		resident.setPerson(p);
+		resident.setLandlord(landlord);
+		
 		//b = new RestaurantChoiBuilding("ff", panel);
 		rs = new RestaurantChoiRevolvingStand();
 		waiter1 = new MockRestaurantChoiWaiterQueue("mockw");
 		waiter1.setRevolvingStand(rs);
 		waiter2 = new MockRestaurantChoiWaiterDirect("Mockw");
-		MockPerson p = new MockPerson("Cook"); 
 		cook = new RestaurantChoiCookRole();
 		cook.setRevolvingStand(rs);
 		p.addRole(cook);

@@ -444,8 +444,7 @@ public class PersonAgent extends Agent implements Person {
 		this.home.removeFood(this, toEat, 1);
 		// Cooks the food and eats it
 		animation.cookAndEatFood(toEat.toString());
-		if(!PersonAnimation.beingTested)
-			atDestination.acquire();
+		atDestination.acquire();
 		this.hasEaten = true;
 	}
 
@@ -467,7 +466,6 @@ public class PersonAgent extends Agent implements Person {
 	private void actGoToBed() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation.goToSleep();
-		if(!PersonAnimation.beingTested)
 		atDestination.acquire();
 		this.hasEaten = false;
 		this.lastWentToSleep = this.getDate(); 
@@ -477,7 +475,6 @@ public class PersonAgent extends Agent implements Person {
 	private void actWakeUp() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation.goOutside();
-		if(!PersonAnimation.beingTested)
 		atDestination.acquire();
 	}
 
