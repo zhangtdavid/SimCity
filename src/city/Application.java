@@ -322,7 +322,7 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
 		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
 		sidewalks.setRoads(trafficControl);
-
+		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
 		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
@@ -370,7 +370,7 @@ public class Application {
 		
 		createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
 
-		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
+		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 325);
 
 		
 		createBuilding(CityViewBuilding.BUILDINGTYPE.HOUSE);
@@ -393,7 +393,7 @@ public class Application {
 		//		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
 
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
-		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(150, 125, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
 		//if you want to see house animation, try (75,225) for location until #66 is fixed (: and uncomment lines 869, 874.
 		//if you dont want this to block the road just move it to (325,325) or something
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
@@ -412,6 +412,7 @@ public class Application {
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		p4Zhang.getAnimation().setCoords(apartmentBuildingZhang1.getCityViewBuilding().getX(), apartmentBuildingZhang1.getCityViewBuilding().getY());
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
@@ -474,7 +475,7 @@ public class Application {
 		// RESTAURANTTIMMS---------------------------------------------------------------------------------------
 		// Create panels
 		RestaurantTimmsPanel rtp1 = new RestaurantTimmsPanel(Color.GRAY);
-		CityViewRestaurant cvr1 = new CityViewRestaurant(175, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, rtp1); 
+		CityViewRestaurant cvr1 = new CityViewRestaurant(275, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, rtp1); 
 		RestaurantTimmsBuilding rtb = new RestaurantTimmsBuilding("RestaurantTimms", rtp1, cvr1);
 		setBuilding(rtp1, cvr1, rtb);
 
@@ -915,11 +916,11 @@ public class Application {
 		//		p4Timms.startThread();
 
 
-		p0Choi.startThread();
-		p1Choi.startThread();
-		p2Choi.startThread();
-		p3Choi.startThread();
-		p4Choi.startThread();
+//		p0Choi.startThread();
+//		p1Choi.startThread();
+//		p2Choi.startThread();
+//		p3Choi.startThread();
+//		p4Choi.startThread();
 		//		p5Choi.startThread();
 		//		p6Choi.startThread();
 		//		p7Choi.startThread();
@@ -961,7 +962,7 @@ public class Application {
 		//		c3JP.startThread();
 		//		c4JP.startThread();
 		//		
-		for(int j = 0; j < 70; j++) {
+		for(int j = 0; j < 0; j++) {
 			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
@@ -1144,10 +1145,10 @@ public class Application {
 		 * Find the building of type closest to the person's location
 		 */
 		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
-			//			int x = p.getAnimation().getXPos();
-			//			int y = p.getAnimation().getYPos();
-			int x  = 100;
-			int y = 100;
+			int x = p.getAnimation().getXPos();
+			int y = p.getAnimation().getYPos();
+//			int x  = 100;
+//			int y = 100;
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface b : map.get(type)) {

@@ -23,10 +23,13 @@ import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
+import city.agents.interfaces.Bus;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
 import city.animations.PersonAnimation;
+import city.animations.WalkerAnimation;
 import city.animations.interfaces.AnimatedPerson;
+import city.animations.interfaces.AnimatedWalker;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
@@ -40,11 +43,13 @@ import city.roles.BusPassengerRole;
 import city.roles.CarPassengerRole;
 import city.roles.MarketCustomerRole;
 import city.roles.ResidentRole;
+import city.roles.WalkerRole;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BusPassenger;
 import city.roles.interfaces.CarPassenger;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.Resident;
+import city.roles.interfaces.Walker;
 
 /**
  * The PersonAgent class.
@@ -78,6 +83,7 @@ public class PersonAgent extends Agent implements Person {
 	private MarketCustomer marketCustomerRole; 				// not retained
 	private CarPassenger carPassengerRole; 					// not retained
 	private BusPassenger busPassengerRole; 					// not retained
+	private Walker walkerRole;								// Not retained
 	private BankCustomer bankCustomerRole; 					// retained
 	private Resident residentRole; 							// retained
 	private Semaphore atDestination = new Semaphore(0, true);
@@ -735,9 +741,19 @@ public class PersonAgent extends Agent implements Person {
 				carPassengerRole.setActive();
 				carPassengerRole.setPerson(this);
 				this.addRole(carPassengerRole);
-			} else {
+			} else if(this.cash > (Bus.BUS_FARE * 10)) { // Only goes to bus if he has 10 times the amount of bus fare in cash
 				BusStop b = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, this);
 				BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
+				walkerRole = new WalkerRole(b);
+				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
+				walkerAnimation.setVisible(true);
+				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				walkerRole.setAnimation(walkerAnimation);
+				walkerRole.setPerson(this);
+				this.addRole(walkerRole);
+				walkerRole.setActive();
+				atDestination.acquire();
+				this.removeRole(walkerRole);
 				// TODO
 				// animation.goToBusStop(b);
 				//if(!PersonAnimation.beingTested)
@@ -748,6 +764,16 @@ public class PersonAgent extends Agent implements Person {
 				busPassengerRole.setPerson(this);
 				busPassengerRole.setActive();
 				this.addRole(busPassengerRole);
+			} else { // Let's go for a walk
+				walkerRole = new WalkerRole(destination);
+				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
+				walkerAnimation.setVisible(true);
+				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				walkerRole.setAnimation(walkerAnimation);
+				walkerRole.setPerson(this);
+				this.addRole(walkerRole);
+				walkerRole.setActive();
+				atDestination.acquire();
 			}
 		} else {
 			// Don't do anything, you're already where you should be
@@ -766,9 +792,17 @@ public class PersonAgent extends Agent implements Person {
 	 * 
 	 */
 	private boolean processTransportationArrival() {
-		if (carPassengerRole == null && busPassengerRole == null) {
+		if (carPassengerRole == null && busPassengerRole == null && walkerRole == null) {
 			return true;
 		} else {
+			if(walkerRole != null) {
+				if(!walkerRole.getActive()) {
+					setCurrentLocation(walkerRole.getDestination());
+					removeRole(walkerRole);
+					walkerRole = null;
+					return true;
+				}
+			}
 			if (car != null && carPassengerRole != null) {
 				if(!carPassengerRole.getActive()) {
 					setCurrentLocation(carPassengerRole.getDestination());

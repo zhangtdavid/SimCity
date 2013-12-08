@@ -26,6 +26,7 @@ public class WalkerRole extends Role implements Walker {
 
 	@Override
 	public void msgImAtDestination() {
+		this.getPerson().guiAtDestination();
 		myEvent = WalkerEvent.ATDESTINATION;
 		stateChanged();
 	}
@@ -34,6 +35,7 @@ public class WalkerRole extends Role implements Walker {
 	
 	@Override
 	public boolean runScheduler() {
+		System.out.println(myState);
 		if(myState == WalkerState.NOTWALKING && myEvent == WalkerEvent.STARTINGTOWALK) { // In car, start driving
 			myState = WalkerState.WALKING;
 			startWalking();

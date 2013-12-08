@@ -3,6 +3,7 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Dimension;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import javax.swing.JPanel;
@@ -16,7 +17,7 @@ public class BuildingCard extends JPanel {
 	public int panelX;
 	public int panelY;
 	public final int delayMS = 5;
-	public List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
+	public List<AnimationInterface> animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 	public Color background;
 
 	public static final int CARD_WIDTH = 500, CARD_HEIGHT = 500;
@@ -39,9 +40,11 @@ public class BuildingCard extends JPanel {
 
 	public void animate() {
 		// Update the position of each visible element
-		for(AnimationInterface animation : animations) {
-			if (animation.getVisible()) {
-				animation.updatePosition();
+		synchronized(animations) {
+			for(AnimationInterface animation : animations) {
+				if (animation.getVisible()) {
+					animation.updatePosition();
+				}
 			}
 		}
 	}

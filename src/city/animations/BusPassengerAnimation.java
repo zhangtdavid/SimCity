@@ -4,6 +4,7 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.util.Random;
 
+import city.Application;
 import city.animations.interfaces.AnimatedBusPassenger;
 import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
@@ -24,8 +25,7 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
-			if(startingSidewalk.setCurrentOccupant(this) == false 
-					) {
+			if(startingSidewalk.setCurrentOccupant(this) == false) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -40,7 +40,7 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 			return;
 		}
 		// Traveling along sidewalks
-		if(atDestinationRoad == false) {
+		if(atDestinationRoad == false && currentSidewalk != null) {
 			if(startingSidewalk != null) {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
@@ -108,12 +108,16 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 						}
 					}
 				}
-			} else if(currentSidewalk == endSidewalk)
+			} else if(currentSidewalk == endSidewalk) {
 				atDestinationRoad = true;
+				while(!sidewalkPath.isEmpty())
+					sidewalkPath.pop();
+				currentSidewalk.setCurrentOccupant(null);
+				currentSidewalk = null;
+			}
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
-			currentSidewalk.setCurrentOccupant(null);
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
@@ -150,13 +154,15 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 		this.xDestination = busPassenger.getBus().getAnimation().getXPos();
 		this.yDestination = busPassenger.getBus().getAnimation().getYPos();
 		if(xDestination > busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX() + 2)
-			xDestination -= 25;
-		else if(xDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX() - 2)
+			xDestination -= (int)(sidewalks.getSidewalkSize());
+		else if(xDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX() - 2) {
 			xDestination += 25;
+		}
 		if(yDestination > busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY() + 2)
-			yDestination -= 25;
-		else if(yDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY() - 2)
+			yDestination -= (int)(sidewalks.getSidewalkSize());
+		else if(yDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY() - 2) {
 			yDestination += 25;
+		}
 		endSidewalk = sidewalks.getClosestSidewalk(xDestination, yDestination);
 		atDestination = false;
 		atDestinationRoad = false;
@@ -169,11 +175,11 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 		int startingX = xPos = busPassenger.getBus().getAnimation().getXPos();
 		int startingY = yPos = busPassenger.getBus().getAnimation().getYPos();
 		if(startingX > busPassenger.getDestination().getCityViewBuilding().getX() + 2)
-			startingX -= 25;
+			startingX -= (int)(sidewalks.getSidewalkSize());
 		else if(startingX < busPassenger.getDestination().getCityViewBuilding().getX() - 2)
 			startingX += 25;
 		if(startingY > busPassenger.getDestination().getCityViewBuilding().getY() + 2)
-			startingY -= 25;
+			startingY -= (int)(sidewalks.getSidewalkSize());
 		else if(startingY <busPassenger.getDestination().getCityViewBuilding().getY() - 2)
 			startingY += 25;
 		startingSidewalk = sidewalks.getClosestSidewalk(startingX, startingY);

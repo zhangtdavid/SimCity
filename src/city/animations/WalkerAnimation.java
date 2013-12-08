@@ -42,8 +42,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
-			if(startingSidewalk.setCurrentOccupant(this) == false 
-					) {
+			if(startingSidewalk.setCurrentOccupant(this) == false) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -58,7 +57,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 			return;
 		}
 		// Traveling along sidewalks
-		if(atDestinationRoad == false) {
+		if(atDestinationRoad == false  && currentSidewalk != null) {
 			if(startingSidewalk != null) {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
@@ -126,12 +125,16 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 						}
 					}
 				}
-			} else if(currentSidewalk == endSidewalk)
+			} else if(currentSidewalk == endSidewalk) {
 				atDestinationRoad = true;
+				while(!sidewalkPath.isEmpty())
+					sidewalkPath.pop();
+				currentSidewalk.setCurrentOccupant(null);
+				currentSidewalk = null;
+			}
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
-			currentSidewalk.setCurrentOccupant(null);
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
@@ -146,8 +149,9 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
-			if(walker != null)
+			if(walker != null) {
 				walker.msgImAtDestination();
+			}
 		}
 	}
 
