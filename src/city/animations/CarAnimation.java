@@ -80,6 +80,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			atDestinationRoad = false;
 			currentBuilding = destinationBuilding;
 			destinationBuilding = null;
+			this.setVisible(false);
 			car.msgAtDestination();
 		}
 	}
@@ -104,6 +105,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		endRoad = Application.CityMap.findClosestRoad(destination);
 		atDestination = false;
 		atDestinationRoad = false;
+		this.setVisible(true);
 		this.car.print("Going to destination " + destination);
 	}
 	

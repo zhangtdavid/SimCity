@@ -30,6 +30,8 @@ public interface BusPassenger extends RoleInterface {
 	public Bus getBus();
 	public BUSPASSENGERSTATE getState();
 	public BUSPASSENGEREVENT getEvent();
+	public void msgImAtDestination();
+	public void print(String string);
 	
 	// Setters
 	
