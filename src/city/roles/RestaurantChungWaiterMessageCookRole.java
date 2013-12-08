@@ -3,10 +3,12 @@ package city.roles;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChungWaiterBase;
-import utilities.RestaurantChungWaiterBase.WCustomer.OrderStatus;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;
+import city.buildings.interfaces.RestaurantChung.MyCustomer;
+import city.buildings.interfaces.RestaurantChung.MyCustomer.OrderStatus;
 
 /**
  * Restaurant Waiter Agent
@@ -23,7 +25,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 
 	// Messages
 	@Override
-	public void tellCookOrder(WCustomer customer, String choice, int table) {
+	public void tellCookOrder(MyCustomer customer, FOOD_ITEMS choice, int table) {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 
 		try {
@@ -33,9 +35,9 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 			e.printStackTrace();
 		}
 
-		print("telling cook order " + choice + " for " + customer.c);
+		print("telling cook order " + choice + " for " + customer.getRestaurantChungCustomer());
 		restaurant.getRestaurantChungCook().msgHereIsAnOrder(this, choice, table);
-		customer.o.os = OrderStatus.Cooking;
+		customer.setOrderStatus(OrderStatus.Cooking);
 		
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}

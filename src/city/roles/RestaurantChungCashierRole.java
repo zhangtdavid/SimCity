@@ -65,7 +65,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 //	Waiter
 //	---------------------------------------------------------------
 	@Override
-	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, FOOD_ITEMS order) {
 		print("Cashier received msgComputeBill");
 		log.add(new LoggedEvent("Cashier received msgComputeBill. For order " + order));
 		if (workingState != WorkingState.NotWorking) {
@@ -290,16 +290,16 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	public class Transaction {
 		RestaurantChungWaiter w;
 		RestaurantChungCustomer c;
-		String choice;
+		FOOD_ITEMS choice;
 		private int price;
 		private int payment;
 		private TransactionState s;
 		
-		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, String order, TransactionState state) {
+		public Transaction(RestaurantChungWaiter w2, RestaurantChungCustomer customer, FOOD_ITEMS order, TransactionState state) {
 			w = w2;
 			c = customer;
 			choice = order;
-			price = restaurant.getFoods().get(FOOD_ITEMS.valueOf(choice)).getPrice();
+			price = restaurant.getFoods().get(choice).getPrice();
 			payment = 0;
 			s = state;
 		}

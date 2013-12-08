@@ -6,7 +6,6 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.RestaurantChungOrder;
-import utilities.RestaurantChungRevolvingStand;
 import city.Application.FOOD_ITEMS;
 import city.bases.Role;
 import city.bases.interfaces.RestaurantBuildingInterface.Food;
@@ -26,7 +25,7 @@ public class MockRestaurantChungCook extends MockRole implements RestaurantChung
 
 	@Override
 	public void msgHereIsAnOrder(
-			RestaurantChungWaiter restaurantChungWaiterBase, String choice,
+			RestaurantChungWaiter restaurantChungWaiterBase, FOOD_ITEMS choice,
 			int table) {
 		// TODO Auto-generated method stub
 		

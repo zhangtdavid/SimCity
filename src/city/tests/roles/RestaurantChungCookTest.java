@@ -156,7 +156,7 @@ public class RestaurantChungCookTest extends TestCase {
 		assertEquals("Cook should have 0 marketCustomerDeliveryRoles.", cook.getMarketCustomerDeliveryRoles().size(), 0);
 		assertEquals("Cook should have 0 marketOrders.", cook.getMarketOrders().size(), 0);
 
-		cook.msgHereIsAnOrder(waiterMC, "steak", 1);
+		cook.msgHereIsAnOrder(waiterMC, FOOD_ITEMS.steak, 1);
 		assertEquals("Cook log should have 1 entry.", cook.log.size(), 1);
 		assertTrue("Cook log should have \"RestaurantChungCook received msgHereIsAnOrder\". The last event logged is " + cook.log.getLastLoggedEvent().toString(), cook.log.containsString("RestaurantChungCook received msgHereIsAnOrder"));
 		assertEquals("Cook should have 1 orders.", cook.getOrders().size(), 1);

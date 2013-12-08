@@ -260,6 +260,17 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	}
 	
 	@Override
+	// Find customer seated at table
+	public MyCustomer findCustomer(int t) {
+		for(MyCustomer customer : customers ){
+			if(customer.getTable() == t) {
+				return customer;		
+			}
+		}
+		return null;
+	}
+	
+	@Override
 	public Table findTable(int t) {
 		for (Table table : tables) {
 			if (table.getTableNumber() == t) {

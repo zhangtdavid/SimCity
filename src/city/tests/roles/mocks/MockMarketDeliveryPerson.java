@@ -69,4 +69,10 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 		return null;
 	}
 
+	@Override
+	public WorkingState getWorkingState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }
