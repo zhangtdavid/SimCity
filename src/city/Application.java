@@ -26,8 +26,8 @@ import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.PersonAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
+import city.animations.WalkerAnimation;
 import city.bases.Building;
-import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.buildings.AptBuilding;
@@ -84,7 +84,6 @@ import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.PersonAnimationTest;
 
 public class Application {
 
@@ -103,7 +102,7 @@ public class Application {
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
 	
-	static CitySidewalkLayout sidewalks;
+	public static CitySidewalkLayout sidewalks;
 	
 	private static final DataModel model = new DataModel();
 
@@ -320,31 +319,32 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
 		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		sidewalks.setRoads(trafficControl);
 		
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(350, 0, "Bus Stop 1", Color.white, bsp1);
+		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
 		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
 		createBuilding(bsp1, cityViewBusStop1, busStop1);
 		
 		BusStopPanel bsp2 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(0, 125, "Bus Stop 2", Color.white, bsp2);
+		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(125, 125, "Bus Stop 2", Color.white, bsp2);
 		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
 		createBuilding(bsp2, cityViewBusStop2, busStop2);
 
 		BusStopPanel bsp3 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(275, 275, "Bus Stop 3", Color.white, bsp3);
+		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(325, 325, "Bus Stop 3", Color.white, bsp3);
 		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
 		createBuilding(bsp3, cityViewBusStop3, busStop3);
 
 		BusStopPanel bsp4 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(75, 425, "Bus Stop 4", Color.white, bsp4);
+		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(125, 325, "Bus Stop 4", Color.white, bsp4);
 		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
 		createBuilding(bsp4, cityViewBusStop4, busStop4);
 		
 		// Create buildings
 		BankPanel bankPanel1 = new BankPanel(Color.green);
-		CityViewBank cityViewBank1 = new CityViewBank(450, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
+		CityViewBank cityViewBank1 = new CityViewBank(425, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
 		BankBuilding bankBuilding1 = new BankBuilding("BankBuilding", bankPanel1, cityViewBank1);
 		createBuilding(bankPanel1, cityViewBank1, bankBuilding1);
 
@@ -372,7 +372,7 @@ public class Application {
 		}
 		
 		MarketPanel marketPanel1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarket1 = new CityViewMarket(125, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
+		CityViewMarket cityViewMarket1 = new CityViewMarket(150, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
 		MarketBuilding marketBuilding1 = new MarketBuilding("MarketBuilding1", marketPanel1, cityViewMarket1);
 		createBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
 		
@@ -399,10 +399,7 @@ public class Application {
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
 		
 		// Create landlord
-		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date);
-		p0Zhang.setHome(apartmentBuildingZhang1); // gives resident role here?
-		PersonAnimation animation = new PersonAnimation(p0Zhang);
-		p0Zhang.setAnimation(animation);
+		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		LandlordRole p0r1Zhang = new LandlordRole();
 		p0Zhang.addRole(p0r1Zhang);
 		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
@@ -410,19 +407,15 @@ public class Application {
 		model.addPerson(p0Zhang);
 		
 		// Create people
-		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date);
-		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date);
-		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date);
-		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date);
+		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p4Zhang = new PersonAgent("Tenant 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
 		model.addPerson(p4Zhang);
-		p1Zhang.setHome(apartmentBuildingZhang1);
-		p2Zhang.setHome(apartmentBuildingZhang1);
-		p3Zhang.setHome(apartmentBuildingZhang1);
-		p4Zhang.setHome(apartmentBuildingZhang1);
-		
+
 		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
 		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 500);
@@ -498,29 +491,23 @@ public class Application {
 		}
 
 		// Create landlord
-		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date);
+		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date, new PersonAnimation(), rhb1Timms);
 		LandlordRole p0r1Timms = new LandlordRole();
 		p0Timms.addRole(p0r1Timms);
-
 		rhb1Timms.setLandlord(p0r1Timms);
-		p0Timms.setHome(rhb1Timms);
 		p0Timms.setCash(10);
 		p0r1Timms.setActive();
 		model.addPerson(p0Timms);
 
 		// Create people
-		PersonAgent p1Timms = new PersonAgent("Cashier 1 Timms", date);
-		PersonAgent p2Timms = new PersonAgent("Cook 1 Timms", date);
-		PersonAgent p3Timms = new PersonAgent("Host 1 Timms", date);
-		PersonAgent p4Timms = new PersonAgent("Waiter 1 Timms", date);
+		PersonAgent p1Timms = new PersonAgent("Cashier 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p2Timms = new PersonAgent("Cook 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p3Timms = new PersonAgent("Host 1 Timms", date, new PersonAnimation(), rhb1Timms);
+		PersonAgent p4Timms = new PersonAgent("Waiter 1 Timms", date, new PersonAnimation(), rhb1Timms);
 		model.addPerson(p1Timms);
 		model.addPerson(p2Timms);
 		model.addPerson(p3Timms);
 		model.addPerson(p4Timms);
-		p1Timms.setHome(rhb1Timms);
-		p2Timms.setHome(rhb1Timms);
-		p3Timms.setHome(rhb1Timms);
-		p4Timms.setHome(rhb1Timms);
 
 		// Give people cars
 		CarAgent c0Timms = new CarAgent(busStop3, p0Timms);
@@ -572,7 +559,7 @@ public class Application {
 		createBuilding(marketPanelChoi1, cityViewMarketChoi1, marketBuildingChoi1);
 
 		RestaurantChoiPanel restaurantChoiPanel1 = new RestaurantChoiPanel(Color.GRAY);
-		CityViewRestaurant cityViewRestaurantChoi1 = new CityViewRestaurant(200, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, restaurantChoiPanel1);
+		CityViewRestaurant cityViewRestaurantChoi1 = new CityViewRestaurant(175, 175, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.cyan, restaurantChoiPanel1);
 		RestaurantChoiBuilding restaurantChoiBuilding1 = new RestaurantChoiBuilding("RestaurantChoi1", restaurantChoiPanel1, cityViewRestaurantChoi1);
 		createBuilding(restaurantChoiPanel1, cityViewRestaurantChoi1, restaurantChoiBuilding1);
 		
@@ -587,30 +574,30 @@ public class Application {
 		createBuilding(rhp2Choi, rhcv2Choi, rhb2Choi);
 		
 		HousePanel rhp3Choi = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
+		CityViewHouse rhcv3Choi = new CityViewHouse(320, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
 		HouseBuilding rhb3Choi = new HouseBuilding("House Choi1", null, rhp3Choi, rhcv3Choi);
 		createBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 		
 		// Create landlord
-		PersonAgent p0Choi = new PersonAgent("Landlord Choi", date);
+		PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), rhb3Choi);
 		LandlordRole p0r1Choi = new LandlordRole();
 		p0Choi.addRole(p0r1Choi);
 		rhb1Choi.setLandlord(p0r1Choi);
-		p0Choi.setHome(rhb1Choi);
 		p0r1Choi.setActive();
 		model.addPerson(p0Choi);
 
 		// Create people
-		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date);
-		PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date);
-		PersonAgent p3Choi = new PersonAgent("Host 1 Choi", date);
-		PersonAgent p4Choi = new PersonAgent("Waiter 1 Choi", date);
-		PersonAgent p5Choi = new PersonAgent("Market Mgr Choi", date);
-		PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date);
-		PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date);
-		PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date);
-		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date);
-		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date);
+		PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date, new PersonAnimation(), rhb1Choi);
+		PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date, new PersonAnimation(),rhb1Choi);
+		PersonAgent p3Choi = new PersonAgent("Host 1 Choi", date, new PersonAnimation(),rhb1Choi);
+		PersonAgent p4Choi = new PersonAgent("Waiter 1 Choi", date, new PersonAnimation(), rhb1Choi);
+		PersonAgent p5Choi = new PersonAgent("Market Mgr Choi", date, new PersonAnimation(),rhb1Choi);
+
+		PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date, new PersonAnimation(), rhb2Choi);
+		PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date, new PersonAnimation(),rhb2Choi);
+		PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date, new PersonAnimation(),rhb2Choi);
+		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date, new PersonAnimation(),rhb2Choi);
+		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date, new PersonAnimation(),rhb2Choi);
 
 		model.addPerson(p1Choi);
 		model.addPerson(p2Choi);
@@ -623,17 +610,19 @@ public class Application {
 		model.addPerson(p9Choi);
 		model.addPerson(p10Choi);
 
-		p1Choi.setHome(rhb1Choi);
+		p0Choi.setHome(rhb3Choi); // 1 person per house
+		
+		p1Choi.setHome(rhb1Choi); // 5 persons per apt
 		p2Choi.setHome(rhb1Choi);
 		p3Choi.setHome(rhb1Choi);
 		p4Choi.setHome(rhb1Choi);
-
-		p5Choi.setHome(rhb2Choi);
+		p5Choi.setHome(rhb1Choi);
+		
 		p6Choi.setHome(rhb2Choi);
 		p7Choi.setHome(rhb2Choi);
 		p8Choi.setHome(rhb2Choi);
 		p9Choi.setHome(rhb2Choi);
-		p10Choi.setHome(rhb3Choi);
+		p10Choi.setHome(rhb2Choi);
 
 
 		// Landlord
@@ -752,42 +741,35 @@ public class Application {
 		
 		// RESTAURANTCHUNGTESTING FOR ANIMATION IN GUI
 		RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
-		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(450, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
+		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
 		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
 		createBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
 		
-		HousePanel housePanelChung1 = new HousePanel(Color.black);
-		CityViewHouse cityViewHouseChung1 = new CityViewHouse(425,250, "Chung House" + (mainFrame.cityView.getStaticsSize()), Color.gray, housePanelChung1);
-		HouseBuilding houseBuildingChung1 = new HouseBuilding("Chung House", null, housePanelChung1, cityViewHouseChung1);
-		createBuilding(housePanelChung1, cityViewHouseChung1, houseBuildingChung1);
+		AptPanel AptPanelChung1 = new AptPanel(Color.black);
+		CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apt" + (mainFrame.cityView.getStaticsSize()), Color.gray, AptPanelChung1);
+		AptBuilding AptBuildingChung1 = new AptBuilding("Chung Apt", null, AptPanelChung1, cityViewAptChung1);
+		createBuilding(AptPanelChung1, cityViewAptChung1, AptBuildingChung1);
 
 
 		
 		// Create landlord
-		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date);
-		System.out.println(p0Chung);
-		System.out.println(p0Chung.getCash());
+		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), AptBuildingChung1);
 		p0Chung.setCash(50); // TODO remove later
 		LandlordRole p0r1Chung = new LandlordRole();
 		p0Chung.addRole(p0r1Chung);
-		houseBuildingChung1.setLandlord(p0r1Chung);
-		p0Chung.setHome(houseBuildingChung1);
+		AptBuildingChung1.setLandlord(p0r1Chung);
 		p0r1Chung.setActive();
 		model.addPerson(p0Chung);
 
 		// Create people
-		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date);
-		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date);
-		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date);
-		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date);
+		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date, new PersonAnimation(), AptBuildingChung1);
+		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date, new PersonAnimation(), AptBuildingChung1);
+		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date, new PersonAnimation(), AptBuildingChung1);
+		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date, new PersonAnimation(), AptBuildingChung1);
 		model.addPerson(p1Chung);
 		model.addPerson(p2Chung);
 		model.addPerson(p3Chung);
 		model.addPerson(p4Chung);
-		p1Chung.setHome(houseBuildingChung1);
-		p2Chung.setHome(houseBuildingChung1);
-		p3Chung.setHome(houseBuildingChung1);
-		p4Chung.setHome(houseBuildingChung1);
 
 		// Give people cars
 		CarAgent c0Chung = new CarAgent(busStop1, p0Chung);
@@ -945,12 +927,12 @@ public class Application {
 		p2Choi.startThread();
 		p3Choi.startThread();
 		p4Choi.startThread();
-		p5Choi.startThread();
-		p6Choi.startThread();
-		p7Choi.startThread();
-		p8Choi.startThread();
-		p9Choi.startThread();
-		p10Choi.startThread();
+//		p5Choi.startThread();
+//		p6Choi.startThread();
+//		p7Choi.startThread();
+//		p8Choi.startThread();
+//		p9Choi.startThread();
+//		p10Choi.startThread();
 		
 		c0Choi.startThread();
 		c1Choi.startThread();
@@ -985,9 +967,12 @@ public class Application {
 //		c2JP.startThread();
 //		c3JP.startThread();
 //		c4JP.startThread();
-
-		PersonAnimationTest testPersonAnimation = new PersonAnimationTest(busStop2, sidewalks);
-		mainFrame.cityView.addAnimation(testPersonAnimation);
+		
+		for(int j = 0; j < 30; j++) {
+			WalkerAnimation testPersonAnimation = new WalkerAnimation(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
+			mainFrame.cityView.addAnimation(testPersonAnimation);
+			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
+		}
 	}
 	
 	public static DataModel getModel() {
@@ -1113,20 +1098,5 @@ public class Application {
 			}
 			return list;
 		}
-	}
-
-	/**
-	 * Probably could be better named, but sets all the foods in the refrig to FOOD_ITEM, 0, so you don't get null pointers when iterating through it
-	 * You shouldn't have to use this, I built it into setHome() so it's done automatically.
-	 * @param person 
-	 * @param house 
-	 */
-	public static void preventFoodNullPointers(Person person, ResidenceBuildingInterface house) {
-		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
-		items.put(FOOD_ITEMS.salad, 0);
-		items.put(FOOD_ITEMS.chicken, 0);
-		items.put(FOOD_ITEMS.steak, 0);
-		items.put(FOOD_ITEMS.pizza, 0); 
-		house.setFood(person, items);
 	}
 }

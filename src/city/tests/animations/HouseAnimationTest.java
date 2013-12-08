@@ -19,7 +19,6 @@ import city.gui.interiors.BankPanel;
 import city.gui.interiors.HousePanel;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
-import city.tests.animations.mocks.MockAnimatedPerson;
 import city.tests.buildings.mocks.MockBusStop;
 import city.tests.roles.mocks.MockCityViewBuilding;
 
@@ -30,7 +29,6 @@ public class HouseAnimationTest extends TestCase {
 	private CityViewHouse houseCityViewBuilding; // does nothing, no gui really pops out...
 	private HousePanel hp; // does nothing, no gui really pops out...
 	private BankPanel bp;
-	private MockAnimatedPerson animation;
 	private LandlordRole landlord;
 	private ResidentRole resident;
 	private BankBuilding bank;	
@@ -81,22 +79,20 @@ public class HouseAnimationTest extends TestCase {
 				
 		//sort of relevant things
 		houseCityViewBuilding = new CityViewHouse(10, 10);
-		person = new PersonAgent("MovingPerson", date);
+		homeAnimation = new PersonAnimation();
+		house = new HouseBuilding("House", landlord, hp, houseCityViewBuilding);
+		person = new PersonAgent("MovingPerson", date, homeAnimation, house);
 		person.setCash(0); // so he doesn't go to market or restaurant
-		animation = new MockAnimatedPerson(person);
-		homeAnimation = new PersonAnimation(person);
+		
 		resident.setPerson(person);
-		person.addRole(resident);
-		person.setAnimation(animation);
+		//person.addRole(resident);
 		//person.setHomeAnimation(homeAnimation);
 		resident.setLandlord(landlord);
 		//person.setOccupation(null); // jobless, but is landlord TODO why doesn't this work now? no jobless people?
 		
 		//And the house, which is the real deal.
-		house = new HouseBuilding("House", landlord, hp, houseCityViewBuilding);
 		Application.CityMap.addBuilding(BUILDING.house,house);
 		house.setCityViewBuilding(houseCityViewBuilding);
-		person.setHome(house);
 		HashMap<FOOD_ITEMS, Integer> foods = new HashMap<FOOD_ITEMS, Integer>();
 		foods.put(FOOD_ITEMS.chicken, 5); // put one chicken in the refrigerator to eat.
 		foods.put(FOOD_ITEMS.salad, 0);
@@ -128,12 +124,12 @@ public class HouseAnimationTest extends TestCase {
 		boolean outcome;
 		outcome = person.runScheduler();
 		// Person should be doing a daily task (going home to cook)
-		assertEquals("Person scheduler should continue running", person.runScheduler(), true);
-		person.getBusPassengerRole().setInactive(); // HAS ARRIVED AT HOME
-		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
 		assertEquals("Person's homeAnimation should have STATES noCommand", homeAnimation.getCommand(), "noCommand");
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true);
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
+		assertEquals("Person's homeAnimation should have STATES noCommand", homeAnimation.getCommand(), "ToRef"); //toref->tostove->totable->done
 		
-		assertEquals("Scheduler should still be true", person.runScheduler(), true);
+		assertEquals("Scheduler should still be true", person.runScheduler(), false);
 		if(outcome){} // no warning saying outcome is useless now...
 		//Fast forward time
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
@@ -142,7 +138,7 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.setCoords(HousePanel.HDX, HousePanel.HDY);
 		assertEquals("xPos was just set to door's x", homeAnimation.getXPos(), HousePanel.HDX);
 		assertEquals("yPos was just set to door's y", homeAnimation.getYPos(), HousePanel.HDY);
-		assertEquals("Person's homeAnimation should have STATES noCommand before I tell it to go to room", homeAnimation.getCommand(), "noCommand");
+		assertEquals("Person wants to sleep", homeAnimation.getCommand(), "ToBed");
 		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
 		
 		//Now go to bed to sleep.

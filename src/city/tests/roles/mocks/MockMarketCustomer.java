@@ -1,6 +1,7 @@
 package city.tests.roles.mocks;
 
 import java.beans.PropertyChangeSupport;
+import java.util.HashMap;
 import java.util.Map;
 
 import utilities.EventLog;
@@ -29,7 +30,7 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public void msgHereIsOrderandBill(Map<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
+	public void msgHereIsOrderandBill(HashMap<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Customer received msgHereIsOrderandBill from cashier. The bill is for " + bill));		
 		System.out.println("Customer received msgHereIsOrderandBill from cashier. The bill is for " + bill);			
 	}

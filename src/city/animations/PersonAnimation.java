@@ -13,7 +13,7 @@ import city.buildings.interfaces.House;
 import city.gui.interiors.AptPanel;
 import city.gui.interiors.HousePanel;
 
-public class PersonAnimation extends Animation implements AnimatedPerson { // needs code standard review
+public class PersonAnimation extends Animation implements AnimatedPerson {
 	
 	// Data
 	
@@ -34,25 +34,36 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	
 	// Constructor
 	
-	public PersonAnimation(Person p) {
-		this.person = p;
-		if(p.getHome() instanceof House){ //house
-			this.xDestination = HousePanel.HDX;
-			this.yDestination = HousePanel.HDY+10;
-			this.xPos = HousePanel.HDX; 
-			this.yPos = HousePanel.HDY+10;
-		}else if(p.getHome() instanceof Apt){ // or apartment
-			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
-			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
-			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
-		}
+	public PersonAnimation() {
+		super();
+		this.person = null; // Expects to have this set immediately after creation
+		this.xDestination = HousePanel.HDX;
+		this.yDestination = HousePanel.HDY+10;
+		this.xPos = HousePanel.HDX; 
+		this.yPos = HousePanel.HDY+10;
+		
+// TODO
+//		if(p.getHome() instanceof House){ //house
+//			this.xDestination = HousePanel.HDX;
+//			this.yDestination = HousePanel.HDY+10;
+//			this.xPos = HousePanel.HDX; 
+//			this.yPos = HousePanel.HDY+10;
+//		}else if(p.getHome() instanceof Apt){ // or apartment
+//			this.xDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
+//			this.yDestination = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
+//			this.xPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][0]-10;
+//			this.yPos = AptPanel.APT_DOOR[p.getRoomNumber()-1][1];
+//		}
 	}
 	
 	// Abstract implementors
 	
 	@Override
 	public void updatePosition() {
+		
+		if (person == null) {
+			throw new IllegalStateException("PersonAnimation does not have a Person object.");
+		}
 		
 		// Movement
 		if (xPos < xDestination)
@@ -262,11 +273,16 @@ public class PersonAnimation extends Animation implements AnimatedPerson { // ne
 	public void setGraphicStatus(String in){
 		status = in;
 	}
-
+	
 	@Override
-	public void setAtHome() {
-		isAtHome = true;
+	public void setPerson(Person p) {
+		this.person = p;
 	}
+	
+    @Override
+    public void setAtHome() {
+    	isAtHome = true;
+    }
 
 	@Override
 	public void setAcquired(){

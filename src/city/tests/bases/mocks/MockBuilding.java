@@ -130,8 +130,7 @@ public abstract class MockBuilding implements BuildingInterface {
 
 	@Override
 	public void removeOccupyingRole(RoleInterface r) {
-		// TODO Auto-generated method stub
-		
+		occupyingRoles.remove(r);
 	}
 
 	@Override

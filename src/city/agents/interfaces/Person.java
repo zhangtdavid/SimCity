@@ -7,6 +7,7 @@ import java.util.List;
 import city.Application;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.interfaces.AgentInterface;
+import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
@@ -76,6 +77,7 @@ public interface Person extends AgentInterface {
 	public void setAnimation(AnimatedPerson a);
 	public void setOccupation(JobRoleInterface r);
 	public void setResidentRole(Resident r);
+	public void setCurrentLocation(BuildingInterface b);
 	
 	// Utilities
 	

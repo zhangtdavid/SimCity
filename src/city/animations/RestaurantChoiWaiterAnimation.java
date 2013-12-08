@@ -12,8 +12,8 @@ public class RestaurantChoiWaiterAnimation extends Animation implements Restaura
 
 	// Data
 	RestaurantChoiWaiter agent;
-	private int xPos = 640, yPos = -20;//default waiter position
-	private int xDestination = 640, yDestination = -20;//default start position
+	private int xPos = 540, yPos = -20;//default waiter position
+	private int xDestination = 540, yDestination = -20;//default start position
 	private boolean currentlyAcquired;
 	private String orderIcon = new String();
 	private int Y;

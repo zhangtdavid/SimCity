@@ -1,14 +1,6 @@
 package city.buildings;
 
-import java.util.HashMap;
-import java.util.Map;
-
-import city.Application.FOOD_ITEMS;
-import city.agents.interfaces.Person;
-import city.animations.PersonAnimation;
-import city.bases.Animation;
 import city.bases.ResidenceBuilding;
-import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Apt;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.AptPanel;
@@ -18,67 +10,40 @@ import city.roles.interfaces.Resident;
 public class AptBuilding extends ResidenceBuilding implements Apt {
 
 	// Data
-	public AptPanel panel; //reference to main gui
-	public Map<Person, Animation> allPersons = new HashMap<Person, Animation>();
+	
+	private AptPanel panel;
+	public final static int NUMBER_OF_BEDS = 5;
 
 	// Constructor
 
 	public AptBuilding(String name, Landlord l, AptPanel panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
-		this.setLandlord(l);
+		this.setLandlord(l); // WHO YOU PAY RENT TO. MIGHT NOT LIVE HERE // TODO Perhaps I should eliminate the landlord requirement, and have that be added separately?
 		this.panel = panel;
 		this.setCityViewBuilding(cityBuilding); 
 	}
 
 	// Getters
+	
 	@Override
 	public boolean getIsFull() {
 		return !residents.isEmpty();
 	}
+	
 	// Setters
 
+	// Utilities
+	
 	@Override
 	public void addResident(Resident r) {
-		if(residents.size() < Apt.NUMBER_OF_BEDS) {
-			residents.add(r);
-			HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
-			items.put(FOOD_ITEMS.salad, 0);
-			items.put(FOOD_ITEMS.chicken, 0);
-			items.put(FOOD_ITEMS.steak, 0);
-			items.put(FOOD_ITEMS.pizza, 0); // should we be putting 1 food item for each person on addition? TODO
-			this.setFood(r.getPerson(), items);
-			r.getPerson().setRoomNumber(residents.size()); // could be one of 1~5 inclusive\
-		}else{
-			r.getPerson().print("This apartment is full (5 residents); cannot live here right now");
+		if (!residents.contains(r)) {
+			if(residents.size() <= AptBuilding.NUMBER_OF_BEDS) {
+				residents.add(r);
+				super.addResident(r);
+			}else{
+				throw new IllegalStateException("Only five people at a time may live in an apartment.");
+			}
 		}
-	}
-
-	// Utilities
-
-	@Override
-	public void addOccupyingRole(RoleInterface r) {
-		// you can put any role the person has into this for house; I just get the person through it.
-		if(!this.allPersons.containsKey(r.getPerson())){ // this prevents duplicates
-			addOccupyingPerson(r.getPerson());
-		}
-		// if you already are in this home, just use the one you have before!
-	}
-
-	/**
-	 * Needed to have Person p instead of RoleInterface because it's not a
-	 * Resident that's doing all the cooking and sleeping, it's a Person.
-	 * 
-	 * @param p
-	 *            The person to move within the house.
-	 */
-	@Override
-	public void addOccupyingPerson(Person p) {
-		PersonAnimation anim = new PersonAnimation(p); // this is disposed of every time the person leaves.
-		p.setAnimation(anim); // set the person's home animation to this.
-		anim.setVisible(true); // set visible the animation. the animation's init. pos. is HDX/HYX.
-		allPersons.put(p, anim);
-		if(!PersonAnimation.beingTested)
-			panel.addVisualizationElement(anim);
 	}
 	
 }

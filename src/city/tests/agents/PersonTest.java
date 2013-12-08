@@ -11,6 +11,7 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.agents.interfaces.Person.STATES;
+import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.RoleInterface;
 import city.tests.agents.mocks.MockBus;
 import city.tests.agents.mocks.MockCar;
@@ -84,26 +85,26 @@ public class PersonTest extends TestCase {
 		Application.CityMap.addBuilding(BUILDING.busStop, busStop2);
 		
 		// Set up test environment
-		person = new PersonAgent("Person", date);
-		animation = new MockAnimatedPerson(person);
+		house = new MockHouse("MockHouse");
+		animation = new MockAnimatedPerson();
+		person = new PersonAgent("Person", date, animation, house);
 		workplace = new MockWorkplace("MockWorkplace");
 		workplaceCityViewBuilding = new MockCityViewBuilding();
 		workplace.setCityViewBuilding(workplaceCityViewBuilding);
-		house = new MockHouse("MockHouse");
+		car = new MockCar("MockCar");
+		bus = new MockBus("MockBus");
 		
-		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
+		// By default, everyone has food at home. We don't want that in the tests.
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
 		items.put(FOOD_ITEMS.salad, 0);
 		items.put(FOOD_ITEMS.chicken, 0);
 		items.put(FOOD_ITEMS.steak, 0);
-		items.put(FOOD_ITEMS.pizza, 0); //ryan addition due to hashmap edit
+		items.put(FOOD_ITEMS.pizza, 0); 
 		house.setFood(person, items);
-		
-		car = new MockCar("MockCar");
-		bus = new MockBus("MockBus");
 	}
 	
 	/**
-	 * The person has a first-shift job, a house, and a car.
+	 * The person has a first-shift job and a car.
 	 * The person has enough money to deposit at the bank. The person's rent is not due. 
 	 * The person will eat at a restaurant. The person has little food at home and will go to the market.
 	 * The person will not eat at home, even though they went to the market, because they ate at the restaurant.
@@ -118,7 +119,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.BANK_DEPOSIT_THRESHOLD);
 		person.setAnimation(animation);
@@ -163,6 +163,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
+		assertEquals("The work Building should be aware of the person's worker", 1, person.getOccupation().getWorkplace(BuildingInterface.class).getOccupyingRoles().size());
 		assertEquals("Person should be at work", Person.STATES.atWork, person.getState());
 		assertTrue("Person's job should be active", person.getOccupation().getActive());
 		
@@ -190,6 +191,7 @@ public class PersonTest extends TestCase {
 		// The person should be going to the bank
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should be going to the bank", Person.STATES.goingToBank, person.getState());
+		assertEquals("The work Building should have no roles inside", 0, person.getOccupation().getWorkplace(BuildingInterface.class).getOccupyingRoles().size());
 		assertTrue("Person should have a CarPassengerRole", person.getCarPassengerRole() != null);
 		assertTrue("Person's CarPassengerRole should be active", person.getCarPassengerRole().getActive());
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
@@ -209,6 +211,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly three roles", 3, person.getRoles().size()); // Occupation, Resident, BankCustomer
 		assertEquals("Person should be at the bank", Person.STATES.atBank, person.getState());
+		assertEquals("The BankBuilding should be aware of the person's BankCustomer", 1, bank.getOccupyingRoles().size());
 		assertTrue("Person's BankCustomerRole should be active", person.getBankCustomerRole().getActive());
 		assertEquals("Person's BankCustomerRole should be making a deposit", Application.BANK_SERVICE.atmDeposit, person.getBankCustomerRole().getService());
 		
@@ -221,6 +224,7 @@ public class PersonTest extends TestCase {
 		
 		// Test that the person has properly left the bank
 		assertTrue("Person should still have BankCustomerRole", person.getBankCustomerRole() != null);
+		assertEquals("The BankBuilding should have no roles inside", 0, bank.getOccupyingRoles().size());
 		assertTrue("Person's BankCustomerRole should be inactive", !person.getBankCustomerRole().getActive());
 		assertEquals("Person should have made a deposit", Person.RESTAURANT_DINING_THRESHOLD, person.getCash()); // See explanation above
 		
@@ -233,7 +237,6 @@ public class PersonTest extends TestCase {
 		assertEquals("Person's CarPassengerRole should be headed to the restaurant", restaurant, person.getCarPassengerRole().getDestination());
 		assertTrue("Person's RestaurantCustomerRole should be inactive", !person.getRestaurantCustomerRole().getActive());
 		assertEquals("Person should have exactly five roles", 5, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassenger, RestaurantCustomer
-		assertEquals("The RestaurantBuilding should be aware of the soon-to-arrive person's RestaurantCustomer", 1, restaurant.getOccupyingRoles().size());
 		
 		// Run the scheduler for person.
 		// - The car should leave
@@ -248,6 +251,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, RestaurantCustomer
 		assertEquals("Person should be at the restaurant", Person.STATES.atRestaurant, person.getState());
+		assertEquals("The RestaurantBuilding should be aware of person's RestaurantCustomer", 1, restaurant.getOccupyingRoles().size());
 		assertTrue("Person's RestaurantCustomerRole should be active", person.getRestaurantCustomerRole().getActive());
 		assertEquals("Person should have eaten", true, person.getHasEaten()); // hasEaten is set true by actGoToRestaurant(), not the scheduler
 		
@@ -265,9 +269,8 @@ public class PersonTest extends TestCase {
 		assertTrue("Person's CarPassengerRole should know that Person owns it", person.getCarPassengerRole().getPerson().equals(person));
 		assertEquals("Person's CarPassengerRole should be headed to the restaurant", market, person.getCarPassengerRole().getDestination());
 		assertEquals("Person should not have a RestaurantCustomerRole", null, person.getRestaurantCustomerRole());
-		// TODO (and do this everywhere) assertEquals("The RestaurantBuilding should know that the person's RestaurantCustomer is gone", 0, restaurant.getOccupyingRoles().size());
+		assertEquals("The RestaurantBuilding should have no roles inside", 0, restaurant.getOccupyingRoles().size());
 		assertEquals("Person should have exactly five roles", 5, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassenger, MarketCustomer
-		assertEquals("The MarketBuilding should be aware of the soon-to-arrive person's MarketCustomer", 1, market.getOccupyingRoles().size()); // TODO and do this for bank, house, occupation, etc.
 		assertEquals("Person's MarketCustomer should have an order of four items", 4, person.getMarketCustomerRole().getOrder().getOrderItems().size());
 		
 		// Run the scheduler for person.
@@ -282,6 +285,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person scheduler should continue running", true, outcome);
 		assertEquals("Person should not have a CarPassengerRole", null, person.getCarPassengerRole());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, MarketCustomer
+		assertEquals("The MarketBuilding should be aware of the person's MarketCustomer", 1, market.getOccupyingRoles().size());
 		assertEquals("Person should be at the market", Person.STATES.atMarket, person.getState());
 		assertTrue("Person's MarketCustomerRole should be active", person.getMarketCustomerRole().getActive());
 		
@@ -295,6 +299,7 @@ public class PersonTest extends TestCase {
 		
 		// Test that the person has properly left the market and is going home to sleep
 		assertEquals("Person should not still have MarketCustomerRole", null, person.getMarketCustomerRole());
+		assertEquals("The MarketBuilding should have no roles inside", 0, market.getOccupyingRoles().size());
 		assertEquals("Person should be going home to sleep", STATES.goingToSleep, person.getState());
 		assertEquals("Person should have exactly four roles", 4, person.getRoles().size()); // Occupation, Resident, BankCustomer, CarPassengerRole
 
@@ -336,7 +341,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -348,7 +353,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.RESTAURANT_DINING_THRESHOLD);
 		person.setAnimation(animation);
@@ -458,7 +462,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * Will send the person to the bank to withdraw money for rent as well.
 	 * 
 	 * Assumes all other tests pass
@@ -471,7 +475,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(0);
 		person.setAnimation(animation);
@@ -541,7 +544,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has no job, a house, and a car.
+	 * The person has no job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -552,7 +555,6 @@ public class PersonTest extends TestCase {
 		
 		// Further setup
 		person.setOccupation(null);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.RESTAURANT_DINING_THRESHOLD);
 		person.setAnimation(animation);
@@ -662,7 +664,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		
 		// Run the scheduler. It is past the person's shiftStart time.
@@ -675,7 +676,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * Sends the person to work via bus. Person has a first-shift job and a house.
+	 * Sends the person to work via bus. Person has a first-shift job.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -687,7 +688,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCash(0);
 		person.setAnimation(animation);
 		
@@ -743,7 +743,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -755,7 +755,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(0);
 		person.setAnimation(animation);
@@ -775,11 +774,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person should be going to cook", Person.STATES.goingToCook, person.getState());
 		
 		// Run the scheduler for person.
-		// - The car should leave
-		// - The car should arrive
-		// - The person should see the car has arrived go to cook.
-		outcome = person.runScheduler();
-		outcome = person.runScheduler();
+		// - The person should go to cook immediately since it's already at home
 		outcome = person.runScheduler();
 		
 		// Person should be cooking

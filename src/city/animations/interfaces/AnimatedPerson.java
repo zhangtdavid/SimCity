@@ -1,5 +1,6 @@
 package city.animations.interfaces;
 
+import city.agents.interfaces.Person;
 import city.bases.interfaces.AnimationInterface;
 
 public interface AnimatedPerson extends AnimationInterface {
@@ -32,6 +33,7 @@ public interface AnimatedPerson extends AnimationInterface {
 	
 	public void setCoords(int x, int y);
 	public void setGraphicStatus(String in);
+	public void setPerson(Person p);
 	public void setAtHome();
 	public void setAcquired();
     

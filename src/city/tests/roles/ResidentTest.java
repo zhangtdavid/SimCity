@@ -48,7 +48,7 @@ public class ResidentTest extends TestCase {
 		p2rL.addResident(p2r1);
 		p2rL.addResident(p1r1);
 		hb.addResident(p1r1);
-		hb.addResident(p2r1);
+		//hb.addResident(p2r1);
 		hb.setTotalCurrentMaintenance(20);
 		hb.setRent(50);
 	}	

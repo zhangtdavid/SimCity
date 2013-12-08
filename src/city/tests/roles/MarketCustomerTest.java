@@ -59,7 +59,7 @@ public class MarketCustomerTest extends TestCase {
 	Map<FOOD_ITEMS, Integer> orderItems;
 	MarketOrder order;
 	
-	Map<FOOD_ITEMS, Integer> collectedItemsAll;
+	HashMap<FOOD_ITEMS, Integer> collectedItemsAll;
 	Map<FOOD_ITEMS, Integer> collectedItemsPartial;
 	
 	public void setUp() throws Exception {
