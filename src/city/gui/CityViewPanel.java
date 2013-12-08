@@ -15,6 +15,7 @@ import city.bases.Building;
 import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.BankBuilding;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantJPBuilding;
@@ -22,8 +23,10 @@ import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
 import city.gui.exteriors.CityViewBank;
 import city.gui.exteriors.CityViewBuilding;
+import city.gui.exteriors.CityViewMarket;
 import city.gui.exteriors.CityViewRestaurant;
 import city.gui.interiors.BankPanel;
+import city.gui.interiors.MarketPanel;
 import city.gui.interiors.RestaurantChoiPanel;
 import city.gui.interiors.RestaurantChungPanel;
 import city.gui.interiors.RestaurantJPPanel;
@@ -89,7 +92,6 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			createBuilding(temp.getCityViewBuilding().getBuilding(), temp.getCityViewBuilding(), temp.getBuilding());
 			temp.setCityViewBuilding(null);
 			temp.setBuilding(null);
-			System.out.println("aospidnfoiasdnfoiasdnfiosda");
 		}
 		for (CityViewBuilding c: statics) {
 			if (c.contains(arg0.getX(), arg0.getY())) {
@@ -117,6 +119,11 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			return;
 		addingObject = true;
 		switch (type) {
+		case MARKET:
+			temp.setCityViewBuilding(new CityViewMarket(-100, -100, "Market " + (statics.size()), Color.blue, new MarketPanel(Color.blue)));
+			temp.setBuilding(new MarketBuilding("Market " + statics.size(),
+					(MarketPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
 		case RESTAURANTZHANG:
 			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)));
 			temp.setBuilding(new RestaurantZhangBuilding("RestaurantZhang " + statics.size(),
@@ -180,6 +187,9 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		}
 	}
 	
+	/*
+	 *  Since the addObject function already sets the cityviewbuilding in the list of statics, I can't call application's setBuilding()
+	 */
 	private void createBuilding(BuildingCard panel, CityViewBuilding cityView, BuildingInterface building) {
 		Application.getMainFrame().buildingView.addView(panel, cityView.getID());
 		if(building.getClass().getName().contains("Restaurant")) {
@@ -193,6 +203,18 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 		} else if(building.getClass().getName().contains("House")) {
 			CityMap.addBuilding(BUILDING.house, building);
 		}
+	}
+	
+	public CityViewBuilding getBuildingAt(int x, int y) {
+		for (CityViewBuilding c: statics) {
+			if(c.getX() == x && c.getY() == y)
+				return c;
+		}
+		for (CityViewBuilding m: movings) {
+			if(m.getX() == x && m.getY() == y)
+				return m;
+		}
+		return null;
 	}
 
 	private class NewBuilding {
