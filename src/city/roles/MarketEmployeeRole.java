@@ -172,8 +172,10 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (customer == null && customerDelivery == null && workingState == WorkingState.NotWorking)
+		if (customer == null && customerDelivery == null && workingState == WorkingState.NotWorking) {
+			market.removeEmployee(this);
 			super.setInactive();
+		}
 		
 		if (state == MarketEmployeeState.None && event == MarketEmployeeEvent.AskedToAssistCustomer) {
 			assistCustomer();

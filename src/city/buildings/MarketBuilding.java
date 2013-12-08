@@ -40,7 +40,7 @@ public class MarketBuilding extends Building implements Market {
 	
 	public static final int WORKER_SALARY = 500;
 	
-	private Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>(); // TODO does concurrent hash map make it safer as a public variable?
+	private Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	private Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	
 //	Constructor

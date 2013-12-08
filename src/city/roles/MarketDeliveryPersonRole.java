@@ -86,8 +86,10 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 				workingState = WorkingState.NotWorking;
 		}
 		
-		if (customerDelivery == null && workingState == WorkingState.NotWorking)
+		if (customerDelivery == null && workingState == WorkingState.NotWorking) {
+			market.removeDeliveryPerson(this);
 			super.setInactive();
+		}
 		
 		if (customerDelivery != null) {
 			deliverItems();
