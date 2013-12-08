@@ -37,7 +37,7 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	@Override
 	public void addResident(Resident r) {
 		if (!residents.contains(r)) {
-			if(residents.size() < AptBuilding.NUMBER_OF_BEDS) {
+			if(residents.size() <= AptBuilding.NUMBER_OF_BEDS) {
 				residents.add(r);
 				super.addResident(r);
 			}else{

@@ -21,10 +21,10 @@ public class RestaurantChoiCookAnimation extends Animation implements Restaurant
 	//Constructor
 	public RestaurantChoiCookAnimation(RestaurantChoiCook c) {
 		this.theCook = c;
-		xPos = RESTX;
-		xDestination = RESTX;
-		yPos = RESTY;
-		yDestination = RESTY;
+		xPos = 520;
+		xDestination = 520;
+		yPos = 0;
+		yDestination = 0;
 	}
 
 	//Abstract

@@ -358,9 +358,19 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 	}
 	
 	@Override
+	public void setActive() {
+		super.setActive();
+		cookGui.setVisible(true);
+		runScheduler();
+	}
+	
+	
+	@Override
 	public void setInactive(){
-		if(orders.isEmpty() && building.seatedCustomers == 0)
+		if(orders.isEmpty() && building.seatedCustomers == 0){
+			cookGui.setVisible(false);
 			super.setInactive();
+		}
 		else wantsToLeave = true;
 	}
 

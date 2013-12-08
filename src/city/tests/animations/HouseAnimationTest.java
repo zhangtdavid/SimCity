@@ -85,7 +85,7 @@ public class HouseAnimationTest extends TestCase {
 		person.setCash(0); // so he doesn't go to market or restaurant
 		
 		resident.setPerson(person);
-		person.addRole(resident);
+		//person.addRole(resident);
 		//person.setHomeAnimation(homeAnimation);
 		resident.setLandlord(landlord);
 		//person.setOccupation(null); // jobless, but is landlord TODO why doesn't this work now? no jobless people?
@@ -124,12 +124,12 @@ public class HouseAnimationTest extends TestCase {
 		boolean outcome;
 		outcome = person.runScheduler();
 		// Person should be doing a daily task (going home to cook)
-		assertEquals("Person scheduler should continue running", person.runScheduler(), true);
-		person.getBusPassengerRole().setInactive(); // HAS ARRIVED AT HOME
-		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
 		assertEquals("Person's homeAnimation should have STATES noCommand", homeAnimation.getCommand(), "noCommand");
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true);
+		assertEquals("Person scheduler should continue running", person.runScheduler(), true); // goes to refrig, stove, table...
+		assertEquals("Person's homeAnimation should have STATES noCommand", homeAnimation.getCommand(), "ToRef"); //toref->tostove->totable->done
 		
-		assertEquals("Scheduler should still be true", person.runScheduler(), true);
+		assertEquals("Scheduler should still be true", person.runScheduler(), false);
 		if(outcome){} // no warning saying outcome is useless now...
 		//Fast forward time
 		date.setTime(date.getTime() + (Application.HALF_HOUR * 36)); // go 9 hours later, so you want to go to sleep
@@ -138,7 +138,7 @@ public class HouseAnimationTest extends TestCase {
 		homeAnimation.setCoords(HousePanel.HDX, HousePanel.HDY);
 		assertEquals("xPos was just set to door's x", homeAnimation.getXPos(), HousePanel.HDX);
 		assertEquals("yPos was just set to door's y", homeAnimation.getYPos(), HousePanel.HDY);
-		assertEquals("Person's homeAnimation should have STATES noCommand before I tell it to go to room", homeAnimation.getCommand(), "noCommand");
+		assertEquals("Person wants to sleep", homeAnimation.getCommand(), "ToBed");
 		//i would set the coords to the room entrance but for the house, it's HDX,HDY anyways.
 		
 		//Now go to bed to sleep.
