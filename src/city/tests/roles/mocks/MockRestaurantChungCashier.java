@@ -9,6 +9,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import city.Application.FOOD_ITEMS;
 import city.bases.Role;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
@@ -17,7 +18,6 @@ import city.roles.RestaurantChungCashierRole.Transaction;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantChungCashier;
 import city.roles.interfaces.RestaurantChungCustomer;
-import city.roles.interfaces.RestaurantChungHost;
 import city.roles.interfaces.RestaurantChungWaiter;
 import city.tests.bases.mocks.MockRole;
 
@@ -41,7 +41,7 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	}
 
 	@Override
-	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order) {
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, FOOD_ITEMS order) {
 		log.add(new LoggedEvent("RestaurantChungCashier received msgComputeBill from RestaurantChungWaiter"));		
 		System.out.println("RestaurantChungCashier received msgComputeBill from RestaurantChungWaiter");			
 	}

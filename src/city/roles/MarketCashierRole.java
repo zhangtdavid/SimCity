@@ -105,8 +105,10 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		print("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
 		Transaction t = findTransaction(id);
 		transactions.remove(t);
-		MyDeliveryPerson dp = market.findDeliveryPerson(d);
-		dp.setAvailable(true);
+		if (d.getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
+			MyDeliveryPerson dp = market.findDeliveryPerson(d);
+			dp.setAvailable(true);
+		}
 	}
 	
 //  Scheduler

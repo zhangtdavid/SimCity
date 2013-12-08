@@ -3,26 +3,54 @@ package utilities;
 import java.util.ArrayList;
 import java.util.List;
 
+import city.Application.FOOD_ITEMS;
+
 public class RestaurantChungMenu {
 	public List<Item> items = new ArrayList<Item>();
 	
 	public class Item {
-		public String item;
-		public double price;
-		public boolean available;
+		private FOOD_ITEMS item;
+		private int price;
+		private boolean available;
 		
-		public Item(String item, double price) {
+		public Item(FOOD_ITEMS item, int price) {
 			this.item = item;
 			this.price = price;
 			available = true;
 		}
+		
+		// Getters
+		public FOOD_ITEMS getItem() {
+			return item;
+		}
+		
+		public int getPrice() {
+			return price;
+		}
+		
+		private boolean getAvailable() {
+			return available;
+		}
+		
+		// Setters
+		public void setItem(FOOD_ITEMS item) {
+			this.item = item;
+		}
+		
+		public void setPrice(int price) {
+			this.price = price;
+		}
+		
+		public void setAvailable(boolean available) {
+			this.available = available;
+		}
 	}
 	
 	public RestaurantChungMenu() {
-		items.add(new Item("steak", 15.99));
-		items.add(new Item("chicken", 10.99));
-		items.add(new Item("salad", 5.99));
-		items.add(new Item("pizza", 8.99));
+		items.add(new Item(FOOD_ITEMS.chicken, 12));
+		items.add(new Item(FOOD_ITEMS.pizza, 10));
+		items.add(new Item(FOOD_ITEMS.salad, 6));
+		items.add(new Item(FOOD_ITEMS.steak, 16));
 	}
 	
 //	Copy constructor, called by the customer
@@ -34,7 +62,7 @@ public class RestaurantChungMenu {
 		}
 	}
 	
-	public Item findItem(String food) {
+	public Item findItem(FOOD_ITEMS food) {
 		for (int i = 0; i < items.size(); i++) {
 			if (items.get(i).item == food) return items.get(i);
 		}

@@ -80,7 +80,7 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 		// Paints Customer's fulfilled order
 		g.setColor(Color.BLACK);		
 		if (agent.getState().equals("Eating")) {
-			g.drawString(agent.getOrder(), xPos+5, yPos+25);
+			g.drawString(agent.getOrder().toString(), xPos+5, yPos+25);
 //			if (agent.getOrder().equals("Chicken")){
 //				g.drawImage(chicken.getImage(), xPos+3, yPos+20, null);
 //			}

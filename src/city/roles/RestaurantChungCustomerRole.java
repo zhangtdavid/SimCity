@@ -8,6 +8,7 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChungMenu;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungCustomerAnimation;
 import city.bases.Role;
 import city.buildings.interfaces.RestaurantChung;
@@ -31,7 +32,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	int positionInLine;
 	int bill;
 	RestaurantChungMenu menu;
-	private String order;
+	private FOOD_ITEMS order;
 	
 	private AgentState state = AgentState.DoingNothing; //The start state
 	private AgentEvent event = AgentEvent.none;
@@ -104,8 +105,8 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 	
 	@Override
-	public void msgOutOfItem(String choice, RestaurantChungMenu menu) {
-		print("Customer received msgOutOfItem " + choice);
+	public void msgOutOfItem(FOOD_ITEMS choice, RestaurantChungMenu menu) {
+		print("Customer received msgOutOfItem " + choice.toString());
 		this.menu = new RestaurantChungMenu(menu);
 		event = AgentEvent.seated;
 		stateChanged();
@@ -293,11 +294,11 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 						return;
 					}
 					int randInt = rand.nextInt(menu.items.size());
-					if (menu.items.get(randInt).price > money) {
+					if (menu.items.get(randInt).getPrice() > money) {
 						menu.items.remove(randInt);						
 					}
 					else {
-						order = menu.items.get(randInt).item;
+						order = menu.items.get(randInt).getItem();
 						print("Finished deciding food, customer wants " + order);
 						msgSelfReadyToOrder();	
 					}
@@ -411,7 +412,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	}
 	
 	@Override
-	public String getOrder() {
+	public FOOD_ITEMS getOrder() {
 		return order;
 	}
 	

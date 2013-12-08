@@ -1,6 +1,7 @@
 package city.roles.interfaces;
 
 import utilities.RestaurantChungMenu;
+import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.RestaurantChung;
 
@@ -19,7 +20,7 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	public void msgAnimationAtSeat();
 	public void msgSelfReadyToOrder();
 	public void msgWhatWouldYouLike();
-	public void msgOutOfItem(String choice, RestaurantChungMenu menu);
+	public void msgOutOfItem(FOOD_ITEMS food_ITEMS, RestaurantChungMenu menu);
 	public void msgHereIsYourFood();
 	public void msgSelfDoneEating();
 	public void msgHereIsCheck(int price);
@@ -31,7 +32,7 @@ public interface RestaurantChungCustomer extends RoleInterface {
 	// Getters
 	public int getHungerLevel();
 	public String getState();
-	public String getOrder();
+	public FOOD_ITEMS getOrder();
 
 	// Setters
 	public void setHungerLevel(int hungerLevel);

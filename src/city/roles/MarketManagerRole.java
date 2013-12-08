@@ -114,7 +114,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.getEmployees().size() > 1)
+			if (market.getManager() != this)
 				workingState = WorkingState.NotWorking;
 		}		
 		

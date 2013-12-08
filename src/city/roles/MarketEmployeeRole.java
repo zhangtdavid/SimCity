@@ -79,26 +79,22 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	public void msgAssistCustomer(MarketCustomer c) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomer from Market Manager."));
 		print("Market Employee received msgAssistCustomer from Market Manager.");
-		if (workingState != WorkingState.NotWorking) {
-			event = MarketEmployeeEvent.AskedToAssistCustomer;
-			customer = c;
-			customerDelivery = null;
-			customerDeliveryPayment = null;
-			stateChanged();
-		}
+		event = MarketEmployeeEvent.AskedToAssistCustomer;
+		customer = c;
+		customerDelivery = null;
+		customerDeliveryPayment = null;
+		stateChanged();
 	}
 	
 	@Override
 	public void msgAssistCustomerDelivery(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay) {
 		log.add(new LoggedEvent("Market Employee received msgAssistCustomerDelivery from Market Manager."));
 		print("Market Employee received msgAssistCustomerDelivery from Market Manager.");
-		if (workingState != WorkingState.NotWorking) {
-			event = MarketEmployeeEvent.AskedToAssistCustomer;
-			customer = null;
-			customerDelivery = c;
-			customerDeliveryPayment = cPay;
-			stateChanged();
-		}
+		event = MarketEmployeeEvent.AskedToAssistCustomer;
+		customer = null;
+		customerDelivery = c;
+		customerDeliveryPayment = cPay;
+		stateChanged();
 	}
 	
 	@Override
@@ -168,12 +164,11 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	@Override
 	public boolean runScheduler() {
 		if (workingState == WorkingState.GoingOffShift) {
-			if (market.getEmployees().size() > 1)
-				workingState = WorkingState.NotWorking;
+			if (market.getEmployees().size() > 1 && customer == null && customerDelivery == null) {
+				market.removeEmployee(this);
+				super.setInactive();	
+			}
 		}
-		
-		if (customer == null && customerDelivery == null && workingState == WorkingState.NotWorking)
-			super.setInactive();
 		
 		if (state == MarketEmployeeState.None && event == MarketEmployeeEvent.AskedToAssistCustomer) {
 			assistCustomer();
@@ -250,7 +245,8 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 //			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
-    	market.getManager().msgIAmAvailableToAssist(this);
+    	if (workingState == WorkingState.Working)
+    			market.getManager().msgIAmAvailableToAssist(this);
     	customer = null;
     	customerDelivery = null;
     	customerDeliveryPayment = null;

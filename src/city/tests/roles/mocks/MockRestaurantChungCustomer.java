@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.RestaurantChungMenu;
+import city.Application.FOOD_ITEMS;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.interfaces.RestaurantChungCashier;
 import city.roles.interfaces.RestaurantChungCustomer;
@@ -66,7 +67,7 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void msgOutOfItem(String choice, RestaurantChungMenu menu) {
+	public void msgOutOfItem(FOOD_ITEMS choice, RestaurantChungMenu menu) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -126,7 +127,7 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public String getOrder() {
+	public FOOD_ITEMS getOrder() {
 		// TODO Auto-generated method stub
 		return null;
 	}

@@ -77,7 +77,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //  Waiter
 //  ---------------------------------------------------------------
 	@Override
-    public void msgHereIsAnOrder(RestaurantChungWaiter w, String choice, int table) {
+    public void msgHereIsAnOrder(RestaurantChungWaiter w, FOOD_ITEMS choice, int table) {
         print("RestaurantChungCook received msgHereIsAnOrder from RestaurantChungWaiter");
 		log.add(new LoggedEvent("RestaurantChungCook received msgHereIsAnOrder from RestaurantChungWaiter. For " + choice));
         orders.add(new RestaurantChungOrder(w, choice, table, OrderState.Pending));
@@ -94,7 +94,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
     
 	@Override
     public void msgSelfDoneCooking(RestaurantChungOrder o) {
-        o.s = OrderState.DoneCooking;
+        o.setOrderState(OrderState.DoneCooking);
         print("RestaurantChungCook done cooking");
 		log.add(new LoggedEvent("RestaurantChungCook received msgSelfDoneCooking."));
         stateChanged();
@@ -215,7 +215,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             
             synchronized(orders) {
                 for (RestaurantChungOrder o : orders) {
-                    if (o.s == OrderState.Cancelled) {
+                    if (o.getOrderState() == OrderState.Cancelled) {
                         informWaiterOfCancellation(o);
                         orders.remove(o);
                         return true;
@@ -242,7 +242,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             
             synchronized(orders) {
                 for (RestaurantChungOrder o : orders) {
-                    if (o.s == OrderState.Pending) {
+                    if (o.getOrderState() == OrderState.Pending) {
                         tryToCookIt(o);
                         return true;
                     }
@@ -251,7 +251,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             
             synchronized(orders) {
                 for (RestaurantChungOrder o : orders) {
-                    if (o.s == OrderState.DoneCooking) {
+                    if (o.getOrderState() == OrderState.DoneCooking) {
                         plateIt(o);
                         return true;
                     }
@@ -333,15 +333,15 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //  Cooking
 //  ---------------------------------------------------------------
     private void tryToCookIt(RestaurantChungOrder o) {
-        Food f = restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice));
+        Food f = restaurant.getFoods().get(o.getChoice());
         // If out of food
         identifyFoodThatIsLow();
         
         if (f.getAmount() == 0) {
                 // sets all orders of the same item to cancelled
             for (int i = 0; i < orders.size(); i++) {
-                if (orders.get(i).choice == o.choice) {
-                    orders.get(i).s = OrderState.Cancelled;
+                if (orders.get(i).getChoice() == o.getChoice()) {
+                    orders.get(i).setOrderState(OrderState.Cancelled);
                 }
             }
             return;
@@ -351,9 +351,9 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
     }
     
     private void cookIt(final RestaurantChungOrder o) {
-        o.s = OrderState.Cooking;
+        o.setOrderState(OrderState.Cooking);
         final RestaurantChungAnimatedCook cookGui = this.getAnimation(RestaurantChungAnimatedCook.class);
-        cookGui.DoGoToGrill(o.choice);
+        cookGui.DoGoToGrill(o.getChoice().toString());
 //		try {
 //			atGrill.acquire();
 //		} catch (InterruptedException e) {
@@ -364,9 +364,9 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         cooking = true;
         timer.schedule(new TimerTask() {
         	public void run() {
-                Food f = restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice));
+                Food f = restaurant.getFoods().get(o.getChoice());
                 f.setAmount(f.getAmount() - 1);
-                print(o.choice + " amount after cooking " + f.getAmount());
+                print(o.getChoice() + " amount after cooking " + f.getAmount());
                 cooking = false;
                 msgSelfDoneCooking(o);
                 cookGui.DoReturnToCookHome();
@@ -378,13 +378,13 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //        		}
             }
         },
-        restaurant.getFoods().get(FOOD_ITEMS.valueOf(o.choice)).getCookingTime()*100);
+        restaurant.getFoods().get(o.getChoice()).getCookingTime()*100);
     }
     
     private void plateIt(final RestaurantChungOrder o) {
-        o.s = OrderState.Plating;
+        o.setOrderState(OrderState.Plating);
         final RestaurantChungAnimatedCook cookGui = this.getAnimation(RestaurantChungAnimatedCook.class);
-        cookGui.DoGoToPlating(o.choice);
+        cookGui.DoGoToPlating(o.getChoice().toString());
 //		try {
 //			atPlating.acquire();
 //		} catch (InterruptedException e) {
@@ -396,7 +396,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         timer2.schedule(new TimerTask() {
             public void run() {
             	RestaurantChungWaiter waiter = findWaiter(o); // Determines the waiter associated with the order
-                waiter.msgOrderIsReady(o.choice, o.table);
+                waiter.msgOrderIsReady(o.getChoice(), o.getTable());
                 plating = false;
                 msgSelfDonePlating(o);
                 cookGui.DoReturnToCookHome();
@@ -413,7 +413,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 
     private void informWaiterOfCancellation(RestaurantChungOrder o) {
         RestaurantChungWaiter w = findWaiter(o);
-        w.msgOutOfItem(o.choice, o.table);
+        w.msgOutOfItem(o.getChoice(), o.getTable());
     }
 
 //  Getters
@@ -439,7 +439,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
     public RestaurantChungWaiter findWaiter(RestaurantChungOrder order) {
         for(RestaurantChungOrder o : orders){
             if(o == order) {
-                return o.w;
+                return o.getRestaurantChungWaiter();
             }
         }
         return null;

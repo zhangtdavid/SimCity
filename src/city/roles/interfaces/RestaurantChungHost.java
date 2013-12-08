@@ -5,14 +5,12 @@ import city.bases.interfaces.RoleInterface;
 public interface RestaurantChungHost extends RoleInterface {
 	public enum WorkingState {Working, GoingOffShift, NotWorking};
 	public enum WaiterState {Working, WantBreak, Rejected, OnBreak};
-	public enum CustomerState {InRestaurant, WaitingInLine, WaitingToBeSeated, GettingSeated, DecidingToLeave, Seated, Done};
 	
 	// Messages
 	public abstract void msgIWantToEat(RestaurantChungCustomer c);
 	public abstract void msgDecidedToStay(RestaurantChungCustomer c);
 	public abstract void msgLeaving(RestaurantChungCustomer c);
 	public abstract void msgTakingCustomerToTable(RestaurantChungCustomer c);
-	public abstract void msgWaiterAvailable(RestaurantChungWaiter w);
 	public abstract void msgIWantToGoOnBreak(RestaurantChungWaiter w);
 	public abstract void msgIAmReturningToWork(RestaurantChungWaiter w);
 	public abstract void msgTableIsFree(RestaurantChungWaiter w, int t, RestaurantChungCustomer c);

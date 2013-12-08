@@ -1,7 +1,6 @@
 package city.tests.roles.mocks;
 
 import java.beans.PropertyChangeSupport;
-import java.util.List;
 import java.util.Map;
 
 import utilities.EventLog;
