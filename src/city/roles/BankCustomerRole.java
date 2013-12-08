@@ -126,7 +126,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void DirectDeposit(){
 		st = STATE.inProgress;
 		netTransaction -= amount;
-		print(Integer.toString(netTransaction));
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
 	
