@@ -5,6 +5,7 @@ import java.util.Map;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.bases.RestaurantBuilding;
 import city.bases.interfaces.RestaurantBuildingInterface;
@@ -72,6 +73,12 @@ public class MockMarketCustomerDelivery extends MockRole implements MarketCustom
 
 	@Override
 	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketOrder getOrder() {
 		// TODO Auto-generated method stub
 		return null;
 	}
