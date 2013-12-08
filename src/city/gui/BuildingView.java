@@ -63,7 +63,6 @@ public class BuildingView extends JPanel implements MouseListener, ActionListene
 		}
 	}
 
-	
 	public void actionPerformed(ActionEvent arg0) {
 		synchronized(cards) {
 			Iterator<Entry<String, BuildingCard>> it = cards.entrySet().iterator();

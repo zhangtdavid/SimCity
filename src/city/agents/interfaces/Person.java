@@ -65,6 +65,7 @@ public interface Person extends AgentInterface {
 	public PropertyChangeSupport getPropertyChangeSupport();
 	public int getRoomNumber();
 	public AnimatedPerson getAnimation();
+	public BuildingInterface getCurrentLocation();
 	
 	// Setters
 	
@@ -85,5 +86,6 @@ public interface Person extends AgentInterface {
 	// public void forceSleep();
 	public void terminateWithExtremePrejudice();
 	public void printViaRole(String role, String msg);
+
 	
 }

@@ -50,6 +50,7 @@ import city.bases.JobRole;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.RoleInterface;
+import city.gui.BuildingView;
 import city.gui.MainFrame;
 
 public class EditPersonTab extends JPanel implements PropertyChangeListener {
@@ -245,6 +246,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 						// Remove the listener from the previous selection
 						personSelectedFromList.getPropertyChangeSupport().removePropertyChangeListener(EditPersonTab.this);
 						mainFrame.personTracePanel.toggleAlertsWithOString(Integer.toString(personSelectedFromList.hashCode()), false);
+						goToPersonLocation(personSelectedFromList);
 					}
 					personSelectedFromList = listPeople.getSelectedValue();
 					personSelectedFromList.getPropertyChangeSupport().addPropertyChangeListener(EditPersonTab.this);
@@ -1242,6 +1244,13 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	private void toggleNewJob(boolean b) {
 		updateWorkplaceValues();
 		panelNewJob.setVisible(b);
+	}
+	
+	private void goToPersonLocation(Person p){
+		if(p.getCurrentLocation() != null){
+			Application.getMainFrame().buildingView.setView(p.getCurrentLocation().getCityViewBuilding().getID()); // visual go-to
+			p.getCurrentLocation().getPanel().repaint(); // equivalent to ActionPerformed for building panels
+		}
 	}
 
 }

@@ -579,6 +579,11 @@ public class PersonAgent extends Agent implements Person {
 	public AnimatedPerson getAnimation(){
 		return animation;
 	}
+	
+	@Override
+	public BuildingInterface getCurrentLocation(){
+		return currentLocation;
+	}
 
 	//=========//
 			// Setters //

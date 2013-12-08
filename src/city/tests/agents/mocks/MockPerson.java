@@ -1046,4 +1046,10 @@ public class MockPerson extends MockAgent implements Person {
 	public void printViaRole(String role, String msg) {
 		AlertLog.getInstance().logMessage(Integer.toString(this.hashCode()), role, msg);
 	}
+
+	@Override
+	public BuildingInterface getCurrentLocation() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
