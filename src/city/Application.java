@@ -113,9 +113,6 @@ public class Application {
 	 * 
 	 * When the program is started, this is the first call. It opens the GUI window, loads
 	 * configuration files, and causes the program to run.
-	 * 
-	 * MAC USERS: You may get javax.swing.UnsupportedLookAndFeelException:
-	 * [The Microsoft Windows Look and Feel - com.sun.java.swing.plaf.windows.WindowsLookAndFeel] not supported on this platform
 	 */
 	public static void main(String[] args) {
 		// Open the animation GUI

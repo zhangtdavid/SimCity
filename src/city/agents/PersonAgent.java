@@ -25,7 +25,6 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
@@ -686,33 +685,33 @@ public class PersonAgent extends Agent implements Person {
 		}
 	}
 
-	@Override
-	public void forceSleep() {
-		synchronized(roles) {
-			for (RoleInterface r : roles) {
-				r.setInactive();
-			}
-		}
-		if (carPassengerRole != null) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-		}
-		if (busPassengerRole != null) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-		}
-		if (restaurantCustomerRole != null) {
-			roles.remove(restaurantCustomerRole);
-			restaurantCustomerRole = null;
-		}
-		if (marketCustomerRole != null) {
-			roles.remove(marketCustomerRole);
-			marketCustomerRole = null;
-		}
-		try {
-			actGoToSleep();
-		} catch (InterruptedException e) {}
-	}
+//	@Override
+//	public void forceSleep() {
+//		synchronized(roles) {
+//			for (RoleInterface r : roles) {
+//				r.setInactive();
+//			}
+//		}
+//		if (carPassengerRole != null) {
+//			roles.remove(carPassengerRole);
+//			carPassengerRole = null;
+//		}
+//		if (busPassengerRole != null) {
+//			roles.remove(busPassengerRole);
+//			busPassengerRole = null;
+//		}
+//		if (restaurantCustomerRole != null) {
+//			roles.remove(restaurantCustomerRole);
+//			restaurantCustomerRole = null;
+//		}
+//		if (marketCustomerRole != null) {
+//			roles.remove(marketCustomerRole);
+//			marketCustomerRole = null;
+//		}
+//		try {
+//			actGoToSleep();
+//		} catch (InterruptedException e) {}
+//	}
 
 	private void removeRole(RoleInterface r) {
 		roles.remove(r);
