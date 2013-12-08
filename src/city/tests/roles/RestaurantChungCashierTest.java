@@ -138,7 +138,7 @@ public class RestaurantChungCashierTest extends TestCase {
 		assertEquals("WaiterMessageCook should have an empty log. It doesn't", waiterMC.log.size(), 0);
 		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.getTransactions().size(), 0);
 
-		cashier.msgComputeBill(waiterMC, customer, "steak");
+		cashier.msgComputeBill(waiterMC, customer, FOOD_ITEMS.steak);
 		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.getTransactions().size(), 1);
@@ -178,7 +178,7 @@ public class RestaurantChungCashierTest extends TestCase {
 		assertEquals("Host should have an empty log. It doesn't", host.log.size(), 0);
 		assertEquals("Cashier should have 0 transactions. It doesn't", cashier.getTransactions().size(), 0);
 				
-		cashier.msgComputeBill(waiterMC, abnormCustomer, "steak");
+		cashier.msgComputeBill(waiterMC, abnormCustomer, FOOD_ITEMS.steak);
 		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
 		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
 		assertEquals("Cashier should have 1 transaction. It doesn't", cashier.getTransactions().size(), 1);

@@ -4,7 +4,8 @@ import java.beans.PropertyChangeSupport;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
-import utilities.RestaurantChungWaiterBase.WCustomer;
+import city.Application.FOOD_ITEMS;
+import city.buildings.interfaces.RestaurantChung.MyCustomer;
 import city.roles.interfaces.RestaurantChungCashier;
 import city.roles.interfaces.RestaurantChungCustomer;
 import city.roles.interfaces.RestaurantChungWaiter;
@@ -60,19 +61,19 @@ public class MockRestaurantChungWaiterMessageCook extends MockRole implements Re
 	}
 
 	@Override
-	public void msgHereIsMyOrder(RestaurantChungCustomer c, String choice) {
+	public void msgHereIsMyOrder(RestaurantChungCustomer c, FOOD_ITEMS choice) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgOutOfItem(String choice, int table) {
+	public void msgOutOfItem(FOOD_ITEMS choice, int table) {
 		// TODO Auto-generated method stub
 		
 	}
 
 	@Override
-	public void msgOrderIsReady(String choice, int table) {
+	public void msgOrderIsReady(FOOD_ITEMS choice, int table) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -132,19 +133,7 @@ public class MockRestaurantChungWaiterMessageCook extends MockRole implements Re
 	}
 
 	@Override
-	public WCustomer findCustomer(RestaurantChungCustomer ca) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public WCustomer findTable(int table) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public void removeCustomerFromList(WCustomer c) {
+	public void removeCustomerFromList(MyCustomer c) {
 		// TODO Auto-generated method stub
 		
 	}
@@ -157,6 +146,12 @@ public class MockRestaurantChungWaiterMessageCook extends MockRole implements Re
 
 	@Override
 	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public WorkingState getWorkingState() {
 		// TODO Auto-generated method stub
 		return null;
 	}

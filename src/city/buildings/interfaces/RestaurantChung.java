@@ -4,6 +4,7 @@ import java.util.Collection;
 import java.util.List;
 
 import utilities.RestaurantChungRevolvingStand;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.bases.interfaces.RestaurantBuildingInterface;
 import city.gui.interiors.RestaurantChungPanel;
@@ -13,7 +14,6 @@ import city.roles.interfaces.RestaurantChungCook;
 import city.roles.interfaces.RestaurantChungCustomer;
 import city.roles.interfaces.RestaurantChungHost;
 import city.roles.interfaces.RestaurantChungWaiter;
-import city.roles.interfaces.RestaurantChungHost.CustomerState;
 import city.roles.interfaces.RestaurantChungHost.WaiterState;
 
 public interface RestaurantChung extends RestaurantBuildingInterface {	
@@ -27,6 +27,7 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	public List<MyCustomer> getCustomers();
 	public Collection<Table> getTables();
 	public int getNumWaitingCustomers();
+	RestaurantChungRevolvingStand getOrderStand();
 
 	//	Setters
 	public void setRestaurantChungHost(RestaurantChungHost host);
@@ -40,8 +41,10 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	void removeCustomerFromList(MyCustomer c);
 	MyWaiter findWaiter(RestaurantChungWaiter w);
 	MyCustomer findCustomer(RestaurantChungCustomer ca);
+	MyCustomer findCustomer(int t);
 	Table findTable(int t);
 	public void incrementNumWaitingCustomers();
+	void decrementNumWaitingCustomers();
 
 	// Classes
 	public class MyWaiter {
@@ -92,16 +95,33 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	}
 	
 	public class MyCustomer {
+		public enum HostCustomerState {InRestaurant, WaitingInLine, WaitingToBeSeated, GettingSeated, DecidingToLeave, Seated, Done};
+		public enum WaiterCustomerState {None, Waiting, Seated, ReadyToOrder, Asked, Eating, WaitingForCheck, Leaving};
+		public enum CheckState {None, AskedForBill, ReceivedBill, DeliveredBill};
+		public enum OrderStatus {None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
+
 		private RestaurantChungCustomer c;
-		private CustomerState s;
 		private int positionInLine;
+		private int table;
+		private FOOD_ITEMS choice;
+		private int bill;
 		private int debt;
+		private HostCustomerState hs;
+		private WaiterCustomerState ws;
+		private CheckState cs;
+		private OrderStatus os;
 		
 		public MyCustomer(RestaurantChungCustomer customer, int pos) {
 			c = customer;
-			s = CustomerState.InRestaurant;
 			setPositionInLine(pos);
+			table = -1;
+			choice = null;
+			bill = 0;
 			setDebt(0);
+			hs = HostCustomerState.InRestaurant;
+			ws = WaiterCustomerState.None;
+			cs = CheckState.None;
+			os = OrderStatus.None;
 		}
 
 		// Getters
@@ -109,16 +129,40 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 			return c;
 		}
 
-		public CustomerState getCustomerState() {
-			return s;
-		}
-		
 		public int getPositionInLine() {
 			return positionInLine;
 		}
 		
+		public int getTable() {
+			return table;
+		}
+		
+		public FOOD_ITEMS getChoice() {
+			return choice;
+		}
+		
+		public int getBill() {
+			return bill;
+		}
+		
 		public int getDebt() {
 			return debt;
+		}
+		
+		public HostCustomerState getHostCustomerState() {
+			return hs;
+		}
+		
+		public WaiterCustomerState getWaiterCustomerState() {
+			return ws;
+		}
+		
+		public CheckState getCheckState() {
+			return cs;
+		}
+		
+		public OrderStatus getOrderStatus() {
+			return os;
 		}
 		
 		// Setters
@@ -126,16 +170,41 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 			this.c = c;
 		}
 
-		public void setCustomerState(CustomerState s) {
-			this.s = s;
-		}
-
 		public void setPositionInLine(int positionInLine) {
 			this.positionInLine = positionInLine;
 		}
 
+		public void setTable(int table) {
+			this.table = table;
+		}
+		
+		public void setChoice(FOOD_ITEMS choice) {
+			this.choice = choice;
+		}
+		
+		public void setBill(int bill) {
+			this.bill = bill;
+		}
+
+
 		public void setDebt(int debt) {
 			this.debt = debt;
+		}
+		
+		public void setHostCustomerState(HostCustomerState s) {
+			hs = s;
+		}
+		
+		public void setWaiterCustomerState(WaiterCustomerState s) {
+			ws = s;
+		}
+		
+		public void setCheckState(CheckState cs) {
+			this.cs = cs;
+		}
+		
+		public void setOrderStatus(OrderStatus os) {
+			this.os = os;
 		}
 		
 		// Utilities	
@@ -179,7 +248,4 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 			return "table " + getTableNumber();
 		}
 	}
-
-	void decrementNumWaitingCustomers();
-	RestaurantChungRevolvingStand getOrderStand();
 }

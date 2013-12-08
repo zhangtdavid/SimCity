@@ -15,10 +15,10 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 	
 	public EventLog log = new EventLog();
 	public Market market;
+	public WorkingState workingState;
 	
 	public MockMarketDeliveryPerson() {
-		// TODO Auto-generated method stub
-		
+		workingState = WorkingState.Working;
 	}
 
 	@Override
@@ -67,6 +67,11 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
 	}
 
 }

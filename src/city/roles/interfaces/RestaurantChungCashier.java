@@ -4,6 +4,7 @@ import java.util.List;
 
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
@@ -14,7 +15,7 @@ public interface RestaurantChungCashier extends RoleInterface {
 	public enum TransactionState {None, Pending, Calculating, ReceivedPayment, InsufficientPayment, NotifiedHost};
 
 	// Messages
-	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, String order);
+	public void msgComputeBill(RestaurantChungWaiter w, RestaurantChungCustomer c, FOOD_ITEMS i);
 	public void msgHereIsPayment(RestaurantChungCustomer c, int bill);
 	public void msgAddMarketOrder(Market selectedMarket, MarketOrder o);
 	

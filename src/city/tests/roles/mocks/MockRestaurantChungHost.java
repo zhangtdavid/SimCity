@@ -55,12 +55,6 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 	}
 
 	@Override
-	public void msgWaiterAvailable(RestaurantChungWaiter w) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void msgIWantToGoOnBreak(RestaurantChungWaiter w) {
 		// TODO Auto-generated method stub
 		

@@ -6,10 +6,12 @@ import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
 import utilities.RestaurantChungRevolvingStand;
 import utilities.RestaurantChungWaiterBase;
-import utilities.RestaurantChungWaiterBase.WCustomer.OrderStatus;
+import city.buildings.interfaces.RestaurantChung.MyCustomer.OrderStatus;
+import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;
+import city.buildings.interfaces.RestaurantChung.MyCustomer;
 
 /**
  * Restaurant Waiter Agent
@@ -28,7 +30,7 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 
 	// Messages
 	@Override
-	public void tellCookOrder(WCustomer customer, String choice, int table) {
+	public void tellCookOrder(MyCustomer customer, FOOD_ITEMS choice, int table) {
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
 
 		try {
@@ -38,11 +40,11 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 			e.printStackTrace();
 		}
 		
-		print("adding order" + choice + " to stand for " + customer.c);
+		print("adding order" + choice + " to stand for " + customer.getRestaurantChungCustomer());
 		
 		orderStand.addOrder(new RestaurantChungOrder(this, choice, table, OrderState.Pending));
 		
-		customer.o.os = OrderStatus.Cooking;
+		customer.setOrderStatus(OrderStatus.Cooking);
 		
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
 	}

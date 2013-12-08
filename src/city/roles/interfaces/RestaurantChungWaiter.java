@@ -1,7 +1,8 @@
 package city.roles.interfaces;
 
-import utilities.RestaurantChungWaiterBase.WCustomer;
+import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.RestaurantChung.MyCustomer;
 
 public interface RestaurantChungWaiter extends RoleInterface {
 	public enum BreakState {Working, WantBreak, AskedForBreak, ApprovedForBreak, RejectedForBreak, OnBreak, ReturningToWork};
@@ -14,9 +15,9 @@ public interface RestaurantChungWaiter extends RoleInterface {
 	public abstract void msgAnimationBreakOver();
 	public abstract void msgSitAtTable(RestaurantChungCustomer c, int table);
 	public abstract void msgReadyToOrder(RestaurantChungCustomer c);
-	public abstract void msgHereIsMyOrder(RestaurantChungCustomer c, String choice);
-	public abstract void msgOutOfItem(String choice, int table);
-	public abstract void msgOrderIsReady(String choice, int table);
+	public abstract void msgHereIsMyOrder(RestaurantChungCustomer c, FOOD_ITEMS choice);
+	public abstract void msgOutOfItem(FOOD_ITEMS choice, int table);
+	public abstract void msgOrderIsReady(FOOD_ITEMS choice, int table);
 	public abstract void msgGetCheck(RestaurantChungCustomer c);
 	public abstract void msgLeaving(RestaurantChungCustomer c);
 	public abstract void msgHereIsBill(RestaurantChungCustomer c, int price);
@@ -29,6 +30,7 @@ public interface RestaurantChungWaiter extends RoleInterface {
 
 	
 	// Getters
+	WorkingState getWorkingState();
 // Only applies to one waiter type
 //	public RestaurantChungRevolvingStand getRevolvingStand();
 //	public void setRevolvingStand(RestaurantChungRevolvingStand stand);
@@ -36,7 +38,5 @@ public interface RestaurantChungWaiter extends RoleInterface {
 	// Setters
 
 	// Utilities
-	public WCustomer findCustomer(RestaurantChungCustomer ca);
-	public WCustomer findTable(int table);
-	public void removeCustomerFromList(WCustomer c);
+	public void removeCustomerFromList(MyCustomer c);
 }

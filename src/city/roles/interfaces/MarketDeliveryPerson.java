@@ -5,10 +5,11 @@ import java.util.Map;
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
+import city.roles.interfaces.MarketDeliveryPerson.WorkingState;
 
 public interface MarketDeliveryPerson extends RoleInterface {
 	// Data
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
+	public enum WorkingState {Working, GoingOffShift};
 	
 	// Constructor
 	
@@ -26,9 +27,11 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	MarketCustomerDelivery getCustomerDelivery();
 	int getOrderId();
 	Map<FOOD_ITEMS, Integer> getCollectedItems();
+	WorkingState getWorkingState();
 	
 	// Setters
 	public void setMarket(Market market);
+
 
 	// Utilities
 	

@@ -15,7 +15,7 @@ public interface RestaurantChungCook extends RoleInterface {
     public enum MarketOrderState {Pending, Ordered};
 	
 	// Messages
-	public void msgHereIsAnOrder(RestaurantChungWaiter restaurantChungWaiterBase, String choice, int table);
+	public void msgHereIsAnOrder(RestaurantChungWaiter restaurantChungWaiterBase, FOOD_ITEMS choice, int table);
 	public void msgSelfLowFoodsIdentified();
 	public void msgSelfDoneCooking(RestaurantChungOrder o);
 	public void msgSelfDonePlating(RestaurantChungOrder o);

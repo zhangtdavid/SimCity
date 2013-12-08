@@ -32,7 +32,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	private int orderId;
 	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
-	private WorkingState workingState = WorkingState.Working;
+	private WorkingState workingState;
 
 //	Constructor
 //	=====================================================================
@@ -43,6 +43,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setWorkplace(b);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
+		workingState = WorkingState.Working;
     }
 	
 //  Activity
@@ -66,28 +67,25 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	@Override
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 		log.add(new LoggedEvent("Market DeliveryPerson received msgDeliverOrder from Market Cashier."));
-		System.out.println("Market DeliveryPerson received msgDeliverOrder from Market Cashier.");
-		if (workingState != WorkingState.NotWorking) {
-			customerDelivery = c;
-	        for (FOOD_ITEMS s: i.keySet()) {
-	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-	        }
-	        orderId = id;
-	        stateChanged();
-		}
+		print("Market DeliveryPerson received msgDeliverOrder from Market Cashier.");
+		customerDelivery = c;
+        for (FOOD_ITEMS s: i.keySet()) {
+        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
+        }
+        orderId = id;
+        stateChanged();
 	}
 	
 //  Scheduler
 //	=====================================================================
 	@Override
 	public boolean runScheduler() {
-		if (workingState == WorkingState.GoingOffShift) {
-			if (market.getDeliveryPeople().size() > 1)
-				workingState = WorkingState.NotWorking;
+		if (workingState == WorkingState.GoingOffShift && customerDelivery == null) {
+			if (market.getDeliveryPeople().size() > 1) {
+				market.removeDeliveryPerson(this);
+				super.setInactive();				
+			}
 		}
-		
-		if (customerDelivery == null && workingState == WorkingState.NotWorking)
-			super.setInactive();
 		
 		if (customerDelivery != null) {
 			deliverItems();
@@ -151,6 +149,11 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	@Override
 	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
 		return collectedItems;
+	}
+	
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
 	}
 	
 //  Setters

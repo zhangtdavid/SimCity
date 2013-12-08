@@ -8,7 +8,7 @@ import city.buildings.interfaces.Market;
 
 public interface MarketEmployee extends RoleInterface {
 	// Data
-	public enum WorkingState {Working, GoingOffShift, NotWorking};
+	public enum WorkingState {Working, GoingOffShift};
 	public enum MarketEmployeeState {None, AskedForOrder};
 	public enum MarketEmployeeEvent {AskedToAssistCustomer, OrderReceived};
 	
