@@ -516,7 +516,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         btnTerminate = new JButton(terminateWithExtremePrejudice);
         btnTerminate.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		// TODO
+        		terminateWithExtremePrejudice();
         	}
         });
         btnTerminate.setPreferredSize(new Dimension(55, 40));
@@ -1044,6 +1044,10 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 			toggleNewJob(false);
 			setNewJobBlank();
 		}
+	}
+	
+	private void terminateWithExtremePrejudice() {
+		personSelectedFromList.terminateWithExtremePrejudice();
 	}
 	
 	//--------------------------------------//

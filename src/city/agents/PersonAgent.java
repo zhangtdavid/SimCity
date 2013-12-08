@@ -42,6 +42,7 @@ import city.roles.ResidentRole;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BusPassenger;
 import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.Landlord;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.Resident;
 
@@ -712,6 +713,44 @@ public class PersonAgent extends Agent implements Person {
 //			actGoToSleep();
 //		} catch (InterruptedException e) {}
 //	}
+	
+	@Override
+	public void terminateWithExtremePrejudice() {
+		print(Thread.currentThread().getStackTrace()[1].getMethodName());
+		
+		// Get rid of the person's car
+		if (car != null) {
+			car.stopThread();
+			car = null;
+		}
+		
+		// If the person is a landlord...
+		//     If the person is a landlord of their own home...
+		//         If it's a house, just remove the house's landlord
+		//         If it's an apartment, set anyone else (who isn't this person) to be the landlord
+		//     If the person is a landlord of a different residence.
+		//         Set anyone else to be the landlord
+		for (RoleInterface i : roles) {
+			if (i instanceof Landlord) {
+				// TODO for Ryan
+			}
+		}
+		
+		// Remove the person from their residence
+		this.getHome().removeResident(residentRole);
+		this.roles.remove(residentRole);
+		
+		// Notify all the person's roles that the person is dead
+		for (RoleInterface i : roles) {
+			i.definitelyDead();
+		}
+		
+		// Final steps
+		roles.clear();
+		Application.getModel().removePerson(this);
+		this.stopThread();
+		print("Goodbye, cruel world!");
+	}
 
 	private void removeRole(RoleInterface r) {
 		roles.remove(r);

@@ -25,15 +25,11 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.agents.interfaces.Person.STATES;
-import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
-import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.ResidenceBuildingInterface;
 import city.bases.interfaces.RoleInterface;
-import city.buildings.AptBuilding;
 import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.BusStop;
 import city.buildings.interfaces.Market;
@@ -711,34 +707,40 @@ public class MockPerson extends MockAgent implements Person {
 			getPropertyChangeSupport().firePropertyChange(ROLES, null, r);
 		}*/
 	}
-
+	
 	@Override
-	public void forceSleep() {
-		synchronized(roles) {
-			for (RoleInterface r : roles) {
-				r.setInactive();
-			}
-		}
-		if (carPassengerRole != null) {
-			roles.remove(carPassengerRole);
-			carPassengerRole = null;
-		}
-		if (busPassengerRole != null) {
-			roles.remove(busPassengerRole);
-			busPassengerRole = null;
-		}
-		if (restaurantCustomerRole != null) {
-			roles.remove(restaurantCustomerRole);
-			restaurantCustomerRole = null;
-		}
-		if (marketCustomerRole != null) {
-			roles.remove(marketCustomerRole);
-			marketCustomerRole = null;
-		}
-		try {
-			actGoToSleep();
-		} catch (InterruptedException e) {}
+	public void terminateWithExtremePrejudice() {
+		// TODO Auto-generated method stub
+		
 	}
+
+//	@Override
+//	public void forceSleep() {
+//		synchronized(roles) {
+//			for (RoleInterface r : roles) {
+//				r.setInactive();
+//			}
+//		}
+//		if (carPassengerRole != null) {
+//			roles.remove(carPassengerRole);
+//			carPassengerRole = null;
+//		}
+//		if (busPassengerRole != null) {
+//			roles.remove(busPassengerRole);
+//			busPassengerRole = null;
+//		}
+//		if (restaurantCustomerRole != null) {
+//			roles.remove(restaurantCustomerRole);
+//			restaurantCustomerRole = null;
+//		}
+//		if (marketCustomerRole != null) {
+//			roles.remove(marketCustomerRole);
+//			marketCustomerRole = null;
+//		}
+//		try {
+//			actGoToSleep();
+//		} catch (InterruptedException e) {}
+//	}
 
 	private void removeRole(RoleInterface r) {
 		roles.remove(r);

@@ -114,5 +114,10 @@ public abstract class MockRole implements RoleInterface {
 	}
 	
 	// Utilities
+	
+	@Override
+	public void definitelyDead() {
+		throw new UnsupportedOperationException("HEY YOU! OVERRIDE THIS METHOD!");
+	}
 
 }
