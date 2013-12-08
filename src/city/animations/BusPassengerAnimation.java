@@ -11,31 +11,17 @@ import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
+import city.roles.BusPassengerRole;
+import city.roles.interfaces.BusPassenger;
 import city.roles.interfaces.Walker;
 
-public class WalkerAnimation extends Animation implements AnimatedWalker {
+public class BusPassengerAnimation extends WalkerAnimation implements AnimatedWalker {
 
-	protected int xPos, yPos;
-	protected int xDestination, yDestination;
-
-	protected Walker walker;
-
-	protected CitySidewalk startingSidewalk = null;
-	protected CitySidewalk endSidewalk = null;
-	protected CitySidewalk currentSidewalk = null;
-	protected CitySidewalkLayout sidewalks = null;
-
-	protected boolean atDestinationRoad = false;
-	protected boolean atDestination = false;
-
-	protected Stack<CitySidewalk>sidewalkPath;
+	private BusPassenger busPassenger;
 	
-	public WalkerAnimation(Walker walker, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
-		this.walker = walker;
-		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
-		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
-		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
-		this.sidewalks = sidewalks;
+	public BusPassengerAnimation(BusPassenger busPassenger, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
+		super(null, startingBuilding, sidewalks);
+		this.busPassenger = busPassenger;
 	}
 
 	@Override
@@ -146,35 +132,69 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
-			if(walker != null)
-				walker.msgImAtDestination();
+			if(busPassenger != null) {
+				this.setVisible(false);
+				busPassenger.msgImAtDestination();
+			}
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.blue);
+		g.setColor(Color.green);
 		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
 	}
 
-	@Override
-	public void goToDestination(BuildingInterface destination) {
-		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
+	public void goToBus() {
+		startingSidewalk = sidewalks.getClosestSidewalk(busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX(),
+				busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY());
 		startingSidewalk.setCurrentOccupant(this);
 		currentSidewalk = startingSidewalk;
-		xDestination = destination.getCityViewBuilding().getX();
-		yDestination = destination.getCityViewBuilding().getY();
-		endSidewalk = sidewalks.getClosestSidewalk(destination.getCityViewBuilding().getX(), destination.getCityViewBuilding().getY());
+		this.xDestination = busPassenger.getBus().getAnimation().getXPos();
+		this.yDestination = busPassenger.getBus().getAnimation().getYPos();
+		if(xDestination > busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX() + 2)
+			xDestination -= 25;
+		else if(xDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX() - 2)
+			xDestination += 25;
+		if(yDestination > busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY() + 2)
+			yDestination -= 25;
+		else if(yDestination < busPassenger.getBusStopToWaitAt().getCityViewBuilding().getY() - 2)
+			yDestination += 25;
+		endSidewalk = sidewalks.getClosestSidewalk(xDestination, yDestination);
 		atDestination = false;
 		atDestinationRoad = false;
 		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
+		this.setVisible(true);
+	}
+	
+	public void getOffBus() {
+		int startingX = xPos = busPassenger.getBus().getAnimation().getXPos();
+		int startingY = yPos = busPassenger.getBus().getAnimation().getYPos();
+		if(startingX > busPassenger.getDestination().getCityViewBuilding().getX() + 2)
+			startingX -= 25;
+		else if(startingX < busPassenger.getDestination().getCityViewBuilding().getX() - 2)
+			startingX += 25;
+		if(startingY > busPassenger.getDestination().getCityViewBuilding().getY() + 2)
+			startingY -= 25;
+		else if(startingY <busPassenger.getDestination().getCityViewBuilding().getY() - 2)
+			startingY += 25;
+		startingSidewalk = sidewalks.getClosestSidewalk(startingX, startingY);
+		startingSidewalk.setCurrentOccupant(this);
+		currentSidewalk = startingSidewalk;
+		this.xDestination = busPassenger.getDestination().getCityViewBuilding().getX();
+		this.yDestination = busPassenger.getDestination().getCityViewBuilding().getY();
+		endSidewalk = sidewalks.getClosestSidewalk(xDestination, yDestination);
+		atDestination = false;
+		atDestinationRoad = false;
+		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
+		this.setVisible(true);
 	}
 
 	@Override
 	public int getXPos() {
 		return xPos;
 	}
-	
+
 	@Override
 	public int getYPos() {
 		return yPos;

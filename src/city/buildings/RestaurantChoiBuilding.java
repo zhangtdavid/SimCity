@@ -164,6 +164,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		}
 		if(r instanceof RestaurantChoiCashierRole) {
 			RestaurantChoiCashierRole c = (RestaurantChoiCashierRole)r;
+			this.getBankCustomer().setPerson(r.getPerson()); // TODO this solves null pointers on print?
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantChoiCashierAnimation anim = new RestaurantChoiCashierAnimation();
 				cashier = c;

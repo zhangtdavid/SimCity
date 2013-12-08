@@ -34,6 +34,4 @@ public interface RestaurantChungCook extends RoleInterface {
 	RestaurantChungWaiter findWaiter(RestaurantChungOrder order);
 	Food findFood(String choice);
 	MyMarketOrder findMarketOrder(int id);
-	void removeOrderFromList(RestaurantChungOrder order);
-	void removeMarketOrderFromList(MyMarketOrder order);
 }

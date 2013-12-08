@@ -10,11 +10,11 @@ import city.roles.interfaces.CarPassenger;
 public class CarPassengerRole extends Role implements CarPassenger {
 	
 	// Data
-	
-	private CarPassengerState myState = CarPassengerState.NOTDRIVING; 	// State of passenger
-	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; 		// Event of passenger
-	private Car myCar; 													// Car this person is getting into
-	private BuildingInterface destination; 
+
+	private CarPassengerState myState = CarPassengerState.NOTDRIVING; // State of passenger
+	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
+	private Car myCar; // Car this person is getting into
+	private BuildingInterface destination; // Building this car is going to
 	
 	// Constructor
 	
@@ -77,7 +77,6 @@ public class CarPassengerRole extends Role implements CarPassenger {
 
 	private void getOutOfCar() {
 		print("Getting out of car " + myCar.getName());
-		// myGui.doGetOutOfCar(myCar); // This will pause this agent until the animation is finished
 		myState = CarPassengerState.NOTDRIVING; // Reset state and event
 		myEvent = CarPassengerEvent.NONE;
 		this.setInactive();

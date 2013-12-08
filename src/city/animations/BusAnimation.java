@@ -24,6 +24,7 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		xDestination = xPos = Application.CityMap.findClosestRoad(startingBuilding).getX();
 		yDestination = yPos = Application.CityMap.findClosestRoad(startingBuilding).getY();
 		Application.CityMap.findClosestRoad(startingBuilding).setVehicle(this);
+		this.setVisible(true);
 	}
 
 	public void updatePosition() {

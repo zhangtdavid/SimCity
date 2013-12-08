@@ -11,6 +11,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
@@ -32,11 +33,10 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	Timer timer = new Timer();
 	
 	private RestaurantChung restaurant;
-	private RestaurantChungHost host;
 	
 	private List<Role> roles = new ArrayList<Role>();
-	public List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
+	private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 
 	WorkingState workingState = WorkingState.Working;
 	
@@ -97,6 +97,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		log.add(new LoggedEvent("Cashier received msgAddMarketOrder."));
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
+		stateChanged();
 	}
 	
 //  Scheduler
@@ -126,7 +127,15 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		if (restaurant.getCash() > 1000)
 			depositMoney();
 		
-		// Scheduler disposition		
+		// Scheduler disposition
+		
+		synchronized(marketTransactions) {
+			for (MarketTransaction t : marketTransactions) {
+				if (t.getMarketTransactionState() == MarketTransactionState.Done) {
+					marketTransactions.remove(t);
+				}
+			}
+		}		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
 				if (t.s == TransactionState.Pending) {
@@ -142,15 +151,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 					return true;
 				}
 			}	
-		}
-		
-		synchronized(transactions) {
-			for (Transaction t : transactions) {
-				if (t.s == TransactionState.Done) {
-					removeTransaction(t);
-					return true;
-				}
-			}
 		}
 		
 		synchronized(transactions) {
@@ -193,16 +193,11 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			return;
 		}
 		
-		t.s = TransactionState.Done;
+		transactions.remove(t);
 		if (restaurant.getCash() >= (t.payment-t.price)) t.c.msgHereIsChange(t.payment-t.price);
 //		t.c.msgHereIsChange(t.payment-t.price);
 		// else, what happens when cashier does not have enough money?
 		//TODO RYAN: don't worry about it; if he gives you extra cash you don't need money to give change; imagine debit?
-	}
-	
-	private void removeTransaction(Transaction t) {
-		print("Removing order");
-		removeOrderFromList(t);
 	}
 	
 	private void notifyHostOfFlake(Transaction t) {
@@ -218,6 +213,16 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
 	}
 	
+	@Override
+	public List<Transaction> getTransactions() {
+		return transactions;
+	}
+	
+	@Override
+	public List<MarketTransaction> getMarketTransactions() {
+		return marketTransactions;
+	}
+	
 //	Setters
 //	=====================================================================		
 	@Override
@@ -230,11 +235,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public void setRestaurant(RestaurantChung restaurant) {
 		this.restaurant = restaurant;
-	}
-	
-	@Override
-	public void setHost(RestaurantChungHost host) {
-		this.host = host;
 	}
 	
 	@Override
@@ -279,16 +279,6 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			}
 		}
 		return null;
-	}
-	
-	@Override
-	public void removeOrderFromList(Transaction transaction) {
-		for(Transaction t: transactions) {
-			if(t == transaction) {
-				transactions.remove(t);
-				return;
-			}
-		}
 	}
 	
 	@Override

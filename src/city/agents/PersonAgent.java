@@ -25,6 +25,7 @@ import city.Application.FOOD_ITEMS;
 import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
+import city.animations.PersonAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.bases.Agent;
 import city.bases.interfaces.BuildingInterface;
@@ -443,7 +444,8 @@ public class PersonAgent extends Agent implements Person {
 		this.home.removeFood(this, toEat, 1);
 		// Cooks the food and eats it
 		animation.cookAndEatFood(toEat.toString());
-		atDestination.acquire();
+		if(!PersonAnimation.beingTested)
+			atDestination.acquire();
 		this.hasEaten = true;
 	}
 
@@ -465,6 +467,7 @@ public class PersonAgent extends Agent implements Person {
 	private void actGoToBed() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation.goToSleep();
+		if(!PersonAnimation.beingTested)
 		atDestination.acquire();
 		this.hasEaten = false;
 		this.lastWentToSleep = this.getDate(); 
@@ -474,6 +477,7 @@ public class PersonAgent extends Agent implements Person {
 	private void actWakeUp() throws InterruptedException {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		animation.goOutside();
+		if(!PersonAnimation.beingTested)
 		atDestination.acquire();
 	}
 
@@ -739,6 +743,7 @@ public class PersonAgent extends Agent implements Person {
 				BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
 				// TODO
 				// animation.goToBusStop(b);
+				//if(!PersonAnimation.beingTested)
 				// atDestination.acquire();
 				// Note: bus stop should set person's location to "null" when they get on the bus
 				setCurrentLocation(b);

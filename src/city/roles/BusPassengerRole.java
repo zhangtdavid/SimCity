@@ -1,8 +1,12 @@
 package city.roles;
 
+import java.util.concurrent.Semaphore;
+
 import trace.AlertLog;
 import trace.AlertTag;
+import city.Application;
 import city.agents.interfaces.Bus;
+import city.animations.BusPassengerAnimation;
 import city.bases.Role;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.interfaces.BusStop;
@@ -17,6 +21,8 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	private Bus myBus;
 	private BusStop busStopToWaitAt;
 	private BusStop destination;
+	private BusPassengerAnimation animation;
+	private Semaphore atDestination = new Semaphore(0, true);
 	
 	// Constructor
 	
@@ -38,6 +44,10 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public void msgBusIsHere(Bus b) {
 		myBus = b;
 		myEvent = BUSPASSENGEREVENT.BUSISHERE;
+		if(animation == null) {
+			animation = new BusPassengerAnimation(this, busStopToWaitAt, Application.sidewalks);
+			Application.getMainFrame().cityView.addAnimation(animation);
+		}
 		stateChanged();
 	}
 	
@@ -45,6 +55,11 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	public void msgImAtYourDestination() {
 		myEvent = BUSPASSENGEREVENT.ATDESTINATION;
 		stateChanged();
+	}
+	
+	@Override
+	public void msgImAtDestination() { // This is at bus
+		atDestination.release();
 	}
 	
 	// Scheduler
@@ -72,7 +87,12 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	private void getOnBus() {
 		print("Getting on bus " + myBus.getName() + " at stop " + destination.getName() + " to go to " + destination.getName());
-		// myGui.doGetOnBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
+		animation.goToBus();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		this.getPerson().setCash(this.getPerson().getCash() - Bus.BUS_FARE);
 		busStopToWaitAt.removeFromWaitingList(this);
 		myState = BUSPASSENGERSTATE.ONBUS;
@@ -81,7 +101,12 @@ public class BusPassengerRole extends Role implements BusPassenger {
 	
 	private void getOffBus() {
 		print("Getting off bus " + myBus.getName() + " at stop " + destination.getName());
-		// animation.doGetOffBus(myBus); // This will call a msg to the GUI, which will pause this role until the animation is finished, and then finish this action
+		animation.getOffBus();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			e.printStackTrace();
+		}
 		myBus.msgImOffBus(this);
 		myState = BUSPASSENGERSTATE.NOTBUSSING;
 		myEvent = BUSPASSENGEREVENT.NONE;
