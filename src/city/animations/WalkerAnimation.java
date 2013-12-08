@@ -5,6 +5,8 @@ import java.awt.Graphics2D;
 import java.util.Random;
 import java.util.Stack;
 
+import city.Application;
+import city.Application.BUILDING;
 import city.animations.interfaces.AnimatedWalker;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
@@ -39,7 +41,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		// Getting on the first road
 		if(startingSidewalk != null && !(xPos == startingSidewalk.getX() && yPos == startingSidewalk.getY())) {
 			if(startingSidewalk.setCurrentOccupant(this) == false 
-					&& !sidewalks.isCarAt(startingSidewalk.getX(),  startingSidewalk.getY())) {
+					) {
 				return;
 			}
 			if (xPos < startingSidewalk.getX())
@@ -105,6 +107,13 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 							sidewalkPath.pop();
 							return;
 						}
+						if(possibleSidewalk.getCorrespondingStoplight() != null) {
+							if((possibleSidewalk.getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
+									possibleSidewalk.getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF) &&
+									!currentSidewalk.isCrosswalk()) {
+								continue;
+							}
+						}
 						if(possibleSidewalk.setCurrentOccupant(this)) {
 							currentSidewalk.setCurrentOccupant(null);
 							currentSidewalk = possibleSidewalk;
@@ -120,6 +129,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
+			currentSidewalk.setCurrentOccupant(null);
 			if (xPos < xDestination)
 				xPos++;
 			else if (xPos > xDestination)
@@ -134,6 +144,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
+//			this.goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
 		}
 	}
 
