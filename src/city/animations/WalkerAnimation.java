@@ -1,32 +1,22 @@
-package city.tests.animations;
+package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Random;
 import java.util.Stack;
 
-import trace.AlertLog;
-import trace.AlertTag;
-import utilities.CitySidewalkAStar;
-import city.Application;
-import city.Application.BUILDING;
-import city.animations.interfaces.AnimatedPerson;
+import city.animations.interfaces.AnimatedWalker;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
-import city.buildings.interfaces.BusStop;
 import city.gui.CityRoad;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
 
-public class PersonAnimationTest extends Animation implements AnimatedPerson {
+public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	private int xPos, yPos;
 	private int xDestination, yDestination;
-
-	private BuildingInterface currentBuilding = null;
-	private BuildingInterface destinationBuilding = null;
+	
 	private CitySidewalk startingSidewalk = null;
 	private CitySidewalk endSidewalk = null;
 	private CitySidewalk currentSidewalk = null;
@@ -36,17 +26,12 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	private boolean atDestination = false;
 
 	private Stack<CitySidewalk>sidewalkPath;
-
-	private String name;
-
-	public PersonAnimationTest(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks, String name) {
+	
+	public WalkerAnimation(BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
 		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
-		currentBuilding = startingBuilding;
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		this.sidewalks = sidewalks;
-		this.name = name;
-		//goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
 	}
 
 	@Override
@@ -149,20 +134,17 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
-			print("At Destination");
-			goToDestination(Application.CityMap.findRandomBuilding(BUILDING.busStop));
 		}
 	}
 
 	@Override
 	public void draw(Graphics2D g) {
-		// TODO Auto-generated method stub
 		g.setColor(Color.blue);
 		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
 	}
-
+	
+	@Override
 	public void goToDestination(BuildingInterface destination) {
-		destinationBuilding = destination;
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		startingSidewalk.setCurrentOccupant(this);
 		currentSidewalk = startingSidewalk;
@@ -172,13 +154,6 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 		atDestination = false;
 		atDestinationRoad = false;
 		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
-		print("Going to destination " + destination.getName());
-	}
-
-	@Override
-	public void goToBusStop(BusStop b) {
-		// TODO Auto-generated method stub
-
 	}
 	
 	@Override
@@ -189,9 +164,5 @@ public class PersonAnimationTest extends Animation implements AnimatedPerson {
 	@Override
 	public int getYPos() {
 		return yPos;
-	}
-
-	public void print(String msg) {
-		AlertLog.getInstance().logMessage(AlertTag.BANK, name, msg);
 	}
 }

@@ -26,6 +26,7 @@ import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.HouseResidentAnimation;
 import city.animations.RestaurantTimmsTableAnimation;
+import city.animations.WalkerAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.ApartmentBuilding;
@@ -77,7 +78,6 @@ import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.tests.animations.PersonAnimationTest;
 
 public class Application {
 
@@ -957,7 +957,7 @@ public class Application {
 //		c4JP.startThread();
 		
 		for(int j = 0; j < 30; j++) {
-			PersonAnimationTest testPersonAnimation = new PersonAnimationTest(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks, "Walker " + j);
+			WalkerAnimation testPersonAnimation = new WalkerAnimation(CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
 			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
 		}
