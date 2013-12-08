@@ -353,10 +353,17 @@ public class Application {
 		bus1.startThread();
 
 		// Create houses
-		HousePanel[] hp = new HousePanel[30];
-		for(int i = 0; i < hp.length; i++){ // all house panels have the same background?
-			hp[i] = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		}
+//		HousePanel[] hp = new HousePanel[30];
+//		CityViewHouse[] cvh;
+//		for(int i = 0; i < hp.length; i++){ // all house panels have the same background?
+//			hp[i] = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+//			cvh[i] = new CityViewHouse();
+//		}
+		
+		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(100, 100, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
+		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
+		createBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
 		
 		MarketPanel marketPanel1 = new MarketPanel(Color.black);
 		CityViewMarket cityViewMarket1 = new CityViewMarket(150, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.BLUE, marketPanel1);
@@ -465,9 +472,9 @@ public class Application {
 		createBuilding(rtp1, cvr1, rtb);
 		
 		// Create buildings
-		HousePanel rhp1Timms = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse rhcv1Timms = new CityViewHouse(300, 430, "House " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
-		HouseBuilding rhb1Timms = new HouseBuilding("Timms House", null, rhp1Timms, rhcv1Timms);
+		AptPanel rhp1Timms = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
+		CityViewApt rhcv1Timms = new CityViewApt(300, 430, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
+		AptBuilding rhb1Timms = new AptBuilding("Timms House", null, rhp1Timms, rhcv1Timms);
 		createBuilding(rhp1Timms, rhcv1Timms, rhb1Timms);
 
 		// Create tables
@@ -720,27 +727,27 @@ public class Application {
 		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
 		createBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
 		
-		HousePanel housePanelChung1 = new HousePanel(Color.black);
-		CityViewHouse cityViewHouseChung1 = new CityViewHouse(425,250, "Chung House" + (mainFrame.cityView.getStaticsSize()), Color.gray, housePanelChung1);
-		HouseBuilding houseBuildingChung1 = new HouseBuilding("Chung House", null, housePanelChung1, cityViewHouseChung1);
-		createBuilding(housePanelChung1, cityViewHouseChung1, houseBuildingChung1);
+		AptPanel aptPanelChung1 = new AptPanel(Color.black);
+		CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelChung1);
+		AptBuilding aptBuildingChung1 = new AptBuilding("Chung Apartment", null, aptPanelChung1, cityViewAptChung1);
+		createBuilding(aptPanelChung1, cityViewAptChung1, aptBuildingChung1);
 
 
 		
 		// Create landlord
-		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), houseBuildingChung1);
+		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), aptBuildingChung1);
 		p0Chung.setCash(50); // TODO remove later
 		LandlordRole p0r1Chung = new LandlordRole();
 		p0Chung.addRole(p0r1Chung);
-		houseBuildingChung1.setLandlord(p0r1Chung);
+		aptBuildingChung1.setLandlord(p0r1Chung);
 		p0r1Chung.setActive();
 		model.addPerson(p0Chung);
 
 		// Create people
-		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
-		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
-		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
-		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date, new PersonAnimation(), houseBuildingChung1);
+		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
+		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
+		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
+		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
 		model.addPerson(p1Chung);
 		model.addPerson(p2Chung);
 		model.addPerson(p3Chung);
@@ -1002,7 +1009,6 @@ public class Application {
 		/**
 		 * Returns a random building of type
 		 */
-
 		public static BuildingInterface findRandomBuilding(BUILDING type) {
 			List<BuildingInterface> list = map.get(type);
 			Collections.shuffle(list);
@@ -1047,6 +1053,11 @@ public class Application {
 			return returnBuilding;
 		}
 
+		/**
+		 * 
+		 * @param b
+		 * @return
+		 */
 		public static CityRoad findClosestRoad(BuildingInterface b) {
 			int x = b.getCityViewBuilding().getX();
 			int y = b.getCityViewBuilding().getY();
@@ -1062,10 +1073,17 @@ public class Application {
 			return returnRoad;
 		}
 
+		/**
+		 * Clears the map of all buildings.
+		 * Convenience function for tests.
+		 */
 		public static void clearMap() {
 			map.clear();
 		}
 		
+		/**
+		 * Returns a list of all buildings in the CityMap
+		 */
 		public static ArrayList<BuildingInterface> getBuildings() {
 			ArrayList<BuildingInterface> list = new ArrayList<BuildingInterface>();
 			for (List<BuildingInterface> l : map.values()) {
@@ -1074,5 +1092,4 @@ public class Application {
 			return list;
 		}
 	}
-
 }

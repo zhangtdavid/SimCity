@@ -1163,8 +1163,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
 	}
 	
 	private void setNewJobBlank() {
-		// Currently nothing to set
-		return;
+		comboBoxJob.setSelectedIndex(0);
 	}
 	
 	//--------------------------------------//
