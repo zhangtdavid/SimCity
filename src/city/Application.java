@@ -1038,7 +1038,7 @@ public class Application {
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case HOUSE:
-			cityViewBuilding = new CityViewHouse(x, y, "House " + (mainFrame.cityView.statics.size()), Color.darkGray, new HousePanel(Color.darkGray));
+			cityViewBuilding = new CityViewHouse(x, y, "House " + (mainFrame.cityView.statics.size()), Color.pink, new HousePanel(Color.pink));
 			building = new HouseBuilding("House " + mainFrame.cityView.statics.size(), null, (HousePanel)cityViewBuilding.getBuilding(), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
