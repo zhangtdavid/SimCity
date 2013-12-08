@@ -50,17 +50,10 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
 		if (workingState != WorkingState.NotWorking) {
-			for (MyCustomer customer : restaurant.getCustomers()) {
-				if (customer.getRestaurantChungCustomer() == c) {
-					customer.setCustomerState(CustomerState.InRestaurant);
-					restaurant.incrementNumWaitingCustomers();
-					stateChanged();
-					return;
-				}
-			}
+			restaurant.incrementNumWaitingCustomers();
+			restaurant.getCustomers().add(new MyCustomer(c, restaurant.getNumWaitingCustomers()));
 			stateChanged();
 		}
-		// TODO inform sender of inactivity
 	}
 	
 	@Override
@@ -86,13 +79,6 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 		print("Host received msgTakingCustomerToTable");
 		MyCustomer hc = restaurant.findCustomer(c);
 		hc.setCustomerState(CustomerState.GettingSeated);
-		stateChanged();
-	}
-	
-	@Override
-	public void msgWaiterAvailable(RestaurantChungWaiter w) {
-		print("Host received msgWaiterAvailable");
-		restaurant.getWaiters().add(new MyWaiter(w));
 		stateChanged();
 	}
 	
@@ -201,7 +187,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 							int fewestCustomers = -1;
 							MyWaiter waiterA = null;
 							for (MyWaiter waiter : restaurant.getWaiters()) {
-								if (waiter.getWaiterState() != WaiterState.OnBreak) {
+								if (waiter.getWaiterState() != WaiterState.OnBreak && waiter.getRestaurantChungWaiter().getWorkingState() == RestaurantChungWaiter.WorkingState.Working) {
 									if (fewestCustomers == -1) fewestCustomers = waiter.getNumCustomers(); // Sets the initial value of numCustomers to the numCustomers of the first available waiter
 									if (waiterA == null) waiterA = waiter; // Sets the initial value of waiterA to the first available waiter
 									if (waiter.getNumCustomers() < fewestCustomers) {

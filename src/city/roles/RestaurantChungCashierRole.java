@@ -23,7 +23,6 @@ import city.buildings.interfaces.RestaurantChung;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantChungCashier;
 import city.roles.interfaces.RestaurantChungCustomer;
-import city.roles.interfaces.RestaurantChungHost;
 import city.roles.interfaces.RestaurantChungWaiter;
 
 public class RestaurantChungCashierRole extends JobRole implements RestaurantChungCashier {

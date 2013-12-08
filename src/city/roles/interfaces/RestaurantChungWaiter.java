@@ -2,6 +2,7 @@ package city.roles.interfaces;
 
 import utilities.RestaurantChungWaiterBase.WCustomer;
 import city.bases.interfaces.RoleInterface;
+import city.roles.interfaces.RestaurantChungWaiter.WorkingState;
 
 public interface RestaurantChungWaiter extends RoleInterface {
 	public enum BreakState {Working, WantBreak, AskedForBreak, ApprovedForBreak, RejectedForBreak, OnBreak, ReturningToWork};
@@ -29,6 +30,7 @@ public interface RestaurantChungWaiter extends RoleInterface {
 
 	
 	// Getters
+	WorkingState getWorkingState();
 // Only applies to one waiter type
 //	public RestaurantChungRevolvingStand getRevolvingStand();
 //	public void setRevolvingStand(RestaurantChungRevolvingStand stand);

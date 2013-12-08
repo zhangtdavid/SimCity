@@ -302,8 +302,10 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 			}
 		}
 
-		if (workingState == WorkingState.NotWorking)
+		if (workingState == WorkingState.NotWorking) {
+			restaurant.removeWaiter(this);
 			super.setInactive();
+		}
 		
 		if (customers.size() == 0 && state == BreakState.ApprovedForBreak) {
 			goOnBreak();
@@ -420,9 +422,12 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		removeCustomerFromList(customer);
 	}
 	
-//  Getters and Setters
+//  Getters
 //  ====================================================================
-	
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
+	}
 	
 //  Utilities
 //	=====================================================================	
