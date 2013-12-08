@@ -32,9 +32,8 @@ public abstract class ResidenceBasePanel extends BuildingCard implements
 
 	// Utility
 
-	@Override
 	public void actionPerformed(ActionEvent arg0) {
-		repaint();
+		
 	}
 
 }

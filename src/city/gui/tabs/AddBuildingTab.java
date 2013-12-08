@@ -3,13 +3,11 @@ package city.gui.tabs;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
-import javax.swing.JPanel;
 import javax.swing.JButton;
+import javax.swing.JPanel;
 
 import city.gui.MainFrame;
 import city.gui.exteriors.CityViewBuilding;

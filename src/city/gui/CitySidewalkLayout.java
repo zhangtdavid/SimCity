@@ -3,17 +3,13 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Rectangle;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.PriorityQueue;
 import java.util.Stack;
-import java.util.TreeSet;
 
 import utilities.CitySidewalkAStar;
 import utilities.TrafficControl;
-import city.animations.BusAnimation;
-import city.animations.CarAnimation;
 import city.bases.interfaces.AnimationInterface;
 
 public class CitySidewalkLayout {

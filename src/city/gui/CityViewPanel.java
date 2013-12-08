@@ -11,7 +11,6 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.animations.interfaces.AnimatedCar;
-import city.bases.Building;
 import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.BankBuilding;

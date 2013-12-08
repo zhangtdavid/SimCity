@@ -59,10 +59,11 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 		animate();
 
 		// Draw each visible element after updating their positions
-		// TODO generates concurrent modification exception
-		for(AnimationInterface animation : animations) {
-			if (animation.getVisible()) {
-				animation.draw(graphics2D);
+		synchronized(animations) {
+			for(AnimationInterface animation : animations) {
+				if (animation.getVisible()) {
+					animation.draw(graphics2D);
+				}
 			}
 		}
 	}

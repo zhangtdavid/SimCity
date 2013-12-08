@@ -3,12 +3,9 @@ package city.gui.interiors;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Timer;
 
-import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 import city.buildings.AptBuilding;
 
@@ -24,7 +21,6 @@ public class AptPanel extends ResidenceBasePanel {
 	// 490x350, 490x450. (5 max)
 	// Data
 	private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
 
 	//Access tip: [roomNumber-1][x=0||y=1]
 	public static final int APT_REFRIG[][] = { { 100, 0 }, { 100, 100 },
@@ -85,15 +81,11 @@ public class AptPanel extends ResidenceBasePanel {
 
 		animate();
 		// Update and draw the position of each visible element
-		for (Animation animation : animations) {
+		for (AnimationInterface animation : animations) {
 				if (animation.getVisible()) {
 					animation.updatePosition();
 					animation.draw(graphics2D);
 				}
 		}
-	}
-	// TODO removal of this makes the house not animate at all. keeping it results it in not doing anything if not focused.
-	public void addVisualizationElement(AnimationInterface ve) {
-		animations.add((Animation)ve);
 	}
 }

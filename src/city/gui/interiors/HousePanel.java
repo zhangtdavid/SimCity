@@ -3,13 +3,9 @@ package city.gui.interiors;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Timer;
 
-import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 
 /**
@@ -22,7 +18,6 @@ public class HousePanel extends ResidenceBasePanel {
 	private static final long serialVersionUID = -9051230986691103443L;
 	// Data
 	private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
 	public static final int HDX = 250;
 	public static final int HDY = 480;
 	public static final int HRX = -10; // house refrigerator
@@ -69,16 +64,15 @@ public class HousePanel extends ResidenceBasePanel {
 
 		// Update the position of each visible element
 		// Draw each visible element after updating their positions
-        animate();
+		animate();
 
-		for (Animation animation : animations) {
-			if (animation.getVisible()) {
-				animation.updatePosition();
-				animation.draw(graphics2D);
+		synchronized(animations) {
+			for (AnimationInterface animation : animations) {
+				if (animation.getVisible()) {
+					animation.updatePosition();
+					animation.draw(graphics2D);
+				}
 			}
 		}
-	}
-	public void addVisualizationElement(AnimationInterface ve) {
-		animations.add((Animation) ve);
 	}
 }
