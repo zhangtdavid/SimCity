@@ -91,20 +91,20 @@ public class PersonTest extends TestCase {
 		workplace = new MockWorkplace("MockWorkplace");
 		workplaceCityViewBuilding = new MockCityViewBuilding();
 		workplace.setCityViewBuilding(workplaceCityViewBuilding);
-
-//		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>(); //
-//		items.put(FOOD_ITEMS.salad, 0);
-//		items.put(FOOD_ITEMS.chicken, 0);
-//		items.put(FOOD_ITEMS.steak, 0);
-//		items.put(FOOD_ITEMS.pizza, 0); //ryan addition due to hashmap edit
-//		house.setFood(person, items);
-
 		car = new MockCar("MockCar");
 		bus = new MockBus("MockBus");
+		
+		// By default, everyone has food at home. We don't want that in the tests.
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
+		items.put(FOOD_ITEMS.salad, 0);
+		items.put(FOOD_ITEMS.chicken, 0);
+		items.put(FOOD_ITEMS.steak, 0);
+		items.put(FOOD_ITEMS.pizza, 0); 
+		house.setFood(person, items);
 	}
 	
 	/**
-	 * The person has a first-shift job, a house, and a car.
+	 * The person has a first-shift job and a car.
 	 * The person has enough money to deposit at the bank. The person's rent is not due. 
 	 * The person will eat at a restaurant. The person has little food at home and will go to the market.
 	 * The person will not eat at home, even though they went to the market, because they ate at the restaurant.
@@ -119,7 +119,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.BANK_DEPOSIT_THRESHOLD);
 		person.setAnimation(animation);
@@ -342,7 +341,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -354,7 +353,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.RESTAURANT_DINING_THRESHOLD);
 		person.setAnimation(animation);
@@ -464,7 +462,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * Will send the person to the bank to withdraw money for rent as well.
 	 * 
 	 * Assumes all other tests pass
@@ -477,7 +475,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(0);
 		person.setAnimation(animation);
@@ -547,7 +544,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has no job, a house, and a car.
+	 * The person has no job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -558,7 +555,6 @@ public class PersonTest extends TestCase {
 		
 		// Further setup
 		person.setOccupation(null);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(Person.RESTAURANT_DINING_THRESHOLD);
 		person.setAnimation(animation);
@@ -668,7 +664,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		
 		// Run the scheduler. It is past the person's shiftStart time.
@@ -681,7 +676,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * Sends the person to work via bus. Person has a first-shift job and a house.
+	 * Sends the person to work via bus. Person has a first-shift job.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -693,7 +688,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCash(0);
 		person.setAnimation(animation);
 		
@@ -749,7 +743,7 @@ public class PersonTest extends TestCase {
 	}
 	
 	/**
-	 * The person has a second-shift job, a house, and a car.
+	 * The person has a second-shift job and a car.
 	 * 
 	 * Assumes all other tests pass
 	 */
@@ -761,7 +755,6 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 12, 0);
 		person.setOccupation(occupation);
-		person.setHome(house);
 		person.setCar(car);
 		person.setCash(0);
 		person.setAnimation(animation);

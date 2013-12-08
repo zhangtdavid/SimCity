@@ -87,7 +87,19 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	// Utilities
 	
 	@Override
-	public abstract void addResident(Resident r);
+	public void addResident(Resident r) {
+		if (!residents.contains(r)) {
+			throw new IllegalStateException("The base class's addResident() should not be called before the resident is added.");
+		}
+		
+		HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
+		items.put(FOOD_ITEMS.salad, 1);
+		items.put(FOOD_ITEMS.chicken, 1);
+		items.put(FOOD_ITEMS.steak, 1);
+		items.put(FOOD_ITEMS.pizza, 1); 
+		this.setFood(r.getPerson(), items);
+		r.getPerson().setRoomNumber(residents.size());
+	}
 	
 	@Override
 	public void removeResident(Resident r) {

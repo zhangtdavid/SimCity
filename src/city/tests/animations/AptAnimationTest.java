@@ -19,7 +19,6 @@ import city.gui.interiors.AptPanel;
 import city.gui.interiors.BankPanel;
 import city.roles.LandlordRole;
 import city.roles.ResidentRole;
-import city.tests.animations.mocks.MockAnimatedPerson;
 import city.tests.buildings.mocks.MockBusStop;
 import city.tests.roles.mocks.MockCityViewBuilding;
 
@@ -79,17 +78,17 @@ public class AptAnimationTest extends TestCase{
 
 		//sort of relevant things
 		houseCityViewBuilding = new CityViewApt(10, 10);
-		person = new PersonAgent("MovingPerson", date);
+		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
+		
+		homeAnimation = new PersonAnimation();
+		person = new PersonAgent("MovingPerson", date, homeAnimation, apt);
 		person.setCash(0); // so he doesn't go to market or restaurant
 		person.setRoomNumber(1);
-		homeAnimation = new PersonAnimation(person);
 		resident.setPerson(person);
 		person.addRole(resident);
-		person.setAnimation(homeAnimation);
 		resident.setLandlord(landlord);
 
 		//And the house, which is the real deal.
-		apt = new AptBuilding("House", landlord, hp, houseCityViewBuilding);
 		Application.CityMap.addBuilding(BUILDING.house,apt);
 		apt.setCityViewBuilding(houseCityViewBuilding);
 		person.setHome(apt);

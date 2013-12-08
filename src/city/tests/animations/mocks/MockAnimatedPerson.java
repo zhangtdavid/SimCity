@@ -101,4 +101,10 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setAtHome() {
+		// TODO Auto-generated method stub
+		
+	}
 }

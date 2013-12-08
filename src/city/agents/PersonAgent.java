@@ -117,6 +117,8 @@ public class PersonAgent extends Agent implements Person {
 		bankCustomerRole = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
 		this.addRole(residentRole);
 		this.addRole(bankCustomerRole);
+		
+		residence.addResident(residentRole);
 	}
 
 	//==========//

@@ -1,8 +1,5 @@
 package city.buildings;
 
-import java.util.HashMap;
-
-import city.Application.FOOD_ITEMS;
 import city.bases.ResidenceBuilding;
 import city.buildings.interfaces.Apt;
 import city.gui.exteriors.CityViewBuilding;
@@ -14,7 +11,7 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 
 	// Data
 	
-	public AptPanel panel;
+	private AptPanel panel;
 	public final static int NUMBER_OF_BEDS = 5;
 
 	// Constructor
@@ -39,17 +36,13 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 	
 	@Override
 	public void addResident(Resident r) {
-		if(residents.size() < NUMBER_OF_BEDS) {
-			residents.add(r);
-			HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
-			items.put(FOOD_ITEMS.salad, 1);
-			items.put(FOOD_ITEMS.chicken, 1);
-			items.put(FOOD_ITEMS.steak, 1);
-			items.put(FOOD_ITEMS.pizza, 1); // should we be putting 1 food item for each person on addition? TODO
-			this.setFood(r.getPerson(), items);
-			r.getPerson().setRoomNumber(residents.size()); // could be one of 1~5 inclusive\
-		}else{
-			throw new IllegalStateException("Only five people at a time may live in an apartment.");
+		if (!residents.contains(r)) {
+			if(residents.size() < AptBuilding.NUMBER_OF_BEDS) {
+				residents.add(r);
+				super.addResident(r);
+			}else{
+				throw new IllegalStateException("Only five people at a time may live in an apartment.");
+			}
 		}
 	}
 	

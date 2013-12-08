@@ -1,8 +1,5 @@
 package city.buildings;
 
-import java.util.HashMap;
-
-import city.Application.FOOD_ITEMS;
 import city.bases.ResidenceBuilding;
 import city.buildings.interfaces.House;
 import city.gui.exteriors.CityViewBuilding;
@@ -42,17 +39,13 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 	 */
 	@Override
 	public void addResident(Resident r) {
-		if (residents.isEmpty()) {
-			// ONLY ONE PERSON PER HOUSE~!
-			this.residents.add(r);
-			HashMap<FOOD_ITEMS, Integer> items = new HashMap<FOOD_ITEMS, Integer>();
-			items.put(FOOD_ITEMS.salad, 1);
-			items.put(FOOD_ITEMS.chicken, 1);
-			items.put(FOOD_ITEMS.steak, 1);
-			items.put(FOOD_ITEMS.pizza, 1); // should we be putting 1 food item for each person on addition? TODO
-			this.setFood(r.getPerson(), items);
-		} else {
-			throw new IllegalStateException("Only one person at a time may live in a house.");
+		if (!residents.contains(r)) {
+			if (residents.isEmpty()) {
+				this.residents.add(r);
+				super.addResident(r);
+			} else {
+				throw new IllegalStateException("Only one person at a time may live in a house.");
+			}
 		}
 	}
 

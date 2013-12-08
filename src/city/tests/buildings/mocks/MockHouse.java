@@ -1,7 +1,5 @@
 package city.tests.buildings.mocks;
 
-import city.Application.FOOD_ITEMS;
-import city.agents.interfaces.Person;
 import city.buildings.interfaces.House;
 import city.roles.interfaces.Resident;
 import city.tests.bases.mocks.MockResidenceBuilding;
@@ -17,17 +15,16 @@ public class MockHouse extends MockResidenceBuilding implements House {
 		// TODO Auto-generated method stub
 		return false;
 	}
-
+	
 	@Override
-	public void removeFood(Person p, FOOD_ITEMS f, int i) {
-		// TODO Auto-generated method stub
-		
+	public void addResident(Resident r) {
+		if (!residents.contains(r)) {
+			if (residents.isEmpty()) {
+				this.residents.add(r);
+				super.addResident(r);
+			} else {
+				throw new IllegalStateException("Only one person at a time may live in a house.");
+			}
+		}
 	}
-
-	@Override
-	public void removeResident(Resident r) {
-		// TODO Auto-generated method stub
-		
-	}
-
 }
