@@ -388,12 +388,9 @@ public class Application {
 //		HouseBuilding houseBuildingZhang1 = new HouseBuilding("House 0 Zhang", null, housePanelZhang1, cityViewHouseZhang1);
 //		createBuilding(housePanelZhang1, cityViewHouseZhang1, houseBuildingZhang1);
 		
-		//rchoi edit: if you're wondering why this is in the middle of the road, it's because of a car error when someone wants to go to where he's already at by driving
-		//he takes a right turn, but stoplights are only made for left turns in this city, so he gets locked in the intersection. TODO issue #66 (don't leave if you don't have to)
-		//this is literally the only place this works right now for some reason
 		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
 		CityViewApt cityViewHouseZhang1 = new CityViewApt(325,325, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1); 
-		//if you want to see house animation, try (75,225) for location (: and uncomment lines 869, 874.
+		//if you want to see house animation, try (75,225) for location until #66 is fixed (: and uncomment lines 869, 874.
 		//if you dont want this to block the road just move it to (325,325) or something
 		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
 		createBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
@@ -410,14 +407,14 @@ public class Application {
 		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
-		PersonAgent p4Zhang = new PersonAgent("Tenant 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
 		model.addPerson(p1Zhang);
 		model.addPerson(p2Zhang);
 		model.addPerson(p3Zhang);
 		model.addPerson(p4Zhang);
 
 		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
-		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+/*		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 500);
 		temp.put(FOOD_ITEMS.salad, 500);
 		temp.put(FOOD_ITEMS.pizza, 500);
@@ -427,7 +424,7 @@ public class Application {
 		apartmentBuildingZhang1.setFood(p2Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 		apartmentBuildingZhang1.setFood(p3Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
-
+*/
 		// Give people cars
 		CarAgent c0Zhang = new CarAgent(busStop2,p0Zhang);
 		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, busStop2);
@@ -899,7 +896,7 @@ public class Application {
 		try {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
-/*
+
 		c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
@@ -909,7 +906,7 @@ public class Application {
 		p1Zhang.startThread();
 		p2Zhang.startThread();
 		p3Zhang.startThread();
-		p4Zhang.startThread();*/
+		p4Zhang.startThread();
 //		c0Timms.startThread();
 //		c1Timms.startThread();
 //		c2Timms.startThread();
