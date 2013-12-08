@@ -12,9 +12,9 @@ public class RestaurantZhangMenu {
 //	private RestaurantPanel panel;
 	
 	public RestaurantZhangMenu() {
-		menuItemsMap.put("Chicken", 9);
-		menuItemsMap.put("Steak", 13);
-		menuItemsMap.put("Pizza", 17);
+		menuItemsMap.put("chicken", 9);
+		menuItemsMap.put("steak", 13);
+		menuItemsMap.put("pizza", 17);
 		allMenuItems = Collections.synchronizedMap(new HashMap<String, Integer>(menuItemsMap));
 	}
 	
@@ -48,12 +48,12 @@ public class RestaurantZhangMenu {
 			// Depends on what stuff is available in the menu
 			if(optionsArraySize < menuItemsMap.size() && money < 9) {
 				if(new Random().nextInt(5) == 0)
-					if(menuItemsMap.containsKey("Pizza")) {
-						return "Pizza";
-					} else if(menuItemsMap.containsKey("Steak")) {
-						return "Steak";
-					} else if(menuItemsMap.containsKey("Chicken")) {
-						return "Chicken";
+					if(menuItemsMap.containsKey("pizza")) {
+						return "pizza";
+					} else if(menuItemsMap.containsKey("steak")) {
+						return "steak";
+					} else if(menuItemsMap.containsKey("chicken")) {
+						return "chicken";
 					} else {
 						return "None";
 					}

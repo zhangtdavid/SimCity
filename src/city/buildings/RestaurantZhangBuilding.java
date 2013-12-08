@@ -7,6 +7,7 @@ import java.util.Vector;
 import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Application;
 import city.animations.RestaurantZhangCookAnimation;
 import city.animations.RestaurantZhangCustomerAnimation;
 import city.animations.RestaurantZhangWaiterAnimation;
@@ -66,9 +67,9 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	//foods.put(FOOD_ITEMS.chicken, new Food("Chicken", 2000, 50, 0, 3, menu.getPrice("Chicken")));
-        //foods.put(FOOD_ITEMS.pizza, new Food("Pizza", 8000, 50, 0, 3, menu.getPrice("Pizza")));
-        //foods.put(FOOD_ITEMS.steak, new Food("Steak", 4000, 50, 0, 3, menu.getPrice("Steak"))); //TODO david? this doesn't work anymore (error)
+    	foods.put(Application.FOOD_ITEMS.chicken, new Food("chicken", 2000, 50, 0, 3, menu.getPrice("chicken")));
+        foods.put(Application.FOOD_ITEMS.pizza, new Food("pizza", 8000, 50, 0, 3, menu.getPrice("pizza")));
+        foods.put(Application.FOOD_ITEMS.steak, new Food("steak", 4000, 50, 0, 3, menu.getPrice("steak")));
     	
 		this.addWorkerRoleName("city.roles.RestaurantZhangCashierRole");
 		this.addWorkerRoleName("city.roles.RestaurantZhangCookRole");
