@@ -1,5 +1,7 @@
 package city.tests.buildings.mocks;
 
+import java.beans.PropertyChangeSupport;
+
 import city.buildings.interfaces.House;
 import city.roles.interfaces.Resident;
 import city.tests.bases.mocks.MockResidenceBuilding;
@@ -26,5 +28,11 @@ public class MockHouse extends MockResidenceBuilding implements House {
 				throw new IllegalStateException("Only one person at a time may live in a house.");
 			}
 		}
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }

@@ -569,7 +569,7 @@ public class Application {
 		AptPanel rhp3Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//busstop4 125 325
 		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
-		AptBuilding rhb3Choi = new AptBuilding("Apt Choi1", null, rhp3Choi, rhcv3Choi);
+		AptBuilding rhb3Choi = new AptBuilding("Apt Choi3", null, rhp3Choi, rhcv3Choi);
 		setBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 
 		// Create landlord
