@@ -10,6 +10,7 @@ import utilities.EventLog;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
 import city.Application;
+import city.Application.BANK_SERVICE;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.bases.JobRole;
@@ -287,8 +288,8 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 	// Utilities
 
 	private void getMoney() { //TODO bank needs to incorporate withdrawal
-		//moneyIncoming = IN_TRANSIT;
-		//this.building.bankConnection.setActive(TODO[something that makes withdraw work], RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
+		moneyIncoming = IN_TRANSIT;
+		this.building.getBankCustomer().setActive(BANK_SERVICE.moneyWithdraw, RestaurantChoiBuilding.DAILY_CAPITAL-building.getCash(), Application.TRANSACTION_TYPE.business);
 	}
 
 	private void depositMoney() {

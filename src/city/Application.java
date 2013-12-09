@@ -369,7 +369,7 @@ public class Application {
 		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(25, 25, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
 		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
 		setBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
-		//createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
+		createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
 		
 		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
 		
@@ -595,6 +595,7 @@ public class Application {
 		PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date, new PersonAnimation(), rhb2Choi);
 		PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date, new PersonAnimation(),rhb2Choi);
 		PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date, new PersonAnimation(),rhb2Choi);
+		p8Choi.setCash(50);
 		PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date, new PersonAnimation(),rhb2Choi);
 		PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date, new PersonAnimation(),rhb2Choi);
 
@@ -735,7 +736,6 @@ public class Application {
 		CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelChung1);
 		AptBuilding aptBuildingChung1 = new AptBuilding("Chung Apartment", null, aptPanelChung1, cityViewAptChung1);
 		setBuilding(aptPanelChung1, cityViewAptChung1, aptBuildingChung1);
-
 
 		// Create landlord
 		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), aptBuildingChung1);
@@ -915,8 +915,8 @@ public class Application {
 		p6Choi.startThread();
 		p7Choi.startThread();
 		p8Choi.startThread();
-		//p9Choi.startThread();
-		//p10Choi.startThread();
+		p9Choi.startThread();
+		p10Choi.startThread();
 		
 		c1Choi.startThread();
 		c2Choi.startThread();
