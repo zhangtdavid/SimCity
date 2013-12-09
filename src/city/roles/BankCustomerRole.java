@@ -128,7 +128,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		netTransaction -= amount;
 		building.getManager().msgDirectDeposit(acctNum, amount, this);
 	}
-	
 
 	private void AskForService(){
 		st = STATE.inProgress;
