@@ -29,7 +29,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	private RestaurantChungWaiter waiter;
 	
 	private int hungerLevel = 10; // determines length of meal
-	int positionInLine;
 	int bill;
 	RestaurantChungMenu menu;
 	private FOOD_ITEMS order;
@@ -41,6 +40,7 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 //	=====================================================================
 	public RestaurantChungCustomerRole(){
 		super();
+		state = AgentState.WaitingInRestaurant;
 	}
 	
 //  Messages
@@ -49,14 +49,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	public void gotHungry() {//from animation
 		print("I'm hungry");
 		event = AgentEvent.gotHungry;
-		stateChanged();
-	}
-
-	@Override
-	public void msgGetInLinePosition(int pos) {
-		print("Customer received msgGetInLinePosition " + pos); // TODO
-		positionInLine = pos;
-		event = AgentEvent.getInLine;
 		stateChanged();
 	}
 	
@@ -171,11 +163,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 	 */
 	@Override
 	public boolean runScheduler() {		
-		if (state == AgentState.DoingNothing && event == AgentEvent.getInLine || state == AgentState.WaitingInRestaurant && event == AgentEvent.getInLine) {
-			getInLine();
-			return true;
-		}
-		
 		if (state == AgentState.WaitingInRestaurant && event == AgentEvent.followWaiter) {
 			sitDown();
 			return true;
@@ -261,13 +248,6 @@ public class RestaurantChungCustomerRole extends Role implements RestaurantChung
 
 //  Actions
 //	=====================================================================	
-	private void getInLine() {
-		print("Getting in position " + positionInLine + " of the line at restaurant");
-		state = AgentState.WaitingInRestaurant;
-		this.getAnimation(RestaurantChungCustomerAnimation.class).DoGoToWaitingArea(positionInLine);
-		event = AgentEvent.standInLine;
-	}
-	
 	private void sitDown() {
 		print("Sitting down");
 		state = AgentState.BeingSeated;

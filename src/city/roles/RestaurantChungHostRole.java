@@ -51,8 +51,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
 		if (workingState != WorkingState.NotWorking) {
-			restaurant.incrementNumWaitingCustomers();
-			restaurant.getCustomers().add(new MyCustomer(c, restaurant.getNumWaitingCustomers()));
+			restaurant.getCustomers().add(new MyCustomer(c));
 			stateChanged();
 		}
 	}
@@ -147,7 +146,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 		}		
 
 		synchronized(restaurant.getCustomers()) {
-			for (MyCustomer customer : restaurant.getCustomers()) {	
+			for (MyCustomer customer : restaurant.getCustomers()) {
 				if ((customer.getHostCustomerState() == HostCustomerState.WaitingInLine && restaurant.getWaiters().size() > 0)) {
 					if (customer.getDebt() > 0) {
 						customer.getRestaurantChungCustomer().msgKickingYouOutAfterPaying(customer.getDebt());
@@ -175,6 +174,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 						}
 					}
 					if (restaurant.getWaiters().size() > 0 && customer.getHostCustomerState() == HostCustomerState.WaitingInLine) {
+						print("HERE7");
 						informCustomerOfNoTables(customer);
 						customer.setHostCustomerState(HostCustomerState.DecidingToLeave);
 					}
@@ -217,7 +217,8 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	}
 
 //	Customer
-//	---------------------------------------------------------------	
+//	---------------------------------------------------------------
+	
 	private void seatCustomer(MyCustomer customer, Table table, RestaurantChungWaiter w) {
 		print("Host telling Waiter to seat customer");
 		w.msgSitAtTable(customer.getRestaurantChungCustomer(), table.getTableNumber());
@@ -228,6 +229,8 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	private void informCustomerOfNoTables(MyCustomer customer) {
 		customer.getRestaurantChungCustomer().msgNoTablesAvailable();
 	}
+	
+
 	
 //  Utilities
 //	=====================================================================	

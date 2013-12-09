@@ -42,6 +42,7 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 		yPos = RestaurantChungPanel.ENTRANCEY;
 		xDestination = xPos;
 		yDestination = yPos;
+		DoGoToWaitingArea();
 	}
 
 //	Gui Updater
@@ -116,17 +117,17 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 		return isPresent;
 	}
 	
-	public void setHungry() {
-		isHungry = true;
-		agent.gotHungry();
-		setPresent(true);
-	}
+//	public void setHungry() {
+//		isHungry = true;
+//		agent.gotHungry();
+//		setPresent(true);
+//	}
 	
 	public boolean isHungry() {
 		return isHungry;
 	}
 
-	public void DoGoToWaitingArea(int waitingPosition) {
+	public void DoGoToWaitingArea() {
 		waitingCustomers.add(agent);
 		waiting = true;
 		xDestination = RestaurantChungPanel.WAITINGAREAX;
