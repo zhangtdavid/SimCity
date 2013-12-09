@@ -20,6 +20,7 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 
 	// TODO add controls like buttons, radio buttons, etc. here
 	private JButton buttonBank;
+	private JButton buttonApt;
 	private JButton buttonHouse;
 	private JButton buttonMarket;
 	private JButton buttonRestaurantZhang;
@@ -42,6 +43,9 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 		buttonBank = new JButton("Add Bank");
 		add(buttonBank);
 		buttonBank.addActionListener(this);
+		buttonApt = new JButton("Add Apartment");
+		add(buttonApt);
+		buttonApt.addActionListener(this);
 		buttonHouse = new JButton("Add House");
 		add(buttonHouse);
 		buttonHouse.addActionListener(this);
@@ -66,7 +70,13 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
-		if (e.getSource().equals(buttonRestaurantZhang)) {
+		if(e.getSource().equals(buttonApt)) {
+			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.APT);
+		} else if (e.getSource().equals(buttonHouse)) {
+			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.HOUSE);
+		} else if (e.getSource().equals(buttonMarket)) {
+			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.MARKET);
+		} else if (e.getSource().equals(buttonRestaurantZhang)) {
 			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG);
 		} else if (e.getSource().equals(buttonRestaurantChoi)) {
 			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHOI);

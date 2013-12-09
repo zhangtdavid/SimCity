@@ -13,18 +13,28 @@ import city.Application.CityMap;
 import city.animations.interfaces.AnimatedCar;
 import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
+import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
+import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantZhangBuilding;
+import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBank;
 import city.gui.exteriors.CityViewBuilding;
+import city.gui.exteriors.CityViewHouse;
 import city.gui.exteriors.CityViewMarket;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantChoi;
+import city.gui.exteriors.CityViewRestaurantChung;
+import city.gui.exteriors.CityViewRestaurantJP;
+import city.gui.exteriors.CityViewRestaurantTimms;
+import city.gui.exteriors.CityViewRestaurantZhang;
+import city.gui.interiors.AptPanel;
 import city.gui.interiors.BankPanel;
+import city.gui.interiors.HousePanel;
 import city.gui.interiors.MarketPanel;
 import city.gui.interiors.RestaurantChoiPanel;
 import city.gui.interiors.RestaurantChungPanel;
@@ -118,33 +128,43 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			return;
 		addingObject = true;
 		switch (type) {
+		case APT:
+			temp.setCityViewBuilding(new CityViewApt(-100, -100, "Apartment " + (statics.size()), Color.gray, new AptPanel(Color.gray)));
+			temp.setBuilding(new AptBuilding("Apartment " + statics.size(), null,
+					(AptPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
+		case HOUSE:
+			temp.setCityViewBuilding(new CityViewHouse(-100, -100, "House " + (statics.size()), Color.darkGray, new HousePanel(Color.darkGray)));
+			temp.setBuilding(new HouseBuilding("House " + statics.size(), null,
+					(HousePanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
+			break;
 		case MARKET:
 			temp.setCityViewBuilding(new CityViewMarket(-100, -100, "Market " + (statics.size()), Color.blue, new MarketPanel(Color.blue)));
 			temp.setBuilding(new MarketBuilding("Market " + statics.size(),
 					(MarketPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTZHANG:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)));
+			temp.setCityViewBuilding(new CityViewRestaurantZhang(-100, -100, "Restaurant " + (statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta)));
 			temp.setBuilding(new RestaurantZhangBuilding("RestaurantZhang " + statics.size(),
 					(RestaurantZhangPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTCHOI:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)));
+			temp.setCityViewBuilding(new CityViewRestaurantChoi(-100, -100, "Restaurant " + (statics.size()), Color.cyan, new RestaurantChoiPanel(Color.cyan)));
 			temp.setBuilding(new RestaurantChoiBuilding("RestaurantChoi " + statics.size(),
 					(RestaurantChoiPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTJP:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)));
+			temp.setCityViewBuilding(new CityViewRestaurantJP(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)));
 			temp.setBuilding(new RestaurantJPBuilding("RestaurantJP " + statics.size(),
 					(RestaurantJPPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTTIMMS:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)));
+			temp.setCityViewBuilding(new CityViewRestaurantTimms(-100, -100, "Restaurant " + (statics.size()), Color.yellow, new RestaurantTimmsPanel(Color.yellow)));
 			temp.setBuilding(new RestaurantTimmsBuilding("RestaurantTimms " + statics.size(),
 					(RestaurantTimmsPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTCHUNG:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)));
+			temp.setCityViewBuilding(new CityViewRestaurantChung(-100, -100, "Restaurant " + (statics.size()), Color.red, new RestaurantChungPanel(Color.red)));
 			temp.setBuilding(new RestaurantChungBuilding("RestaurantChung " + statics.size(),
 					(RestaurantChungPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;

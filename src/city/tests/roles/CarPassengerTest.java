@@ -5,7 +5,7 @@ import java.awt.Color;
 import junit.framework.TestCase;
 import city.agents.CarAgent;
 import city.buildings.RestaurantZhangBuilding;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantZhang;
 import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.CarPassengerRole;
 import city.tests.agents.mocks.MockPerson;
@@ -22,7 +22,7 @@ public class CarPassengerTest extends TestCase {
 	public void setUp() throws Exception {
 		super.setUp();
 		person = new MockPerson("PersonName");
-		destination = new RestaurantZhangBuilding("RestZ", RestaurantZhangPanel, new CityViewRestaurant(0, 0, "City View RestZ", Color.black, RestaurantZhangPanel));
+		destination = new RestaurantZhangBuilding("RestZ", RestaurantZhangPanel, new CityViewRestaurantZhang(0, 0, "City View RestZ", Color.black, RestaurantZhangPanel));
 		car = new CarAgent(destination, person);
 		anim = new MockAnimatedCar(car);
 		car.setAnimation(anim);
