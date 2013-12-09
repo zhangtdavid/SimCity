@@ -21,7 +21,7 @@ public class BankPanel extends BuildingCard implements ActionListener {
 	private List<Animation> animations = new ArrayList<Animation>();
 
     public BankPanel(Color color) {
-    	super(color);
+    	super(color.CYAN);
     	
         setVisible(true);
  
@@ -40,6 +40,8 @@ public class BankPanel extends BuildingCard implements ActionListener {
         graphics2D.setColor(background);
         graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
+        graphics2D.setColor(Color.WHITE);
+        graphics2D.fillRect(300, 100, 20, 300);
         // Update the position of each visible element
         for(Animation animation : animations) {
         	if (animation.getVisible()) {

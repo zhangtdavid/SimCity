@@ -824,7 +824,7 @@ public class Application {
 		//		RestaurantJPPanel restaurantJPPanel1 = new RestaurantJPPanel(Color.DARK_GRAY);
 		//		CityViewRestaurant cityViewRestaurantJP1 = new CityViewRestaurant(400, 200, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.green, restaurantJPPanel1); 
 		//		RestaurantJPBuilding restaurantJPBuilding1 = new RestaurantJPBuilding("RestaurantJP1", restaurantJPPanel1, cityViewRestaurantJP1);
-		//		createBuilding(restaurantJPPanel1, cityViewRestaurantJP1, restaurantJPBuilding1);
+		//		setBuilding(restaurantJPPanel1, cityViewRestaurantJP1, restaurantJPBuilding1);
 		//		
 		//		HousePanel housePanelJP1 = new HousePanel(Color.black);
 		//		CityViewHouse cityViewHouseJP1 = new CityViewHouse(400, 250, "JP House" + (mainFrame.cityView.getStaticsSize()), Color.gray, housePanelJP1);

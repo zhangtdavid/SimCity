@@ -83,7 +83,7 @@ public class BankManagerTest extends TestCase {
 		assertTrue("Manager's scheduler should return true.", manager.runScheduler());
 		assertEquals("Teller's log length should be 3.", 3, teller.log.size());
 		assertTrue("Teller should be allowed to give withdrawal. His log reads instead: " + teller.log.getLastLoggedEvent().toString(), teller.log.containsString("Received msgTransactionSuccessful"));
-		assertTrue("Account funds should be depleted.", Bank.accounts.get(0).balance == 0);
+		assertTrue("Account funds should be depleted.", manager.building.accounts.get(0).balance == 0);
 	}
 	
 	public void testNormativeDepositandLoanPayment(){
