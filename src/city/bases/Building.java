@@ -1,6 +1,5 @@
 package city.bases;
 
-import java.awt.Component;
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;

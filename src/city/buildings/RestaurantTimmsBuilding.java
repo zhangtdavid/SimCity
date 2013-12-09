@@ -7,6 +7,7 @@ import java.util.Map;
 
 import utilities.MarketOrder;
 import city.Application;
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantTimmsCashierAnimation;
 import city.animations.RestaurantTimmsCookAnimation;
@@ -16,9 +17,11 @@ import city.animations.RestaurantTimmsWaiterAnimation;
 import city.bases.RestaurantBuilding;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.RestaurantTimmsBuilding.MenuItem.State;
+import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.RestaurantTimms;
 import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.RestaurantTimmsPanel;
+import city.roles.BankCustomerRole;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.RestaurantTimmsCashier;
 import city.roles.interfaces.RestaurantTimmsCook;
@@ -76,6 +79,9 @@ public class RestaurantTimmsBuilding extends RestaurantBuilding implements Resta
 			restaurantMenu.add(item);
 		}
 		
+		// Create bank customer
+		this.bankCustomer = new BankCustomerRole((Bank)(Application.CityMap.findRandomBuilding(BUILDING.bank)));
+		
 		this.addWorkerRoleName("city.roles.RestaurantTimmsCashierRole");
 		this.addWorkerRoleName("city.roles.RestaurantTimmsCookRole");
 		this.addWorkerRoleName("city.roles.RestaurantTimmsHostRole");
@@ -86,6 +92,14 @@ public class RestaurantTimmsBuilding extends RestaurantBuilding implements Resta
 	//=========//
 	// Getters //
 	//=========//
+	
+	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = true;
+		if (cashier == null || cook == null || host == null) { disposition = false; }
+		if (restaurantWaiters.size() == 0) { disposition = false; }
+		return disposition;
+	}
 	
 	@Override
 	public RestaurantTimmsCashier getCashier() {
