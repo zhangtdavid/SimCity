@@ -11,6 +11,7 @@ import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.Market.MyMarketCustomer;
+import city.buildings.interfaces.Market.MyMarketCustomer.MarketCustomerState;
 import city.buildings.interfaces.Market.MyMarketEmployee;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.MarketCustomerDelivery;
@@ -125,12 +126,15 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 			}
 		}
 		synchronized(market.getCustomers()) {
-			if (market.getCustomers().size() > 0 && market.getEmployees().size() > 0) {
-				synchronized(market.getEmployees()) {
-					for (MyMarketEmployee employee : market.getEmployees()) {
-						if (employee.getMarketEmployeeState() == MyMarketEmployee.MarketEmployeeState.Available) {
-							assistCustomer(market.getCustomers().get(0), employee);
-							return true;
+			for (MyMarketCustomer customer : market.getCustomers()) {
+				if (customer.getState() == MarketCustomerState.WaitingForService && market.getEmployees().size() > 0) {
+					synchronized(market.getEmployees()) {
+						for (MyMarketEmployee employee : market.getEmployees()) {
+							if (employee.getMarketEmployeeState() == MyMarketEmployee.MarketEmployeeState.Available) {
+								assistCustomer(customer, employee);
+								customer.setState(MarketCustomerState.GotService);
+								return true;
+							}
 						}
 					}
 				}
@@ -150,7 +154,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	private void assistCustomer(MyMarketCustomer c, MyMarketEmployee e) {
 		if (c.getCustomer() != null) {
 			e.getEmployee().msgAssistCustomer(c.getCustomer());
-			market.getCustomers().remove(c);
+//			market.getCustomers().remove(c);
 			e.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.CollectingItems);			
 		}
 		else {
@@ -164,7 +168,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 		MyMarketCustomer cd = market.findCustomerDelivery(e.getCustomerDelivery());
 		e.getEmployee().msgHereIsCustomerDeliveryOrder(cd.getOrder(), cd.getOrderId());
 		e.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.CollectingItems);
-		market.getCustomers().remove(cd);
+//		market.getCustomers().remove(cd);
 	}
 	
 //  Getters
