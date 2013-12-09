@@ -1,5 +1,6 @@
 package city.tests.buildings.mocks;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 
 import city.buildings.interfaces.BusStop;
@@ -58,6 +59,12 @@ public class MockBusStop extends MockBuilding implements BusStop {
 
 	@Override
 	public CityRoad getRoadLocatedOn() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
 		// TODO Auto-generated method stub
 		return null;
 	}

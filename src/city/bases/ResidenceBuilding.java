@@ -108,10 +108,16 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	}
 	
 	@Override
-	public void removeFood(Person p, FOOD_ITEMS f, int i) {
+	public boolean removeFood(Person p, FOOD_ITEMS f, int i) {
 		HashMap<FOOD_ITEMS, Integer> temp = allFoodItems.get(p);
-		temp.put(f, temp.get(f)-i); // -i from the choice
-		allFoodItems.put(p, temp); // put in the new map into allFoodItems
+		if(allFoodItems.get(p).get(f) != null){
+			temp.put(f, temp.get(f)-i); // -i from the choice
+			allFoodItems.put(p, temp); // put in the new map into allFoodItems
+			return true;
+		}else{
+			p.print("Found no food in the refrigerator, that's weird. (CURSE YOU CONTROL PANEL)");
+			return false;
+		}
 	}
 	
 	@Override

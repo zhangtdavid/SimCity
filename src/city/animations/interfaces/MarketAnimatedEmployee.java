@@ -1,6 +1,9 @@
 package city.animations.interfaces;
 
+import java.util.LinkedList;
+
 import city.bases.interfaces.AnimationInterface;
+import city.roles.interfaces.MarketEmployee;
 
 public interface MarketAnimatedEmployee extends AnimationInterface{
 
@@ -11,6 +14,10 @@ public interface MarketAnimatedEmployee extends AnimationInterface{
 	void doDeliverItems();
 
 	void doGoToCounter();
+
+	LinkedList<MarketEmployee> getEmployeeStalls();
+
+	int getCounterLoc();
 
 	// Data
 

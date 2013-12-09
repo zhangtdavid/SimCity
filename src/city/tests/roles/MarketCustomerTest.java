@@ -9,6 +9,7 @@ import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.bases.Animation;
 import city.buildings.BankBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;
@@ -18,6 +19,7 @@ import city.roles.MarketCustomerRole;
 import city.roles.interfaces.MarketCustomer.MarketCustomerEvent;
 import city.roles.interfaces.MarketCustomer.MarketCustomerState;
 import city.tests.agents.mocks.MockPerson;
+import city.tests.animations.mocks.MockMarketAnimatedCustomer;
 import city.tests.roles.mocks.MockLandlord;
 import city.tests.roles.mocks.MockMarketCashier;
 import city.tests.roles.mocks.MockMarketCustomerDelivery;
@@ -37,6 +39,8 @@ public class MarketCustomerTest extends TestCase {
 	
 	MockPerson customerPerson;
 	MarketCustomerRole customer;
+	MockMarketAnimatedCustomer customerGui;
+	
 	MockLandlord landlord;
 	HouseBuilding home;
 	
@@ -98,10 +102,11 @@ public class MarketCustomerTest extends TestCase {
 		
 		customerPerson = new MockPerson("Customer");
 		customer = new MarketCustomerRole(order);
-//		marketCustomerGui = new MarketCustomerAnimation(customer);
+		customerGui = new MockMarketAnimatedCustomer(customer);
 		customer.setPerson(customerPerson);
 		customer.setMarket(market);
-//		customer.setAnimation((Animation) marketCustomerGui);
+		customer.setAnimation(customerGui);
+		
 		landlord = new MockLandlord();
 		home = new HouseBuilding("House", landlord, housePanel, null); // TODO fix null perhaps.
 		customerPerson.setHome(home);
@@ -155,12 +160,11 @@ public class MarketCustomerTest extends TestCase {
 		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
 		assertTrue("Manager log should have \"Manager received msgIWouldLikeToPlaceAnOrder\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIWouldLikeToPlaceAnOrder"));
 	
-		customer.msgWhatWouldYouLike(employee, 0);
+		customer.msgWhatWouldYouLike(employee);
 		assertEquals("Customer log should have 1 entry.", customer.log.size(), 1);
 		assertTrue("Customer log should have \"Customer received msgWhatWouldYouLike\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgWhatWouldYouLike"));
 		assertTrue("Customer event should be AskedForOrder.", customer.getMarketCustomerEvent() == MarketCustomerEvent.AskedForOrder);
 		assertTrue("Customer employee should be employee.", customer.getEmployee() == employee);
-		assertTrue("Customer loc should be 0.", customer.getLoc() == 0);
 		
 		customer.runScheduler();
 		assertTrue("Customer state should be WaitingForOrder.", customer.getMarketCustomerState() == MarketCustomerState.WaitingForOrder);

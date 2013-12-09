@@ -12,6 +12,8 @@ import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
 import city.animations.MarketCustomerAnimation;
 import city.animations.RestaurantChungCustomerAnimation;
+import city.animations.interfaces.MarketAnimatedCustomer;
+import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.Role;
 import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomer;
@@ -31,7 +33,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private MarketOrder order;
 
 	private HashMap<FOOD_ITEMS, Integer> receivedItems = new HashMap<FOOD_ITEMS, Integer>();
-	private int loc; // stall number of employee
 	private int bill;
 
 	private MarketCustomerEvent event;
@@ -61,12 +62,11 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 //  Messages
 //	=====================================================================
 	@Override
-	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
+	public void msgWhatWouldYouLike(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Customer received msgWhatWouldYouLike from Market Employee."));
 		System.out.println("Market Customer received msgWhatWouldYouLike from Market Employee.");
 		event = MarketCustomerEvent.AskedForOrder;
 		employee = e;
-		this.loc = loc;
 		stateChanged();
 	}
 	
@@ -141,31 +141,31 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
 		market.getManager().msgIWouldLikeToPlaceAnOrder(this);
-		this.getAnimation(MarketCustomerAnimation.class).DoStandInWaitingForServiceLine();
+		this.getAnimation(MarketAnimatedCustomer.class).DoStandInWaitingForServiceLine();
 	}
 	
 	private void giveOrder() {
 		state = MarketCustomerState.WaitingForOrder;
-//		marketCustomerGui.DoGoToCounter(loc);
-//		try {
-//			atCounter.acquire();
-	//	} catch (InterruptedException e) {
-	//		// TODO Auto-generated catch block
-	//		e.printStackTrace();
-	//	}
+		this.getAnimation(MarketAnimatedCustomer.class).DoGoToCounter(employee);
+		try {
+			atCounter.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		employee.msgHereIsMyOrder(this, order.getOrderItems(), order.getOrderId());
-//		marketCustomerGui.DoStandInWaitingForServiceLine();		
+		this.getAnimation(MarketAnimatedCustomer.class).DoStandInWaitingForItemsLine();
 	}
 	
 	private void pickUpOrderAndPay() {
 		state = MarketCustomerState.Paying;
-//		masrketCustomerGui.DoGoToCashier();
-//		try {
-//		atCashier.acquire();
-//	} catch (InterruptedException e) {
-//		// TODO Auto-generated catch block
-//		e.printStackTrace();
-//	}
+		this.getAnimation(MarketAnimatedCustomer.class).DoGoToCashier();
+		try {
+			atCashier.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 		int payment = checkBill();
 		if (payment != -1) 
 			market.getCashier().msgHereIsPayment(order.getOrderId(), payment);
@@ -174,7 +174,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 	private void leaveMarket() {
 		state = MarketCustomerState.None;
-//		marketCustomerGui.DoExitMarket();
+		this.getAnimation(MarketAnimatedCustomer.class).DoExitMarket();
 	}
 	
 //  Getters
@@ -201,11 +201,6 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	}
 	
 	@Override
-	public int getLoc() {
-		return loc;
-	}
-	
-	@Override
 	public int getBill() {
 		return bill;
 	}
@@ -224,8 +219,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	public String getStateString() {
 		return state.toString();
 	}
-	
-	
+
 //  Setters
 //	=====================================================================	
 	@Override

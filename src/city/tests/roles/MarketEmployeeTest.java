@@ -17,6 +17,7 @@ import city.roles.interfaces.MarketEmployee.MarketEmployeeEvent;
 import city.roles.interfaces.MarketEmployee.MarketEmployeeState;
 import city.roles.interfaces.MarketEmployee.WorkingState;
 import city.tests.agents.mocks.MockPerson;
+import city.tests.animations.mocks.MockMarketAnimatedEmployee;
 import city.tests.roles.mocks.MockMarketCashier;
 import city.tests.roles.mocks.MockMarketCustomer;
 import city.tests.roles.mocks.MockMarketCustomerDelivery;
@@ -45,7 +46,7 @@ public class MarketEmployeeTest extends TestCase {
 	
 	MockPerson employeePerson;
 	MarketEmployeeRole employee;
-//	MarketAnimatedEmployee employeeGui;
+	MockMarketAnimatedEmployee employeeGui;
 
 	MockPerson employeePerson2;
 	MarketEmployeeRole employee2;
@@ -93,10 +94,11 @@ public class MarketEmployeeTest extends TestCase {
 		
 		employeePerson = new MockPerson("Employee"); 
 		employee = new MarketEmployeeRole(market, 0, 12);
+		employeeGui = new MockMarketAnimatedEmployee(employee);
 		employee.setPerson(employeePerson);
 		employee.setMarket(market);
+		employee.setAnimation(employeeGui);
 		employee.setActive();
-//		employee.setAnimation((Animation) employeeGui);
 		
 		employeePerson2 = new MockPerson("Employee2"); 
 		employee2 = new MarketEmployeeRole(market, 13, 24);

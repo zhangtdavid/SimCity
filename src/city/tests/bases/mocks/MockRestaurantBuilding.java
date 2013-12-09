@@ -1,5 +1,6 @@
 package city.tests.bases.mocks;
 
+import java.beans.PropertyChangeSupport;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -34,6 +35,12 @@ public class MockRestaurantBuilding extends MockBuilding implements RestaurantBu
 	public void setFoodQuantity(FOOD_ITEMS f, int i) {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

@@ -1,5 +1,6 @@
 package city.tests.buildings.mocks;
 
+import java.beans.PropertyChangeSupport;
 import java.util.List;
 import java.util.Map;
 
@@ -138,6 +139,18 @@ public class MockMarket extends MockBuilding implements Market {
 	public MyMarketCustomer findCustomerDelivery(MarketCustomerDelivery cd) {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void setInventory(Map<FOOD_ITEMS, Integer> map) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

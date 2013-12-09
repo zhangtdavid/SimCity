@@ -89,9 +89,8 @@ public abstract class MockResidenceBuilding extends MockBuilding implements Resi
 	}
 	
 	@Override
-	public void removeFood(Person p, FOOD_ITEMS f, int i) {
-		// TODO Auto-generated method stub
-		
+	public boolean removeFood(Person p, FOOD_ITEMS f, int i) {
+		return true;
 	}
 
 	@Override
