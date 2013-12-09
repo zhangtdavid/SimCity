@@ -16,7 +16,12 @@ import city.gui.BuildingCard;
 public class RestaurantJPPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
-	
+	private final int WINDOWX = 500;
+    private final int WINDOWY = 500;
+    private final int TABLEORIGINX = 200;
+    private final int TABLEORIGINY = 250;
+    private final int TABLELENGTH = 50;
+    private final int TABLESEPARATION = 100;
     private final int delayMS = 5;
 	private List<Animation> animations = new ArrayList<Animation>();
 
@@ -41,6 +46,18 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
         graphics2D.setColor(background);
         graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 
+        for(int i=0; i<3; i++)			//HACK, need 3 to be a variable!
+        {
+        graphics2D.setColor(Color.ORANGE);
+        graphics2D.fillRect(TABLEORIGINX, TABLEORIGINY - i*TABLESEPARATION, TABLELENGTH, TABLELENGTH);
+        }
+        
+    	graphics2D.setColor(Color.yellow);
+    	graphics2D.fillRect(160, 420, 60, 20);
+    	graphics2D.setColor(Color.RED);
+    	graphics2D.fillRect(80, 420, 60, 20);
+    	graphics2D.setColor(Color.white);
+    	graphics2D.fillRect(20, 350, 50, 50);
         // Update the position of each visible element
         for(Animation animation : animations) {
         	if (animation.getVisible()) {
