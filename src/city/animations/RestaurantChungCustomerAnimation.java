@@ -2,6 +2,7 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 
 import city.animations.interfaces.RestaurantChungAnimatedCustomer;
 import city.bases.Animation;
@@ -10,6 +11,10 @@ import city.roles.interfaces.RestaurantChungCustomer;
 
 public class RestaurantChungCustomerAnimation extends Animation implements RestaurantChungAnimatedCustomer {
 	private RestaurantChungCustomer agent = null;
+	
+	private static LinkedList<RestaurantChungCustomer> waitingCustomers = new LinkedList<RestaurantChungCustomer>(); 
+	
+	private boolean waiting = false;	
 
 	private boolean isPresent = false;
 	private boolean isHungry = false;
@@ -33,10 +38,10 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 //	=====================================================================
 	public RestaurantChungCustomerAnimation(RestaurantChungCustomer c) {
 		agent = c;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
+		xPos = RestaurantChungPanel.ENTRANCEX;
+		yPos = RestaurantChungPanel.ENTRANCEY;
+		xDestination = xPos;
+		yDestination = yPos;
 	}
 
 //	Gui Updater
@@ -51,6 +56,11 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 			yPos++;
 		else if (yPos > yDestination)
 			yPos--;
+		
+		if (waiting) {
+			xDestination = RestaurantChungPanel.WAITINGAREAX;
+			yDestination = RestaurantChungPanel.WAITINGAREAY+(waitingCustomers.indexOf(agent)*30);
+		}
 
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command == Command.GoToSeat) agent.msgAnimationAtSeat(); // Released atSeat semaphore
@@ -117,18 +127,23 @@ public class RestaurantChungCustomerAnimation extends Animation implements Resta
 	}
 
 	public void DoGoToWaitingArea(int waitingPosition) {
+		waitingCustomers.add(agent);
+		waiting = true;
 		xDestination = RestaurantChungPanel.WAITINGAREAX;
-		yDestination = RestaurantChungPanel.WAITINGAREAY+(waitingPosition*30);
+		yDestination = RestaurantChungPanel.WAITINGAREAY+(waitingCustomers.indexOf(agent)*30);
 	}
 	
 	public void DoGoToSeat(int x, int y) {
-    	System.out.println("Customer Gui going to seat");
-		xDestination = x;
+		waitingCustomers.remove(agent);
+    	waiting = false;
+    	xDestination = x;
 		yDestination = y;
 		command = Command.GoToSeat;
 	}
 	
 	public void DoExitRestaurant() {
+		waitingCustomers.remove(agent);
+    	waiting = false;
 		xDestination = RestaurantChungPanel.EXITX;
 		yDestination = RestaurantChungPanel.EXITY;
 		command = Command.LeaveRestaurant;

@@ -160,7 +160,8 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.getEmployees().size() > 1 && customer == null && customerDelivery == null) {
 				market.removeEmployee(this);
-				super.setInactive();	
+				super.setInactive();
+				this.getAnimation(MarketAnimatedEmployee.class).removeFromEmployeeStalls();
 			}
 		}
 		

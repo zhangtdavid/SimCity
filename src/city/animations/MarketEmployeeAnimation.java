@@ -40,7 +40,7 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 		else if (yPos > yDestination)
 			yPos--;
 
-		// Could cause problems if an employee is in the middle of talking with a customer
+		// Could cause problems if an employee is in the middle of talking with a customer, but very brief interaction anyway
 		if (atCounter) {
 	        xDestination = MarketPanel.COUNTERX+((employeeStalls.indexOf(employee)+1)*45);
 	        yDestination = MarketPanel.COUNTERY-MarketPanel.RECTDIM;
@@ -96,7 +96,8 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 		atCounter = true;
 	}
 
-	// Getters
+//  Getters
+//	=====================================================================
 	@Override
 	public LinkedList<MarketEmployee> getEmployeeStalls() {
 		return employeeStalls;
@@ -105,5 +106,12 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 	@Override
 	public int getCounterLoc() {
 		return employeeStalls.indexOf(employee);
+	}
+	
+//  Utilities
+//	=====================================================================
+	@Override
+	public void removeFromEmployeeStalls() {
+		employeeStalls.remove(employee);
 	}
 }

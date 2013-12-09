@@ -19,6 +19,8 @@ public interface MarketAnimatedEmployee extends AnimationInterface{
 
 	int getCounterLoc();
 
+	void removeFromEmployeeStalls();
+
 	// Data
 
 	// Constructor

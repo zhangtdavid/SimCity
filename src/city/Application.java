@@ -559,7 +559,7 @@ public class Application {
 
 
 		// RESTAURANTCHOI----------------------------------------------------------------------------
-		MarketBuilding marketBuildingChoi1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 325);
+//		MarketBuilding marketBuildingChoi1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 325);
 		RestaurantChoiBuilding restaurantChoiBuilding1 = (RestaurantChoiBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHOI, 225, 425);
 
 		AptPanel rhp1Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
@@ -821,6 +821,11 @@ public class Application {
 		restaurantChungBuilding1.addOccupyingRole(p4r1Chung);
 		p4Chung.setOccupation(p4r1Chung);
 		
+		p1Chung.startThread();
+		p2Chung.startThread();
+		p3Chung.startThread();
+		p4Chung.startThread();
+		
 		// BANK------------------------------------------------------------------------------
 		BankPanel bankPanel11 = new BankPanel(Color.black);
 		CityViewBank cityViewBank11 = new CityViewBank(425, 100, "Bank " + (mainFrame.cityView.getStaticsSize()), Color.yellow, bankPanel11); 
@@ -874,85 +879,85 @@ public class Application {
 		p2Bank.setOccupation(p2r1Bank);
 		
 		// MARKET------------------------------------------------------------------------------
-		MarketPanel marketPanel1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarket1 = new CityViewMarket(425, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, marketPanel1); 
-		MarketBuilding marketBuilding1 = new MarketBuilding("Market 1", marketPanel1, cityViewMarket1);
-		setBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
-		
-		AptPanel aptPanelMarket1 = new AptPanel(Color.black);
-		CityViewApt cityViewAptMarket1 = new CityViewApt(425,250, "Market Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelMarket1);
-		AptBuilding aptBuildingMarket1 = new AptBuilding("Market Apartment", null, aptPanelMarket1, cityViewAptMarket1);
-		setBuilding(aptPanelMarket1, cityViewAptMarket1, aptBuildingMarket1);
-
-		// Create landlord
-		PersonAgent p0Market = new PersonAgent("Landlord Market", date, new PersonAnimation(), aptBuildingMarket1);
-		p0Market.setCash(50); // TODO remove later
-		LandlordRole p0r1Market = new LandlordRole();
-		p0Market.addRole(p0r1Market);
-		aptBuildingMarket1.setLandlord(p0r1Market);
-		p0r1Market.setActive();
-		model.addPerson(p0Market);
-
-		// Create people
-		PersonAgent p1Market = new PersonAgent("MarketCashier 1", date, new PersonAnimation(), aptBuildingMarket1);
-		PersonAgent p2Market = new PersonAgent("MarketDeliveryPerson 1", date, new PersonAnimation(), aptBuildingMarket1);
-		PersonAgent p3Market = new PersonAgent("MarketEmployee 1", date, new PersonAnimation(), aptBuildingMarket1);
-		PersonAgent p4Market = new PersonAgent("MarketManager 1", date, new PersonAnimation(), aptBuildingMarket1);
-		model.addPerson(p1Market);
-		model.addPerson(p2Market);
-		model.addPerson(p3Market);
-		model.addPerson(p4Market);
-
-		// Give people cars
-		CarAgent c0Market = new CarAgent(busStop1, p0Market);
-		CarAnimation c0AnimMarket = new CarAnimation(c0Market, busStop1);
-		c0Market.setAnimation(c0AnimMarket);
-		mainFrame.cityView.addAnimation(c0AnimMarket);
-		CarAgent c1Market = new CarAgent(busStop1, p1Market);
-		CarAnimation c1AnimMarket = new CarAnimation(c1Market, busStop1);
-		c1Market.setAnimation(c1AnimMarket);
-		mainFrame.cityView.addAnimation(c1AnimMarket);
-		CarAgent c2Market = new CarAgent(busStop1, p2Market);
-		CarAnimation c2AnimMarket = new CarAnimation(c2Market, busStop1);
-		c2Market.setAnimation(c2AnimMarket);
-		mainFrame.cityView.addAnimation(c2AnimMarket);
-		CarAgent c3Market = new CarAgent(busStop1, p3Market);
-		CarAnimation c3AnimMarket = new CarAnimation(c3Market, busStop1);
-		c3Market.setAnimation(c3AnimMarket);
-		mainFrame.cityView.addAnimation(c3AnimMarket);
-		CarAgent c4Market = new CarAgent(busStop1, p4Market);
-		CarAnimation c4AnimMarket = new CarAnimation(c4Market, busStop1);
-		c4Market.setAnimation(c4AnimMarket);
-		mainFrame.cityView.addAnimation(c4AnimMarket);
-
-		// Create cashier
-		MarketCashierRole p1r1Market = new MarketCashierRole(marketBuilding1, 0, 12);
-		p1r1Market.setPerson(p1Market);
-		marketBuilding1.addOccupyingRole(p1r1Market);
-		p1Market.setOccupation(p1r1Market);
-
-		// Create delivery person
-		MarketDeliveryPersonRole p2r1Market = new MarketDeliveryPersonRole(marketBuilding1, 0, 12);
-		p2r1Market.setPerson(p2Market);		
-		marketBuilding1.addOccupyingRole(p2r1Market);
-		p2Market.setOccupation(p2r1Market);
-
-		// Create employee
-		MarketEmployeeRole p3r1Market = new MarketEmployeeRole(marketBuilding1, 0, 12);
-		p3r1Market.setPerson(p3Market);		
-		marketBuilding1.addOccupyingRole(p3r1Market);
-		p3Market.setOccupation(p3r1Market);
-
-		// Create manager
-		MarketManagerRole p4r1Market = new MarketManagerRole(marketBuilding1, 0, 12);
-		p4r1Market.setPerson(p4Market);		
-		marketBuilding1.addOccupyingRole(p4r1Market);
-		p4Market.setOccupation(p4r1Market);
-		
-		p1Market.startThread();
-		p2Market.startThread();
-		p3Market.startThread();
-		p4Market.startThread();
+//		MarketPanel marketPanel1 = new MarketPanel(Color.black);
+//		CityViewMarket cityViewMarket1 = new CityViewMarket(425, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, marketPanel1); 
+//		MarketBuilding marketBuilding1 = new MarketBuilding("Market 1", marketPanel1, cityViewMarket1);
+//		setBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
+//		
+//		AptPanel aptPanelMarket1 = new AptPanel(Color.black);
+//		CityViewApt cityViewAptMarket1 = new CityViewApt(425,250, "Market Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelMarket1);
+//		AptBuilding aptBuildingMarket1 = new AptBuilding("Market Apartment", null, aptPanelMarket1, cityViewAptMarket1);
+//		setBuilding(aptPanelMarket1, cityViewAptMarket1, aptBuildingMarket1);
+//
+//		// Create landlord
+//		PersonAgent p0Market = new PersonAgent("Landlord Market", date, new PersonAnimation(), aptBuildingMarket1);
+//		p0Market.setCash(50); // TODO remove later
+//		LandlordRole p0r1Market = new LandlordRole();
+//		p0Market.addRole(p0r1Market);
+//		aptBuildingMarket1.setLandlord(p0r1Market);
+//		p0r1Market.setActive();
+//		model.addPerson(p0Market);
+//
+//		// Create people
+//		PersonAgent p1Market = new PersonAgent("MarketCashier 1", date, new PersonAnimation(), aptBuildingMarket1);
+//		PersonAgent p2Market = new PersonAgent("MarketDeliveryPerson 1", date, new PersonAnimation(), aptBuildingMarket1);
+//		PersonAgent p3Market = new PersonAgent("MarketEmployee 1", date, new PersonAnimation(), aptBuildingMarket1);
+//		PersonAgent p4Market = new PersonAgent("MarketManager 1", date, new PersonAnimation(), aptBuildingMarket1);
+//		model.addPerson(p1Market);
+//		model.addPerson(p2Market);
+//		model.addPerson(p3Market);
+//		model.addPerson(p4Market);
+//
+//		// Give people cars
+//		CarAgent c0Market = new CarAgent(busStop1, p0Market);
+//		CarAnimation c0AnimMarket = new CarAnimation(c0Market, busStop1);
+//		c0Market.setAnimation(c0AnimMarket);
+//		mainFrame.cityView.addAnimation(c0AnimMarket);
+//		CarAgent c1Market = new CarAgent(busStop1, p1Market);
+//		CarAnimation c1AnimMarket = new CarAnimation(c1Market, busStop1);
+//		c1Market.setAnimation(c1AnimMarket);
+//		mainFrame.cityView.addAnimation(c1AnimMarket);
+//		CarAgent c2Market = new CarAgent(busStop1, p2Market);
+//		CarAnimation c2AnimMarket = new CarAnimation(c2Market, busStop1);
+//		c2Market.setAnimation(c2AnimMarket);
+//		mainFrame.cityView.addAnimation(c2AnimMarket);
+//		CarAgent c3Market = new CarAgent(busStop1, p3Market);
+//		CarAnimation c3AnimMarket = new CarAnimation(c3Market, busStop1);
+//		c3Market.setAnimation(c3AnimMarket);
+//		mainFrame.cityView.addAnimation(c3AnimMarket);
+//		CarAgent c4Market = new CarAgent(busStop1, p4Market);
+//		CarAnimation c4AnimMarket = new CarAnimation(c4Market, busStop1);
+//		c4Market.setAnimation(c4AnimMarket);
+//		mainFrame.cityView.addAnimation(c4AnimMarket);
+//
+//		// Create cashier
+//		MarketCashierRole p1r1Market = new MarketCashierRole(marketBuilding1, 0, 12);
+//		p1r1Market.setPerson(p1Market);
+//		marketBuilding1.addOccupyingRole(p1r1Market);
+//		p1Market.setOccupation(p1r1Market);
+//
+//		// Create delivery person
+//		MarketDeliveryPersonRole p2r1Market = new MarketDeliveryPersonRole(marketBuilding1, 0, 12);
+//		p2r1Market.setPerson(p2Market);		
+//		marketBuilding1.addOccupyingRole(p2r1Market);
+//		p2Market.setOccupation(p2r1Market);
+//
+//		// Create employee
+//		MarketEmployeeRole p3r1Market = new MarketEmployeeRole(marketBuilding1, 0, 12);
+//		p3r1Market.setPerson(p3Market);		
+//		marketBuilding1.addOccupyingRole(p3r1Market);
+//		p3Market.setOccupation(p3r1Market);
+//
+//		// Create manager
+//		MarketManagerRole p4r1Market = new MarketManagerRole(marketBuilding1, 0, 12);
+//		p4r1Market.setPerson(p4Market);		
+//		marketBuilding1.addOccupyingRole(p4r1Market);
+//		p4Market.setOccupation(p4r1Market);
+//		
+//		p1Market.startThread();
+//		p2Market.startThread();
+//		p3Market.startThread();
+//		p4Market.startThread();
 		
 		
 		//

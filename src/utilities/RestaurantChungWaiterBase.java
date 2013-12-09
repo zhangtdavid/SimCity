@@ -92,7 +92,6 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 			restaurant.findCustomer(c).setWaiterCustomerState(WaiterCustomerState.Waiting);
 			stateChanged();
 		}
-		// TODO inform sender of inactivity
 	}
 	
 	@Override
@@ -317,6 +316,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		if (workingState == WorkingState.NotWorking && haveCustomers == false) {
 			restaurant.removeWaiter(this);
 			super.setInactive();
+			this.getAnimation(RestaurantChungWaiterAnimation.class).removeFromWaiterHomePositions();
 		}
 		
 		if (state == BreakState.ApprovedForBreak && haveCustomers == false) {

@@ -3,9 +3,9 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 import java.util.Vector;
 
-import utilities.StringUtil;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.bases.Animation;
 import city.gui.interiors.RestaurantChungPanel;
@@ -19,13 +19,15 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 	{Working, AskedForBreak, OnBreak};
 	private WaiterState state = WaiterState.Working;
 	
+	private static LinkedList<RestaurantChungWaiter> waiterPositions = new LinkedList<RestaurantChungWaiter>();
+	
 	private boolean delivering = false;
     private String food = null;
 
 //	Location Information
 //	=====================================================================
-    private int xPos = -20, yPos = -20; //default waiter position
-    private int xDestination = -20, yDestination = -20; //default start position
+    private int xPos = RestaurantChungPanel.WAITERHOMEX, yPos = RestaurantChungPanel.WAITERHOMEY+(waiterPositions.indexOf(agent)*30); //default waiter position
+    private int xDestination = xPos, yDestination = yPos; //default start position
 	private enum Command {noCommand, GoToWaiterHome, GoToLine, GoToEntrance, GoToTable, GoToCook, GoToCashier, GoOffBreak};
 	private Command command=Command.noCommand;
     
@@ -47,7 +49,8 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 
     public RestaurantChungWaiterAnimation(RestaurantChungWaiter wa) {
         agent = wa;
-    }
+        waiterPositions.add(agent);
+	}
 
     public void updatePosition() {
         if (xPos < xDestination)
@@ -94,7 +97,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 
     public void DoReturnToWaiterHome() {
         xDestination = RestaurantChungPanel.WAITERHOMEX;
-        yDestination = RestaurantChungPanel.WAITERHOMEY;
+        yDestination = RestaurantChungPanel.WAITERHOMEY+(waiterPositions.indexOf(agent)*30);
 		command = Command.GoToWaiterHome;
     }
     
@@ -145,7 +148,7 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     
     public void DoGoOnBreak() {
     	setOnBreak();
-        xDestination = RestaurantChungPanel.WAITERBREAKX;
+        xDestination = RestaurantChungPanel.WAITERBREAKX-(waiterPositions.indexOf(agent)*30);
         yDestination = RestaurantChungPanel.WAITERBREAKY;
     }
     
@@ -154,54 +157,54 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 		command = Command.GoOffBreak;
     }
 	
-//  Utilities
+//  Getters
 //	=====================================================================
-    public int getXPos() {
+	@Override
+   public int getXPos() {
         return xPos;
     }
 
+	@Override
     public int getYPos() {
         return yPos;
     }
     
+	@Override
+    public LinkedList<RestaurantChungWaiter> getWaiterPositions() {
+		return waiterPositions;
+	}
+   
+//  Utilities
+//	=====================================================================
+	@Override
     public void addTable(int x, int y) {
 		tableXYs.add(new TableXY(x, y));
 	}
+
+	@Override
 	public int findTableX(int table) {
 		return tableXYs.get(table).tableX;
 	}
 	
+	@Override
 	public int findTableY(int table) {
 		return tableXYs.get(table).tableY;
 	}
-    
-    protected void print(String msg, Throwable e) {
-        StringBuffer sb = new StringBuffer();
-        sb.append(getName());
-        sb.append(": ");
-        sb.append(msg);
-        sb.append("\n");
-        if (e != null) {
-            sb.append(StringUtil.stackTraceString(e));
-        }
-        System.out.print(sb.toString());
-    }
-    
-    protected String getName() {
-        return StringUtil.shortName(this);
-    }
 
+	@Override
 	public void setAskedForBreak() {
 		state = WaiterState.AskedForBreak;
 		agent.msgAnimationAskedForBreak();
 //		gui.setWaiterWaiting(agent);
 	}
     
+	@Override
 	public void setOnBreak() {
 		state = WaiterState.OnBreak;
 //		gui.setWaiterOnBreak(agent);
 	}
 	
+	@Override
 	public void setOffBreak() {
 		state = WaiterState.Working;
 		DoGoOffBreak();
@@ -209,7 +212,13 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 //		gui.setWaiterWorking(agent);
 	}
 	
+	@Override
 	public String isOnBreak() {
 		return state.toString();
-	}    
+	} 
+	
+	@Override
+	public void removeFromWaiterHomePositions() {
+		waiterPositions.remove(agent);
+	}
 }
