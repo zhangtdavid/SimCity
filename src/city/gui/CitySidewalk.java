@@ -2,8 +2,11 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.bases.interfaces.AnimationInterface;
 import city.gui.exteriors.CityViewBuilding;
@@ -20,6 +23,8 @@ public class CitySidewalk extends CityViewBuilding {
 	protected CityRoad correspondingStoplight = null;
 
 	volatile protected AnimationInterface currentOccupant = null;
+	
+	private static BufferedImage cityViewSidewalkImage = null;
 
 	// Constructor
 
@@ -32,14 +37,22 @@ public class CitySidewalk extends CityViewBuilding {
 		//Make the lane surface
 		rectangle = new Rectangle();
 		rectangle.setRect(x, y, size, size);
+		
+		try {
+			if(cityViewSidewalkImage == null)
+				cityViewSidewalkImage = ImageIO.read(CitySidewalk.class.getResource("/icons/cityView/CityViewSidewalkImage.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	// Paint stuff
 
 	@Override
 	public void paint( Graphics g2 ) {
-		g2.setColor( sidewalkColor );
-		((Graphics2D) g2).fill( rectangle );
+//		g2.setColor( sidewalkColor );
+//		((Graphics2D) g2).fill( rectangle );
+		g2.drawImage(cityViewSidewalkImage, x, y, null);
 	}
 
 	@Override

@@ -70,6 +70,10 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 	}
 
 	public void actionPerformed(ActionEvent e) {
+		if(mainFrame.cityView.addingObject == true) {
+			mainFrame.cityView.statics.remove(mainFrame.cityView.statics.remove(mainFrame.cityView.statics.size() - 1));
+			mainFrame.cityView.addingObject = false;
+		}
 		if(e.getSource().equals(buttonApt)) {
 			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.APT);
 		} else if (e.getSource().equals(buttonHouse)) {
