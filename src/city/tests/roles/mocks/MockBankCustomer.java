@@ -88,4 +88,10 @@ public class MockBankCustomer extends MockRole implements BankCustomer {
 		return null;
 	}
 
+	@Override
+	public void msgAtDestination() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

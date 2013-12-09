@@ -27,7 +27,7 @@ public abstract class Building implements BuildingInterface {
 	private int cash; // Cash that the building has. Used by restaurants, etc., not houses, bus stops, etc.
 	private HashMap<RoleInterface, AnimationInterface> occupyingRoles = new HashMap<RoleInterface, AnimationInterface>(); // Stores all roles currently inside the building, along with their animations
 	private CityViewBuilding cityViewBuilding; // The representation of this building in the GUI's map
-	private BuildingCard panel; // The representation of this building's interior
+	protected BuildingCard panel; // The representation of this building's interior
 	private ArrayList<String> workerRoleClasses = new ArrayList<String>(); // The classes which work in this type of building
 	private String buildingClassName;
 	private PropertyChangeSupport propertyChangeSupport;

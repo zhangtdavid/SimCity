@@ -3,6 +3,7 @@ package city.tests.roles;
 import junit.framework.TestCase;
 import city.Application;
 import city.Application.BUILDING;
+import city.animations.BankCustomerAnimation;
 import city.buildings.BankBuilding;
 import city.buildings.RestaurantJPBuilding;
 import city.roles.BankCustomerRole;

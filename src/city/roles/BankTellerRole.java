@@ -1,7 +1,10 @@
 package city.roles;
 
+import java.util.concurrent.Semaphore;
+
 import trace.AlertLog;
 import trace.AlertTag;
+import city.animations.BankTellerAnimation;
 import city.bases.JobRole;
 import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankCustomer;
@@ -13,7 +16,9 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	private Bank building;
 	private int boothNumber;
 	private boolean wantsInactive = false;
-	public MyCustomer currentCustomer;
+	public MyCustomer currentCustomer = null;
+	private BankTellerAnimation gui = null;
+	private Semaphore atDestination = new Semaphore(0,true);
 	
 	// Constructor
 	public BankTellerRole (Bank b, int shiftStart, int shiftEnd){
@@ -86,6 +91,8 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	public void msgDoneAndLeaving() {
 		print("Done and Leaving message received");
 		currentCustomer.s = SERVICE_STATE.done;
+		if(gui!=null)
+			gui.DoClearString();
 		stateChanged();
 	}
 	
@@ -97,6 +104,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 			super.setInactive();
 			wantsInactive = false;
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
+			gui.DoLeave();
 			return false;
 		}
 		if(currentCustomer != null){
@@ -143,31 +151,71 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	
 	// Actions
 	private void ServiceCustomer(){
+		if(gui!=null)
+			gui.DoString("May I help the next customer?");
 		currentCustomer.bc.msgWhatDoYouWant(boothNumber, this);
 		currentCustomer.s = SERVICE_STATE.inProgress;
 	}
 	
 	private void TryDeposit(){
+		if(gui!=null){
+		gui.DoGoToVault();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gui.DoGoToStation();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		currentCustomer.s = SERVICE_STATE.inProgress;
 		building.getManager().msgTryDeposit(currentCustomer.amount, currentCustomer.acctNum, this);
 	}
 	
 	private void GiveAccountNumber(){
+		if(gui!=null)
+			gui.DoString("Your account number is " + currentCustomer.acctNum);
 		currentCustomer.bc.msgAccountCreated(currentCustomer.acctNum);
 		currentCustomer.s = SERVICE_STATE.finished;
 	}
 	
 	private void TryWithdraw(){
+		if(gui!=null){
+		gui.DoGoToVault();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		gui.DoGoToStation();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		building.getManager().msgWithdraw(currentCustomer.acctNum, currentCustomer.amount, this);
 		currentCustomer.s = SERVICE_STATE.inProgress;
 	}
 	
 	private void TransferWithdrawal(){
+		if(gui!=null)
+			gui.DoString("Here is your withdrawal");
 		currentCustomer.bc.msgHereIsWithdrawal(currentCustomer.amount);
 		currentCustomer.s = SERVICE_STATE.finished;
 	}
 	
 	private void DepositSuccessful(){
+		if(gui!=null)
+			gui.DoString("Your deposit was successful");
 		currentCustomer.bc.msgDepositCompleted();
 		currentCustomer.s = SERVICE_STATE.finished;
 	}
@@ -175,11 +223,16 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	private void CheckLoanEligible(){
 		currentCustomer.s = SERVICE_STATE.inProgress;
 		if(currentCustomer.salary == 0){
+			if(gui!=null)
+				gui.DoString("Your transaction was denied");
 			currentCustomer.bc.msgTransactionDenied();
+			
 			//Non- norm and will hang for now
 		}
 		else if(currentCustomer.salary*2 > currentCustomer.amount){
 			building.getManager().msgCreateLoan(currentCustomer.amount, currentCustomer.amount/4, currentCustomer.acctNum);
+			if(gui!=null)
+				gui.DoString("You have been granted a loan");
 			currentCustomer.bc.msgLoanGranted(currentCustomer.amount);
 			currentCustomer.s = SERVICE_STATE.finished;
 		}
@@ -188,6 +241,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	private void GetNewCustomer(){
 		currentCustomer = null;
 		building.getManager().msgAvailable(this);
+		
 	}
 	
 	// Getters
@@ -198,7 +252,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	public void setActive() {
 		print("Customer has been set active");
 		building.getManager().msgAvailable(this);
-		this.setActivityBegun();
+		super.setActive();
 	}
 	
 	@Override
@@ -206,6 +260,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 		if(currentCustomer == null){
 			super.setInactive();
 			this.getPerson().setCash(this.getPerson().getCash() + Bank.WORKER_SALARY);
+			gui.DoLeave();
 		}	
 		else{
 			building.getManager().msgUnavailable(this);
@@ -233,5 +288,17 @@ public class BankTellerRole extends JobRole implements BankTeller {
 		public MyCustomer(BankCustomer bc2){
 			bc = bc2;
 		}
+	}
+
+	public void setGui(BankTellerAnimation anim) {
+		gui = anim;
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void msgAtDestination() {
+		// TODO Auto-generated method stub
+		atDestination.release();// = true;
+		stateChanged();
 	}
 }
