@@ -133,12 +133,6 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	}
 
 	@Override
-	public void msgGetInLinePosition(int positionInLine) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public void setHungerLevel(int hungerLevel) {
 		// TODO Auto-generated method stub
 		

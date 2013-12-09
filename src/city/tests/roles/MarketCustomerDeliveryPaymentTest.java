@@ -64,6 +64,8 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		CityMap.clearMap();
+
 		bank = new BankBuilding("Bank", null, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
 

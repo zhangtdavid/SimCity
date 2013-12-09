@@ -7,6 +7,7 @@ import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.bases.RestaurantBuilding;
 import city.buildings.BankBuilding;
@@ -55,6 +56,8 @@ public class MarketCustomerDeliveryTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		CityMap.clearMap();
+		
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding", null, null));
 		
 		market = new MarketBuilding("Market1", null, null);

@@ -74,6 +74,7 @@ public class RestaurantChungCookTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();
+		CityMap.clearMap();
 		
 		// Bank must come first so the restaurant and market can create bankCustomerRoles
 		bank = new BankBuilding("Bank", null, null);		
@@ -181,7 +182,7 @@ public class RestaurantChungCookTest extends TestCase {
 		assertTrue("Cook marketOrders should contain a marketOrder with state == Ordered.", cook.getMarketOrders().get(0).getMarketOrderState() == MarketOrderState.Ordered);
 		assertEquals("Cook should have 1 marketCustomerDeliveryRole.", cook.getMarketCustomerDeliveryRoles().size(), 1);
 		assertTrue("MarketCustomerDeliveryRole should have state == Ordering.", ((MarketCustomerDelivery) cook.getMarketCustomerDeliveryRoles().get(0)).getState() == MarketCustomerState.Ordering);
-
+		
 		cook.runScheduler();
 		assertTrue("MarketCustomerDeliveryRole should have state == None.", ((MarketCustomerDelivery) cook.getMarketCustomerDeliveryRoles().get(0)).getState() == MarketCustomerState.None);
 		

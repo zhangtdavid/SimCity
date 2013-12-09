@@ -8,6 +8,7 @@ import junit.framework.TestCase;
 import utilities.MarketOrder;
 import city.Application;
 import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.bases.Animation;
 import city.buildings.BankBuilding;
@@ -67,6 +68,8 @@ public class MarketCustomerTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		CityMap.clearMap();
+
 		Application.CityMap.addBuilding(BUILDING.bank, new BankBuilding("BankBuilding", null, null));
 
 		marketPanel = new MarketPanel(Color.blue);
