@@ -61,7 +61,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		print("MarketCashier received msgComputeBill from MarketEmployee.");
 		if (workingState != WorkingState.NotWorking) {
 			transactions.add(new Transaction(e, c, order, collectedItems, id));		
-			stateChanged();			
+			stateChanged();
 		}
 		// TODO inform sender of inactivity
 	}
@@ -136,18 +136,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		
 		synchronized(transactions) {
 			for (Transaction t : transactions) {
-				if (t.s == TransactionState.PendingDelivery) {
-					for(MyDeliveryPerson dt : market.getDeliveryPeople()){
-						if(dt.getAvailable() == true) {
-							assignDelivery(t, dt);
-							return true;
-						}
-					}
-				}
-			}
-		}	
-		synchronized(transactions) {
-			for (Transaction t : transactions) {
 				if (t.s == TransactionState.Pending) {
 					computeBill(t);
 					return true;
@@ -163,7 +151,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			}
 		}
 		
-		if (workingState == WorkingState.NotWorking)
+		if (workingState == WorkingState.NotWorking && transactions.size() == 0)
 			super.setInactive();
 		
 		return blocking;
@@ -194,7 +182,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	private void processPayment(Transaction t) {
 		// TODO handle non norm when payment is not enough
 		// TODO manage giving change
-		t.s = TransactionState.PendingDelivery;
 		
 		if (t.customer != null){
 			t.customer.msgPaymentReceived();
@@ -206,7 +193,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
 				market.setCash(market.getCash() + t.payment);
 				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
-					if(dt.getAvailable() == true) {
+					if(dt.getAvailable() == true && dt.getDeliveryPerson().getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
 						assignDelivery(t, dt);
 					}
 				}
@@ -230,6 +217,11 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	@Override
 	public List<Transaction> getTransactions() {
 		return transactions;
+	}
+	
+	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
 	}
 	
 //  Setters

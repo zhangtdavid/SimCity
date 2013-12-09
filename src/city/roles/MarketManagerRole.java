@@ -11,6 +11,7 @@ import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.Market.MyMarketCustomer;
+import city.buildings.interfaces.Market.MyMarketCustomer.MarketCustomerState;
 import city.buildings.interfaces.Market.MyMarketEmployee;
 import city.roles.interfaces.MarketCustomer;
 import city.roles.interfaces.MarketCustomerDelivery;
@@ -27,8 +28,6 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 
 	private boolean itemsLow;
 	
-
-
 	private WorkingState workingState = WorkingState.Working;
 	
 //	Constructor
@@ -63,7 +62,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	public void msgIWouldLikeToPlaceAnOrder(MarketCustomer c) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person."));
-			System.out.println("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
+			print("Market Manager received msgIWouldLikeToPlaceAnOrder from Market Customer In Person.");
 			market.getCustomers().add(new MyMarketCustomer(c));
 			stateChanged();
 		}
@@ -75,7 +74,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	public void msgIWouldLikeToPlaceADeliveryOrder(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 		if (workingState != WorkingState.NotWorking) {
 			log.add(new LoggedEvent("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery."));
-			System.out.println("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
+			print("Market Manager received msgIWouldLikeToPlaceADeliveryOrder from Market Customer Delivery.");
 			market.getCustomers().add(new MyMarketCustomer(c, cPay, o, id));
 			stateChanged();
 		}
@@ -86,7 +85,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgWhatWouldCustomerDeliveryLike(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee."));
-		System.out.println("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
+		print("Market Manager received msgWhatWouldCustomerDeliveryLike from Market Employee.");
 		MyMarketEmployee tempEmployee = market.findEmployee(e);
 		tempEmployee.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.GettingOrder);
 		stateChanged();
@@ -95,7 +94,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgIAmAvailableToAssist(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Manager received msgIAmAvailableToAssist from Market Employee."));
-		System.out.println("Market Manager received msgIAmAvailableToAssist from Market Employee.");
+		print("Market Manager received msgIAmAvailableToAssist from Market Employee.");
 		MyMarketEmployee tempEmployee = market.findEmployee(e);
 		tempEmployee.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.Available);
 		stateChanged();
@@ -104,7 +103,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	@Override
 	public void msgItemLow() {
 		log.add(new LoggedEvent("Market Manager received msgItemLow from Market Employee."));
-		System.out.println("Market Manager received msgItemLow from Market Employee.");
+		print("Market Manager received msgItemLow from Market Employee.");
 		itemsLow = true;
 		stateChanged();
 	}
@@ -127,12 +126,15 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 			}
 		}
 		synchronized(market.getCustomers()) {
-			if (market.getCustomers().size() > 0 && market.getEmployees().size() > 0) {
-				synchronized(market.getEmployees()) {
-					for (MyMarketEmployee employee : market.getEmployees()) {
-						if (employee.getMarketEmployeeState() == MyMarketEmployee.MarketEmployeeState.Available) {
-							assistCustomer(market.getCustomers().get(0), employee);
-							return true;
+			for (MyMarketCustomer customer : market.getCustomers()) {
+				if (customer.getState() == MarketCustomerState.WaitingForService && market.getEmployees().size() > 0) {
+					synchronized(market.getEmployees()) {
+						for (MyMarketEmployee employee : market.getEmployees()) {
+							if (employee.getMarketEmployeeState() == MyMarketEmployee.MarketEmployeeState.Available) {
+								assistCustomer(customer, employee);
+								customer.setState(MarketCustomerState.GotService);
+								return true;
+							}
 						}
 					}
 				}
@@ -152,7 +154,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 	private void assistCustomer(MyMarketCustomer c, MyMarketEmployee e) {
 		if (c.getCustomer() != null) {
 			e.getEmployee().msgAssistCustomer(c.getCustomer());
-			market.getCustomers().remove(c);
+//			market.getCustomers().remove(c);
 			e.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.CollectingItems);			
 		}
 		else {
@@ -166,7 +168,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 		MyMarketCustomer cd = market.findCustomerDelivery(e.getCustomerDelivery());
 		e.getEmployee().msgHereIsCustomerDeliveryOrder(cd.getOrder(), cd.getOrderId());
 		e.setMarketEmployeeState(MyMarketEmployee.MarketEmployeeState.CollectingItems);
-		market.getCustomers().remove(cd);
+//		market.getCustomers().remove(cd);
 	}
 	
 //  Getters

@@ -258,17 +258,8 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
                 }
             }
             
-    		if (workingState == WorkingState.NotWorking)
+    		if (workingState == WorkingState.NotWorking && orders.size() == 0)
     			super.setInactive();
-            
-//            synchronized(marketOrders) {
-//                for (MyMarketOrder o: marketOrders) {
-//                    if (o.s == MarketOrderState.Delivered) {
-//                        removeMarketOrder(o);
-//                        return true;
-//                    }
-//                }
-//            }
 
             //we have tried all our rules and found
             //nothing to do. So return false to main loop of abstract agent

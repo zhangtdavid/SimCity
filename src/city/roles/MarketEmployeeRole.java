@@ -302,6 +302,11 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	}
 	
 	@Override
+	public WorkingState getWorkingState() {
+		return workingState;
+	}
+	
+	@Override
 	public String getStateString() {
 		return state.toString();
 	}

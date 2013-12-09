@@ -12,7 +12,7 @@ public interface MarketCashier extends RoleInterface {
 
 	// Data
 	public enum WorkingState {Working, GoingOffShift, NotWorking};
-	public enum TransactionState {Pending, Calculating, ReceivedPayment, PendingDelivery, Delivering};
+	public enum TransactionState {Pending, Calculating, ReceivedPayment, Delivering};
 	
 	// Constructor
 	
@@ -30,6 +30,7 @@ public interface MarketCashier extends RoleInterface {
 	// Getters
 	public Market getMarket();
 	List<Transaction> getTransactions();
+	WorkingState getWorkingState();
 	
 	// Setters
 	public void setMarket(Market market);

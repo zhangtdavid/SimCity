@@ -101,6 +101,7 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 		public enum OrderStatus {None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 
 		private RestaurantChungCustomer c;
+		private RestaurantChungWaiter waiter;
 		private int positionInLine;
 		private int table;
 		private FOOD_ITEMS choice;
@@ -113,6 +114,7 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 		
 		public MyCustomer(RestaurantChungCustomer customer, int pos) {
 			c = customer;
+			waiter = null;
 			setPositionInLine(pos);
 			table = -1;
 			choice = null;
@@ -129,6 +131,10 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 			return c;
 		}
 
+		public RestaurantChungWaiter getWaiter() {
+			return waiter;
+		}
+		
 		public int getPositionInLine() {
 			return positionInLine;
 		}
@@ -168,6 +174,10 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 		// Setters
 		public void setRestaurantChungCustomer(RestaurantChungCustomer c) {
 			this.c = c;
+		}
+		
+		public void setWaiter(RestaurantChungWaiter waiter) {
+			this.waiter = waiter;
 		}
 
 		public void setPositionInLine(int positionInLine) {

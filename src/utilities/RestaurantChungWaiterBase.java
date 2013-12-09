@@ -87,6 +87,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 	public void msgSitAtTable(RestaurantChungCustomer c, int table) {
 		if (workingState != WorkingState.NotWorking) {
 			print("Waiter received msgSitAtTable");
+			restaurant.findCustomer(c).setWaiter(this);
 			restaurant.findCustomer(c).setTable(table);
 			restaurant.findCustomer(c).setWaiterCustomerState(WaiterCustomerState.Waiting);
 			stateChanged();
@@ -221,7 +222,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getOrderStatus() == MyCustomer.OrderStatus.Cancelled) {
+			if (customer.getWaiter() == this && customer.getOrderStatus() == MyCustomer.OrderStatus.Cancelled) {
 				try {
 					informCustomerOfCancellation(customer);
 				} catch (InterruptedException e) {}
@@ -230,7 +231,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.Waiting) {
+			if (customer.getWaiter() == this && customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.Waiting) {
 				try {
 					seatCustomer(customer);
 				} catch (InterruptedException e) {}
@@ -239,7 +240,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.ReadyToOrder) {
+			if (customer.getWaiter() == this && customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.ReadyToOrder) {
 				try {
 					takeOrder(customer);
 				} catch (InterruptedException e) {}
@@ -248,14 +249,14 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getOrderStatus() == MyCustomer.OrderStatus.Ordered) {
+			if (customer.getWaiter() == this && customer.getOrderStatus() == MyCustomer.OrderStatus.Ordered) {
 				tellCookOrder(customer, customer.getChoice(), customer.getTable());
 				return true;
 			}
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getOrderStatus() == MyCustomer.OrderStatus.DoneCooking) {
+			if (customer.getWaiter() == this && customer.getOrderStatus() == MyCustomer.OrderStatus.DoneCooking) {
 				try {
 					pickUpOrder(customer);
 				} catch (InterruptedException e) {}
@@ -264,7 +265,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getOrderStatus() == MyCustomer.OrderStatus.PickedUp) {
+			if (customer.getWaiter() == this && customer.getOrderStatus() == MyCustomer.OrderStatus.PickedUp) {
 				try {
 					deliverOrder(customer);
 				} catch (InterruptedException e) {}
@@ -273,7 +274,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.WaitingForCheck && customer.getCheckState() == MyCustomer.CheckState.None) {
+			if (customer.getWaiter() == this && customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.WaitingForCheck && customer.getCheckState() == MyCustomer.CheckState.None) {
 				try {
 					getCheck(customer);
 				} catch (InterruptedException e) {}
@@ -282,7 +283,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getCheckState() == MyCustomer.CheckState.ReceivedBill) {
+			if (customer.getWaiter() == this && customer.getCheckState() == MyCustomer.CheckState.ReceivedBill) {
 				try {
 					giveCheck(customer);
 				} catch (InterruptedException e) {}
@@ -291,18 +292,34 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		}
 		
 		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getCheckState() == MyCustomer.CheckState.DeliveredBill || customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.Leaving) { // Non-normative scenario when customer can't afford anything
+			if (customer.getWaiter() == this && customer.getCheckState() == MyCustomer.CheckState.DeliveredBill) {
+				customer.setWaiter(null);
+				return true;
+			}
+		}
+		
+		// Non-norm when customer cannot afford anything
+		for (MyCustomer customer : restaurant.getCustomers()) {
+			if (customer.getWaiter() == this && customer.getWaiterCustomerState() == MyCustomer.WaiterCustomerState.Leaving) {
 				removeCustomer(customer);
 				return true;
 			}
 		}
+		
+		
+		boolean haveCustomers = false;
+		for (MyCustomer customer : restaurant.getCustomers()) {
+			if (customer.getWaiter() == this) {
+				haveCustomers = true;
+			}
+		}
 
-		if (workingState == WorkingState.NotWorking) {
+		if (workingState == WorkingState.NotWorking && haveCustomers == false) {
 			restaurant.removeWaiter(this);
 			super.setInactive();
 		}
 		
-		if (restaurant.getCustomers().size() == 0 && state == BreakState.ApprovedForBreak) {
+		if (state == BreakState.ApprovedForBreak && haveCustomers == false) {
 			goOnBreak();
 			return true;
 		}
