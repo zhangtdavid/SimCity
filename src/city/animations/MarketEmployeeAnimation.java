@@ -14,7 +14,7 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 	
 //	Location Information
 //	=====================================================================	
-	private int xPos = 20, yPos = 20;
+	private int xPos = MarketPanel.COUNTERX+((employeeStalls.indexOf(employee)+1)*45), yPos = MarketPanel.COUNTERY-MarketPanel.RECTDIM;
 	private int xDestination = xPos, yDestination = yPos;
 	private enum Command {noCommand, GoToPhone, CollectItems, GoToCashier, GoToCounter};
 	private Command command=Command.noCommand;
@@ -42,14 +42,16 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 
 		// Could cause problems if an employee is in the middle of talking with a customer
 		if (atCounter) {
-			doGoToCounter();
-		}
+	        xDestination = MarketPanel.COUNTERX+((employeeStalls.indexOf(employee)+1)*45);
+	        yDestination = MarketPanel.COUNTERY-MarketPanel.RECTDIM;
+	    }
 		
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToPhone) employee.msgAnimationAtPhone();
 			else if (command == Command.CollectItems) employee.msgFinishedCollectingItems();
 			else if (command == Command.GoToCashier) employee.msgAnimationAtCashier();
 			else if (command == Command.GoToCounter) employee.msgAnimationAtCounter();
+			command = Command.noCommand;
 		}
 	}
 
@@ -82,14 +84,14 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 	public void doDeliverItems() {
         xDestination = MarketPanel.CASHIEREMPINTERACTIONX;
         yDestination = MarketPanel.CASHIEREMPINTERACTIONY;		
-		command = Command.GoToCashier;		
+		command = Command.GoToCashier;
 		atCounter = false;
 	}
 
 	@Override
 	public void doGoToCounter() {
-        xDestination = MarketPanel.COUNTERX+(employeeStalls.indexOf(employee)*45);
-        yDestination = MarketPanel.COUNTERY;
+        xDestination = MarketPanel.COUNTERX+((employeeStalls.indexOf(employee)+1)*45);
+        yDestination = MarketPanel.COUNTERY-MarketPanel.RECTDIM;
 		command = Command.GoToCounter;
 		atCounter = true;
 	}

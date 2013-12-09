@@ -425,7 +425,7 @@ public class MockPerson extends MockAgent implements Person {
 			i += 1;
 		} while (i < 4);
 		MarketOrder order = new MarketOrder(items);
-		marketCustomerRole = new MarketCustomerRole(order);
+		marketCustomerRole = new MarketCustomerRole(m, order);
 		this.addRole(marketCustomerRole);
 	}
 

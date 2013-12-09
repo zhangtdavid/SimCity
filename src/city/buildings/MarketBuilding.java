@@ -10,7 +10,9 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.animations.MarketCashierAnimation;
+import city.animations.MarketEmployeeAnimation;
 import city.animations.interfaces.MarketAnimatedCashier;
+import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.Building;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Bank;
@@ -151,13 +153,13 @@ public class MarketBuilding extends Building implements Market {
 //	Utilities
 //	=====================================================================
 	@Override
-	public void addOccupyingRole(RoleInterface r) {
+	public void addOccupyingRole(RoleInterface r) {		
 		if(r instanceof MarketManagerRole) {
 			MarketManagerRole m = (MarketManagerRole)r;
 			
 			if(!super.occupyingRoleExists(m)) {
 				manager = m;
-//				m.setActive();
+				m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
 			}			
 		}
@@ -170,22 +172,21 @@ public class MarketBuilding extends Building implements Market {
 				anim.setVisible(true);
 				this.getPanel().addVisualizationElement(anim);
 				cashier = c;
-//				c.setActive();
-				super.addOccupyingRole(c, null); // null --> anim
+				c.setActive();
+				super.addOccupyingRole(c, anim);
 			}
 		}
 		if(r instanceof MarketEmployeeRole) {
-			MarketEmployeeRole m = (MarketEmployeeRole)r;
+			MarketEmployeeRole e = (MarketEmployeeRole)r;
 			
-			if(!super.occupyingRoleExists(m)) {
-				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
-				//c.setGui(anim);	
-//				c.setAnimation(anim);
-				//anim.setVisible(true);
-				//panel.addVisualizationElement(anim);
-				this.addEmployee(m);
-				m.setActive();
-				super.addOccupyingRole(m, null); // null --> anim
+			if(!super.occupyingRoleExists(e)) {
+				MarketAnimatedEmployee anim = new MarketEmployeeAnimation(e); 
+				e.setAnimation(anim);
+				anim.setVisible(true);
+				this.getPanel().addVisualizationElement(anim);
+				this.addEmployee(e);
+				e.setActive();
+				super.addOccupyingRole(e, anim);
 			}
 		}
 		if(r instanceof MarketDeliveryPersonRole) {

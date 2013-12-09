@@ -101,7 +101,7 @@ public class MarketCustomerTest extends TestCase {
 		cashier.market = market;
 		
 		customerPerson = new MockPerson("Customer");
-		customer = new MarketCustomerRole(order);
+		customer = new MarketCustomerRole(market, order);
 		customerGui = new MockMarketAnimatedCustomer(customer);
 		customer.setPerson(customerPerson);
 		customer.setMarket(market);

@@ -126,6 +126,8 @@ public class MarketCashierTest extends TestCase {
 		
 		market.setCashier(cashier);
 		market.setManager(manager);
+		market.addEmployee(employee);
+		market.addDeliveryPerson(deliveryPerson);
 		
 		bankManagerPerson = new MockPerson("BankManager");
 		bankManager = new MockBankManager();
