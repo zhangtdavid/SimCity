@@ -13,6 +13,11 @@ import city.gui.BuildingCard;
 public class CityViewRestaurant extends CityViewBuilding {
 	
 	private static BufferedImage cityViewRestaurantImage = null;
+	private static BufferedImage cityViewRestaurantZhangImage = null;
+	private static BufferedImage cityViewRestaurantChoiImage = null;
+	private static BufferedImage cityViewRestaurantChungImage = null;
+	private static BufferedImage cityViewRestaurantJPImage = null;
+	private static BufferedImage cityViewRestaurantTimmsImage = null;
 
 	public CityViewRestaurant(int x, int y) {
 		super(x, y, Color.red, "Restaurant 1");

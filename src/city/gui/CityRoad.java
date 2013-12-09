@@ -27,7 +27,7 @@ public class CityRoad extends CityViewBuilding {
 	protected int height;
 	protected Color laneColor;
 
-	protected Animation vehicle = null;
+	protected volatile Animation vehicle = null;
 	protected CityRoad nextRoad;
 	protected boolean isHorizontal;
 	protected boolean isRedLight = false;
@@ -139,19 +139,19 @@ public class CityRoad extends CityViewBuilding {
 		if ( isHorizontal ) {
 			//End of lane is xOrigin + width - vehicle width
 			if ( xVelocity > 0 && x >= xOrigin + vWidth) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			} else if ( xVelocity < 0 && x <= xOrigin - vWidth ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			}
 		} else {
 			if ( yVelocity > 0 && y >= yOrigin + vHeight ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			} else if ( yVelocity < 0 && y <= yOrigin - vHeight ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			}
 		}
 	}
@@ -212,8 +212,8 @@ public class CityRoad extends CityViewBuilding {
 		nextRoad = r;
 	}
 
-	public boolean setVehicle( Animation v ) {
-		if(vehicle == null) {
+	public synchronized boolean setVehicle( Animation v ) {
+		if(vehicle == null || v == null || vehicle == v) {
 			vehicle = v;
 			return true;
 		}
