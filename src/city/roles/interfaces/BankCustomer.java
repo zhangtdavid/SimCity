@@ -33,6 +33,7 @@ public interface BankCustomer extends RoleInterface {
 	
 	public BuildingInterface getBusiness();
 	public BANK_SERVICE getService();
+	public void msgAtDestination();
 	
 	// Setters
 	

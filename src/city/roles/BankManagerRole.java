@@ -2,9 +2,11 @@ package city.roles;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import city.animations.BankManagerAnimation;
 import city.bases.JobRole;
 import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
@@ -23,6 +25,8 @@ public class BankManagerRole extends JobRole implements BankManager {
 	public List<BankCustomer> customers = new ArrayList<BankCustomer>();
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private boolean wantsInactive = false;
+	private Semaphore atDestination = new Semaphore(0,true);
+	private BankManagerAnimation gui = null;
 	
 	// Constructor
 
@@ -31,7 +35,6 @@ public class BankManagerRole extends JobRole implements BankManager {
 		this.setWorkplace(b);
 		this.setSalary(Bank.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
-		setActivityBegun();
 	}
 
 	// Messages
@@ -224,6 +227,11 @@ public class BankManagerRole extends JobRole implements BankManager {
 	// Setters
 	
 	@Override
+	public void setActive() {
+		building.setManager(this);
+		super.setActive();	
+	}
+	
 	public void setInactive(){
 		if(building.getManager() != this && customers.size() == 0){
 			super.setInactive();
@@ -269,5 +277,18 @@ public class BankManagerRole extends JobRole implements BankManager {
 			teller = tell;
 			bc = r;
 		}
+	}
+
+	public void msgAtDestination() {
+		atDestination.release();// = true;
+		stateChanged();
+		// TODO Auto-generated method stub
+		
+	}
+
+	public void setGui(BankManagerAnimation anim) {
+		gui = anim;
+		// TODO Auto-generated method stub
+		
 	}
 }

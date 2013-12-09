@@ -1,46 +1,42 @@
 package city.animations;
 
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics2D;
 import java.util.HashMap;
 import java.util.Map;
 
 import city.bases.Animation;
-import city.roles.RestaurantJPWaiterRole;
+import city.roles.BankTellerRole;
 
 public class BankTellerAnimation extends Animation{
 
-    private RestaurantJPWaiterRole agent = null;
+    private BankTellerRole agent = null;
     private boolean onBreak = false;
+    private boolean moving = false;
+    private boolean talking = false;
+    private String dialogue;
+    private int xHome = 310;
+    private int yHome;
+    private int xVault = 420;
+    private int yVault = 240;
     
+    private static final int tellerSize = 20;
     private int xPos = 0, yPos = 0;//default waiter position
     private int xDestination = 0, yDestination = 0;//default start position
+    
+    public Map <Integer, Integer> TellerLocations = new HashMap<Integer, Integer>(); 
 
-    public static final int xTable = 200;
-    public static final int yTable = 250;
-    public static final int checkIn = -10;
-    public static final int waiterSize = 20;
-    public int xHome = 0;
-    public int yHome = 0;
-    
-    public static final int tableSeparation = 100;
-    public static final int CookX = 150;
-    public static final int CookY = 380;
-    
-    private boolean delivering = false;
-    private String food = new String();
-    
-    public Map <Integer, Dimension> TableLocations = new HashMap<Integer, Dimension>(); 
-
-    public BankTellerAnimation(RestaurantJPWaiterRole w, int place) {
-        agent = w;
+    public BankTellerAnimation(BankTellerRole r, int place) {
+        agent = r;	//msgAvailable
 		xPos = 400;
-		yPos = 50 + place*50;
-		xDestination = xPos;
-		yDestination = yPos;
-		xHome = xPos;
-		yHome = yPos;
+		yPos = 0;
+		xDestination = xHome;
+		for(int i = 0; i<3; i++){
+			TellerLocations.put(0, 160+i*100);
+		}
+		yHome = TellerLocations.get(place);
+		yDestination = yHome;
+		moving = true;
         //TableLocations.put(1, (200, 250));
     }
 
@@ -55,20 +51,18 @@ public class BankTellerAnimation extends Animation{
         else if (yPos > yDestination)
             yPos--;
 
-        if (xPos == xDestination && yPos == yDestination
-        		&& ((xDestination == xTable + waiterSize || xDestination == checkIn) || yDestination == CookY || xDestination == xHome + 20) ) {
+        if (xPos == xDestination && yPos == yDestination && moving) {
            agent.msgAtDestination();
-           xDestination = xHome;
-           yDestination = yHome;
+           moving = false;
         }
     }
 
     public void draw(Graphics2D g) {
         g.setColor(Color.MAGENTA);
-        g.fillRect(xPos, yPos, waiterSize, waiterSize);
-        if(delivering){
+        g.fillRect(xPos, yPos, tellerSize, tellerSize);
+        if(talking){
         	g.setColor(Color.BLACK);
-        	g.drawString(food, xPos, yPos);
+        	g.drawString(dialogue, xPos, yPos);
         }
     }
 
@@ -76,34 +70,7 @@ public class BankTellerAnimation extends Animation{
         return true;						//USed to just return true
     }
 
-    public void DoGoToOrigin() {
-    	delivering = false;
-    	xDestination = xHome;
-    	yDestination = yHome;
-    }
-    
-    public void DoGoToTable(Integer table) {
-        xDestination = xTable + waiterSize;
-        yDestination = yTable - (table - 1)*tableSeparation - waiterSize;
-    }
-
-    public void DoDeliverFood(String f){
-    	delivering = true;
-    	food = f;
-    }
-    public void DoLeaveCustomer() {
-        xDestination = xHome;					//Sloppy little hack to make sure update position works
-        yDestination = yHome;
-    }
-
-    public void DoPickUpCustomer(){
-    	xDestination = xHome + 20;
-    	yDestination = yHome + 20;
-    }
-    public void DoGoToCook(){
-    	xDestination = CookX;
-    	yDestination = CookY;
-    }
+   
     public int getXPos() {
         return xPos;
     }
@@ -112,12 +79,6 @@ public class BankTellerAnimation extends Animation{
         return yPos;
     }
     
-    public void setDelivering(boolean b){
-    	if(b)
-    		delivering = true;
-    	else
-    		delivering = false;
-    }
     
     public void setBreakRequested() {
 		onBreak = true;
@@ -129,5 +90,37 @@ public class BankTellerAnimation extends Animation{
     
 	public boolean hasAskedForBreak() {
 		return onBreak;
+	}
+
+	public void DoClearString() {
+		// TODO Auto-generated method stub
+		talking = false;
+	}
+
+	public void DoString(String string) {
+		// TODO Auto-generated method stub
+		dialogue = string;
+		talking = true;
+	}
+
+	public void DoGoToVault() {
+		// TODO Auto-generated method stub
+		xDestination = xVault;
+		yDestination = yVault;
+		moving = true;
+	}
+
+	public void DoGoToStation() {
+		// TODO Auto-generated method stub
+		xDestination = xHome;
+		yDestination = yHome;
+		moving = true;
+	}
+
+	public void DoLeave() {
+		// TODO Auto-generated method stub
+		xDestination = 400;
+		yDestination = 0;
+		moving = true;
 	}
 }

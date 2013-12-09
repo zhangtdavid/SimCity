@@ -21,7 +21,7 @@ public class BankPanel extends BuildingCard implements ActionListener {
 	private List<Animation> animations = new ArrayList<Animation>();
 
     public BankPanel(Color color) {
-    	super(color.CYAN);
+    	super(Color.CYAN);
     	
         setVisible(true);
  

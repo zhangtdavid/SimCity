@@ -1,12 +1,16 @@
 package city.roles;
 
+import java.util.concurrent.Semaphore;
+
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Application;
 import city.Application.BANK_SERVICE;
+import city.animations.BankCustomerAnimation;
 import city.bases.Building;
 import city.bases.Role;
 import city.bases.interfaces.BuildingInterface;
+import city.buildings.BankBuilding;
 import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BankTeller;
@@ -15,7 +19,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	
-	private Bank building;
+	private BankBuilding building;
 	private BuildingInterface business = null;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
@@ -25,23 +29,30 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private BankTeller t;
 	public int acctNum = -1;
 	private int boothNumber;
+	BankCustomerAnimation gui;
+	private Semaphore atDestination = new Semaphore(0,true);
 
 	// Constructor
 	
 	public BankCustomerRole(BuildingInterface bus, Bank b) {
-		building = b;
+		building = (BankBuilding) b;
 		business = bus;
 		st = STATE.none;
 	}
 	
 	public BankCustomerRole(Bank b) {
-		building = b;
+		building = (BankBuilding) b;
 		st = STATE.none;
 	}
 	
 	
 	// Messages
-
+	
+	public void msgAtDestination(){
+		atDestination.release();// = true;
+		stateChanged();
+	}
+	
 	public void msgWhatDoYouWant(int booth, BankTeller tell) {
 		print("WhatDoYouWant message received");
 		t = tell;
@@ -132,21 +143,53 @@ public class BankCustomerRole extends Role implements BankCustomer {
 
 	private void AskForService(){
 		st = STATE.inProgress;
+		if(gui!=null){
+		gui.DoGetInLine(building.waitingCustomers.size());
+		building.waitingCustomers.add(gui);
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
 		building.getManager().msgNeedService(this);
 	}
 	
 	private void Deposit(){
 		st = STATE.inProgress;
+		if(gui!=null){
+		gui.DoGoToTeller(boothNumber, "Deposit $" + amount);
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		building.removeWaitingCustomer(gui);
 		netTransaction -= amount;
 		t.msgDeposit(amount, acctNum);
 	}
 	
 	private void RequestWithdrawal(){
+		if(gui!=null){
+		gui.DoGoToTeller(boothNumber, "Withdraw $" + amount);
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		}
+		building.removeWaitingCustomer(gui);
 		st = STATE.inProgress;
 		t.msgWithdraw(acctNum, amount, this.getPerson().getOccupation().getSalary());
 	}
 	
 	private void ExitBank(){
+		if(gui!= null)
+			gui.DoExitBank();
 		st = STATE.inProgress;
 		if(service != Application.BANK_SERVICE.atmDeposit)
 			t.msgDoneAndLeaving();
@@ -199,6 +242,12 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		this.getPerson().printViaRole("BankCustomer", msg);
         AlertLog.getInstance().logMessage(AlertTag.BANK, "BankCustomerRole " + this.getPerson().getName(), msg);
     }
+
+	public void setGui(BankCustomerAnimation anim) {
+		gui = anim;
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 	// Classes 
