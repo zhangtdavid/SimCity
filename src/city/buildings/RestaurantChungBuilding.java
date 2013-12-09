@@ -176,7 +176,6 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
 				addWaiter(w, anim);
-				w.setRevolvingStand(orderStand);
 				super.addOccupyingRole(w, anim);
 			}
 		}

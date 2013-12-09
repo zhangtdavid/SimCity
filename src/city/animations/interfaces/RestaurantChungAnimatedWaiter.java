@@ -3,6 +3,7 @@ package city.animations.interfaces;
 import java.util.LinkedList;
 
 import city.bases.interfaces.AnimationInterface;
+import city.roles.interfaces.RestaurantChungCustomer;
 import city.roles.interfaces.RestaurantChungWaiter;
 
 public interface RestaurantChungAnimatedWaiter extends AnimationInterface {
@@ -24,6 +25,26 @@ public interface RestaurantChungAnimatedWaiter extends AnimationInterface {
 	String isOnBreak();
 
 	void removeFromWaiterHomePositions();
+
+	void DoReturnToWaiterHome();
+
+	void DoGoToCustomerLine();
+
+	void DoGoToTable(int table);
+
+	void DoBringToTable(RestaurantChungCustomer customer, int table);
+
+	void DoDeliverFood(int table, String choice);
+
+	void DoGoToCook();
+
+	void DoReturnToEntrance();
+
+	void DoGoToCashier();
+
+	void DoGoOnBreak();
+
+	void DoGoOffBreak();
 
 	// Data
 	

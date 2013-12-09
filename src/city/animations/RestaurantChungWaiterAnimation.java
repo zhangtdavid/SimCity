@@ -95,18 +95,21 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
         return true;
     }
 
+	@Override
     public void DoReturnToWaiterHome() {
         xDestination = RestaurantChungPanel.WAITERHOMEX;
         yDestination = RestaurantChungPanel.WAITERHOMEY+(waiterPositions.indexOf(agent)*30);
 		command = Command.GoToWaiterHome;
     }
     
+	@Override
 	public void DoGoToCustomerLine() {
         xDestination = RestaurantChungPanel.CUSTOMERLINEX;
         yDestination = RestaurantChungPanel.CUSTOMERLINEY;
 		command = Command.GoToLine;
 	}
     
+	@Override
 	public void DoGoToTable(int table) {
     	tableNumX = findTableX(table);
     	tableNumY = findTableY(table);
@@ -115,12 +118,14 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
 		command = Command.GoToTable;
 	}
     
+	@Override
     public void DoBringToTable(RestaurantChungCustomer customer, int table) {
     	DoGoToTable(table);
     	System.out.println("Waiter Gui bringing " + customer + " to table " + (table+1));
     	customer.getAnimation(RestaurantChungCustomerAnimation.class).DoGoToSeat(findTableX(table), findTableY(table));
     }
 
+	@Override
     public void DoDeliverFood(int table, String choice) {
     	System.out.println("Waiter Gui bringing food to table " + (table+1));
     	delivering = true;
@@ -128,30 +133,35 @@ public class RestaurantChungWaiterAnimation extends Animation implements Restaur
     	DoGoToTable(table);
     }
     
+	@Override
     public void DoGoToCook() {
         xDestination = RestaurantChungPanel.ORDERDROPX;
         yDestination = RestaurantChungPanel.ORDERDROPY;
 		command = Command.GoToCook;
     }
     
+	@Override
     public void DoReturnToEntrance() {
         xDestination = RestaurantChungPanel.ENTRANCEX;
         yDestination = RestaurantChungPanel.ENTRANCEY;
 		command = Command.GoToEntrance;
     }
     
+	@Override
 	public void DoGoToCashier() {
         xDestination = RestaurantChungPanel.CASHIERX;
         yDestination = RestaurantChungPanel.CASHIERY;
 		command = Command.GoToCashier;		
 	}
     
+	@Override
     public void DoGoOnBreak() {
     	setOnBreak();
         xDestination = RestaurantChungPanel.WAITERBREAKX-(waiterPositions.indexOf(agent)*30);
         yDestination = RestaurantChungPanel.WAITERBREAKY;
     }
     
+	@Override
     public void DoGoOffBreak() {
     	DoReturnToEntrance();
 		command = Command.GoOffBreak;

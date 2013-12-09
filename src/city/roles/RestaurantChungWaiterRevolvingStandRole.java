@@ -4,11 +4,11 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChungOrder;
 import utilities.RestaurantChungOrder.OrderState;
-import utilities.RestaurantChungRevolvingStand;
 import utilities.RestaurantChungWaiterBase;
 import city.buildings.interfaces.RestaurantChung.MyCustomer.OrderStatus;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;
 import city.buildings.interfaces.RestaurantChung.MyCustomer;
@@ -18,8 +18,6 @@ import city.buildings.interfaces.RestaurantChung.MyCustomer;
  */
 //A Waiter tends to the host and customers' requests
 public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWaiterBase {	
-	RestaurantChungRevolvingStand orderStand;
-
 	public RestaurantChungWaiterRevolvingStandRole(RestaurantChung b, int t1, int t2) {
 		super();
 		restaurant = b;
@@ -31,7 +29,7 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 	// Messages
 	@Override
 	public void tellCookOrder(MyCustomer customer, FOOD_ITEMS choice, int table) {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToCook();
 
 		try {
 			atCook.acquire();
@@ -42,21 +40,11 @@ public class RestaurantChungWaiterRevolvingStandRole extends RestaurantChungWait
 		
 		print("adding order" + choice + " to stand for " + customer.getRestaurantChungCustomer());
 		
-		orderStand.addOrder(new RestaurantChungOrder(this, choice, table, OrderState.Pending));
+		restaurant.getOrderStand().addOrder(new RestaurantChungOrder(this, choice, table, OrderState.Pending));
 		
 		customer.setOrderStatus(OrderStatus.Cooking);
 		
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
-	}
-	
-	// Getters
-	public RestaurantChungRevolvingStand getRevolvingStand() {
-		return orderStand;
-	}
-	
-	// Setters
-	public void setRevolvingStand(RestaurantChungRevolvingStand stand) {
-		orderStand = stand;
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	@Override
