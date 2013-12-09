@@ -32,6 +32,11 @@ public class BusStopBuilding extends Building implements BusStop {
 	// Getters
 	
 	@Override
+	public boolean getBusinessIsOpen() {
+		return false;
+	}
+	
+	@Override
 	public List<BusPassenger> getWaitingList() {
 		return waitingList;
 	}

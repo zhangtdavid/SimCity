@@ -72,6 +72,14 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	
 //	Getters
 //	=====================================================================	
+	
+	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = false;
+
+		return disposition;
+	}
+	
 	@Override
 	public RestaurantChungPanel getRestaurantChungPanel() {
 		return (RestaurantChungPanel)(super.getPanel());

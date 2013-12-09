@@ -36,6 +36,13 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 	
 	// Constructor
 	
+	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = false;
+
+		return disposition;
+	}
+	
 	// Utilities
 	
 	@Override

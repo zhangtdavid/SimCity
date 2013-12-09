@@ -88,6 +88,13 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 	}
 
 	// Getters
+	
+	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = false;
+
+		return disposition;
+	}
 
 	public static int getWorkerSalary() {
 		return WORKER_SALARY;
