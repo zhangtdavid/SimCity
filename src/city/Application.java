@@ -26,8 +26,6 @@ import city.agents.interfaces.Person;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.PersonAnimation;
-import city.animations.RestaurantTimmsTableAnimation;
-import city.animations.WalkerAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.AptBuilding;
@@ -52,7 +50,11 @@ import city.gui.exteriors.CityViewBuilding;
 import city.gui.exteriors.CityViewBusStop;
 import city.gui.exteriors.CityViewHouse;
 import city.gui.exteriors.CityViewMarket;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantChoi;
+import city.gui.exteriors.CityViewRestaurantChung;
+import city.gui.exteriors.CityViewRestaurantJP;
+import city.gui.exteriors.CityViewRestaurantTimms;
+import city.gui.exteriors.CityViewRestaurantZhang;
 import city.gui.interiors.AptPanel;
 import city.gui.interiors.BankPanel;
 import city.gui.interiors.BusStopPanel;
@@ -64,14 +66,6 @@ import city.gui.interiors.RestaurantJPPanel;
 import city.gui.interiors.RestaurantTimmsPanel;
 import city.gui.interiors.RestaurantZhangPanel;
 import city.roles.LandlordRole;
-import city.roles.RestaurantChungCashierRole;
-import city.roles.RestaurantChungCookRole;
-import city.roles.RestaurantChungHostRole;
-import city.roles.RestaurantChungWaiterMessageCookRole;
-import city.roles.RestaurantTimmsCashierRole;
-import city.roles.RestaurantTimmsCookRole;
-import city.roles.RestaurantTimmsHostRole;
-import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
@@ -1019,30 +1013,30 @@ public class Application {
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTZHANG:
-			cityViewBuilding = new CityViewRestaurant(x, y, "RestaurantZhang " + (mainFrame.cityView.statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta));
+			cityViewBuilding = new CityViewRestaurantZhang(x, y, "RestaurantZhang " + (mainFrame.cityView.statics.size()), Color.magenta, new RestaurantZhangPanel(Color.magenta));
 			building = new RestaurantZhangBuilding("RestaurantZhang " + mainFrame.cityView.statics.size(), (RestaurantZhangPanel)cityViewBuilding.getBuilding(), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTCHOI:
-			cityViewBuilding = new CityViewRestaurant(x, y, "RestaurantChoi " + mainFrame.cityView.statics.size(), Color.cyan, new RestaurantChoiPanel(Color.cyan));
+			cityViewBuilding = new CityViewRestaurantChoi(x, y, "RestaurantChoi " + mainFrame.cityView.statics.size(), Color.cyan, new RestaurantChoiPanel(Color.cyan));
 			building = new RestaurantChoiBuilding("RestaurantChoi " + mainFrame.cityView.statics.size(),
 					(RestaurantChoiPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTJP:
-			cityViewBuilding = new CityViewRestaurant(x, y, "RestaurantJP " + mainFrame.cityView.statics.size(), Color.orange, new RestaurantJPPanel(Color.orange));
+			cityViewBuilding = new CityViewRestaurantJP(x, y, "RestaurantJP " + mainFrame.cityView.statics.size(), Color.orange, new RestaurantJPPanel(Color.orange));
 			building = new RestaurantJPBuilding("RestaurantJP " + mainFrame.cityView.statics.size(),
 					(RestaurantJPPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTTIMMS:
-			cityViewBuilding = new CityViewRestaurant(x, y, "RestaurantTimms " + mainFrame.cityView.statics.size(), Color.yellow, new RestaurantTimmsPanel(Color.yellow));
+			cityViewBuilding = new CityViewRestaurantTimms(x, y, "RestaurantTimms " + mainFrame.cityView.statics.size(), Color.yellow, new RestaurantTimmsPanel(Color.yellow));
 			building = new RestaurantTimmsBuilding("RestaurantTimms " + mainFrame.cityView.statics.size(),
 					(RestaurantTimmsPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
 			return building;
 		case RESTAURANTCHUNG:
-			cityViewBuilding = new CityViewRestaurant(x, y, "RestaurantChung " + mainFrame.cityView.statics.size(), Color.red, new RestaurantChungPanel(Color.red));
+			cityViewBuilding = new CityViewRestaurantChung(x, y, "RestaurantChung " + mainFrame.cityView.statics.size(), Color.red, new RestaurantChungPanel(Color.red));
 			building = new RestaurantChungBuilding("RestaurantChung " + mainFrame.cityView.statics.size(),
 					(RestaurantChungPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
 			setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);

@@ -4,7 +4,7 @@ import junit.framework.TestCase;
 import city.Application;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.interfaces.RestaurantTimms;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantTimms;
 import city.roles.RestaurantTimmsCustomerRole;
 import city.roles.interfaces.RestaurantTimmsCustomer;
 import city.tests.agents.mocks.MockPerson;
@@ -32,7 +32,7 @@ public class RestaurantTimmsCustomerTest extends TestCase {
 		host = new MockRestaurantTimmsHost();
 		waiter = new MockRestaurantTimmsWaiter();
 		
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurantTimms(0, 0));
 		rtb.setCashier(cashier);
 		rtb.setHost(host);
 		
