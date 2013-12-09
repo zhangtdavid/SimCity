@@ -39,12 +39,18 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 //	--------------------------------------------------------------------
     public static final int COUNTERX = 0, COUNTERY = 275;
     public static final int COUNTERW = 500, COUNTERH = 25;
+    public static final int COUNTERINTERACTIONY = COUNTERX+COUNTERH;
     
 //	Cashier
 //	--------------------------------------------------------------------
     public static final int CASHIERX = 440, CASHIERY = 275-RECTDIM;    
     public static final int CASHIEREMPINTERACTIONX = CASHIERX-RECTDIM, CASHIEREMPINTERACTIONY = CASHIERY;
-    public static final int CASHIERCUSTINTERACTIONX = CASHIERX+COUNTERH, CASHIERCUSTINTERACTIONY = COUNTERY+COUNTERH;
+    public static final int CASHIERCUSTINTERACTIONY = COUNTERY+COUNTERH;
+    
+//	Waiting Areas
+//	--------------------------------------------------------------------
+    public static final int SERVICEWAITINGX = 100, SERVICEWAITINGY = 420;
+    public static final int ITEMSWAITINGX = 400, ITEMSWAITINGY = 320;
 
 	private final int delayMS = 5;
 	private List<AnimationInterface> animations = new ArrayList<AnimationInterface>();

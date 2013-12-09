@@ -9,6 +9,7 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
+import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
@@ -27,9 +28,7 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	private Semaphore atCounter = new Semaphore(0, true);
 
 	private Market market;
- 
-	private int loc; // location at front counter
-	
+ 	
 	private MarketCustomer customer;
 	private MarketCustomerDelivery customerDelivery;
 	private MarketCustomerDeliveryPayment customerDeliveryPayment;
@@ -54,7 +53,6 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 		customerDelivery = null;
 		customerDeliveryPayment = null;
 		state = MarketEmployeeState.None;
-		loc = market.getEmployees().size(); // TODO double check this. Need to decide how to set loc for each employee
     }
 	
 //  Activity
@@ -187,17 +185,16 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	private void assistCustomer() {
 		state = MarketEmployeeState.AskedForOrder;
 		if (customer != null) {
-			customer.msgWhatWouldYouLike(this, loc);
+			customer.msgWhatWouldYouLike(this);
 		}
 		else {
-// 			TODO schung 99c0f4da25
-//			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
-//			try {
-//				atPhone.acquire();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+			this.getAnimation(MarketAnimatedEmployee.class).doGoToPhone();
+			try {
+				atPhone.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 			market.getManager().msgWhatWouldCustomerDeliveryLike(this);
 		}
 	}
@@ -211,25 +208,23 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
         	else if (market.getInventory().get(item) >= order.get(item)) {
         		market.getInventory().put(item, market.getInventory().get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
-//     			TODO schung 99c0f4da25
-//        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
-//        		try {
-//    			finishedCollectingItems.acquire();
-//    			} catch (InterruptedException e) {
-//    				// TODO Auto-generated catch block
-//    				e.printStackTrace();
-//    			}
+        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
+        		try {
+    			finishedCollectingItems.acquire();
+    			} catch (InterruptedException e) {
+    				// TODO Auto-generated catch block
+    				e.printStackTrace();
+    			}
         	}
         	if (market.getInventory().get(item) < 10)
         		market.getManager().msgItemLow();
-// 			TODO schung 99c0f4da25
-//        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
-//    		try {
-//				atCashier.acquire();
-//			} catch (InterruptedException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
+        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
+    		try {
+				atCashier.acquire();
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 
         }
     	// dependent on customer type
@@ -237,14 +232,13 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
     		market.getCashier().msgComputeBill(this, customer, order, collectedItems, orderId);
     	else
     		market.getCashier().msgComputeBill(this, customerDelivery, customerDeliveryPayment, order, collectedItems, orderId);
-//			TODO schung 99c0f4da25
-//    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
-//		try {
-//			atCounter.acquire();
-//		} catch (InterruptedException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
+    	this.getAnimation(MarketAnimatedEmployee.class).doGoToCounter();
+		try {
+			atCounter.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     	if (workingState == WorkingState.Working)
     			market.getManager().msgIAmAvailableToAssist(this);
     	customer = null;
