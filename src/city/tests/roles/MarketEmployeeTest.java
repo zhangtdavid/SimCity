@@ -15,6 +15,7 @@ import city.gui.interiors.MarketPanel;
 import city.roles.MarketEmployeeRole;
 import city.roles.interfaces.MarketEmployee.MarketEmployeeEvent;
 import city.roles.interfaces.MarketEmployee.MarketEmployeeState;
+import city.roles.interfaces.MarketEmployee.WorkingState;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.roles.mocks.MockMarketCashier;
 import city.tests.roles.mocks.MockMarketCustomer;
@@ -45,6 +46,9 @@ public class MarketEmployeeTest extends TestCase {
 	MockPerson employeePerson;
 	MarketEmployeeRole employee;
 //	MarketAnimatedEmployee employeeGui;
+
+	MockPerson employeePerson2;
+	MarketEmployeeRole employee2;
 	
 	MockPerson managerPerson;
 	MockMarketManager manager;
@@ -91,7 +95,13 @@ public class MarketEmployeeTest extends TestCase {
 		employee = new MarketEmployeeRole(market, 0, 12);
 		employee.setPerson(employeePerson);
 		employee.setMarket(market);
+		employee.setActive();
 //		employee.setAnimation((Animation) employeeGui);
+		
+		employeePerson2 = new MockPerson("Employee2"); 
+		employee2 = new MarketEmployeeRole(market, 13, 24);
+		employee2.setPerson(employeePerson2);
+		employee2.setMarket(market);
 		
 		managerPerson = new MockPerson("Manager"); 
 		manager = new MockMarketManager();
@@ -108,6 +118,7 @@ public class MarketEmployeeTest extends TestCase {
 		orderItems.put(FOOD_ITEMS.salad, 5);
 		orderItems.put(FOOD_ITEMS.steak, 5);
 		
+		MarketOrder.setCurrentID(0);
 		order = new MarketOrder(orderItems);
 		
 		collectedItemsAll = new HashMap<FOOD_ITEMS, Integer>();
@@ -170,6 +181,7 @@ public class MarketEmployeeTest extends TestCase {
 		assertTrue("Employee customer should be null.", employee.getMarketCustomer() == null);
 		assertTrue("Employee state should be None.", employee.getMarketEmployeeState() == MarketEmployeeState.None);
 	}
+	
 	public void testNormCustomerDeliveryScenario() {
 		assertEquals("Cashier should have an empty log.", cashier.log.size(), 0);
 		assertEquals("Employee should have an empty log.", employee.log.size(), 0);
@@ -218,6 +230,54 @@ public class MarketEmployeeTest extends TestCase {
 		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
 		assertTrue("Employee customer should be null.", employee.getMarketCustomer() == null);
 		assertTrue("Employee state should be None.", employee.getMarketEmployeeState() == MarketEmployeeState.None);
+	}
+	
+	public void testShiftChange() {		
+		employee.msgAssistCustomer(customer);
+		assertEquals("Employee log should have 1 entry.", employee.log.size(), 1);
+		assertTrue("Employee log should have \"Employee received msgAssistCustomer\". The last event logged is " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgAssistCustomer"));
+		assertTrue("Employee event should be AskedToAssistCustomer.", employee.getMarketEmployeeEvent() == MarketEmployeeEvent.AskedToAssistCustomer);
+		assertTrue("Employee customer should be customer.", employee.getMarketCustomer() == customer);
+		
+		employee.runScheduler();
+		assertTrue("Employee state should be AskedForOrder.", employee.getMarketEmployeeState() == MarketEmployeeState.AskedForOrder);
+		assertEquals("Customer log should have 1 entry.", customer.log.size(), 1);
+		assertTrue("Customer log should have \"Customer received msgWhatWouldYouLike\". The last event logged is " + customer.log.getLastLoggedEvent().toString(), customer.log.containsString("Customer received msgWhatWouldYouLike"));
+
+		employee.msgHereIsMyOrder(customer, order.getOrderItems(), order.getOrderId());
+		assertEquals("Employee log should have 2 entries.", employee.log.size(), 2);
+		assertTrue("Employee log should have \"Employee received msgHereIsMyOrder\". The last event logged is actually " + employee.log.getLastLoggedEvent().toString(), employee.log.containsString("Employee received msgHereIsMyOrder"));
+		assertTrue("Employee event should be OrderReceived.", employee.getMarketEmployeeEvent() == MarketEmployeeEvent.OrderReceived);
+		assertTrue("employee.orderId should be order.orderId.", employee.getOrderId() == order.getOrderId());
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.orderItems should be order.orderItems.", employee.getOrder().get(item) == order.getOrderItems().get(item));
+        }
+		
+		employee.runScheduler();
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("employee.collectedItems should be order.orderItems.", employee.getCollectedItems().get(item) == order.getOrderItems().get(item));
+        }
+        for (FOOD_ITEMS item: order.getOrderItems().keySet()) {
+    		assertTrue("market.inventory should be market.inventory - order.orderItems.", market.getInventory().get(item) == 45);
+        }
+		assertEquals("Cashier log should have 1 entry.", cashier.log.size(), 1);
+		assertTrue("Cashier log should have \"Cashier received msgComputeBill\". The last event logged is " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgComputeBill"));
+		assertEquals("Manager log should have 1 entry.", manager.log.size(), 1);
+		assertTrue("Manager log should have \"Manager received msgIAmAvailableToAssist\". The last event logged is " + manager.log.getLastLoggedEvent().toString(), manager.log.containsString("Manager received msgIAmAvailableToAssist"));
+		assertTrue("Employee customer should be null.", employee.getMarketCustomer() == null);
+		assertTrue("Employee state should be None.", employee.getMarketEmployeeState() == MarketEmployeeState.None);
+		
+		assertTrue("Employee should have workingState == Working.",  employee.getWorkingState() == WorkingState.Working);
+		employee.setInactive();
+		assertTrue("Employee should have workingState == GoingOffShift.",  employee.getWorkingState() == WorkingState.GoingOffShift);
+		
+		// Add another employee
+		market.addEmployee(employee2);
+		employee2.setActive();
+		
+		assertEquals("Employee should be active.", employee.getActive(), true);
+		employee.runScheduler();
+		assertEquals("Employee should be inactive.", employee.getActive(), false);
 	}
 }
 

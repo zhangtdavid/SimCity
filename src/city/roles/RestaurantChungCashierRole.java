@@ -161,7 +161,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 			}
 		}
 		
-		if (marketTransactions.size() == 0 && workingState == WorkingState.NotWorking)
+		if (workingState == WorkingState.NotWorking && transactions.size() == 0 && marketTransactions.size() == 0)
 			super.setInactive();
 
 		return blocking;

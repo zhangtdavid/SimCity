@@ -142,4 +142,10 @@ public class MockMarketEmployee extends MockRole implements MarketEmployee {
 		return null;
 	}
 
+	@Override
+	public WorkingState getWorkingState() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
 }

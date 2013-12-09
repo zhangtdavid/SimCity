@@ -362,7 +362,7 @@ public class Application {
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
 		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim); 
-		//bus1.startThread();
+		bus1.startThread();
 
 		
 		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
@@ -481,7 +481,7 @@ public class Application {
 
 		// Create buildings
 		AptPanel rhp1Timms = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Timms = new CityViewApt(450, 430, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
+		CityViewApt rhcv1Timms = new CityViewApt(450, 425, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
 		AptBuilding rhb1Timms = new AptBuilding("Timms Apartment", null, rhp1Timms, rhcv1Timms);
 		setBuilding(rhp1Timms, rhcv1Timms, rhb1Timms);
 
@@ -555,22 +555,22 @@ public class Application {
 
 
 		// RESTAURANTCHOI----------------------------------------------------------------------------
-		MarketBuilding marketBuildingChoi1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 200, 425);
+		MarketBuilding marketBuildingChoi1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 325);
 		RestaurantChoiBuilding restaurantChoiBuilding1 = (RestaurantChoiBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHOI, 225, 425);
 
 		AptPanel rhp1Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Choi = new CityViewApt(350, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
+		CityViewApt rhcv1Choi = new CityViewApt(350, 425, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
 		AptBuilding rhb1Choi = new AptBuilding("Apt Choi1", null, rhp1Choi, rhcv1Choi);
 		setBuilding(rhp1Choi, rhcv1Choi, rhb1Choi);
 
 		AptPanel rhp2Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv2Choi = new CityViewApt(380, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp2Choi);
+		CityViewApt rhcv2Choi = new CityViewApt(375, 425, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp2Choi);
 		AptBuilding rhb2Choi = new AptBuilding("Apt Choi2", null, rhp2Choi, rhcv2Choi);
 		setBuilding(rhp2Choi, rhcv2Choi, rhb2Choi);
 
 		AptPanel rhp3Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//busstop4 125 325
-		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
+		CityViewApt rhcv3Choi = new CityViewApt(325, 425, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
 		AptBuilding rhb3Choi = new AptBuilding("Apt Choi1", null, rhp3Choi, rhcv3Choi);
 		setBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 
@@ -970,7 +970,7 @@ public class Application {
 		//		c4JP.startThread();
 		//
 		//		
-		for(int j = 0; j < 0; j++) {
+		for(int j = 0; j < 70; j++) {
 			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);

@@ -121,6 +121,8 @@ public interface Market extends BuildingInterface {
 		private MarketCustomer customer;
 		private MarketCustomerDelivery customerDelivery;
 		private MarketCustomerDeliveryPayment customerDeliveryPayment;
+		public enum MarketCustomerState {WaitingForService, GotService};
+		private MarketCustomerState state;
 	    private Map<FOOD_ITEMS, Integer> order = new HashMap<FOOD_ITEMS, Integer>();
 	    private int orderId;
 		
@@ -128,12 +130,14 @@ public interface Market extends BuildingInterface {
 			this.customer = customer;
 			customerDelivery = null;
 			customerDeliveryPayment = null;
+			state = MarketCustomerState.WaitingForService;
 		}
 		
 		public MyMarketCustomer(MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, int id) {
 			this.customer = null;
 			customerDelivery = c;
 			customerDeliveryPayment = cPay;
+			state = MarketCustomerState.WaitingForService;
 			
             for (FOOD_ITEMS item: o.keySet()) {
                 order.put(item, o.get(item)); // Create a deep copy of the order map
@@ -152,6 +156,10 @@ public interface Market extends BuildingInterface {
 		
 		public MarketCustomerDeliveryPayment getCustomerDeliveryPayment() {
 			return customerDeliveryPayment;
+		}
+		
+		public MarketCustomerState getState() {
+			return state;
 		}
 		
 		public Map<FOOD_ITEMS, Integer> getOrder() {
@@ -174,6 +182,10 @@ public interface Market extends BuildingInterface {
 		public void setCustomerDeliveryPayment(
 				MarketCustomerDeliveryPayment customerDeliveryPayment) {
 			this.customerDeliveryPayment = customerDeliveryPayment;
+		}
+		
+		public void setState(MarketCustomerState state) {
+			this.state = state;
 		}
 		
 		public void setOrderId(int orderId) {

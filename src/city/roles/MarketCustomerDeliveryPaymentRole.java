@@ -43,9 +43,6 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
 		print("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
 		MarketTransaction mt = findMarketTransaction(id);
-//		System.out.println(marketTransactions.size());
-//		print(Integer.toString(id));
-//		print(mt.toString());
     	mt.setMarketTransactionState(MarketTransactionState.Processing);
 		mt.setBill(bill);
 		stateChanged(); // TODO need to fix this, change it to run when setActive
