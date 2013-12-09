@@ -35,4 +35,10 @@ public class MockHouse extends MockResidenceBuilding implements House {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

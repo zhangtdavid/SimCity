@@ -62,6 +62,10 @@ import city.roles.interfaces.Walker;
  *   This will usually need to be done in the scheduler. Thanks to processTransportationArrival
  *   you can just use currentLocation.addOccupyingRole(). This should be done along with setActive()
  * - The same applies when leaving a building, use removeOccupyingRole()
+ * 
+ * To-do:
+ * - getBuildingIsOpen() is not implemented
+ * 
  */
 public class PersonAgent extends Agent implements Person {
 	
@@ -114,7 +118,7 @@ public class PersonAgent extends Agent implements Person {
 		this.cash = 0;
 		this.hasEaten = false;
 		this.home = residence;
-		this.currentLocation = null;
+		this.currentLocation = residence;
 		this.animation = animation;
 		animation.setPerson(this);
 		this.lastAteAtRestaurant = new Date(startDate.getTime());

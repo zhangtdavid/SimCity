@@ -18,4 +18,10 @@ public class MockWorkplace extends MockBuilding {
 		return null;
 	}
 
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

@@ -82,6 +82,13 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
 	// Utilities
 
 	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = false;
+
+		return disposition;
+	}
+	
+	@Override
 	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof RestaurantZhangCustomerRole) {
 			RestaurantZhangCustomerRole c = (RestaurantZhangCustomerRole)r;

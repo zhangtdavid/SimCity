@@ -81,6 +81,14 @@ public class MarketBuilding extends Building implements Market {
 
 //  Getters
 //	=====================================================================	
+	
+	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = false;
+
+		return disposition;
+	}
+	
 	@Override
 	public MarketManager getManager() {
 		return manager;

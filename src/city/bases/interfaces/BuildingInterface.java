@@ -32,6 +32,7 @@ public interface BuildingInterface {
 	public ArrayList<String> getWorkerRoleClassNames();
 	public String getBuildingClassName();
 	public PropertyChangeSupport getPropertyChangeSupport();
+	public boolean getBusinessIsOpen();
 	
 	// Setters
 	
