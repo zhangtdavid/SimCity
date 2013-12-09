@@ -6,6 +6,7 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
+import java.awt.GridLayout;
 import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
@@ -17,6 +18,10 @@ import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
+import java.util.HashMap;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
@@ -32,6 +37,7 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
+import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
 import javax.swing.SwingConstants;
@@ -43,8 +49,11 @@ import javax.swing.event.ListSelectionListener;
 
 import utilities.DataModel;
 import city.Application;
+import city.agents.interfaces.Person;
 import city.bases.Building;
 import city.bases.JobRole;
+import city.bases.ResidenceBuilding;
+import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.RoleInterface;
@@ -69,11 +78,11 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	
 	private DataModel dataModel;
 	private DefaultListModel<Building> buildingsListModel;
-	private DefaultListModel<RoleInterface> roleListModel;
+	private DefaultListModel<Person> roleListModel;
 	private DefaultComboBoxModel<String> jobComboBoxModel;
 	private DefaultComboBoxModel<BuildingInterface> workplaceComboBoxModel;
 	private Building buildingSelectedFromList; // Needed so that we can deactivate old listeners
-	private RoleInterface roleSelectedFromList;
+	private Person roleSelectedFromList;
 	private String jobSelectedFromComboBox;
 	private BuildingInterface workplaceSelectedFromComboBox;
 	
@@ -85,11 +94,12 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JPanel panelCash;
 	private JLabel labelCash;
 	private JFormattedTextField textCash;
+	
 	private JPanel panelControl;
 	private JButton btnSave;
 	private JPanel panelRoles;
 	private JScrollPane scrollRoles;
-	private JList<RoleInterface> listRoles;
+	private JList<Person> listRoles;
 	private JLabel labelRoles;
 	private JPanel panelRoleState;
 	private JLabel labelRoleState;
@@ -111,9 +121,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JLabel labelEnd1;
 	private JSpinner spinnerStart1;
 	private JSpinner spinnerEnd1;
-	private JPanel panelSalary;
-	private JLabel labelSalary;
-	private JLabel labelSalaryValue;
 	private JPanel panelRoleRevertSave;
 	private JButton buttonRoleSave;
 	private JButton btnHasJob;
@@ -123,6 +130,9 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JPanel panelWorkplace;
 	private JLabel labelWorkplace;
 	private JComboBox<BuildingInterface> comboBoxWorkplace;
+	private JPanel panelSalary;
+	private JLabel labelSalary;
+	private JTextField labelSalaryValue;
 	private JPanel panelShift2;
 	private JLabel labelShift2;
 	private JLabel labelStart2;
@@ -169,10 +179,11 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 		// The DataModel allows the list objects to auto-update
 		this.dataModel = Application.getModel();
 		this.dataModel.getPropertyChangeSupport().addPropertyChangeListener(DataModel.BUILDINGS, this);
+		this.dataModel.getPropertyChangeSupport().addPropertyChangeListener(DataModel.PEOPLE, this);
 		
 		// The ListModel is an object which stores what the JList displays
 		this.buildingsListModel = new DefaultListModel<Building>();
-		this.roleListModel = new DefaultListModel<RoleInterface>();
+		this.roleListModel = new DefaultListModel<Person>();
 		
 		// The ComboBoxModel is an object which stores what the ComboBox displays
 		this.jobComboBoxModel = new DefaultComboBoxModel<String>();
@@ -462,9 +473,9 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelRoles = new JPanel();
         panelRoles.setBorder(new EmptyBorder(5, 0, 0, 0));
         panelRoles.setLayout(new BorderLayout(0, 0));
-        panelRoles.setPreferredSize(new Dimension(300, 85));
-        panelRoles.setMinimumSize(new Dimension(300, 85));
-        panelRoles.setMaximumSize(new Dimension(300, 85));
+        panelRoles.setPreferredSize(new Dimension(300, 120));
+        panelRoles.setMinimumSize(new Dimension(300, 120));
+        panelRoles.setMaximumSize(new Dimension(300, 120));
         add(panelRoles);
         
         // Add roles label
@@ -480,13 +491,13 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         scrollRoles = new JScrollPane();
         scrollRoles.setBorder(new LineBorder(SystemColor.menu, 3));
         scrollRoles.setHorizontalScrollBarPolicy(ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
-        scrollRoles.setPreferredSize(new Dimension(300, 60));
-        scrollRoles.setMinimumSize(new Dimension(300, 60));
-        scrollRoles.setMaximumSize(new Dimension(300, 60));
+        scrollRoles.setPreferredSize(new Dimension(300, 100));
+        scrollRoles.setMinimumSize(new Dimension(300, 100));
+        scrollRoles.setMaximumSize(new Dimension(300, 100));
         panelRoles.add(scrollRoles, BorderLayout.CENTER);
         
         // Add roles list
-        listRoles = new JList<RoleInterface>(roleListModel);
+        listRoles = new JList<Person>(roleListModel);
         listRoles.addListSelectionListener(new ListSelectionListener() {
 			/**
 			 * When a Role is selected from the list, this is the code that kicks off the GUI update
@@ -519,8 +530,8 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 			@Override
             public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
                 Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (renderer instanceof JLabel && value instanceof RoleInterface) {
-                    ((JLabel) renderer).setText(((RoleInterface) value).getClass().getName());
+                if (renderer instanceof JLabel && value instanceof Person) {
+                    ((JLabel) renderer).setText(((Person)value).getName());
                 }
                 return renderer;
             }
@@ -596,29 +607,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelEditJob.setLayout(new BoxLayout(panelEditJob, BoxLayout.Y_AXIS));
         add(panelEditJob);
 
-		//--------------------------------------//
-		// Salary
-		//--------------------------------------//
-
-        panelSalary = new JPanel();
-        panelSalary.setSize(new Dimension(300, 20));
-        panelSalary.setMinimumSize(new Dimension(300, 20));
-        panelSalary.setMaximumSize(new Dimension(300, 20));
-        panelSalary.setLayout(new BoxLayout(panelSalary, BoxLayout.X_AXIS));
-        panelEditJob.add(panelSalary);
-        
-        labelSalary = new JLabel("Salary");
-        labelSalary.setPreferredSize(new Dimension(100, 16));
-        labelSalary.setMinimumSize(new Dimension(100, 16));
-        labelSalary.setMaximumSize(new Dimension(100, 16));
-        labelSalary.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelSalary.add(labelSalary);
-        
-        labelSalaryValue = new JLabel("null");
-        labelSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelSalary.add(labelSalaryValue);
-        
-		//--------------------------------------//
+        //--------------------------------------//
 		// Shift
 		//--------------------------------------//
         
@@ -775,6 +764,27 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         });
         panelWorkplace.add(comboBoxWorkplace);
         
+        //
+        panelSalary = new JPanel();
+        panelSalary.setSize(new Dimension(300, 20));
+        panelSalary.setMinimumSize(new Dimension(300, 20));
+        panelSalary.setMaximumSize(new Dimension(300, 20));
+        panelSalary.setLayout(new BoxLayout(panelSalary, BoxLayout.X_AXIS));
+        panelEditJob.add(panelSalary);
+        
+        labelSalary = new JLabel("Salary");
+        labelSalary.setPreferredSize(new Dimension(100, 16));
+        labelSalary.setMinimumSize(new Dimension(100, 16));
+        labelSalary.setMaximumSize(new Dimension(100, 16));
+        labelSalary.setBorder(new EmptyBorder(0, 10, 0, 10));
+        panelSalary.add(labelSalary);
+        
+        labelSalaryValue = new JTextField("null");
+        labelSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
+        panelSalary.add(labelSalaryValue);
+        
+        
+        
 		//--------------------------------------//
 		// Shift
 		//--------------------------------------//
@@ -876,28 +886,30 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
                 } else if (evt.getOldValue() == null && evt.getNewValue() != null) {
                     buildingsListModel.addElement((Building) evt.getNewValue());
                 }
-            }
-            // A building has been added or removed from the combo box list
-            if (DataModel.BUILDINGS.equals(evt.getPropertyName())) {
+
             	// Rather than updating the model directly, use this method.
             	// For some reason you can't iterate over the whole model. Since we need to show/hide
             	// buildings based on which role is selected, that is a problem.
-            	updateWorkplaceValues();
+                updateBuildingValues();
+                updateWorkplaceValues();
+            }
+            // A building has been added or removed from the combo box list
+            if (DataModel.PEOPLE.equals(evt.getPropertyName())) {
+            	
             }
         }
-        if (evt.getSource() == buildingSelectedFromList) {/*
-        	if (Building.ROLES.equals(evt.getPropertyName())) {
-                if (evt.getOldValue() != null && evt.getNewValue() == null) {
-                    roleListModel.removeElement(evt.getOldValue());
-                    if (roleSelectedFromList == evt.getOldValue()) {
-                    	toggleEditJob(false);
-                    	setEditJobBlank();
-                    }
-                } else if (evt.getOldValue() == null && evt.getNewValue() != null) {
-                    roleListModel.addElement((RoleInterface) evt.getNewValue());
+        if (Person.ROLES.equals(evt.getPropertyName())) {
+            if (evt.getOldValue() != null && evt.getNewValue() == null) {
+                roleListModel.removeElement(evt.getOldValue());
+                if (roleSelectedFromList == evt.getOldValue()) {
+                	toggleEditJob(false);
+                	setEditJobBlank();
                 }
-        	}*/
-        }
+            } else if (evt.getOldValue() == null && evt.getNewValue() != null) {
+            	if(!roleListModel.contains(((RoleInterface) evt.getNewValue()).getPerson())) // no dupe adding
+                	roleListModel.addElement(((RoleInterface) evt.getNewValue()).getPerson());
+            }
+    	}
     }
     
 	//============================================================================//
@@ -986,34 +998,42 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	 */
 	private void updateBuildingValues() {
 		Building p = buildingSelectedFromList;
-		textName.setText(p.getName());
-		textCash.setValue(p.getCash());
-		String string = p.getClass().toString();
-		String st = string.split(" ")[1];
-		String s[] = st.split(".buildings.",0);
-		lblResidence.setText(s[1]);
-		/*
-		if (p.getOccupation() != null) {
+		if(p != null){
+			textName.setText(p.getName());
+			textCash.setValue(p.getCash());
+			String string = p.getClass().toString();
+			String st = string.split(" ")[1];
+			String s[] = st.split(".buildings.",0);
+			lblResidence.setText(s[1]);
+			/*
+			if (p.getOccupation() != null) {
 			btnHasJob.setIcon(job);
-		} else {
+			} else {
 			btnHasJob.setIcon(nojob);
-		}*/
-		roleListModel.clear();
-		/*for (RoleInterface r : p.getRoles()) {
-			roleListModel.addElement(r);
-		}*/
+			}*/
+			roleListModel.clear();
+			if(p instanceof ResidenceBuilding){
+				
+				for(int i = 0; i < ((ResidenceBuilding)p).getResidents().size(); i++)
+					roleListModel.addElement(((ResidenceBuilding)p).getResidents().get(i).getPerson());
+				
+			}
+			for (Entry<RoleInterface, AnimationInterface> entry : p.getOccupyingRoles().entrySet()){
+				roleListModel.addElement(entry.getKey().getPerson()); // go through all the residentroles with anims and go~
+			}
+		}
 		toggleButtons(true);
 	}
 	
 	private void updateRoleValues() {
-		RoleInterface r = roleSelectedFromList;
+		Person r = roleSelectedFromList;
+		/*
 		labelRoleStateValue.setText(r.getStateString());
 		labelRoleActiveValue.setText(String.valueOf(r.getActive()));
 		labelRoleActivityValue.setText(String.valueOf(r.getActivity()));
 		if (r instanceof JobRoleInterface) {
 			JobRoleInterface jr = (JobRole) r;
 			toggleEditJob(true);
-			labelSalaryValue.setText(currencyFormat.format(jr.getSalary()));
 			try {
 				spinnerStart1.commitEdit();
 				spinnerEnd1.commitEdit();
@@ -1022,7 +1042,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 			spinnerEnd1.setValue(jr.getShiftEnd());
 		} else {
 			toggleEditJob(false);
-		}
+		}*/
 	}
 	
 	private void updateWorkplaceValues() {
@@ -1056,7 +1076,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 		labelRoleStateValue.setText("null");
 		labelRoleActiveValue.setText("null");
 		labelRoleActivityValue.setText("null");
-		labelSalaryValue.setText("null");
 		toggleEditJob(false);
 	}
 	
