@@ -10,6 +10,8 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
+import city.animations.MarketCustomerAnimation;
+import city.animations.RestaurantChungCustomerAnimation;
 import city.bases.Role;
 import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomer;
@@ -139,7 +141,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	private void requestService() {
 		state = MarketCustomerState.WaitingForService;
 		market.getManager().msgIWouldLikeToPlaceAnOrder(this);
-//		marketCustomerGui.DoStandInWaitingForServiceLine();			
+		this.getAnimation(MarketCustomerAnimation.class).DoStandInWaitingForServiceLine();
 	}
 	
 	private void giveOrder() {
