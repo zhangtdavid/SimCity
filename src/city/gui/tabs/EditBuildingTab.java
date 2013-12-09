@@ -86,7 +86,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JLabel labelCash;
 	private JFormattedTextField textCash;
 	private JPanel panelControl;
-	private JButton btnRevert;
 	private JButton btnSave;
 	private JPanel panelRoles;
 	private JScrollPane scrollRoles;
@@ -116,7 +115,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JLabel labelSalary;
 	private JLabel labelSalaryValue;
 	private JPanel panelRoleRevertSave;
-	private JButton buttonRoleRevert;
 	private JButton buttonRoleSave;
 	private JButton btnHasJob;
 	private JPanel panelJob;
@@ -356,17 +354,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelControl.setLayout(new BoxLayout(panelControl, BoxLayout.X_AXIS));
         add(panelControl);
         
-        // Revert
-        btnRevert = new JButton("Revert");
-        btnRevert.setFocusable(false);
-        btnRevert.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		updateBuildingValues();
-        	}
-        });
-        btnRevert.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        panelControl.add(btnRevert);
-        
         // Save
         btnSave = new JButton("Save");
         btnSave.setFocusable(false);
@@ -481,7 +468,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         add(panelRoles);
         
         // Add roles label
-        labelRoles = new JLabel("Building's Roles");
+        labelRoles = new JLabel("Building Occupants");
         labelRoles.setBorder(new EmptyBorder(0, 10, 0, 10));
         labelRoles.setPreferredSize(new Dimension(140, 20));
         labelRoles.setMinimumSize(new Dimension(140, 20));
@@ -679,16 +666,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelRoleRevertSave.setMaximumSize(new Dimension(300, 30));
         panelRoleRevertSave.setLayout(new BoxLayout(panelRoleRevertSave, BoxLayout.X_AXIS));
         panelEditJob.add(panelRoleRevertSave);
-        
-        buttonRoleRevert = new JButton("Revert");
-        buttonRoleRevert.setFocusable(false);
-        buttonRoleRevert.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        buttonRoleRevert.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		updateRoleValues();
-        	}
-        });
-        panelRoleRevertSave.add(buttonRoleRevert);
         
         buttonRoleSave = new JButton("Save");
         buttonRoleSave.setFocusable(false);
@@ -1011,6 +988,10 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 		Building p = buildingSelectedFromList;
 		textName.setText(p.getName());
 		textCash.setValue(p.getCash());
+		String string = p.getClass().toString();
+		String st = string.split(" ")[1];
+		String s[] = st.split(".buildings.",0);
+		lblResidence.setText(s[1]);
 		/*
 		if (p.getOccupation() != null) {
 			btnHasJob.setIcon(job);
@@ -1088,11 +1069,9 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	//--------------------------------------//
 	
 	private void toggleButtons(boolean b) {
-		btnRevert.setEnabled(b);
 		btnSave.setEnabled(b);
 		btnHouse.setEnabled(false);
 		btnWork.setEnabled(false);
-		// btnHasHouse.setEnabled(false); // TODO
 		btnHasJob.setEnabled(false);
 		// btnSleep.setEnabled(b); // TODO
 		btnTerminate.setEnabled(b);
