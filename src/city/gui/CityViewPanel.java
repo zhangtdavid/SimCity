@@ -134,7 +134,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 					(RestaurantChoiPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
 		case RESTAURANTJP:
-			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.orange)));
+			temp.setCityViewBuilding(new CityViewRestaurant(-100, -100, "Restaurant " + (statics.size()), Color.orange, new RestaurantJPPanel(Color.darkGray)));
 			temp.setBuilding(new RestaurantJPBuilding("RestaurantJP " + statics.size(),
 					(RestaurantJPPanel)(temp.getCityViewBuilding().getBuilding()), temp.getCityViewBuilding()));
 			break;
