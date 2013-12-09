@@ -225,7 +225,6 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 			e.printStackTrace();
 		}
 		
-		
     	// dependent on customer type
     	if (customer != null)
     		market.getCashier().msgComputeBill(this, customer, order, collectedItems, orderId);
