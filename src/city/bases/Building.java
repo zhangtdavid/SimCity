@@ -1,5 +1,7 @@
 package city.bases;
 
+import java.awt.Component;
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -28,10 +30,13 @@ public abstract class Building implements BuildingInterface {
 	private BuildingCard panel; // The representation of this building's interior
 	private ArrayList<String> workerRoleClasses = new ArrayList<String>(); // The classes which work in this type of building
 	private String buildingClassName;
+	private PropertyChangeSupport propertyChangeSupport;
+
 	
 	// Constructor
 
 	public Building(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
+		propertyChangeSupport = new PropertyChangeSupport(this);
 		this.name = name;
 		this.cash = 0;
 		this.setPanel(panel);
@@ -97,6 +102,11 @@ public abstract class Building implements BuildingInterface {
 		return buildingClassName;
 	}
 	
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+    	return propertyChangeSupport;
+	}
+	
 	// Setters
 	
 	@Override
@@ -153,5 +163,7 @@ public abstract class Building implements BuildingInterface {
 	public void addWorkerRoleName(String r) {
 		workerRoleClasses.add(r);
 	}
+
+
 
 }

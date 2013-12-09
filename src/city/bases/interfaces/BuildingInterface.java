@@ -1,5 +1,6 @@
 package city.bases.interfaces;
 
+import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -30,6 +31,7 @@ public interface BuildingInterface {
 	public HashMap<RoleInterface, AnimationInterface> getOccupyingRoles();
 	public ArrayList<String> getWorkerRoleClassNames();
 	public String getBuildingClassName();
+	public PropertyChangeSupport getPropertyChangeSupport();
 	
 	// Setters
 	

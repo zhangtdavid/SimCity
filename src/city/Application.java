@@ -419,7 +419,7 @@ public class Application {
 		model.addPerson(p4Zhang);
 
 		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
-				HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 500);
 		temp.put(FOOD_ITEMS.salad, 500);
 		temp.put(FOOD_ITEMS.pizza, 500);
@@ -571,7 +571,7 @@ public class Application {
 		AptPanel rhp3Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//busstop4 125 325
 		CityViewApt rhcv3Choi = new CityViewApt(325, 425, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
-		AptBuilding rhb3Choi = new AptBuilding("Apt Choi1", null, rhp3Choi, rhcv3Choi);
+		AptBuilding rhb3Choi = new AptBuilding("Apt Choi3", null, rhp3Choi, rhcv3Choi);
 		setBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 
 		// Create landlord
@@ -924,7 +924,8 @@ public class Application {
 
 
 		c0Choi.startThread();
-		p0Choi.startThread();/*
+		//p0Choi.startThread();
+		/*
 		p1Choi.startThread();
 		p2Choi.startThread();
 		p3Choi.startThread();

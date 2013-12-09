@@ -562,7 +562,7 @@ public class EditPersonTab extends JPanel implements PropertyChangeListener {
         scrollRoles.setMinimumSize(new Dimension(300, 60));
         scrollRoles.setMaximumSize(new Dimension(300, 60));
         panelRoles.add(scrollRoles, BorderLayout.CENTER);
-        
+       
         // Add roles list
         listRoles = new JList<RoleInterface>(roleListModel);
         listRoles.addListSelectionListener(new ListSelectionListener() {

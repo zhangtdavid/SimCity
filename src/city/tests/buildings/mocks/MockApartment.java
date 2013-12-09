@@ -1,5 +1,7 @@
 package city.tests.buildings.mocks;
 
+import java.beans.PropertyChangeSupport;
+
 import city.buildings.AptBuilding;
 import city.buildings.interfaces.Apt;
 import city.roles.interfaces.Resident;
@@ -27,5 +29,11 @@ public class MockApartment extends MockResidenceBuilding implements Apt {
 				throw new IllegalStateException("Only five people at a time may live in an apartment.");
 			}
 		}
+	}
+
+	@Override
+	public PropertyChangeSupport getPropertyChangeSupport() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 }
