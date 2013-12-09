@@ -33,6 +33,8 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
 	
 	private WorkingState workingState;
+	
+	private boolean restaurantClosed;
 
 //	Constructor
 //	=====================================================================
@@ -44,17 +46,12 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
 		workingState = WorkingState.Working;
+		
+		restaurantClosed = false;
     }
 	
 //  Activity
-//	=====================================================================		
-//	// TODO schung 99c0f4da25
-//	@Override
-//	public void setActive() {
-//		super.setActivityBegun();
-//		super.setActive();
-//	}
-	
+//	=====================================================================	
 	@Override
 	public void setInactive(){
 		workingState = WorkingState.GoingOffShift;
@@ -80,6 +77,16 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //	=====================================================================
 	@Override
 	public boolean runScheduler() {
+		// Role Scheduler
+		boolean blocking = false;
+//		if (carPassenger.getActive() && carPassenger.getActivity()) {
+//			blocking  = true;
+//			boolean activity = carPassenger.runScheduler();
+//			if (!activity) {
+//				carPassenger.setActivityFinished();
+//			}
+//		}		
+		
 		if (workingState == WorkingState.GoingOffShift && customerDelivery == null) {
 			if (market.getDeliveryPeople().size() > 1) {
 				market.removeDeliveryPerson(this);
@@ -87,45 +94,44 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			}
 		}
 		
+//		if (restaurantClosed) {
+//			if(market.getOpen()) {
+//				deliverItems();
+//				return true;
+//			}
+//		}
+//		
 		if (customerDelivery != null) {
 			deliverItems();
 			return true;
 		}
-		
-//		// Role Scheduler
-//		boolean blocking = false;
-//		if (carPassenger.getActive() && carPassenger.getActivity()) {
-//			blocking  = true;
-//			boolean activity = carPassenger.runScheduler();
-//			if (!activity) {
-//				carPassenger.setActivityFinished();
-//			}
-//		}
-//		
-//		// Scheduler disposition
-//		return blocking;
-		return false;
+
+		return blocking;
 	}
 	
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
 		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant());
-		carPassenger.setActive();
-		market.getCashier().msgDeliveringItems(this);
+		if (!restaurantClosed)
+			market.getCashier().msgDeliveringItems(this);
 
-//		// TODO schung 99c0f4da25
-//      deliveryTruckGui.doGoToAddress();
 // 		notify customer if there is a difference between order and collected items
 // 		switch into CarPassenger;
-//		while (carPassenger.getActive() && carPassenger.getActivity()) {
+//		carPassenger.setActive();
+//		while (carPassenger.getActive()) {
 //			// do nothing
 //		}
-//		// TODO how does all this car stuff work??
 		
-		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
-		market.getCashier().msgFinishedDeliveringItems(this, orderId);
-		customerDelivery = null;
+//		if(market.getOpen()) {
+			customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
+			market.getCashier().msgFinishedDeliveringItems(this, orderId);
+			customerDelivery = null;
+//		}
+//		else {
+//			restaurantClosed = true;
+//			carPassenger = new CarPassengerRole(car, market); // go back to Restaurant
+//		}
 	}
 	
 //  Getters

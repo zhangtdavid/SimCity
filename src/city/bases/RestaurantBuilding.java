@@ -30,7 +30,7 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));
 		addFood(FOOD_ITEMS.salad, new Food("salad", 3, 6, 5, 10, 6));
 		addFood(FOOD_ITEMS.steak, new Food("steak", 12, 6, 5, 10, 16));        
-        setCash(1000);
+        setCash(800);
 	}
     
     // Messages

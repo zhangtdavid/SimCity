@@ -427,6 +427,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		customer.setCheckState(CheckState.DeliveredBill);
 		customer.getRestaurantChungCustomer().msgHereIsCheck(customer.getBill());
 		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		restaurant.getRestaurantChungHost().msgTableIsFree(this, customer.getTable(), customer.getRestaurantChungCustomer());
 	}
 
 	private void removeCustomer(MyCustomer customer) {
