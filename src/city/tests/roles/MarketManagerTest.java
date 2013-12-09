@@ -195,7 +195,6 @@ public class MarketManagerTest extends TestCase {
 	}
 	
 	public void testMultipleCustomersandShiftChange() {
-		System.out.println("TEST HERE");
 		assertTrue("Manager should have workingState == Working.",  manager.getWorkingState() == WorkingState.Working);
 		manager.setInactive();
 		assertTrue("Manager should have workingState == GoingOffShift.",  manager.getWorkingState() == WorkingState.GoingOffShift);

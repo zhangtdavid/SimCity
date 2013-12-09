@@ -2,6 +2,7 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 
 import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.Animation;
@@ -18,8 +19,14 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 	private enum Command {noCommand, GoToPhone, CollectItems, GoToCashier, GoToCounter};
 	private Command command=Command.noCommand;
 	
+	private static LinkedList<MarketEmployee> employeeStalls = new LinkedList<MarketEmployee>();
+	
+	private boolean atCounter = true;
+
+	
 	public MarketEmployeeAnimation(MarketEmployee e) {
 		employee = e;
+		employeeStalls.add(employee);
 	}
 
 	public void updatePosition() {
@@ -33,6 +40,11 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 		else if (yPos > yDestination)
 			yPos--;
 
+		// Could cause problems if an employee is in the middle of talking with a customer
+		if (atCounter) {
+			doGoToCounter();
+		}
+		
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command==Command.GoToPhone) employee.msgAnimationAtPhone();
 			else if (command == Command.CollectItems) employee.msgFinishedCollectingItems();
@@ -50,26 +62,46 @@ public class MarketEmployeeAnimation extends Animation implements MarketAnimated
 		return true;
 	}
 
+	@Override
 	public void doGoToPhone() {
         xDestination = MarketPanel.PHONEX;
         yDestination = MarketPanel.PHONEY;
 		command = Command.GoToPhone;		
-	}
-	
-	public void doDeliverItems() {
-		// TODO Auto-generated method stub
-		
+		atCounter = false;
 	}
 
+	@Override
 	public void doCollectItems() {
-		// TODO Auto-generated method stub
-		
+        xDestination = MarketPanel.SHELFX-(MarketPanel.RECTDIM)+(employeeStalls.indexOf(employee)*(MarketPanel.SHELFW+MarketPanel.SHELFGAP));
+        yDestination = MarketPanel.SHELFY+(MarketPanel.SHELFH/2)-(MarketPanel.RECTDIM/2);
+        command = Command.CollectItems;	
+		atCounter = false;
+	}
+	
+	@Override
+	public void doDeliverItems() {
+        xDestination = MarketPanel.CASHIEREMPINTERACTIONX;
+        yDestination = MarketPanel.CASHIEREMPINTERACTIONY;		
+		command = Command.GoToCashier;		
+		atCounter = false;
 	}
 
 	@Override
 	public void doGoToCounter() {
-        xDestination = MarketPanel.CASHIEREMPINTERACTIONX;
-        yDestination = MarketPanel.CASHIEREMPINTERACTIONY;
-		command = Command.GoToCounter;			
+        xDestination = MarketPanel.COUNTERX+(employeeStalls.indexOf(employee)*45);
+        yDestination = MarketPanel.COUNTERY;
+		command = Command.GoToCounter;
+		atCounter = true;
+	}
+
+	// Getters
+	@Override
+	public LinkedList<MarketEmployee> getEmployeeStalls() {
+		return employeeStalls;
+	}
+	
+	@Override
+	public int getCounterLoc() {
+		return employeeStalls.indexOf(employee);
 	}
 }

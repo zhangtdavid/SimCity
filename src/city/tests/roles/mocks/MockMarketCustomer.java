@@ -24,9 +24,9 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	}
 
 	@Override
-	public void msgWhatWouldYouLike(MarketEmployee e, int loc) {
-		log.add(new LoggedEvent("Customer received msgWhatWouldYouLike from employee at stall " + loc));		
-		System.out.println("Customer received msgWhatWouldYouLike from employee at stall " + loc);
+	public void msgWhatWouldYouLike(MarketEmployee e) {
+		log.add(new LoggedEvent("Customer received msgWhatWouldYouLike from employee"));		
+		System.out.println("Customer received msgWhatWouldYouLike from employee");
 	}
 
 	@Override
@@ -92,12 +92,6 @@ public class MockMarketCustomer extends MockRole implements MarketCustomer {
 	public Map<FOOD_ITEMS, Integer> getReceivedItems() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public int getLoc() {
-		// TODO Auto-generated method stub
-		return 0;
 	}
 
 	@Override

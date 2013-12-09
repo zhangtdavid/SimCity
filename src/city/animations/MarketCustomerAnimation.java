@@ -2,24 +2,25 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.util.LinkedList;
 
 import city.animations.interfaces.MarketAnimatedCustomer;
+import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.Animation;
+import city.gui.interiors.MarketPanel;
 import city.roles.interfaces.MarketCustomer;
+import city.roles.interfaces.MarketEmployee;
 
 public class MarketCustomerAnimation extends Animation implements MarketAnimatedCustomer {
 	private MarketCustomer customer = null;
-
-	private boolean isPresent = false;
 	
-//	Fixed Numbers
-//	=====================================================================
-	private static final int CRECTDIM = 20;
-    private static final int xEntrance = 15, yEntrance = 20;
-    private static final int xExit = 275, yExit = -40;
-    private static final int xWaitingArea = 50, yWaitingArea = 100;
-    private static final int xCounter = 15, yCounter = 320+25;
-    private static final int xRegister= 465, yRegister = 320+25;
+	private static LinkedList<MarketCustomer> customersWaitingForService = new LinkedList<MarketCustomer>(); 
+	private static LinkedList<MarketCustomer> customersWaitingForItems = new LinkedList<MarketCustomer>(); 
+
+	private boolean waitingForService = false;
+	private boolean waitingForItems = false;
+	
+	private boolean isPresent = false;
 
 //	Location Information
 //	=====================================================================
@@ -51,6 +52,16 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 		else if (yPos > yDestination)
 			yPos--;
 
+		if (waitingForService) {
+			xDestination = MarketPanel.SERVICEWAITINGX+(customersWaitingForService.indexOf(customer)*30);
+			yDestination = MarketPanel.SERVICEWAITINGY;
+		}
+		
+		else if (waitingForItems) {
+			xDestination = MarketPanel.ITEMSWAITINGX-(customersWaitingForItems.indexOf(customer)*30)-20;
+			yDestination = MarketPanel.ITEMSWAITINGY;
+		}
+		
 		if (xPos == xDestination && yPos == yDestination) {
 			if (command == Command.GoToCounter) customer.msgAnimationAtCounter();
 			if (command == Command.GoToCashier) customer.msgAnimationAtCashier();
@@ -62,7 +73,7 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 	public void draw(Graphics2D g) {
 		// Paints Customer Square
 		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CRECTDIM, CRECTDIM);
+		g.fillRect(xPos, yPos, MarketPanel.RECTDIM, MarketPanel.RECTDIM);
 	}
 
 //	Utilities
@@ -75,31 +86,42 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 		return isPresent;
 	}
 
+	@Override
 	public void DoStandInWaitingForServiceLine() {
-		xDestination = xWaitingArea;
-		yDestination = yWaitingArea;//+(waitingPosition*30);		
+		customersWaitingForService.add(customer);
+		waitingForService = true;
+		xDestination = MarketPanel.SERVICEWAITINGX+(customersWaitingForService.indexOf(customer)*30);
+		yDestination = MarketPanel.SERVICEWAITINGY;	
 	}
 	
-	public void DoGoToCounter(int loc) {
-		xDestination = xCounter+(50*loc);
-		yDestination = yCounter;		
+	@Override
+	public void DoGoToCounter(MarketEmployee employee) {
+		customersWaitingForService.remove(customer);
+		xDestination = MarketPanel.COUNTERX+(45*employee.getAnimation(MarketAnimatedEmployee.class).getCounterLoc());
+		yDestination = MarketPanel.COUNTERINTERACTIONY;
 		command = Command.GoToCounter;
 	}
 	
-	public void DoGoToWaitingArea() {
-		xDestination = xWaitingArea;
-		yDestination = yWaitingArea;//+(waitingPosition*30);
+	@Override
+	public void DoStandInWaitingForItemsLine() {
+		customersWaitingForItems.add(customer);
+		waitingForItems = true;
+		xDestination = MarketPanel.ITEMSWAITINGX-(customersWaitingForItems.indexOf(customer)*30)-20;;
+		yDestination = MarketPanel.ITEMSWAITINGY;
 	}
 	
+	@Override
 	public void DoGoToCashier() {
-		xDestination = xRegister;
-		yDestination = yRegister;
+		customersWaitingForItems.remove(customer);
+		xDestination = MarketPanel.CASHIERX;
+		yDestination = MarketPanel.CASHIERCUSTINTERACTIONY;
 		command = Command.GoToCashier;
 	}
 	
+	@Override
 	public void DoExitMarket() {
-		xDestination = xExit;
-		yDestination = yExit;
+		xDestination = MarketPanel.EXITX;
+		yDestination = MarketPanel.EXITY;
 		command = Command.LeaveMarket;
 	}
 }
