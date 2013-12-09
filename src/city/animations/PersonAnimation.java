@@ -106,7 +106,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 							cookAndEatFood(foodToEat);
 							person.print("Done cooking");
 						}
-					}, 1000);
+					}, 4000);
 				//has left stove with food, to table
 			} else if (command == Command.ToTable) { // rTable: ^ then eat food
 				command = Command.StationaryAtTable;
@@ -123,7 +123,7 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 							leaving = true;
 							command = Command.noCommand;
 						}
-					}, 1000);
+					}, 4000);
 			}
 		}
 	}
