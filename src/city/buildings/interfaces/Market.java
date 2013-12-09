@@ -35,12 +35,14 @@ public interface Market extends BuildingInterface {
 	public List<MyMarketEmployee> getEmployees();
 	public List<MyDeliveryPerson> getDeliveryPeople();
 	public List<MyMarketCustomer> getCustomers();
+	public Map<FOOD_ITEMS, Integer> getInventory();
+	public Map<FOOD_ITEMS, Integer> getPrices();
 	
 	// Setters
 	public void setManager(MarketManager manager);
 	public void setCashier(MarketCashier cashier);
-	Map<FOOD_ITEMS, Integer> getInventory();
-	Map<FOOD_ITEMS, Integer> getPrices();
+	public void setInventory(Map<FOOD_ITEMS, Integer> map);
+
 	
 	// Utilities
 	public MyMarketEmployee findEmployee(MarketEmployee me);
@@ -73,6 +75,7 @@ public interface Market extends BuildingInterface {
 		public void setAvailable(boolean available) {
 			this.available = available;
 		}
+		
 	}
 
 	MyDeliveryPerson findDeliveryPerson(MarketDeliveryPerson d);

@@ -147,4 +147,10 @@ public class MockMarket extends MockBuilding implements Market {
 		return null;
 	}
 
+	@Override
+	public void setInventory(Map<FOOD_ITEMS, Integer> map) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

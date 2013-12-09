@@ -362,7 +362,7 @@ public class Application {
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
 		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim); 
-		//bus1.startThread();
+		bus1.startThread();
 
 		
 		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
@@ -417,7 +417,7 @@ public class Application {
 		model.addPerson(p4Zhang);
 
 		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
-				HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
 		temp.put(FOOD_ITEMS.chicken, 500);
 		temp.put(FOOD_ITEMS.salad, 500);
 		temp.put(FOOD_ITEMS.pizza, 500);
@@ -479,7 +479,7 @@ public class Application {
 
 		// Create buildings
 		AptPanel rhp1Timms = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Timms = new CityViewApt(450, 430, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
+		CityViewApt rhcv1Timms = new CityViewApt(450, 450, "Apartment " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Timms);
 		AptBuilding rhb1Timms = new AptBuilding("Timms Apartment", null, rhp1Timms, rhcv1Timms);
 		setBuilding(rhp1Timms, rhcv1Timms, rhb1Timms);
 
@@ -557,18 +557,18 @@ public class Application {
 		RestaurantChoiBuilding restaurantChoiBuilding1 = (RestaurantChoiBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHOI, 225, 425);
 
 		AptPanel rhp1Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv1Choi = new CityViewApt(350, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
+		CityViewApt rhcv1Choi = new CityViewApt(350, 450, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp1Choi);
 		AptBuilding rhb1Choi = new AptBuilding("Apt Choi1", null, rhp1Choi, rhcv1Choi);
 		setBuilding(rhp1Choi, rhcv1Choi, rhb1Choi);
 
 		AptPanel rhp2Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewApt rhcv2Choi = new CityViewApt(380, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp2Choi);
+		CityViewApt rhcv2Choi = new CityViewApt(375, 450, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp2Choi);
 		AptBuilding rhb2Choi = new AptBuilding("Apt Choi2", null, rhp2Choi, rhcv2Choi);
 		setBuilding(rhp2Choi, rhcv2Choi, rhb2Choi);
 
 		AptPanel rhp3Choi = new AptPanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		//busstop4 125 325
-		CityViewApt rhcv3Choi = new CityViewApt(320, 430, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
+		CityViewApt rhcv3Choi = new CityViewApt(325, 450, "Apt " + mainFrame.cityView.getStaticsSize(), Color.gray, rhp3Choi);
 		AptBuilding rhb3Choi = new AptBuilding("Apt Choi3", null, rhp3Choi, rhcv3Choi);
 		setBuilding(rhp3Choi, rhcv3Choi, rhb3Choi);
 

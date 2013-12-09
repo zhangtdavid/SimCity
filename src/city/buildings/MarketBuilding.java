@@ -147,6 +147,11 @@ public class MarketBuilding extends Building implements Market {
 		this.cashier = cashier;
 	}
 	
+	@Override
+	public void setInventory(Map<FOOD_ITEMS, Integer> map){
+		inventory = map;
+	}
+	
 //	Utilities
 //	=====================================================================
 	@Override

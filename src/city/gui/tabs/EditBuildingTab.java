@@ -6,28 +6,21 @@ import java.awt.Component;
 import java.awt.ComponentOrientation;
 import java.awt.Dimension;
 import java.awt.Font;
-import java.awt.GridLayout;
-import java.awt.Insets;
 import java.awt.SystemColor;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.beans.PropertyChangeEvent;
 import java.beans.PropertyChangeListener;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
 import java.math.RoundingMode;
 import java.text.NumberFormat;
 import java.text.ParseException;
 import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 import java.util.Map.Entry;
 
 import javax.swing.BoxLayout;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.DefaultListCellRenderer;
 import javax.swing.DefaultListModel;
-import javax.swing.ImageIcon;
 import javax.swing.JButton;
 import javax.swing.JComboBox;
 import javax.swing.JFormattedTextField;
@@ -37,10 +30,8 @@ import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.JSpinner;
 import javax.swing.JTextField;
-import javax.swing.ListModel;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
-import javax.swing.SwingConstants;
 import javax.swing.SwingUtilities;
 import javax.swing.border.EmptyBorder;
 import javax.swing.border.LineBorder;
@@ -49,14 +40,18 @@ import javax.swing.event.ListSelectionListener;
 
 import utilities.DataModel;
 import city.Application;
+import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
 import city.bases.Building;
 import city.bases.JobRole;
 import city.bases.ResidenceBuilding;
+import city.bases.RestaurantBuilding;
 import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.RoleInterface;
+import city.buildings.BankBuilding;
+import city.buildings.MarketBuilding;
 import city.gui.MainFrame;
 
 public class EditBuildingTab extends JPanel implements PropertyChangeListener, ActionListener{
@@ -69,11 +64,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	
 	private final MainFrame mainFrame;
 	
-	private final ImageIcon car = new ImageIcon(EditBuildingTab.class.getResource("/icons/car.png"));
-	private final ImageIcon nocar = new ImageIcon(EditBuildingTab.class.getResource("/icons/nocar.png"));
-	private final ImageIcon job = new ImageIcon(EditBuildingTab.class.getResource("/icons/job.png"));
-	private final ImageIcon nojob = new ImageIcon(EditBuildingTab.class.getResource("/icons/nojob.png"));
-	private final ImageIcon terminateWithExtremePrejudice = new ImageIcon(EditBuildingTab.class.getResource("/icons/terminate.png"));
     private final NumberFormat currencyFormat = NumberFormat.getCurrencyInstance(getDefaultLocale());
 	
 	private DataModel dataModel;
@@ -84,7 +74,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private Building buildingSelectedFromList; // Needed so that we can deactivate old listeners
 	private Person roleSelectedFromList;
 	private String jobSelectedFromComboBox;
-	private BuildingInterface workplaceSelectedFromComboBox;
 	
 	private JScrollPane scrollBuildings;
 	private JList<Building> listBuildings;
@@ -101,52 +90,24 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private JScrollPane scrollRoles;
 	private JList<Person> listRoles;
 	private JLabel labelRoles;
-	private JPanel panelRoleState;
-	private JLabel labelRoleState;
-	private JLabel labelRoleStateValue;
-	private JPanel panelRoleActive;
-	private JLabel labelRoleActive;
-	private JLabel labelRoleActiveValue;
-	private JPanel panelRoleActivity;
-	private JLabel labelRoleActivity;
-	private JLabel labelRoleActivityValue;
-	private JPanel panelToggles;
-	private JButton btnHasCar;
-	private JButton btnHouse;
-	private JButton btnWork;
 	// private JButton btnHasHouse; // TODO
-	private JPanel panelShift1;
-	private JLabel labelShift1;
-	private JLabel labelStart1;
-	private JLabel labelEnd1;
-	private JSpinner spinnerStart1;
-	private JSpinner spinnerEnd1;
 	private JPanel panelRoleRevertSave;
 	private JButton buttonRoleSave;
-	private JButton btnHasJob;
 	private JPanel panelJob;
 	private JComboBox<String> comboBoxJob;
 	private JLabel labelJob;
 	private JPanel panelWorkplace;
 	private JLabel labelWorkplace;
-	private JComboBox<BuildingInterface> comboBoxWorkplace;
-	private JPanel panelSalary;
-	private JLabel labelSalary;
-	private JTextField labelSalaryValue;
-	private JPanel panelShift2;
-	private JLabel labelShift2;
-	private JLabel labelStart2;
-	private JSpinner spinnerStart2;
-	private JLabel labelEnd2;
-	private JSpinner spinnerEnd2;
 	private JPanel panelAdd;
 	private JButton buttonAdd;
 	private JPanel panelNewJob;
 	private JPanel panelEditJob;
 	private JLabel label;
 	private JPanel panel;
+	private JButton giveFood;
+	private JButton emptyFood;
+	
 	// private JButton btnSleep; // TODO
-	private JButton btnTerminate;
 	private JPanel panelHouseData;
 	private JLabel lblLivesIn;
 	private JLabel lblResidence;
@@ -353,7 +314,17 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         lblResidence.setPreferredSize(new Dimension(200, 14));
         lblResidence.setFont(getFont().deriveFont(Font.BOLD));
         panelHouseData.add(lblResidence);
+    
+        //rchoi
+        giveFood = new JButton("Give 20 of all food");
+        giveFood.addActionListener(this);
+        giveFood.setVisible(false);
+        emptyFood = new JButton("Empty all food");
+        emptyFood.addActionListener(this);
+        emptyFood.setVisible(false);
+
         
+        //
 		//--------------------------------------//
 		// Building buttons 1        
 		//--------------------------------------//
@@ -376,97 +347,8 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         btnSave.setAlignmentX(Component.RIGHT_ALIGNMENT);
         panelControl.add(btnSave);
         
-        // See Home
-		btnHouse = new JButton("See Home");
-		btnHouse.setFocusable(false);
-		btnHouse.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent arg0) {
-        	//	Application.getMainFrame().CP.editBuildingsTab.displayBuilding(buildingSelectedFromList.getHome());
-			}
-		});
-		btnHouse.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		panelControl.add(btnHouse);
-		
-		// See Job
-		btnWork = new JButton("See Job");
-		btnWork.setFocusable(false);
-		btnWork.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-			//	Application.getMainFrame().CP.editBuildingsTab.displayBuilding(buildingSelectedFromList.getOccupation().getWorkplace(BuildingInterface.class));
-			}
-		});
-		btnWork.setAlignmentX(Component.RIGHT_ALIGNMENT);
-		panelControl.add(btnWork);
-		
 		//--------------------------------------//
-		// Building buttons 2       
-		//--------------------------------------//
-        
-        // Add car button
-        panelToggles = new JPanel();
-        panelToggles.setPreferredSize(new Dimension(300, 40));
-        panelToggles.setMinimumSize(new Dimension(300, 40));
-        panelToggles.setMaximumSize(new Dimension(300, 40));
-        panelToggles.setLayout(new BoxLayout(panelToggles, BoxLayout.X_AXIS));
-        add(panelToggles);
-        
-
-        // Job toggle
-        btnHasJob = new JButton(job);
-        btnHasJob.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		//toggleBuildingJob();
-        	}
-        });
-        btnHasJob.setFocusable(false);
-        btnHasJob.setMargin(new Insets(2, 2, 2, 2));
-        btnHasJob.setHorizontalTextPosition(SwingConstants.RIGHT);
-        btnHasJob.setHorizontalAlignment(SwingConstants.LEFT);
-        btnHasJob.setAlignmentX(Component.CENTER_ALIGNMENT);
-        btnHasJob.setPreferredSize(new Dimension(55, 40));
-        btnHasJob.setMinimumSize(new Dimension(55, 40));
-        btnHasJob.setMaximumSize(new Dimension(55, 40));
-        panelToggles.add(btnHasJob);
-        
-// TODO
-//        // Sleep toggle
-//        btnSleep = new JButton(sleep);
-//        btnSleep.addActionListener(new ActionListener() {
-//        	public void actionPerformed(ActionEvent e) {
-//        		buildingSelectedFromList.forceSleep();
-//        	}
-//        });
-//        btnSleep.setPreferredSize(new Dimension(55, 40));
-//        btnSleep.setMinimumSize(new Dimension(55, 40));
-//        btnSleep.setMaximumSize(new Dimension(55, 40));
-//        btnSleep.setMargin(new Insets(2, 2, 2, 2));
-//        btnSleep.setHorizontalTextPosition(SwingConstants.RIGHT);
-//        btnSleep.setHorizontalAlignment(SwingConstants.LEFT);
-//        btnSleep.setFocusable(false);
-//        btnSleep.setEnabled(false);
-//        btnSleep.setAlignmentX(0.5f);
-//        panelToggles.add(btnSleep);
-        
-        // Terminate
-        btnTerminate = new JButton(terminateWithExtremePrejudice);
-        btnTerminate.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		//terminateWithExtremePrejudice();
-        	}
-        });
-        btnTerminate.setPreferredSize(new Dimension(55, 40));
-        btnTerminate.setMinimumSize(new Dimension(55, 40));
-        btnTerminate.setMaximumSize(new Dimension(55, 40));
-        btnTerminate.setMargin(new Insets(2, 2, 2, 2));
-        btnTerminate.setHorizontalTextPosition(SwingConstants.RIGHT);
-        btnTerminate.setHorizontalAlignment(SwingConstants.LEFT);
-        btnTerminate.setFocusable(false);
-        btnTerminate.setEnabled(false);
-        btnTerminate.setAlignmentX(0.5f);
-        panelToggles.add(btnTerminate);
-        
-		//--------------------------------------//
-		// Roles list      
+		// Person list      
 		//--------------------------------------//
         
         // Add roles panel
@@ -512,6 +394,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 					roleSelectedFromList = listRoles.getSelectedValue();
 					roleSelectedFromList.getPropertyChangeSupport().addPropertyChangeListener(EditBuildingTab.this);
 					updateRoleValues();
+					setEditJobBlank();
 				}  else {
 					toggleEditJob(false);
 					setEditJobBlank();
@@ -538,66 +421,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         });
         scrollRoles.setViewportView(listRoles);
         
-		//--------------------------------------//
-		// Role info    
-		//--------------------------------------//
         
-        // Create role state area
-        panelRoleState = new JPanel();
-        panelRoleState.setLayout(new BoxLayout(panelRoleState, BoxLayout.X_AXIS));
-        panelRoleState.setPreferredSize(new Dimension(300, 20));
-        panelRoleState.setMinimumSize(new Dimension(300, 20));
-        panelRoleState.setMaximumSize(new Dimension(300, 20));
-        add(panelRoleState);
-        
-        labelRoleState = new JLabel("State");
-        labelRoleState.setPreferredSize(new Dimension(100, 16));
-        labelRoleState.setMinimumSize(new Dimension(100, 16));
-        labelRoleState.setMaximumSize(new Dimension(100, 16));
-        labelRoleState.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelRoleState.add(labelRoleState);
-        
-        labelRoleStateValue = new JLabel("null");
-        labelRoleStateValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelRoleState.add(labelRoleStateValue);
-        
-        // Create role active area
-        panelRoleActive = new JPanel();
-        panelRoleActive.setLayout(new BoxLayout(panelRoleActive, BoxLayout.X_AXIS));
-        panelRoleActive.setPreferredSize(new Dimension(300, 20));
-        panelRoleActive.setMinimumSize(new Dimension(300, 20));
-        panelRoleActive.setMaximumSize(new Dimension(300, 20));
-        add(panelRoleActive);
-        
-        labelRoleActive = new JLabel("Is Active");
-        labelRoleActive.setPreferredSize(new Dimension(100, 16));
-        labelRoleActive.setMinimumSize(new Dimension(100, 16));
-        labelRoleActive.setMaximumSize(new Dimension(100, 16));
-        labelRoleActive.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelRoleActive.add(labelRoleActive);
-        
-        labelRoleActiveValue = new JLabel("null");
-        labelRoleActiveValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelRoleActive.add(labelRoleActiveValue);
-        
-        // Create role activity area
-        panelRoleActivity = new JPanel();
-        panelRoleActivity.setLayout(new BoxLayout(panelRoleActivity, BoxLayout.X_AXIS));
-        panelRoleActivity.setPreferredSize(new Dimension(300, 20));
-        panelRoleActivity.setMinimumSize(new Dimension(300, 20));
-        panelRoleActivity.setMaximumSize(new Dimension(300, 20));
-        add(panelRoleActivity);
-        
-        labelRoleActivity = new JLabel("Has Activity");
-        labelRoleActivity.setPreferredSize(new Dimension(100, 16));
-        labelRoleActivity.setMinimumSize(new Dimension(100, 16));
-        labelRoleActivity.setMaximumSize(new Dimension(100, 16));
-        labelRoleActivity.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelRoleActivity.add(labelRoleActivity);
-        
-        labelRoleActivityValue = new JLabel("null");
-        labelRoleActivityValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelRoleActivity.add(labelRoleActivityValue);
         
 		//~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 		// Edit role 
@@ -607,44 +431,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelEditJob.setLayout(new BoxLayout(panelEditJob, BoxLayout.Y_AXIS));
         add(panelEditJob);
 
-        //--------------------------------------//
-		// Shift
-		//--------------------------------------//
-        
-        panelShift1 = new JPanel();
-        panelEditJob.add(panelShift1);
-        panelShift1.setPreferredSize(new Dimension(300, 30));
-        panelShift1.setMinimumSize(new Dimension(300, 30));
-        panelShift1.setMaximumSize(new Dimension(300, 30));
-        panelShift1.setLayout(new BoxLayout(panelShift1, BoxLayout.X_AXIS));
-        
-        labelShift1 = new JLabel("Shift");
-        labelShift1.setPreferredSize(new Dimension(100, 16));
-        labelShift1.setMinimumSize(new Dimension(100, 16));
-        labelShift1.setMaximumSize(new Dimension(100, 16));
-        labelShift1.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelShift1.add(labelShift1);
-        
-        labelStart1 = new JLabel("Start");
-        labelStart1.setBorder(new EmptyBorder(0, 0, 0, 5));
-        panelShift1.add(labelStart1);
-        
-        spinnerStart1 = new JSpinner();
-        spinnerStart1.setPreferredSize(new Dimension(40, 20));
-        spinnerStart1.setMinimumSize(new Dimension(40, 20));
-        spinnerStart1.setMaximumSize(new Dimension(40, 20));
-        panelShift1.add(spinnerStart1);
-        
-        labelEnd1 = new JLabel("End");
-        labelEnd1.setBorder(new EmptyBorder(0, 15, 0, 5));
-        panelShift1.add(labelEnd1);
-        
-        spinnerEnd1 = new JSpinner();
-        spinnerEnd1.setPreferredSize(new Dimension(40, 20));
-        spinnerEnd1.setMinimumSize(new Dimension(40, 20));
-        spinnerEnd1.setMaximumSize(new Dimension(40, 20));
-        panelShift1.add(spinnerEnd1);
-        
+        //
 		//--------------------------------------//
 		// Revert/Save
 		//--------------------------------------//
@@ -660,7 +447,7 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         buttonRoleSave.setFocusable(false);
         buttonRoleSave.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent e) {
-        		saveChangedJob((JobRole) roleSelectedFromList);
+        		//saveChangedJob((JobRole) roleSelectedFromList);
         	}
         });
         panelRoleRevertSave.add(buttonRoleSave);
@@ -741,89 +528,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         labelWorkplace.setMaximumSize(new Dimension(100, 16));
         panelWorkplace.add(labelWorkplace);
         
-        comboBoxWorkplace = new JComboBox<BuildingInterface>(workplaceComboBoxModel);
-        comboBoxWorkplace.setPreferredSize(new Dimension(190, 20));
-        comboBoxWorkplace.setMinimumSize(new Dimension(190, 20));
-        comboBoxWorkplace.setMaximumSize(new Dimension(190, 20));
-        comboBoxWorkplace.setFocusable(false);
-        comboBoxWorkplace.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		workplaceSelectedFromComboBox = (BuildingInterface) comboBoxWorkplace.getSelectedItem();
-        	}
-        });
-        comboBoxWorkplace.setRenderer(new DefaultListCellRenderer() {
-			private static final long serialVersionUID = 17900884575341448L;
-			@Override
-            public Component getListCellRendererComponent(JList<?> list, Object value, int index, boolean isSelected, boolean cellHasFocus) {
-                Component renderer = super.getListCellRendererComponent(list, value, index, isSelected, cellHasFocus);
-                if (renderer instanceof JLabel && value instanceof BuildingInterface) {
-                    ((JLabel) renderer).setText(((BuildingInterface) value).getName());
-                }
-                return renderer;
-            }
-        });
-        panelWorkplace.add(comboBoxWorkplace);
-        
-        //
-        panelSalary = new JPanel();
-        panelSalary.setSize(new Dimension(300, 20));
-        panelSalary.setMinimumSize(new Dimension(300, 20));
-        panelSalary.setMaximumSize(new Dimension(300, 20));
-        panelSalary.setLayout(new BoxLayout(panelSalary, BoxLayout.X_AXIS));
-        panelEditJob.add(panelSalary);
-        
-        labelSalary = new JLabel("Salary");
-        labelSalary.setPreferredSize(new Dimension(100, 16));
-        labelSalary.setMinimumSize(new Dimension(100, 16));
-        labelSalary.setMaximumSize(new Dimension(100, 16));
-        labelSalary.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelSalary.add(labelSalary);
-        
-        labelSalaryValue = new JTextField("null");
-        labelSalaryValue.setFont(getFont().deriveFont(Font.BOLD));
-        panelSalary.add(labelSalaryValue);
-        
-        
-        
-		//--------------------------------------//
-		// Shift
-		//--------------------------------------//
-        
-        panelShift2 = new JPanel();
-        panelShift2.setPreferredSize(new Dimension(300, 30));
-        panelShift2.setMaximumSize(new Dimension(300, 30));
-        panelShift2.setMinimumSize(new Dimension(300, 30));
-        panelShift2.setLayout(new BoxLayout(panelShift2, BoxLayout.X_AXIS));
-        panelNewJob.add(panelShift2);
-        
-        labelShift2 = new JLabel("Shift");
-        labelShift2.setPreferredSize(new Dimension(100, 16));
-        labelShift2.setMinimumSize(new Dimension(100, 16));
-        labelShift2.setMaximumSize(new Dimension(100, 16));
-        labelShift2.setBorder(new EmptyBorder(0, 10, 0, 10));
-        panelShift2.add(labelShift2);
-        
-        labelStart2 = new JLabel("Start");
-        labelStart2.setBorder(new EmptyBorder(0, 0, 0, 5));
-        panelShift2.add(labelStart2);
-        
-        spinnerStart2 = new JSpinner();
-        spinnerStart2.setPreferredSize(new Dimension(40, 20));
-        spinnerStart2.setMinimumSize(new Dimension(40, 20));
-        spinnerStart2.setMaximumSize(new Dimension(40, 20));
-        panelShift2.add(spinnerStart2);
-        
-        labelEnd2 = new JLabel("End");
-        labelEnd2.setBorder(new EmptyBorder(0, 15, 0, 5));
-        panelShift2.add(labelEnd2);
-        
-        spinnerEnd2 = new JSpinner();
-        spinnerEnd2.setPreferredSize(new Dimension(40, 20));
-        spinnerEnd2.setMinimumSize(new Dimension(40, 20));
-        spinnerEnd2.setMaximumSize(new Dimension(40, 20));
-        spinnerEnd2.setValue(12);
-        panelShift2.add(spinnerEnd2);
-        
 		//--------------------------------------//
 		// Add
 		//--------------------------------------//
@@ -836,14 +540,15 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
         panelNewJob.add(panelAdd);
         
         buttonAdd = new JButton("Add");
-        buttonAdd.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent e) {
-        		saveNewJob();
-        	}
-        });
+       
         buttonAdd.setFocusable(false);
         buttonAdd.setAlignmentX(1.0f);
         panelAdd.add(buttonAdd);
+        
+        
+        //rchoi set food buttons
+        add(giveFood);
+        add(emptyFood);
         
         //~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~//
 		// Finish setup
@@ -895,7 +600,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
             }
             // A building has been added or removed from the combo box list
             if (DataModel.PEOPLE.equals(evt.getPropertyName())) {
-            	
             }
         }
         if (Person.ROLES.equals(evt.getPropertyName())) {
@@ -940,50 +644,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 		listBuildings.repaint();
 	}
 	
-	private void saveChangedJob(JobRoleInterface r) {
-		try {
-			spinnerStart1.commitEdit();
-			spinnerEnd1.commitEdit();
-		} catch (ParseException e) {}
-		r.setShift((Integer) spinnerStart1.getValue(), (Integer) spinnerEnd1.getValue());
-	}
-	
-	private void saveNewJob() {
-		if (jobSelectedFromComboBox != null && workplaceSelectedFromComboBox != null) {
-			try {
-				spinnerStart2.commitEdit();
-				spinnerEnd2.commitEdit();
-			} catch (ParseException e) {}
-			try {
-				Class<?> c0 = Class.forName(jobSelectedFromComboBox);
-				Class<?> c1 = Class.forName(workplaceSelectedFromComboBox.getBuildingClassName());
-				Constructor<?> r0 = c0.getConstructor(c1, Integer.TYPE, Integer.TYPE);
-				JobRole j0 = (JobRole) r0.newInstance(workplaceSelectedFromComboBox, (Integer) spinnerStart2.getValue(), (Integer) spinnerEnd2.getValue());
-			} catch (NoSuchMethodException | SecurityException | ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
-				e.printStackTrace();
-			}
-			btnHasJob.setIcon(job);
-			toggleNewJob(false);
-			setNewJobBlank();
-		}
-	}
-	
-	/*
-	private void toggleBuildingJob() {
-		Building p = buildingSelectedFromList;
-		if (p.getOccupation() != null) {
-			p.setOccupation(null);
-			// Must check to see if it worked (can't remove while active)
-			if (p.getOccupation() == null)
-				btnHasJob.setIcon(nojob);
-		} else {
-			setNewJobBlank();
-			toggleNewJob(true);
-		}
-		return;
-	}
-	*/
-	
 	//============================================================================//
 	// Utilities    
     //============================================================================//
@@ -1001,16 +661,22 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 		if(p != null){
 			textName.setText(p.getName());
 			textCash.setValue(p.getCash());
+			if(p instanceof BankBuilding || p instanceof MarketBuilding || p instanceof RestaurantBuilding){
+				textCash.setEnabled(true);
+			}else{
+				textCash.setEnabled(false);
+			}
 			String string = p.getClass().toString();
 			String st = string.split(" ")[1];
 			String s[] = st.split(".buildings.",0);
 			lblResidence.setText(s[1]);
-			/*
-			if (p.getOccupation() != null) {
-			btnHasJob.setIcon(job);
-			} else {
-			btnHasJob.setIcon(nojob);
-			}*/
+			if(p instanceof RestaurantBuilding || p instanceof ResidenceBuilding || p instanceof MarketBuilding){
+				giveFood.setVisible(true);
+				emptyFood.setVisible(true);
+			}else{
+				giveFood.setVisible(false);
+				emptyFood.setVisible(false);
+			}
 			roleListModel.clear();
 			if(p instanceof ResidenceBuilding){
 				
@@ -1027,22 +693,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	
 	private void updateRoleValues() {
 		Person r = roleSelectedFromList;
-		/*
-		labelRoleStateValue.setText(r.getStateString());
-		labelRoleActiveValue.setText(String.valueOf(r.getActive()));
-		labelRoleActivityValue.setText(String.valueOf(r.getActivity()));
-		if (r instanceof JobRoleInterface) {
-			JobRoleInterface jr = (JobRole) r;
-			toggleEditJob(true);
-			try {
-				spinnerStart1.commitEdit();
-				spinnerEnd1.commitEdit();
-			} catch (ParseException e) {}
-			spinnerStart1.setValue(jr.getShiftStart());
-			spinnerEnd1.setValue(jr.getShiftEnd());
-		} else {
-			toggleEditJob(false);
-		}*/
 	}
 	
 	private void updateWorkplaceValues() {
@@ -1063,19 +713,13 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	private void setEditBuildingBlank() {
 		textName.setText("");
 		textCash.setText("");
-		btnHasCar.setIcon(nocar);
-		// btnHasHouse.setIcon(house); // TODO
 		lblResidence.setText("-");
-		btnHasJob.setIcon(nojob);
 		roleListModel.clear();
 		toggleButtons(false);
 		setEditJobBlank();
 	}
 	
 	private void setEditJobBlank() {
-		labelRoleStateValue.setText("null");
-		labelRoleActiveValue.setText("null");
-		labelRoleActivityValue.setText("null");
 		toggleEditJob(false);
 	}
 	
@@ -1089,27 +733,6 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	
 	private void toggleButtons(boolean b) {
 		btnSave.setEnabled(b);
-		btnHouse.setEnabled(false);
-		btnWork.setEnabled(false);
-		btnHasJob.setEnabled(false);
-		// btnSleep.setEnabled(b); // TODO
-		btnTerminate.setEnabled(b);
-		/*
-		if (b && buildingSelectedFromList != null) {
-			if (buildingSelectedFromList.getHome() != null) {
-				btnHouse.setEnabled(b);
-				// btnHasHouse.setEnabled(b); // TODO
-				btnHasJob.setEnabled(b);
-			}
-			if (buildingSelectedFromList.getOccupation() != null) {
-				btnWork.setEnabled(b);
-				if (buildingSelectedFromList.getOccupation().getActive()) {
-					btnHasJob.setEnabled(false);
-				} else {
-					btnHasJob.setEnabled(true);
-				}
-			}
-		}*/
 	}
 	
 	private void toggleEditJob(boolean b) {
@@ -1128,8 +751,60 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 
 	@Override
 	public void actionPerformed(ActionEvent e) {
-		// TODO Auto-generated method stub
-		
+		if(e.getSource().equals(giveFood)){ // give 20 of each food to the building.
+			System.out.println("=================================");
+			System.out.println("OVERRIDE: The food supply is 20 of everything! FOR " + buildingSelectedFromList.getName());
+			System.out.println("=================================");
+			HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+			temp.put(FOOD_ITEMS.chicken, 20);
+			temp.put(FOOD_ITEMS.salad, 20);
+			temp.put(FOOD_ITEMS.pizza, 20);
+			temp.put(FOOD_ITEMS.steak, 20);
+			Building b = buildingSelectedFromList;
+			if(b instanceof ResidenceBuilding){ // give all residents food.
+				for(int i = 0; i < ((ResidenceBuilding)b).getResidents().size(); i++)
+					((ResidenceBuilding)b).setFood(((ResidenceBuilding)b).getResidents().get(i).getPerson(), temp);
+				
+			}else if (b instanceof RestaurantBuilding){
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.chicken, 20);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.pizza, 20);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.salad, 20);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.steak, 20);
+				
+			}else if (b instanceof MarketBuilding){
+				((MarketBuilding)b).setInventory(temp);			
+			}
+			
+		}else if(e.getSource().equals(emptyFood)){
+			System.out.println("=================================");
+			System.out.println("OVERRIDE: The food supply is 0 of everything! FOR " + buildingSelectedFromList.getName());
+			System.out.println("=================================");
+			Building b = buildingSelectedFromList;
+			if(b instanceof ResidenceBuilding){
+				for(int i = 0; i < ((ResidenceBuilding)b).getResidents().size(); i++){
+					HashMap<FOOD_ITEMS, Integer> temp1 = ((ResidenceBuilding)b).getFoodItems(((ResidenceBuilding)b).getResidents().get(i).getPerson());
+					temp1.put(FOOD_ITEMS.chicken, 0);
+					temp1.put(FOOD_ITEMS.salad, 0);
+					temp1.put(FOOD_ITEMS.pizza, 0);
+					temp1.put(FOOD_ITEMS.steak, 0);
+					((ResidenceBuilding)b).setFood(((ResidenceBuilding)b).getResidents().get(i).getPerson(), temp1);
+				}
+			}else if (b instanceof RestaurantBuilding){
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.chicken, 0);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.pizza, 0);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.salad, 0);
+				((RestaurantBuilding)b).setFoodQuantity(FOOD_ITEMS.steak, 0);
+			}else if (b instanceof MarketBuilding){
+				HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+				temp.put(FOOD_ITEMS.chicken, 0);
+				temp.put(FOOD_ITEMS.salad, 0);
+				temp.put(FOOD_ITEMS.pizza, 0);
+				temp.put(FOOD_ITEMS.steak, 0);
+				((MarketBuilding)b).setInventory(temp);
+			}			
+			
+			
+		}
 	}
 	public void goToBuilding(BuildingInterface b){
 		Application.getMainFrame().buildingView.setView(b.getCityViewBuilding().getID()); // visual go-to

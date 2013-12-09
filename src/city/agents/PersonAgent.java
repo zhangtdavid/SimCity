@@ -449,11 +449,14 @@ public class PersonAgent extends Agent implements Person {
 				break;
 			}
 		}
-		this.home.removeFood(this, toEat, 1);
-		// Cooks the food and eats it
-		animation.cookAndEatFood(toEat.toString());
-		atDestination.acquire();
-		this.hasEaten = true;
+		if(this.home.removeFood(this, toEat, 1)){
+			// Cooks the food and eats it
+			animation.cookAndEatFood(toEat.toString());
+			atDestination.acquire();
+			this.hasEaten = true;			
+		}else{
+			this.hasEaten = false;
+		}
 	}
 
 	/**

@@ -30,6 +30,6 @@ public interface ResidenceBuildingInterface extends BuildingInterface {
 
 	public void addResident(Resident r);
 	public void removeResident(Resident r);
-	public void removeFood(Person p, FOOD_ITEMS f, int i);
+	public boolean removeFood(Person p, FOOD_ITEMS f, int i);
 
 }
