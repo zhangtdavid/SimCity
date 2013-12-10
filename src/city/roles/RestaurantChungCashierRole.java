@@ -96,6 +96,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		log.add(new LoggedEvent("Cashier received msgAddMarketOrder."));
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
+		roles.get(0).runScheduler();
 		stateChanged();
 	}
 	

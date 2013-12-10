@@ -42,6 +42,12 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	public void msgHereIsBill(int bill, int id) {
 		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
 		print("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
+		try {
+			Thread.sleep(5000);
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} // Need to wait for cashier to add order
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.setMarketTransactionState(MarketTransactionState.Processing);
 		mt.setBill(bill);
