@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -21,14 +20,11 @@ import utilities.RestaurantZhangTable;
 import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
-import city.bases.Building;
 import city.bases.JobRole;
 import city.bases.RestaurantBuilding;
-import city.bases.Role;
 import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantZhangBuilding;
-import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.RestaurantZhangCashier;
 import city.roles.interfaces.RestaurantZhangCook;
@@ -215,14 +211,14 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		o.status = RestaurantZhangOrder.OrderStatus.cooking;
 		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
-		if(findFood(o.choice).getAmount()  <= 0) {
+		if(findFood(o.choice).getAmount() <= 0) {
 			print("Out of " + findFood(o.choice).getItem());
 			mainMenu.remove(o.choice);
 			thisGui.removeFromPlatingArea(o.pos);
 			ordersToCook.remove(o);
 			o.w.msgOutOfFood(o.t);
 
-			Application.FOOD_ITEMS currentFoodItem;
+			Application.FOOD_ITEMS currentFoodItem = Application.FOOD_ITEMS.chicken;
 			for(Application.FOOD_ITEMS foodItem : Application.FOOD_ITEMS.values()) {
 				if(o.choice.equals(foodItem.toString())) {
 					currentFoodItem = foodItem;
@@ -239,7 +235,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				}
 			}
 
-			buildingOfEmployment.getFoods().get(o.choice).setFoodOrderState(RestaurantBuilding.FoodOrderState.Pending);
+			buildingOfEmployment.getFoods().get(currentFoodItem).setFoodOrderState(RestaurantBuilding.FoodOrderState.Pending);
 			Map<FOOD_ITEMS, Integer> mapForNewMarketOrder = new HashMap<FOOD_ITEMS, Integer>();
 			mapForNewMarketOrder.put(currentFoodItem, buildingOfEmployment.getFoods().get(currentFoodItem).getCapacity());
 			MyMarketOrder newMarketOrder = new MyMarketOrder(new MarketOrder(mapForNewMarketOrder));
@@ -257,7 +253,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			stateChanged();
 			return;
 		} else {
-			cookInventory.get(o.choice).setAmount(cookInventory.get(o.choice).getAmount() - 1);
+			findFood(o.choice).setAmount(findFood(o.choice).getAmount() - 1);
 		}
 		// Cooking
 		thisGui.goToPlating();
@@ -274,7 +270,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				orderIsReady(tempOrder);
 			}
 		},
-		(long) cookInventory.get(tempOrder.choice).getCookingTime());
+		(long) findFood(tempOrder.choice).getCookingTime());
 	}
 
 	private void orderIsReady(RestaurantZhangOrder o) {
@@ -389,11 +385,6 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	}
 
 	@Override
-	public Map<String, Food> getCookInventory() {
-		return cookInventory;
-	}
-
-	@Override
 	public int getPosOfNewOrder() {
 		return ordersToCook.size();
 	}
@@ -417,13 +408,8 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	// Setters
 
 	@Override
-	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food) {
+	public void setMenuTimes(RestaurantZhangMenu m) {
 		mainMenu = m;
-		Iterator<Map.Entry<FOOD_ITEMS, Food>> foodIt = food.entrySet().iterator();
-		while(foodIt.hasNext()) {
-			Map.Entry<FOOD_ITEMS, Food> entry = foodIt.next();
-			cookInventory.put(entry.getValue().getItem(), entry.getValue());
-		}
 	}
 
 	@Override

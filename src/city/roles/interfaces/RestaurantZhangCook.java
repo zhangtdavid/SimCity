@@ -10,7 +10,6 @@ import utilities.RestaurantZhangTable;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.bases.interfaces.RoleInterface;
-import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
 
 public interface RestaurantZhangCook extends RoleInterface {
@@ -40,13 +39,12 @@ public interface RestaurantZhangCook extends RoleInterface {
 	public List<RestaurantZhangOrder> getOrdersToCook();
 	public RestaurantZhangRevolvingStand getOrderStand();
 	public RestaurantZhangMenu getMainMenu();
-	public Map<String, Food> getCookInventory();
 	public int getPosOfNewOrder();
 	public boolean getWaitingToCheckStand();
 	
 	// Setters
 	
-	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food);
+	public void setMenuTimes(RestaurantZhangMenu m);
 	public void setAnimation(RestaurantZhangAnimatedCook gui);
 	public void addMarket(MarketBuilding m);
 	public void setRevolvingStand(RestaurantZhangRevolvingStand rs);

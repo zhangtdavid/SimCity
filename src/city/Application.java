@@ -401,21 +401,25 @@ public class Application {
 
 		// Create cashier
 		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100);
+		p1r1Zhang.setPerson(p1Zhang);
 		rzb1.addOccupyingRole(p1r1Zhang);
 		p1Zhang.setOccupation(p1r1Zhang);
 
 		// Create cook
 		RestaurantZhangCookRole p2r1Zhang = new RestaurantZhangCookRole(rzb1, 0, 100);
+		p2r1Zhang.setPerson(p2Zhang);
 		rzb1.addOccupyingRole(p2r1Zhang);
 		p2Zhang.setOccupation(p2r1Zhang);
 
 		// Create host
 		RestaurantZhangHostRole p3r1Zhang = new RestaurantZhangHostRole(rzb1, 0, 100);
+		p3r1Zhang.setPerson(p3Zhang);
 		rzb1.addOccupyingRole(p3r1Zhang);
 		p3Zhang.setOccupation(p3r1Zhang);
 
 		// Create waiter
 		RestaurantZhangWaiterSharedDataRole p4r1Zhang = new RestaurantZhangWaiterSharedDataRole(rzb1, 0, 100);
+		p4r1Zhang.setPerson(p4Zhang);
 		rzb1.addOccupyingRole(p4r1Zhang);
 		p4Zhang.setOccupation(p4r1Zhang);
 
@@ -948,12 +952,13 @@ public class Application {
 		}
 	}
 
-	public static Point findNextOpenLocation() {
-		for(int i = 25; i < 450; i += 25) {
-			for(int j = 25; j < 450; j += 25) {
-				if(i == 25 && (j == 25 || j == 425))
+	public static Point findNextOpenLocation(int x, int y) {
+		
+		for(int i = x; i < 450; i += 25) {
+			for(int j = y; j < 450; j += 25) {
+				if(i <= 25 && (j <= 25 || j >= 425))
 					i+= 25;
-				if(i == 425 && (j == 25 || j == 425))
+				if(i >= 425 && (j <= 25 || j >= 425))
 					break;
 				if(mainFrame.cityView.getBuildingAt(i, j) != null)
 					continue;
@@ -968,7 +973,7 @@ public class Application {
 	 * Creates a building at the next available location
 	 */
 	public static BuildingInterface createBuilding(CityViewBuilding.BUILDINGTYPE type) {
-		Point nextLocation = findNextOpenLocation();
+		Point nextLocation = findNextOpenLocation(0, 0);
 		if(nextLocation == null)
 			return null;
 		return createBuilding(type, (int)(nextLocation.getX()), (int)(nextLocation.getY()));
@@ -977,7 +982,12 @@ public class Application {
 	/*
 	 * Creates a building at the given x and y coordinates. Can and will overlap buildings
 	 */
-	public static BuildingInterface createBuilding(CityViewBuilding.BUILDINGTYPE type, int x, int y) {
+	public static BuildingInterface createBuilding(CityViewBuilding.BUILDINGTYPE type, int potentialX, int potentialY) {
+		Point nextLocation = findNextOpenLocation(potentialX, potentialY);
+		if(nextLocation == null)
+			return null;
+		int x = nextLocation.x;
+		int y = nextLocation.y;
 		CityViewBuilding cityViewBuilding;
 		Building building;
 		switch (type) {

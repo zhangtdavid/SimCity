@@ -35,7 +35,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 
 	public CityPanel(MainFrame mf) {
 		mainframe = mf;
-		timer = new Timer(((Double) (Application.INTERVAL * 0.01)).intValue(), this);
+		timer = new Timer(((Double) (Application.INTERVAL * 0.001)).intValue(), this);
 		timer.start();
 		try {
 			if(cityViewBackgroundImage == null)

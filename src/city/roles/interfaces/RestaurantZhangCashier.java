@@ -3,9 +3,11 @@ package city.roles.interfaces;
 import java.util.List;
 import java.util.Map;
 
+import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import city.bases.interfaces.RoleInterface;
+import city.buildings.interfaces.Market;
 
 public interface RestaurantZhangCashier extends RoleInterface {
 	
@@ -19,6 +21,7 @@ public interface RestaurantZhangCashier extends RoleInterface {
 	
 	public void msgComputeBill(RestaurantZhangWaiter w, RestaurantZhangCustomer c, String choice);
 	public void msgHereIsPayment(RestaurantZhangCheck c, int cash);
+	void msgAddMarketOrder(Market m, MarketOrder o);
 	
 	// Getters
 	
