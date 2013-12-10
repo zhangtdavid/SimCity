@@ -41,7 +41,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	}
 	
 	public BankCustomerRole(Bank b) {
-		building = (BankBuilding) b;
+		building = (BankBuilding)b;
 		st = STATE.none;
 	}
 	

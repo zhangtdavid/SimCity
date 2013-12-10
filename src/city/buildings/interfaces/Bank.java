@@ -12,7 +12,6 @@ public interface Bank extends BuildingInterface {
 	public static final int WORKER_SALARY = 300;
 	public static final List<Loan> loans = null;
 	public static final List<Account> accounts = null;
-	public int waitingCustomers = 0;
 
 	public List<Loan> getLoans();
 

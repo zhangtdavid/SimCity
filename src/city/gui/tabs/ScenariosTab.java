@@ -4,14 +4,13 @@ import java.awt.Component;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.GridBagConstraints;
-import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JPanel;
 
+import city.Application;
 import city.gui.MainFrame;
 
 public class ScenariosTab extends JPanel implements ActionListener{
@@ -44,7 +43,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioJ.setFocusable(false);
         btnScenarioJ.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runBigCity();
         	}
         });
         btnScenarioJ.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -54,7 +53,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioF.setFocusable(false);
         btnScenarioF.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runGhostTown();
         	}
         });
         btnScenarioF.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -64,7 +63,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioO.setFocusable(false);
         btnScenarioO.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runBankRobbery();
         	}
         });
         btnScenarioO.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -74,7 +73,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioP.setFocusable(false);
         btnScenarioP.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runVehicleCollision();;
         	}
         });
         btnScenarioP.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -84,7 +83,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioQ.setFocusable(false);
         btnScenarioQ.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runPersonCollision();
         	}
         });
         btnScenarioQ.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -94,7 +93,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioR.setFocusable(false);
         btnScenarioR.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runWeekend();
         	}
         });
         btnScenarioR.setAlignmentX(Component.RIGHT_ALIGNMENT);
@@ -104,7 +103,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioS.setFocusable(false);
         btnScenarioS.addActionListener(new ActionListener() {
         	public void actionPerformed(ActionEvent arg0) {
-        		//runBigCity();
+        		Application.runShiftChange();
         	}
         });
         btnScenarioS.setAlignmentX(Component.RIGHT_ALIGNMENT);

@@ -109,6 +109,8 @@ public class Application {
 	public static enum TRANSACTION_TYPE {personal, business};
 	public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
 	public static enum BUILDING {bank, busStop, house, apartment, market, restaurant};
+	
+	private List<PersonAgent> People = new ArrayList<PersonAgent>();
 
 	static List<CityRoad> roads = new ArrayList<CityRoad>();
 	public static TrafficControl trafficControl;
@@ -131,11 +133,7 @@ public class Application {
 			e.printStackTrace();
 		}
 		mainFrame = new MainFrame();
-
-		// Load a scenario
 		createTown();
-		parseConfig();
-
 		// Start the simulation
 		final DateFormat df = new SimpleDateFormat("MMMM dd HHmm");
 		df.setTimeZone(TimeZone.getTimeZone("UTC"));
@@ -154,8 +152,9 @@ public class Application {
 	/**
 	 * This will eventually load some type of configuration file that specifies how many
 	 * people to create and what roles to create them in.
+	 * @param s 
 	 */
-	private static void parseConfig() {
+	public static void runBigCity() {
 
 //		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date, new PersonAnimation(), rhb1Timms);
 //		LandlordRole p0r1Timms = new LandlordRole();
@@ -221,6 +220,30 @@ public class Application {
 //		try {
 //			Thread.sleep(1000);
 //		} catch (InterruptedException e) {}
+	}
+	
+	public static void runGhostTown(){
+		
+	}
+	
+	public static void runBankRobbery(){
+		
+	}
+	
+	public static void runVehicleCollision(){
+		
+	}
+	
+	public static void runPersonCollision(){
+	
+	}
+
+	public static void runWeekend(){
+	
+	}
+
+	public static void runShiftChange(){
+	
 	}
 
 	public static void createTown(){
@@ -445,8 +468,6 @@ public class Application {
 				CityViewBank cityViewBank11 = new CityViewBank(425, 100, "Bank " + (mainFrame.cityView.getStaticsSize()), Color.yellow, bankPanel11); 
 				BankBuilding bankBuilding11 = new BankBuilding("Bank 1", bankPanel11, cityViewBank11);
 				setBuilding(bankPanel11, cityViewBank11, bankBuilding11);
-				
-				createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
 
 				RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
 
