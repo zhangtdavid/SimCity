@@ -14,6 +14,7 @@ import city.bases.Animation;
 import city.bases.Building;
 import city.buildings.interfaces.BusStop;
 import city.gui.CityRoad;
+import city.gui.CityRoadIntersection;
 import city.gui.exteriors.CityViewApt;
 
 public class BusAnimation extends Animation implements AnimatedBus {
@@ -65,15 +66,17 @@ public class BusAnimation extends Animation implements AnimatedBus {
 		//		g.drawString("Bus", xPos, yPos + 10);
 		if(Application.trafficControl != null) {
 			CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
+			if(currentRoad.getClass() == CityRoadIntersection.class)
+				currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
 			if(currentRoad == null)
 				imageToRender = cityViewBusEastImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getXVelocity() > 0)
+			else if(currentRoad.getXVelocity() > 0)
 				imageToRender = cityViewBusEastImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getXVelocity() < 0)
+			else if(currentRoad.getXVelocity() < 0)
 				imageToRender = cityViewBusWestImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getYVelocity() < 0)
+			else if(currentRoad.getYVelocity() < 0)
 				imageToRender = cityViewBusNorthImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getYVelocity() > 0)
+			else if(currentRoad.getYVelocity() > 0)
 				imageToRender = cityViewBusSouthImage;
 		}
 		g.drawImage(imageToRender, xPos, yPos, null);

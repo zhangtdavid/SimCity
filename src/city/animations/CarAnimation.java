@@ -14,6 +14,7 @@ import city.animations.interfaces.AnimatedCar;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
+import city.gui.CityRoadIntersection;
 import city.gui.exteriors.CityViewApt;
 
 public class CarAnimation extends Animation implements AnimatedCar {
@@ -128,15 +129,17 @@ public class CarAnimation extends Animation implements AnimatedCar {
 //			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
 		if(Application.trafficControl != null && startingRoad == null && atDestinationRoad == false) {
 			CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
+			if(currentRoad.getClass() == CityRoadIntersection.class)
+				currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
 			if(currentRoad == null)
 				imageToRender = cityViewCarEastImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getXVelocity() > 0)
+			else if(currentRoad.getXVelocity() > 0)
 				imageToRender = cityViewCarEastImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getXVelocity() < 0)
+			else if(currentRoad.getXVelocity() < 0)
 				imageToRender = cityViewCarWestImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getYVelocity() < 0)
+			else if(currentRoad.getYVelocity() < 0)
 				imageToRender = cityViewCarNorthImage;
-			else if(Application.trafficControl.getRoadThatVehicleIsOn(this).getYVelocity() > 0)
+			else if(currentRoad.getYVelocity() > 0)
 				imageToRender = cityViewCarSouthImage;
 		}
 		g.drawImage(imageToRender, xPos, yPos, null);
