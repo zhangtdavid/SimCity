@@ -133,8 +133,11 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	
 	@Override
 	public void setActive() {
+		super.setActivityBegun();
 		super.setActive();
-		this.msgImAtCar();
+		myEvent = CarPassengerEvent.ATCAR;
+		if (parent != null)
+			parent.setActivityBegun();
 	}
 	
 	// Utilities

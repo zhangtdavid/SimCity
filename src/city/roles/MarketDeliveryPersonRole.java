@@ -57,7 +57,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		CarAnimation carAnim = new CarAnimation(car, market);
 		car.setAnimation(carAnim);
 		Application.getMainFrame().cityView.addAnimation(carAnim);
-		
+
 		workingState = WorkingState.Working;
 		s = DeliveryState.None;
 		
@@ -122,23 +122,25 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			timer.schedule(new TimerTask() {
 				public void run() {
 //					 check if restaurant is open
-					if(customerDelivery.getRestaurant().getBusinessIsOpen())
+//					if(customerDelivery.getRestaurant().getBusinessIsOpen())
 						restaurantClosed = false;
-					else {
-						stateChanged();
-					}
+						s = DeliveryState.Pending;
+//					else {
+//						stateChanged();
+//					}
 				}
 			},
 			5000);
 		}
 //		
-		if (customerDelivery != null) {
+		if (s == DeliveryState.Pending) {
 			deliverItems();
 			return true;
 		}
 		
 		if (s == DeliveryState.Arrived) {
 			checkOpen();
+			return true;
 		}
 
 		return blocking;
@@ -151,18 +153,20 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant(), this);
 		carPassenger.setPerson(this.getPerson());
 		carPassenger.setActive();
+		this.getPerson().setCar(car); // overwrites the person's personal car.
 		
 		s = DeliveryState.Delivering;
 	}
 	
 	public void checkOpen() {
-		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
+//		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
 			giveItems();
-		}
-		else {
-			restaurantClosed = true;
-			carPassenger = new CarPassengerRole(car, market);
-		}
+//		}
+//		else {
+//			restaurantClosed = true;
+//			carPassenger = new CarPassengerRole(car, market);
+			s = DeliveryState.ReturningToRestaurant;
+//		}
 	}
 	
 	public void giveItems() {
