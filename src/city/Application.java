@@ -29,7 +29,6 @@ import city.animations.PersonAnimation;
 import city.animations.WalkerAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
-import city.bases.interfaces.JobRoleInterface;
 import city.buildings.AptBuilding;
 import city.buildings.BankBuilding;
 import city.buildings.BusStopBuilding;
@@ -78,23 +77,10 @@ import city.roles.RestaurantChoiCashierRole;
 import city.roles.RestaurantChoiCookRole;
 import city.roles.RestaurantChoiHostRole;
 import city.roles.RestaurantChoiWaiterQueueRole;
-import city.roles.RestaurantChungCashierRole;
-import city.roles.RestaurantChungCookRole;
-import city.roles.RestaurantChungHostRole;
-import city.roles.RestaurantChungWaiterMessageCookRole;
-import city.roles.RestaurantChungWaiterRevolvingStandRole;
-import city.roles.RestaurantTimmsCashierRole;
-import city.roles.RestaurantTimmsCookRole;
-import city.roles.RestaurantTimmsHostRole;
-import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
-import city.roles.interfaces.MarketCashier;
-import city.roles.interfaces.MarketDeliveryPerson;
-import city.roles.interfaces.MarketEmployee;
-import city.roles.interfaces.MarketManager;
 
 public class Application {
 
@@ -162,7 +148,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 75, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// West roads
 		for(int i = 75; i <= 350; i+=25) {
@@ -170,7 +155,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(75, i, 25, 25, 0, 1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// South roads
 		for(int i = 75; i <= 350; i+=25) {
@@ -178,7 +162,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 375, 25, 25, 1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// East roads
 		for(int i = 375; i >= 100; i-=25) {
@@ -186,7 +169,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North/South middle roads
 		for(int i = 350; i >= 100; i-=25) {
@@ -194,7 +176,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// East/West middle roads
 		for(int i = 350; i >= 100; i -= 25) {
@@ -202,28 +183,22 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North intersection
 		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 75, 25, 25, Color.gray);
 		roads.add(intersectionNorth);
-		mainFrame.cityView.addMoving(intersectionNorth);
 		// West intersection
 		CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 225, 25, 25, Color.gray);
 		roads.add(intersectionWest);
-		mainFrame.cityView.addMoving(intersectionWest);
 		// South intersection
 		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 375, 25, 25, Color.gray);
 		roads.add(intersectionSouth);
-		mainFrame.cityView.addMoving(intersectionSouth);
 		// East intersection
 		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
 		roads.add(intersectionEast);
-		mainFrame.cityView.addMoving(intersectionEast);
 		// Center intersection
 		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
 		roads.add(intersectionCenter);
-		mainFrame.cityView.addMoving(intersectionCenter);
 		// Connect all roads
 		for(int i = 0; i < roads.size() - 1; i++) {
 			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
@@ -327,7 +302,6 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
 		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
-		sidewalks.setRoads(trafficControl);
 
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
@@ -371,7 +345,8 @@ public class Application {
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
 		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim);
-		//bus1.startThread();
+		bus1.startThread();
+
 
 		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
 		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(25, 25, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
@@ -379,7 +354,6 @@ public class Application {
 		setBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
 
 		//createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
-
 		//RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
 
 		createBuilding(CityViewBuilding.BUILDINGTYPE.HOUSE);
@@ -693,12 +667,12 @@ public class Application {
 		CarAnimation c8AnimChoi = new CarAnimation(c8Choi, busStop4);
 		c8Choi.setAnimation(c8AnimChoi);
 		mainFrame.cityView.addAnimation(c8AnimChoi);
-		CarAgent c9Choi = new CarAgent(busStop4, p9Choi);
-		CarAnimation c9AnimChoi = new CarAnimation(c9Choi, busStop4);
+		CarAgent c9Choi = new CarAgent(busStop3, p9Choi);
+		CarAnimation c9AnimChoi = new CarAnimation(c9Choi, busStop3);
 		c9Choi.setAnimation(c9AnimChoi);
 		mainFrame.cityView.addAnimation(c9AnimChoi);
-		CarAgent c10Choi = new CarAgent(busStop4, p10Choi);
-		CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop4);
+		CarAgent c10Choi = new CarAgent(busStop3, p10Choi);
+		CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop3);
 		c10Choi.setAnimation(c10AnimChoi);
 		mainFrame.cityView.addAnimation(c10AnimChoi);
 		
@@ -724,148 +698,84 @@ public class Application {
 		CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelChung1);
 		AptBuilding aptBuildingChung1 = new AptBuilding("Chung Apartment", null, aptPanelChung1, cityViewAptChung1);
 		setBuilding(aptPanelChung1, cityViewAptChung1, aptBuildingChung1);
+=======
+		AptPanel apartmentPanelZhang1 = new AptPanel(Color.getHSBColor((float)200, (float).68, (float).399)); // this is now a house, because I just finished house.
+		CityViewApt cityViewHouseZhang1 = new CityViewApt(275,275, "Zhang Landlord Apartment", Color.gray, apartmentPanelZhang1);
+		//if you want to see house animation, try (75,225) for location until #66 is fixed (: and uncomment lines 869, 874.
+		//if you dont want this to block the road just move it to (325,325) or something
+		AptBuilding apartmentBuildingZhang1 = new AptBuilding("House 0 Zhang", null, apartmentPanelZhang1, cityViewHouseZhang1);
+		setBuilding(apartmentPanelZhang1, cityViewHouseZhang1, apartmentBuildingZhang1);
+>>>>>>> origin
 
 		// Create landlord
-		PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), aptBuildingChung1);
-		p0Chung.setCash(50); // TODO remove later
-		LandlordRole p0r1Chung = new LandlordRole();
-		p0Chung.addRole(p0r1Chung);
-		aptBuildingChung1.setLandlord(p0r1Chung);
-		p0r1Chung.setActive();
-		model.addPerson(p0Chung);
+		PersonAgent p0Zhang = new PersonAgent("Landlord Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		LandlordRole p0r1Zhang = new LandlordRole();
+		p0Zhang.addRole(p0r1Zhang);
+		apartmentBuildingZhang1.setLandlord(p0r1Zhang);
+		p0r1Zhang.setActive();
+		model.addPerson(p0Zhang);
 
 		// Create people
-		PersonAgent p1Chung = new PersonAgent("Cashier 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
-		PersonAgent p2Chung = new PersonAgent("Cook 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
-		PersonAgent p3Chung = new PersonAgent("Host 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
-		PersonAgent p4Chung = new PersonAgent("Waiter 1 Chung", date, new PersonAnimation(), aptBuildingChung1);
-		model.addPerson(p1Chung);
-		model.addPerson(p2Chung);
-		model.addPerson(p3Chung);
-		model.addPerson(p4Chung);
+		PersonAgent p1Zhang = new PersonAgent("Cashier 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p2Zhang = new PersonAgent("Cook 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p3Zhang = new PersonAgent("Host 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		PersonAgent p4Zhang = new PersonAgent("Waiter 1 Zhang", date, new PersonAnimation(), apartmentBuildingZhang1);
+		p4Zhang.getAnimation().setCoords(apartmentBuildingZhang1.getCityViewBuilding().getX(), apartmentBuildingZhang1.getCityViewBuilding().getY());
+		model.addPerson(p1Zhang);
+		model.addPerson(p2Zhang);
+		model.addPerson(p3Zhang);
+		model.addPerson(p4Zhang);
+
+		//Give people basically inf. food. NOTE, THAT I DID THIS AFTER setHome(). setHome() sets all foods to 1! can be changed
+		HashMap<FOOD_ITEMS, Integer> temp = new HashMap<FOOD_ITEMS, Integer>();
+		temp.put(FOOD_ITEMS.chicken, 500);
+		temp.put(FOOD_ITEMS.salad, 500);
+		temp.put(FOOD_ITEMS.pizza, 500);
+		temp.put(FOOD_ITEMS.steak, 500);
+		apartmentBuildingZhang1.setFood(p0Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p1Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p2Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p3Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
+		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 
 		// Give people cars
-		CarAgent c0Chung = new CarAgent(busStop1, p0Chung);
-		CarAnimation c0AnimChung = new CarAnimation(c0Chung, busStop1);
-		c0Chung.setAnimation(c0AnimChung);
-		mainFrame.cityView.addAnimation(c0AnimChung);
-		CarAgent c1Chung = new CarAgent(busStop1, p1Chung);
-		CarAnimation c1AnimChung = new CarAnimation(c1Chung, busStop1);
-		c1Chung.setAnimation(c1AnimChung);
-		mainFrame.cityView.addAnimation(c1AnimChung);
-		CarAgent c2Chung = new CarAgent(busStop1, p2Chung);
-		CarAnimation c2AnimChung = new CarAnimation(c2Chung, busStop1);
-		c2Chung.setAnimation(c2AnimChung);
-		mainFrame.cityView.addAnimation(c2AnimChung);
-		CarAgent c3Chung = new CarAgent(busStop1, p3Chung);
-		CarAnimation c3AnimChung = new CarAnimation(c3Chung, busStop1);
-		c3Chung.setAnimation(c3AnimChung);
-		mainFrame.cityView.addAnimation(c3AnimChung);
-		CarAgent c4Chung = new CarAgent(busStop1, p4Chung);
-		CarAnimation c4AnimChung = new CarAnimation(c4Chung, busStop1);
-		c4Chung.setAnimation(c4AnimChung);
-		mainFrame.cityView.addAnimation(c4AnimChung);
+		//                CarAgent c0Zhang = new CarAgent(apartmentBuildingZhang1,p0Zhang);
+		//                CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, apartmentBuildingZhang1);
+		//                c0Zhang.setAnimation(c0AnimZhang);
+		//                mainFrame.cityView.addAnimation(c0AnimZhang);
+		CarAgent c1Zhang = new CarAgent(apartmentBuildingZhang1,p1Zhang);
+		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, apartmentBuildingZhang1);
+		c1Zhang.setAnimation(c1AnimZhang);
+		mainFrame.cityView.addAnimation(c1AnimZhang);
+		CarAgent c2Zhang = new CarAgent(apartmentBuildingZhang1,p2Zhang);
+		CarAnimation c2AnimZhang = new CarAnimation(c2Zhang, apartmentBuildingZhang1);
+		c2Zhang.setAnimation(c2AnimZhang);
+		mainFrame.cityView.addAnimation(c2AnimZhang);
+		CarAgent c3Zhang = new CarAgent(apartmentBuildingZhang1,p3Zhang);
+		CarAnimation c3AnimZhang = new CarAnimation(c3Zhang, apartmentBuildingZhang1);
+		c3Zhang.setAnimation(c3AnimZhang);
+		mainFrame.cityView.addAnimation(c3AnimZhang);
+		CarAgent c4Zhang = new CarAgent(apartmentBuildingZhang1,p4Zhang);
+		CarAnimation c4AnimZhang = new CarAnimation(c4Zhang, apartmentBuildingZhang1);
+		c4Zhang.setAnimation(c4AnimZhang);
+		mainFrame.cityView.addAnimation(c4AnimZhang);
 
 		// Create cashier
-		RestaurantChungCashierRole p1r1Chung = new RestaurantChungCashierRole(restaurantChungBuilding1, 0, 12);
-		p1r1Chung.setPerson(p1Chung);
-		p1r1Chung.setMarketCustomerDeliveryPaymentPerson();
-		p1r1Chung.setBankCustomerPerson();
-		restaurantChungBuilding1.addOccupyingRole(p1r1Chung);
-		p1Chung.setOccupation(p1r1Chung);
+		RestaurantZhangCashierRole p1r1Zhang = new RestaurantZhangCashierRole(rzb1, 0, 100);
+		rzb1.addOccupyingRole(p1r1Zhang);
+		p1Zhang.setOccupation(p1r1Zhang);
 
 		// Create cook
-		RestaurantChungCookRole p2r1Chung = new RestaurantChungCookRole(restaurantChungBuilding1, 0, 12);
-		p2r1Chung.setPerson(p2Chung);		
-		restaurantChungBuilding1.addOccupyingRole(p2r1Chung);
-		p2Chung.setOccupation(p2r1Chung);
+		RestaurantZhangCookRole p2r1Zhang = new RestaurantZhangCookRole(rzb1, 0, 100);
+		rzb1.addOccupyingRole(p2r1Zhang);
+		p2Zhang.setOccupation(p2r1Zhang);
 
 		// Create host
-		RestaurantChungHostRole p3r1Chung = new RestaurantChungHostRole(restaurantChungBuilding1, 0, 12);
-		p3r1Chung.setPerson(p3Chung);		
-		restaurantChungBuilding1.addOccupyingRole(p3r1Chung);
-		p3Chung.setOccupation(p3r1Chung);
+		RestaurantZhangHostRole p3r1Zhang = new RestaurantZhangHostRole(rzb1, 0, 100);
+		rzb1.addOccupyingRole(p3r1Zhang);
+		p3Zhang.setOccupation(p3r1Zhang);
 
-		// Create waiter message cook
-//		RestaurantChungWaiterMessageCookRole p4r1Chung = new RestaurantChungWaiterMessageCookRole(restaurantChungBuilding1, 0, 12);
-//		p4r1Chung.setPerson(p4Chung);		
-//		restaurantChungBuilding1.addOccupyingRole(p4r1Chung);
-//		p4Chung.setOccupation(p4r1Chung);
-//		
-		// Create waiter revolving stand
-		RestaurantChungWaiterRevolvingStandRole p4r1Chung = new RestaurantChungWaiterRevolvingStandRole(restaurantChungBuilding1, 0, 12);
-		p4r1Chung.setPerson(p4Chung);		
-		restaurantChungBuilding1.addOccupyingRole(p4r1Chung);
-		p4Chung.setOccupation(p4r1Chung);
-		
-		p1Chung.startThread();
-		p2Chung.startThread();
-		p3Chung.startThread();
-		p4Chung.startThread();
-		
-		// BANK------------------------------------------------------------------------------
-		BankPanel bankPanel11 = new BankPanel(Color.black);
-		CityViewBank cityViewBank11 = new CityViewBank(425, 100, "Bank " + (mainFrame.cityView.getStaticsSize()), Color.yellow, bankPanel11); 
-		BankBuilding bankBuilding11 = new BankBuilding("Bank 1", bankPanel11, cityViewBank11);
-		setBuilding(bankPanel11, cityViewBank11, bankBuilding11);
-		
-		AptPanel aptPanelBank1 = new AptPanel(Color.black);
-		CityViewApt cityViewAptBank1 = new CityViewApt(425,250, "Bank Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelBank1);
-		AptBuilding aptBuildingBank1 = new AptBuilding("Bank Apartment", null, aptPanelBank1, cityViewAptBank1);
-		setBuilding(aptPanelBank1, cityViewAptBank1, aptBuildingBank1);
-
-		// Create landlord
-		PersonAgent p0Bank = new PersonAgent("Landlord Bank", date, new PersonAnimation(), aptBuildingBank1);
-		p0Bank.setCash(50); // TODO remove later
-		LandlordRole p0r1Bank = new LandlordRole();
-		p0Bank.addRole(p0r1Bank);
-		aptBuildingBank1.setLandlord(p0r1Bank);
-		p0r1Bank.setActive();
-		model.addPerson(p0Bank);
-
-		// Create people
-		PersonAgent p1Bank = new PersonAgent("BankManager 1", date, new PersonAnimation(), aptBuildingBank1);
-		PersonAgent p2Bank = new PersonAgent("BankTeller 1", date, new PersonAnimation(), aptBuildingBank1);
-		model.addPerson(p1Bank);
-		model.addPerson(p2Bank);
-
-		// Give people cars
-		CarAgent c0Bank = new CarAgent(busStop1, p0Bank);
-		CarAnimation c0AnimBank = new CarAnimation(c0Bank, busStop1);
-		c0Bank.setAnimation(c0AnimBank);
-		mainFrame.cityView.addAnimation(c0AnimBank);
-		CarAgent c1Bank = new CarAgent(busStop1, p1Bank);
-		CarAnimation c1AnimBank = new CarAnimation(c1Bank, busStop1);
-		c1Bank.setAnimation(c1AnimBank);
-		mainFrame.cityView.addAnimation(c1AnimBank);
-		CarAgent c2Bank = new CarAgent(busStop1, p2Bank);
-		CarAnimation c2AnimBank = new CarAnimation(c2Bank, busStop1);
-		c2Bank.setAnimation(c2AnimBank);
-		mainFrame.cityView.addAnimation(c2AnimBank);
-
-		// Create cashier
-		BankManagerRole p1r1Bank = new BankManagerRole(bankBuilding11, 0, 12);
-		p1r1Bank.setPerson(p1Bank);
-		bankBuilding11.addOccupyingRole(p1r1Bank);
-		p1Bank.setOccupation(p1r1Bank);
-
-		// Create cook
-		BankTellerRole p2r1Bank = new BankTellerRole(bankBuilding11, 0, 12);
-		p2r1Bank.setPerson(p2Bank);		
-		bankBuilding11.addOccupyingRole(p2r1Bank);
-		p2Bank.setOccupation(p2r1Bank);
-		
-		// MARKET------------------------------------------------------------------------------
-		MarketPanel marketPanel1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarket1 = new CityViewMarket(425, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, marketPanel1); 
-		MarketBuilding marketBuilding1 = new MarketBuilding("Market 1", marketPanel1, cityViewMarket1);
-		setBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
-		
-		AptPanel aptPanelMarket1 = new AptPanel(Color.black);
-		CityViewApt cityViewAptMarket1 = new CityViewApt(425,250, "Market Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelMarket1);
-		AptBuilding aptBuildingMarket1 = new AptBuilding("Market Apartment", null, aptPanelMarket1, cityViewAptMarket1);
-		setBuilding(aptPanelMarket1, cityViewAptMarket1, aptBuildingMarket1);
-
+<<<<<<< HEAD
 		// Create landlord
 		PersonAgent p0Market = new PersonAgent("Landlord Market", date, new PersonAnimation(), aptBuildingMarket1);
 		p0Market.setCash(50); // TODO remove later
@@ -979,8 +889,12 @@ public class Application {
 		              c8Choi.startThread();
 		              c9Choi.startThread();
 		              c10Choi.startThread();
-		              c0Choi.startThread();
-		              p0Choi.startThread();
+		              try {
+		      			Thread.sleep(4000);
+		      			c0Choi.startThread();
+			            p0Choi.startThread();
+		      		} catch (InterruptedException e) {}
+		              
 		//              c0Chung.startThread();
 		//              c1Chung.startThread();
 		//              c2Chung.startThread();
@@ -1007,7 +921,6 @@ public class Application {
 //			mainFrame.cityView.addAnimation(testPersonAnimation);
 //			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
 //		}
-
 	}
 
 	public static DataModel getModel() {
@@ -1185,10 +1098,8 @@ public class Application {
 		 * Find the building of type closest to the person's location
 		 */
 		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
-			int x = p.getAnimation().getXPos();
-			int y = p.getAnimation().getYPos();
-			//                      int x  = 100;
-			//                      int y = 100;
+			int x = p.getCurrentLocation().getCityViewBuilding().getX();
+			int y = p.getCurrentLocation().getCityViewBuilding().getY();
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface b : map.get(type)) {

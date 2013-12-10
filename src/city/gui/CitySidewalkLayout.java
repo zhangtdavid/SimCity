@@ -67,6 +67,7 @@ public class CitySidewalkLayout {
 				}
 			}
 		}
+		this.setRoads(roads);
 	}
 
 	// Getters
