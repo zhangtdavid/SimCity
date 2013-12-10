@@ -7,7 +7,6 @@ import utilities.RestaurantChungOrder.OrderState;
 import utilities.RestaurantChungWaiterBase;
 import city.buildings.interfaces.RestaurantChung.MyCustomer.OrderStatus;
 import city.Application.FOOD_ITEMS;
-import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;
