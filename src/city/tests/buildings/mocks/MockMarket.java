@@ -153,4 +153,10 @@ public class MockMarket extends MockBuilding implements Market {
 		
 	}
 
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

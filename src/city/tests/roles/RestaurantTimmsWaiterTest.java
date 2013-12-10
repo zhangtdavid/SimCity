@@ -3,7 +3,7 @@ package city.tests.roles;
 import junit.framework.TestCase;
 import city.Application;
 import city.buildings.RestaurantTimmsBuilding;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantZhang;
 import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantTimmsWaiterRole.InternalCustomer;
 import city.tests.agents.mocks.MockPerson;
@@ -31,7 +31,7 @@ public class RestaurantTimmsWaiterTest extends TestCase {
 		cook = new MockRestaurantTimmsCook();
 		customer = new MockRestaurantTimmsCustomer();
 		
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurantZhang(0, 0));
 
 		rtb.setCashier(cashier);
 		rtb.setCook(cook);

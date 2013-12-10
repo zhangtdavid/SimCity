@@ -83,7 +83,7 @@ public class MarketCustomerDeliveryRole extends Role implements MarketCustomerDe
 //  Actions
 //	=====================================================================	
 	private void callMarket() {
-		state = MarketCustomerState.None;
+		state = MarketCustomerState.None;		
 		market.getManager().msgIWouldLikeToPlaceADeliveryOrder(this, restaurantCashier, order.getOrderItems(), order.getOrderId());
 	}
 

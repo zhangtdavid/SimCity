@@ -32,8 +32,8 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgNoTablesAvailable() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgNoTablesAvailable from RestaurantChungHost"));		
+		System.out.println("RestaurantChungCashier received msgNoTablesAvailable from RestaurantChungHost");				
 	}
 
 	@Override
@@ -44,8 +44,8 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgFollowMeToTable(RestaurantChungWaiter w, RestaurantChungMenu menu) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgFollowMeToTable from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungCustomer received msgFollowMeToTable from RestaurantChungWaiter");				
 	}
 
 	@Override
@@ -62,8 +62,8 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgWhatWouldYouLike() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgWhatWouldYouLike from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungCustomer received msgWhatWouldYouLike from RestaurantChungWaiter");			
 	}
 
 	@Override
@@ -74,8 +74,8 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgHereIsYourFood() {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCustomer received msgHereIsYourFood from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungCustomer received msgHereIsYourFood from RestaurantChungWaiter");			
 	}
 
 	@Override
@@ -86,8 +86,8 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 
 	@Override
 	public void msgHereIsCheck(int price) {
-//		log.add(new LoggedEvent("Received msgHereIsCheck from waiter. Check is for " + price));
-//		System.out.println("Customer: Received msgHereIsCheck from waiter. Check is for " + price);
+		log.add(new LoggedEvent("Received msgHereIsCheck from waiter. Check is for " + price));
+		System.out.println("Customer: Received msgHereIsCheck from waiter. Check is for " + price);
 	}
 
 	@Override
@@ -130,12 +130,6 @@ public class MockRestaurantChungCustomer extends MockRole implements RestaurantC
 	public FOOD_ITEMS getOrder() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void msgGetInLinePosition(int positionInLine) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override

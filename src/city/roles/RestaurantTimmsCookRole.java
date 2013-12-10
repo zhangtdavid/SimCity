@@ -195,6 +195,7 @@ public class RestaurantTimmsCookRole extends JobRole implements RestaurantTimmsC
 		// Set up a role which will place the order
 		MarketBuilding market = (MarketBuilding) Application.CityMap.findRandomBuilding(BUILDING.market);
 		marketCustomerDeliveryRole = new MarketCustomerDeliveryRole(rtb, marketOrder, rtb.getCashier().getMarketPaymentRole());
+		marketCustomerDeliveryRole.setPerson(this.getPerson());
 		marketCustomerDeliveryRole.setMarket(market);
 		marketCustomerDeliveryRole.setActive();
 		roles.add((Role) marketCustomerDeliveryRole);

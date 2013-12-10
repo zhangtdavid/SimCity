@@ -69,4 +69,10 @@ public class MockBusStop extends MockBuilding implements BusStop {
 		return null;
 	}
 
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

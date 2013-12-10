@@ -32,44 +32,44 @@ public class MockRestaurantChungHost extends MockRole implements RestaurantChung
 
 	@Override
 	public void msgIWantToEat(RestaurantChungCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgIWantToEat from RestaurantChungCustomer"));		
+		System.out.println("RestaurantChungHost received msgIWantToEat from RestaurantChungCustomer");			
 	}
 
 	@Override
 	public void msgDecidedToStay(RestaurantChungCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgDecidedToStay from RestaurantChungCustomer"));		
+		System.out.println("RestaurantChungHost received msgDecidedToStay from RestaurantChungCustomer");			
 	}
 
 	@Override
 	public void msgLeaving(RestaurantChungCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgLeaving from RestaurantChungCustomer"));		
+		System.out.println("RestaurantChungHost received msgLeaving from RestaurantChungCustomer");			
 	}
 
 	@Override
 	public void msgTakingCustomerToTable(RestaurantChungCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgTakingCustomerToTable from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungHost received msgTakingCustomerToTable from RestaurantChungWaiter");					
 	}
 
 	@Override
 	public void msgIWantToGoOnBreak(RestaurantChungWaiter w) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgIWantToGoOnBreak from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungHost received msgIWantToGoOnBreak from RestaurantChungWaiter");			
 	}
 
 	@Override
 	public void msgIAmReturningToWork(RestaurantChungWaiter w) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgIAmReturningToWork from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungHost received msgIAmReturningToWork from RestaurantChungWaiter");			
 	}
 
 	@Override
 	public void msgTableIsFree(RestaurantChungWaiter waiter, int t, RestaurantChungCustomer c) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungHost received msgTableIsFree from RestaurantChungWaiter"));		
+		System.out.println("RestaurantChungHost received msgTableIsFree from RestaurantChungWaiter");			
 	}
 
 	@Override

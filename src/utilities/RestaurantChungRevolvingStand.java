@@ -4,13 +4,13 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class RestaurantChungRevolvingStand {
-	List<RestaurantChungOrder> orderList = new ArrayList<RestaurantChungOrder>();
+	private List<RestaurantChungOrder> orderList = new ArrayList<RestaurantChungOrder>();
 	private int count = 0;
 
 	public RestaurantChungRevolvingStand() { }
 
 	synchronized public void addOrder(RestaurantChungOrder o) {
-		orderList.add(o);
+		getOrderList().add(o);
 		count++;
 	}
 
@@ -19,6 +19,14 @@ public class RestaurantChungRevolvingStand {
 			return null;
 		}
 		count--;
-		return orderList.remove(0);
+		return getOrderList().remove(0);
+	}
+
+	public List<RestaurantChungOrder> getOrderList() {
+		return orderList;
+	}
+
+	public void setOrderList(List<RestaurantChungOrder> orderList) {
+		this.orderList = orderList;
 	}
 }

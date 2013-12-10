@@ -5,6 +5,7 @@ import trace.AlertTag;
 import utilities.RestaurantChungWaiterBase;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;
 import city.buildings.interfaces.RestaurantChung.MyCustomer;
@@ -26,7 +27,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 	// Messages
 	@Override
 	public void tellCookOrder(MyCustomer customer, FOOD_ITEMS choice, int table) {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToCook();
 
 		try {
 			atCook.acquire();
@@ -39,7 +40,7 @@ public class RestaurantChungWaiterMessageCookRole extends RestaurantChungWaiterB
 		restaurant.getRestaurantChungCook().msgHereIsAnOrder(this, choice, table);
 		customer.setOrderStatus(OrderStatus.Cooking);
 		
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	@Override

@@ -26,9 +26,13 @@ import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Bus;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
+import city.animations.MarketCashierAnimation;
+import city.animations.MarketCustomerAnimation;
 import city.animations.WalkerAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedWalker;
+import city.animations.interfaces.MarketAnimatedCashier;
+import city.animations.interfaces.MarketAnimatedCustomer;
 import city.bases.Agent;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
@@ -62,6 +66,10 @@ import city.roles.interfaces.Walker;
  *   This will usually need to be done in the scheduler. Thanks to processTransportationArrival
  *   you can just use currentLocation.addOccupyingRole(). This should be done along with setActive()
  * - The same applies when leaving a building, use removeOccupyingRole()
+ * 
+ * To-do:
+ * - getBuildingIsOpen() is not implemented
+ * 
  */
 public class PersonAgent extends Agent implements Person {
 	
@@ -114,7 +122,7 @@ public class PersonAgent extends Agent implements Person {
 		this.cash = 0;
 		this.hasEaten = true;
 		this.home = residence;
-		this.currentLocation = null;
+		this.currentLocation = residence;
 		this.animation = animation;
 		animation.setPerson(this);
 		this.lastAteAtRestaurant = new Date(startDate.getTime());
@@ -386,6 +394,7 @@ public class PersonAgent extends Agent implements Person {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (RoleInterface) r0.newInstance();
+			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -418,8 +427,13 @@ public class PersonAgent extends Agent implements Person {
 			i += 1;
 		} while (i < 4);
 		MarketOrder order = new MarketOrder(items);
-		marketCustomerRole = new MarketCustomerRole(order);
+		marketCustomerRole = new MarketCustomerRole(m, order);
 		this.addRole(marketCustomerRole);
+		// Market Customer Animation
+		MarketAnimatedCustomer anim = new MarketCustomerAnimation(marketCustomerRole);
+		marketCustomerRole.setAnimation(anim);	
+		anim.setVisible(true);
+		m.getPanel().addVisualizationElement(anim);
 	}
 
 	/**

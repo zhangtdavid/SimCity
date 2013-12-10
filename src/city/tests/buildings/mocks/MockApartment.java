@@ -36,4 +36,10 @@ public class MockApartment extends MockResidenceBuilding implements Apt {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 }

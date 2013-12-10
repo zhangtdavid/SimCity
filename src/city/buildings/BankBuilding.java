@@ -46,6 +46,14 @@ public class BankBuilding extends Building implements Bank {
 	// Getters
 	
 	@Override
+	public boolean getBusinessIsOpen() {
+		boolean disposition = true;
+		if (manager == null) { disposition = false; };
+		if (employees.size() == 0) { disposition = false; };
+		return disposition;
+	}
+	
+	@Override
 	public List<Loan> getLoans(){
 		return loans;
 	}

@@ -25,16 +25,38 @@ public class CitySidewalkLayout {
 
 	// Constructor
 
-	public CitySidewalkLayout(MainFrame mf, int width, int height, int xOrigin, int yOrigin, double sidewalkSize, Color sidewalkColor, List<Rectangle> nonSidewalkArea) {
+	public CitySidewalkLayout(MainFrame mf, int width, int height, int xOrigin, int yOrigin, double sidewalkSize, Color sidewalkColor, List<Rectangle> nonSidewalkArea, TrafficControl roads) {
 		mainFrame = mf;
 		this.width = width;
 		this.height = height;
+		this.roads = roads;
 		this.sidewalkSize = sidewalkSize;
 		sidewalkGrid = new CitySidewalk[height][width];
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
 				sidewalkGrid[i][j] = new CitySidewalk((int) (xOrigin + j * sidewalkSize), (int) (yOrigin + i * sidewalkSize), sidewalkSize, 1, sidewalkColor);
 				mainFrame.cityView.addMoving(sidewalkGrid[i][j]);
+				// This gigantic if statement checks if it is an intersection crosswalk
+				CityRoad westRoadClose = roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)sidewalkSize, sidewalkGrid[i][j].getY());
+				CityRoad westRoadFar = roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)(2 * sidewalkSize), sidewalkGrid[i][j].getY());
+				CityRoad eastRoadClose = roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)sidewalkSize, sidewalkGrid[i][j].getY());
+				CityRoad eastRoadFar = roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)(2 *sidewalkSize), sidewalkGrid[i][j].getY());
+				CityRoad northRoadClose = roads.getRoadAt(sidewalkGrid[i][j].getX(), sidewalkGrid[i][j].getY() - (int)sidewalkSize);
+				CityRoad northRoadFar = roads.getRoadAt(sidewalkGrid[i][j].getX(), sidewalkGrid[i][j].getY()  - (int)(2 * sidewalkSize));
+				CityRoad southRoadClose = roads.getRoadAt(sidewalkGrid[i][j].getX(), sidewalkGrid[i][j].getY() + (int)sidewalkSize);
+				CityRoad southRoadFar = roads.getRoadAt(sidewalkGrid[i][j].getX(), sidewalkGrid[i][j].getY()  + (int)(2 * sidewalkSize));
+				if((westRoadClose != null && westRoadFar != null) && (eastRoadClose != null && eastRoadFar != null)) {
+					if((westRoadClose.isRedLight() || westRoadFar.isRedLight() || westRoadClose.getClass() == CityRoadIntersection.class || westRoadFar.getClass() == CityRoadIntersection.class) &&
+							(eastRoadClose.isRedLight() || eastRoadFar.isRedLight() || eastRoadClose.getClass() == CityRoadIntersection.class || eastRoadFar.getClass() == CityRoadIntersection.class)) {
+						sidewalkGrid[i][j].setImageToRender(null);
+					}
+				}
+				if((northRoadClose != null && northRoadFar != null) && (southRoadClose != null && southRoadFar != null)) {
+					if((northRoadClose.isRedLight() || northRoadFar.isRedLight() || northRoadClose.getClass() == CityRoadIntersection.class || northRoadFar.getClass() == CityRoadIntersection.class) &&
+							(southRoadClose.isRedLight() || southRoadFar.isRedLight() || southRoadClose.getClass() == CityRoadIntersection.class || southRoadFar.getClass() == CityRoadIntersection.class)) {
+						sidewalkGrid[i][j].setImageToRender(null);
+					}
+				}
 				for(int k = 0; k < nonSidewalkArea.size(); k++) { // Remove if in the nonSidewalkArea
 					Rectangle currentNonSidewalkArea = nonSidewalkArea.get(k);
 					if((j >= currentNonSidewalkArea.getX() && j < (currentNonSidewalkArea.getX() + currentNonSidewalkArea.getWidth())) &&

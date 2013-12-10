@@ -43,4 +43,10 @@ public class MockRestaurantBuilding extends MockBuilding implements RestaurantBu
 		return null;
 	}
 
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
+
 }

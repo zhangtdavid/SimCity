@@ -6,12 +6,15 @@ import java.util.List;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketTransaction;
+import city.Application;
 import city.Application.BANK_SERVICE;
+import city.Application.BUILDING;
 import city.Application.TRANSACTION_TYPE;
 import city.animations.interfaces.RestaurantTimmsAnimatedCashier;
 import city.bases.JobRole;
 import city.bases.Role;
 import city.bases.interfaces.RoleInterface;
+import city.buildings.BankBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
 import city.buildings.RestaurantTimmsBuilding.Check.State;
 import city.buildings.interfaces.RestaurantTimms;
@@ -132,10 +135,10 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 			}
 		}
 		
-		if (rtb.getCash() > RestaurantTimmsCashier.MAX_CAPITAL) {
+		if (rtb.getCash() > RestaurantTimmsCashier.MAX_CAPITAL && ((BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank)).getBusinessIsOpen()) {
 			int amount = (rtb.getCash() - RestaurantTimmsCashier.MAX_CAPITAL + RestaurantTimmsCashier.MIN_CAPITAL);
 			rtb.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, amount, TRANSACTION_TYPE.business);
-		} else if (rtb.getCash() < RestaurantTimmsCashier.MIN_CAPITAL) {
+		} else if (rtb.getCash() < RestaurantTimmsCashier.MIN_CAPITAL && ((BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank)).getBusinessIsOpen()) {
 			int amount = RestaurantTimmsCashier.MIN_CAPITAL;
 			rtb.getBankCustomer().setActive(BANK_SERVICE.deposit, amount, TRANSACTION_TYPE.business);
 		}
@@ -228,6 +231,8 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 		if (rtb.getBankCustomer().getActive()) {
 			// The bank customer should not be in the middle of a transaction when the cashier switches
 			throw new IllegalStateException();
+		} else {
+			rtb.getBankCustomer().setPerson(this.getPerson());
 		}
 		this.getAnimation(RestaurantTimmsAnimatedCashier.class).setVisible(true);
 		shiftOver = false;

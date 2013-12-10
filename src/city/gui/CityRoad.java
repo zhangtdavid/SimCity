@@ -4,14 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
+import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
@@ -27,13 +32,15 @@ public class CityRoad extends CityViewBuilding {
 	protected int height;
 	protected Color laneColor;
 
-	protected Animation vehicle = null;
+	protected volatile Animation vehicle = null;
 	protected CityRoad nextRoad;
 	protected boolean isHorizontal;
 	protected boolean isRedLight = false;
 	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
 
 	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
+
+	protected BufferedImage imageToRender = null;
 
 	// Constructor
 
@@ -79,9 +86,7 @@ public class CityRoad extends CityViewBuilding {
 		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
 			laneColor = Color.red;
 		}
-		g2.setColor( laneColor );
-		((Graphics2D) g2).fill( rectangle );
-
+		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
 		if(vehicle == null) 
 			return;
 		double x = 0;
@@ -139,19 +144,19 @@ public class CityRoad extends CityViewBuilding {
 		if ( isHorizontal ) {
 			//End of lane is xOrigin + width - vehicle width
 			if ( xVelocity > 0 && x >= xOrigin + vWidth) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			} else if ( xVelocity < 0 && x <= xOrigin - vWidth ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			}
 		} else {
 			if ( yVelocity > 0 && y >= yOrigin + vHeight ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			} else if ( yVelocity < 0 && y <= yOrigin - vHeight ) {
-				nextRoad.setVehicle(vehicle);
-				vehicle = null;
+				if(nextRoad.setVehicle(vehicle))
+					vehicle = null;
 			}
 		}
 	}
@@ -212,8 +217,8 @@ public class CityRoad extends CityViewBuilding {
 		nextRoad = r;
 	}
 
-	public boolean setVehicle( Animation v ) {
-		if(vehicle == null) {
+	public synchronized boolean setVehicle( Animation v ) {
+		if(vehicle == null || v == null || vehicle == v) {
 			vehicle = v;
 			return true;
 		}
@@ -228,5 +233,9 @@ public class CityRoad extends CityViewBuilding {
 	public void addIntersectionSidewalk(CitySidewalk intersectionSidewalk) {
 		if(!intersectionSidewalks.contains(intersectionSidewalk))
 			intersectionSidewalks.add(intersectionSidewalk);
+	}
+
+	public void setImageToRender(BufferedImage image) {
+		imageToRender = image;
 	}
 }

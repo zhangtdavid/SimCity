@@ -71,6 +71,7 @@ public class RestaurantChungCashierTest extends TestCase {
 	 */
 	public void setUp() throws Exception{
 		super.setUp();		
+		CityMap.clearMap();
 
 		// Bank must come first so the restaurant and market can create bankCustomerRoles
 		bank = new BankBuilding("Bank", null, null);	

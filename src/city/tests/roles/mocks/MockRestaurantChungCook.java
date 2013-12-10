@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.Map;
 
 import utilities.EventLog;
+import utilities.LoggedEvent;
 import utilities.RestaurantChungOrder;
 import city.Application.FOOD_ITEMS;
 import city.bases.Role;
@@ -52,8 +53,8 @@ public class MockRestaurantChungCook extends MockRole implements RestaurantChung
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder,
 			int id) {
-		// TODO Auto-generated method stub
-		
+		log.add(new LoggedEvent("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson"));		
+		System.out.println("RestaurantChungCook received msgHereIsOrderDelivery from MarketDeliveryPerson");			
 	}
 
 	@Override

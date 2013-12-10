@@ -149,6 +149,7 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
 			atDestinationRoad = false;
+			this.setVisible(false);
 			if(walker != null) {
 				walker.msgImAtDestination();
 			}

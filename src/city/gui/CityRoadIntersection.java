@@ -3,13 +3,19 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.imageio.ImageIO;
+
+import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
+import city.gui.exteriors.CityViewApt;
 
 public class CityRoadIntersection extends CityRoad {
 
@@ -26,7 +32,8 @@ public class CityRoadIntersection extends CityRoad {
 	public void paint( Graphics g2 ) {
 		g2.setColor( laneColor );
 		((Graphics2D) g2).fill( rectangle );
-
+		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
+		
 		if(vehicle == null) {
 			return;
 		}

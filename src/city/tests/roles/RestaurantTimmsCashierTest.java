@@ -3,11 +3,11 @@ package city.tests.roles;
 import junit.framework.TestCase;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
-import city.gui.exteriors.CityViewRestaurant;
+import city.gui.exteriors.CityViewRestaurantZhang;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.interfaces.RestaurantTimmsCashier;
 import city.tests.agents.mocks.MockPerson;
-import city.tests.animations.mock.MockRestaurantTimmsAnimatedCashier;
+import city.tests.animations.mocks.MockRestaurantTimmsAnimatedCashier;
 import city.tests.roles.mocks.MockBankCustomer;
 import city.tests.roles.mocks.MockRestaurantTimmsCashier;
 import city.tests.roles.mocks.MockRestaurantTimmsCustomer;
@@ -34,7 +34,7 @@ public class RestaurantTimmsCashierTest extends TestCase {
 		cashier2 = new MockRestaurantTimmsCashier();
 		bankCustomer = new MockBankCustomer();
 
-		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurant(0, 0));
+		rtb = new RestaurantTimmsBuilding("RestaurantTimms", null, new CityViewRestaurantZhang(0, 0));
 		rtb.setCash(RestaurantTimmsCashier.MIN_CAPITAL);
 		rtb.setBankCustomer(bankCustomer);
 		

@@ -78,12 +78,14 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 		return true;
 	}
 	
+	@Override
     public void DoReturnToCookHome() {
         xDestination = RestaurantChungPanel.COOKHOMEX;
         yDestination = RestaurantChungPanel.COOKHOMEY;
 		command = Command.GoToCookHome;
     }
     
+	@Override
 	public void DoGoToGrill(String item) {
         cookingItem = item;
         cooking = true;
@@ -92,6 +94,7 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 		command = Command.GoToGrill;
 	}
 	
+	@Override
 	public void DoGoToPlating(String item) {
         platingItem = item;
         plating = true;

@@ -10,21 +10,21 @@ import javax.imageio.ImageIO;
 
 import city.gui.BuildingCard;
 
-public class CityViewRestaurant extends CityViewBuilding {
+public class CityViewRestaurantZhang extends CityViewBuilding {
 	
-	private static BufferedImage cityViewRestaurantImage = null;
+	private static BufferedImage cityViewRestaurantZhangImage = null;
 
-	public CityViewRestaurant(int x, int y) {
-		super(x, y, Color.red, "Restaurant 1");
+	public CityViewRestaurantZhang(int x, int y) {
+		super(x, y, Color.red, "Restaurant Zhang 1");
 		setRectangle(new Rectangle(x, y, 25, 25));
 	}
 	
-	public CityViewRestaurant(int x, int y, String ID, Color color, BuildingCard b) {
+	public CityViewRestaurantZhang(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 25, 25));
 		try {
-			if(cityViewRestaurantImage == null)
-				cityViewRestaurantImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRestaurantZhangImage.png"));
+			if(cityViewRestaurantZhangImage == null)
+				cityViewRestaurantZhangImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRestaurantZhangImage.png"));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -39,6 +39,6 @@ public class CityViewRestaurant extends CityViewBuilding {
 	@Override
 	public void paint(Graphics g) {
 		//		super.paint(g);
-		g.drawImage(cityViewRestaurantImage, x, y, null);
+		g.drawImage(cityViewRestaurantZhangImage, x, y, null);
 	}
 }

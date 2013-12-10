@@ -38,6 +38,11 @@ public abstract class ResidenceBuilding extends Building implements ResidenceBui
 	// Getters
 	
 	@Override
+	public boolean getBusinessIsOpen() {
+		return false;
+	}
+	
+	@Override
 	public Landlord getLandlord() {
 		return landlord;
 	}

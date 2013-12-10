@@ -44,5 +44,11 @@ public class MockBank extends MockBuilding implements Bank {
 		// TODO Auto-generated method stub
 		return null;
 	}
+
+	@Override
+	public boolean getBusinessIsOpen() {
+		// TODO Auto-generated method stub
+		return false;
+	}
 	
 }

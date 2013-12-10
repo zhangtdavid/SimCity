@@ -33,10 +33,10 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 //	=====================================================================
 	public MarketCustomerAnimation(MarketCustomer c) {
 		customer = c;
-		xPos = -40;
-		yPos = -40;
-		xDestination = -40;
-		yDestination = -40;
+		xPos = 20;
+		yPos = 540;
+		xDestination = MarketPanel.ENTRANCEX;
+		yDestination = MarketPanel.ENTRANCEY;
 	}
 
 //	Gui Updater
@@ -97,7 +97,8 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 	@Override
 	public void DoGoToCounter(MarketEmployee employee) {
 		customersWaitingForService.remove(customer);
-		xDestination = MarketPanel.COUNTERX+(45*employee.getAnimation(MarketAnimatedEmployee.class).getCounterLoc());
+		waitingForService = false;
+		xDestination = MarketPanel.COUNTERX+(((employee.getAnimation(MarketAnimatedEmployee.class).getCounterLoc())+1)*45);
 		yDestination = MarketPanel.COUNTERINTERACTIONY;
 		command = Command.GoToCounter;
 	}
@@ -113,6 +114,7 @@ public class MarketCustomerAnimation extends Animation implements MarketAnimated
 	@Override
 	public void DoGoToCashier() {
 		customersWaitingForItems.remove(customer);
+		waitingForItems = false;
 		xDestination = MarketPanel.CASHIERX;
 		yDestination = MarketPanel.CASHIERCUSTINTERACTIONY;
 		command = Command.GoToCashier;

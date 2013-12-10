@@ -42,7 +42,7 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingRoad != null) {
-			if(startingRoad.setVehicle(this) == false && startingRoad.getVehicle() != this) {
+			if(startingRoad.setVehicle(this) == false) {
 				return;
 			}
 			if(startingRoad.isWalkerAt(xPos, yPos)) {
@@ -99,7 +99,6 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	public void goToDestination(BuildingInterface destination) {
 		destinationBuilding = destination;
 		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
-		startingRoad.setVehicle(this);
 		xDestination = destination.getCityViewBuilding().getX();
 		yDestination = destination.getCityViewBuilding().getY();
 		endRoad = Application.CityMap.findClosestRoad(destination);

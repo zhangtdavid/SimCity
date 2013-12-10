@@ -51,8 +51,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	public void msgIWantToEat(RestaurantChungCustomer c) {
 		print("Host received msgIWantToEat");
 		if (workingState != WorkingState.NotWorking) {
-			restaurant.incrementNumWaitingCustomers();
-			restaurant.getCustomers().add(new MyCustomer(c, restaurant.getNumWaitingCustomers()));
+			restaurant.getCustomers().add(new MyCustomer(c));
 			stateChanged();
 		}
 	}
@@ -137,34 +136,6 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
             If so seat him at the table.
 		 */
 		
-		synchronized(restaurant.getCustomers()) {
-			for (MyCustomer customer : restaurant.getCustomers()) {
-				if (customer.getHostCustomerState() == HostCustomerState.Done && customer.getPositionInLine() != -1) { // If the customer decided to leave
-					print("CUSTOMER LEFT, UPDATE LINE");
-					updateCustomersInLineAfterLeaving(customer);
-					return true;
-				}		
-			}
-		}
-		
-		synchronized(restaurant.getCustomers()) {
-			for (MyCustomer customer : restaurant.getCustomers()) {
-				if (customer.getHostCustomerState() == HostCustomerState.GettingSeated) {
-					updateCustomersInLineAfterSeating(customer);
-					return true;
-				}		
-			}
-		}
-		
-		synchronized(restaurant.getCustomers()) {
-			for (MyCustomer customer : restaurant.getCustomers()) {
-				if (customer.getHostCustomerState() == HostCustomerState.InRestaurant) {
-					standCustomerInLine(customer);
-					return true;
-				}	
-			}
-		}
-		
 		synchronized(restaurant.getWaiters()) {
 			for (MyWaiter waiter : restaurant.getWaiters()) {
 				if (waiter.getWaiterState() == WaiterState.WantBreak) {
@@ -175,10 +146,9 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 		}		
 
 		synchronized(restaurant.getCustomers()) {
-			for (MyCustomer customer : restaurant.getCustomers()) {	
-				if (((customer.getHostCustomerState() == HostCustomerState.WaitingInLine && restaurant.getWaiters().size() > 0))) {
+			for (MyCustomer customer : restaurant.getCustomers()) {
+				if ((customer.getHostCustomerState() == HostCustomerState.WaitingInLine && restaurant.getWaiters().size() > 0)) {
 					if (customer.getDebt() > 0) {
-//						System.out.println("IN KICKING OUT");
 						customer.getRestaurantChungCustomer().msgKickingYouOutAfterPaying(customer.getDebt());
 						customer.setHostCustomerState(HostCustomerState.Done);
 						return true;
@@ -198,14 +168,13 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 								}
 							}
 							t.setOccupant(customer.getRestaurantChungCustomer());
-							
 							seatCustomer(customer, t, waiterA.getRestaurantChungWaiter()); //the action
-//							updateCustomersInLine();
 							waiterA.incrementNumCustomers();
 							return true; //return true to the abstract agent to reinvoke the scheduler.
 						}
 					}
 					if (restaurant.getWaiters().size() > 0 && customer.getHostCustomerState() == HostCustomerState.WaitingInLine) {
+						print("HERE7");
 						informCustomerOfNoTables(customer);
 						customer.setHostCustomerState(HostCustomerState.DecidingToLeave);
 					}
@@ -249,41 +218,6 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 
 //	Customer
 //	---------------------------------------------------------------
-	private void standCustomerInLine(MyCustomer customer) {
-		print("Host telling customer to stand in position " + customer.getPositionInLine());
-		customer.setHostCustomerState(HostCustomerState.WaitingInLine);
-		customer.getRestaurantChungCustomer().msgGetInLinePosition(customer.getPositionInLine());
-	}
-	
-	private void moveCustomerInLine(MyCustomer customer) {
-		print("Host telling customer to move to position " + customer.getPositionInLine());
-		customer.getRestaurantChungCustomer().msgGetInLinePosition(customer.getPositionInLine());
-	}
-	
-	private void updateCustomersInLineAfterSeating(MyCustomer c) {
-		c.setPositionInLine(-1); // Makes the position in line variable invalid
-		c.setHostCustomerState(HostCustomerState.Seated);
-		restaurant.decrementNumWaitingCustomers();
-		for (MyCustomer customer : restaurant.getCustomers()) {
-			if (customer.getHostCustomerState() == HostCustomerState.WaitingInLine || customer.getHostCustomerState() == HostCustomerState.WaitingToBeSeated || customer.getHostCustomerState() == HostCustomerState.DecidingToLeave) {
-				customer.decrementPositionInLine();
-				moveCustomerInLine(customer);
-			}		
-		}
-	}
-	
-	private void updateCustomersInLineAfterLeaving(MyCustomer c) {
-		restaurant.decrementNumWaitingCustomers();
-		print("POSITION CUST LEFT " + c.getPositionInLine());
-		for (int i = c.getPositionInLine()+1; i < restaurant.getCustomers().size(); i++) {
-			print("POSITION CUST BEHIND LEFT " + restaurant.getCustomers().get(i).getPositionInLine());
-			if (restaurant.getCustomers().get(i).getHostCustomerState() == HostCustomerState.WaitingInLine && restaurant.getCustomers().get(i).getPositionInLine() > c.getPositionInLine() || restaurant.getCustomers().get(i).getHostCustomerState() == HostCustomerState.WaitingToBeSeated && restaurant.getCustomers().get(i).getPositionInLine() > c.getPositionInLine() || restaurant.getCustomers().get(i).getHostCustomerState() == HostCustomerState.DecidingToLeave && restaurant.getCustomers().get(i).getPositionInLine() > c.getPositionInLine()) {
-				restaurant.getCustomers().get(i).decrementPositionInLine();
-				moveCustomerInLine(restaurant.getCustomers().get(i));
-			}		
-		}
-		c.setPositionInLine(-1); // Makes the position in line variable invalid
-	}
 	
 	private void seatCustomer(MyCustomer customer, Table table, RestaurantChungWaiter w) {
 		print("Host telling Waiter to seat customer");
@@ -295,6 +229,7 @@ public class RestaurantChungHostRole extends JobRole implements RestaurantChungH
 	private void informCustomerOfNoTables(MyCustomer customer) {
 		customer.getRestaurantChungCustomer().msgNoTablesAvailable();
 	}
+	
 
 	
 //  Utilities

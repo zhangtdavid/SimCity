@@ -43,9 +43,7 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	MyCustomer findCustomer(RestaurantChungCustomer ca);
 	MyCustomer findCustomer(int t);
 	Table findTable(int t);
-	public void incrementNumWaitingCustomers();
-	void decrementNumWaitingCustomers();
-
+	
 	// Classes
 	public class MyWaiter {
 		private RestaurantChungWaiter w;
@@ -95,14 +93,13 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 	}
 	
 	public class MyCustomer {
-		public enum HostCustomerState {InRestaurant, WaitingInLine, WaitingToBeSeated, GettingSeated, DecidingToLeave, Seated, Done};
+		public enum HostCustomerState {WaitingInLine, WaitingToBeSeated, GettingSeated, DecidingToLeave, Seated, Done};
 		public enum WaiterCustomerState {None, Waiting, Seated, ReadyToOrder, Asked, Eating, WaitingForCheck, Leaving};
 		public enum CheckState {None, AskedForBill, ReceivedBill, DeliveredBill};
 		public enum OrderStatus {None, Ordered, Cooking, Cancelled, DoneCooking, PickedUp, Delivered};
 
 		private RestaurantChungCustomer c;
 		private RestaurantChungWaiter waiter;
-		private int positionInLine;
 		private int table;
 		private FOOD_ITEMS choice;
 		private int bill;
@@ -112,15 +109,14 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 		private CheckState cs;
 		private OrderStatus os;
 		
-		public MyCustomer(RestaurantChungCustomer customer, int pos) {
+		public MyCustomer(RestaurantChungCustomer customer) {
 			c = customer;
 			waiter = null;
-			setPositionInLine(pos);
 			table = -1;
 			choice = null;
 			bill = 0;
 			setDebt(0);
-			hs = HostCustomerState.InRestaurant;
+			hs = HostCustomerState.WaitingInLine;
 			ws = WaiterCustomerState.None;
 			cs = CheckState.None;
 			os = OrderStatus.None;
@@ -133,10 +129,6 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 
 		public RestaurantChungWaiter getWaiter() {
 			return waiter;
-		}
-		
-		public int getPositionInLine() {
-			return positionInLine;
 		}
 		
 		public int getTable() {
@@ -180,10 +172,6 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 			this.waiter = waiter;
 		}
 
-		public void setPositionInLine(int positionInLine) {
-			this.positionInLine = positionInLine;
-		}
-
 		public void setTable(int table) {
 			this.table = table;
 		}
@@ -215,11 +203,6 @@ public interface RestaurantChung extends RestaurantBuildingInterface {
 		
 		public void setOrderStatus(OrderStatus os) {
 			this.os = os;
-		}
-		
-		// Utilities	
-		public void decrementPositionInLine() {
-			positionInLine--;
 		}
 	}
 	
