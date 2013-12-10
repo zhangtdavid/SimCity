@@ -913,11 +913,11 @@ public class Application {
         		// delivery Person's car
         		CarAgent carDelivery = new CarAgent(marketBuilding1, p2r1Market); // setting b to be the current location of the car
         		CarAnimation carAnim = new CarAnimation(carDelivery, marketBuilding1);
-        		carAnim.setVisible(true);
+//        		carAnim.setVisible(true);
         		carDelivery.setAnimation(carAnim);
-        		carDelivery.startThread();
-        		mainFrame.cityView.addAnimation(c4AnimMarket);
+        		mainFrame.cityView.addAnimation(carAnim);
         		p2r1Market.setDeliveryCar(carDelivery);
+        		carDelivery.startThread();
         		
         		// Create employee
         		MarketEmployeeRole p3r1Market = new MarketEmployeeRole(marketBuilding1, 0, 12);
