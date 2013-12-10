@@ -133,6 +133,7 @@ public class Application {
 		mainFrame = new MainFrame();
 
 		// Load a scenario
+		createTown();
 		parseConfig();
 
 		// Start the simulation
@@ -155,236 +156,6 @@ public class Application {
 	 * people to create and what roles to create them in.
 	 */
 	private static void parseConfig() {
-		// Create roads
-		// North roads
-		for(int i = 375; i >= 100; i -= 25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(i, 75, 25, 25, -1, 0, true, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// West roads
-		for(int i = 75; i <= 350; i+=25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(75, i, 25, 25, 0, 1, false, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// South roads
-		for(int i = 75; i <= 350; i+=25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(i, 375, 25, 25, 1, 0, true, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// East roads
-		for(int i = 375; i >= 100; i-=25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// North/South middle roads
-		for(int i = 350; i >= 100; i-=25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// East/West middle roads
-		for(int i = 350; i >= 100; i -= 25) {
-			if(i == 225)
-				continue;
-			CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.black);
-			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
-		}
-		// North intersection
-		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 75, 25, 25, Color.gray);
-		roads.add(intersectionNorth);
-		mainFrame.cityView.addMoving(intersectionNorth);
-		// West intersection
-		CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 225, 25, 25, Color.gray);
-		roads.add(intersectionWest);
-		mainFrame.cityView.addMoving(intersectionWest);
-		// South intersection
-		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 375, 25, 25, Color.gray);
-		roads.add(intersectionSouth);
-		mainFrame.cityView.addMoving(intersectionSouth);
-		// East intersection
-		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
-		roads.add(intersectionEast);
-		mainFrame.cityView.addMoving(intersectionEast);
-		// Center intersection
-		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
-		roads.add(intersectionCenter);
-		mainFrame.cityView.addMoving(intersectionCenter);
-		// Connect all roads
-		for(int i = 0; i < roads.size() - 1; i++) {
-			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
-				roads.get(i).setNextRoad(intersectionNorth);
-				continue;
-			} else if(roads.get(i).getX() == intersectionNorth.getX() + 50 && roads.get(i).getY() == intersectionNorth.getY()) { // Set stoplight to east of north intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
-			} else if(roads.get(i).getY() == intersectionNorth.getY() + 25 && roads.get(i).getX() == intersectionNorth.getX()) { // Set nextRoad of road to south of north intersection
-				roads.get(i).setNextRoad(intersectionNorth);
-				continue;
-			} else if(roads.get(i).getY() == intersectionNorth.getY() + 50 && roads.get(i).getX() == intersectionNorth.getX()) { // Set stoplight of road to south of north intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
-			} else if(roads.get(i).getX() == intersectionNorth.getX() - 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to west of north intersection
-				intersectionNorth.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getY() == intersectionWest.getY() - 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to north of west intersection
-				roads.get(i).setNextRoad(intersectionWest);
-				continue;
-			} else if(roads.get(i).getY() == intersectionWest.getY() - 50 && roads.get(i).getX() == intersectionWest.getX()) { // Set stoplight of road to north of west intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
-			} else if(roads.get(i).getY() == intersectionWest.getY() + 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to south of west intersection
-				intersectionWest.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
-				roads.get(i).setNextRoad(intersectionWest);
-				continue;
-			} else if(roads.get(i).getX() == intersectionWest.getX() + 50 && roads.get(i).getY() == intersectionWest.getY()) { // Set stoplight of road to east of west intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
-			} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
-				intersectionSouth.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getX() == intersectionSouth.getX() - 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to west of south intersection
-				roads.get(i).setNextRoad(intersectionSouth);
-				continue;
-			} else if(roads.get(i).getX() == intersectionSouth.getX() - 50 && roads.get(i).getY() == intersectionSouth.getY()) { // Set stoplight of road to west of south intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
-			} else if(roads.get(i).getX() == intersectionSouth.getX() + 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to east of south intersection
-				intersectionSouth.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getY() == intersectionEast.getY() - 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to north of east intersection
-				intersectionEast.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getX() == intersectionEast.getX() - 25 && roads.get(i).getY() == intersectionEast.getY()) { // Set nextRoad of road to west of east intersection
-				intersectionEast.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getY() == intersectionEast.getY() + 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to south of east intersection
-				roads.get(i).setNextRoad(intersectionEast);
-				continue;
-			} else if(roads.get(i).getY() == intersectionEast.getY() + 50 && roads.get(i).getX() == intersectionEast.getX()) { // Set stoplight of road to south of east intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
-			} else if(roads.get(i).getY() == intersectionCenter.getY() - 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to north of center intersection
-				intersectionCenter.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getX() == intersectionCenter.getX() + 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to east of center intersection
-				roads.get(i).setNextRoad(intersectionCenter);
-				continue;
-			} else if(roads.get(i).getX() == intersectionCenter.getX() + 50 && roads.get(i).getY() == intersectionCenter.getY()) { // Set stoplight of road to east of center intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
-			} else if(roads.get(i).getX() == intersectionCenter.getX() - 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to west of center intersection
-				intersectionCenter.setNextRoad(roads.get(i));
-				roads.get(i).setNextRoad(roads.get(i + 1));
-				continue;
-			} else if(roads.get(i).getY() == intersectionCenter.getY() + 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to south of center intersection
-				roads.get(i).setNextRoad(intersectionCenter);
-				continue;
-			} else if(roads.get(i).getY() == intersectionCenter.getY() + 50 && roads.get(i).getX() == intersectionCenter.getX()) { // Set stoplight of road to south of center intersection
-				roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
-			} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 100) { // Last road in the outer loop
-				roads.get(i).setNextRoad(roads.get(0));
-				continue;
-			}
-			// Straight road
-			if(roads.get(i).getClass() != CityRoadIntersection.class)
-				roads.get(i).setNextRoad(roads.get(i+1));
-		}
-		trafficControl = new TrafficControl(roads);
-
-		// Sidewalks
-		ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
-		nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
-		nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
-		nonSidewalkArea.add(new Rectangle(2, 4, 2, 8)); // Topmid left
-		nonSidewalkArea.add(new Rectangle(14, 6, 2, 10)); // Topmid center
-		nonSidewalkArea.add(new Rectangle(26, 4, 2, 12)); // Topmid right
-		nonSidewalkArea.add(new Rectangle(6, 14, 10, 2)); // Center left
-		nonSidewalkArea.add(new Rectangle(18, 14, 10, 2)); // Center right
-		nonSidewalkArea.add(new Rectangle(2, 14, 2, 12)); // Bottommid left
-		nonSidewalkArea.add(new Rectangle(14, 18, 2, 8)); // Bottommid center
-		nonSidewalkArea.add(new Rectangle(26, 18, 2, 8)); // Bottommid right
-		nonSidewalkArea.add(new Rectangle(2, 26, 10, 2)); // Bottom left
-		nonSidewalkArea.add(new Rectangle(14, 26, 14, 2)); // Bottom right
-		nonSidewalkArea.add(new Rectangle(6, 6, 6, 6)); // Top left square
-		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
-		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
-		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
-		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
-		sidewalks.setRoads(trafficControl);
-
-		// Bus Stops!!!!!!!!
-		BusStopPanel bsp1 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
-		BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
-		setBuilding(bsp1, cityViewBusStop1, busStop1);
-
-		BusStopPanel bsp2 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop2 = new CityViewBusStop(125, 125, "Bus Stop 2", Color.white, bsp2);
-		BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
-		setBuilding(bsp2, cityViewBusStop2, busStop2);
-
-		BusStopPanel bsp3 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop3 = new CityViewBusStop(325, 325, "Bus Stop 3", Color.white, bsp3);
-		BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
-		setBuilding(bsp3, cityViewBusStop3, busStop3);
-
-		BusStopPanel bsp4 = new BusStopPanel(Color.white);
-		CityViewBusStop cityViewBusStop4 = new CityViewBusStop(125, 325, "Bus Stop 4", Color.white, bsp4);
-		BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
-		setBuilding(bsp4, cityViewBusStop4, busStop4);
-
-		// Create buildings
-		BankPanel bankPanel1 = new BankPanel(Color.green);
-		CityViewBank cityViewBank1 = new CityViewBank(425, 200, "Bank " + mainFrame.cityView.getStaticsSize(), Color.green, bankPanel1);
-		BankBuilding bankBuilding1 = new BankBuilding("BankBuilding", bankPanel1, cityViewBank1);
-		setBuilding(bankPanel1, cityViewBank1, bankBuilding1);
-
-		busStop1.setNextStop(busStop2);
-		busStop1.setPreviousStop(busStop4);
-		busStop2.setNextStop(busStop3);
-		busStop2.setPreviousStop(busStop1);
-		busStop3.setNextStop(busStop4);
-		busStop3.setPreviousStop(busStop2);
-		busStop4.setNextStop(busStop1);
-		busStop4.setPreviousStop(busStop3);
-
-		// Create buses
-		BusAgent bus1 = new BusAgent(busStop1, busStop2);
-		BusAnimation b1Anim = new BusAnimation(bus1, busStop1);
-		bus1.setAnimation(b1Anim);
-		mainFrame.cityView.addAnimation(b1Anim);
-		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim);
-		bus1.startThread();
-
-		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
-		CityViewHouse unoccupiedHouseView1 = new CityViewHouse(25, 25, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
-		HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
-		setBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
-
-		createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
-
-		RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
-
-		createBuilding(CityViewBuilding.BUILDINGTYPE.HOUSE);
-		createBuilding(CityViewBuilding.BUILDINGTYPE.APT);
-
 
 //		PersonAgent p0Timms = new PersonAgent("Landlord Timms", date, new PersonAnimation(), rhb1Timms);
 //		LandlordRole p0r1Timms = new LandlordRole();
@@ -445,109 +216,262 @@ public class Application {
 //		RestaurantTimmsWaiterRole p4r1Timms = new RestaurantTimmsWaiterRole(rtb, 0, 100);
 //		rtb.addOccupyingRole(p4r1Timms);
 //		p4Timms.setOccupation(p4r1Timms);
-
-
-
-		// RESTAURANTCHUNG------------------------------------------------------------------------------
-		RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
-		CityViewRestaurantChung cityViewRestaurantChung1 = new CityViewRestaurantChung(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
-		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
-		setBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
-		
-		AptPanel aptPanelChung1 = new AptPanel(Color.black);
-		CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelChung1);
-		AptBuilding aptBuildingChung1 = new AptBuilding("Chung Apartment", null, aptPanelChung1, cityViewAptChung1);
-		setBuilding(aptPanelChung1, cityViewAptChung1, aptBuildingChung1);
-
-		// BANK------------------------------------------------------------------------------
-		BankPanel bankPanel11 = new BankPanel(Color.black);
-		CityViewBank cityViewBank11 = new CityViewBank(425, 100, "Bank " + (mainFrame.cityView.getStaticsSize()), Color.yellow, bankPanel11); 
-		BankBuilding bankBuilding11 = new BankBuilding("Bank 1", bankPanel11, cityViewBank11);
-		setBuilding(bankPanel11, cityViewBank11, bankBuilding11);
 		
 		
-		
-		// MARKET------------------------------------------------------------------------------
-		MarketPanel marketPanel1 = new MarketPanel(Color.black);
-		CityViewMarket cityViewMarket1 = new CityViewMarket(425, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, marketPanel1); 
-		MarketBuilding marketBuilding1 = new MarketBuilding("Market 1", marketPanel1, cityViewMarket1);
-		setBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
-		
-		
-		try {
-			Thread.sleep(1000);
-		} catch (InterruptedException e) {}
-
-//		c0Zhang.startThread();
-//		c1Zhang.startThread();
-//		c2Zhang.startThread();
-//		c3Zhang.startThread();
-//		c4Zhang.startThread();
-//		p0Zhang.startThread();
-//		p1Zhang.startThread();
-//		p2Zhang.startThread();
-//		p3Zhang.startThread();
-//		p4Zhang.startThread();
-		//              c0Timms.startThread();
-		//              c1Timms.startThread();
-		//              c2Timms.startThread();
-		//              c3Timms.startThread();
-		//              c4Timms.startThread();
-		//              p0Timms.startThread();
-		//              p1Timms.startThread();
-		//              p2Timms.startThread();
-		//              p3Timms.startThread();
-		//              p4Timms.startThread();
-		//              c0Choi.startThread();
-		//              p0Choi.startThread();
-		//              p1Choi.startThread();
-		//              p2Choi.startThread();
-		//              p3Choi.startThread();
-		//              p4Choi.startThread();
-		//              p5Choi.startThread();
-		//              p6Choi.startThread();
-		//              p7Choi.startThread();
-		//              p8Choi.startThread();
-		//              p9Choi.startThread();
-		//              p10Choi.startThread();
-		//              c1Choi.startThread();
-		//              c2Choi.startThread();
-		//              c3Choi.startThread();
-		//              c4Choi.startThread();
-		//              c5Choi.startThread();
-		//              c6Choi.startThread();
-		//              c7Choi.startThread();
-		//              c8Choi.startThread();
-		//              c9Choi.startThread();
-		//              c10Choi.startThread();
-		//              c0Chung.startThread();
-		//              c1Chung.startThread();
-		//              c2Chung.startThread();
-		//              c3Chung.startThread();
-		//              c4Chung.startThread();
-		//              p0Chung.startThread();
-		//              p1Chung.startThread();
-		//              p2Chung.startThread();
-		//              p3Chung.startThread();
-		//              p4Chung.startThread();
-		//              p0JP1.startThread();
-		//              p1JP.startThread();
-		//              p2JP.startThread();
-		//              p3JP.startThread();
-		//              p4JP.startThread();
-		//              c1JP.startThread();
-		//              c2JP.startThread();
-		//              c3JP.startThread();
-		//              c4JP.startThread();
-		//             
-//		for(int j = 0; j < 700; j++) {
-//			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
-//			testPersonAnimation.setVisible(true);
-//			mainFrame.cityView.addAnimation(testPersonAnimation);
-//			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
-//		}
+//		try {
+//			Thread.sleep(1000);
+//		} catch (InterruptedException e) {}
 	}
 
+	public static void createTown(){
+		// Create roads
+				// North roads
+				for(int i = 375; i >= 100; i -= 25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(i, 75, 25, 25, -1, 0, true, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// West roads
+				for(int i = 75; i <= 350; i+=25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(75, i, 25, 25, 0, 1, false, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// South roads
+				for(int i = 75; i <= 350; i+=25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(i, 375, 25, 25, 1, 0, true, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// East roads
+				for(int i = 375; i >= 100; i-=25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// North/South middle roads
+				for(int i = 350; i >= 100; i-=25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// East/West middle roads
+				for(int i = 350; i >= 100; i -= 25) {
+					if(i == 225)
+						continue;
+					CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.black);
+					roads.add(tempRoad);
+					mainFrame.cityView.addMoving(tempRoad);
+				}
+				// North intersection
+				CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 75, 25, 25, Color.gray);
+				roads.add(intersectionNorth);
+				mainFrame.cityView.addMoving(intersectionNorth);
+				// West intersection
+				CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 225, 25, 25, Color.gray);
+				roads.add(intersectionWest);
+				mainFrame.cityView.addMoving(intersectionWest);
+				// South intersection
+				CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 375, 25, 25, Color.gray);
+				roads.add(intersectionSouth);
+				mainFrame.cityView.addMoving(intersectionSouth);
+				// East intersection
+				CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
+				roads.add(intersectionEast);
+				mainFrame.cityView.addMoving(intersectionEast);
+				// Center intersection
+				CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
+				roads.add(intersectionCenter);
+				mainFrame.cityView.addMoving(intersectionCenter);
+				// Connect all roads
+				for(int i = 0; i < roads.size() - 1; i++) {
+					if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
+						roads.get(i).setNextRoad(intersectionNorth);
+						continue;
+					} else if(roads.get(i).getX() == intersectionNorth.getX() + 50 && roads.get(i).getY() == intersectionNorth.getY()) { // Set stoplight to east of north intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
+					} else if(roads.get(i).getY() == intersectionNorth.getY() + 25 && roads.get(i).getX() == intersectionNorth.getX()) { // Set nextRoad of road to south of north intersection
+						roads.get(i).setNextRoad(intersectionNorth);
+						continue;
+					} else if(roads.get(i).getY() == intersectionNorth.getY() + 50 && roads.get(i).getX() == intersectionNorth.getX()) { // Set stoplight of road to south of north intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
+					} else if(roads.get(i).getX() == intersectionNorth.getX() - 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to west of north intersection
+						intersectionNorth.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getY() == intersectionWest.getY() - 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to north of west intersection
+						roads.get(i).setNextRoad(intersectionWest);
+						continue;
+					} else if(roads.get(i).getY() == intersectionWest.getY() - 50 && roads.get(i).getX() == intersectionWest.getX()) { // Set stoplight of road to north of west intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
+					} else if(roads.get(i).getY() == intersectionWest.getY() + 25 && roads.get(i).getX() == intersectionWest.getX()) { // Set nextRoad of road to south of west intersection
+						intersectionWest.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getX() == intersectionWest.getX() + 25 && roads.get(i).getY() == intersectionWest.getY()) { // Set nextRoad of road to east of west intersection
+						roads.get(i).setNextRoad(intersectionWest);
+						continue;
+					} else if(roads.get(i).getX() == intersectionWest.getX() + 50 && roads.get(i).getY() == intersectionWest.getY()) { // Set stoplight of road to east of west intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
+					} else if(roads.get(i).getY() == intersectionSouth.getY() - 25 && roads.get(i).getX() == intersectionSouth.getX()) { // Set nextRoad of road to north of south intersection
+						intersectionSouth.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getX() == intersectionSouth.getX() - 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to west of south intersection
+						roads.get(i).setNextRoad(intersectionSouth);
+						continue;
+					} else if(roads.get(i).getX() == intersectionSouth.getX() - 50 && roads.get(i).getY() == intersectionSouth.getY()) { // Set stoplight of road to west of south intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
+					} else if(roads.get(i).getX() == intersectionSouth.getX() + 25 && roads.get(i).getY() == intersectionSouth.getY()) { // Set nextRoad of road to east of south intersection
+						intersectionSouth.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getY() == intersectionEast.getY() - 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to north of east intersection
+						intersectionEast.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getX() == intersectionEast.getX() - 25 && roads.get(i).getY() == intersectionEast.getY()) { // Set nextRoad of road to west of east intersection
+						intersectionEast.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getY() == intersectionEast.getY() + 25 && roads.get(i).getX() == intersectionEast.getX()) { // Set nextRoad of road to south of east intersection
+						roads.get(i).setNextRoad(intersectionEast);
+						continue;
+					} else if(roads.get(i).getY() == intersectionEast.getY() + 50 && roads.get(i).getX() == intersectionEast.getX()) { // Set stoplight of road to south of east intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
+					} else if(roads.get(i).getY() == intersectionCenter.getY() - 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to north of center intersection
+						intersectionCenter.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getX() == intersectionCenter.getX() + 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to east of center intersection
+						roads.get(i).setNextRoad(intersectionCenter);
+						continue;
+					} else if(roads.get(i).getX() == intersectionCenter.getX() + 50 && roads.get(i).getY() == intersectionCenter.getY()) { // Set stoplight of road to east of center intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.HORIZONTALOFF);
+					} else if(roads.get(i).getX() == intersectionCenter.getX() - 25 && roads.get(i).getY() == intersectionCenter.getY()) { // Set nextRoad of road to west of center intersection
+						intersectionCenter.setNextRoad(roads.get(i));
+						roads.get(i).setNextRoad(roads.get(i + 1));
+						continue;
+					} else if(roads.get(i).getY() == intersectionCenter.getY() + 25 && roads.get(i).getX() == intersectionCenter.getX()) { // Set nextRoad of road to south of center intersection
+						roads.get(i).setNextRoad(intersectionCenter);
+						continue;
+					} else if(roads.get(i).getY() == intersectionCenter.getY() + 50 && roads.get(i).getX() == intersectionCenter.getX()) { // Set stoplight of road to south of center intersection
+						roads.get(i).setStopLightType(STOPLIGHTTYPE.VERTICALOFF);
+					} else if(roads.get(i).getX() == 375 && roads.get(i).getY() == 100) { // Last road in the outer loop
+						roads.get(i).setNextRoad(roads.get(0));
+						continue;
+					}
+					// Straight road
+					if(roads.get(i).getClass() != CityRoadIntersection.class)
+						roads.get(i).setNextRoad(roads.get(i+1));
+				}
+				trafficControl = new TrafficControl(roads);
+
+				// Sidewalks
+				ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
+				nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
+				nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
+				nonSidewalkArea.add(new Rectangle(2, 4, 2, 8)); // Topmid left
+				nonSidewalkArea.add(new Rectangle(14, 6, 2, 10)); // Topmid center
+				nonSidewalkArea.add(new Rectangle(26, 4, 2, 12)); // Topmid right
+				nonSidewalkArea.add(new Rectangle(6, 14, 10, 2)); // Center left
+				nonSidewalkArea.add(new Rectangle(18, 14, 10, 2)); // Center right
+				nonSidewalkArea.add(new Rectangle(2, 14, 2, 12)); // Bottommid left
+				nonSidewalkArea.add(new Rectangle(14, 18, 2, 8)); // Bottommid center
+				nonSidewalkArea.add(new Rectangle(26, 18, 2, 8)); // Bottommid right
+				nonSidewalkArea.add(new Rectangle(2, 26, 10, 2)); // Bottom left
+				nonSidewalkArea.add(new Rectangle(14, 26, 14, 2)); // Bottom right
+				nonSidewalkArea.add(new Rectangle(6, 6, 6, 6)); // Top left square
+				nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
+				nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
+				nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
+				sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
+				sidewalks.setRoads(trafficControl);
+
+				// Bus Stops!!!!!!!!
+				BusStopPanel bsp1 = new BusStopPanel(Color.white);
+				CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
+				BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
+				setBuilding(bsp1, cityViewBusStop1, busStop1);
+
+				BusStopPanel bsp2 = new BusStopPanel(Color.white);
+				CityViewBusStop cityViewBusStop2 = new CityViewBusStop(125, 125, "Bus Stop 2", Color.white, bsp2);
+				BusStopBuilding busStop2 = new BusStopBuilding("Bus Stop 2", bsp2, cityViewBusStop2);
+				setBuilding(bsp2, cityViewBusStop2, busStop2);
+
+				BusStopPanel bsp3 = new BusStopPanel(Color.white);
+				CityViewBusStop cityViewBusStop3 = new CityViewBusStop(325, 325, "Bus Stop 3", Color.white, bsp3);
+				BusStopBuilding busStop3 = new BusStopBuilding("Bus Stop 3", bsp3, cityViewBusStop3);
+				setBuilding(bsp3, cityViewBusStop3, busStop3);
+
+				BusStopPanel bsp4 = new BusStopPanel(Color.white);
+				CityViewBusStop cityViewBusStop4 = new CityViewBusStop(125, 325, "Bus Stop 4", Color.white, bsp4);
+				BusStopBuilding busStop4 = new BusStopBuilding("Bus Stop 4", bsp4, cityViewBusStop4);
+				setBuilding(bsp4, cityViewBusStop4, busStop4);
+
+				busStop1.setNextStop(busStop2);
+				busStop1.setPreviousStop(busStop4);
+				busStop2.setNextStop(busStop3);
+				busStop2.setPreviousStop(busStop1);
+				busStop3.setNextStop(busStop4);
+				busStop3.setPreviousStop(busStop2);
+				busStop4.setNextStop(busStop1);
+				busStop4.setPreviousStop(busStop3);
+
+				// Create buses
+				BusAgent bus1 = new BusAgent(busStop1, busStop2);
+				BusAnimation b1Anim = new BusAnimation(bus1, busStop1);
+				bus1.setAnimation(b1Anim);
+				mainFrame.cityView.addAnimation(b1Anim);
+				CityMap.findClosestRoad(busStop1).setVehicle(b1Anim);
+				bus1.startThread();
+
+				HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));
+				CityViewHouse unoccupiedHouseView1 = new CityViewHouse(25, 25, "Unoccupied House", Color.BLUE, unoccupiedHousePanel1);
+				HouseBuilding unoccupiedHouseBuilding = new HouseBuilding("Unoccupied House", null, unoccupiedHousePanel1, unoccupiedHouseView1);
+				setBuilding(unoccupiedHousePanel1, unoccupiedHouseView1, unoccupiedHouseBuilding);
+
+				BankPanel bankPanel11 = new BankPanel(Color.black);
+				CityViewBank cityViewBank11 = new CityViewBank(425, 100, "Bank " + (mainFrame.cityView.getStaticsSize()), Color.yellow, bankPanel11); 
+				BankBuilding bankBuilding11 = new BankBuilding("Bank 1", bankPanel11, cityViewBank11);
+				setBuilding(bankPanel11, cityViewBank11, bankBuilding11);
+				
+				createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 150, 125);
+
+				RestaurantZhangBuilding rzb1 = (RestaurantZhangBuilding) createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 175, 125);
+
+				createBuilding(CityViewBuilding.BUILDINGTYPE.HOUSE);
+				createBuilding(CityViewBuilding.BUILDINGTYPE.APT);
+				
+				// RESTAURANTCHUNG------------------------------------------------------------------------------
+				RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
+				CityViewRestaurantChung cityViewRestaurantChung1 = new CityViewRestaurantChung(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
+				RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
+				setBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
+				
+				AptPanel aptPanelChung1 = new AptPanel(Color.black);
+				CityViewApt cityViewAptChung1 = new CityViewApt(425,250, "Chung Apartment" + (mainFrame.cityView.getStaticsSize()), Color.gray, aptPanelChung1);
+				AptBuilding aptBuildingChung1 = new AptBuilding("Chung Apartment", null, aptPanelChung1, cityViewAptChung1);
+				setBuilding(aptPanelChung1, cityViewAptChung1, aptBuildingChung1);
+				
+				// MARKET------------------------------------------------------------------------------
+				MarketPanel marketPanel1 = new MarketPanel(Color.black);
+				CityViewMarket cityViewMarket1 = new CityViewMarket(425, 125, "Market " + (mainFrame.cityView.getStaticsSize()), Color.yellow, marketPanel1); 
+				MarketBuilding marketBuilding1 = new MarketBuilding("Market 1", marketPanel1, cityViewMarket1);
+				setBuilding(marketPanel1, cityViewMarket1, marketBuilding1);
+
+	}
+	
 	public static DataModel getModel() {
 		return model;
 	}
