@@ -368,7 +368,60 @@ public class Application {
             RestaurantChungBuilding restaurantChungBuilding1 = (RestaurantChungBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHUNG, 425, 300);
             RestaurantJPBuilding restaurantJPBuilding1 = (RestaurantJPBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTJP, 425, 350);
             
-            // Create landlord
+            // Create People
+            PersonAgent p1 = new PersonAgent("Timms Host", date, new PersonAnimation(), Apartment1);
+            PersonAgent p2 = new PersonAgent("Timms Cashier", date, new PersonAnimation(), Apartment1);
+            PersonAgent p3 = new PersonAgent("Timms Cook", date, new PersonAnimation(), Apartment1);
+            PersonAgent p4 = new PersonAgent("Timms Waiter1", date, new PersonAnimation(), Apartment1);
+            PersonAgent p5 = new PersonAgent("Timms Waiter2", date, new PersonAnimation(), Apartment3);
+            /*PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
+            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);*/
+            
+            
+            
             PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
             LandlordRole p0r1Choi = new LandlordRole();
             p0Choi.addRole(p0r1Choi);
