@@ -160,6 +160,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	}
 	
 	public void checkOpen() {
+		print(customerDelivery.getRestaurant().toString());
 		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
 			giveItems();
 		}

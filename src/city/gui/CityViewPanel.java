@@ -109,7 +109,7 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			}
 		}
 		for (AnimationInterface a : animations) {
-			if (AnimatedCar.class.isInstance(a)) {
+			if (AnimatedCar.class.isInstance(a) && a.getVisible()) {
 				AnimatedCar c = (AnimatedCar) a;
 				if (c.contains(arg0.getX(), arg0.getY())) {
 					AlertLog.getInstance().logMessage(AlertTag.GENERAL_CITY, this.name, "Car Selected: " + c.getCar().getName());

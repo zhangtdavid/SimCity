@@ -86,7 +86,8 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
 	@Override
 	public boolean getBusinessIsOpen() {
 		boolean disposition = false;
-
+		if(host.getActive())
+			return true;
 		return disposition;
 	}
 	

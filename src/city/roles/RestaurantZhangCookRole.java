@@ -85,7 +85,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	// From MarketDeliveryPerson
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-		print("RestaurantZhangCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
+		print("!!!!!!!!!!!!!!!!!!!!!!!!!RestaurantZhangCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
 		MyMarketOrder mo = findMarketOrder(id);
 		marketOrders.remove(mo);
 
@@ -93,6 +93,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			Food f = findFood(i.toString());
 			f.setAmount(f.getAmount() + marketOrder.get(i));
 			print("New Inventory: " + f.getItem() + " " + f.getAmount());
+			mainMenu.reAddItem(f.getItem());
 			f.setFoodOrderState(RestaurantBuilding.FoodOrderState.None);
 		}
 		stateChanged();
@@ -130,7 +131,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				// The role becomes inactive when the order is fulfilled, cook should remove the role from its list
 				else if (!r.getActive()) {
 					MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
-					marketOrders.remove(mo);
+					msgHereIsOrderDelivery(mo.order.getOrderItems(), mo.getOrder().getOrderId());
 					marketCustomerDeliveryList.remove(r);
 					break;
 				}
@@ -188,6 +189,9 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				waitingToCheckStand = true;
 				timer.schedule(new TimerTask() {
 					public void run() {
+						for(Food foodItem : buildingOfEmployment.getFoods().values()) {
+							print(foodItem.getItem() + " " + foodItem.getAmount());
+						}
 						waitingToCheckStand = false;
 						RestaurantZhangOrder newOrder = myOrderStand.remove();
 						if(newOrder != null) {
