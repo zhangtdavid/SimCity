@@ -394,6 +394,7 @@ public class PersonAgent extends Agent implements Person {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (RoleInterface) r0.newInstance();
+			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -1083,7 +1084,6 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 
-//		return true; For testing restaurants
 		return disposition;
 	}
 

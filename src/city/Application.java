@@ -26,6 +26,7 @@ import city.agents.interfaces.Person;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.animations.PersonAnimation;
+import city.animations.WalkerAnimation;
 import city.bases.Building;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
@@ -325,7 +326,7 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
-		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
+		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
 		sidewalks.setRoads(trafficControl);
 
 		// Bus Stops!!!!!!!!
@@ -1440,12 +1441,12 @@ public class Application {
 		//              c3JP.startThread();
 		//              c4JP.startThread();
 		//             
-		//              for(int j = 0; j < 70; j++) {
-		//                      WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
-		//                      testPersonAnimation.setVisible(true);
-		//                      mainFrame.cityView.addAnimation(testPersonAnimation);
-		//                      testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
-		//              }
+//		for(int j = 0; j < 700; j++) {
+//			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
+//			testPersonAnimation.setVisible(true);
+//			mainFrame.cityView.addAnimation(testPersonAnimation);
+//			testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
+//		}
 	}
 
 	public static DataModel getModel() {
