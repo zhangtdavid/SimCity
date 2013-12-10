@@ -621,6 +621,7 @@ public class PersonAgent extends Agent implements Person {
 			// Giving an occupation
 			this.occupation = r;
 			this.addRole(r);
+			r.setPerson(this);
 		} else if (this.occupation != null) {
 			// Taking away an occupation
 			if (this.occupation.getActive()) {
@@ -1083,8 +1084,8 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 
-		return disposition;
-//		return true; for testing restaurant
+//		return disposition;
+		return true;
 	}
 
 	/**
