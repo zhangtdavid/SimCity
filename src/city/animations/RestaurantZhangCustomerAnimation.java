@@ -19,7 +19,6 @@ public class RestaurantZhangCustomerAnimation extends Animation implements Resta
 	private static final int CUSTGUIYPOS = -40;
 	private static final int CUSTGUIXDEST = -40;
 	private static final int CUSTGUIYDEST = -40;
-	private static final int CUSTWIDTH = 20;
 	private static final int CUSTHEIGHT = 20;
 	private static final int EXITDESTX = -40;
 	private static final int EXITDESTY = -40;

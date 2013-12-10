@@ -16,7 +16,6 @@ import javax.swing.Timer;
 import utilities.RestaurantZhangTable;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.BuildingCard;
-import city.gui.exteriors.CityViewApt;
 
 public class RestaurantZhangPanel extends BuildingCard implements ActionListener {
 

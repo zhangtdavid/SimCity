@@ -67,4 +67,16 @@ public class MockRestaurantZhangAnimatedWaiter extends MockAnimation implements 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public int getBaseX() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public int getBaseY() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

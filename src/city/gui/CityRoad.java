@@ -2,21 +2,16 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
-import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
