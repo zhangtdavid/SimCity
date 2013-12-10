@@ -32,4 +32,10 @@ public class MockAnimatedWalker extends MockAnimation implements AnimatedWalker 
 	public void goToDestination(BuildingInterface destination) {
 		log.add(new LoggedEvent("Walker " + walker.getPerson().getName() + " is going to destination " + destination.getName()));
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }

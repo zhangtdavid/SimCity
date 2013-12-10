@@ -107,4 +107,10 @@ public class MockAnimatedPerson extends MockAnimation implements AnimatedPerson 
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }

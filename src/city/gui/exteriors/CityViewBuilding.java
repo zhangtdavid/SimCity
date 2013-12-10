@@ -22,6 +22,8 @@ public abstract class CityViewBuilding {
 	protected boolean isActive;
 	protected BUILDINGTYPE type = BUILDINGTYPE.NONE;
 	
+	protected boolean isUgly = false;
+	
 	// Constructors
 	
 	public CityViewBuilding() {
@@ -130,6 +132,10 @@ public abstract class CityViewBuilding {
 	
 	public void setBuilding(BuildingCard building) {
 		this.building = building;
+	}
+	
+	public void setUgly(boolean newUgly) {
+		isUgly = newUgly;
 	}
 	
 	// Utilities

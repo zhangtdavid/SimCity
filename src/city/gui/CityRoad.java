@@ -80,13 +80,17 @@ public class CityRoad extends CityViewBuilding {
 
 	@Override
 	public void paint( Graphics g2 ) {
-		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
-			laneColor = Color.green;
-		}
-		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
-			laneColor = Color.red;
-		}
-		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
+		if(isUgly) {
+			if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
+				laneColor = Color.green;
+			}
+			if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
+				laneColor = Color.red;
+			}
+		g2.setColor(laneColor);
+		g2.fillRect(xOrigin, yOrigin, width, height);
+		} else
+			g2.drawImage(imageToRender, xOrigin, yOrigin, null);
 		if(vehicle == null) 
 			return;
 		double x = 0;
@@ -166,11 +170,11 @@ public class CityRoad extends CityViewBuilding {
 	public void updatePosition() { };
 
 	// Getters
-	
+
 	public int getXVelocity() {
 		return xVelocity;
 	}
-	
+
 	public int getYVelocity() {
 		return yVelocity;
 	}

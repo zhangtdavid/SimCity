@@ -920,7 +920,7 @@ public class Application {
 		//              c3JP.startThread();
 		//              c4JP.startThread();
 		//             
-		for(int j = 0; j < 7; j++) {
+		for(int j = 0; j < 0; j++) {
 			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
@@ -1077,6 +1077,8 @@ public class Application {
 		 */
 		public static BuildingInterface findRandomBuilding(BUILDING type) {
 			List<BuildingInterface> list = map.get(type);
+			if(list == null)
+				return null;
 			Collections.shuffle(list);
 			return list.get(0);
 		}

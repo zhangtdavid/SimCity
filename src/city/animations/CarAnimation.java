@@ -18,9 +18,9 @@ import city.gui.CityRoadIntersection;
 import city.gui.exteriors.CityViewApt;
 
 public class CarAnimation extends Animation implements AnimatedCar {
-	
+
 	// Data
-	
+
 	private Car car = null;
 
 	private int xPos, yPos;
@@ -31,10 +31,10 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	private CityRoad startingRoad = null;
 	private CityRoad endRoad = null;
 	private Rectangle rectangle;
-	
+
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = true;
-	
+
 	private static BufferedImage cityViewCarNorthImage = null;
 	private static BufferedImage cityViewCarEastImage = null;
 	private static BufferedImage cityViewCarSouthImage = null;
@@ -59,9 +59,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Paint
-	
+
 	public void updatePosition() {
 		// Getting on the first road
 		if(startingRoad != null) {
@@ -119,34 +119,37 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			car.msgAtDestination();
 		}
 	}
-	
+
 	public void draw(Graphics2D g) {
-//		g.setColor(Color.PINK);
-//		g.fillRect(xPos, yPos, SIZE, SIZE);
-//		g.setColor(Color.red);
-//		rectangle.setLocation(xPos, yPos);
-//		if(car != null)
-//			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
-		if(Application.trafficControl != null && startingRoad == null && atDestinationRoad == false) {
-			CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
-			if(currentRoad.getClass() == CityRoadIntersection.class)
-				currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
-			if(currentRoad == null)
-				imageToRender = cityViewCarEastImage;
-			else if(currentRoad.getXVelocity() > 0)
-				imageToRender = cityViewCarEastImage;
-			else if(currentRoad.getXVelocity() < 0)
-				imageToRender = cityViewCarWestImage;
-			else if(currentRoad.getYVelocity() < 0)
-				imageToRender = cityViewCarNorthImage;
-			else if(currentRoad.getYVelocity() > 0)
-				imageToRender = cityViewCarSouthImage;
+		if(isUgly) {
+			g.setColor(Color.PINK);
+			g.fillRect(xPos, yPos, SIZE, SIZE);
+			g.setColor(Color.red);
+			rectangle.setLocation(xPos, yPos);
+			if(car != null)
+				g.drawString(car.getClass().getSimpleName(), xPos, yPos);
+		} else {
+			if(Application.trafficControl != null && startingRoad == null && atDestinationRoad == false) {
+				CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
+				if(currentRoad.getClass() == CityRoadIntersection.class)
+					currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
+				if(currentRoad == null)
+					imageToRender = cityViewCarEastImage;
+				else if(currentRoad.getXVelocity() > 0)
+					imageToRender = cityViewCarEastImage;
+				else if(currentRoad.getXVelocity() < 0)
+					imageToRender = cityViewCarWestImage;
+				else if(currentRoad.getYVelocity() < 0)
+					imageToRender = cityViewCarNorthImage;
+				else if(currentRoad.getYVelocity() > 0)
+					imageToRender = cityViewCarSouthImage;
+			}
+			g.drawImage(imageToRender, xPos, yPos, null);
 		}
-		g.drawImage(imageToRender, xPos, yPos, null);
 	}
-	
+
 	// Action
-	
+
 	public void goToDestination(BuildingInterface destination) {
 		destinationBuilding = destination;
 		startingRoad = Application.CityMap.findClosestRoad(currentBuilding);
@@ -158,9 +161,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		this.setVisible(true);
 		this.car.print("Going to destination " + destination);
 	}
-	
+
 	// Getters
-	
+
 	@Override
 	public int getXPos() {
 		return xPos;
@@ -170,34 +173,34 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	public int getYPos() {
 		return yPos;
 	}
-	
+
 	@Override
 	public Car getCar() {
 		return car;
 	}
-	
+
 	@Override
 	public BuildingInterface getDestinationBuilding() {
 		return destinationBuilding;
 	}
-	
+
 	@Override
 	public CityRoad getEndRoad() {
 		return endRoad;
 	}
-	
+
 	@Override
 	public boolean getAtDestinationRoad() {
 		return atDestinationRoad;
 	}
-	
+
 	@Override
 	public CityRoad getStartingRoad() {
 		return startingRoad;
 	}
-	
+
 	// Setters
-	
+
 	@Override
 	public void setXPos(int x) {
 		xPos = x;
@@ -227,9 +230,9 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	public void setStartingRoad(CityRoad startingRoad) {
 		this.startingRoad = startingRoad;
 	}
-	
+
 	// Utilities
-	
+
 	@Override
 	public boolean contains(int x, int y) {
 		return rectangle.contains(x, y);

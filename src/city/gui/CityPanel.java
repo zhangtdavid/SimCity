@@ -29,6 +29,7 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	public List<AnimationInterface> animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 	protected Color background;
 	protected Timer timer;
+	protected boolean isUgly = false;
 	
 	private static BufferedImage cityViewBackgroundImage = null;
 
@@ -55,17 +56,20 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	public void drawComponents(Graphics g) {
 		synchronized(movings) {
 			for (CityViewBuilding c:movings) {
+				c.setUgly(isUgly);
 				c.paint(g);
 			}
 		}
 		synchronized(animations) {
 			for (AnimationInterface a : animations) {
+				a.setUgly(isUgly);
 				if(a.getVisible())
 					a.draw((Graphics2D) g);
 			}
 		}
 		synchronized(statics) {
 			for (CityViewBuilding c:statics) {
+				c.setUgly(isUgly);
 				c.paint(g);
 			}
 		}
@@ -107,5 +111,12 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	public void actionPerformed(ActionEvent e) {
 		this.repaint();
 	}
-
+	
+	public void setUgly(boolean newUgly) {
+		isUgly = newUgly;
+	}
+	
+	public boolean getUgly() {
+		return isUgly;
+	}
 }

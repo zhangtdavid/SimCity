@@ -11,9 +11,9 @@ import javax.imageio.ImageIO;
 import city.gui.BuildingCard;
 
 public class CityViewMarket extends CityViewBuilding{
-	
+
 	private static BufferedImage cityViewMarketImage = null;
-	
+
 	public CityViewMarket(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 25, 25));
@@ -28,13 +28,15 @@ public class CityViewMarket extends CityViewBuilding{
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-//		super.paint(g);
-		g.drawImage(cityViewMarketImage, x, y, null);
+		if(isUgly)
+			super.paint(g);
+		else
+			g.drawImage(cityViewMarketImage, x, y, null);
 	}
 
 }

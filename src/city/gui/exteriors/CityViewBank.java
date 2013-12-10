@@ -11,7 +11,7 @@ import javax.imageio.ImageIO;
 import city.gui.BuildingCard;
 
 public class CityViewBank extends CityViewBuilding {
-	
+
 	private static BufferedImage cityViewBankImage = null;
 
 	public CityViewBank(int x, int y) {
@@ -38,7 +38,9 @@ public class CityViewBank extends CityViewBuilding {
 
 	@Override
 	public void paint(Graphics g) {
-		//		super.paint(g);
-		g.drawImage(cityViewBankImage, x, y, null);
+		if(isUgly)		
+			super.paint(g);
+		else
+			g.drawImage(cityViewBankImage, x, y, null);
 	}
 }
