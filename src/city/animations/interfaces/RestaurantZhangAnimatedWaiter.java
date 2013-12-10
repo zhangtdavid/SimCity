@@ -27,6 +27,10 @@ public interface RestaurantZhangAnimatedWaiter extends AnimationInterface {
     
     // Getters
     
+    public int getBaseX();
+    
+    public int getBaseY();
+    
     // Setters
     
     // Utilities

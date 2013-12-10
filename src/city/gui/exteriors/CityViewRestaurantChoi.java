@@ -11,14 +11,14 @@ import javax.imageio.ImageIO;
 import city.gui.BuildingCard;
 
 public class CityViewRestaurantChoi extends CityViewBuilding {
-	
+
 	private static BufferedImage cityViewRestaurantChoiImage = null;
 
 	public CityViewRestaurantChoi(int x, int y) {
 		super(x, y, Color.red, "Restaurant 1");
 		setRectangle(new Rectangle(x, y, 25, 25));
 	}
-	
+
 	public CityViewRestaurantChoi(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 25, 25));
@@ -29,16 +29,18 @@ public class CityViewRestaurantChoi extends CityViewBuilding {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		//		super.paint(g);
-		g.drawImage(cityViewRestaurantChoiImage, x, y, null);
+		if(isUgly)
+			super.paint(g);
+		else
+			g.drawImage(cityViewRestaurantChoiImage, x, y, null);
 	}
 }

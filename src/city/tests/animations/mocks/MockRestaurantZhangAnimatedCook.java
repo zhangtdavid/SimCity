@@ -81,6 +81,12 @@ public class MockRestaurantZhangAnimatedCook extends MockAnimation implements Re
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 	
 }

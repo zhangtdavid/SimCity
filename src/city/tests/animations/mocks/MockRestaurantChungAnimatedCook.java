@@ -59,4 +59,10 @@ public class MockRestaurantChungAnimatedCook extends MockAnimation implements Re
 		cook.msgAnimationAtPlating();		
 	}
 
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

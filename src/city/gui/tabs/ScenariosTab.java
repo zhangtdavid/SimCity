@@ -38,16 +38,6 @@ public class ScenariosTab extends JPanel implements ActionListener{
 		GridBagConstraints c = new GridBagConstraints();
 		c.fill = GridBagConstraints.HORIZONTAL;
 
-        
-        btnScenarioJ = new JButton("Big City Scenario A/C/E/G/J");
-        btnScenarioJ.setFocusable(false);
-        btnScenarioJ.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		Application.runBigCity();
-        	}
-        });
-        btnScenarioJ.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        this.add(btnScenarioJ);
 		
         btnScenarioF = new JButton("Ghost Town Scenario F");
         btnScenarioF.setFocusable(false);

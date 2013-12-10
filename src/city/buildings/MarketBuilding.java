@@ -172,7 +172,7 @@ public class MarketBuilding extends Building implements Market {
 			
 			if(!super.occupyingRoleExists(m)) {
 				manager = m;
-				m.setActive();
+				//m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
 			}			
 		}
@@ -185,7 +185,7 @@ public class MarketBuilding extends Building implements Market {
 				anim.setVisible(true);
 				this.getPanel().addVisualizationElement(anim);
 				cashier = c;
-				c.setActive();
+				//c.setActive();
 				super.addOccupyingRole(c, anim);
 			}
 		}
@@ -198,7 +198,7 @@ public class MarketBuilding extends Building implements Market {
 				anim.setVisible(true);
 				this.getPanel().addVisualizationElement(anim);
 				this.addEmployee(e);
-				e.setActive();
+				//e.setActive();
 				super.addOccupyingRole(e, anim);
 			}
 		}
@@ -212,7 +212,7 @@ public class MarketBuilding extends Building implements Market {
 				//anim.setVisible(true);
 				//panel.addVisualizationElement(anim);
 				this.addDeliveryPerson(m);
-				m.setActive();
+				//m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
 			}
 		}

@@ -65,7 +65,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	public void msgDepositCompleted() {
 		print("DepositCompleted message received");
 		st = STATE.exit;
-//	    stateChanged();
+	    stateChanged();
 	}
 	
 	@Override
@@ -73,7 +73,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		print("AccountCreated message received");
 		acctNum = acct;
 		st = STATE.exit;
-		//stateChanged();
+		stateChanged();
 	}
 	
 	@Override
@@ -81,7 +81,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		print("HereIsWithdrawal message received");
 		netTransaction += money;
 		st = STATE.exit;
-		//stateChanged();
+		stateChanged();
 	}
 	
 	@Override

@@ -38,7 +38,9 @@ public class CityViewRestaurantZhang extends CityViewBuilding {
 	
 	@Override
 	public void paint(Graphics g) {
-		//		super.paint(g);
-		g.drawImage(cityViewRestaurantZhangImage, x, y, null);
+		if(isUgly)
+			super.paint(g);
+		else
+			g.drawImage(cityViewRestaurantZhangImage, x, y, null);
 	}
 }

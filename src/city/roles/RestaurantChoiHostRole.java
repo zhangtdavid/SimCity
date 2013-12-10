@@ -116,7 +116,7 @@ public class RestaurantChoiHostRole extends JobRole implements RestaurantChoiHos
 	
 	@Override
 	public boolean runScheduler() {
-		if(wantsToLeave && building.host != this && waitingCustomers.isEmpty()){
+		if(wantsToLeave && building.getHost() != this && waitingCustomers.isEmpty()){
 			wantsToLeave = false;
 			super.setInactive();
 		}
@@ -206,7 +206,7 @@ public class RestaurantChoiHostRole extends JobRole implements RestaurantChoiHos
 	}
 
 	private void assignTable(int i){
-		print("Host told "+leastActiveWaiter.getName()
+		print("Host told "+leastActiveWaiter.getPerson().getName()
 				+" to seat customer " + waitingCustomers.get(0).getPerson().getName() 
 				+  " at table " + tables.get(i).getTableNumber());
 		synchronized(tables){
@@ -239,7 +239,7 @@ public class RestaurantChoiHostRole extends JobRole implements RestaurantChoiHos
 	
 	@Override
 	public void setInactive(){
-		if(building.host != this && waitingCustomers.isEmpty()){
+		if(building.getHost() != this && waitingCustomers.isEmpty()){
 			super.setInactive();
 		}else{
 			wantsToLeave = true;

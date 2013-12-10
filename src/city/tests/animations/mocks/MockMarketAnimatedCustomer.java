@@ -72,6 +72,12 @@ public class MockMarketAnimatedCustomer extends MockAnimation implements MarketA
 		customer.msgAnimationFinishedLeaveMarket();	
 	}
 
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
+
 
 
 

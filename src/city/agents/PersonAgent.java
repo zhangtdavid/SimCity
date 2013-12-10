@@ -120,7 +120,6 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.cash = 0;
-		this.hasEaten = false;
 		this.home = residence;
 		this.currentLocation = residence;
 		this.animation = animation;
@@ -1085,6 +1084,7 @@ public class PersonAgent extends Agent implements Person {
 		if (this.hasEaten) { disposition = false; }
 
 		return disposition;
+//		return true; for testing restaurant
 	}
 
 	/**

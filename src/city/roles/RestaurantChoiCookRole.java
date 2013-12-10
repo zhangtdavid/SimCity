@@ -4,23 +4,32 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.concurrent.Semaphore;
 
 import trace.AlertLog;
 import trace.AlertTag;
+import utilities.MarketOrder;
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
+import city.Application.BUILDING;
+import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCook;
 import city.bases.JobRole;
 import city.bases.RestaurantBuilding.FoodOrderState;
+import city.bases.Role;
 import city.bases.interfaces.RestaurantBuildingInterface.Food;
+import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.interfaces.Market;
+import city.roles.RestaurantChungCookRole.MyMarketOrder;
 import city.roles.interfaces.MarketCustomerDelivery;
+import city.roles.interfaces.RestaurantChoiCashier;
 import city.roles.interfaces.RestaurantChoiCook;
+import city.roles.interfaces.RestaurantChungCook.MarketOrderState;
 
 public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCook {
 
@@ -37,9 +46,8 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 	private Timer timer = new Timer(); // for cooking!
 	private List<myMarket> markets = Collections.synchronizedList(new ArrayList<myMarket>()); // myMarket has a MarketBuilding AND goodies.
     private MarketCustomerDelivery marketCustomerDelivery;
-    // private RestaurantChoiCashier cashier; // THIS IS REQUIRED FOR MARKETS.
-    // private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
-    
+    private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>()); 
+    private List<Role> marketCustomerDeliveryRoles = new ArrayList<Role>();
 	// Constructor
     
 	/**
@@ -82,7 +90,15 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 		o.setState(RestaurantChoiOrder.COOKED);
 		stateChanged();
 	}
-
+	
+	/**
+	 * This is a self-msg anyways, so I left it private.
+	 */
+    private void msgSelfLowFoodsIdentified() {
+        print("RestaurantChoiCook received msgSelfLowFoodsIdentified");
+        stateChanged();
+    }
+    
 	/*@Override
 	public void msgOutOfThisFood(Market m, int choice) {
 		synchronized(markets){
@@ -95,10 +111,10 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 	}*/
 	
 	@Override
-	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id) {
-        print("Cook received msgFoodReceived");
-        //MyMarketOrder mo = findMarketOrder(id); //TODO THIS IS FOR MARKET INTEGRATION
-        //removeMarketOrderFromList(mo);
+	public void msgFoodReceived(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
+		print("RestaurantChoiCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
+        MyMarketOrder mo = findMarketOrder(id);
+        marketOrders.remove(mo);
         
         for (FOOD_ITEMS i: marketOrder.keySet()) {
             Food f = findFood(i.toString());
@@ -148,6 +164,37 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 	public boolean runScheduler() {
 		boolean blocking = false;
 		// Role Scheduler
+		if(wantsToLeave && building.seatedCustomers == 0){
+			wantsToLeave = false;
+			super.setInactive();
+		}
+		
+		for (Role r : marketCustomerDeliveryRoles) {
+            if (r.getActive() && r.getActivity()) {
+                    blocking  = true;
+                    boolean activity = r.runScheduler();
+                    if (!activity) {
+                            r.setActivityFinished();
+                    }
+                    break;
+            }
+            // The role becomes inactive when the order is fulfilled, cook should remove the role from its list
+            else if (!r.getActive()) {
+                    MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
+                    marketCustomerDeliveryRoles.remove(r);
+                    break;
+            }
+		}
+		
+        synchronized(marketOrders) {
+            for (MyMarketOrder o: marketOrders) {
+                if (o.s == MarketOrderState.Pending) {
+                    orderFoodThatIsLow(o);
+                    return true;
+                }
+            }
+        }
+
 		if (marketCustomerDelivery != null && marketCustomerDelivery.getActive() && marketCustomerDelivery.getActivity()) {
 			blocking  = true;
 			boolean activity = marketCustomerDelivery.runScheduler();
@@ -155,10 +202,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 				marketCustomerDelivery.setActivityFinished();
 			}
 		}
-		if(wantsToLeave && building.seatedCustomers == 0){
-			wantsToLeave = false;
-			super.setInactive();
-		}
+		
 		synchronized(orders){ // take from grill to plates
 			for(int i = 0; i < orders.size(); i ++){
 				if(orders.get(i).getState() == RestaurantChoiOrder.COOKED){
@@ -195,6 +239,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 			CheckBack();
 			checkback = true;		
 		}
+
 		cookGui.DoLeave();
 		return blocking;
 	}
@@ -206,14 +251,36 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 			o.setState(RestaurantChoiOrder.READY_FOR_PICKUP);
 		}
 		o.getWaiter().msgOrderComplete(o); //send this to waiter!
-		print("Moved plate to plating area. Told " + o.getWaiter().getName() + " that an item is done");
+		print("Moved plate to plating area. Told " + o.getWaiter().getPerson().getName() + " that an item is done");
 	}
 
+    private void identifyFoodThatIsLow() {
+        print("Identifying food that is low");                
+        Map<FOOD_ITEMS, Integer> lowFoods = new HashMap<FOOD_ITEMS, Integer>();                
+        int numLow = 0;
+        
+        for (FOOD_ITEMS i: building.getFoods().keySet()) {
+            if (building.getFoods().get(i).getFoodOrderState() == FoodOrderState.None && (building.getFoods().get(i).getAmount() <= building.getFoods().get(i).getLow())) {
+                    lowFoods.put(i, building.getFoods().get(i).getCapacity() - building.getFoods().get(i).getAmount());
+                building.getFoods().get(i).setFoodOrderState(FoodOrderState.Pending);
+                numLow++;
+            }
+            else lowFoods.put(i, 0);
+        }
+
+        if (numLow > 0) marketOrders.add(new MyMarketOrder(new MarketOrder(lowFoods)));
+        
+        msgSelfLowFoodsIdentified();
+    }
+
+	
+	
 	private boolean AnalyzeCookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.CHECKING);
 		}
 		print("Checking if I have ingredients");
+		this.identifyFoodThatIsLow();
 		//this is the internal food object corresponding to the choice in order (below).
 		Food tempFood = building.getFoods().get(o.getChoice());
 		if(tempFood.getAmount() <= tempFood.getLow()){
@@ -239,7 +306,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 					//MarketOrder mo = new MarketOrder(forOrder); // since this is direct: one order at a time, deal with it~
 				}
 				tempFood.setFoodOrderState(FoodOrderState.Pending);
-				print("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.getItem());
+				//print("Asked Market " + marketIndex%markets.size() + " for " + t + " " + tempFood.getItem());
 			}
 		}
 		if(tempFood.getAmount() == 0){ // if we happen to be at 0 of the stock...
@@ -254,6 +321,35 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 		return true;
 	}
 
+	private void orderFoodThatIsLow(MyMarketOrder o) {
+        print("Ordering food that is low");
+        o.s = MarketOrderState.Ordered;
+        
+        for (FOOD_ITEMS i: o.order.getOrderItems().keySet()) {
+            if (o.order.getOrderItems().get(i) > 0) {
+                Food f = findFood(i.toString());
+                f.setFoodOrderState(FoodOrderState.Ordered);
+            }
+        }
+
+        for (FOOD_ITEMS i: building.getFoods().keySet()) {
+            print("Current Inventory: " + i + " " + building.getFoods().get(i).getAmount());
+        }
+
+        for (FOOD_ITEMS i: o.order.getOrderItems().keySet()) {
+            print("Order: " + i + " " + o.order.getOrderItems().get(i));
+        }
+         
+        MarketBuilding selectedMarket = (MarketBuilding) CityMap.findRandomBuilding(BUILDING.market);
+        MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(building, o.order, building.getCashier().getMarketCustomerDeliveryPayment());
+		marketCustomerDelivery.setMarket(selectedMarket);
+		marketCustomerDelivery.setPerson(super.getPerson());
+		marketCustomerDelivery.setActive();
+		marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
+		building.getCashier().msgAddMarketOrder(selectedMarket, o.order);
+    }
+
+	
 	private boolean CookOrder(RestaurantChoiOrder o) {
 		synchronized(orders){
 			o.setState(RestaurantChoiOrder.COOKING);
@@ -396,10 +492,10 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
 		building.setFoodQuantity(FOOD_ITEMS.steak, 0);
 	}
 	
-	/* TODO THIS IS FOR MARKET INTEGRATION
+	
     public MyMarketOrder findMarketOrder(int id) {
         for(MyMarketOrder o: marketOrders){
-            if(o.order.orderId == id) {
+            if(o.getOrder().getOrderId() == id) {
                 return o;
             }
         }
@@ -411,10 +507,10 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
                 marketOrders.remove(order);
             }
         }
-    }*/
+    }
 	
     private Food findFood(String choice) {
-        for(Food f: building.getFoods().values()){
+    	for(Food f: building.getFoods().values()){
             if(f.getItem().equals(choice)) {
                 return f;
             }
@@ -449,19 +545,21 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
     }
     
 	// Classes
-    
-    /*     // TODO THIS IS FOR MARKET INTEGRATION
-	   private class MyMarketOrder{
-	    	MarketOrder order;
-	        MarketOrderState s;
-	        
-	        public MyMarketOrder(MarketOrder o) {
-	        	order = new MarketOrder(o);
-	            s = MarketOrderState.Pending;
-	        }
-	    }
-	    private enum MarketOrderState
-	    {Pending, Ordered}; */
-    
-    
+    public class MyMarketOrder{
+    	private MarketOrder order;
+        private MarketOrderState s;
+        
+        public MyMarketOrder(MarketOrder o) {
+        	order = new MarketOrder(o);
+            s = MarketOrderState.Pending;
+        }
+        
+        public MarketOrder getOrder() {
+			return order;
+		}
+        
+        public MarketOrderState getMarketOrderState() {
+        	return s;
+		}
+    }
 }

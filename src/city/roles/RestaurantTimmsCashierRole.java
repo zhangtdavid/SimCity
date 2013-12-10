@@ -59,7 +59,7 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 		
 		// The sub-role for paying the market is always part of the cashier. It's always active.
 		// Not giving the sub-role knowledge of the role's person. Hopefully this won't cause problems.
-		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(rtb, marketTransactions);
+		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(rtb, marketTransactions, this);
 		marketPaymentRole.setActive();
 		roles.add((Role) marketPaymentRole);
 	}

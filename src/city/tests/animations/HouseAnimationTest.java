@@ -177,7 +177,7 @@ public class HouseAnimationTest extends TestCase {
 		assertEquals("Status should say Cooking steak", "Cooking steak", homeAnimation.getStatus()); // check status (with mockperson, can not skip "cooking");
 		
 		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.StationaryAtStove.toString()); // STATES confirmed
-		Thread.sleep(4000); // cooking
+		Thread.sleep(5000); // cooking
 		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // cooked; confirmed
 		homeAnimation.setCoords(HousePanel.HTX+20, HousePanel.HTY);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);

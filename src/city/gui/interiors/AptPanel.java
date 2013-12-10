@@ -69,7 +69,6 @@ public class AptPanel extends ResidenceBasePanel {
 			
 			graphics.fillRect(APT_BED[i][0], APT_BED[i][1], WIDTH, WIDTH);
 			graphics.setColor(Color.WHITE); // door: white
-			
 			graphics.fillRect(APT_DOOR[i][0], APT_DOOR[i][1], WIDTH, WIDTH);
 		}
 		// now draw lines dividing the rooms

@@ -404,6 +404,8 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	public void setActive() {
 		super.setActive();
 		thisGui.setVisible(true);
+		thisGui.GoToDestination(190, 50);
+		waitForAnimation();
 		runScheduler();
 	}
 	
@@ -420,6 +422,8 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				return;
 			}
 		}
+		thisGui.GoToDestination(-20, -20);
+		waitForAnimation();
 		thisGui.setVisible(false);
 		super.setInactive();
 	}

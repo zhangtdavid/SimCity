@@ -28,6 +28,7 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 	private JButton buttonRestaurantChung;
 	private JButton buttonRestaurantJP;
 	private JButton buttonRestaurantTimms;
+	private JButton buttonTogglePrettyView;
 
 	public AddBuildingTab(MainFrame mf) {
 		mainFrame = mf;
@@ -67,6 +68,9 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 		buttonRestaurantTimms = new JButton("Add RestaurantTimms");
 		add(buttonRestaurantTimms);
 		buttonRestaurantTimms.addActionListener(this);
+		buttonTogglePrettyView = new JButton("Toggle Ugly! (Debug View)");
+		add(buttonTogglePrettyView);
+		buttonTogglePrettyView.addActionListener(this);
 	}
 
 	public void actionPerformed(ActionEvent e) {
@@ -74,7 +78,9 @@ public class AddBuildingTab extends JPanel implements ActionListener{
 			mainFrame.cityView.statics.remove(mainFrame.cityView.statics.remove(mainFrame.cityView.statics.size() - 1));
 			mainFrame.cityView.addingObject = false;
 		}
-		if(e.getSource().equals(buttonApt)) {
+		if(e.getSource().equals(buttonTogglePrettyView)) {
+			mainFrame.cityView.setUgly(!mainFrame.cityView.getUgly());
+		} else if(e.getSource().equals(buttonApt)) {
 			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.APT);
 		} else if (e.getSource().equals(buttonHouse)) {
 			mainFrame.cityView.addObject(CityViewBuilding.BUILDINGTYPE.HOUSE);

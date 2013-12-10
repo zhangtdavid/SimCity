@@ -2,21 +2,16 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
-import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
-import javax.imageio.ImageIO;
 
 import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
-import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
@@ -80,13 +75,17 @@ public class CityRoad extends CityViewBuilding {
 
 	@Override
 	public void paint( Graphics g2 ) {
-		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
-			laneColor = Color.green;
-		}
-		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
-			laneColor = Color.red;
-		}
-		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
+		if(isUgly) {
+			if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALOFF || stopLightType == STOPLIGHTTYPE.VERTICALOFF)) {
+				laneColor = Color.green;
+			}
+			if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
+				laneColor = Color.red;
+			}
+		g2.setColor(laneColor);
+		g2.fillRect(xOrigin, yOrigin, width, height);
+		} else
+			g2.drawImage(imageToRender, xOrigin, yOrigin, null);
 		if(vehicle == null) 
 			return;
 		double x = 0;
@@ -95,7 +94,6 @@ public class CityRoad extends CityViewBuilding {
 		double vHeight = 0;
 		// Check for pedestrians at intersection
 		for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
-			System.out.println("asdfoiasndfsdaifosdafndisaodifnosadif");
 			if(sidewalksAtIntersection.getCurrentOccupant() != null)
 				return;
 		}
@@ -166,11 +164,11 @@ public class CityRoad extends CityViewBuilding {
 	public void updatePosition() { };
 
 	// Getters
-	
+
 	public int getXVelocity() {
 		return xVelocity;
 	}
-	
+
 	public int getYVelocity() {
 		return yVelocity;
 	}

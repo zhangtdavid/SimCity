@@ -36,6 +36,16 @@ public class TrafficControl implements ActionListener {
 	private static BufferedImage cityViewRoadNorthWestTurnImage = null;
 	private static BufferedImage cityViewRoadSouthEastTurnImage = null;
 	private static BufferedImage cityViewRoadSouthWestTurnImage = null;
+	
+	private static BufferedImage cityViewRoadNorthStopImage = null;
+	private static BufferedImage cityViewRoadEastStopImage = null;
+	private static BufferedImage cityViewRoadSouthStopImage = null;
+	private static BufferedImage cityViewRoadWestStopImage = null;
+	
+	private static BufferedImage cityViewRoadNorthGoImage = null;
+	private static BufferedImage cityViewRoadEastGoImage = null;
+	private static BufferedImage cityViewRoadSouthGoImage = null;
+	private static BufferedImage cityViewRoadWestGoImage = null;
 
 	public TrafficControl(List<CityRoad> roads) {
 		// Images for turns and straights
@@ -52,6 +62,14 @@ public class TrafficControl implements ActionListener {
 				cityViewRoadNorthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthWestTurnImage.png"));
 				cityViewRoadSouthEastTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthEastTurnImage.png"));
 				cityViewRoadSouthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthWestTurnImage.png"));
+				cityViewRoadNorthStopImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthStopImage.png"));
+				cityViewRoadEastStopImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadEastStopImage.png"));
+				cityViewRoadSouthStopImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthStopImage.png"));
+				cityViewRoadWestStopImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadWestStopImage.png"));
+				cityViewRoadNorthGoImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthGoImage.png"));
+				cityViewRoadEastGoImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadEastGoImage.png"));
+				cityViewRoadSouthGoImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthGoImage.png"));
+				cityViewRoadWestGoImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadWestGoImage.png"));
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -116,11 +134,19 @@ public class TrafficControl implements ActionListener {
 					r.setImageToRender(cityViewRoadCrosswalkNorthSouthImage);
 			}
 			// Stop light
-			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF) {
+			if(r.isRedLight() && (r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALON)) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.HORIZONTALON);
+				if(r.getHorizontal() && r.getXVelocity() > 0)
+					r.setImageToRender(cityViewRoadEastStopImage);
+				else if(r.getHorizontal() && r.getXVelocity() < 0)
+					r.setImageToRender(cityViewRoadWestStopImage);
 			}
-			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALON) {
+			if(r.isRedLight() && (r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALON || r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF)) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.VERTICALOFF);
+				if(r.getYVelocity() < 0)
+					r.setImageToRender(cityViewRoadNorthGoImage);
+				else if(r.getYVelocity() > 0)
+					r.setImageToRender(cityViewRoadSouthGoImage);
 			}
 			Application.getMainFrame().cityView.addMoving(r);
 		}
@@ -132,13 +158,28 @@ public class TrafficControl implements ActionListener {
 		for(CityRoad r : roads) {
 			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.HORIZONTALON);
+				if(r.getHorizontal() && r.getXVelocity() > 0)
+					r.setImageToRender(cityViewRoadEastStopImage);
+				else if(r.getHorizontal() && r.getXVelocity() < 0)
+					r.setImageToRender(cityViewRoadWestStopImage);
 			} else if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALON) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.HORIZONTALOFF);
-			}
-			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALON) {
-				r.setStopLightType(CityRoad.STOPLIGHTTYPE.VERTICALOFF);
+				if(r.getHorizontal() && r.getXVelocity() > 0)
+					r.setImageToRender(cityViewRoadEastGoImage);
+				else if(r.getHorizontal() && r.getXVelocity() < 0)
+					r.setImageToRender(cityViewRoadWestGoImage);
 			} else if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALOFF) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.VERTICALON);
+				if(!r.getHorizontal() && r.getYVelocity() > 0)
+					r.setImageToRender(cityViewRoadSouthStopImage);
+				else if(!r.getHorizontal() && r.getYVelocity() < 0)
+					r.setImageToRender(cityViewRoadNorthStopImage);
+			} else if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.VERTICALON) {
+				r.setStopLightType(CityRoad.STOPLIGHTTYPE.VERTICALOFF);
+				if(!r.getHorizontal() && r.getYVelocity() > 0)
+					r.setImageToRender(cityViewRoadSouthGoImage);
+				else if(!r.getHorizontal() && r.getYVelocity() < 0)
+					r.setImageToRender(cityViewRoadNorthGoImage);
 			}
 		}
 		stopLightTimer.restart();
