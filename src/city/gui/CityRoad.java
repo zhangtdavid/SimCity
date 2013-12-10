@@ -165,6 +165,14 @@ public class CityRoad extends CityViewBuilding {
 	public void updatePosition() { };
 
 	// Getters
+	
+	public int getXVelocity() {
+		return xVelocity;
+	}
+	
+	public int getYVelocity() {
+		return yVelocity;
+	}
 
 	public CityRoad getNextRoad() {
 		return nextRoad;
