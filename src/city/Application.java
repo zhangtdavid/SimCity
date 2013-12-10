@@ -920,7 +920,7 @@ public class Application {
 		//              c3JP.startThread();
 		//              c4JP.startThread();
 		//             
-		for(int j = 0; j < 1; j++) {
+		for(int j = 0; j < 7; j++) {
 			WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
 			testPersonAnimation.setVisible(true);
 			mainFrame.cityView.addAnimation(testPersonAnimation);
