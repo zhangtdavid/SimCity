@@ -5,6 +5,7 @@ import java.beans.PropertyChangeSupport;
 import city.agents.interfaces.Car;
 import city.bases.interfaces.BuildingInterface;
 import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.MarketDeliveryPerson;
 import city.tests.bases.mocks.MockRole;
 
 public class MockCarPassenger extends MockRole implements CarPassenger {
@@ -53,6 +54,12 @@ public class MockCarPassenger extends MockRole implements CarPassenger {
 
 	@Override
 	public String getStateString() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public MarketDeliveryPerson getParent() {
 		// TODO Auto-generated method stub
 		return null;
 	}

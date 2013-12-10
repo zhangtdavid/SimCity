@@ -47,7 +47,7 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		this.setShift(t1, t2);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChungBuilding.WORKER_SALARY);
-		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions, this));
 		roles.get(0).setActive();
 		roles.add((Role) restaurant.getBankCustomer());
 		roles.get(1).setActive();
@@ -96,9 +96,12 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 		log.add(new LoggedEvent("Cashier received msgAddMarketOrder."));
 		marketTransactions.add(new MarketTransaction(m, o));
 		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
-		roles.get(0).runScheduler();
 		stateChanged();
 	}
+	
+//	public void msgReceivedBill() {
+//		stateChanged();
+//	}
 	
 //  Scheduler
 //	=====================================================================
@@ -110,13 +113,9 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 //		if (transactions.size() == 0) return true; // Solved an issue I encountered, can't remember exactly?
 		
 		boolean blocking = false;
-		for (Role r : roles) if (r.getActive() && r.getActivity()) {
+		for (Role r : roles) if (r.getActive()) {
 			blocking  = true;
-			boolean activity = r.runScheduler();
-			if (!activity) {
-				r.setActivityFinished();
-			}
-			break;
+			r.runScheduler();
 		}
 				
 		if (workingState == WorkingState.GoingOffShift) {

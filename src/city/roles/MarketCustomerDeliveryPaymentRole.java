@@ -11,6 +11,7 @@ import utilities.MarketTransaction.MarketTransactionState;
 import city.Application.FOOD_ITEMS;
 import city.bases.JobRole;
 import city.bases.interfaces.RestaurantBuildingInterface;
+import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 
@@ -25,13 +26,16 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 	
 	private List<MarketTransaction> marketTransactions; // point to list shared with the restaurant cashier
 	
+	private RoleInterface parent;
+	
 //	Constructor
 //	=====================================================================
-	public MarketCustomerDeliveryPaymentRole(RestaurantBuildingInterface r, List<MarketTransaction> marketTransactions) {
+	public MarketCustomerDeliveryPaymentRole(RestaurantBuildingInterface r, List<MarketTransaction> marketTransactions, RoleInterface parent) {
 		super();
 		restaurant = r;
 		this.marketTransactions = marketTransactions;
 		this.setWorkplace(r);
+		this.parent = parent;
     }
 
 //  Messages
@@ -40,6 +44,7 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 //	---------------------------------------------------------------
 	@Override
 	public void msgHereIsBill(int bill, int id) {
+//		restaurant.getCashier.setActive();
 		log.add(new LoggedEvent("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier."));
 		print("MarketCustomerDeliveryPayment received msgHereIsBill from Market Cashier.");
 		try {
@@ -51,6 +56,9 @@ public class MarketCustomerDeliveryPaymentRole extends JobRole implements Market
 		MarketTransaction mt = findMarketTransaction(id);
     	mt.setMarketTransactionState(MarketTransactionState.Processing);
 		mt.setBill(bill);
+//		if (parent.getClass() == RestaurantChungCashier.class)
+//			((RestaurantChungCashier) parent).msgReceivedBill();
+		parent.setActivityBegun();
 		stateChanged(); // TODO need to fix this, change it to run when setActive
 	}
 

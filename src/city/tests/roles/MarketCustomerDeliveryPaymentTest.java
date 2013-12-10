@@ -92,7 +92,7 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 		customerDelivery.market = market;
 		
 		customerDeliveryPaymentPerson = new MockPerson("CustomerDeliveryPayment"); 
-		customerDeliveryPayment = new MarketCustomerDeliveryPaymentRole(restaurantChung, marketTransactions);
+		customerDeliveryPayment = new MarketCustomerDeliveryPaymentRole(restaurantChung, marketTransactions, cashier);
 		customerDeliveryPayment.setPerson(customerDeliveryPaymentPerson);
 		customerDeliveryPayment.setMarket(market);
 		

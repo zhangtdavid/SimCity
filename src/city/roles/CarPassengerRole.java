@@ -6,6 +6,7 @@ import city.agents.interfaces.Car;
 import city.bases.Role;
 import city.bases.interfaces.BuildingInterface;
 import city.roles.interfaces.CarPassenger;
+import city.roles.interfaces.MarketDeliveryPerson;
 
 public class CarPassengerRole extends Role implements CarPassenger {
 	
@@ -15,6 +16,8 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	private CarPassengerEvent myEvent = CarPassengerEvent.NONE; // Event of passenger
 	private Car myCar; // Car this person is getting into
 	private BuildingInterface destination; // Building this car is going to
+	
+	private MarketDeliveryPerson parent;
 	
 	// Constructor
 	
@@ -31,6 +34,12 @@ public class CarPassengerRole extends Role implements CarPassenger {
 		this.destination = destination;
 	}
 	
+	public CarPassengerRole(Car c, BuildingInterface destination, MarketDeliveryPerson parent) {
+		this.myCar = c;
+		this.destination = destination;
+		this.parent = parent;
+	}
+	
 	// Messages
 
 	/**
@@ -39,6 +48,8 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	@Override
 	public void msgImAtCar() {
 		myEvent = CarPassengerEvent.ATCAR;
+		if (parent != null)
+			parent.setActivityBegun();
 		stateChanged();
 	}
 
@@ -48,6 +59,8 @@ public class CarPassengerRole extends Role implements CarPassenger {
 	@Override
 	public void msgImAtDestination() { 
 		myEvent = CarPassengerEvent.ATDESTINATION;
+		if (parent != null)
+			parent.setActivityBegun();
 		stateChanged();
 	}
 	
@@ -79,6 +92,8 @@ public class CarPassengerRole extends Role implements CarPassenger {
 		print("Getting out of car " + myCar.getName());
 		myState = CarPassengerState.NOTDRIVING; // Reset state and event
 		myEvent = CarPassengerEvent.NONE;
+		if (parent != null)
+			parent.msgArrivedAtDestination();
 		this.setInactive();
 	}
 	
@@ -109,13 +124,17 @@ public class CarPassengerRole extends Role implements CarPassenger {
 		return myState.toString();
 	}
 	
+	@Override
+	public MarketDeliveryPerson getParent() {
+		return parent;
+	}
+	
 	// Setters
 	
 	@Override
 	public void setActive() {
-		super.setActivityBegun();
 		super.setActive();
-		myEvent = CarPassengerEvent.ATCAR;
+		this.msgImAtCar();
 	}
 	
 	// Utilities
