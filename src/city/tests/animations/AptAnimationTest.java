@@ -100,7 +100,7 @@ public class AptAnimationTest extends TestCase{
 		// Set up test environment
 	}
 	
-	public void testMovementInHouse() throws InterruptedException{
+	public void testMovementInApt() throws InterruptedException{
 
 		System.out.println("");
 		System.out.println("===================== Testing Animation Message Calls in House =====================");
@@ -178,7 +178,7 @@ public class AptAnimationTest extends TestCase{
 		assertEquals("Status should say Cooking steak", "Cooking steak", homeAnimation.getStatus()); // check status (with mockperson, can not skip "cooking");
 		
 		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.StationaryAtStove.toString()); // STATES confirmed
-		Thread.sleep(4000); // cooking
+		Thread.sleep(5000); // cooking
 		assertEquals("Command of home animation should be ToTable", homeAnimation.getCommand(), Command.ToTable.toString()); // cooked; confirmed
 		homeAnimation.setCoords(AptPanel.APT_TABLE[person.getRoomNumber()-1][0], AptPanel.APT_TABLE[person.getRoomNumber()-1][1]+20);
 		assertEquals("xDest = xPos", homeAnimation.getXPos(), homeAnimation.getDestination()[0]);

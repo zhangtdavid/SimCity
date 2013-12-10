@@ -256,7 +256,11 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		else
 			wantsToLeave = true; // if there are things to deal with, set yourself as not wanting more things to do
 	}
-	
+
+	@Override
+	public void setMarketCustomerDeliveryPaymentPerson() {
+		roles.get(0).setPerson(super.getPerson());		
+	}
 	// Utilities
 
 	private void getMoney() { //TODO bank needs to incorporate withdrawal

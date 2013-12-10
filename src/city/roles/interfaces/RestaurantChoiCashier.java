@@ -43,6 +43,7 @@ public interface RestaurantChoiCashier extends RoleInterface {
 	// Setters
 	
 	public void setGui(RestaurantChoiAnimatedCashier r);
+	public void setMarketCustomerDeliveryPaymentPerson();
 	
 	// Utilities
 

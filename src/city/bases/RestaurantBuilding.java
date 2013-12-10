@@ -26,10 +26,10 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 		super(name, panel, cityBuilding);
 		
         // Add items and their cooking times to a map		
-		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 2, 5, 10, 10)); // item, cookingTime, amount, low, capacity, price, orderSate
-		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 2, 5, 10, 12));
-		addFood(FOOD_ITEMS.salad, new Food("salad", 3, 2, 5, 10, 6));
-		addFood(FOOD_ITEMS.steak, new Food("steak", 12, 2, 5, 10, 16));        
+		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10)); // item, cookingTime, amount, low, capacity, price, orderSate
+		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));
+		addFood(FOOD_ITEMS.salad, new Food("salad", 3, 6, 5, 10, 6));
+		addFood(FOOD_ITEMS.steak, new Food("steak", 12, 6, 5, 10, 16));        
         setCash(800);
 	}
     
