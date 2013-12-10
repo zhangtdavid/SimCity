@@ -9,11 +9,14 @@ import java.util.Map;
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.MarketOrder;
+import utilities.MarketTransaction;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.bases.Building;
 import city.bases.JobRole;
 import city.bases.Role;
+import city.buildings.RestaurantZhangBuilding;
 import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantZhangCashier;
@@ -22,29 +25,35 @@ import city.roles.interfaces.RestaurantZhangHost;
 import city.roles.interfaces.RestaurantZhangWaiter;
 
 public class RestaurantZhangCashierRole extends JobRole implements RestaurantZhangCashier {
-	
+
 	// Data
-	
-	// private Map<RestaurantZhangMarket, Integer> marketBills = Collections.synchronizedMap(new HashMap<Market, Integer>());
-	// private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+
 	private List<RestaurantZhangCheck> pendingChecks = Collections.synchronizedList(new ArrayList<RestaurantZhangCheck>());
-	private List<Role> roles = new ArrayList<Role>();
 	private RestaurantZhangHost host;
 	private boolean restaurantClosing = false;
 	private Map<RestaurantZhangCustomer, Integer> tabCustomers = new HashMap<RestaurantZhangCustomer, Integer>();
 	private int balance = 10000;
 	private Map<String, Integer> menu;
-	
+
+	private RestaurantZhangBuilding restaurant;
+	private List<Role> roles = Collections.synchronizedList(new ArrayList<Role>());
+	private List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
+
 	// Constructor
 
 	public RestaurantZhangCashierRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
+		restaurant = (RestaurantZhangBuilding) restaurantToWorkAt;
 		this.setShift(shiftStart_, shiftEnd_);
 		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCASHIERSALARY);
-		// roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		// Market stuff
+		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions, this));
+		roles.get(0).setActive();
+//		roles.add((Role) restaurant.getBankCustomer());
+//		roles.get(1).setActive();
 	}
-	
+
 	// Messages
 
 	@Override
@@ -60,11 +69,43 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 		c.payment = cash;
 		stateChanged();
 	}
-	
+
+	// Sent by Cook
+	@Override
+	public void msgAddMarketOrder(Market m, MarketOrder o) {
+		print("Cashier received msgAddMarketOrder");
+		marketTransactions.add(new MarketTransaction(m, o));
+		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
+		stateChanged();
+	}
+
 	// Scheduler
 
 	@Override
 	public boolean runScheduler() {
+		boolean blocking = false;
+		
+		for (Role r : roles)  {
+			if (r.getActive() && r.getActivity()) {
+				if(r.getPerson() == null)
+					r.setPerson(this.getPerson()); // Sanity check
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity)
+					r.setActivityFinished();
+				break;
+			}
+		}
+		
+		synchronized(marketTransactions) {
+            for (MarketTransaction transaction : marketTransactions) {
+                    if (transaction.getMarketTransactionState() == MarketTransactionState.Done) {
+					marketTransactions.remove(transaction);
+					return true;
+				}
+			}
+		}
+
 		if(restaurantClosing) {
 			if(((RestaurantZhangHostRole)host).getNumberOfCustomersInRestaurant() <= 0) {
 				super.setInactive();
@@ -101,7 +142,7 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 	}
 
 	// Actions
-	
+
 	private void giveCheckToWaiter(RestaurantZhangCheck c) {
 		pendingChecks.remove(c);
 		c.status = RestaurantZhangCheck.CheckStatus.atWaiter;
@@ -138,51 +179,51 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 	//		balance -= (int)bill;
 	//		Do("Cashier balance after paying Market " + m.getName() + ": " + balance);
 	//	}
-	
+
 	// Getters
-	
+
 	@Override
 	public List<RestaurantZhangCheck> getPendingChecks() {
 		return pendingChecks;
 	}
-	
+
 	@Override
 	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
 		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO cleanup
 	}
-	
+
 	@Override
 	public RestaurantZhangHost getHost() {
 		return host;
 	}
-	
+
 	@Override
 	public Map<RestaurantZhangCustomer, Integer> getTabCustomers() {
 		return tabCustomers;
 	}
-	
+
 	@Override
 	public int getBalance() {
 		return balance;
 	}
-	
+
 	@Override
 	public Map<String, Integer> getMenu() {
 		return menu;
 	}
-	
+
 	// Setters
 
 	@Override
 	public void setMenu(RestaurantZhangMenu m) {
 		menu = new HashMap<String, Integer>(m.getMenu());
 	}
-	
+
 	@Override
 	public void setHost(RestaurantZhangHost h) {
 		host = h;
 	}
-	
+
 	@Override
 	public void setInactive() {
 		if(host != null) {
@@ -193,30 +234,15 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 		}
 		super.setInactive();
 	}
-	
+
 	// Utilities
-	
+
 	@Override
 	public void print(String msg) {
 		this.getPerson().printViaRole("RestaurantZhangCashier", msg);
-        AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCashierRole " + this.getPerson().getName(), msg);
-    }
+		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCashierRole " + this.getPerson().getName(), msg);
+	}
 
 	// Classes
-
-	public static class MarketTransaction {
-		public enum MarketTransactionState {Pending, Processing, WaitingForConfirmation};
-		public Market market;
-		public MarketOrder order;
-		public int bill;
-		public MarketTransactionState s;
-
-		public MarketTransaction (Market m, MarketOrder o) {
-			market = m;
-			order = new MarketOrder(o);
-			bill = 0;
-			s = MarketTransactionState.Pending;
-		}
-	}
 }
 

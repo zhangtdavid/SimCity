@@ -292,7 +292,6 @@ public class RestaurantZhangCustomerRole extends Role implements RestaurantZhang
 		timer.schedule(new TimerTask() {
 			public void run() {
 				choice = customerMenu.randomChoice(money);
-				choice = "steak";
 //				if(name.contains("thief")) { // Hack to make customer steal
 //					choice = customerMenu.randomChoice(50.00);
 //				}

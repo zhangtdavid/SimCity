@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.ConcurrentModificationException;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Timer;
@@ -18,14 +17,14 @@ import utilities.RestaurantZhangMenu;
 import utilities.RestaurantZhangOrder;
 import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
+import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
-import city.bases.Building;
 import city.bases.JobRole;
 import city.bases.RestaurantBuilding;
 import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
-import city.buildings.interfaces.Market;
+import city.buildings.RestaurantZhangBuilding;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.RestaurantZhangCashier;
 import city.roles.interfaces.RestaurantZhangCook;
@@ -35,10 +34,9 @@ import city.roles.interfaces.RestaurantZhangWaiter;
 public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangCook {
 
 	// Data
-	
+
 	private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
 	private RestaurantZhangCashier cashier;
-	private List<MarketCustomerDelivery> marketCustomerDeliveryList = new ArrayList<MarketCustomerDelivery>();
 	private RestaurantZhangAnimatedCook thisGui;
 	private RestaurantZhangHost host;
 	private Timer timer = new Timer();
@@ -48,18 +46,21 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	private RestaurantZhangRevolvingStand myOrderStand;
 	private boolean waitingToCheckStand = false;
 	private RestaurantZhangMenu mainMenu = new RestaurantZhangMenu();
-	private Map<String, Food> cookInventory = new HashMap<String, Food>();
-	private List<CookInvoice> cookInvoiceList = new ArrayList<CookInvoice>();
-	
+
+	private RestaurantZhangBuilding buildingOfEmployment;
+	private List<MarketCustomerDelivery> marketCustomerDeliveryList = Collections.synchronizedList(new ArrayList<MarketCustomerDelivery>());
+	private List<MyMarketOrder> marketOrders = Collections.synchronizedList(new ArrayList<MyMarketOrder>());
+
 	// Constructor
 
-	public RestaurantZhangCookRole(Building restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
+	public RestaurantZhangCookRole(RestaurantZhangBuilding restaurantToWorkAt, int shiftStart_, int shiftEnd_) {
 		super();
+		buildingOfEmployment = restaurantToWorkAt;
 		this.setShift(shiftStart_, shiftEnd_);
 		this.setWorkplace(restaurantToWorkAt);
 		this.setSalary(RESTAURANTZHANGCOOKSALARY);
 	}
-	
+
 	// Messages
 
 	@Override
@@ -81,42 +82,20 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		}
 	}
 
+	// From MarketDeliveryPerson
 	@Override
-	public void msgProcessedInvoice(String food, boolean isAvailable, int processedAmount) {
-		//		CookInvoice currentInvoice = null; // Find the cookInvoice associated with the food
-		//		for(CookInvoice ci : cookInvoiceList) {
-		//			if(ci.food == food) {
-		//				currentInvoice = ci;
-		//			}
-		//		}
-		//		if(currentInvoice != null) {
-		//			if(!isAvailable) { // If the market cannot fulfill it, switch the market for the invoice
-		//				currentInvoice.status = CookInvoiceStatus.changedMarket;
-		//				stateChanged();
-		//			} else if(currentInvoice.amount > processedAmount) {
-		//				CookInvoice newInvoice = new CookInvoice(currentInvoice.food, 
-		//						cookInventory.get(currentInvoice.food).threshold - (processedAmount + cookInventory.get(currentInvoice.food).amount), 
-		//						marketList.get(marketList.indexOf(currentInvoice.assignedMarket)));
-		//				newInvoice.status = CookInvoiceStatus.changedMarket;
-		//				cookInvoiceList.add(newInvoice);				
-		//				stateChanged();
-		//			}
-		//		} else {
-		//			print("Nonexistent invoice.");
-		//		}
-	}
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
+		print("RestaurantZhangCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
+		MyMarketOrder mo = findMarketOrder(id);
+		marketOrders.remove(mo);
 
-	@Override
-	public void msgHereIsInvoice(String food, int amount) {
-		//		CookInvoice currentInvoice = null; // Find the cookInvoice associated with the food
-		//		for(CookInvoice ci : cookInvoiceList) {
-		//			if(ci.food == food) {
-		//				currentInvoice = ci;
-		//			}
-		//		}
-		//		currentInvoice.amount = amount;
-		//		currentInvoice.status = CookInvoiceStatus.completed;
-		//		stateChanged();
+		for (FOOD_ITEMS i: marketOrder.keySet()) {
+			Food f = findFood(i.toString());
+			f.setAmount(f.getAmount() + marketOrder.get(i));
+			print("New Inventory: " + f.getItem() + " " + f.getAmount());
+			f.setFoodOrderState(RestaurantBuilding.FoodOrderState.None);
+		}
+		stateChanged();
 	}
 
 	@Override
@@ -124,9 +103,9 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		atBase.release();
 		stateChanged();
 	}
-	
+
 	// Scheduler
-	
+
 	@Override
 	public boolean runScheduler() {
 		try {
@@ -139,6 +118,25 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			}
 			// Role Scheduler
 			boolean blocking = false;
+			for(MarketCustomerDelivery r : marketCustomerDeliveryList) {
+				if (r.getActive() && r.getActivity()) {
+					blocking = true;
+					boolean activity = r.runScheduler();
+					if (!activity) {
+						r.setActivityFinished();
+					}
+					break;
+				}
+				// The role becomes inactive when the order is fulfilled, cook should remove the role from its list
+				else if (!r.getActive()) {
+					MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
+					marketOrders.remove(mo);
+					marketCustomerDeliveryList.remove(r);
+					break;
+				}
+			}
+
+
 			if (marketCustomerDeliveryList.isEmpty() != true) {
 				for(MarketCustomerDelivery r : marketCustomerDeliveryList) {
 					if(r.getActive() && r.getActivity())
@@ -213,26 +211,49 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		o.status = RestaurantZhangOrder.OrderStatus.cooking;
 		thisGui.addToPlatingArea(o.choice + "?", o.pos);
 		// Check if food is in stock
-		if(cookInventory.get(o.choice).getAmount()  <= 0) {
-			print("Out of " + cookInventory.get(o.choice).getItem());
+		if(findFood(o.choice).getAmount() <= 0) {
+			print("Out of " + findFood(o.choice).getItem());
 			mainMenu.remove(o.choice);
 			thisGui.removeFromPlatingArea(o.pos);
 			ordersToCook.remove(o);
 			o.w.msgOutOfFood(o.t);
-			for(CookInvoice ci : cookInvoiceList) {
-				if(ci.food == o.choice) { // Invoice for this food already exists
-					return;
+
+			Application.FOOD_ITEMS currentFoodItem = Application.FOOD_ITEMS.chicken;
+			for(Application.FOOD_ITEMS foodItem : Application.FOOD_ITEMS.values()) {
+				if(o.choice.equals(foodItem.toString())) {
+					currentFoodItem = foodItem;
+					break;
 				}
 			}
-			CookInvoice tempInvoice = new CookInvoice(o.choice, cookInventory.get(o.choice).getCapacity() - cookInventory.get(o.choice).getAmount(), markets.get(0));
-			cookInvoiceList.add(tempInvoice);
-			MarketCustomerDeliveryRole tempDeliveryRole = new MarketCustomerDeliveryRole(this.getWorkplace(RestaurantBuilding.class), tempInvoice.marketorder, cashier.getMarketCustomerDeliveryPayment());
-			marketCustomerDeliveryList.add(tempDeliveryRole);
-			tempDeliveryRole.setActive();
+
+			//Checks if an order of this type has been created
+			for(MyMarketOrder order : marketOrders) {
+				for(Application.FOOD_ITEMS foodInOrder : order.getOrder().getOrderItems().keySet()) {
+					if(foodInOrder == currentFoodItem) {
+						return;
+					}
+				}
+			}
+
+			buildingOfEmployment.getFoods().get(currentFoodItem).setFoodOrderState(RestaurantBuilding.FoodOrderState.Pending);
+			Map<FOOD_ITEMS, Integer> mapForNewMarketOrder = new HashMap<FOOD_ITEMS, Integer>();
+			mapForNewMarketOrder.put(currentFoodItem, buildingOfEmployment.getFoods().get(currentFoodItem).getCapacity());
+			MyMarketOrder newMarketOrder = new MyMarketOrder(new MarketOrder(mapForNewMarketOrder));
+			newMarketOrder.state = MarketOrderState.Ordered;
+			marketOrders.add(newMarketOrder);
+
+			MarketBuilding selectedMarket = (MarketBuilding) Application.CityMap.findRandomBuilding(Application.BUILDING.market);
+			MarketCustomerDelivery marketCustomerDelivery = new MarketCustomerDeliveryRole(buildingOfEmployment, newMarketOrder.order, buildingOfEmployment.getCashier().getMarketCustomerDeliveryPayment());
+			marketCustomerDelivery.setMarket(selectedMarket);
+			marketCustomerDelivery.setPerson(super.getPerson());
+			marketCustomerDelivery.setActive();
+			marketCustomerDeliveryList.add(marketCustomerDelivery);
+			buildingOfEmployment.getCashier().msgAddMarketOrder(selectedMarket, newMarketOrder.order);
+			
 			stateChanged();
 			return;
 		} else {
-			cookInventory.get(o.choice).setAmount(cookInventory.get(o.choice).getAmount() - 1);
+			findFood(o.choice).setAmount(findFood(o.choice).getAmount() - 1);
 		}
 		// Cooking
 		thisGui.goToPlating();
@@ -249,7 +270,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				orderIsReady(tempOrder);
 			}
 		},
-		(long) cookInventory.get(tempOrder.choice).getCookingTime());
+		(long) findFood(tempOrder.choice).getCookingTime());
 	}
 
 	private void orderIsReady(RestaurantZhangOrder o) {
@@ -315,79 +336,80 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 			e.printStackTrace();
 		}
 	}
-	
+
 	// Getters
-	
+
 	@Override
 	public List<MarketBuilding> getMarkets() {
 		return markets;
 	}
-	
+
 	@Override
 	public RestaurantZhangCashier getCashier() {
 		return cashier;
 	}
-	
+
 	@Override
 	public List<MarketCustomerDelivery> getmarketCustomerDeliveryList() {
 		return marketCustomerDeliveryList;
 	}
-	
+
 	@Override
 	public RestaurantZhangAnimatedCook getGui() {
 		return thisGui;
 	}
-	
+
 	@Override
 	public RestaurantZhangHost getHost() {
 		return host;
 	}
-	
+
 	@Override
 	public List<RestaurantZhangOrder> getOrdersToCook() {
 		return ordersToCook;
 	}
-	
+
 	@Override
 	public RestaurantZhangRevolvingStand getOrderStand() {
 		return myOrderStand;
 	}
-	
+
 	@Override
 	public boolean getWaitingToCheckStand() {
 		return waitingToCheckStand;
 	}
-	
+
 	@Override
 	public RestaurantZhangMenu getMainMenu() {
 		return mainMenu;
 	}
-	
-	@Override
-	public Map<String, Food> getCookInventory() {
-		return cookInventory;
-	}
-	
-	@Override
-	public List<CookInvoice> getCookInvoiceList() {
-		return cookInvoiceList;
-	}
-	
+
 	@Override
 	public int getPosOfNewOrder() {
 		return ordersToCook.size();
 	}
 
+	private MyMarketOrder findMarketOrder(int orderId) {
+		for(MyMarketOrder order : marketOrders) {
+			if(order.getOrder().getOrderId() == orderId)
+				return order;
+		}
+		return null;
+	}
+
+	private Food findFood(String foodString) {
+		for(Food f : buildingOfEmployment.getFoods().values()) {
+			if(f.getItem().equals(foodString))
+				return f;
+		}
+		return null;
+	}
+
 	// Setters
 
 	@Override
-	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food) {
+	public void setMenuTimes(RestaurantZhangMenu m) {
 		mainMenu = m;
-		Iterator<Map.Entry<FOOD_ITEMS, Food>> foodIt = food.entrySet().iterator();
-		while(foodIt.hasNext()) {
-			Map.Entry<FOOD_ITEMS, Food> entry = foodIt.next();
-			cookInventory.put(entry.getValue().getItem(), entry.getValue());
-		}
 	}
 
 	@Override
@@ -408,12 +430,12 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		waitForAnimation();
 		runScheduler();
 	}
-	
+
 	@Override
 	public void setHost(RestaurantZhangHost h) {
 		host = h;
 	}
-	
+
 	@Override
 	public void setInactive() {
 		if(host != null) {
@@ -427,55 +449,74 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		thisGui.setVisible(false);
 		super.setInactive();
 	}
-	
+
 	// Utilities
-	
+
 	@Override
 	public void print(String msg) {
 		this.getPerson().printViaRole("RestaurantZhangCook", msg);
 		AlertLog.getInstance().logMessage(AlertTag.RESTAURANTZHANG, "RestaurantZhangCookRole " + this.getPerson().getName(), msg);
-    }
-	
+	}
+
 	@Override
 	public void hackOrderIsReady(RestaurantZhangOrder o) {
 		orderIsReady(o);
 	}
-	
+
 	@Override
 	public void addMarket(MarketBuilding m) {
 		markets.add(m);
 	}
-	
+
 	// Classes
 
-	public static class CookInvoice {
-		// MarketBuilding assignedMarket;
-		MarketOrder marketorder;
-		// CookInvoiceStatus status;
-		String food;
-		// int amount;
-		// static enum CookInvoiceStatus {created, processing, changedMarket, completed};
+	// Classes
+	public class MyMarketOrder {
+		private MarketOrder order;
+		private MarketOrderState state;
 
-		CookInvoice(String food_, int amount_, Market market_) {
-			food = food_;
-			// amount = amount_;
-			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();
-			switch(food_) {
-			case "steak":
-				invoice.put(FOOD_ITEMS.steak, amount_);
-				break;
-			case "chicken":
-				invoice.put(FOOD_ITEMS.chicken, amount_);
-				break;
-			case "pizza":
-				invoice.put(FOOD_ITEMS.pizza, amount_);
-				break;
-			}
-			marketorder = new MarketOrder(invoice);
-			// assignedMarket = market_;
-			// status = CookInvoiceStatus.created;
+		public MyMarketOrder(MarketOrder o) {
+			order = new MarketOrder(o);
+			state = MarketOrderState.Pending;
+		}
+
+		public MarketOrder getOrder() {
+			return order;
+		}
+
+		public MarketOrderState getMarketOrderState() {
+			return state;
 		}
 	}
-	
+
+	//	public static class CookInvoice {
+	//		// MarketBuilding assignedMarket;
+	//		MarketOrder marketorder;
+	//		// CookInvoiceStatus status;
+	//		String food;
+	//		// int amount;
+	//		// static enum CookInvoiceStatus {created, processing, changedMarket, completed};
+	//
+	//		CookInvoice(String food_, int amount_, Market market_) {
+	//			food = food_;
+	//			// amount = amount_;
+	//			Map<FOOD_ITEMS, Integer> invoice = new HashMap<FOOD_ITEMS, Integer>();
+	//			switch(food_) {
+	//			case "steak":
+	//				invoice.put(FOOD_ITEMS.steak, amount_);
+	//				break;
+	//			case "chicken":
+	//				invoice.put(FOOD_ITEMS.chicken, amount_);
+	//				break;
+	//			case "pizza":
+	//				invoice.put(FOOD_ITEMS.pizza, amount_);
+	//				break;
+	//			}
+	//			marketorder = new MarketOrder(invoice);
+	//			// assignedMarket = market_;
+	//			// status = CookInvoiceStatus.created;
+	//		}
+	//	}
+
 }
 
