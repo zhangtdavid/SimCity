@@ -10,10 +10,7 @@ import utilities.EventLog;
 import utilities.LoggedEvent;
 import utilities.MarketOrder;
 import city.Application.FOOD_ITEMS;
-import city.animations.MarketCustomerAnimation;
-import city.animations.RestaurantChungCustomerAnimation;
 import city.animations.interfaces.MarketAnimatedCustomer;
-import city.animations.interfaces.MarketAnimatedEmployee;
 import city.bases.Role;
 import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomer;
@@ -40,8 +37,9 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	
 //	Constructor
 //	=====================================================================
-	public MarketCustomerRole(MarketOrder o) {
+	public MarketCustomerRole(Market market, MarketOrder o) {
 		super(); // TODO
+		this.market = market;
         for (FOOD_ITEMS s: o.getOrderItems().keySet()) {
         	receivedItems.put(s, 0); // initialize all values in collectedItems to 0
         }
@@ -64,7 +62,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public void msgWhatWouldYouLike(MarketEmployee e) {
 		log.add(new LoggedEvent("Market Customer received msgWhatWouldYouLike from Market Employee."));
-		System.out.println("Market Customer received msgWhatWouldYouLike from Market Employee.");
+		print("Market Customer received msgWhatWouldYouLike from Market Employee.");
 		event = MarketCustomerEvent.AskedForOrder;
 		employee = e;
 		stateChanged();
@@ -73,7 +71,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public void msgHereIsOrderandBill(HashMap<FOOD_ITEMS, Integer> collectedItems, int bill, int id) {
 		log.add(new LoggedEvent("Market Customer received msgHereIsOrderandBill from Market Cashier."));
-		System.out.println("Market Customer received msgHereIsOrderandBill from Market Cashier.");
+		print("Market Customer received msgHereIsOrderandBill from Market Cashier.");
 		event = MarketCustomerEvent.OrderReady;
         for (FOOD_ITEMS item: collectedItems.keySet()) {
             receivedItems.put(item, collectedItems.get(item)); // Create a deep copy of the order map

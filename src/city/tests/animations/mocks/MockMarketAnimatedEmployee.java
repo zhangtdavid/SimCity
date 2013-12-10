@@ -76,4 +76,10 @@ public class MockMarketAnimatedEmployee extends MockAnimation implements MarketA
 	public int getCounterLoc() {
 		return employeeStalls.indexOf(employee);
 	}
+
+	@Override
+	public void removeFromEmployeeStalls() {
+		// TODO Auto-generated method stub
+		
+	}
 }

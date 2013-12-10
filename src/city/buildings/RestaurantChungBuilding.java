@@ -165,8 +165,9 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				c.setRestaurant(this);
 				anim.setVisible(true); // TODO set this in setActive()
 				getPanel().addVisualizationElement(anim);
-				customers.add(new MyCustomer(c, numWaitingCustomers++));
+//				customers.add(new MyCustomer(c));
 				super.addOccupyingRole(c, anim);
+				c.setActive();
 				host.msgIWantToEat(c);
 			}
 		}
@@ -183,7 +184,6 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantChungWaiterAnimation anim = new RestaurantChungWaiterAnimation(w);
 				addWaiter(w, anim);
-				w.setRevolvingStand(orderStand);
 				super.addOccupyingRole(w, anim);
 			}
 		}
@@ -192,6 +192,7 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 			if(!super.occupyingRoleExists(h)) { 
 				host = h;
 				super.addOccupyingRole(h, null);
+				h.setActive();
 			}
 		}
 		if(r instanceof RestaurantChungCookRole) {
@@ -203,6 +204,7 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				getPanel().addVisualizationElement(anim);
 				cook = c;
 				super.addOccupyingRole(c, anim);
+				c.setActive();
 			}
 		}
 		if(r instanceof RestaurantChungCashierRole) {
@@ -214,6 +216,7 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 				getPanel().addVisualizationElement(anim);
 				cashier = c;
 				super.addOccupyingRole(c, anim);
+				c.setActive();
 			}
 		}
 	}
@@ -223,11 +226,12 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	public void addWaiter(RestaurantChungWaiter w, RestaurantChungWaiterAnimation anim) {
 		waiters.add(new MyWaiter(w));
 		w.setAnimation(anim);
-		anim.setVisible(true); // TODO set this in setActive()
+		anim.setVisible(true);
 		getPanel().addVisualizationElement(anim);
     	for (int i = 0; i < 9; i++) {
     		anim.addTable(RestaurantChungPanel.TABLEX+((i%3)*RestaurantChungPanel.TABLEGAP), RestaurantChungPanel.TABLEY+((i/3)*RestaurantChungPanel.TABLEGAP));
-    	}	
+    	}
+    	w.setActive();
 	}
 	
 	// Remove
@@ -286,16 +290,5 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 			}
 		}
 		return null;
-	}
-	
-	// Other
-	@Override
-	public void incrementNumWaitingCustomers() {
-		numWaitingCustomers++;
-	}
-	
-	@Override
-	public void decrementNumWaitingCustomers() {
-		numWaitingCustomers--;
 	}
 }

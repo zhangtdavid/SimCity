@@ -40,10 +40,12 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     private static final int GRILLW = 60, GRILLL = 15;    
     public static final int COOKGRILLX = KITCHEN1X+120, COOKGRILLY = KITCHEN2Y-RECTDIM;
     public static final int PLATINGX = KITCHEN1X+30, PLATINGY = KITCHEN1L-RECTDIM;
+    public static final int STANDX = KITCHEN1X+7, STANDY = KITCHEN1Y+RECTDIM+2;
+    public static final int STANDW = 17, STANDL = 15;
 
 //	Cook
 //	--------------------------------------------------------------------
-    public static final int COOKHOMEX = KITCHEN1X+50, COOKHOMEY = KITCHEN1Y+20;	
+    public static final int COOKHOMEX = KITCHEN1X+50, COOKHOMEY = KITCHEN1Y+RECTDIM;	
 
 //	Cashier
 //	--------------------------------------------------------------------
@@ -58,7 +60,7 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
     
 //	Waiter
 //	--------------------------------------------------------------------
-    public static final int WAITERHOMEX = 440, WAITERHOMEY = 120;
+    public static final int WAITERHOMEX = 440, WAITERHOMEY = 140;
     public static final int CUSTOMERLINEX = 40, CUSTOMERLINEY = 100;
     public static final int ORDERDROPX = 280, ORDERDROPY = 20;
     public static final int WAITERBREAKX = 260, WAITERBREAKY = 40; 
@@ -93,6 +95,9 @@ public class RestaurantChungPanel extends BuildingCard implements ActionListener
         
         g2.setColor(Color.GRAY);
         g2.fillRect(GRILLX, GRILLY, GRILLW, GRILLL);
+        
+        g2.setColor(Color.GRAY);
+        g2.fillRect(STANDX, STANDY, STANDW, STANDL);
         
         g2.setColor(Color.YELLOW);
         g2.fillRect(CASHIERDESKX, CASHIERDESKY, CASHIERDESKW, CASHIERDESKL);

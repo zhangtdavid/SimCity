@@ -6,6 +6,7 @@ import trace.AlertLog;
 import trace.AlertTag;
 import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChungWaiterAnimation;
+import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.bases.JobRole;
 import city.buildings.interfaces.RestaurantChung;
 import city.buildings.interfaces.RestaurantChung.MyCustomer;
@@ -92,7 +93,6 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 			restaurant.findCustomer(c).setWaiterCustomerState(WaiterCustomerState.Waiting);
 			stateChanged();
 		}
-		// TODO inform sender of inactivity
 	}
 	
 	@Override
@@ -317,6 +317,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		if (workingState == WorkingState.NotWorking && haveCustomers == false) {
 			restaurant.removeWaiter(this);
 			super.setInactive();
+			this.getAnimation(RestaurantChungAnimatedWaiter.class).removeFromWaiterHomePositions();
 		}
 		
 		if (state == BreakState.ApprovedForBreak && haveCustomers == false) {
@@ -339,7 +340,7 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 	}	
 
 	private void rejectForBreak() {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).setOffBreak();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).setOffBreak();
 		restaurant.getRestaurantChungHost().msgIAmReturningToWork(this);
 		state = BreakState.Working;
 	}
@@ -347,33 +348,32 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 	private void goOnBreak() {
 		print("Waiter going on break");
 		state = BreakState.OnBreak;
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoOnBreak();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoOnBreak();
 	}
 	
 	private void returnToWork() {
 		print("Waiter returning to work");
 		state = BreakState.Working;
 		restaurant.getRestaurantChungHost().msgIAmReturningToWork(this);
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();		
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();		
 	}
 	
 	//	Customer
 	//	---------------------------------------------------------------
 	private void seatCustomer(MyCustomer customer) throws InterruptedException {	
 		print("Waiter seating " + customer.getRestaurantChungCustomer() + " at " + customer.getTable());
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCustomerLine();
-		// atEntrance.drainPermits(); // Have to drain because of multiple calls of DoReturnToEntrance() without atEntrance.acquires();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToCustomerLine();
 		atLine.acquire();
 		restaurant.getRestaurantChungHost().msgTakingCustomerToTable(customer.getRestaurantChungCustomer());
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoBringToTable(customer.getRestaurantChungCustomer(), customer.getTable()-1);
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoBringToTable(customer.getRestaurantChungCustomer(), customer.getTable()-1);
 		customer.getRestaurantChungCustomer().msgFollowMeToTable(this, menu);
 		atTable.acquire();
 		customer.setWaiterCustomerState(WaiterCustomerState.Seated);
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	private void informCustomerOfCancellation(MyCustomer customer) throws InterruptedException {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.getTable()-1);
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToTable(customer.getTable()-1);
 		atTable.acquire();
 		customer.getRestaurantChungCustomer().msgOutOfItem(customer.getChoice(), menu);
 		// Resets all menu items to available after informing a single customer
@@ -383,50 +383,51 @@ public abstract class RestaurantChungWaiterBase extends JobRole implements Resta
 		customer.setWaiterCustomerState(WaiterCustomerState.Seated);
 		customer.setOrderStatus(OrderStatus.None);	
 
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	private void takeOrder(MyCustomer customer) throws InterruptedException {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.getTable()-1);
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToTable(customer.getTable()-1);
 		atTable.acquire();
 		print("taking order from " + customer.getRestaurantChungCustomer());		
 		customer.getRestaurantChungCustomer().msgWhatWouldYouLike();
 		customer.setWaiterCustomerState(WaiterCustomerState.Asked);
 		
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	protected abstract void tellCookOrder(MyCustomer customer, FOOD_ITEMS f, int table);
 	
 	private void pickUpOrder(MyCustomer customer) throws InterruptedException {
 		print("picking up order from cook");
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCook();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToCook();
 		atCook.acquire();
 		customer.setOrderStatus(OrderStatus.PickedUp);
 	}
 	
 	private void deliverOrder(MyCustomer customer) throws InterruptedException {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoDeliverFood(customer.getTable()-1, customer.getChoice().toString());
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoDeliverFood(customer.getTable()-1, customer.getChoice().toString());
 		atTable.acquire();	
 		customer.setOrderStatus(MyCustomer.OrderStatus.Delivered);
 		customer.getRestaurantChungCustomer().msgHereIsYourFood();
 		customer.setWaiterCustomerState(WaiterCustomerState.Eating);
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
 	}
 	
 	private void getCheck(MyCustomer customer) throws InterruptedException {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToCashier();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToCashier();
 		atCashier.acquire();
 		customer.setCheckState(CheckState.AskedForBill);
 		restaurant.getRestaurantChungCashier().msgComputeBill(this, customer.getRestaurantChungCustomer(), customer.getChoice());
 	}
 	
 	private void giveCheck(MyCustomer customer) throws InterruptedException {
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoGoToTable(customer.getTable()-1);
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoGoToTable(customer.getTable()-1);
 		atTable.acquire();	
 		customer.setCheckState(CheckState.DeliveredBill);
 		customer.getRestaurantChungCustomer().msgHereIsCheck(customer.getBill());
-		this.getAnimation(RestaurantChungWaiterAnimation.class).DoReturnToWaiterHome();
+		this.getAnimation(RestaurantChungAnimatedWaiter.class).DoReturnToWaiterHome();
+		restaurant.getRestaurantChungHost().msgTableIsFree(this, customer.getTable(), customer.getRestaurantChungCustomer());
 	}
 
 	private void removeCustomer(MyCustomer customer) {

@@ -64,6 +64,8 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 	
 	public void setUp() throws Exception {
 		super.setUp();
+		CityMap.clearMap();
+
 		bank = new BankBuilding("Bank", null, null);
 		CityMap.addBuilding(BUILDING.bank, bank);
 
@@ -155,7 +157,7 @@ public class MarketCustomerDeliveryPaymentTest extends TestCase {
 		customerDeliveryPayment.runScheduler();
 		assertEquals("Cashier log should have 1 entry. It doesn't", cashier.log.size(), 1);
 		assertTrue("Cashier log should have \"Cashier received msgHereIsPayment\". The last event logged is " + customerDeliveryPayment.log.getLastLoggedEvent().toString(), cashier.log.containsString("MarketCashier received msgHereIsPayment"));
-		assertEquals("RestaurantChung money should be 890. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 890);
+		assertEquals("RestaurantChung money should be 690. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 690);
 		assertTrue("CustomerDeliveryPayment transactions should contain a transaction with state == WaitingForConfirmation. It doesn't.", customerDeliveryPayment.getMarketTransactions().get(0).getMarketTransactionState() == MarketTransactionState.WaitingForConfirmation);
 		
 		customerDeliveryPayment.msgPaymentReceived(0);

@@ -7,7 +7,7 @@ import city.gui.exteriors.CityViewRestaurantZhang;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.interfaces.RestaurantTimmsCashier;
 import city.tests.agents.mocks.MockPerson;
-import city.tests.animations.mock.MockRestaurantTimmsAnimatedCashier;
+import city.tests.animations.mocks.MockRestaurantTimmsAnimatedCashier;
 import city.tests.roles.mocks.MockBankCustomer;
 import city.tests.roles.mocks.MockRestaurantTimmsCashier;
 import city.tests.roles.mocks.MockRestaurantTimmsCustomer;
