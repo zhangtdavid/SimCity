@@ -388,10 +388,10 @@ public class Application {
 		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 
 		// Give people cars
-		//                CarAgent c0Zhang = new CarAgent(apartmentBuildingZhang1,p0Zhang);
-		//                CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, apartmentBuildingZhang1);
-		//                c0Zhang.setAnimation(c0AnimZhang);
-		//                mainFrame.cityView.addAnimation(c0AnimZhang);
+		CarAgent c0Zhang = new CarAgent(apartmentBuildingZhang1,p0Zhang);
+		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, apartmentBuildingZhang1);
+		c0Zhang.setAnimation(c0AnimZhang);
+		mainFrame.cityView.addAnimation(c0AnimZhang);
 		CarAgent c1Zhang = new CarAgent(apartmentBuildingZhang1,p1Zhang);
 		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, apartmentBuildingZhang1);
 		c1Zhang.setAnimation(c1AnimZhang);
@@ -858,7 +858,7 @@ public class Application {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
-		//                c0Zhang.startThread();
+		c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();

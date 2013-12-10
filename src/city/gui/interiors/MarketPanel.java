@@ -53,7 +53,6 @@ public class MarketPanel extends BuildingCard implements ActionListener {
     public static final int ITEMSWAITINGX = 400, ITEMSWAITINGY = 320;
 
 	private final int delayMS = 5;
-	private List<AnimationInterface> animations = new ArrayList<AnimationInterface>();
 	
 //	Constructor
 //	=====================================================================
@@ -103,9 +102,5 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 				animation.draw(g2);
 //			}
 		}
-	}
-
-	public void addVisualizationElement(AnimationInterface anim) {
-		animations.add(anim);
 	}
 }

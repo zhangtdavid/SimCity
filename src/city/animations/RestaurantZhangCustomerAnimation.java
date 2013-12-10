@@ -2,10 +2,15 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import utilities.RestaurantZhangTable;
 import city.animations.interfaces.RestaurantZhangAnimatedCustomer;
 import city.bases.Animation;
+import city.gui.exteriors.CityViewApt;
 import city.roles.interfaces.RestaurantZhangCustomer;
 
 public class RestaurantZhangCustomerAnimation extends Animation implements RestaurantZhangAnimatedCustomer {
@@ -32,25 +37,47 @@ public class RestaurantZhangCustomerAnimation extends Animation implements Resta
 	private int xDestination, yDestination;
 	private enum Command {noCommand, GoToRestaurant, GoToSeat, LeaveRestaurant};
 	private Command command=Command.noCommand;
-
+	
+	private static BufferedImage restaurantZhangCustomerNorthImage = null;
+	private static BufferedImage restaurantZhangCustomerEastImage = null;
+	private static BufferedImage restaurantZhangCustomerSouthImage = null;
+	private static BufferedImage restaurantZhangCustomerWestImage = null;
+	private BufferedImage imageToRender;
+	
 	public RestaurantZhangCustomerAnimation(RestaurantZhangCustomer c){ //HostAgent m) {
 		role = c;
 		xPos = CUSTGUIXPOS;
 		yPos = CUSTGUIYPOS;
 		xDestination = CUSTGUIXDEST;
 		yDestination = CUSTGUIYDEST;
+		try {
+			if(restaurantZhangCustomerNorthImage == null || restaurantZhangCustomerEastImage == null || restaurantZhangCustomerSouthImage == null || restaurantZhangCustomerWestImage == null) {
+				restaurantZhangCustomerNorthImage = ImageIO.read(CityViewApt.class.getResource("/icons/restaurantZhangPanel/restaurantZhangCustomerNorthImage.png"));
+				restaurantZhangCustomerEastImage = ImageIO.read(CityViewApt.class.getResource("/icons/restaurantZhangPanel/restaurantZhangCustomerEastImage.png"));
+				restaurantZhangCustomerSouthImage = ImageIO.read(CityViewApt.class.getResource("/icons/restaurantZhangPanel/restaurantZhangCustomerSouthImage.png"));
+				restaurantZhangCustomerWestImage = ImageIO.read(CityViewApt.class.getResource("/icons/restaurantZhangPanel/restaurantZhangCustomerWestImage.png"));
+				imageToRender = restaurantZhangCustomerNorthImage;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void updatePosition() {
-		if (xPos < xDestination)
+		if (xPos < xDestination) {
 			xPos++;
-		else if (xPos > xDestination)
+			imageToRender = restaurantZhangCustomerEastImage;
+		} else if (xPos > xDestination) {
 			xPos--;
-
-		if (yPos < yDestination)
+			imageToRender = restaurantZhangCustomerWestImage;
+		}
+		if (yPos < yDestination) {
 			yPos++;
-		else if (yPos > yDestination)
+			imageToRender = restaurantZhangCustomerSouthImage;
+		} else if (yPos > yDestination) {
 			yPos--;
+			imageToRender = restaurantZhangCustomerNorthImage;
+		}
 
 		if (xPos == xDestination && yPos == yDestination) {
 			if(command == Command.GoToRestaurant) {
@@ -69,7 +96,7 @@ public class RestaurantZhangCustomerAnimation extends Animation implements Resta
 
 	public void draw(Graphics2D g) {
 		g.setColor(Color.GREEN);
-		g.fillRect(xPos, yPos, CUSTWIDTH, CUSTHEIGHT);
+		g.drawImage(imageToRender, xPos, yPos, null);
 		if(foodString != null)
 			g.drawString(foodString, xPos, yPos + CUSTHEIGHT + TEXTHEIGHT);
 	}
