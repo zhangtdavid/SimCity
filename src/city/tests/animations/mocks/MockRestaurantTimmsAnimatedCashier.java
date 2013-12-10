@@ -1,4 +1,4 @@
-package city.tests.animations.mock;
+package city.tests.animations.mocks;
 
 import java.awt.Graphics2D;
 

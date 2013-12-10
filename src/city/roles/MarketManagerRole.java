@@ -125,6 +125,7 @@ public class MarketManagerRole extends JobRole implements MarketManager {
 				}
 			}
 		}
+		
 		synchronized(market.getCustomers()) {
 			for (MyMarketCustomer customer : market.getCustomers()) {
 				if (customer.getState() == MarketCustomerState.WaitingForService && market.getEmployees().size() > 0) {

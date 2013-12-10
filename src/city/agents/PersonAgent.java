@@ -26,9 +26,13 @@ import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Bus;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
+import city.animations.MarketCashierAnimation;
+import city.animations.MarketCustomerAnimation;
 import city.animations.WalkerAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedWalker;
+import city.animations.interfaces.MarketAnimatedCashier;
+import city.animations.interfaces.MarketAnimatedCustomer;
 import city.bases.Agent;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
@@ -422,8 +426,13 @@ public class PersonAgent extends Agent implements Person {
 			i += 1;
 		} while (i < 4);
 		MarketOrder order = new MarketOrder(items);
-		marketCustomerRole = new MarketCustomerRole(order);
+		marketCustomerRole = new MarketCustomerRole(m, order);
 		this.addRole(marketCustomerRole);
+		// Market Customer Animation
+		MarketAnimatedCustomer anim = new MarketCustomerAnimation(marketCustomerRole);
+		marketCustomerRole.setAnimation(anim);	
+		anim.setVisible(true);
+		m.getPanel().addVisualizationElement(anim);
 	}
 
 	/**
@@ -1074,6 +1083,7 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 
+//		return true; For testing restaurants
 		return disposition;
 	}
 

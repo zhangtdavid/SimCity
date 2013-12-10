@@ -195,6 +195,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
 					if(dt.getAvailable() == true && dt.getDeliveryPerson().getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
 						assignDelivery(t, dt);
+						break;
 					}
 				}
 			}

@@ -128,15 +128,13 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	@Override
 	public void msgAnimationAtPhone() {
 		print("Market Employee received msgAnimationAtPhone");
-//		event = AgentEvent.seated;
 		atPhone.release();
 		stateChanged();
 	}
 	
 	@Override
 	public void msgFinishedCollectingItems() {
-		print("Market Employee received msgAnimationAtPhone");
-//		event = AgentEvent.seated;
+		print("Market Employee received msgFinishedCollectingItems");
 		finishedCollectingItems.release();
 		stateChanged();
 	}
@@ -144,7 +142,6 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	@Override
 	public void msgAnimationAtCashier() {
 		print("Market Employee received msgAnimationAtCashier");
-//		event = AgentEvent.seated;
 		atCashier.release();
 		stateChanged();
 	}
@@ -152,7 +149,6 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 	@Override
 	public void msgAnimationAtCounter() {
 		print("Market Employee received msgAnimationAtCounter");
-//		event = AgentEvent.seated;
 		atCounter.release();
 		stateChanged();
 	}
@@ -164,7 +160,8 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 		if (workingState == WorkingState.GoingOffShift) {
 			if (market.getEmployees().size() > 1 && customer == null && customerDelivery == null) {
 				market.removeEmployee(this);
-				super.setInactive();	
+				super.setInactive();
+				this.getAnimation(MarketAnimatedEmployee.class).removeFromEmployeeStalls();
 			}
 		}
 		
@@ -172,6 +169,7 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
 			assistCustomer();
 			return true;
 		}
+		
 		if (state == MarketEmployeeState.AskedForOrder && event == MarketEmployeeEvent.OrderReceived) {
 			collectItems();
 			return true;
@@ -208,25 +206,26 @@ public class MarketEmployeeRole extends JobRole implements MarketEmployee {
         	else if (market.getInventory().get(item) >= order.get(item)) {
         		market.getInventory().put(item, market.getInventory().get(item) - order.get(item));
         		collectedItems.put(item, order.get(item));
-        		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
-        		try {
-    			finishedCollectingItems.acquire();
-    			} catch (InterruptedException e) {
-    				// TODO Auto-generated catch block
-    				e.printStackTrace();
-    			}
         	}
-        	if (market.getInventory().get(item) < 10)
+        	if (market.getInventory().get(item) < 25)
         		market.getManager().msgItemLow();
-        	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
-    		try {
-				atCashier.acquire();
-			} catch (InterruptedException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-
         }
+        
+		this.getAnimation(MarketAnimatedEmployee.class).doCollectItems();
+		try {
+			finishedCollectingItems.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+    	this.getAnimation(MarketAnimatedEmployee.class).doDeliverItems();
+		try {
+			atCashier.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
     	// dependent on customer type
     	if (customer != null)
     		market.getCashier().msgComputeBill(this, customer, order, collectedItems, orderId);

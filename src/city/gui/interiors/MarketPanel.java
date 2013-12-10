@@ -21,7 +21,7 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 //	Fixed Numbers
 //	--------------------------------------------------------------------
 	public static final int RECTDIM = 20;
-    public static final int ENTRANCEX = 40, ENTRANCEY = 480;
+    public static final int ENTRANCEX = 40, ENTRANCEY = 470;
     public static final int EXITX = 420, EXITY = 520;
     
 //	Phone
@@ -39,7 +39,7 @@ public class MarketPanel extends BuildingCard implements ActionListener {
 //	--------------------------------------------------------------------
     public static final int COUNTERX = 0, COUNTERY = 275;
     public static final int COUNTERW = 500, COUNTERH = 25;
-    public static final int COUNTERINTERACTIONY = COUNTERX+COUNTERH;
+    public static final int COUNTERINTERACTIONY = COUNTERY+COUNTERH;
     
 //	Cashier
 //	--------------------------------------------------------------------
