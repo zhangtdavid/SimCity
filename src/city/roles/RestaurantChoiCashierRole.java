@@ -29,7 +29,7 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 	
 	// Data
 	
-	private int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
+	public int moneyIncoming = 0; // 0 = no money in transit; 1 = money in transit
 	private EventLog log = new EventLog();
 	private RestaurantChoiAnimatedCashier cashierGui;
 	private boolean wantsToLeave;
@@ -189,7 +189,7 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 			this.depositMoney();
 			print("after depositing: " + building.getCash());
 		}
-		if(building.getCash() < RestaurantChoi.WITHDRAW_THRESHOLD) this.getMoney();
+		if(building.getCash() < RestaurantChoi.WITHDRAW_THRESHOLD && moneyIncoming != IN_TRANSIT) this.getMoney();
 		return blocking;
 	}
 	

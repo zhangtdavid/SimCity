@@ -1,6 +1,7 @@
 package city.roles;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.Semaphore;
 
@@ -15,6 +16,7 @@ import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BankManager;
 import city.roles.interfaces.BankTeller;
+import city.roles.interfaces.Resident;
 
 public class BankManagerRole extends JobRole implements BankManager {
 	
@@ -22,7 +24,7 @@ public class BankManagerRole extends JobRole implements BankManager {
 
 	public BankBuilding building;
 	public List<MyTeller> myTellers = new ArrayList<MyTeller>();
-	public List<BankCustomer> customers = new ArrayList<BankCustomer>();
+	public List<BankCustomer> customers = Collections.synchronizedList(new ArrayList<BankCustomer>());
 	public List<BankTask> bankTasks = new ArrayList<BankTask>();
 	private boolean wantsInactive = false;
 	private Semaphore atDestination = new Semaphore(0,true);
@@ -137,8 +139,18 @@ public class BankManagerRole extends JobRole implements BankManager {
 								Withdraw(bT);
 								return true;
 							} else {
-								WithdrawalFailed(bT);
-								return true;
+								if(bT.bc == null){
+									WithdrawalFailed(bT);
+									return true;
+								}
+								if(bT.bc != null || bT.bc.getBusiness() != null){
+									bT.money = a.balance; //If not enough desired money, get all you can instead. ~RCHOI EDIT
+									Withdraw(bT);
+									return true;
+								}else{
+									WithdrawalFailed(bT);
+									return true;
+								}
 							}
 						}
 					}

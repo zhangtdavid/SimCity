@@ -68,13 +68,15 @@ public class RestaurantChoiPanel extends BuildingCard implements ActionListener 
         graphics.setColor(Color.WHITE); // dishes
         graphics.fillRect(DISHES_X, DISHES_Y, WIDTH, WIDTH);
         
-        animate();
-        // Update the position of each visible element
-        for(AnimationInterface animation : animations) {
-        	if (animation.getVisible()) {
-                animation.updatePosition();
-                animation.draw(graphics2D);
-            }
-        }
+        synchronized(animations){
+			animate();
+			// Update the position of each visible element
+			for (AnimationInterface animation : animations) {
+				if (animation.getVisible()) {
+					animation.updatePosition();
+					animation.draw(graphics2D);
+				}
+			}
+		}
 	}
 }

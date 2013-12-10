@@ -285,7 +285,7 @@ public abstract class RestaurantChoiWaiterBase extends JobRole implements Restau
 	}
 
 	private void DoSeatCustomer(RestaurantChoiCustomer customer, RestaurantChoiTable table) {
-		print("Seating " + customer + " at " + table + " @ (" + table.getxCoord() + ", " + table.getyCoord() + ")");
+		print("Seating " + customer.getPerson().getName() + " at " + table + " @ (" + table.getxCoord() + ", " + table.getyCoord() + ")");
 		waiterGui.setAcquired();
 		waiterGui.DoBringToTable(customer, table.getxCoord(), table.getyCoord());
 	}

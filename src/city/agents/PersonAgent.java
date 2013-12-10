@@ -959,6 +959,8 @@ public class PersonAgent extends Agent implements Person {
 	private STATES pickDailyTask() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		STATES disposition = STATES.none;
+		disposition = STATES.goingToRestaurant;
+		return disposition;/*
 		if (shouldGoToBank()) {
 			disposition = STATES.goingToBank;
 		} else if (shouldPayLandlord()) {
@@ -972,7 +974,7 @@ public class PersonAgent extends Agent implements Person {
 		} else {
 			disposition = STATES.goingToSleep;
 		}
-		return disposition;
+		return disposition;*/
 	}
 
 	/**
