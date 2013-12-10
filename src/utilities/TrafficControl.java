@@ -11,6 +11,7 @@ import javax.imageio.ImageIO;
 import javax.swing.Timer;
 
 import city.Application;
+import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.CityRoad;
 import city.gui.CityRoadIntersection;
@@ -171,5 +172,13 @@ public class TrafficControl implements ActionListener {
 				listToReturn.add(r.getVehicle());
 		}
 		return listToReturn;
+	}
+	
+	public CityRoad getRoadThatVehicleIsOn(Animation vehicle) {
+		for(CityRoad r : roads) {
+			if(r.getVehicle() == vehicle)
+				return r;
+		}
+		return null;
 	}
 }
