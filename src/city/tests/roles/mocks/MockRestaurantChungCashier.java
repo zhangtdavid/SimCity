@@ -34,7 +34,7 @@ public class MockRestaurantChungCashier extends MockRole implements RestaurantCh
 	public List<MarketTransaction> marketTransactions = Collections.synchronizedList(new ArrayList<MarketTransaction>());
 	
 	public MockRestaurantChungCashier(RestaurantChung restaurant) {
-		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions));
+		roles.add(new MarketCustomerDeliveryPaymentRole(restaurant, marketTransactions, this));
 		roles.get(0).setActive();
 		roles.add((Role) restaurant.getBankCustomer());
 		roles.get(1).setActive();

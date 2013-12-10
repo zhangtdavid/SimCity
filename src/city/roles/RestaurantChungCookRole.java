@@ -35,6 +35,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //  Data
 //  ===================================================================== 
 	public EventLog log = new EventLog();
+	Timer timer0 = new Timer();
 	Timer timer = new Timer();
     Timer timer2 = new Timer();
     
@@ -224,7 +225,6 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
             }
             
 			if(!waitingToCheckStand) {
-				print("Waiting 5 seconds to check the stand");
 				waitingToCheckStand = true;
 				timer.schedule(new TimerTask() {
 					public void run() {
@@ -353,7 +353,7 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
 //		}
         print("Cooking");
         cooking = true;
-        timer.schedule(new TimerTask() {
+        timer0.schedule(new TimerTask() {
         	public void run() {
                 Food f = restaurant.getFoods().get(o.getChoice());
                 f.setAmount(f.getAmount() - 1);

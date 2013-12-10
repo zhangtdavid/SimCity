@@ -74,4 +74,10 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 		return workingState;
 	}
 
+	@Override
+	public void msgArrivedAtDestination() {
+		// TODO Auto-generated method stub
+		
+	}
+
 }
