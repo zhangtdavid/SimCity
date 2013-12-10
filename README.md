@@ -92,12 +92,8 @@ addition to writing all GUI code, David also integrated everyone's code in the `
   - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
 
 ### Ryan Choi (19%)
-* Housing
-  - Designed, implemented residential components. One-to-many landlord-to-home relations, rent, maintenance, etc.
-  - The room designs are in the code but not implemented. John's activity on PersonAgent made ResidentRole very straightforward.
-  - See branch rchoi for JUnit tests.
-  - This restaurant utilizes the bank for deposits.
-  - This restaurant did not completely implement markets, though I believe it could have. The market receives the request for more food, but did not deliver. (complexities with v2.2 design and new delivery-truck mechanisms)
-  - "Full disclosure" I'm inclined to believe this percentage should be a bit lower, excuses of exams or research aside. 
-  - That being said this shouldn't be a problem going into V2 since midterms, etc. are over. The lack of House/apt GUI is my responsibility, i.e. not knocking out difference between intra-house person and resident behavior, or just doing the person animations because I very well could have.
-  - We will have a good project for V2.
+-All housing logic, e.g. clear room after removing person; how often/much maintenance is added to rent intervals
+-All housing graphics, e.g. difference between apartment and house panels
+-Everything in the "Edit Building" Tab, for live changes (e.g. force withdrawal by setting cash to 0)
+-Restaurant integration complete: producer-consumer, market orders, bank transactions.
+-Integrated bank and market into restaurant, with ordering OK, withdraw OK, deposit OK. 
