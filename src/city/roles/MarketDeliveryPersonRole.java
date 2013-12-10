@@ -124,12 +124,13 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			timer.schedule(new TimerTask() {
 				public void run() {
 //					 check if restaurant is open
-//					if(customerDelivery.getRestaurant().getBusinessIsOpen())
+					if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
 						restaurantClosed = false;
 						s = DeliveryState.Pending;
-//					else {
-//						stateChanged();
-//					}
+					}
+					else {
+						stateChanged();
+					}
 				}
 			},
 			5000);
@@ -161,14 +162,14 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	}
 	
 	public void checkOpen() {
-//		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
+		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
 			giveItems();
-//		}
-//		else {
-//			restaurantClosed = true;
-//			carPassenger = new CarPassengerRole(car, market);
+		}
+		else {
+			restaurantClosed = true;
+			carPassenger = new CarPassengerRole(car, market);
 			s = DeliveryState.ReturningToRestaurant;
-//		}
+		}
 	}
 	
 	public void giveItems() {
