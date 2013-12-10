@@ -8,7 +8,7 @@ import city.buildings.interfaces.Market;
 
 public interface MarketDeliveryPerson extends RoleInterface {
 	// Data
-	public enum DeliveryState {Pending, Delivering, Arrived, Received};
+	public enum DeliveryState {None, Pending, Delivering, ArrivedatRestaurant, Received, ReturningToMarket};
 	public enum WorkingState {Working, GoingOffShift};
 	
 	// Constructor
