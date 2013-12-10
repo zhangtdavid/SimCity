@@ -1104,8 +1104,6 @@ public class Application {
 		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
 			int x = p.getCurrentLocation().getCityViewBuilding().getX();
 			int y = p.getCurrentLocation().getCityViewBuilding().getY();
-			//                      int x  = 100;
-			//                      int y = 100;
 			double closestDistance = 1000000;
 			BuildingInterface returnBuilding = null;
 			for(BuildingInterface b : map.get(type)) {
