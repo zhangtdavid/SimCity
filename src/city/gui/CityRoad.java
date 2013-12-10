@@ -40,12 +40,7 @@ public class CityRoad extends CityViewBuilding {
 
 	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
 	
-	private static BufferedImage cityViewRoadHorizontalImage = null;
-	private static BufferedImage cityViewRoadVerticalImage = null;
-	private static BufferedImage cityViewRoadNorthEastTurnImage = null;
-	private static BufferedImage cityViewRoadNorthWestTurnImage = null;
-	private static BufferedImage cityViewRoadSouthEastTurnImage = null;
-	private static BufferedImage cityViewRoadSouthWestTurnImage = null;
+	protected BufferedImage imageToRender = null;
 
 	// Constructor
 
@@ -62,19 +57,6 @@ public class CityRoad extends CityViewBuilding {
 
 		//Make the lane surface
 		rectangle = new Rectangle( xOrigin, yOrigin, width, height );
-		try {
-			if(cityViewRoadHorizontalImage == null || cityViewRoadVerticalImage == null ||
-					cityViewRoadNorthEastTurnImage == null || cityViewRoadNorthWestTurnImage == null ||
-					cityViewRoadSouthEastTurnImage == null || cityViewRoadSouthWestTurnImage == null)
-				cityViewRoadHorizontalImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadHorizontalImage.png"));
-				cityViewRoadVerticalImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadVerticalImage.png"));
-				cityViewRoadNorthEastTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthEastTurnImage.png"));
-				cityViewRoadNorthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthWestTurnImage.png"));
-				cityViewRoadSouthEastTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthEastTurnImage.png"));
-				cityViewRoadSouthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthWestTurnImage.png"));
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
 	}
 
 	public CityRoad(int xo, int yo, int w, int h, int xv, int yv, boolean ish, Color lc, STOPLIGHTTYPE spotLightType) {
@@ -104,10 +86,7 @@ public class CityRoad extends CityViewBuilding {
 		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
 			laneColor = Color.red;
 		}
-		if(isHorizontal)
-			g2.drawImage(cityViewRoadHorizontalImage, xOrigin, yOrigin, null);
-		else
-			g2.drawImage(cityViewRoadVerticalImage, xOrigin, yOrigin, null);
+		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
 
 		if(vehicle == null) 
 			return;
@@ -255,5 +234,9 @@ public class CityRoad extends CityViewBuilding {
 	public void addIntersectionSidewalk(CitySidewalk intersectionSidewalk) {
 		if(!intersectionSidewalks.contains(intersectionSidewalk))
 			intersectionSidewalks.add(intersectionSidewalk);
+	}
+
+	public void setImageToRender(BufferedImage image) {
+		imageToRender = image;
 	}
 }

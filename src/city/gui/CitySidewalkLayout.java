@@ -25,16 +25,26 @@ public class CitySidewalkLayout {
 
 	// Constructor
 
-	public CitySidewalkLayout(MainFrame mf, int width, int height, int xOrigin, int yOrigin, double sidewalkSize, Color sidewalkColor, List<Rectangle> nonSidewalkArea) {
+	public CitySidewalkLayout(MainFrame mf, int width, int height, int xOrigin, int yOrigin, double sidewalkSize, Color sidewalkColor, List<Rectangle> nonSidewalkArea, TrafficControl roads) {
 		mainFrame = mf;
 		this.width = width;
 		this.height = height;
+		this.roads = roads;
 		this.sidewalkSize = sidewalkSize;
 		sidewalkGrid = new CitySidewalk[height][width];
 		for(int i = 0; i < height; i++) {
 			for(int j = 0; j < width; j++) {
 				sidewalkGrid[i][j] = new CitySidewalk((int) (xOrigin + j * sidewalkSize), (int) (yOrigin + i * sidewalkSize), sidewalkSize, 1, sidewalkColor);
 				mainFrame.cityView.addMoving(sidewalkGrid[i][j]);
+				// This gigantic if statement checks if it is an intersection crosswalk
+				CityRoad leftRoadClose = roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)sidewalkSize, sidewalkGrid[i][j].getY());
+//				CityRoad leftRoadFar = 
+//				if( ( (roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)sidewalkSize, sidewalkGrid[i][j].getY()).isRedLight() || roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)(2 * sidewalkSize), sidewalkGrid[i][j].getY()).isRedLight()) 
+//						|| (roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)sidewalkSize, sidewalkGrid[i][j].getY()).isRedLight() || roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)(2 * sidewalkSize), sidewalkGrid[i][j].getY()).isRedLight()) )
+//						&& ( (roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)sidewalkSize, sidewalkGrid[i][j].getY()).getClass() == CityRoadIntersection.class || roads.getRoadAt(sidewalkGrid[i][j].getX() - (int)(2 * sidewalkSize), sidewalkGrid[i][j].getY()).getClass() == CityRoadIntersection.class) 
+//								|| (roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)sidewalkSize, sidewalkGrid[i][j].getY()).getClass() == CityRoadIntersection.class || roads.getRoadAt(sidewalkGrid[i][j].getX() + (int)(2 * sidewalkSize), sidewalkGrid[i][j].getY()).getClass() == CityRoadIntersection.class)) ) {
+//					sidewalkGrid[i][j].setImageToRender(null);
+//				}
 				for(int k = 0; k < nonSidewalkArea.size(); k++) { // Remove if in the nonSidewalkArea
 					Rectangle currentNonSidewalkArea = nonSidewalkArea.get(k);
 					if((j >= currentNonSidewalkArea.getX() && j < (currentNonSidewalkArea.getX() + currentNonSidewalkArea.getWidth())) &&

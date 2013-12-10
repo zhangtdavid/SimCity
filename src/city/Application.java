@@ -137,7 +137,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 75, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// West roads
 		for(int i = 75; i <= 350; i+=25) {
@@ -145,7 +144,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(75, i, 25, 25, 0, 1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// South roads
 		for(int i = 75; i <= 350; i+=25) {
@@ -153,7 +151,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 375, 25, 25, 1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// East roads
 		for(int i = 375; i >= 100; i-=25) {
@@ -161,7 +158,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(375, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North/South middle roads
 		for(int i = 350; i >= 100; i-=25) {
@@ -169,7 +165,6 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(225, i, 25, 25, 0, -1, false, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// East/West middle roads
 		for(int i = 350; i >= 100; i -= 25) {
@@ -177,28 +172,22 @@ public class Application {
 				continue;
 			CityRoad tempRoad = new CityRoad(i, 225, 25, 25, -1, 0, true, Color.black);
 			roads.add(tempRoad);
-			mainFrame.cityView.addMoving(tempRoad);
 		}
 		// North intersection
 		CityRoadIntersection intersectionNorth = new CityRoadIntersection(225, 75, 25, 25, Color.gray);
 		roads.add(intersectionNorth);
-		mainFrame.cityView.addMoving(intersectionNorth);
 		// West intersection
 		CityRoadIntersection intersectionWest = new CityRoadIntersection(75, 225, 25, 25, Color.gray);
 		roads.add(intersectionWest);
-		mainFrame.cityView.addMoving(intersectionWest);
 		// South intersection
 		CityRoadIntersection intersectionSouth = new CityRoadIntersection(225, 375, 25, 25, Color.gray);
 		roads.add(intersectionSouth);
-		mainFrame.cityView.addMoving(intersectionSouth);
 		// East intersection
 		CityRoadIntersection intersectionEast = new CityRoadIntersection(375, 225, 25, 25, Color.gray);
 		roads.add(intersectionEast);
-		mainFrame.cityView.addMoving(intersectionEast);
 		// Center intersection
 		CityRoadIntersection intersectionCenter = new CityRoadIntersection(225, 225, 25, 25, Color.gray);
 		roads.add(intersectionCenter);
-		mainFrame.cityView.addMoving(intersectionCenter);
 		// Connect all roads
 		for(int i = 0; i < roads.size() - 1; i++) {
 			if(roads.get(i).getX() == intersectionNorth.getX() + 25 && roads.get(i).getY() == intersectionNorth.getY()) { // Set nextRoad of road to east of north intersection
@@ -301,8 +290,7 @@ public class Application {
 		nonSidewalkArea.add(new Rectangle(18, 6, 6, 6)); // Top right square
 		nonSidewalkArea.add(new Rectangle(6, 18, 6, 6)); // Bottom left square
 		nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
-		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea);
-		sidewalks.setRoads(trafficControl);
+		sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
 
 		// Bus Stops!!!!!!!!
 		BusStopPanel bsp1 = new BusStopPanel(Color.white);
@@ -399,10 +387,10 @@ public class Application {
 		apartmentBuildingZhang1.setFood(p4Zhang, temp); // TODO we put 500 food in his fridge, so don't do that in release
 
 		// Give people cars
-		CarAgent c0Zhang = new CarAgent(apartmentBuildingZhang1,p0Zhang);
-		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, apartmentBuildingZhang1);
-		c0Zhang.setAnimation(c0AnimZhang);
-		mainFrame.cityView.addAnimation(c0AnimZhang);
+//		CarAgent c0Zhang = new CarAgent(apartmentBuildingZhang1,p0Zhang);
+//		CarAnimation c0AnimZhang = new CarAnimation(c0Zhang, apartmentBuildingZhang1);
+//		c0Zhang.setAnimation(c0AnimZhang);
+//		mainFrame.cityView.addAnimation(c0AnimZhang);
 		CarAgent c1Zhang = new CarAgent(apartmentBuildingZhang1,p1Zhang);
 		CarAnimation c1AnimZhang = new CarAnimation(c1Zhang, apartmentBuildingZhang1);
 		c1Zhang.setAnimation(c1AnimZhang);
@@ -869,7 +857,7 @@ public class Application {
 			Thread.sleep(1000);
 		} catch (InterruptedException e) {}
 
-		c0Zhang.startThread();
+//		c0Zhang.startThread();
 		c1Zhang.startThread();
 		c2Zhang.startThread();
 		c3Zhang.startThread();
@@ -1114,8 +1102,8 @@ public class Application {
 		 * Find the building of type closest to the person's location
 		 */
 		public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
-			int x = p.getAnimation().getXPos();
-			int y = p.getAnimation().getYPos();
+			int x = p.getCurrentLocation().getCityViewBuilding().getX();
+			int y = p.getCurrentLocation().getCityViewBuilding().getY();
 			//                      int x  = 100;
 			//                      int y = 100;
 			double closestDistance = 1000000;

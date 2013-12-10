@@ -25,6 +25,7 @@ public class CitySidewalk extends CityViewBuilding {
 	volatile protected AnimationInterface currentOccupant = null;
 	
 	private static BufferedImage cityViewSidewalkImage = null;
+	private BufferedImage imageToRender;
 
 	// Constructor
 
@@ -41,6 +42,7 @@ public class CitySidewalk extends CityViewBuilding {
 		try {
 			if(cityViewSidewalkImage == null)
 				cityViewSidewalkImage = ImageIO.read(CitySidewalk.class.getResource("/icons/cityView/CityViewSidewalkImage.png"));
+			imageToRender = cityViewSidewalkImage;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -52,7 +54,8 @@ public class CitySidewalk extends CityViewBuilding {
 	public void paint( Graphics g2 ) {
 //		g2.setColor( sidewalkColor );
 //		((Graphics2D) g2).fill( rectangle );
-		g2.drawImage(cityViewSidewalkImage, x, y, null);
+		if(imageToRender != null)
+			g2.drawImage(cityViewSidewalkImage, x, y, null);
 	}
 
 	@Override
@@ -88,5 +91,9 @@ public class CitySidewalk extends CityViewBuilding {
 
 	public void setCorrespondingStoplight(CityRoad correspondingStoplight) {
 		this.correspondingStoplight = correspondingStoplight;
+	}
+
+	public void setImageToRender(BufferedImage imageToRender) {
+		this.imageToRender = imageToRender;
 	}
 }
