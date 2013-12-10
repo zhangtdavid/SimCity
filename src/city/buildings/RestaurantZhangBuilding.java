@@ -165,5 +165,9 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
 			}
 		}
 	}
+	
+	public RestaurantZhangCashier getCashier() {
+		return cashier;
+	}
 
 }

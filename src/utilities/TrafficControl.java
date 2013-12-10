@@ -19,7 +19,7 @@ import city.gui.exteriors.CityViewApt;
 
 public class TrafficControl implements ActionListener {
 	List<CityRoad> roads;
-	Timer stopLightTimer = new Timer(3000, this);
+	Timer stopLightTimer = new Timer(Application.INTERVAL * 3, this);
 	
 	private static BufferedImage cityViewRoadCrosswalkEastWestImage = null;
 	private static BufferedImage cityViewRoadCrosswalkNorthSouthImage = null;

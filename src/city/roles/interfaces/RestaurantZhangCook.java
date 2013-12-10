@@ -12,11 +12,11 @@ import city.animations.interfaces.RestaurantZhangAnimatedCook;
 import city.bases.interfaces.RoleInterface;
 import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
-import city.roles.RestaurantZhangCookRole.CookInvoice;
 
 public interface RestaurantZhangCook extends RoleInterface {
 	
 	// Data
+	public enum MarketOrderState {Pending, Ordered};
 	
 	public static final int RESTAURANTZHANGCOOKSALARY = 100;
 	public static final int COOKX = 190;
@@ -27,8 +27,7 @@ public interface RestaurantZhangCook extends RoleInterface {
 	public void msgHereIsAnOrder(RestaurantZhangWaiter w, String choice, RestaurantZhangTable t);
 	public void msgGotCompletedOrder(RestaurantZhangTable table);
 	public void msgAtDestination();
-	public void msgProcessedInvoice(String food, boolean isAvailable, int processedAmount);
-	public void msgHereIsInvoice(String food, int amount);
+	void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id);
 
 	// Getters
 	
@@ -42,7 +41,6 @@ public interface RestaurantZhangCook extends RoleInterface {
 	public RestaurantZhangRevolvingStand getOrderStand();
 	public RestaurantZhangMenu getMainMenu();
 	public Map<String, Food> getCookInventory();
-	public List<CookInvoice> getCookInvoiceList();
 	public int getPosOfNewOrder();
 	public boolean getWaitingToCheckStand();
 	

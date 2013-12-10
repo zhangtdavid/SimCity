@@ -46,8 +46,6 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	}
 
 	public void paint(Graphics g) {
-//		g.setColor(background);
-//		g.fillRect(0, 0, getWidth(), getHeight());
 		g.drawImage(cityViewBackgroundImage, 0, 0, null);
 		moveComponents();
 		drawComponents(g);
