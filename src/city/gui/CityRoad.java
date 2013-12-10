@@ -39,7 +39,7 @@ public class CityRoad extends CityViewBuilding {
 	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
 
 	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
-	
+
 	protected BufferedImage imageToRender = null;
 
 	// Constructor
@@ -87,7 +87,7 @@ public class CityRoad extends CityViewBuilding {
 			laneColor = Color.red;
 		}
 		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
-
+		g2.fillRect(xOrigin, yOrigin, width, height);
 		if(vehicle == null) 
 			return;
 		double x = 0;

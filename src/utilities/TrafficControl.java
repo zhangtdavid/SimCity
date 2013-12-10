@@ -13,12 +13,15 @@ import javax.swing.Timer;
 import city.Application;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.CityRoad;
+import city.gui.CityRoadIntersection;
 import city.gui.exteriors.CityViewApt;
 
 public class TrafficControl implements ActionListener {
 	List<CityRoad> roads;
 	Timer stopLightTimer = new Timer(3000, this);
 	
+	private static BufferedImage cityViewRoadCrosswalkEastWestImage = null;
+	private static BufferedImage cityViewRoadCrosswalkNorthSouthImage = null;
 	
 	private static BufferedImage cityViewRoadIntersectionAllImage = null;
 	private static BufferedImage cityViewRoadIntersectionNorthImage = null;
@@ -38,13 +41,17 @@ public class TrafficControl implements ActionListener {
 		try {
 			if(cityViewRoadHorizontalImage == null || cityViewRoadVerticalImage == null ||
 					cityViewRoadNorthEastTurnImage == null || cityViewRoadNorthWestTurnImage == null ||
-					cityViewRoadSouthEastTurnImage == null || cityViewRoadSouthWestTurnImage == null)
+					cityViewRoadSouthEastTurnImage == null || cityViewRoadSouthWestTurnImage == null ||
+					cityViewRoadCrosswalkEastWestImage == null || cityViewRoadCrosswalkNorthSouthImage == null) {
+				cityViewRoadCrosswalkEastWestImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadCrosswalkEastWestImage.png"));
+				cityViewRoadCrosswalkNorthSouthImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadCrosswalkNorthSouthImage.png"));
 				cityViewRoadHorizontalImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadHorizontalImage.png"));
 				cityViewRoadVerticalImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadVerticalImage.png"));
 				cityViewRoadNorthEastTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthEastTurnImage.png"));
 				cityViewRoadNorthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadNorthWestTurnImage.png"));
 				cityViewRoadSouthEastTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthEastTurnImage.png"));
 				cityViewRoadSouthWestTurnImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewRoadSouthWestTurnImage.png"));
+			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -92,6 +99,21 @@ public class TrafficControl implements ActionListener {
 				r.setImageToRender(cityViewRoadHorizontalImage);
 			else if(!r.getHorizontal())
 				r.setImageToRender(cityViewRoadVerticalImage);
+			// Crosswalks
+			CityRoad northRoad = getRoadAt(r.getX(), r.getY() - 25);
+			CityRoad eastRoad = getRoadAt(r.getX() + 25, r.getY());
+			CityRoad southRoad = getRoadAt(r.getX(), r.getY() + 25);
+			CityRoad westRoad = getRoadAt(r.getX() - 25, r.getY());
+			if(northRoad != null && southRoad != null) {
+				if((northRoad.isRedLight() || southRoad.isRedLight()) &&
+						(northRoad.getClass() == CityRoadIntersection.class || southRoad.getClass() == CityRoadIntersection.class))
+					r.setImageToRender(cityViewRoadCrosswalkEastWestImage);
+			}
+			if(eastRoad != null && westRoad != null) {
+				if((eastRoad.isRedLight() || westRoad.isRedLight()) &&
+						(eastRoad.getClass() == CityRoadIntersection.class || westRoad.getClass() == CityRoadIntersection.class))
+					r.setImageToRender(cityViewRoadCrosswalkNorthSouthImage);
+			}
 			// Stop light
 			if(r.isRedLight() && r.getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF) {
 				r.setStopLightType(CityRoad.STOPLIGHTTYPE.HORIZONTALON);
