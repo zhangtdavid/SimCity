@@ -28,12 +28,13 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	public EventLog log = new EventLog();
 	Timer timer = new Timer();
 
-	public enum DeliveryState {None, Pending, Delivering, Arrived, Received, ReturningToRestaurant};
+	public enum DeliveryState {None, Pending, Delivering, Arrived, Received, ReturningToMarket};
 
 	private DeliveryState s;
 	
 	private Market market;
 	
+	private Car personalCar;
 	private Car car;
 	private CarPassenger carPassenger;
 	
@@ -55,7 +56,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(market, this); // setting b to be the current location of the car
 		CarAnimation carAnim = new CarAnimation(car, market);
-		carAnim.setVisible(true);;
+		carAnim.setVisible(true);
 		car.setAnimation(carAnim);
 		car.startThread();
 		Application.getMainFrame().cityView.addAnimation(carAnim);
@@ -92,8 +93,10 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	
 	@Override
 	public void msgArrivedAtDestination() {
-		if (s == DeliveryState.ReturningToRestaurant) {
-			
+		// UPDATE
+		if (s == DeliveryState.ReturningToMarket) {
+			if (!restaurantClosed)
+				s = DeliveryState.None;
 		}
 		
 		else {
@@ -116,6 +119,7 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		if (workingState == WorkingState.GoingOffShift && customerDelivery == null) {
 			if (market.getDeliveryPeople().size() > 1) {
 				market.removeDeliveryPerson(this);
+				this.getPerson().setCar(personalCar); // switches back to personal car
 				super.setInactive();				
 			}
 		}
@@ -144,6 +148,11 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			checkOpen();
 			return true;
 		}
+		
+		if (s == DeliveryState.ReturningToMarket) {
+			returnToMarket();
+			return true;
+		}
 
 		return blocking;
 	}
@@ -152,10 +161,12 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //	=====================================================================	
 	private void deliverItems() {
 		market.getCashier().msgDeliveringItems(this);
+		if (personalCar == null)
+				personalCar = this.getPerson().getCar();
 		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant(), this);
 		carPassenger.setPerson(this.getPerson());
 		carPassenger.setActive();
-		this.getPerson().setCar(car); // overwrites the person's personal car.
+		this.getPerson().setCar(car);
 		
 		s = DeliveryState.Delivering;
 	}
@@ -167,14 +178,24 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //		else {
 //			restaurantClosed = true;
 //			carPassenger = new CarPassengerRole(car, market);
-			s = DeliveryState.ReturningToRestaurant;
 //		}
+			
+		returnToMarket();
+			// UPDATE
 	}
 	
 	public void giveItems() {
 		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
 		market.getCashier().msgFinishedDeliveringItems(this, orderId);
 		customerDelivery = null;
+		// UPDATE
+	}
+	
+	public void returnToMarket() {
+		s = DeliveryState.ReturningToMarket;
+		carPassenger = new CarPassengerRole(car, market, this);
+		carPassenger.setPerson(this.getPerson());
+		carPassenger.setActive();
 	}
 	
 //  Getters

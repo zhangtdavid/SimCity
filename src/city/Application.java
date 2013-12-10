@@ -748,7 +748,7 @@ public class Application {
 
 		// RESTAURANTCHUNG------------------------------------------------------------------------------
 		RestaurantChungPanel restaurantChungPanel1 = new RestaurantChungPanel(Color.black);
-		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(425, 150, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
+		CityViewRestaurant cityViewRestaurantChung1 = new CityViewRestaurant(425, 300, "Restaurant " + (mainFrame.cityView.getStaticsSize()), Color.yellow, restaurantChungPanel1); 
 		RestaurantChungBuilding restaurantChungBuilding1 = new RestaurantChungBuilding("RestaurantChung1", restaurantChungPanel1, cityViewRestaurantChung1);
 		setBuilding(restaurantChungPanel1, cityViewRestaurantChung1, restaurantChungBuilding1);
 		

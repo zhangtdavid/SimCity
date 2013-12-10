@@ -227,8 +227,9 @@ public class RestaurantChungCashierRole extends JobRole implements RestaurantChu
 	@Override
 	public void setPerson(Person p) {
 		super.setPerson(p);
-		roles.get(0).setPerson(this.getPerson());
-		roles.get(1).setPerson(this.getPerson());
+		for (int i = 0; i < roles.size(); i++) {
+			roles.get(i).setPerson(this.getPerson());
+		}
 	}
 	
 	@Override
