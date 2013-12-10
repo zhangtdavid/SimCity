@@ -148,11 +148,6 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			checkOpen();
 			return true;
 		}
-		
-		if (s == DeliveryState.ReturningToMarket) {
-			returnToMarket();
-			return true;
-		}
 
 		return blocking;
 	}
