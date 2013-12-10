@@ -130,6 +130,8 @@ public class PersonAnimation extends Animation implements AnimatedPerson {
 
 	@Override
 	public void draw(Graphics2D g) {
+		g.setColor(Color.white);
+		g.drawString("Resident: "+ person.getName(), AptPanel.APT_DOOR[this.person.getRoomNumber()-1][0]+30, AptPanel.APT_DOOR[this.person.getRoomNumber()-1][1]);
 		g.setColor(Color.GREEN);
 		g.fillRect(xPos, yPos, AnimatedPerson.WIDTH, AnimatedPerson.WIDTH);
 		g.setColor(Color.WHITE);

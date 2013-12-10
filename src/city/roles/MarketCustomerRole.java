@@ -108,7 +108,7 @@ public class MarketCustomerRole extends Role implements MarketCustomer {
 	@Override
 	public void msgAnimationFinishedLeaveMarket() {
 		print("Market Customer received msgAnimationFinishedLeaveMarket");
-		super.setActive();
+		super.setInactive();
 	}
 	
 //  Scheduler

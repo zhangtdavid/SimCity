@@ -92,7 +92,11 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 	@Override
 	public boolean getBusinessIsOpen() {
 		boolean disposition = false;
-
+		if(this.cashier.getActive() && this.cook.getActive() && this.host.getActive()) // if these guys are here
+			for (RestaurantChoiWaiterBase w : waiters) { // and if one waiter is here
+				if(w.getActive())
+					disposition = true;
+			}
 		return disposition;
 	}
 

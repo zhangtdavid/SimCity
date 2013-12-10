@@ -120,9 +120,8 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.cash = 0;
-		this.hasEaten = true;
 		this.home = residence;
-		this.currentLocation = residence;
+		this.currentLocation = null;
 		this.animation = animation;
 		animation.setPerson(this);
 		this.lastAteAtRestaurant = new Date(startDate.getTime());

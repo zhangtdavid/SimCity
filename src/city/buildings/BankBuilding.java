@@ -96,7 +96,7 @@ public class BankBuilding extends Building implements Bank {
 				allRoles.put(c, anim);
 			}
 			manager = c;
-			c.setActive();
+			//c.setActive();
 			System.out.println("Bank Manager set");
 		}
 		if(r instanceof BankTellerRole) {
@@ -110,7 +110,7 @@ public class BankBuilding extends Building implements Bank {
 				allRoles.put(c, anim);
 			}
 			employees.add(c);
-			c.setActive();
+			//c.setActive();
 			System.out.println("Bank Teller set");
 		}
 		if(r instanceof BankCustomerRole) {
