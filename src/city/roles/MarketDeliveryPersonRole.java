@@ -55,7 +55,9 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setSalary(MarketBuilding.WORKER_SALARY);
 		car = new CarAgent(market, this); // setting b to be the current location of the car
 		CarAnimation carAnim = new CarAnimation(car, market);
+		carAnim.setVisible(true);;
 		car.setAnimation(carAnim);
+		car.startThread();
 		Application.getMainFrame().cityView.addAnimation(carAnim);
 
 		workingState = WorkingState.Working;
