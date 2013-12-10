@@ -2,6 +2,7 @@ package city.gui;
 
 import java.awt.Color;
 import java.awt.Graphics;
+import java.awt.Graphics2D;
 import java.awt.Rectangle;
 import java.awt.image.BufferedImage;
 import java.io.IOException;
@@ -18,12 +19,12 @@ public class CitySidewalk extends CityViewBuilding {
 	protected int velocity;
 	protected double size;
 	protected Color sidewalkColor;
-	
+
 	protected boolean isCrosswalk = false;
 	protected CityRoad correspondingStoplight = null;
 
 	volatile protected AnimationInterface currentOccupant = null;
-	
+
 	private static BufferedImage cityViewSidewalkImage = null;
 	private BufferedImage imageToRender;
 
@@ -38,7 +39,7 @@ public class CitySidewalk extends CityViewBuilding {
 		//Make the lane surface
 		rectangle = new Rectangle();
 		rectangle.setRect(x, y, size, size);
-		
+
 		try {
 			if(cityViewSidewalkImage == null)
 				cityViewSidewalkImage = ImageIO.read(CitySidewalk.class.getResource("/icons/cityView/CityViewSidewalkImage.png"));
@@ -52,10 +53,13 @@ public class CitySidewalk extends CityViewBuilding {
 
 	@Override
 	public void paint( Graphics g2 ) {
-//		g2.setColor( sidewalkColor );
-//		((Graphics2D) g2).fill( rectangle );
-		if(imageToRender != null)
-			g2.drawImage(cityViewSidewalkImage, x, y, null);
+		if(isUgly) {
+			g2.setColor( sidewalkColor );
+			((Graphics2D) g2).fill( rectangle );
+		} else {
+			if(imageToRender != null)
+				g2.drawImage(cityViewSidewalkImage, x, y, null);
+		}
 	}
 
 	@Override
@@ -66,7 +70,7 @@ public class CitySidewalk extends CityViewBuilding {
 	public AnimationInterface getCurrentOccupant() {
 		return currentOccupant;
 	}
-	
+
 	public boolean isCrosswalk() {
 		return isCrosswalk;
 	}
@@ -84,7 +88,7 @@ public class CitySidewalk extends CityViewBuilding {
 		}
 		return false;
 	}
-	
+
 	public void setCrosswalk(boolean b) {
 		isCrosswalk = b;
 	}

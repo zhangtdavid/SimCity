@@ -15,6 +15,8 @@ public abstract class Animation implements AnimationInterface {
 	protected int xPos, yPos;
 	private Agent agent;
 	
+	protected boolean isUgly;
+	
 	// Constructor
 	
 	// Abstract
@@ -61,6 +63,11 @@ public abstract class Animation implements AnimationInterface {
 	@Override
 	public void setAgent(Agent a) {
 		this.agent = a;
+	}
+	
+	@Override
+	public void setUgly(boolean newUgly) {
+		isUgly = newUgly;
 	}
 	
     // Utilities

@@ -31,6 +31,7 @@ public interface AnimationInterface {
     
     public void setVisible(boolean b);
     public void setAgent(Agent a);
+    public void setUgly(boolean newUgly);
     
     // Utilities
 

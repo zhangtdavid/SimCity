@@ -42,4 +42,10 @@ public class MockAnimatedBusPassenger extends MockAnimation implements AnimatedB
 	public void goToBus() {
 		log.add(new LoggedEvent("BusPassenger " + busPassenger.getPerson().getName() + " is getting on the bus"));
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }

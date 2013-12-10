@@ -35,11 +35,11 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	protected Stack<CitySidewalk>sidewalkPath;
 	
-	private static BufferedImage cityViewWalkerNorthImage = null;
-	private static BufferedImage cityViewWalkerEastImage = null;
-	private static BufferedImage cityViewWalkerSouthImage = null;
-	private static BufferedImage cityViewWalkerWestImage = null;
-	private BufferedImage imageToRender;
+	protected static BufferedImage cityViewWalkerNorthImage = null;
+	protected static BufferedImage cityViewWalkerEastImage = null;
+	protected static BufferedImage cityViewWalkerSouthImage = null;
+	protected static BufferedImage cityViewWalkerWestImage = null;
+	protected BufferedImage imageToRender;
 	
 	public WalkerAnimation(Walker walker, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		this.walker = walker;
@@ -195,9 +195,11 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	@Override
 	public void draw(Graphics2D g) {
-//		g.setColor(Color.blue);
-//		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
-		g.drawImage(imageToRender, xPos, yPos, null);
+		if(isUgly) {
+			g.setColor(Color.blue);
+			g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
+		} else
+			g.drawImage(imageToRender, xPos, yPos, null);
 	}
 
 	@Override

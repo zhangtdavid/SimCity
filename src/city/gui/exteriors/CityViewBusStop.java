@@ -11,14 +11,14 @@ import javax.imageio.ImageIO;
 import city.gui.BuildingCard;
 
 public class CityViewBusStop extends CityViewBuilding {
-	
+
 	private static BufferedImage cityViewBusStopImage = null;
 
 	public CityViewBusStop(int x, int y) {
 		super(x, y, Color.white, "Bus Stop 1");
 		setRectangle(new Rectangle(x, y, 25, 25));
 	}
-	
+
 	public CityViewBusStop(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 25, 25));
@@ -29,15 +29,17 @@ public class CityViewBusStop extends CityViewBuilding {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		//		super.paint(g);
-		g.drawImage(cityViewBusStopImage, x, y, null);
+		if(isUgly)		
+			super.paint(g);
+		else
+			g.drawImage(cityViewBusStopImage, x, y, null);
 	}
 }

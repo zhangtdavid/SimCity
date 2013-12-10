@@ -37,4 +37,10 @@ public class MockAnimatedBus extends MockAnimation implements AnimatedBus {
 	public void doGoToNextStop(BusStop nextStop) {
 		bus.msgAtDestination();
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }

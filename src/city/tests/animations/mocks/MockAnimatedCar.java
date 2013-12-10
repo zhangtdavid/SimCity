@@ -105,4 +105,10 @@ public class MockAnimatedCar extends MockAnimation implements AnimatedCar {
 		// TODO Auto-generated method stub
 		return false;
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }
