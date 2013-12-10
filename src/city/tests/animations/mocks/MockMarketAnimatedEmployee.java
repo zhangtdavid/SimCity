@@ -82,4 +82,10 @@ public class MockMarketAnimatedEmployee extends MockAnimation implements MarketA
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 }

@@ -443,6 +443,8 @@ public abstract class RestaurantZhangWaiterBase extends JobRole implements Resta
 				return;
 			}
 		}
+		thisGui.GoToDestination(-20, -20);
+		waitForAnimation();
 		thisGui.setVisible(false);
 		super.setInactive();
 	}
@@ -451,6 +453,8 @@ public abstract class RestaurantZhangWaiterBase extends JobRole implements Resta
 	public void setActive() {
 		super.setActive();
 		thisGui.setVisible(true);
+		thisGui.GoToDestination(thisGui.getBaseX(), thisGui.getBaseY());
+		waitForAnimation();
 		runScheduler();
 	}
 

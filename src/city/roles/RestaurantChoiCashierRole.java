@@ -16,7 +16,6 @@ import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantChoiAnimatedCashier;
 import city.bases.JobRole;
 import city.bases.Role;
-import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChoi;
@@ -57,13 +56,8 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building.getBankCustomer().setPerson(this.getPerson());
-        roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
-        roles.get(0).setPerson(this.getPerson());
-        roles.get(0).setActive();
-        roles.add((Role) building.getBankCustomer());// These two are not market related. Just demonstrating how I handled the bank interaction
-        roles.get(1).setPerson(this.getPerson());
-        roles.get(1).setActive();
-
+		roles.add((Role) building.getBankCustomer());
+		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions, this));
 	}
 
 	public RestaurantChoiCashierRole(){ // for testing mechanics
@@ -140,7 +134,7 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 	public boolean runScheduler() {
         boolean blocking = false;
         for (Role r : roles) if (r.getActive() && r.getActivity()) {
-        	if(r.getPerson() == null) r.setPerson(this.getPerson());
+        	if(r.getPerson() == null) r.setPerson(this.getPerson()); // just in case~
                 blocking  = true;
                 boolean activity = r.runScheduler();
                 if (!activity) {

@@ -18,7 +18,7 @@ public class CityViewHouse extends CityViewBuilding {
 		super(x, y, Color.WHITE, "House 1");
 		setRectangle(new Rectangle(x, y, 25, 25));
 	}
-	
+
 	public CityViewHouse(int x, int y, String ID, Color color, BuildingCard b) {
 		super(x, y, color, ID, b);
 		setRectangle(new Rectangle(x, y, 25, 25));
@@ -29,17 +29,19 @@ public class CityViewHouse extends CityViewBuilding {
 			e.printStackTrace();
 		}
 	}
-	
+
 	@Override
 	public void updatePosition() {
 		// TODO Auto-generated method stub
-		
+
 	}
-	
+
 	@Override
 	public void paint(Graphics g) {
-		//		super.paint(g);
-		g.drawImage(cityViewHouseImage, x, y, null);
+		if(isUgly)		
+			super.paint(g);
+		else
+			g.drawImage(cityViewHouseImage, x, y, null);
 	}
 
 }

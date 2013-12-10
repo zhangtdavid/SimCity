@@ -46,7 +46,7 @@ public class RestaurantJPCashierRole extends JobRole implements RestaurantJPCash
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);
-		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(b, marketTransactions);
+		marketPaymentRole = new MarketCustomerDeliveryPaymentRole(b, marketTransactions, this);
 		Prices.put("Steak", 13);
 		Prices.put("Chicken", 11);
 		Prices.put("Salad", 6);

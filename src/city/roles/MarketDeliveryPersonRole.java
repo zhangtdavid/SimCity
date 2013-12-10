@@ -2,14 +2,18 @@ package city.roles;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import trace.AlertLog;
 import trace.AlertTag;
 import utilities.EventLog;
 import utilities.LoggedEvent;
+import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.agents.CarAgent;
 import city.agents.interfaces.Car;
+import city.animations.CarAnimation;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
@@ -22,7 +26,12 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //  Data
 //	=====================================================================	
 	public EventLog log = new EventLog();
+	Timer timer = new Timer();
 
+	public enum DeliveryState {None, Pending, Delivering, Arrived, Received, ReturningToRestaurant};
+
+	private DeliveryState s;
+	
 	private Market market;
 	
 	private Car car;
@@ -42,10 +51,17 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		super();
 		market = b;
 		this.setShift(t1, t2);
-		this.setWorkplace(b);
+		this.setWorkplace(market);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
-		car = new CarAgent(b, this); // TODO schung 99c0f4da25 (Setting b to be the current location of the car- is this correct?)
+		car = new CarAgent(market, this); // setting b to be the current location of the car
+		CarAnimation carAnim = new CarAnimation(car, market);
+		carAnim.setVisible(true);;
+		car.setAnimation(carAnim);
+		car.startThread();
+		Application.getMainFrame().cityView.addAnimation(carAnim);
+
 		workingState = WorkingState.Working;
+		s = DeliveryState.None;
 		
 		restaurantClosed = false;
     }
@@ -70,7 +86,20 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
         	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
         }
         orderId = id;
+        s = DeliveryState.Pending;
         stateChanged();
+	}
+	
+	@Override
+	public void msgArrivedAtDestination() {
+		if (s == DeliveryState.ReturningToRestaurant) {
+			
+		}
+		
+		else {
+	        s = DeliveryState.Arrived;		
+		}
+		stateChanged();
 	}
 	
 //  Scheduler
@@ -79,13 +108,10 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	public boolean runScheduler() {
 		// Role Scheduler
 		boolean blocking = false;
-//		if (carPassenger.getActive() && carPassenger.getActivity()) {
-//			blocking  = true;
-//			boolean activity = carPassenger.runScheduler();
-//			if (!activity) {
-//				carPassenger.setActivityFinished();
-//			}
-//		}		
+		if (carPassenger != null && carPassenger.getActive()) {
+			blocking  = true;
+			carPassenger.runScheduler();
+		}	
 		
 		if (workingState == WorkingState.GoingOffShift && customerDelivery == null) {
 			if (market.getDeliveryPeople().size() > 1) {
@@ -94,15 +120,29 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			}
 		}
 		
-//		if (restaurantClosed) {
-//			if(market.getOpen()) {
-//				deliverItems();
-//				return true;
-//			}
-//		}
+		if (restaurantClosed) {
+			timer.schedule(new TimerTask() {
+				public void run() {
+//					 check if restaurant is open
+					if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
+						restaurantClosed = false;
+						s = DeliveryState.Pending;
+					}
+					else {
+						stateChanged();
+					}
+				}
+			},
+			5000);
+		}
 //		
-		if (customerDelivery != null) {
+		if (s == DeliveryState.Pending) {
 			deliverItems();
+			return true;
+		}
+		
+		if (s == DeliveryState.Arrived) {
+			checkOpen();
 			return true;
 		}
 
@@ -112,26 +152,30 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
-		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant());
-		if (!restaurantClosed)
-			market.getCashier().msgDeliveringItems(this);
-
-// 		notify customer if there is a difference between order and collected items
-// 		switch into CarPassenger;
-//		carPassenger.setActive();
-//		while (carPassenger.getActive()) {
-//			// do nothing
-//		}
+		market.getCashier().msgDeliveringItems(this);
+		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant(), this);
+		carPassenger.setPerson(this.getPerson());
+		carPassenger.setActive();
+		this.getPerson().setCar(car); // overwrites the person's personal car.
 		
-//		if(market.getOpen()) {
-			customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
-			market.getCashier().msgFinishedDeliveringItems(this, orderId);
-			customerDelivery = null;
-//		}
-//		else {
-//			restaurantClosed = true;
-//			carPassenger = new CarPassengerRole(car, market); // go back to Restaurant
-//		}
+		s = DeliveryState.Delivering;
+	}
+	
+	public void checkOpen() {
+		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
+			giveItems();
+		}
+		else {
+			restaurantClosed = true;
+			carPassenger = new CarPassengerRole(car, market);
+			s = DeliveryState.ReturningToRestaurant;
+		}
+	}
+	
+	public void giveItems() {
+		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
+		market.getCashier().msgFinishedDeliveringItems(this, orderId);
+		customerDelivery = null;
 	}
 	
 //  Getters

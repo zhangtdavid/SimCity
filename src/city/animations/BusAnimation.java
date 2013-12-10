@@ -60,26 +60,29 @@ public class BusAnimation extends Animation implements AnimatedBus {
 	}
 
 	public void draw(Graphics2D g) {
-		//		g.setColor(Color.CYAN);
-		//		g.fillRect(xPos, yPos, SIZE, SIZE);
-		//		g.setColor(Color.black);
-		//		g.drawString("Bus", xPos, yPos + 10);
-		if(Application.trafficControl != null) {
-			CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
-			if(currentRoad.getClass() == CityRoadIntersection.class)
-				currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
-			if(currentRoad == null)
-				imageToRender = cityViewBusEastImage;
-			else if(currentRoad.getXVelocity() > 0)
-				imageToRender = cityViewBusEastImage;
-			else if(currentRoad.getXVelocity() < 0)
-				imageToRender = cityViewBusWestImage;
-			else if(currentRoad.getYVelocity() < 0)
-				imageToRender = cityViewBusNorthImage;
-			else if(currentRoad.getYVelocity() > 0)
-				imageToRender = cityViewBusSouthImage;
+		if(isUgly) {
+			g.setColor(Color.CYAN);
+			g.fillRect(xPos, yPos, SIZE, SIZE);
+			g.setColor(Color.black);
+			g.drawString("Bus", xPos, yPos + 10);
+		} else {
+			if(Application.trafficControl != null) {
+				CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
+				if(currentRoad.getClass() == CityRoadIntersection.class)
+					currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
+				if(currentRoad == null)
+					imageToRender = cityViewBusEastImage;
+				else if(currentRoad.getXVelocity() > 0)
+					imageToRender = cityViewBusEastImage;
+				else if(currentRoad.getXVelocity() < 0)
+					imageToRender = cityViewBusWestImage;
+				else if(currentRoad.getYVelocity() < 0)
+					imageToRender = cityViewBusNorthImage;
+				else if(currentRoad.getYVelocity() > 0)
+					imageToRender = cityViewBusSouthImage;
+			}
+			g.drawImage(imageToRender, xPos, yPos, null);
 		}
-		g.drawImage(imageToRender, xPos, yPos, null);
 	}
 
 	// Actions

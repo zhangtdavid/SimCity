@@ -55,5 +55,11 @@ public class MockRestaurantZhangAnimatedCustomer extends MockAnimation implement
 		// TODO Auto-generated method stub
 		
 	}
+
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
 	
 }

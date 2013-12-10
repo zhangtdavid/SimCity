@@ -67,7 +67,8 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
     				TABLEYSTART + ((ix / TABLECOLUMN) * TABLEYSPACING),
     				TABLEW, TABLEH));
     	}
-    	panel.setTables(tables);
+    	if(panel != null)
+    		panel.setTables(tables);
     	foods.put(Application.FOOD_ITEMS.chicken, new Food("chicken", 2000, 50, 0, 3, menu.getPrice("chicken")));
         foods.put(Application.FOOD_ITEMS.pizza, new Food("pizza", 8000, 50, 0, 3, menu.getPrice("pizza")));
         foods.put(Application.FOOD_ITEMS.steak, new Food("steak", 4000, 50, 0, 3, menu.getPrice("steak")));

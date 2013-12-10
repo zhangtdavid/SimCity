@@ -159,7 +159,7 @@ public class RestaurantChungCashierTest extends TestCase {
 		assertEquals("Cashier payment variable should be 16. It's " + cashier.getTransactions().get(0).getPayment() + "instead", cashier.getTransactions().get(0).getPayment(), 16);
 		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
 		cashier.getTransactions().get(0).getTransactionState() == TransactionState.ReceivedPayment);	
-		assertEquals("Cashier money should be 1016. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 1016);
+		assertEquals("Cashier money should be 816. It's " + restaurantChung.getCash() + "instead", restaurantChung.getCash(), 816);
 		
 		cashier.runScheduler();
 		assertEquals("Cashier should have 0 transaction. It doesn't", cashier.getTransactions().size(), 0);
@@ -172,7 +172,7 @@ public class RestaurantChungCashierTest extends TestCase {
 	}
 	
 	public void testOneAbnormalCustomerScenario() {
-		assertEquals("Cashier should have 500.0. It doesn't", restaurantChung.getCash(), 1000);
+		assertEquals("Cashier should have 800. It doesn't", restaurantChung.getCash(), 800);
 		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
 		assertEquals("Customer should have an empty log. It doesn't", abnormCustomer.log.size(), 0);
 		assertEquals("Waiter should have an empty log. It doesn't", waiterMC.log.size(), 0);
@@ -199,7 +199,7 @@ public class RestaurantChungCashierTest extends TestCase {
 		assertEquals("Cashier payment variable should be 0. It's " + cashier.getTransactions().get(0).getPayment() + "instead", cashier.getTransactions().get(0).getPayment(), 0);
 		assertTrue("Cashier transactions should contain a transaction with state == ReceivedPayment. It doesn't.",
 		cashier.getTransactions().get(0).getTransactionState() == TransactionState.ReceivedPayment);	
-		assertEquals("Cashier should have 1000. It doesn't", restaurantChung.getCash(), 1000);
+		assertEquals("Cashier should have 800. It doesn't", restaurantChung.getCash(), 800);
 		
 		cashier.runScheduler();
 		assertTrue("Cashier transactions should contain a transaction with state == InsufficientPayment. It doesn't.",
@@ -218,7 +218,7 @@ public class RestaurantChungCashierTest extends TestCase {
 	}
 
 	public void testOneNormalMarketScenario() {
-		assertEquals("Cashier should have 1000. It doesn't", restaurantChung.getCash(), 1000);
+		assertEquals("Cashier should have 800. It doesn't", restaurantChung.getCash(), 800);
 		assertEquals("Cashier should have an empty log. It doesn't", cashier.log.size(), 0);
 		assertEquals("Cashier should have 0 market transactions. It doesn't", cashier.getMarketTransactions().size(), 0);
 

@@ -3,19 +3,13 @@ package city.gui;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
-import java.awt.image.BufferedImage;
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.Hashtable;
 import java.util.List;
 
-import javax.imageio.ImageIO;
-
-import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
-import city.gui.exteriors.CityViewApt;
 
 public class CityRoadIntersection extends CityRoad {
 

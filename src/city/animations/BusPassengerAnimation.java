@@ -1,7 +1,5 @@
 package city.animations;
 
-import java.awt.Color;
-import java.awt.Graphics2D;
 import java.util.Random;
 
 import city.animations.interfaces.AnimatedBusPassenger;
@@ -14,7 +12,7 @@ import city.roles.interfaces.BusPassenger;
 public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBusPassenger {
 
 	private BusPassenger busPassenger;
-	
+
 	public BusPassengerAnimation(BusPassenger busPassenger, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		super(null, startingBuilding, sidewalks);
 		this.busPassenger = busPassenger;
@@ -27,15 +25,23 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 			if(startingSidewalk.setCurrentOccupant(this) == false) {
 				return;
 			}
-			if (xPos < startingSidewalk.getX())
+			if (xPos < startingSidewalk.getX()) {
 				xPos++;
-			else if (xPos > startingSidewalk.getX())
+				imageToRender = cityViewWalkerEastImage;
+			}
+			else if (xPos > startingSidewalk.getX()) {
 				xPos--;
+				imageToRender = cityViewWalkerWestImage;
+			}
 
-			if (yPos < startingSidewalk.getY())
+			if (yPos < startingSidewalk.getY()) {
 				yPos++;
-			else if (yPos > startingSidewalk.getY())
+				imageToRender = cityViewWalkerSouthImage;
+			}
+			else if (yPos > startingSidewalk.getY()) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 			return;
 		}
 		// Traveling along sidewalks
@@ -44,14 +50,19 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
 			}
-			if(xPos < currentSidewalk.getX())
+			if(xPos < currentSidewalk.getX()) {
 				xPos++;
-			else if(xPos > currentSidewalk.getX())
+				imageToRender = cityViewWalkerEastImage;
+			} else if(xPos > currentSidewalk.getX()) {
 				xPos--;
-			else if(yPos < currentSidewalk.getY())
+				imageToRender = cityViewWalkerWestImage;
+			} else if(yPos < currentSidewalk.getY()) {
 				yPos++;
-			else if(yPos > currentSidewalk.getY())
+				imageToRender = cityViewWalkerSouthImage;
+			} else if(yPos > currentSidewalk.getY()) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 			else if(!sidewalkPath.isEmpty()) {
 				if(sidewalkPath.peek().getCorrespondingStoplight() != null) {
 					if((sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
@@ -117,15 +128,21 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
-			if (xPos < xDestination)
+			if (xPos < xDestination) {
 				xPos++;
-			else if (xPos > xDestination)
+				imageToRender = cityViewWalkerEastImage;
+			} else if (xPos > xDestination) {
 				xPos--;
-
-			if (yPos < yDestination)
+				imageToRender = cityViewWalkerWestImage;
+			}
+			
+			if (yPos < yDestination) {
 				yPos++;
-			else if (yPos > yDestination)
+				imageToRender = cityViewWalkerSouthImage;
+			} else if (yPos > yDestination) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 		}
 		//
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
@@ -138,12 +155,6 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 		}
 	}
 
-	@Override
-	public void draw(Graphics2D g) {
-		g.setColor(Color.green);
-		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
-	}
-	
 	@Override
 	public void goToBus() {
 		startingSidewalk = sidewalks.getClosestSidewalk(busPassenger.getBusStopToWaitAt().getCityViewBuilding().getX(),
@@ -168,7 +179,7 @@ public class BusPassengerAnimation extends WalkerAnimation implements AnimatedBu
 		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
 		this.setVisible(true);
 	}
-	
+
 	@Override
 	public void getOffBus() {
 		int startingX = xPos = busPassenger.getBus().getAnimation().getXPos();

@@ -76,4 +76,10 @@ public class MockRestaurantTimmsAnimatedCustomer extends MockAnimation implement
 		return false;
 	}
 
+	@Override
+	public void setUgly(boolean newUgly) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

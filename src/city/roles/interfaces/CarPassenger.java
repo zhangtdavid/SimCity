@@ -28,6 +28,7 @@ public interface CarPassenger extends RoleInterface {
 	public CarPassengerEvent getEvent();
 	public Car getCar();
 	public BuildingInterface getDestination();
+	MarketDeliveryPerson getParent();
 	
 	// Setters
 	
