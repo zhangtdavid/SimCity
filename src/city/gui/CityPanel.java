@@ -6,18 +6,19 @@ import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseListener;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.imageio.ImageIO;
 import javax.swing.JPanel;
 import javax.swing.Timer;
 
 import city.Application;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.exteriors.CityViewBuilding;
-
-
 
 public abstract class CityPanel extends JPanel implements ActionListener, MouseListener {
 
@@ -28,16 +29,25 @@ public abstract class CityPanel extends JPanel implements ActionListener, MouseL
 	public List<AnimationInterface> animations = Collections.synchronizedList(new ArrayList<AnimationInterface>());
 	protected Color background;
 	protected Timer timer;
+	
+	private static BufferedImage cityViewBackgroundImage = null;
 
 	public CityPanel(MainFrame mf) {
 		mainframe = mf;
 		timer = new Timer(((Double) (Application.INTERVAL * 0.005)).intValue(), this);
 		timer.start();
+		try {
+			if(cityViewBackgroundImage == null)
+				cityViewBackgroundImage = ImageIO.read(CityPanel.class.getResource("/icons/cityView/CityViewBackgroundImage.png"));
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	public void paint(Graphics g) {
-		g.setColor(background);
-		g.fillRect(0, 0, getWidth(), getHeight());
+//		g.setColor(background);
+//		g.fillRect(0, 0, getWidth(), getHeight());
+		g.drawImage(cityViewBackgroundImage, 0, 0, null);
 		moveComponents();
 		drawComponents(g);
 	}

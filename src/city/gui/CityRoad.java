@@ -4,14 +4,19 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import javax.imageio.ImageIO;
 
 import city.Application;
 import city.animations.BusAnimation;
 import city.animations.CarAnimation;
 import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
+import city.gui.exteriors.CityViewApt;
 import city.gui.exteriors.CityViewBuilding;
 
 public class CityRoad extends CityViewBuilding {
@@ -34,6 +39,8 @@ public class CityRoad extends CityViewBuilding {
 	protected STOPLIGHTTYPE stopLightType = STOPLIGHTTYPE.HORIZONTALOFF;
 
 	protected List<CitySidewalk> intersectionSidewalks = new ArrayList<CitySidewalk>();
+
+	protected BufferedImage imageToRender = null;
 
 	// Constructor
 
@@ -79,9 +86,7 @@ public class CityRoad extends CityViewBuilding {
 		if(isRedLight && (stopLightType == STOPLIGHTTYPE.HORIZONTALON || stopLightType == STOPLIGHTTYPE.VERTICALON)) {
 			laneColor = Color.red;
 		}
-		g2.setColor( laneColor );
-		((Graphics2D) g2).fill( rectangle );
-
+		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
 		if(vehicle == null) 
 			return;
 		double x = 0;
@@ -228,5 +233,9 @@ public class CityRoad extends CityViewBuilding {
 	public void addIntersectionSidewalk(CitySidewalk intersectionSidewalk) {
 		if(!intersectionSidewalks.contains(intersectionSidewalk))
 			intersectionSidewalks.add(intersectionSidewalk);
+	}
+
+	public void setImageToRender(BufferedImage image) {
+		imageToRender = image;
 	}
 }

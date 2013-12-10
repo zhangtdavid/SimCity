@@ -37,7 +37,7 @@ public class RestaurantZhangPanel extends BuildingCard implements ActionListener
 	public void paint(Graphics graphics) {
 		Graphics2D graphics2D = (Graphics2D)graphics;
 		// Clear the screen by painting a rectangle the size of the frame
-		graphics2D.setColor(background);
+		graphics2D.setColor(Color.yellow);
 		graphics2D.fillRect(0, 0, CARD_WIDTH, CARD_HEIGHT);
 		graphics.setColor(Color.black);
 		graphics.fillRect(20, 10, 40, 460);

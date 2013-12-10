@@ -47,9 +47,9 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 	private static final long serialVersionUID = 3622803906501755529L;
 
 	public static final int CITY_WIDTH = 500, CITY_HEIGHT = 500;
-	boolean addingObject = false;
+	public boolean addingObject = false;
 
-	private static NewBuilding temp;
+	public static NewBuilding temp;
 
 	String name = "City Panel";
 
@@ -223,6 +223,8 @@ public class CityViewPanel extends CityPanel implements MouseMotionListener {
 			CityMap.addBuilding(BUILDING.busStop, building);
 		} else if(building.getClass().getName().contains("House")) {
 			CityMap.addBuilding(BUILDING.house, building);
+		} else if(building.getClass().getName().contains("Apt")) {
+			CityMap.addBuilding(BUILDING.apartment, building);
 		}
 	}
 	
