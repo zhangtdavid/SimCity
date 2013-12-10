@@ -95,6 +95,7 @@ public class CityRoad extends CityViewBuilding {
 		double vHeight = 0;
 		// Check for pedestrians at intersection
 		for(CitySidewalk sidewalksAtIntersection : intersectionSidewalks) {
+			System.out.println("asdfoiasndfsdaifosdafndisaodifnosadif");
 			if(sidewalksAtIntersection.getCurrentOccupant() != null)
 				return;
 		}
@@ -165,6 +166,14 @@ public class CityRoad extends CityViewBuilding {
 	public void updatePosition() { };
 
 	// Getters
+	
+	public int getXVelocity() {
+		return xVelocity;
+	}
+	
+	public int getYVelocity() {
+		return yVelocity;
+	}
 
 	public CityRoad getNextRoad() {
 		return nextRoad;

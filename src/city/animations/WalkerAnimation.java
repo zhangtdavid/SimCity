@@ -2,8 +2,12 @@ package city.animations;
 
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
 import java.util.Random;
 import java.util.Stack;
+
+import javax.imageio.ImageIO;
 
 import city.animations.interfaces.AnimatedWalker;
 import city.bases.Animation;
@@ -11,6 +15,7 @@ import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
 import city.gui.CitySidewalk;
 import city.gui.CitySidewalkLayout;
+import city.gui.exteriors.CityViewApt;
 import city.roles.interfaces.Walker;
 
 public class WalkerAnimation extends Animation implements AnimatedWalker {
@@ -30,12 +35,29 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	protected Stack<CitySidewalk>sidewalkPath;
 	
+	private static BufferedImage cityViewWalkerNorthImage = null;
+	private static BufferedImage cityViewWalkerEastImage = null;
+	private static BufferedImage cityViewWalkerSouthImage = null;
+	private static BufferedImage cityViewWalkerWestImage = null;
+	private BufferedImage imageToRender;
+	
 	public WalkerAnimation(Walker walker, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		this.walker = walker;
 		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
 		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		this.sidewalks = sidewalks;
+		try {
+			if(cityViewWalkerNorthImage == null || cityViewWalkerEastImage == null || cityViewWalkerSouthImage == null || cityViewWalkerWestImage == null) {
+				cityViewWalkerNorthImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewWalkerNorthImage.png"));
+				cityViewWalkerEastImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewWalkerEastImage.png"));
+				cityViewWalkerSouthImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewWalkerSouthImage.png"));
+				cityViewWalkerWestImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewWalkerWestImage.png"));
+			}
+			imageToRender = cityViewWalkerNorthImage;
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 
 	@Override
@@ -45,15 +67,20 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 			if(startingSidewalk.setCurrentOccupant(this) == false) {
 				return;
 			}
-			if (xPos < startingSidewalk.getX())
+			if (xPos < startingSidewalk.getX()) {
 				xPos++;
-			else if (xPos > startingSidewalk.getX())
+				imageToRender = cityViewWalkerEastImage;
+			} else if (xPos > startingSidewalk.getX()) {
 				xPos--;
-
-			if (yPos < startingSidewalk.getY())
+				imageToRender = cityViewWalkerWestImage;
+			}
+			if (yPos < startingSidewalk.getY()) {
 				yPos++;
-			else if (yPos > startingSidewalk.getY())
+				imageToRender = cityViewWalkerSouthImage;
+			} else if (yPos > startingSidewalk.getY()) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 			return;
 		}
 		// Traveling along sidewalks
@@ -62,14 +89,19 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 				currentSidewalk = startingSidewalk;
 				startingSidewalk = null;
 			}
-			if(xPos < currentSidewalk.getX())
+			if(xPos < currentSidewalk.getX()) {
 				xPos++;
-			else if(xPos > currentSidewalk.getX())
+				imageToRender = cityViewWalkerEastImage;
+			} else if(xPos > currentSidewalk.getX()) {
 				xPos--;
-			else if(yPos < currentSidewalk.getY())
+				imageToRender = cityViewWalkerWestImage;
+			} else if(yPos < currentSidewalk.getY()) {
 				yPos++;
-			else if(yPos > currentSidewalk.getY())
+				imageToRender = cityViewWalkerSouthImage;
+			} else if(yPos > currentSidewalk.getY()) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 			else if(!sidewalkPath.isEmpty()) {
 				if(sidewalkPath.peek().getCorrespondingStoplight() != null) {
 					if((sidewalkPath.peek().getCorrespondingStoplight().getStopLightType() == CityRoad.STOPLIGHTTYPE.HORIZONTALOFF || 
@@ -135,15 +167,20 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 		}
 		// Finished walking to sidewalk, walk into building
 		if(atDestinationRoad == true) {
-			if (xPos < xDestination)
+			if (xPos < xDestination) {
 				xPos++;
-			else if (xPos > xDestination)
+				imageToRender = cityViewWalkerEastImage;
+			} else if (xPos > xDestination) {
 				xPos--;
-
-			if (yPos < yDestination)
+				imageToRender = cityViewWalkerWestImage;
+			}
+			if (yPos < yDestination) {
 				yPos++;
-			else if (yPos > yDestination)
+				imageToRender = cityViewWalkerSouthImage;
+			} else if (yPos > yDestination) {
 				yPos--;
+				imageToRender = cityViewWalkerNorthImage;
+			}
 		}
 		//
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
@@ -158,8 +195,9 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	@Override
 	public void draw(Graphics2D g) {
-		g.setColor(Color.blue);
-		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
+//		g.setColor(Color.blue);
+//		g.fillRect(xPos, yPos, (int)(sidewalks.getSidewalkSize()), (int)(sidewalks.getSidewalkSize()));
+		g.drawImage(imageToRender, xPos, yPos, null);
 	}
 
 	@Override

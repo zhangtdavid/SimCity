@@ -26,6 +26,8 @@ public class CityRoadIntersection extends CityRoad {
 		super(xo, yo, w, h, 0, 0, false, lc);
 	}
 
+	private CityRoad currentNextRoad = null;
+
 	// Paint stuff
 
 	@Override
@@ -33,7 +35,7 @@ public class CityRoadIntersection extends CityRoad {
 		g2.setColor( laneColor );
 		((Graphics2D) g2).fill( rectangle );
 		g2.drawImage(imageToRender, xOrigin, yOrigin, null);
-		
+
 		if(vehicle == null) {
 			return;
 		}
@@ -42,7 +44,7 @@ public class CityRoadIntersection extends CityRoad {
 		double vWidth = 0;
 		double vHeight = 0;
 		CityRoad thisNextRoad = nextRoads.get(0);
-		
+
 		if(vehicle instanceof CarAnimation) {
 			vehicle = (CarAnimation) vehicle;
 
@@ -63,7 +65,7 @@ public class CityRoadIntersection extends CityRoad {
 				}
 				atIntersection = true;
 			}
-			
+
 			// At the destination
 			if(((CarAnimation) vehicle).getEndRoad() == this) { // This car is at its destination road
 				((CarAnimation) vehicle).setAtDestinationRoad(true);
@@ -71,9 +73,10 @@ public class CityRoadIntersection extends CityRoad {
 				atIntersection = false;
 				return;
 			}
-			
+
 			// Find which connecting road is the closest
-						thisNextRoad = findBestRoad(this, ((CarAnimation) vehicle).getEndRoad());
+			thisNextRoad = findBestRoad(this, ((CarAnimation) vehicle).getEndRoad());
+			currentNextRoad = thisNextRoad;
 
 			// If the next road is clear, move it to the road
 			if(thisNextRoad.vehicle == null && ((CarAnimation) vehicle).getStartingRoad() == null) {
@@ -107,7 +110,7 @@ public class CityRoadIntersection extends CityRoad {
 				}
 				atIntersection = true;
 			}
-			
+
 			// At the destination
 			if(((BusAnimation) vehicle).isAtDestination()) {
 				return;
@@ -115,6 +118,7 @@ public class CityRoadIntersection extends CityRoad {
 
 			// Find which connecting road is the closest
 			thisNextRoad = findBestRoad(this, ((BusAnimation) vehicle).getBus().getNextStop().getRoadLocatedOn());
+			currentNextRoad = thisNextRoad;
 			
 			// If the next road is clear, move it to the road
 			if(thisNextRoad.vehicle == null) {
@@ -163,6 +167,10 @@ public class CityRoadIntersection extends CityRoad {
 		nextRoads.add(r);
 	}
 	
+	public CityRoad getCurrentNextRoad() {
+		return currentNextRoad;
+	}
+
 	/*
 	 * Returns a road that will result in the correct destination from the given intersection
 	 */
@@ -191,7 +199,7 @@ public class CityRoadIntersection extends CityRoad {
 				}
 			}
 		}
-		
+
 		return null;
 	}
 }

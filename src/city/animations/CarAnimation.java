@@ -3,6 +3,10 @@ package city.animations;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Rectangle;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+
+import javax.imageio.ImageIO;
 
 import city.Application;
 import city.agents.interfaces.Car;
@@ -10,6 +14,8 @@ import city.animations.interfaces.AnimatedCar;
 import city.bases.Animation;
 import city.bases.interfaces.BuildingInterface;
 import city.gui.CityRoad;
+import city.gui.CityRoadIntersection;
+import city.gui.exteriors.CityViewApt;
 
 public class CarAnimation extends Animation implements AnimatedCar {
 	
@@ -28,6 +34,12 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	
 	private boolean atDestinationRoad = false;
 	private boolean atDestination = true;
+	
+	private static BufferedImage cityViewCarNorthImage = null;
+	private static BufferedImage cityViewCarEastImage = null;
+	private static BufferedImage cityViewCarSouthImage = null;
+	private static BufferedImage cityViewCarWestImage = null;
+	private BufferedImage imageToRender;
 
 	public CarAnimation(Car c, BuildingInterface startingBuilding) {
 		car = c;
@@ -35,6 +47,17 @@ public class CarAnimation extends Animation implements AnimatedCar {
 		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
 		rectangle = new Rectangle(xPos, yPos, SIZE, SIZE);
 		currentBuilding = startingBuilding;
+		try {
+			if(cityViewCarNorthImage == null || cityViewCarEastImage == null || cityViewCarSouthImage == null || cityViewCarWestImage == null) {
+				cityViewCarNorthImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewCarNorthImage.png"));
+				cityViewCarEastImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewCarEastImage.png"));
+				cityViewCarSouthImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewCarSouthImage.png"));
+				cityViewCarWestImage = ImageIO.read(CityViewApt.class.getResource("/icons/cityView/CityViewCarWestImage.png"));
+				imageToRender = cityViewCarNorthImage;
+			}
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 	}
 	
 	// Paint
@@ -48,15 +71,22 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			if(startingRoad.isWalkerAt(xPos, yPos)) {
 				return;
 			}
-			if (xPos < startingRoad.getX() && !startingRoad.getHorizontal())
+			if (xPos < startingRoad.getX() && !startingRoad.getHorizontal()) {
 				xPos++;
-			else if (xPos > startingRoad.getX() && !startingRoad.getHorizontal())
+				imageToRender = cityViewCarEastImage;
+			}
+			else if (xPos > startingRoad.getX() && !startingRoad.getHorizontal()) {
 				xPos--;
-
-			if (yPos < startingRoad.getY() && startingRoad.getHorizontal())
+				imageToRender = cityViewCarWestImage;
+			}
+			if (yPos < startingRoad.getY() && startingRoad.getHorizontal()) {
 				yPos++;
-			else if (yPos > startingRoad.getY() && startingRoad.getHorizontal())
+				imageToRender = cityViewCarSouthImage;
+			}
+			else if (yPos > startingRoad.getY() && startingRoad.getHorizontal()) {
 				yPos--;
+				imageToRender = cityViewCarNorthImage;
+			}
 			if(xPos == startingRoad.getX() && yPos == startingRoad.getY())
 				startingRoad = null;
 		}
@@ -65,15 +95,20 @@ public class CarAnimation extends Animation implements AnimatedCar {
 			if(endRoad.isWalkerAt(xPos, yPos)) {
 				return;
 			}
-			if (xPos < xDestination)
+			if (xPos < xDestination) {
 				xPos++;
-			else if (xPos > xDestination)
+				imageToRender = cityViewCarEastImage;
+			} else if (xPos > xDestination) {
 				xPos--;
-	
-			if (yPos < yDestination)
+				imageToRender = cityViewCarWestImage;
+			}
+			if (yPos < yDestination) {
 				yPos++;
-			else if (yPos > yDestination)
+				imageToRender = cityViewCarSouthImage;
+			} else if (yPos > yDestination) {
 				yPos--;
+				imageToRender = cityViewCarNorthImage;
+			}
 		}
 		if(xPos == xDestination && yPos == yDestination && atDestination == false) {
 			atDestination = true;
@@ -86,12 +121,28 @@ public class CarAnimation extends Animation implements AnimatedCar {
 	}
 	
 	public void draw(Graphics2D g) {
-		g.setColor(Color.PINK);
-		g.fillRect(xPos, yPos, SIZE, SIZE);
-		g.setColor(Color.red);
-		rectangle.setLocation(xPos, yPos);
-		if(car != null)
-			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
+//		g.setColor(Color.PINK);
+//		g.fillRect(xPos, yPos, SIZE, SIZE);
+//		g.setColor(Color.red);
+//		rectangle.setLocation(xPos, yPos);
+//		if(car != null)
+//			g.drawString(car.getClass().getSimpleName(), xPos, yPos);
+		if(Application.trafficControl != null && startingRoad == null && atDestinationRoad == false) {
+			CityRoad currentRoad = Application.trafficControl.getRoadThatVehicleIsOn(this);
+			if(currentRoad.getClass() == CityRoadIntersection.class)
+				currentRoad = ((CityRoadIntersection)currentRoad).getCurrentNextRoad();
+			if(currentRoad == null)
+				imageToRender = cityViewCarEastImage;
+			else if(currentRoad.getXVelocity() > 0)
+				imageToRender = cityViewCarEastImage;
+			else if(currentRoad.getXVelocity() < 0)
+				imageToRender = cityViewCarWestImage;
+			else if(currentRoad.getYVelocity() < 0)
+				imageToRender = cityViewCarNorthImage;
+			else if(currentRoad.getYVelocity() > 0)
+				imageToRender = cityViewCarSouthImage;
+		}
+		g.drawImage(imageToRender, xPos, yPos, null);
 	}
 	
 	// Action
