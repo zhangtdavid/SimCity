@@ -115,7 +115,7 @@ public class RestaurantChoiCustomerRole extends Role implements RestaurantChoiCu
 
 	@Override
 	public void msgHeresYourChange(int amt) {
-		print("Received change");
+		print("Received change of: " + amt);
 		this.getPerson().setCash(amt); // no state to change - just do it on the way out
 		event = EVENT.gotChange;
 	}

@@ -2,6 +2,7 @@ package city.roles.interfaces;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import utilities.RestaurantChoiOrder;
 import utilities.RestaurantChoiRevolvingStand;
@@ -20,7 +21,7 @@ public interface RestaurantChoiCook extends RoleInterface {
 	public void msgHeresAnOrder(RestaurantChoiOrder or);
 	public void msgFoodsDone(RestaurantChoiOrder o);
 	// public void msgOutOfThisFood(Market m, int choice); TODO
-	public void msgFoodReceived(HashMap<FOOD_ITEMS, Integer> marketOrder, int id);
+	public void msgFoodReceived(Map<FOOD_ITEMS, Integer> marketOrder, int id);
 	public void msgAtRefrigerator();
 	public void msgAtGrills();
 	public void msgAtPlatingArea();

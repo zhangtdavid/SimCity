@@ -38,18 +38,18 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 
 	// Data
 	
-	public RestaurantChoiCookRole cook;
-	public RestaurantChoiCashierRole cashier;
-	public RestaurantChoiHostRole host;
-	public RestaurantChoiMenu menu;
-	public int seatedCustomers = 0;
-	public RestaurantChoiPanel panel; //reference to main gui
-	public Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
-	public List<RestaurantChoiCustomer> customers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
-	public List<RestaurantChoiWaiterBase> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterBase>());
-	public RestaurantChoiRevolvingStand rs;
-	public RestaurantChoiTable t;
-	public Bank bank;
+	private RestaurantChoiCookRole cook;
+	private RestaurantChoiCashierRole cashier;
+	private RestaurantChoiHostRole host;
+	public RestaurantChoiMenu menu; // anyone can look up a menu of a restaurant.
+	public int seatedCustomers = 0; // anyone can know how many seated customers there are in a restaurant.
+	private RestaurantChoiPanel panel; //reference to main gui
+	private Map<Role, Animation> allRoles = new HashMap<Role, Animation>();
+	private List<RestaurantChoiCustomer> customers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
+	private List<RestaurantChoiWaiterBase> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterBase>());
+	private RestaurantChoiRevolvingStand rs;
+	private RestaurantChoiTable t;
+	private Bank bank;
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor
@@ -65,7 +65,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		this.setCityViewBuilding(cityBuilding);
 		//set up tables
 		// Add items and their data times to a map
-
+/*
 		int rand = 7+(int)Math.ceil(10*Math.random());
 		super.addFood(FOOD_ITEMS.steak, new Food("Steak", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 16));
@@ -78,6 +78,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		rand = 7+(int)Math.ceil(10*Math.random());
 		super.addFood(FOOD_ITEMS.salad, new Food("Salad", (int)(Math.ceil(Math.random()*6)*1000),
 				1, ((int)Math.floor(rand*0.2)), rand, 6));
+	*/			
 		
 		this.addWorkerRoleName("city.roles.RestaurantChoiCashierRole");
 		this.addWorkerRoleName("city.roles.RestaurantChoiCookRole");
@@ -92,7 +93,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 	@Override
 	public boolean getBusinessIsOpen() {
 		boolean disposition = false;
-		if(this.cashier.getActive() && this.cook.getActive() && this.host.getActive()) // if these guys are here
+		if(this.getCashier().getActive() && this.cook.getActive() && this.getHost().getActive()) // if these guys are here
 			for (RestaurantChoiWaiterBase w : waiters) { // and if one waiter is here
 				if(w.getActive())
 					disposition = true;
@@ -110,8 +111,8 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 	public void addOccupyingRole(RoleInterface r) {
 		if(r instanceof RestaurantChoiCustomerRole) {
 			RestaurantChoiCustomerRole c = (RestaurantChoiCustomerRole)r;
-			c.setCashier(cashier);
-			c.setHost(host);
+			c.setCashier(getCashier());
+			c.setHost(getHost());
 			if(!super.occupyingRoleExists(c)) {
 				RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
 				c.setGui(anim);	
@@ -123,10 +124,10 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		}
 		if(r instanceof RestaurantChoiWaiterDirectRole) {
 			RestaurantChoiWaiterDirectRole w = (RestaurantChoiWaiterDirectRole)r;
-			w.setCashier(cashier);
+			w.setCashier(getCashier());
 			w.setCook(cook);
-			w.setHost(host);
-			host.addWaiter(w);
+			w.setHost(getHost());
+			getHost().addWaiter(w);
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
@@ -138,11 +139,11 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		}
 		if(r instanceof RestaurantChoiWaiterQueueRole) {
 			RestaurantChoiWaiterQueueRole w = (RestaurantChoiWaiterQueueRole)r;
-			w.setCashier(cashier);
+			w.setCashier(getCashier());
 			w.setCook(cook);
-			w.setHost(host);
+			w.setHost(getHost());
 			w.setRevolvingStand(rs);
-			host.addWaiter(w);
+			getHost().addWaiter(w);
 			if(!super.occupyingRoleExists(w)) {
 				RestaurantChoiWaiterAnimation anim = new RestaurantChoiWaiterAnimation(w); 
 				w.setAnimation(anim);
@@ -155,7 +156,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 		if(r instanceof RestaurantChoiHostRole) {
 			RestaurantChoiHostRole h = (RestaurantChoiHostRole)r;
 			if(!super.occupyingRoleExists(h)) { 
-				host = h;
+				setHost(h);
 				super.addOccupyingRole(h, null);
 			}
 		}
@@ -178,7 +179,7 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 			this.getBankCustomer().setPerson(r.getPerson()); // TODO this solves null pointers on print?
 			if(!super.occupyingRoleExists(c)) { 
 				RestaurantChoiCashierAnimation anim = new RestaurantChoiCashierAnimation();
-				cashier = c;
+				setCashier(c);
 				c.setGui(anim);
 				allRoles.put(c, null);
 				anim.setVisible(true);
@@ -186,5 +187,21 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 				super.addOccupyingRole(c, anim);
 			}
 		}
+	}
+
+	public RestaurantChoiHostRole getHost() {
+		return host;
+	}
+
+	public void setHost(RestaurantChoiHostRole host) {
+		this.host = host;
+	}
+
+	public RestaurantChoiCashierRole getCashier() {
+		return cashier;
+	}
+
+	public void setCashier(RestaurantChoiCashierRole cashier) {
+		this.cashier = cashier;
 	}
 }

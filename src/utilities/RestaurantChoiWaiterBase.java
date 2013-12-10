@@ -386,11 +386,11 @@ public abstract class RestaurantChoiWaiterBase extends JobRole implements Restau
 	public void setInactive() { 
 		if(myCustomers.size() == 0){
 			super.setInactive();
-			building.host.msgSetUnavailable(this);
+			building.getHost().msgSetUnavailable(this);
 		}
 		else{
 			wantsToLeave = true;
-			building.host.msgSetUnavailable(this); // tell boss i'm done
+			building.getHost().msgSetUnavailable(this); // tell boss i'm done
 		}
 	}
 	

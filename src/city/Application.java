@@ -340,12 +340,13 @@ public class Application {
 		busStop4.setPreviousStop(busStop3);
 
 		// Create buses
+		/*
 		BusAgent bus1 = new BusAgent(busStop1, busStop2);
 		BusAnimation b1Anim = new BusAnimation(bus1, busStop1);
 		bus1.setAnimation(b1Anim);
 		mainFrame.cityView.addAnimation(b1Anim);
 		CityMap.findClosestRoad(busStop1).setVehicle(b1Anim);
-		bus1.startThread();
+		bus1.startThread();*/
 
 
 		HousePanel unoccupiedHousePanel1 = new HousePanel(Color.getHSBColor((float)37, (float).53, (float).529));

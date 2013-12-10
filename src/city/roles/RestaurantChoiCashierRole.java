@@ -9,6 +9,7 @@ import trace.AlertTag;
 import utilities.EventLog;
 import utilities.MarketOrder;
 import utilities.MarketTransaction;
+import utilities.MarketTransaction.MarketTransactionState;
 import city.Application;
 import city.Application.BANK_SERVICE;
 import city.Application.FOOD_ITEMS;
@@ -17,6 +18,7 @@ import city.bases.JobRole;
 import city.bases.Role;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
+import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChoi;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantChoiCashier;
@@ -55,8 +57,13 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		this.setWorkplace(b);
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building.getBankCustomer().setPerson(this.getPerson());
-		roles.add((Role) building.getBankCustomer());
-		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
+        roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions));
+        roles.get(0).setPerson(this.getPerson());
+        roles.get(0).setActive();
+        roles.add((Role) building.getBankCustomer());// These two are not market related. Just demonstrating how I handled the bank interaction
+        roles.get(1).setPerson(this.getPerson());
+        roles.get(1).setActive();
+
 	}
 
 	public RestaurantChoiCashierRole(){ // for testing mechanics
@@ -99,23 +106,16 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 	}
 
 	/**
-	 * When the cook requests an order from a market, he forwards the cashier a bill.
+	 * When the cook requests an order from a market, he forwards the cashier a
+	 * bill.
 	 */
 	@Override
-	public void msgAddMarketOrder(MarketBuilding m, MarketOrder o) {
-		marketTransactions.add(new MarketTransaction(m, o));	
+	public void msgAddMarketOrder(Market m, MarketOrder o) {
+		print("Cashier received msgAddMarketOrder");
+		marketTransactions.add(new MarketTransaction(m, o));
+		((MarketCustomerDeliveryPaymentRole) roles.get(0)).setMarket(m);
 	}
 
-	/*
- 	public void msgHeresYourMarketBill(Market m, int type, int amount){
-		double owed = foodCost.get(type)*amount;
-		synchronized(marketBills){
-			marketBills.put(m, owed);
-		}
-		stateChanged();
-	}
-	 */
-	
 	@Override
 	public void msgHeresYourMoney(int withdrawal) {
 		building.setCash(building.getCash()+withdrawal);
@@ -138,40 +138,31 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 	
 	@Override
 	public boolean runScheduler() {
-		boolean blocking = false;
-		for (Role r : roles){
-			if (r.getActive() && r.getActivity()) {
-				blocking  = true;
-				boolean activity = r.runScheduler();
-				if (!activity) {
-					r.setActivityFinished();
+        boolean blocking = false;
+        for (Role r : roles) if (r.getActive() && r.getActivity()) {
+        	if(r.getPerson() == null) r.setPerson(this.getPerson());
+                blocking  = true;
+                boolean activity = r.runScheduler();
+                if (!activity) {
+                        r.setActivityFinished();
+                }
+                break;
+        }
+
+        synchronized(marketTransactions) {
+            for (MarketTransaction t : marketTransactions) {
+                    if (t.getMarketTransactionState() == MarketTransactionState.Done) {
+					marketTransactions.remove(t);
+					return true;
 				}
-				break;
 			}
 		}
+
+        
 		if(wantsToLeave && checks.isEmpty() && building.seatedCustomers == 0 && marketTransactions.isEmpty()){
 			wantsToLeave = false;
 			super.setInactive();
 		}
-		//market interactions
-		/*	synchronized(marketBills){
-					for(int i = 0; i < markets.size(); i++){
-						if(marketBills.get(markets.get(i)) > 0){  // double rounding problems? we'll see
-							print(marketBills.get(markets.get(i)));
-							//if we don't have enough money, get money from the bank
-							//assume the restaurant is successful and has unlimited money for the quarter
-							if(money < marketBills.get(markets.get(i)) && moneyIncoming == NOT_IN_TRANSIT){
-								getMoney();
-								moneyIncoming = IN_TRANSIT;
-								return true;
-							}else if(money > marketBills.get(markets.get(i))){ // if has to pay and can pay
-								payMarketBill(markets.get(i), marketBills.get(markets.get(i)));
-								print("paying bill");
-								return true;
-							}
-						}
-					}
-				}*/
 
 		//customer interactions
 		for(int i = 0; i < checks.size(); i++){
@@ -222,17 +213,6 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		checks.remove(ch);		
 	}
 	
-	/*
-	private void payMarketBill(Market m, double payment) {
-		m.msgHeresYourPayment(payment);
-		money-=payment;
-		synchronized(marketBills){
-			marketBills.put(m, 0.0); // set bill to 0
-		}
-
-	}
-	 */
-
 	// Getters
 	
 	@Override
@@ -255,22 +235,14 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		return moneyIncoming;
 	}
 
+	@Override
+	public MarketCustomerDeliveryPayment getMarketCustomerDeliveryPayment() {
+		return (MarketCustomerDeliveryPayment) roles.get(0); // TODO clean up
+	}
+	
 	//Setters
 	
-	/*   
-	@Override 
-	public void setBanker(Banker b){
-		restaurantBanker = b; // only one banker (we can trust...) TODO fix so that this matches with bank in simcity201
-    } // fixed in setBankCustomer (2 below)
-    
-
-	@Override
-    public void addMarket(Market m){
-     	markets.add(m); // TODO fix so that this matches with market in simcity201
-	 	marketBills.put(m,0.0);
-	}
-	 */ 
-
+	
 	@Override
 	public void setGui(RestaurantChoiAnimatedCashier r) {
 		this.cashierGui = r;
