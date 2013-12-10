@@ -82,14 +82,23 @@ addition to writing all GUI code, David also integrated everyone's code in the `
 ### Shirley Chung (19%)
 * Market
   - Designed and implemented market
-  - Created all roles associated with market, and integrated with bank.
-  - Did JUnit testing for all roles in schung branch
-  - Created the panel for the gui, but did not have time to complete
-  - Started creating guis for market roles
-* Market and Restaurant Integration
-  - Integrated with personal restaurant in schung branch, but did not have time to fully integrate with master
+  - Created all roles associated with market, got working with personAgent and integrated with bank
+  - Did JUnit testing for all roles
+  - Completed animation for in person and delivery interactions
+  - Did not test with multiple employees
+  - Had some instances where customer did not successfully enter markt. Not sure if this was due to the market, car, or animation.
+  - Market Delivery animation worked in restaurantChungAnimation branch, but had problems integrating car animation in master
+  - Implemented code for handling a closed restaurant upon delivery, but could not set up scenario in application and did not test
 * Restaurant
-  - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
+  - Restaurant integrated into the city
+  - Can handle multiple customers
+  - Producer-consumer scenario works
+  - Have not tested with both producer-consumer and traditional messaging
+  - Bank interaction works
+  - Customer will sometimes freeze after ordering
+  - While testing in restaurantChungAnimation branch, froze after cook ordered from market. After changes to city animations in master, this may have been fixed, but did not test
+* Market and Restaurant Integration
+  - Integrated with personal restaurant, provided instructions for integration with other restaurants, but it would have been helpful if they were posted earlier
 
 ### Ryan Choi (19%)
 -All housing logic, e.g. clear room after removing person; how often/much maintenance is added to rent intervals
