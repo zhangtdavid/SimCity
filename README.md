@@ -38,8 +38,6 @@ Please read the [Coding Standards](https://github.com/usc-csci201-fall2013/team1
  - A building view displays the internal structures of the buildings. 
  - People travel between buildings by car or bus or walking and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents, or a customer. Customers just walk around, go to banks, eat at restaurants, eat at home, etc. And sleep. They like to sleep.
  - The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition. Workers actually work 24 hour shifts.
-
-## Problems
  
 ## Project Contributions
 ### John Timms (22%)
