@@ -27,17 +27,14 @@ public class BankTellerAnimation extends Animation{
     public Map <Integer, Integer> TellerLocations = new HashMap<Integer, Integer>(); 
 
     public BankTellerAnimation(BankTellerRole r, int place) {
-        agent = r;	//msgAvailable
+        System.out.println(place);
+    	agent = r;	//msgAvailable
 		xPos = 400;
 		yPos = 0;
-		xDestination = xHome;
 		for(int i = 0; i<3; i++){
-			TellerLocations.put(0, 160+i*100);
+			TellerLocations.put(i, 160+i*100);
 		}
 		yHome = TellerLocations.get(place);
-		yDestination = yHome;
-		moving = true;
-        //TableLocations.put(1, (200, 250));
     }
 
     public void updatePosition() {

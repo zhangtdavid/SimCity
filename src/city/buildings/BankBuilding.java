@@ -106,7 +106,6 @@ public class BankBuilding extends Building implements Bank {
 				c.setGui(anim);	
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
-				employees.add(c);
 				allRoles.put(c, anim);
 			}
 			employees.add(c);
@@ -118,7 +117,6 @@ public class BankBuilding extends Building implements Bank {
 			if(!allRoles.containsKey(c)) {
 				BankCustomerAnimation anim = new BankCustomerAnimation(c); 
 				c.setGui(anim);	
-//				c.setAnimation(anim);
 				anim.setVisible(true);
 				panel.addVisualizationElement(anim);
 				allRoles.put(c, anim);
