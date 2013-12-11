@@ -3,10 +3,14 @@ package city.bases;
 import java.util.HashMap;
 import java.util.Map;
 
+import city.Application;
+import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RestaurantBuildingInterface;
+import city.buildings.interfaces.Bank;
 import city.gui.BuildingCard;
 import city.gui.exteriors.CityViewBuilding;
+import city.roles.BankCustomerRole;
 import city.roles.interfaces.BankCustomer;
 
 /**
@@ -24,7 +28,7 @@ public abstract class RestaurantBuilding extends Building implements RestaurantB
 
 	public RestaurantBuilding(String name, BuildingCard panel, CityViewBuilding cityBuilding) {
 		super(name, panel, cityBuilding);
-		
+		bankCustomer = new BankCustomerRole(this, (Bank)Application.CityMap.findRandomBuilding(BUILDING.bank));
         // Add items and their cooking times to a map		
 		addFood(FOOD_ITEMS.chicken, new Food("chicken", 6, 6, 5, 10, 10)); // item, cookingTime, amount, low, capacity, price, orderSate
 		addFood(FOOD_ITEMS.pizza, new Food("pizza", 9, 6, 5, 10, 12));

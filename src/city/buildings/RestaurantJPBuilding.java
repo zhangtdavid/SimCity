@@ -50,6 +50,10 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 		this.cashier = c;
 	}
 	
+	public void setHost(RestaurantJPHostRole h){
+		host = h;
+	}
+	
 	public Vector<RestaurantJPCustomer> customers = new Vector<RestaurantJPCustomer>();
 	public Vector<RestaurantJPWaiter> waiters = new Vector<RestaurantJPWaiter>();
 

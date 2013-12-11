@@ -13,11 +13,14 @@ import utilities.MarketTransaction;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
 import utilities.MarketTransaction.MarketTransactionState;
+import city.Application.BANK_SERVICE;
+import city.Application.TRANSACTION_TYPE;
 import city.bases.Building;
 import city.bases.JobRole;
 import city.bases.Role;
 import city.buildings.RestaurantZhangBuilding;
 import city.buildings.interfaces.Market;
+import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantZhangCashier;
 import city.roles.interfaces.RestaurantZhangCustomer;
@@ -83,19 +86,6 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 
 	@Override
 	public boolean runScheduler() {
-		boolean blocking = false;
-		
-		for (Role r : roles)  {
-			if (r.getActive() && r.getActivity()) {
-				if(r.getPerson() == null)
-					r.setPerson(this.getPerson()); // Sanity check
-				blocking  = true;
-				boolean activity = r.runScheduler();
-				if (!activity)
-					r.setActivityFinished();
-				break;
-			}
-		}
 		
 		synchronized(marketTransactions) {
             for (MarketTransaction transaction : marketTransactions) {
@@ -138,7 +128,28 @@ public class RestaurantZhangCashierRole extends JobRole implements RestaurantZha
 		//				return true;
 		//			}
 		//		}
-		return false;
+		
+		if(restaurant.getCash() > 2000) {
+			restaurant.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, restaurant.getCash() - 2000, TRANSACTION_TYPE.business);
+			roles.add((Role) restaurant.getBankCustomer());
+			restaurant.setCash(2000);
+		}
+		
+		boolean blocking = false;
+		
+		for (Role r : roles)  {
+			if (r.getActive() && r.getActivity()) {
+				if(r.getPerson() == null && r.getClass() != BankCustomer.class)
+					r.setPerson(this.getPerson()); // Sanity check
+				blocking  = true;
+				boolean activity = r.runScheduler();
+				if (!activity)
+					r.setActivityFinished();
+				break;
+			}
+		}
+		
+		return blocking;
 	}
 
 	// Actions
