@@ -361,18 +361,18 @@ public class Application {
             bus1.startThread();
             
      // Create buildings
-            AptBuilding Apartment1 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 75);
+            AptBuilding Apartment1 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 125);
             AptBuilding Apartment2 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 100);
             AptBuilding Apartment3 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 150);
             AptBuilding Apartment4 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 200);
             AptBuilding Apartment5 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 250);
             AptBuilding Apartment6 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 300);
             AptBuilding Apartment7 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 350);
-            AptBuilding Apartment8 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 375);
-            AptBuilding Apartment9 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 75, 425);
+            AptBuilding Apartment8 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 325);
+            AptBuilding Apartment9 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 125, 425);
             AptBuilding Apartment10 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 100, 425);
-            BankBuilding bank1 = (BankBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.BANK, 425, 75);
-            MarketBuilding market1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 100);
+            BankBuilding bank1 = (BankBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.BANK, 425, 100);
+            MarketBuilding market1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 125);
             RestaurantTimmsBuilding restaurantTimms = (RestaurantTimmsBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTTIMMS, 425, 150);
             RestaurantZhangBuilding restaurantZhang = (RestaurantZhangBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 425, 200);
             RestaurantChoiBuilding restaurantChoi = (RestaurantChoiBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHOI, 425, 250);

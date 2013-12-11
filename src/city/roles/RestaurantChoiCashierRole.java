@@ -57,6 +57,7 @@ public class RestaurantChoiCashierRole extends JobRole implements RestaurantChoi
 		this.setSalary(RestaurantChoiBuilding.getWorkerSalary());
 		building.getBankCustomer().setPerson(this.getPerson());
 		roles.add(new MarketCustomerDeliveryPaymentRole(building, marketTransactions, this));
+		roles.get(0).setPerson(this.getPerson());
 		roles.add((Role) building.getBankCustomer());
 	}
 
