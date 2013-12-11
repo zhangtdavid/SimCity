@@ -251,7 +251,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	
 	@Override
 	public void setActive() {
-		print("Customer has been set active");
+		print("Teller has been set active");
 		building.getManager().msgAvailable(this);
 		super.setActive();
 		gui.DoGoToStation();

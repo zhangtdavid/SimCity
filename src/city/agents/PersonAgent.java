@@ -203,7 +203,7 @@ public class PersonAgent extends Agent implements Person {
 				int money = 0;
 				if (cash >= BANK_DEPOSIT_THRESHOLD) { 
 					choice = BANK_SERVICE.deposit; 
-					money = BANK_DEPOSIT_SUM;
+					money = cash - BANK_DEPOSIT_THRESHOLD + 1;
 				} 
 				if (residentRole.rentIsDue()) { 
 					choice = BANK_SERVICE.moneyWithdraw; 

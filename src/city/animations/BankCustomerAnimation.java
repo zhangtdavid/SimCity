@@ -33,7 +33,7 @@ public class BankCustomerAnimation extends Animation{
 		xPos = -20;
 		yPos = 520;
 		for(int i = 0; i<3; i++){
-			TellerLocations.put(0, 160+i*100);
+			TellerLocations.put(i, 160+i*100);
 		}
     }
 

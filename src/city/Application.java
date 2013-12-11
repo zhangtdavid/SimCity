@@ -973,12 +973,12 @@ public class Application {
             p32.startThread();
             p33.startThread();
             p34.startThread();
-            p35.startThread();
+            /*p35.startThread();
             p36.startThread();
             p37.startThread();
             p38.startThread();
             p39.startThread();
-            /*p40.startThread();
+            p40.startThread();
             p41.startThread();
             p42.startThread();
             p43.startThread();
@@ -989,6 +989,7 @@ public class Application {
             p48.startThread();
             p49.startThread();
             p50.startThread();*/
+            
             for(int j = 0; j < 0; j++) {
                     WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
                     testPersonAnimation.setVisible(true);

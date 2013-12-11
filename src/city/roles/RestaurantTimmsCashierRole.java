@@ -136,12 +136,9 @@ public class RestaurantTimmsCashierRole extends JobRole implements RestaurantTim
 		}
 		
 		if (rtb.getCash() > RestaurantTimmsCashier.MAX_CAPITAL && ((BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank)).getBusinessIsOpen()) {
-			int amount = (rtb.getCash() - RestaurantTimmsCashier.MAX_CAPITAL + RestaurantTimmsCashier.MIN_CAPITAL);
+			int amount = (rtb.getCash() - RestaurantTimmsCashier.MAX_CAPITAL);
 			rtb.getBankCustomer().setActive(BANK_SERVICE.atmDeposit, amount, TRANSACTION_TYPE.business);
-		} else if (rtb.getCash() < RestaurantTimmsCashier.MIN_CAPITAL && ((BankBuilding) Application.CityMap.findRandomBuilding(BUILDING.bank)).getBusinessIsOpen()) {
-			int amount = RestaurantTimmsCashier.MIN_CAPITAL;
-			rtb.getBankCustomer().setActive(BANK_SERVICE.deposit, amount, TRANSACTION_TYPE.business);
-		}
+		} 
 
 		//------------------------------------------------/
 		// Role Scheduler (for market orders and banking) /
