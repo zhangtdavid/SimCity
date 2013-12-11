@@ -238,6 +238,7 @@ public class RestaurantJPCookRole extends JobRole implements RestaurantJPCook {
 	
 	private void PlateIt(Order o) {
 		o.s = state.finished;
+		print("HERE");
 		o.w.msgOrderIsReady(o.choice, o.table);
 	}
 	
