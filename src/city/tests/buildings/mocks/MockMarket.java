@@ -159,4 +159,16 @@ public class MockMarket extends MockBuilding implements Market {
 		return false;
 	}
 
+	@Override
+	public int getCurrentDeliveryPerson() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void setCurrentDeliveryPerson(int currentDeliveryPerson) {
+		// TODO Auto-generated method stub
+		
+	}
+
 }

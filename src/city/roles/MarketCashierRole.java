@@ -33,7 +33,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	private WorkingState workingState = WorkingState.Working;
 	
 	private List<Transaction> transactions = Collections.synchronizedList(new ArrayList<Transaction>());
-
+	
 //	Constructor
 //	=====================================================================
 	public MarketCashierRole(Market market, int t1, int t2) {
@@ -95,8 +95,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 	public void msgDeliveringItems(MarketDeliveryPerson d) {
 		log.add(new LoggedEvent("Market Cashier received msgDeliveringItems from Delivery Person."));
 		print("Market Cashier received msgDeliveringItems from Delivery Person.");
-		MyDeliveryPerson dp = market.findDeliveryPerson(d);
-		dp.setAvailable(false);
 	}
 	
 	@Override
@@ -105,10 +103,6 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		print("Market Cashier received msgFinishedDeliveringItems from Delivery Person.");
 		Transaction t = findTransaction(id);
 		transactions.remove(t);
-		if (d.getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
-			MyDeliveryPerson dp = market.findDeliveryPerson(d);
-			dp.setAvailable(true);
-		}
 	}
 	
 //  Scheduler
@@ -183,6 +177,8 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		// TODO handle non norm when payment is not enough
 		// TODO manage giving change
 		
+		boolean assigned = false;
+		
 		if (t.customer != null){
 			t.customer.msgPaymentReceived();
 			market.setCash(market.getCash() + t.payment);
@@ -192,11 +188,14 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 			if(t.bill == t.payment) {
 				t.customerDeliveryPayment.msgPaymentReceived(t.orderId);
 				market.setCash(market.getCash() + t.payment);
-				for(MyDeliveryPerson dt : market.getDeliveryPeople()) {
-					if(dt.getAvailable() == true && dt.getDeliveryPerson().getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
-						assignDelivery(t, dt);
-						break;
+				
+				while (!assigned) {
+					// Cycles through marketDeliveryPeople, assigns to next person in list if they are working
+					if (market.getDeliveryPeople().get(market.getCurrentDeliveryPerson()%market.getDeliveryPeople().size()).getDeliveryPerson().getWorkingState() == MarketDeliveryPerson.WorkingState.Working) {
+						assignDelivery(t, market.getDeliveryPeople().get(market.getCurrentDeliveryPerson()));
+						assigned = true;
 					}
+					market.setCurrentDeliveryPerson(market.getCurrentDeliveryPerson()+1);
 				}
 			}
 

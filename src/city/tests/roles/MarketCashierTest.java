@@ -239,13 +239,11 @@ public class MarketCashierTest extends TestCase {
 		cashier.msgDeliveringItems(deliveryPerson);
 		assertEquals("Cashier log should have 3 entries.", cashier.log.size(), 3);
 		assertTrue("Cashier log should have \"Cashier received msgDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgDeliveringItems"));
-		assertTrue("Market deliveryPeople should contain a Delivery Person with available == false.", !market.getDeliveryPeople().get(0).getAvailable());
 		
 		cashier.msgFinishedDeliveringItems(deliveryPerson, order.getOrderId());
 		assertEquals("Cashier log should have 4 entries.", cashier.log.size(), 4);
 		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
 		assertEquals("Cashier should have 0 transactions.", cashier.getTransactions().size(), 0);
-		assertTrue("Market deliveryPeople should contain a Delivery Person with available == true.", market.getDeliveryPeople().get(0).getAvailable());
 	}
 	
 	public void testBankDeposit() {
@@ -343,13 +341,11 @@ public class MarketCashierTest extends TestCase {
 		cashier.msgDeliveringItems(deliveryPerson);
 		assertEquals("Cashier log should have 6 entries.", cashier.log.size(), 6);
 		assertTrue("Cashier log should have \"Cashier received msgDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgDeliveringItems"));
-		assertTrue("Market deliveryPeople should contain a Delivery Person with available == false.", !market.getDeliveryPeople().get(0).getAvailable());
 		
 		cashier.msgFinishedDeliveringItems(deliveryPerson, order2.getOrderId());
 		assertEquals("Cashier log should have 7 entries.", cashier.log.size(), 7);
 		assertTrue("Cashier log should have \"Cashier received msgFinishedDeliveringItems\". The last event logged is actually " + cashier.log.getLastLoggedEvent().toString(), cashier.log.containsString("Cashier received msgFinishedDeliveringItems"));
 		assertEquals("Cashier should have 0 transactions.", cashier.getTransactions().size(), 0);
-		assertTrue("Market deliveryPeople should contain a Delivery Person with available == true.", market.getDeliveryPeople().get(0).getAvailable());
 
 		assertEquals("Cashier should be active.", cashier.getActive(), true);
 		cashier.runScheduler();

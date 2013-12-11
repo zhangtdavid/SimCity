@@ -46,6 +46,9 @@ public class MarketBuilding extends Building implements Market {
 	private Map<FOOD_ITEMS, Integer> inventory = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	private Map<FOOD_ITEMS, Integer> prices = new ConcurrentHashMap<FOOD_ITEMS, Integer>();
 	
+	private int currentDeliveryPerson;
+
+	
 //	Constructor
 //	=====================================================================	
 	public MarketBuilding(String name, MarketPanel panel, CityViewBuilding cityBuilding) {
@@ -271,5 +274,15 @@ public class MarketBuilding extends Building implements Market {
 			}
 		}
 		return null;
+	}
+
+	@Override
+	public int getCurrentDeliveryPerson() {
+		return currentDeliveryPerson;
+	}
+
+	@Override
+	public void setCurrentDeliveryPerson(int currentDeliveryPerson) {
+		this.currentDeliveryPerson = currentDeliveryPerson;
 	}
 }
