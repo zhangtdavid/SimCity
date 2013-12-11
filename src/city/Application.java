@@ -83,9 +83,14 @@ import city.roles.RestaurantChungCashierRole;
 import city.roles.RestaurantChungCookRole;
 import city.roles.RestaurantChungHostRole;
 import city.roles.RestaurantChungWaiterRevolvingStandRole;
+import city.roles.RestaurantTimmsCashierRole;
+import city.roles.RestaurantTimmsCookRole;
+import city.roles.RestaurantTimmsHostRole;
+import city.roles.RestaurantTimmsWaiterRole;
 import city.roles.RestaurantZhangCashierRole;
 import city.roles.RestaurantZhangCookRole;
 import city.roles.RestaurantZhangHostRole;
+import city.roles.RestaurantZhangWaiterRegularRole;
 import city.roles.RestaurantZhangWaiterSharedDataRole;
 
 public class Application {
@@ -147,7 +152,7 @@ public class Application {
          * people to create and what roles to create them in.
          */
         private static void parseConfig() {
-        	// Create roads
+        // Create roads
             // North roads
             for(int i = 375; i >= 100; i -= 25) {
                     if(i == 225)
@@ -289,7 +294,7 @@ public class Application {
             }
             trafficControl = new TrafficControl(roads);
 
-            // Sidewalks
+      // Create Sidewalks
             ArrayList<Rectangle> nonSidewalkArea = new ArrayList<Rectangle>();
             nonSidewalkArea.add(new Rectangle(2, 2, 14, 2)); // Top left
             nonSidewalkArea.add(new Rectangle(18, 2, 10, 2)); // Top right
@@ -309,7 +314,7 @@ public class Application {
             nonSidewalkArea.add(new Rectangle(18, 18, 6, 6)); // Bottom right square
             sidewalks = new CitySidewalkLayout(mainFrame, 30, 30, 50, 50, 12.5, Color.orange, nonSidewalkArea, trafficControl);
 
-            // Bus Stops!!!!!!!!
+      //Create Bus Stops
             BusStopPanel bsp1 = new BusStopPanel(Color.white);
             CityViewBusStop cityViewBusStop1 = new CityViewBusStop(325, 125, "Bus Stop 1", Color.white, bsp1);
             BusStopBuilding busStop1 = new BusStopBuilding("Bus Stop 1", bsp1, cityViewBusStop1);
@@ -346,7 +351,7 @@ public class Application {
             CityMap.findClosestRoad(busStop1).setVehicle(b1Anim);
             bus1.startThread();
             
-            // Create buildings
+     // Create buildings
             AptBuilding Apartment1 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 50);
             AptBuilding Apartment2 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 100);
             AptBuilding Apartment3 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 150);
@@ -357,10 +362,7 @@ public class Application {
             AptBuilding Apartment8 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 400);
             AptBuilding Apartment9 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 50, 425);
             AptBuilding Apartment10 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 100, 425);
-            
-            
             BankBuilding bank1 = (BankBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.BANK, 425, 50);
-
             MarketBuilding market1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 100);
             RestaurantTimmsBuilding restaurantTimms = (RestaurantTimmsBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTTIMMS, 425, 150);
             RestaurantZhangBuilding restaurantZhang = (RestaurantZhangBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 425, 200);
@@ -368,99 +370,163 @@ public class Application {
             RestaurantChungBuilding restaurantChungBuilding1 = (RestaurantChungBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTCHUNG, 425, 300);
             RestaurantJPBuilding restaurantJPBuilding1 = (RestaurantJPBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTJP, 425, 350);
             
-            // Create People
+     // Create People
             PersonAgent p1 = new PersonAgent("Timms Host", date, new PersonAnimation(), Apartment1);
             PersonAgent p2 = new PersonAgent("Timms Cashier", date, new PersonAnimation(), Apartment1);
             PersonAgent p3 = new PersonAgent("Timms Cook", date, new PersonAnimation(), Apartment1);
             PersonAgent p4 = new PersonAgent("Timms Waiter1", date, new PersonAnimation(), Apartment1);
-            PersonAgent p5 = new PersonAgent("Timms Waiter2", date, new PersonAnimation(), Apartment3);
-            /*PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);*/
+            PersonAgent p5 = new PersonAgent("Timms Waiter2", date, new PersonAnimation(), Apartment1);
+            PersonAgent p6 = new PersonAgent("Chung Host", date, new PersonAnimation(), Apartment2);
+            PersonAgent p7 = new PersonAgent("Chung Cashier", date, new PersonAnimation(), Apartment2);
+            PersonAgent p8 = new PersonAgent("Chung Cook", date, new PersonAnimation(), Apartment2);
+            PersonAgent p9 = new PersonAgent("Chung Waiter1", date, new PersonAnimation(), Apartment2);
+            PersonAgent p10 = new PersonAgent("Chung Waiter2", date, new PersonAnimation(), Apartment2);
+            PersonAgent p11 = new PersonAgent("Zhang Host", date, new PersonAnimation(), Apartment3);
+            PersonAgent p12 = new PersonAgent("Zhang Cashier", date, new PersonAnimation(), Apartment3);
+            PersonAgent p13 = new PersonAgent("Zhang Cook", date, new PersonAnimation(), Apartment3);
+            PersonAgent p14 = new PersonAgent("Zhang Waiter1", date, new PersonAnimation(), Apartment3);
+            PersonAgent p15 = new PersonAgent("Zhang Waiter2", date, new PersonAnimation(), Apartment3);
+            PersonAgent p16 = new PersonAgent("Choi Host", date, new PersonAnimation(), Apartment4);
+            PersonAgent p17 = new PersonAgent("Choi Cashier", date, new PersonAnimation(), Apartment4);
+            PersonAgent p18 = new PersonAgent("Choi Cook", date, new PersonAnimation(), Apartment4);
+            PersonAgent p19 = new PersonAgent("Choi Waiter1", date, new PersonAnimation(), Apartment4);
+            PersonAgent p20 = new PersonAgent("Choi Waiter2", date, new PersonAnimation(), Apartment4);
+            PersonAgent p21 = new PersonAgent("JP Host", date, new PersonAnimation(), Apartment5);
+            PersonAgent p22 = new PersonAgent("JP Cashier", date, new PersonAnimation(), Apartment5);
+            PersonAgent p23 = new PersonAgent("JP Cook", date, new PersonAnimation(), Apartment5);
+            PersonAgent p24 = new PersonAgent("JP Waiter1", date, new PersonAnimation(), Apartment5);
+            PersonAgent p25 = new PersonAgent("JP Waiter2", date, new PersonAnimation(), Apartment5);
+            PersonAgent p26 = new PersonAgent("Bank Manager", date, new PersonAnimation(), Apartment6);
+            PersonAgent p27 = new PersonAgent("Bank Teller1", date, new PersonAnimation(), Apartment6);
+            PersonAgent p28 = new PersonAgent("Bank Teller2", date, new PersonAnimation(), Apartment6);
+            PersonAgent p29 = new PersonAgent("Bank Teller3", date, new PersonAnimation(), Apartment6);
+            PersonAgent p30 = new PersonAgent("Bank Robber", date, new PersonAnimation(), Apartment6);
+            PersonAgent p31 = new PersonAgent("Market Manager", date, new PersonAnimation(), Apartment7);
+            PersonAgent p32 = new PersonAgent("Market Cashier", date, new PersonAnimation(), Apartment7);
+            PersonAgent p33 = new PersonAgent("Market Delivery Man", date, new PersonAnimation(), Apartment7);
+            PersonAgent p34 = new PersonAgent("Market Employee1", date, new PersonAnimation(), Apartment7);
+            PersonAgent p35 = new PersonAgent("Market Employee2", date, new PersonAnimation(), Apartment7);
+            PersonAgent p36 = new PersonAgent("Consumer1", date, new PersonAnimation(), Apartment8);
+            PersonAgent p37 = new PersonAgent("Consumer2", date, new PersonAnimation(), Apartment8);
+            PersonAgent p38 = new PersonAgent("Consumer3", date, new PersonAnimation(), Apartment8);
+            PersonAgent p39 = new PersonAgent("Consumer4", date, new PersonAnimation(), Apartment8);
+            PersonAgent p40 = new PersonAgent("Consumer5", date, new PersonAnimation(), Apartment8);
+            PersonAgent p41 = new PersonAgent("Consumer6", date, new PersonAnimation(), Apartment9);
+            PersonAgent p42 = new PersonAgent("Consumer7", date, new PersonAnimation(), Apartment9);
+            PersonAgent p43 = new PersonAgent("Consumer8", date, new PersonAnimation(), Apartment9);
+            PersonAgent p44 = new PersonAgent("Consumer9", date, new PersonAnimation(), Apartment9);
+            PersonAgent p45 = new PersonAgent("Consumer10", date, new PersonAnimation(), Apartment9);
+            PersonAgent p46 = new PersonAgent("Consumer11", date, new PersonAnimation(), Apartment10);
+            PersonAgent p47 = new PersonAgent("Consumer12", date, new PersonAnimation(), Apartment10);
+            PersonAgent p48 = new PersonAgent("Consumer13", date, new PersonAnimation(), Apartment10);
+            PersonAgent p49 = new PersonAgent("Consumer14", date, new PersonAnimation(), Apartment10);
+            PersonAgent p50 = new PersonAgent("Consumer15", date, new PersonAnimation(), Apartment10);
+            
+   //Create Landlords
+            LandlordRole landlord1 = new LandlordRole();
+            p1.addRole(landlord1);
+            Apartment1.setLandlord(landlord1);
+            
+            LandlordRole landlord2 = new LandlordRole();
+            p6.addRole(landlord2);
+            Apartment2.setLandlord(landlord1);
+            
+            LandlordRole landlord3 = new LandlordRole();
+            p11.addRole(landlord3);
+            Apartment3.setLandlord(landlord3);
+            
+            LandlordRole landlord4 = new LandlordRole();
+            p16.addRole(landlord4);
+            Apartment4.setLandlord(landlord4);
+            
+            LandlordRole landlord5 = new LandlordRole();
+            p21.addRole(landlord5);
+            Apartment5.setLandlord(landlord5);
+            
+            LandlordRole landlord6 = new LandlordRole();
+            p26.addRole(landlord6);
+            Apartment6.setLandlord(landlord6);
+            
+            LandlordRole landlord7 = new LandlordRole();
+            p31.addRole(landlord7);
+            Apartment7.setLandlord(landlord7);
+            
+            LandlordRole landlord8 = new LandlordRole();
+            p36.addRole(landlord8);
+            Apartment8.setLandlord(landlord8);
+            
+            LandlordRole landlord9 = new LandlordRole();
+            p41.addRole(landlord9);
+            Apartment9.setLandlord(landlord9);
+            
+            LandlordRole landlord10 = new LandlordRole();
+            p46.addRole(landlord10);
+            Apartment10.setLandlord(landlord10);
+     // Create occupations
+            //RestaurantTimms
+            RestaurantTimmsHostRole timmsHost = new RestaurantTimmsHostRole(restaurantTimms, 0, 24);
+            restaurantTimms.addOccupyingRole(timmsHost);
+            p1.setOccupation(timmsHost);
+            
+            RestaurantTimmsCashierRole timmsCashier = new RestaurantTimmsCashierRole(restaurantTimms, 0, 24);
+            restaurantTimms.addOccupyingRole(timmsCashier);
+            p2.setOccupation(timmsCashier);
+            
+            RestaurantTimmsCookRole timmsCook = new RestaurantTimmsCookRole(restaurantTimms, 0, 24);
+            restaurantTimms.addOccupyingRole(timmsCook);
+            p3.setOccupation(timmsCook);
+            
+            RestaurantTimmsWaiterRole timmsWaiter1 = new RestaurantTimmsWaiterRole(restaurantTimms, 0, 24);
+            restaurantTimms.addOccupyingRole(timmsWaiter1);
+            p4.setOccupation(timmsWaiter1);
+            
+            RestaurantTimmsWaiterRole timmsWaiter2 = new RestaurantTimmsWaiterRole(restaurantTimms, 0, 24);
+            restaurantTimms.addOccupyingRole(timmsWaiter2);
+            p5.setOccupation(timmsWaiter2);
+            
+            //Chung Restaurant
+           /* RestaurantHostRole Host = new RestaurantHostRole(restaurant, 0, 24);
+            restaurant.addOccupyingRole();
+            p.setOccupation();
+            
+            RestaurantCashierRole Cashier = new RestaurantCashierRole(restaurant, 0, 24);
+            restaurant.addOccupyingRole();
+            p.setOccupation();
+            
+            RestaurantCookRole Cook = new RestaurantCookRole(restaurant, 0, 24);
+            restaurant.addOccupyingRole();
+            p8.setOccupation();
+            
+            RestaurantZhangWaiterRegularRole zhangWaiter1 = new RestaurantZhangWaiterRegularRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangWaiter1);
+            p9.setOccupation(zhangWaiter1);
+            
+            RestaurantZhangWaiterSharedDataRole zhangWaiter2 = new RestaurantZhangWaiterSharedDataRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangWaiter2);
+            p10.setOccupation(zhangWaiter2);
+            
+            //RestaurantZhang
+            RestaurantZhangHostRole zhangHost = new RestaurantZhangHostRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangHost);
+            p6.setOccupation(zhangHost);
+            
+            RestaurantZhangCashierRole zhangCashier = new RestaurantZhangCashierRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangCashier);
+            p7.setOccupation(zhangCashier);
+            
+            RestaurantZhangCookRole zhangCook = new RestaurantZhangCookRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangCook);
+            p8.setOccupation(zhangCook);
+            
+            RestaurantZhangWaiterRegularRole zhangWaiter1 = new RestaurantZhangWaiterRegularRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangWaiter1);
+            p9.setOccupation(zhangWaiter1);
+            
+            RestaurantZhangWaiterSharedDataRole zhangWaiter2 = new RestaurantZhangWaiterSharedDataRole(restaurantZhang, 0, 24);
+            restaurantZhang.addOccupyingRole(zhangWaiter2);
+            p10.setOccupation(zhangWaiter2);
             
             
-            
-            PersonAgent p0Choi = new PersonAgent("Landlord Choi", date, new PersonAnimation(), Apartment3);
-            LandlordRole p0r1Choi = new LandlordRole();
-            p0Choi.addRole(p0r1Choi);
-            Apartment1.setLandlord(p0r1Choi);
-            Apartment2.setLandlord(p0r1Choi);
-            Apartment3.setLandlord(p0r1Choi);
-            model.addPerson(p0Choi);
-            p0Choi.setCash(2000);
-                            
-            // Create people
-            
-            PersonAgent p1Choi = new PersonAgent("Cashier 1 Choi", date, new PersonAnimation(), Apartment1);
-            PersonAgent p2Choi = new PersonAgent("Cook 1 Choi", date, new PersonAnimation(),Apartment1);
-            PersonAgent p3Choi = new PersonAgent("Host 1 Choi", date, new PersonAnimation(),Apartment1);
-            PersonAgent p4Choi = new PersonAgent("Waiter 1 Choi", date, new PersonAnimation(), Apartment1);
-            PersonAgent p5Choi = new PersonAgent("Market Mgr Choi", date, new PersonAnimation(),Apartment1);
-
-            PersonAgent p6Choi = new PersonAgent("Market Cshr Choi", date, new PersonAnimation(), Apartment2);
-            PersonAgent p7Choi = new PersonAgent("Market Emp Choi", date, new PersonAnimation(),Apartment2);
-            PersonAgent p8Choi = new PersonAgent("Market Dlvry Choi", date, new PersonAnimation(),Apartment2);
-            PersonAgent p9Choi = new PersonAgent("Bank manager Choi", date, new PersonAnimation(),Apartment2);
-            PersonAgent p10Choi = new PersonAgent("Bank Teller Choi", date, new PersonAnimation(),Apartment2);
-
-            model.addPerson(p1Choi);
-            model.addPerson(p2Choi);
-            model.addPerson(p3Choi);
-            model.addPerson(p4Choi);
-            model.addPerson(p5Choi);
-            model.addPerson(p6Choi);
-            model.addPerson(p7Choi);
-            model.addPerson(p8Choi);
-            model.addPerson(p9Choi);
-            model.addPerson(p10Choi);
-
-            // Landlord
-            RestaurantChoiCashierRole p1r1Choi = new RestaurantChoiCashierRole(restaurantChoiBuilding1, 0, 24);
-            restaurantChoiBuilding1.addOccupyingRole(p1r1Choi);
-            p1Choi.setOccupation(p1r1Choi);
-
             // Create cook
             RestaurantChoiCookRole p2r1Choi = new RestaurantChoiCookRole(restaurantChoiBuilding1, 0, 24);
             restaurantChoiBuilding1.addOccupyingRole(p2r1Choi);
@@ -502,7 +568,7 @@ public class Application {
              * END RYAN'S PART 
              */
             // RESTAURANTCHUNG------------------------------------------------------------------------------
-                    
+            /*        
             // Create landlord
             PersonAgent p0Chung = new PersonAgent("Landlord Chung", date, new PersonAnimation(), Apartment4);
             p0Chung.setCash(50); // TODO remove later
@@ -803,7 +869,7 @@ public class Application {
                     mainFrame.cityView.addAnimation(testPersonAnimation);
                     testPersonAnimation.goToDestination(CityMap.findRandomBuilding(BUILDING.busStop));
             }
-
+*/
         }
 
         public static DataModel getModel() {
@@ -856,9 +922,6 @@ public class Application {
          * Creates a building at the given x and y coordinates. Can and will overlap buildings
          */
         public static void runGhostTown(){
-
-        }
-        public static void runBankRobbery(){
 
         }
         public static void runVehicleCollision(){

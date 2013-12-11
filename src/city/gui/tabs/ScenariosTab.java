@@ -49,16 +49,6 @@ public class ScenariosTab extends JPanel implements ActionListener{
         btnScenarioF.setAlignmentX(Component.RIGHT_ALIGNMENT);
         this.add(btnScenarioF);
         
-        btnScenarioO = new JButton("Bank Robbery Scenario O");
-        btnScenarioO.setFocusable(false);
-        btnScenarioO.addActionListener(new ActionListener() {
-        	public void actionPerformed(ActionEvent arg0) {
-        		Application.runBankRobbery();
-        	}
-        });
-        btnScenarioO.setAlignmentX(Component.RIGHT_ALIGNMENT);
-        this.add(btnScenarioO);
-        
         btnScenarioP = new JButton("Vehicle Collision Scenario P");
         btnScenarioP.setFocusable(false);
         btnScenarioP.addActionListener(new ActionListener() {
