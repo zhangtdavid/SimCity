@@ -34,10 +34,10 @@ Inside `src` are multiple packages:
 Please read the [Coding Standards](https://github.com/usc-csci201-fall2013/team17/wiki/Coding-Standards) wiki for full details.
 
 ## Project Outline
- - The project contains a city view alongside a building view. The city view includes roads and buildings.
+ - The project contains a city view alongside a building view alongside a control panel. The city view includes roads and buildings.
  - A building view displays the internal structures of the buildings. 
- - People travel between buildings by car or bus and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents, or a customer. 
- - The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition.
+ - People travel between buildings by car or bus or walking and assume roles appropriate to the buildings. They can be an employee (i.e. manager, employee, waiter, etc.) of the business the building represents, or a customer. Customers just walk around, go to banks, eat at restaurants, eat at home, etc. And sleep. They like to sleep.
+ - The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition. Workers actually work 24 hour shifts.
 
 ## Problems
  - Banks and markets are not yet fully integrated.
@@ -50,59 +50,35 @@ Please read the [Coding Standards](https://github.com/usc-csci201-fall2013/team1
 ## Project Contributions
 ### John Timms (22%)
 
-John is responsible for the entire architecture of the project, except for animations. The general interaction of Agents, Buildings, Roles, etc. was all designed by John, and he assisted
-the rest of the team in developing roles that could interact with the rest. John wrote the PersonAgent class and made skeletons for all of the project's code files. John's restaurant is 
-RestaurantTimms; it has the market partially implemented and no bank or revolving stand implementation. John assisted the team by explaining various git strategies and managed merges.
-The PersonAgent does not have unit tests, but there are no known issues with it. Problems where people do not ever leave a building or job are caused by improper integration with the framework.
+John is responsible for the entire architecture of the project's back end. The general interaction of Agents, Buildings, Roles, etc. was all designed by John, and he assisted the rest of the team in developing roles that could interact with the rest. John wrote the PersonAgent class and made skeletons for all of the project's code files. John's restaurant is RestaurantTimms; it has the market partially implemented and no bank or revolving stand implementation. John assisted the team by explaining various git strategies and managed merges. The PersonAgent does not have unit tests, but there are no known issues with it. Problems where people do not ever leave a building or job are caused by improper integration with the framework.
  
 ### David Zhang (21%)
 
-David is responsible for the GUI architecture. Animations, the city view, building view, control panel, and trace panel were all implemented by David. David also implemented the transportation
-system. Some cars roam infinitely. Buses do not stop in the animation, but they are working correctly. David wrote the revolving stand which everyone uses in their shared-data restaurants. In
-addition to writing all GUI code, David also integrated everyone's code in the `Application` file so that everything could run in the same simulation.
+David is responsible for the GUI architecture. Animations, the city view, building view, control panel, all images, and trace panel were all implemented by David. David also implemented the transportation system. Both cars and people have collision detection with each other, but sometimes it doesn't work at intersections. Cars and buses and people walking all have sophisticated navigation systems - a faux A Star for vehicles, and an actual A Star designed by David for walkers. Buses stop at bus stops, and people animate to them as well. David wrote the revolving stand which everyone uses in their shared-data restaurants. In addition to writing all GUI code, David also provided functions in Application class (where the main function resides) to make integration of all people, buildings, transportation, etc. to work properly.
 
 ### John Francis (19%)
-* Bank
-  - Designed and implemented bank. Bank is not yet fully functioning in the city, but works by itself in a branch. You can see a small demo that interacts with RestaurantChoi
-  - Provided methodology to allow integration with Restaurants and Markets
-* Buildings
-  - Wrote cash handling methods in the building and person class to allow directDeposits by businesses
-* Restaurant
-  - Restaurant integrated into the city, but it isn't working. Not sure why - David integrated it into the restaurant. 
 
-* Disclosure
-  - Testing exists for the Teller and Manager, but not the Customer. The Manager testing only covers the directDeposit funcitonality
-  - Restaurant testing is virtually non-existent, except for the Cashier
-  - Loan payment functionality exists in local branch but was not done in time for integration (EDIT: may have gotten in)
-  - Internal BankGui was not completed
-  - Ironically, personal restaurant was not fully integrated with Bank (EDIT: may have gotten in)
-  - All Bank interactions have been tested in runtime and do work perfectly, although the mechanism to pay employees after they have been setInactive only exists in local BankBranch and was not done in time for integration (EDIT: may have gotten in)
-  - Restaurant stopped working during final integation due to errors in RestaurantPanel. Was implemented and working correctly in commit 1bf454f98b70f3377da416038285c1d7d2bfabe2
+Designed and implemented bank, which is fully tested and functional within the city. Also provided methodology to allow integration with Restaurants and Markets. Wrote cash handling methods in the building and person class to allow directDeposits by businesses. Restaurant is integrated into the city, but it isn't working. Gets hung up on cashier because I simply did not have time to change the way the building was initialized. Created the standard parseConfig and runtime scenario, as well as the beautiful, non-functional scenario tab. Disclosure: Restaurant testing is virtually non-existent, except for the Cashier Restaurant does not finish normative. Bank robbery scenario was not implemented although a little BankRobber guy does run around and live with the other employees to gain some pretty stellar intel for his big heist. Did not integrate market into restaurant. **Was responsible for implementing all scenarios and largely failed. Lacked infrastructure for closing buildings and creating collisions, and as stated before, did not implement BankRobbery upon command.
 
 ### Shirley Chung (19%)
-* Market
-  - Designed and implemented market
-  - Created all roles associated with market, got working with personAgent and integrated with bank
-  - Did JUnit testing for all roles
-  - Completed animation for in person and delivery interactions
-  - Did not test with multiple employees
-  - Had some instances where customer did not successfully enter markt. Not sure if this was due to the market, car, or animation.
-  - Market Delivery animation worked in restaurantChungAnimation branch, but had problems integrating car animation in master
-  - Implemented code for handling a closed restaurant upon delivery, but could not set up scenario in application and did not test
+
+*Market
+
+ - Shirley designed and implemented market interactions. This required creating all the roles associated with market, getting them to work with personAgent, integrating with bank to deposit money, and integrating with restaurants. JUnit testing worked for all the roles except for DeliveryPerson. A significant design change was implemented late in the project that did not allow for a complete change of the test. Animation for the market is implemented. It works for both in-person and delivery customers. The first customer in line sometimes does not get helped and employees freeze when they talk to the cashier. The delivery car leaves, goes to a restaurant, and returns. The code for handling a closed restaurant upon delivery was implemented, but his scenario was never tested.
+
 * Restaurant
-  - Restaurant integrated into the city
-  - Can handle multiple customers
-  - Producer-consumer scenario works
-  - Have not tested with both producer-consumer and traditional messaging
-  - Bank interaction works
-  - Customer will sometimes freeze after ordering
-  - While testing in restaurantChungAnimation branch, froze after cook ordered from market. After changes to city animations in master, this may have been fixed, but did not test
-* Market and Restaurant Integration
-  - Integrated with personal restaurant, provided instructions for integration with other restaurants, but it would have been helpful if they were posted earlier
+
+ - The RestaurantChung is integrated into the city. It can handle multiple customers and the producer-consumer scenario works. A scenario running both producer-consumer and traditional messaging has not been tested. The cashier successfully interacts with the bank. The customer and waiters will sometimes freeze after ordering.
 
 ### Ryan Choi (19%)
--All housing logic, e.g. clear room after removing person; how often/much maintenance is added to rent intervals
--All housing graphics, e.g. difference between apartment and house panels
--Everything in the "Edit Building" Tab, for live changes (e.g. force withdrawal by setting cash to 0)
--Restaurant integration complete: producer-consumer, market orders, bank transactions.
--Integrated bank and market into restaurant, with ordering OK, withdraw OK, deposit OK. 
+-All housing logic, e.g. clear room after removing person; how often/much maintenance is added to rent intervals.
+
+-All housing graphics, and animation. e.g. Difference between apartment and house panels.
+
+-Landlord can own >1 residence. Landlord doesn't have to live in residence. Apartments can share residents.
+
+-Everything in the "Edit Building" Tab, for live changes (e.g. force withdrawal by setting cash to 0).
+
+-Restaurant integration: producer-consumer, bank transactions, market orders WERE functional but not sure.
+
+-Integrated bank and market into restaurant, with ordering OK, withdraw OK, deposit OK.
