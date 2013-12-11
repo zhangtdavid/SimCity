@@ -1,9 +1,9 @@
 package city.roles;
 
-import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.Queue;
 import java.util.Timer;
-import java.util.TimerTask;
 
 import trace.AlertLog;
 import trace.AlertTag;
@@ -14,6 +14,7 @@ import city.agents.interfaces.Car;
 import city.bases.JobRole;
 import city.buildings.MarketBuilding;
 import city.buildings.interfaces.Market;
+import city.buildings.interfaces.Market.DeliveryState;
 import city.roles.interfaces.CarPassenger;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.MarketDeliveryPerson;
@@ -25,23 +26,15 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	public EventLog log = new EventLog();
 	Timer timer = new Timer();
 
-	public enum DeliveryState {None, Pending, Delivering, Arrived, Received, ReturningToMarket};
-
-	private DeliveryState s;
-	
 	private Market market;
+
+	private Queue<MyDelivery> deliveries;
 	
 	private Car personalCar;
 	private Car car;
 	private CarPassenger carPassenger;
 	
-	private MarketCustomerDelivery customerDelivery;
-	private int orderId;
-	private Map<FOOD_ITEMS, Integer> collectedItems = new HashMap<FOOD_ITEMS, Integer>();
-	
 	private WorkingState workingState;
-	
-	private boolean restaurantClosed;
 
 //	Constructor
 //	=====================================================================
@@ -51,11 +44,9 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.setShift(t1, t2);
 		this.setWorkplace(market);
 		this.setSalary(MarketBuilding.WORKER_SALARY);
-
 		workingState = WorkingState.Working;
-		s = DeliveryState.None;
 		
-		restaurantClosed = false;
+		deliveries = new LinkedList<MyDelivery>();
     }
 	
 //  Activity
@@ -73,25 +64,23 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	public void msgDeliverOrder(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 		log.add(new LoggedEvent("Market DeliveryPerson received msgDeliverOrder from Market Cashier."));
 		print("Market DeliveryPerson received msgDeliverOrder from Market Cashier.");
-		customerDelivery = c;
-        for (FOOD_ITEMS s: i.keySet()) {
-        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-        }
-        orderId = id;
-        s = DeliveryState.Pending;
+		deliveries.add(new MyDelivery(c, i, id));
         stateChanged();
 	}
 	
 	@Override
 	public void msgArrivedAtDestination() {
-		// UPDATE
-		if (s == DeliveryState.ReturningToMarket) {
-			if (!restaurantClosed)
-				s = DeliveryState.None;
+		if (deliveries.peek().s == DeliveryState.ReturningToMarket) {
+			if (deliveries.peek().received = true)
+				deliveries.remove();
+			// If market was closed, move delivery to end of list
+			else{
+				MyDelivery tempDelivery = deliveries.poll(); // removes head item
+				deliveries.add(tempDelivery); // move to end of the list
+			}
 		}
-		
 		else {
-	        s = DeliveryState.Arrived;		
+			deliveries.peek().s = DeliveryState.Arrived;
 		}
 		stateChanged();
 	}
@@ -107,37 +96,21 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			carPassenger.runScheduler();
 		}	
 		
-		if (workingState == WorkingState.GoingOffShift && customerDelivery == null) {
+		if (workingState == WorkingState.GoingOffShift && deliveries.size() == 0) {
 			if (market.getDeliveryPeople().size() > 1) {
-				market.removeDeliveryPerson(this);
+				market.getDeliveryPeople().remove(this);
 				if (personalCar != null)
 					this.getPerson().setCar(personalCar); // switches back to personal car
 				super.setInactive();				
 			}
 		}
 		
-		if (restaurantClosed) {
-			timer.schedule(new TimerTask() {
-				public void run() {
-//					 check if restaurant is open
-					if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
-						restaurantClosed = false;
-						s = DeliveryState.Pending;
-					}
-					else {
-						stateChanged();
-					}
-				}
-			},
-			5000);
-		}
-//		
-		if (s == DeliveryState.Pending) {
+		if (deliveries.peek().s == DeliveryState.Pending) {
 			deliverItems();
 			return true;
 		}
 		
-		if (s == DeliveryState.Arrived) {
+		if (deliveries.peek().s == DeliveryState.Arrived) {
 			checkOpen();
 			return true;
 		}
@@ -148,20 +121,20 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //  Actions
 //	=====================================================================	
 	private void deliverItems() {
-		market.getCashier().msgDeliveringItems(this);
+		// Before first delivery, store personal car pointer
 		if (personalCar == null)
-				personalCar = this.getPerson().getCar();
-		carPassenger = new CarPassengerRole(car, customerDelivery.getRestaurant(), this);
+			personalCar = this.getPerson().getCar();
+		market.getCashier().msgDeliveringItems(this);
+		carPassenger = new CarPassengerRole(car, deliveries.peek().customerDelivery.getRestaurant(), this);
 		carPassenger.setPerson(this.getPerson());
 		carPassenger.setActive();
 		this.getPerson().setCar(car);
 		
-		s = DeliveryState.Delivering;
+		deliveries.peek().s = DeliveryState.Delivering;
 	}
 	
 	public void checkOpen() {
-		print(customerDelivery.getRestaurant().toString());
-		if(customerDelivery.getRestaurant().getBusinessIsOpen()) {
+		if(deliveries.peek().customerDelivery.getRestaurant().getBusinessIsOpen()) {
 			giveItems();
 		}
 
@@ -169,14 +142,13 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	}
 	
 	public void giveItems() {
-		customerDelivery.msgHereIsOrderDelivery(collectedItems, orderId);
-		market.getCashier().msgFinishedDeliveringItems(this, orderId);
-		customerDelivery = null;
-		// UPDATE
+		deliveries.peek().customerDelivery.msgHereIsOrderDelivery(deliveries.peek().collectedItems, deliveries.peek().orderId);
+		market.getCashier().msgFinishedDeliveringItems(this, deliveries.peek().orderId);
+		deliveries.peek().received = true;
 	}
 	
 	public void returnToMarket() {
-		s = DeliveryState.ReturningToMarket;
+		deliveries.peek().s = DeliveryState.ReturningToMarket;
 		carPassenger = new CarPassengerRole(car, market, this);
 		carPassenger.setPerson(this.getPerson());
 		carPassenger.setActive();
@@ -192,17 +164,17 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	
 	@Override
 	public MarketCustomerDelivery getCustomerDelivery() {
-		return customerDelivery;
+		return deliveries.peek().customerDelivery;
 	}
 	
 	@Override
 	public int getOrderId() {
-		return orderId;
+		return deliveries.peek().orderId;
 	}
 	
 	@Override
 	public Map<FOOD_ITEMS, Integer> getCollectedItems() {
-		return collectedItems;
+		return deliveries.peek().collectedItems;
 	}
 	
 	@Override
@@ -228,4 +200,25 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 		this.getPerson().printViaRole("MarketDeliveryPerson", msg);
         AlertLog.getInstance().logMessage(AlertTag.MARKET, "MarketDeliveryPersonRole " + this.getPerson().getName(), msg);
     }
+	
+//  Classes
+//	=====================================================================
+	public class MyDelivery {
+		MarketCustomerDelivery customerDelivery;
+		Map<FOOD_ITEMS, Integer> collectedItems;
+		int orderId;
+		private DeliveryState s;
+		boolean received;
+		
+		public MyDelivery(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
+			customerDelivery = c;
+	        for (FOOD_ITEMS s: i.keySet()) {
+	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
+
+	        }
+            orderId = id;
+            s = DeliveryState.Pending;
+            received = false;
+		}		
+	}
 }

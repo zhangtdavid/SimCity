@@ -17,6 +17,8 @@ import city.roles.interfaces.MarketEmployee;
 import city.roles.interfaces.MarketManager;
 
 public interface Market extends BuildingInterface {
+	public enum DeliveryState {None, Pending, Delivering, Arrived, ReturningToMarket};
+
 	// Employee
 	public void addEmployee(MarketEmployee employee);
 	public void removeEmployee(MarketEmployee employee);
@@ -51,11 +53,9 @@ public interface Market extends BuildingInterface {
 	// Classes
 	public class MyDeliveryPerson {
 		private MarketDeliveryPerson deliveryPerson;
-		private boolean available;
 		
 		public MyDeliveryPerson(MarketDeliveryPerson d) {
 			deliveryPerson = d;
-			available = true;
 		}
 		
 		// Getters
@@ -63,17 +63,9 @@ public interface Market extends BuildingInterface {
 			return deliveryPerson;
 		}
 		
-		public boolean getAvailable() {
-			return available;
-		}
-		
 		// Setters
 		public void setDeliveryPerson(MarketDeliveryPerson deliveryPerson) {
 			this.deliveryPerson = deliveryPerson;
-		}
-		
-		public void setAvailable(boolean available) {
-			this.available = available;
 		}
 		
 	}
@@ -195,4 +187,7 @@ public interface Market extends BuildingInterface {
 			this.orderId = orderId;
 		}
 	}
+
+	int getCurrentDeliveryPerson();
+	void setCurrentDeliveryPerson(int currentDeliveryPerson);
 }
