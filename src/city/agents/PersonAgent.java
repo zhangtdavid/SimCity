@@ -385,7 +385,7 @@ public class PersonAgent extends Agent implements Person {
 	private void actGoToRestaurant() throws InterruptedException { 
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		BuildingInterface building = Application.CityMap.findRandomBuilding(BUILDING.restaurant);
-		this.lastAteAtRestaurant = this.date;
+		this.lastAteAtRestaurant = new Date(date.getTime());
 		this.hasEaten = true;
 
 		// Use reflection to get a Restaurant<name>CustomerRole to use when dining at the restaurant
@@ -495,7 +495,7 @@ public class PersonAgent extends Agent implements Person {
 		animation.goToSleep();
 		atDestination.acquire();
 		this.hasEaten = false;
-		this.lastWentToSleep = this.getDate(); 
+		this.lastWentToSleep = new Date(date.getTime()); 
 		setState(STATES.atSleep);
 	}
 	
