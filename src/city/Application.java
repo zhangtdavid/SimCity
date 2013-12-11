@@ -1237,8 +1237,14 @@ public class Application {
                  * Find the building of type closest to the person's location
                  */
                 public static BuildingInterface findClosestBuilding(BUILDING type, Person p) {
-                        int x = p.getCurrentLocation().getCityViewBuilding().getX();
-                        int y = p.getCurrentLocation().getCityViewBuilding().getY();
+                	
+                		int x = 0;
+                		int y = 0;
+                	
+                if(p.getCurrentLocation().getCityViewBuilding() != null) {
+                        x = p.getCurrentLocation().getCityViewBuilding().getX();
+                        y = p.getCurrentLocation().getCityViewBuilding().getY();
+                }
                         double closestDistance = 1000000;
                         BuildingInterface returnBuilding = null;
                         for(BuildingInterface b : map.get(type)) {

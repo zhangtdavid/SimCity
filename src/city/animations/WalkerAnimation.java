@@ -43,8 +43,11 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 	
 	public WalkerAnimation(Walker walker, BuildingInterface startingBuilding, CitySidewalkLayout sidewalks) {
 		this.walker = walker;
-		xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
-		yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
+		if(startingBuilding.getCityViewBuilding() != null) {
+			xDestination = xPos = startingBuilding.getCityViewBuilding().getX();
+			yDestination = yPos = startingBuilding.getCityViewBuilding().getY();
+		}
+		if(sidewalks != null)
 		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
 		this.sidewalks = sidewalks;
 		try {
@@ -204,15 +207,19 @@ public class WalkerAnimation extends Animation implements AnimatedWalker {
 
 	@Override
 	public void goToDestination(BuildingInterface destination) {
-		startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
-		startingSidewalk.setCurrentOccupant(this);
+		if(sidewalks != null) {
+			startingSidewalk = sidewalks.getClosestSidewalk(xPos, yPos);
+			startingSidewalk.setCurrentOccupant(this);
+		}
 		currentSidewalk = startingSidewalk;
 		xDestination = destination.getCityViewBuilding().getX();
 		yDestination = destination.getCityViewBuilding().getY();
-		endSidewalk = sidewalks.getClosestSidewalk(destination.getCityViewBuilding().getX(), destination.getCityViewBuilding().getY());
+		if(sidewalks != null)
+			endSidewalk = sidewalks.getClosestSidewalk(destination.getCityViewBuilding().getX(), destination.getCityViewBuilding().getY());
 		atDestination = false;
 		atDestinationRoad = false;
-		sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
+		if(sidewalks != null)
+			sidewalkPath = sidewalks.getBestPath(startingSidewalk, endSidewalk);
 	}
 
 	@Override
