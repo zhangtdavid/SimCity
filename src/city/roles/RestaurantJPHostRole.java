@@ -30,6 +30,7 @@ public class RestaurantJPHostRole extends JobRole {
 	public RestaurantJPHostRole(RestaurantJPBuilding b, int shiftStart, int shiftEnd) {
 		super();
 		building = b;
+		b.setHost(this);
 		this.setWorkplace(b);
 		this.setSalary(RestaurantJP.WORKER_SALARY);
 		this.setShift(shiftStart, shiftEnd);

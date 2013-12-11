@@ -11,6 +11,7 @@ import java.util.List;
 import javax.swing.Timer;
 
 import city.bases.Animation;
+import city.bases.interfaces.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantJPPanel extends BuildingCard implements ActionListener {
@@ -23,7 +24,6 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
     private final int TABLELENGTH = 50;
     private final int TABLESEPARATION = 100;
     private final int delayMS = 5;
-	private List<Animation> animations = new ArrayList<Animation>();
 
     public RestaurantJPPanel(Color color) {
     	super(color);
@@ -59,7 +59,7 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
     	graphics2D.setColor(Color.white);
     	graphics2D.fillRect(20, 350, 50, 50);
         // Update the position of each visible element
-        for(Animation animation : animations) {
+        for(AnimationInterface animation : animations) {
         	if (animation.getVisible()) {
                 animation.updatePosition();
             }
@@ -67,14 +67,11 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
 
         // Draw each visible element after updating their positions
         // TODO generates concurrent modification exception
-        for(Animation animation : animations) {
+        for(AnimationInterface animation : animations) {
             if (animation.getVisible()) {
                 animation.draw(graphics2D);
             }
         }
     }
-    
-    public void addVisualizationElement(Animation ve) {
-    	animations.add(ve);
-    }
+ 
 }
