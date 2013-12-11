@@ -5,8 +5,10 @@ import java.util.List;
 import java.util.Map;
 
 import utilities.LoggedEvent;
+import utilities.MarketOrder;
 import utilities.RestaurantZhangCheck;
 import utilities.RestaurantZhangMenu;
+import city.buildings.interfaces.Market;
 import city.roles.interfaces.MarketCustomerDeliveryPayment;
 import city.roles.interfaces.RestaurantZhangCashier;
 import city.roles.interfaces.RestaurantZhangCustomer;
@@ -89,5 +91,11 @@ public class MockRestaurantZhangCashier extends MockRole implements RestaurantZh
 	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void msgAddMarketOrder(Market m, MarketOrder o) {
+		// TODO Auto-generated method stub
+		
 	}
 }

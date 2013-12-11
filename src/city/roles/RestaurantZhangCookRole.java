@@ -84,7 +84,7 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	// From MarketDeliveryPerson
 	@Override
 	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder, int id) {
-		print("!!!!!!!!!!!!!!!!!!!!!!!!!RestaurantZhangCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
+		print("RestaurantZhangCook received msgHereIsOrderDelivery from MarketDeliveryPerson");
 		MyMarketOrder mo = findMarketOrder(id);
 		marketOrders.remove(mo);
 
@@ -187,9 +187,6 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				waitingToCheckStand = true;
 				timer.schedule(new TimerTask() {
 					public void run() {
-						for(Food foodItem : buildingOfEmployment.getFoods().values()) {
-							print(foodItem.getItem() + " " + foodItem.getAmount());
-						}
 						waitingToCheckStand = false;
 						RestaurantZhangOrder newOrder = myOrderStand.remove();
 						if(newOrder != null) {

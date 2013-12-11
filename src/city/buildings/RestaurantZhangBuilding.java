@@ -69,9 +69,9 @@ public class RestaurantZhangBuilding extends RestaurantBuilding implements Resta
     	}
     	if(panel != null)
     		panel.setTables(tables);
-    	foods.put(Application.FOOD_ITEMS.chicken, new Food("chicken", 2000, 0, 0, 3, menu.getPrice("chicken")));
-        foods.put(Application.FOOD_ITEMS.pizza, new Food("pizza", 8000, 0, 0, 3, menu.getPrice("pizza")));
-        foods.put(Application.FOOD_ITEMS.steak, new Food("steak", 4000, 0, 0, 3, menu.getPrice("steak")));
+    	foods.put(Application.FOOD_ITEMS.chicken, new Food("chicken", 2000, 3, 0, 3, menu.getPrice("chicken")));
+        foods.put(Application.FOOD_ITEMS.pizza, new Food("pizza", 8000, 3, 0, 3, menu.getPrice("pizza")));
+        foods.put(Application.FOOD_ITEMS.steak, new Food("steak", 4000, 3, 0, 3, menu.getPrice("steak")));
     	
 		this.addWorkerRoleName("city.roles.RestaurantZhangCashierRole");
 		this.addWorkerRoleName("city.roles.RestaurantZhangCookRole");
