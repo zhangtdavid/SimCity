@@ -117,7 +117,8 @@ public abstract class Role implements RoleInterface {
 	 */
 	@Override
 	public void definitelyDead() {
-		throw new UnsupportedOperationException("HEY YOU! OVERRIDE THIS METHOD!");
+		// throw new UnsupportedOperationException("HEY YOU! OVERRIDE THIS METHOD!");
+		return;
 	}
 	
 	protected void stateChanged() {
