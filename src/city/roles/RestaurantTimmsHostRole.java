@@ -37,6 +37,7 @@ public class RestaurantTimmsHostRole extends JobRole implements RestaurantTimmsH
 		this.setShift(shiftStart, shiftEnd);
 		this.waiterWantingBreak = null;
 		this.rtb = b;
+		b.setHost(this);
 		this.shiftOver = false;
 	}
 
