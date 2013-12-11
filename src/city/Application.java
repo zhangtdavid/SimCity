@@ -439,7 +439,7 @@ public class Application {
             
             LandlordRole landlord2 = new LandlordRole();
             p6.addRole(landlord2);
-            Apartment2.setLandlord(landlord1);
+            Apartment2.setLandlord(landlord2);
             landlord2.setActive();
             
             LandlordRole landlord3 = new LandlordRole();
