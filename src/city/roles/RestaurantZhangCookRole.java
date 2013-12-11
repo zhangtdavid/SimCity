@@ -36,7 +36,6 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	// Data
 
 	private List<MarketBuilding> markets = Collections.synchronizedList(new ArrayList<MarketBuilding>());
-	private RestaurantZhangCashier cashier;
 	private RestaurantZhangAnimatedCook thisGui;
 	private RestaurantZhangHost host;
 	private Timer timer = new Timer();
@@ -91,11 +90,10 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 
 		for (FOOD_ITEMS i: marketOrder.keySet()) {
 			Food f = findFood(i.toString());
-			f.setAmount(f.getAmount() + marketOrder.get(i));
 			print("New Inventory: " + f.getItem() + " " + f.getAmount());
+			mainMenu.reAddItem(f.getItem());
 			f.setFoodOrderState(RestaurantBuilding.FoodOrderState.None);
 		}
-		stateChanged();
 	}
 
 	@Override
@@ -129,8 +127,9 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 				}
 				// The role becomes inactive when the order is fulfilled, cook should remove the role from its list
 				else if (!r.getActive()) {
+					r.setActivityFinished();
 					MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
-					marketOrders.remove(mo);
+					msgHereIsOrderDelivery(mo.order.getOrderItems(), mo.getOrder().getOrderId());
 					marketCustomerDeliveryList.remove(r);
 					break;
 				}
@@ -345,11 +344,6 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 	}
 
 	@Override
-	public RestaurantZhangCashier getCashier() {
-		return cashier;
-	}
-
-	@Override
 	public List<MarketCustomerDelivery> getmarketCustomerDeliveryList() {
 		return marketCustomerDeliveryList;
 	}
@@ -487,6 +481,12 @@ public class RestaurantZhangCookRole extends JobRole implements RestaurantZhangC
 		public MarketOrderState getMarketOrderState() {
 			return state;
 		}
+	}
+
+	@Override
+	public RestaurantZhangCashier getCashier() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 	//	public static class CookInvoice {

@@ -11,9 +11,7 @@ import utilities.RestaurantZhangRevolvingStand;
 import utilities.RestaurantZhangTable;
 import city.Application.FOOD_ITEMS;
 import city.animations.interfaces.RestaurantZhangAnimatedCook;
-import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
-import city.roles.RestaurantZhangCookRole.CookInvoice;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.RestaurantZhangCashier;
 import city.roles.interfaces.RestaurantZhangCook;
@@ -51,28 +49,9 @@ public class MockRestaurantZhangCook extends MockRole implements RestaurantZhang
 	}
 
 	@Override
-	public void msgProcessedInvoice(String food, boolean isAvailable,
-			int processedAmount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
-	public void msgHereIsInvoice(String food, int amount) {
-		// TODO Auto-generated method stub
-		
-	}
-
-	@Override
 	public RestaurantZhangAnimatedCook getGui() {
 		// TODO Auto-generated method stub
 		return null;
-	}
-
-	@Override
-	public void setMenuTimes(RestaurantZhangMenu m, Map<FOOD_ITEMS, Food> food) {
-		// TODO Auto-generated method stub
-		
 	}
 
 	@Override
@@ -148,18 +127,6 @@ public class MockRestaurantZhangCook extends MockRole implements RestaurantZhang
 	}
 
 	@Override
-	public Map<String, Food> getCookInventory() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public List<CookInvoice> getCookInvoiceList() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public boolean getWaitingToCheckStand() {
 		// TODO Auto-generated method stub
 		return false;
@@ -175,5 +142,18 @@ public class MockRestaurantZhangCook extends MockRole implements RestaurantZhang
 	public String getStateString() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void msgHereIsOrderDelivery(Map<FOOD_ITEMS, Integer> marketOrder,
+			int id) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public void setMenuTimes(RestaurantZhangMenu m) {
+		// TODO Auto-generated method stub
+		
 	}
 }
