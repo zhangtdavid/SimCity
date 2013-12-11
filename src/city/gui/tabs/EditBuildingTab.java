@@ -28,7 +28,6 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
-import javax.swing.JSpinner;
 import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.ScrollPaneConstants;
@@ -43,12 +42,10 @@ import city.Application;
 import city.Application.FOOD_ITEMS;
 import city.agents.interfaces.Person;
 import city.bases.Building;
-import city.bases.JobRole;
 import city.bases.ResidenceBuilding;
 import city.bases.RestaurantBuilding;
 import city.bases.interfaces.AnimationInterface;
 import city.bases.interfaces.BuildingInterface;
-import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.BankBuilding;
 import city.buildings.MarketBuilding;
@@ -692,7 +689,8 @@ public class EditBuildingTab extends JPanel implements PropertyChangeListener, A
 	}
 	
 	private void updateRoleValues() {
-		Person r = roleSelectedFromList;
+		// Person r = roleSelectedFromList;
+		return;
 	}
 	
 	private void updateWorkplaceValues() {

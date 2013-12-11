@@ -6,8 +6,6 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
-import city.agents.interfaces.Person;
-import city.bases.Animation;
 import city.gui.BuildingCard;
 
 public abstract class ResidenceBasePanel extends BuildingCard implements
@@ -15,7 +13,6 @@ public abstract class ResidenceBasePanel extends BuildingCard implements
 
 	// Data
 	private static final long serialVersionUID = 6350170306014756337L;
-	private Person person; // use to send messages (arrivedAtX) & room#
 	public static final int WIDTH = 20;
 
 	// Constructor

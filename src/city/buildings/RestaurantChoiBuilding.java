@@ -8,11 +8,9 @@ import java.util.Map;
 
 import utilities.RestaurantChoiMenu;
 import utilities.RestaurantChoiRevolvingStand;
-import utilities.RestaurantChoiTable;
 import utilities.RestaurantChoiWaiterBase;
 import city.Application;
 import city.Application.BUILDING;
-import city.Application.FOOD_ITEMS;
 import city.animations.RestaurantChoiCashierAnimation;
 import city.animations.RestaurantChoiCookAnimation;
 import city.animations.RestaurantChoiCustomerAnimation;
@@ -48,8 +46,6 @@ public class RestaurantChoiBuilding extends RestaurantBuilding implements Restau
 	private List<RestaurantChoiCustomer> customers = Collections.synchronizedList(new ArrayList<RestaurantChoiCustomer>());
 	private List<RestaurantChoiWaiterBase> waiters = Collections.synchronizedList(new ArrayList<RestaurantChoiWaiterBase>());
 	private RestaurantChoiRevolvingStand rs;
-	private RestaurantChoiTable t;
-	private Bank bank;
 	private static final int WORKER_SALARY = 500; // this high value helps accelerate normative testing. Also everyone makes the same amount!
 
 	// Constructor

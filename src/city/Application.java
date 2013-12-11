@@ -19,7 +19,6 @@ import javax.swing.UnsupportedLookAndFeelException;
 
 import utilities.DataModel;
 import utilities.TrafficControl;
-import city.Application.BUILDING;
 import city.agents.BusAgent;
 import city.agents.CarAgent;
 import city.agents.PersonAgent;
@@ -89,7 +88,6 @@ import city.roles.RestaurantJPCashierRole;
 import city.roles.RestaurantJPCookRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
-import city.roles.RestaurantJPWaiterSharedDataRole;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.RestaurantTimmsCookRole;
 import city.roles.RestaurantTimmsHostRole;
@@ -108,7 +106,6 @@ public class Application {
 
         public static final int HALF_HOUR = 1800000; // A half hour in milliseconds
         public static final int INTERVAL = 1000; // One interval is the simulation's equivalent of a half-hour
-        public static final int PAYCHECK_INTERVAL = 0; // TODO set the global interval at which people are paid
         public static enum BANK_SERVICE {none, deposit, moneyWithdraw, atmDeposit};
         public static enum TRANSACTION_TYPE {personal, business};
         public static enum FOOD_ITEMS {steak, chicken, salad, pizza};
@@ -1151,7 +1148,7 @@ public class Application {
                         setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
                         return building;
                 case RESTAURANTTIMMS:
-                        cityViewBuilding = new CityViewRestaurantTimms(x, y, "RestaurantTimms " + mainFrame.cityView.statics.size(), Color.yellow, new RestaurantTimmsPanel(Color.yellow));
+                        cityViewBuilding = new CityViewRestaurantTimms(x, y, "RestaurantTimms " + mainFrame.cityView.statics.size(), Color.gray, new RestaurantTimmsPanel(Color.gray));
                         building = new RestaurantTimmsBuilding("RestaurantTimms " + mainFrame.cityView.statics.size(),
                                         (RestaurantTimmsPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
                         setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);

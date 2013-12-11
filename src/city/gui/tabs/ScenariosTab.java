@@ -18,9 +18,7 @@ public class ScenariosTab extends JPanel implements ActionListener{
 	private static final long serialVersionUID = 9166425422374406573L;
 	
 	private MainFrame mainFrame;
-	private JButton btnScenarioJ;
 	private JButton btnScenarioF;
-	private JButton btnScenarioO;
 	private JButton btnScenarioP;
 	private JButton btnScenarioQ;
 	private JButton btnScenarioR;

@@ -11,7 +11,6 @@ public class AptBuilding extends ResidenceBuilding implements Apt {
 
 	// Data
 	
-	private AptPanel panel;
 	public final static int NUMBER_OF_BEDS = 5;
 
 	// Constructor

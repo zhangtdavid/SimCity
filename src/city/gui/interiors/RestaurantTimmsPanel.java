@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.Timer;
 
+import city.animations.RestaurantTimmsTableAnimation;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.BuildingCard;
 
@@ -22,6 +23,12 @@ public class RestaurantTimmsPanel extends BuildingCard implements ActionListener
 
 		Timer timer = new Timer(delayMS, this);
 		timer.start();
+		
+        int i = 0;
+        while (i < 9) {
+                this.addVisualizationElement(new RestaurantTimmsTableAnimation(i));
+                i++;
+        }
 	}
 
 	public void actionPerformed(ActionEvent e) {

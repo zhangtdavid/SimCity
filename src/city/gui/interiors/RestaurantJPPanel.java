@@ -5,20 +5,15 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Timer;
 
-import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.BuildingCard;
 
 public class RestaurantJPPanel extends BuildingCard implements ActionListener {
 
 	private static final long serialVersionUID = 1255285244678935863L;
-	private final int WINDOWX = 500;
-    private final int WINDOWY = 500;
     private final int TABLEORIGINX = 200;
     private final int TABLEORIGINY = 250;
     private final int TABLELENGTH = 50;

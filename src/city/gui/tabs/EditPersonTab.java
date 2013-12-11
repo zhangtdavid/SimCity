@@ -50,7 +50,6 @@ import city.bases.JobRole;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.JobRoleInterface;
 import city.bases.interfaces.RoleInterface;
-import city.gui.BuildingView;
 import city.gui.MainFrame;
 
 public class EditPersonTab extends JPanel implements PropertyChangeListener {

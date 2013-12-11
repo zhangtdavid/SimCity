@@ -5,12 +5,9 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
 
 import javax.swing.Timer;
 
-import city.bases.Animation;
 import city.bases.interfaces.AnimationInterface;
 import city.gui.BuildingCard;
 

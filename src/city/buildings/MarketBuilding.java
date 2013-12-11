@@ -9,7 +9,6 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
-import city.animations.BankCustomerAnimation;
 import city.animations.MarketCashierAnimation;
 import city.animations.MarketCustomerAnimation;
 import city.animations.MarketEmployeeAnimation;

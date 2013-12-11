@@ -5,7 +5,6 @@ import java.util.List;
 import city.animations.BankCustomerAnimation;
 import city.bases.interfaces.BuildingInterface;
 import city.buildings.BankBuilding.Account;
-import city.buildings.BankBuilding.Loan;
 import city.roles.interfaces.BankManager;
 
 public interface Bank extends BuildingInterface {

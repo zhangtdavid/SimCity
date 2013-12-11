@@ -11,7 +11,6 @@ public class HouseBuilding extends ResidenceBuilding implements House {
 
 	// Data
 	
-	private HousePanel panel;
 	public static final int NUMBER_OF_BEDS = 1;
 
 	// Constructor
