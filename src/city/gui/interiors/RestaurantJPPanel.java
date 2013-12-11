@@ -73,5 +73,4 @@ public class RestaurantJPPanel extends BuildingCard implements ActionListener {
             }
         }
     }
- 
 }
