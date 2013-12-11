@@ -584,7 +584,7 @@ public class Application {
             restaurantJP.addOccupyingRole(jpWaiter1);
             p24.setOccupation(jpWaiter1);
             
-            RestaurantJPWaiterSharedDataRole jpWaiter2 = new RestaurantJPWaiterSharedDataRole(restaurantJP, 0, 24);
+            RestaurantJPWaiterRole jpWaiter2 = new RestaurantJPWaiterRole(restaurantJP, 0, 24);
             restaurantJP.addOccupyingRole(jpWaiter2);
             p25.setOccupation(jpWaiter2);
             
@@ -973,22 +973,38 @@ public class Application {
             p32.startThread();
             p33.startThread();
             p34.startThread();
-            /*p35.startThread();
+            p35.setCash(18);
+            p35.startThread();
+            p36.setCash(18);
             p36.startThread();
+            p37.setCash(18);
             p37.startThread();
+            p38.setCash(18);
             p38.startThread();
+            p39.setCash(18);
             p39.startThread();
+            p40.setCash(18);
             p40.startThread();
+            p41.setCash(18);
             p41.startThread();
+            p42.setCash(18);
             p42.startThread();
+            p43.setCash(18);
             p43.startThread();
+            p44.setCash(18);
             p44.startThread();
+            p45.setCash(18);
             p45.startThread();
+            p46.setCash(18);
             p46.startThread();
+            p47.setCash(18);
             p47.startThread();
+            p48.setCash(18);
             p48.startThread();
+            p49.setCash(18);
             p49.startThread();
-            p50.startThread();*/
+            p50.setCash(18);
+            p50.startThread();
             
             for(int j = 0; j < 0; j++) {
                     WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);

@@ -91,8 +91,6 @@ public class BankTellerRole extends JobRole implements BankTeller {
 	public void msgDoneAndLeaving() {
 		print("Done and Leaving message received");
 		currentCustomer.s = SERVICE_STATE.done;
-		if(gui!=null)
-			gui.DoClearString();
 		stateChanged();
 	}
 	
