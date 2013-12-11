@@ -26,13 +26,9 @@ import city.Application.TRANSACTION_TYPE;
 import city.agents.interfaces.Bus;
 import city.agents.interfaces.Car;
 import city.agents.interfaces.Person;
-import city.animations.MarketCashierAnimation;
-import city.animations.MarketCustomerAnimation;
 import city.animations.WalkerAnimation;
 import city.animations.interfaces.AnimatedPerson;
 import city.animations.interfaces.AnimatedWalker;
-import city.animations.interfaces.MarketAnimatedCashier;
-import city.animations.interfaces.MarketAnimatedCustomer;
 import city.bases.Agent;
 import city.bases.ResidenceBuilding;
 import city.bases.interfaces.BuildingInterface;
@@ -120,6 +116,7 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.cash = 0;
+		this.hasEaten = false;
 		this.home = residence;
 		this.currentLocation = residence;
 		this.animation = animation;
@@ -137,7 +134,7 @@ public class PersonAgent extends Agent implements Person {
 		
 		residence.addResident(residentRole);
 		this.setHome(residence);
-		this.animation.setPerson(this);//TODO
+		this.animation.setPerson(this);
 	}
 
 	//==========//
@@ -393,7 +390,6 @@ public class PersonAgent extends Agent implements Person {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (RoleInterface) r0.newInstance();
-			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -428,11 +424,6 @@ public class PersonAgent extends Agent implements Person {
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(m, order);
 		this.addRole(marketCustomerRole);
-		// Market Customer Animation
-		MarketAnimatedCustomer anim = new MarketCustomerAnimation(marketCustomerRole);
-		marketCustomerRole.setAnimation(anim);	
-		anim.setVisible(true);
-		m.getPanel().addVisualizationElement(anim);
 	}
 
 	/**
@@ -755,7 +746,7 @@ public class PersonAgent extends Agent implements Person {
 //	}
 	
 	@Override
-	public void terminateWithExtremePrejudice() { // TODO i guess this has to be tested too...
+	public void terminateWithExtremePrejudice() {
 		print(Thread.currentThread().getStackTrace()[1].getMethodName());
 		
 		// Get rid of the person's car
@@ -858,18 +849,15 @@ public class PersonAgent extends Agent implements Person {
 				walkerRole = new WalkerRole(b);
 				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 				walkerAnimation.setVisible(true);
-				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				if(Application.getMainFrame() != null)
+					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 				walkerRole.setAnimation(walkerAnimation);
 				walkerRole.setPerson(this);
 				this.addRole(walkerRole);
 				walkerRole.setActive();
-				atDestination.acquire();
+				if(Application.sidewalks != null)
+					atDestination.acquire();
 				this.removeRole(walkerRole);
-				// TODO
-				// animation.goToBusStop(b);
-				//if(!PersonAnimation.beingTested)
-				// atDestination.acquire();
-				// Note: bus stop should set person's location to "null" when they get on the bus
 				setCurrentLocation(b);
 				busPassengerRole = new BusPassengerRole(d, b, destination);
 				busPassengerRole.setPerson(this);
@@ -879,12 +867,14 @@ public class PersonAgent extends Agent implements Person {
 				walkerRole = new WalkerRole(destination);
 				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 				walkerAnimation.setVisible(true);
-				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				if(Application.getMainFrame() != null)
+					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 				walkerRole.setAnimation(walkerAnimation);
 				walkerRole.setPerson(this);
 				this.addRole(walkerRole);
 				walkerRole.setActive();
-				atDestination.acquire();
+				if(Application.sidewalks != null)
+					atDestination.acquire();
 			}
 		} else {
 			// Don't do anything, you're already where you should be
@@ -931,12 +921,14 @@ public class PersonAgent extends Agent implements Person {
 					walkerRole = new WalkerRole(destination);
 					AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 					walkerAnimation.setVisible(true);
-					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+					if(Application.getMainFrame() != null)
+						Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 					walkerRole.setAnimation(walkerAnimation);
 					walkerRole.setPerson(this);
 					this.addRole(walkerRole);
 					walkerRole.setActive();
 					try {
+						if(Application.sidewalks != null)
 						atDestination.acquire();
 					} catch (InterruptedException e) {
 						e.printStackTrace();
@@ -1084,8 +1076,7 @@ public class PersonAgent extends Agent implements Person {
 		if (today >= threshold) { disposition = true; }
 		if (this.hasEaten) { disposition = false; }
 
-//		return disposition;
-		return true;
+		return disposition;
 	}
 
 	/**
@@ -1147,8 +1138,6 @@ public class PersonAgent extends Agent implements Person {
 	 * @return true if the current time is at or within their working hours
 	 */
 	private boolean inShiftRange() {
-		// TODO do we need to give the person enough time to get to work?
-
 		Calendar c = Calendar.getInstance(TimeZone.getTimeZone("UTC"));
 		c.setTime(date);
 		int hour = c.get(Calendar.HOUR_OF_DAY);

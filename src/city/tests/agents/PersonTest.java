@@ -11,7 +11,6 @@ import city.Application.FOOD_ITEMS;
 import city.agents.PersonAgent;
 import city.agents.interfaces.Person;
 import city.agents.interfaces.Person.STATES;
-import city.animations.interfaces.AnimatedBusPassenger;
 import city.bases.interfaces.BuildingInterface;
 import city.bases.interfaces.RoleInterface;
 import city.tests.agents.mocks.MockBus;
@@ -215,7 +214,7 @@ public class PersonTest extends TestCase {
 		assertEquals("Person should be at the bank", Person.STATES.atBank, person.getState());
 		assertEquals("The BankBuilding should be aware of the person's BankCustomer", 1, bank.getOccupyingRoles().size());
 		assertTrue("Person's BankCustomerRole should be active", person.getBankCustomerRole().getActive());
-		assertEquals("Person's BankCustomerRole should be making a deposit", Application.BANK_SERVICE.atmDeposit, person.getBankCustomerRole().getService());
+		assertEquals("Person's BankCustomerRole should be making a deposit", Application.BANK_SERVICE.deposit, person.getBankCustomerRole().getService());
 		
 		// Force the bank interaction to end. Simulate the deposit being successful. Run the scheduler for person.
 		// Note- a truly successful deposit would setCash(BANK_DEPOSIT_THRESHOLD - BANK_DEPOSIT_SUM) but we want the person to go to a restaurant next
@@ -690,7 +689,7 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setCash(0);
+		person.setCash(51);
 		person.setAnimation(animation);
 		
 		// Preconditions
