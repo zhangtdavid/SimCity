@@ -54,11 +54,11 @@ Designed and implemented bank, which is fully tested and functional within the c
 
 ### Shirley Chung (19%)
 
-* Market
+Market
 
  - Shirley designed and implemented market interactions. This required creating all the roles associated with market, getting them to work with personAgent, integrating with bank to deposit money, and integrating with restaurants. JUnit testing worked for all the roles except for DeliveryPerson. A significant design change was implemented late in the project that did not allow for a complete change of the test. Animation for the market is implemented. It works for both in-person and delivery customers. The first customer in line sometimes does not get helped and employees freeze when they talk to the cashier. The delivery car leaves, goes to a restaurant, and returns. The code for handling a closed restaurant upon delivery was implemented, but his scenario was never tested.
 
-* Restaurant
+Restaurant
 
  - The RestaurantChung is integrated into the city. It can handle multiple customers and the producer-consumer scenario works. A scenario running both producer-consumer and traditional messaging has not been tested. The cashier successfully interacts with the bank. The customer and waiters will sometimes freeze after ordering.
 
