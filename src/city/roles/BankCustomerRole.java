@@ -230,7 +230,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		st = STATE.entering;
 		super.setActive();
-		gui.DoGetInLine(building.getWaitingCustomersSize());
+		if (gui != null)
+			gui.DoGetInLine(building.getWaitingCustomersSize());
 	}
 	
 	public void setBusiness(Building business) {

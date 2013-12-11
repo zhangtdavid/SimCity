@@ -1,5 +1,6 @@
 package city.roles;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.Queue;
@@ -105,12 +106,12 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 			}
 		}
 		
-		if (deliveries.peek().s == DeliveryState.Pending) {
+		if (deliveries.size() > 0 && deliveries.peek().s == DeliveryState.Pending) {
 			deliverItems();
 			return true;
 		}
 		
-		if (deliveries.peek().s == DeliveryState.Arrived) {
+		if (deliveries.size() > 0 && deliveries.peek().s == DeliveryState.Arrived) {
 			checkOpen();
 			return true;
 		}
@@ -163,6 +164,11 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	}
 	
 	@Override
+	public Queue<MyDelivery> getDeliveries() {
+		return deliveries;
+	}
+	
+	@Override
 	public MarketCustomerDelivery getCustomerDelivery() {
 		return deliveries.peek().customerDelivery;
 	}
@@ -170,6 +176,11 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 	@Override
 	public int getOrderId() {
 		return deliveries.peek().orderId;
+	}
+	
+	@Override
+	public DeliveryState getDeliveryState() {
+		return deliveries.peek().s;
 	}
 	
 	@Override
@@ -205,16 +216,15 @@ public class MarketDeliveryPersonRole extends JobRole implements MarketDeliveryP
 //	=====================================================================
 	public class MyDelivery {
 		MarketCustomerDelivery customerDelivery;
-		Map<FOOD_ITEMS, Integer> collectedItems;
+		Map<FOOD_ITEMS, Integer> collectedItems  = new HashMap<FOOD_ITEMS, Integer>();
 		int orderId;
-		private DeliveryState s;
+		DeliveryState s;
 		boolean received;
 		
 		public MyDelivery(MarketCustomerDelivery c, Map<FOOD_ITEMS, Integer> i, int id) {
 			customerDelivery = c;
 	        for (FOOD_ITEMS s: i.keySet()) {
 	        	collectedItems.put(s, i.get(s)); // initialize all values in collectedItems to 0
-
 	        }
             orderId = id;
             s = DeliveryState.Pending;

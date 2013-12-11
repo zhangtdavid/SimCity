@@ -2,11 +2,14 @@ package city.tests.roles.mocks;
 
 import java.beans.PropertyChangeSupport;
 import java.util.Map;
+import java.util.Queue;
 
 import utilities.EventLog;
 import utilities.LoggedEvent;
 import city.Application.FOOD_ITEMS;
 import city.buildings.interfaces.Market;
+import city.buildings.interfaces.Market.DeliveryState;
+import city.roles.MarketDeliveryPersonRole.MyDelivery;
 import city.roles.interfaces.MarketCustomerDelivery;
 import city.roles.interfaces.MarketDeliveryPerson;
 import city.tests.bases.mocks.MockRole;
@@ -78,6 +81,18 @@ public class MockMarketDeliveryPerson extends MockRole implements MarketDelivery
 	public void msgArrivedAtDestination() {
 		// TODO Auto-generated method stub
 		
+	}
+
+	@Override
+	public Queue<MyDelivery> getDeliveries() {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public DeliveryState getDeliveryState() {
+		// TODO Auto-generated method stub
+		return null;
 	}
 
 }

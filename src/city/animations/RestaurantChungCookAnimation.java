@@ -63,7 +63,7 @@ public class RestaurantChungCookAnimation extends Animation implements Restauran
 	}
 
 	public void draw(Graphics2D g) {
-		g.setColor(Color.RED);
+		g.setColor(Color.BLUE);
 		g.fillRect(xPos, yPos, RestaurantChungPanel.RECTDIM, RestaurantChungPanel.RECTDIM);
 		g.setColor(Color.BLACK);
 		if (cooking) {
