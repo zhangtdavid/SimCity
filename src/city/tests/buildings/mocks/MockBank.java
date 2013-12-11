@@ -3,6 +3,7 @@ package city.tests.buildings.mocks;
 import java.beans.PropertyChangeSupport;
 import java.util.List;
 
+import city.animations.BankCustomerAnimation;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
 import city.buildings.interfaces.Bank;
@@ -49,6 +50,12 @@ public class MockBank extends MockBuilding implements Bank {
 	public boolean getBusinessIsOpen() {
 		// TODO Auto-generated method stub
 		return false;
+	}
+
+	@Override
+	public void removeWaitingCustomer(BankCustomerAnimation gui) {
+		// TODO Auto-generated method stub
+		
 	}
 	
 }
