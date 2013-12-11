@@ -53,10 +53,6 @@ public class BankBuilding extends Building implements Bank {
 		return disposition;
 	}
 	
-	@Override
-	public List<Loan> getLoans(){
-		return loans;
-	}
 	
 	@Override
 	public List<Account> getAccounts(){
@@ -148,6 +144,18 @@ public class BankBuilding extends Building implements Bank {
 			balance = money;
 			acctNum = num;
 		}
+	}
+
+	@Override
+	public int getWaitingCustomersSize() {
+		// TODO Auto-generated method stub
+		return waitingCustomers.size();
+	}
+
+	@Override
+	public void addWaitingCustomer(BankCustomerAnimation gui) {
+		// TODO Auto-generated method stub
+		waitingCustomers.add(gui);
 	}
 	
 }

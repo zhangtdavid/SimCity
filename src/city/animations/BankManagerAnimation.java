@@ -17,7 +17,8 @@ public class BankManagerAnimation extends Animation{
 
     private BankManagerRole agent = null;
     
-    private int xPos, yPos;//default waiter position
+    private int xPos;
+    private int yPos;//default waiter position
     private int xDestination, yDestination;//default start position
 
     public static final int checkIn = -10;
@@ -32,11 +33,11 @@ public class BankManagerAnimation extends Animation{
 
     public BankManagerAnimation(BankManagerRole m) {
         agent = m;
-		xPos = 0;
-        yPos = 400;
+        xPos = -20;
+        yPos = -20;
 		xDestination = 400;
 		yDestination = 400;
-		moving = true;
+		moving = false;
     }
 
     public void updatePosition() {
@@ -65,6 +66,9 @@ public class BankManagerAnimation extends Animation{
         }
     }
     
+    public void DoEnterBank(){
+    	moving = true;
+    }
     public void DoDirectDeposit(int amount){
     	dialogue = ("+$" + amount); 
     	

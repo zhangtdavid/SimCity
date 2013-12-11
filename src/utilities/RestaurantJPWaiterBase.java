@@ -314,6 +314,7 @@ public abstract class RestaurantJPWaiterBase extends JobRole implements Restaura
 	@Override
 	public void setActive() {
 		super.setActive();
+		waiterGui.DoGoToOrigin();
 	}
 	
 	@Override

@@ -33,6 +33,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	String myOrder = new String();
 	int bill = 0;
 	RestaurantJPCashier cashier;
+	private RestaurantJPHostRole host;
 
 	//Constructor
 	
@@ -175,7 +176,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 //-------------------------------------------------------------------------------------------Actions
 
 	public void goToRestaurant() {
-		building.host.msgIWantToEat(this);//send our instance, so he can respond to us
+		host.msgIWantToEat(this);//send our instance, so he can respond to us
 	}
 
 	private void SitDown() {
@@ -247,7 +248,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	private void DecideToLeave(){
 		int leave = (int) (Math.random() * 2);
 		if(leave == 1){
-			building.host.msgLeaving(this);
+			host.msgLeaving(this);
 			customerGui.DoExitRestaurant();
 			state = AgentState.DoingNothing;
 			event = AgentEvent.none;
@@ -280,6 +281,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	
 	public void setActive(){
 		super.setActive();
+		customerGui.DoEnterRestaurant();
 		gotHungry();
 	}
 	
@@ -320,5 +322,12 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	public void print(String msg) {
         AlertLog.getInstance().logMessage(AlertTag.RESTAURANTJP, "RestaurantJPCustomerRole " + this.getPerson().getName(), msg);
     }
+
+
+	public void setHost(RestaurantJPHostRole host) {
+		this.host = host;
+		// TODO Auto-generated method stub
+		
+	}
 }
 

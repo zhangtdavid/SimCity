@@ -84,6 +84,7 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 			if(!super.occupyingRoleExists(c)) {
 				RestaurantJPCustomerAnimation anim = new RestaurantJPCustomerAnimation(c, customerCounter);
 				customerCounter++;
+				c.setHost(host);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);

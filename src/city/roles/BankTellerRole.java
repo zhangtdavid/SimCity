@@ -115,6 +115,7 @@ public class BankTellerRole extends JobRole implements BankTeller {
 			if(currentCustomer.t == SERVICE_TYPE.deposit){
 				if(currentCustomer.s == SERVICE_STATE.pending){
 					TryDeposit();
+						
 					return true;
 				}
 				if(currentCustomer.s == SERVICE_STATE.newAccount){
@@ -253,6 +254,13 @@ public class BankTellerRole extends JobRole implements BankTeller {
 		print("Customer has been set active");
 		building.getManager().msgAvailable(this);
 		super.setActive();
+		gui.DoGoToStation();
+		try {
+			atDestination.acquire();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 	
 	@Override
@@ -300,5 +308,9 @@ public class BankTellerRole extends JobRole implements BankTeller {
 		// TODO Auto-generated method stub
 		atDestination.release();// = true;
 		stateChanged();
+	}
+	
+	public void setBoothNumber(int place){
+		boothNumber = place;
 	}
 }

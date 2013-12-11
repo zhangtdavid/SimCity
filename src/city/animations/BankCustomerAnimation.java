@@ -30,10 +30,8 @@ public class BankCustomerAnimation extends Animation{
 
     public BankCustomerAnimation(BankCustomer bc) {
         agent = bc;
-		xPos = 0;
-		yPos = 250;
-		xDestination = xPos;
-		yDestination = yPos;
+		xPos = -20;
+		yPos = 520;
 		for(int i = 0; i<3; i++){
 			TellerLocations.put(0, 160+i*100);
 		}
@@ -59,7 +57,7 @@ public class BankCustomerAnimation extends Animation{
 
     public void draw(Graphics2D g) {
     	
-        g.setColor(Color.DARK_GRAY);
+        g.setColor(Color.BLUE);
         g.fillRect(xPos, yPos, customerSize, customerSize);
         if(talking){
         	g.setColor(Color.BLACK);
@@ -75,6 +73,7 @@ public class BankCustomerAnimation extends Animation{
     	talking = true;
     	xDestination = lineX;
     	yDestination = lineBeginY + 50*place;
+    	moving = true;
     }
     
     public void MoveUpInLine(){
@@ -90,8 +89,8 @@ public class BankCustomerAnimation extends Animation{
     }
     
     public void DoExitBank(){
-    	xDestination = 0;
-    	yDestination = 250;
+    	xDestination = -20;
+    	yDestination = -20;
     	dialogue = "Thank you. Done and Leaving";
     	talking = true;
     	moving = true;

@@ -34,12 +34,12 @@ public class RestaurantJPCustomerAnimation extends Animation{
 	
 	public RestaurantJPCustomerAnimation(RestaurantJPCustomerRole c, int place){ //HostAgent m) {//Removed RestaurantGui parameter
 		agent = c;
-		xPos = 450;
-		yPos = 50 + place*50;
+		xPos = -20;
+		yPos = -20;
+		xHome = 450;
+		yHome = 50 + place*50;
 		xDestination = xPos;
 		yDestination = yPos;
-		xHome = xPos;
-		yHome = yPos;
 		//maitreD = m;
 		//this.gui = gui;
 	}
@@ -82,6 +82,11 @@ public class RestaurantJPCustomerAnimation extends Animation{
 
 	public boolean isPresent() {
 		return isPresent;
+	}
+	
+	public void DoEnterRestaurant(){
+		xDestination = xHome;
+		yDestination = yHome;
 	}
 	public void setHungry() {
 		isHungry = true;

@@ -15,26 +15,28 @@ public class BankTellerAnimation extends Animation{
     private boolean moving = false;
     private boolean talking = false;
     private String dialogue;
-    private int xHome = 310;
+    private int xHome = 330;
     private int yHome;
     private int xVault = 420;
     private int yVault = 240;
     
     private static final int tellerSize = 20;
     private int xPos = 0, yPos = 0;//default waiter position
-    private int xDestination = 0, yDestination = 0;//default start position
+    private int xDestination, yDestination;//default start position
     
     public Map <Integer, Integer> TellerLocations = new HashMap<Integer, Integer>(); 
 
     public BankTellerAnimation(BankTellerRole r, int place) {
         System.out.println(place);
     	agent = r;	//msgAvailable
-		xPos = 400;
-		yPos = 0;
+		xPos = -20;
+		yPos = -20;
+		moving = false;
 		for(int i = 0; i<3; i++){
-			TellerLocations.put(i, 160+i*100);
+			TellerLocations.put(i, 140+i*100);
 		}
 		yHome = TellerLocations.get(place);
+		agent.setBoothNumber(place);
     }
 
     public void updatePosition() {

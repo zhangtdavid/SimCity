@@ -55,6 +55,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	public void msgWhatDoYouWant(int booth, BankTeller tell) {
 		print("WhatDoYouWant message received");
+		building.removeWaitingCustomer(gui);
 		t = tell;
 		boothNumber = booth;
 		st = STATE.requestService;
@@ -143,8 +144,8 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void AskForService(){
 		st = STATE.inProgress;
 		if(gui!=null){
-		gui.DoGetInLine(building.waitingCustomers.size());
-		building.waitingCustomers.add(gui);
+		gui.DoGetInLine(building.getWaitingCustomersSize());
+		building.addWaitingCustomer(gui);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -158,7 +159,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	private void Deposit(){
 		st = STATE.inProgress;
 		if(gui!=null){
-		gui.DoGoToTeller(boothNumber, "Deposit $" + amount);
+		gui.DoGoToTeller(boothNumber, "Deposit $" + amount + " " + acctNum + " " + boothNumber);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -169,6 +170,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		building.removeWaitingCustomer(gui);
 		netTransaction -= amount;
 		t.msgDeposit(amount, acctNum);
+		
 	}
 	
 	private void RequestWithdrawal(){
@@ -228,6 +230,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		st = STATE.entering;
 		super.setActive();
+		gui.DoGetInLine(building.getWaitingCustomersSize());
 	}
 	
 	public void setBusiness(Building business) {

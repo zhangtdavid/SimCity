@@ -120,6 +120,8 @@ public class Application {
         public static CitySidewalkLayout sidewalks;
 
         private static final DataModel model = new DataModel();
+        
+        private static List<PersonAgent> people = new ArrayList<PersonAgent>();
 
         /**
          * Main routine to start the program.
@@ -624,58 +626,64 @@ public class Application {
             p35.setOccupation(marketEmployee2);
 
 
-            model.addPerson(p1);
-            model.addPerson(p2);
-            model.addPerson(p3);
-            model.addPerson(p4);
-            model.addPerson(p5);
-            model.addPerson(p6);
-            model.addPerson(p7);
-            model.addPerson(p8);
-            model.addPerson(p9);
-            model.addPerson(p10);
-            model.addPerson(p11);
-            model.addPerson(p12);
-            model.addPerson(p13);
-            model.addPerson(p14);
-            model.addPerson(p15);
-            model.addPerson(p16);
-            model.addPerson(p17);
-            model.addPerson(p18);
-            model.addPerson(p19);
-            model.addPerson(p20);
-            model.addPerson(p21);
-            model.addPerson(p22);
-            model.addPerson(p23);
-            model.addPerson(p24);
-            model.addPerson(p25);
-            model.addPerson(p26);
-            model.addPerson(p27);
-            model.addPerson(p28);
-            model.addPerson(p29);
-            model.addPerson(p30);
-            model.addPerson(p31);
-            model.addPerson(p32);
-            model.addPerson(p33);
-            model.addPerson(p34);
-            model.addPerson(p35);
-            model.addPerson(p36);
-            model.addPerson(p37);
-            model.addPerson(p38);
-            model.addPerson(p39);
-            model.addPerson(p40);
-            model.addPerson(p41);
-            model.addPerson(p42);
-            model.addPerson(p43);
-            model.addPerson(p44);
-            model.addPerson(p45);
-            model.addPerson(p46);
-            model.addPerson(p47);
-            model.addPerson(p48);
-            model.addPerson(p49);
-            model.addPerson(p50);
+            people.add(p1);
+            people.add(p2);
+            people.add(p3);
+            people.add(p4);
+            people.add(p5);
+            people.add(p6);
+            people.add(p7);
+            people.add(p8);
+            people.add(p9);
+            people.add(p10);
+            people.add(p11);
+            people.add(p12);
+            people.add(p13);
+            people.add(p14);
+            people.add(p15);
+            people.add(p16);
+            people.add(p17);
+            people.add(p18);
+            people.add(p19);
+            people.add(p20);
+            people.add(p21);
+            people.add(p22);
+            people.add(p23);
+            people.add(p24);
+            people.add(p25);
+            people.add(p26);
+            people.add(p27);
+            people.add(p28);
+            people.add(p29);
+            people.add(p30);
+            people.add(p31);
+            people.add(p32);
+            people.add(p33);
+            people.add(p34);
+            people.add(p35);
+            people.add(p36);
+            people.add(p37);
+            people.add(p38);
+            people.add(p39);
+            people.add(p40);
+            people.add(p41);
+            people.add(p42);
+            people.add(p43);
+            people.add(p44);
+            people.add(p45);
+            people.add(p46);
+            people.add(p47);
+            people.add(p48);
+            people.add(p49);
+            people.add(p50);
             
+            for(PersonAgent p : people){
+            	model.addPerson(p);
+            }
             
+            for(PersonAgent p : people){
+            	p.setCash(200);
+            }
      
                     // delivery Person's car
                     CarAgent carDelivery = new CarAgent(market1, marketDelivery); // setting b to be the current location of the car
@@ -970,7 +978,7 @@ public class Application {
             p37.startThread();
             p38.startThread();
             p39.startThread();
-            p40.startThread();
+            /*p40.startThread();
             p41.startThread();
             p42.startThread();
             p43.startThread();
@@ -980,7 +988,7 @@ public class Application {
             p47.startThread();
             p48.startThread();
             p49.startThread();
-            p50.startThread();
+            p50.startThread();*/
             for(int j = 0; j < 0; j++) {
                     WalkerAnimation testPersonAnimation = new WalkerAnimation(null, CityMap.findRandomBuilding(BUILDING.busStop), sidewalks);
                     testPersonAnimation.setVisible(true);

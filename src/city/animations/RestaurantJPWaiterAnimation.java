@@ -35,12 +35,12 @@ public class RestaurantJPWaiterAnimation extends Animation{
 
     public RestaurantJPWaiterAnimation(RestaurantJPWaiterBase w, int place) {
         agent = w;
-		xPos = 400;
-		yPos = 50 + place*50;
+		xPos = -20;
+		yPos = -20;
 		xDestination = xPos;
 		yDestination = yPos;
-		xHome = xPos;
-		yHome = yPos;
+		xHome = 400;
+		yHome = 50 + place*50;
         //TableLocations.put(1, (200, 250));
     }
 

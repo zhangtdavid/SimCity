@@ -241,7 +241,8 @@ public class BankManagerRole extends JobRole implements BankManager {
 	@Override
 	public void setActive() {
 		building.setManager(this);
-		super.setActive();	
+		super.setActive();
+		gui.DoEnterBank();
 	}
 	
 	public void setInactive(){
