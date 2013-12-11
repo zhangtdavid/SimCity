@@ -12,7 +12,6 @@ import city.roles.RestaurantJPHostRole;
 
 public class RestaurantJPHostAnimation extends Animation{
 
-    private RestaurantJPHostRole agent = null;
 
     private int xPos = -20, yPos = -20;//default waiter position
     private int xDestination = -20, yDestination = -20;//default start position
@@ -23,7 +22,7 @@ public class RestaurantJPHostAnimation extends Animation{
     public Map <Integer, Dimension> TableLocations = new HashMap<Integer, Dimension>(); 
 
     public RestaurantJPHostAnimation(RestaurantJPHostRole agent) {
-        this.agent = agent;
+       //  this.agent = agent;
         //TableLocations.put(1, (200, 250));
     }
 

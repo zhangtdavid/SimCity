@@ -16,7 +16,6 @@ import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BankManager;
 import city.roles.interfaces.BankTeller;
-import city.roles.interfaces.Resident;
 
 public class BankManagerRole extends JobRole implements BankManager {
 	

@@ -9,7 +9,6 @@ import city.gui.interiors.MarketPanel;
 import city.roles.interfaces.MarketCashier;
 
 public class MarketCashierAnimation extends Animation implements MarketAnimatedCashier {
-	private MarketCashier cashier = null;
 	
 //	Location Information
 //	=====================================================================	
@@ -17,7 +16,7 @@ public class MarketCashierAnimation extends Animation implements MarketAnimatedC
 	private int xDestination = xPos, yDestination = yPos;
 
 	public MarketCashierAnimation(MarketCashier c) {
-		cashier = c;
+		// cashier = c;
 	}
 
 	public void updatePosition() {

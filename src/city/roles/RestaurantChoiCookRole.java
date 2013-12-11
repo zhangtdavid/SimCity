@@ -25,9 +25,7 @@ import city.bases.interfaces.RestaurantBuildingInterface.Food;
 import city.buildings.MarketBuilding;
 import city.buildings.RestaurantChoiBuilding;
 import city.buildings.interfaces.Market;
-import city.roles.RestaurantChungCookRole.MyMarketOrder;
 import city.roles.interfaces.MarketCustomerDelivery;
-import city.roles.interfaces.RestaurantChoiCashier;
 import city.roles.interfaces.RestaurantChoiCook;
 import city.roles.interfaces.RestaurantChungCook.MarketOrderState;
 
@@ -180,7 +178,7 @@ public class RestaurantChoiCookRole extends JobRole implements RestaurantChoiCoo
             }
             // The role becomes inactive when the order is fulfilled, cook should remove the role from its list
             else if (!r.getActive()) {
-                    MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
+                    // MyMarketOrder mo = findMarketOrder(((MarketCustomerDelivery) r).getOrder().getOrderId());
                     marketCustomerDeliveryRoles.remove(r);
                     break;
             }

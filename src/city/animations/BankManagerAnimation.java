@@ -10,7 +10,6 @@ import city.roles.BankManagerRole;
 
 public class BankManagerAnimation extends Animation{
 
-    private BankManagerRole agent = null;
     
     private int xPos;
     private int yPos;//default waiter position
@@ -28,7 +27,7 @@ public class BankManagerAnimation extends Animation{
     
 
     public BankManagerAnimation(BankManagerRole m) {
-        agent = m;
+        // agent = m;
         xPos = -20;
         yPos = -20;
 		xDestination = 400;

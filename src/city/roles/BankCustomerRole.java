@@ -10,7 +10,6 @@ import city.animations.BankCustomerAnimation;
 import city.bases.Building;
 import city.bases.Role;
 import city.bases.interfaces.BuildingInterface;
-import city.buildings.BankBuilding;
 import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankCustomer;
 import city.roles.interfaces.BankTeller;

@@ -28,9 +28,9 @@ public class RestaurantChungMenu {
 			return price;
 		}
 		
-		private boolean getAvailable() {
-			return available;
-		}
+//		private boolean getAvailable() {
+//			return available;
+//		}
 		
 		// Setters
 		public void setItem(FOOD_ITEMS item) {

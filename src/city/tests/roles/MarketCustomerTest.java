@@ -10,7 +10,6 @@ import city.Application;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
-import city.bases.Animation;
 import city.buildings.BankBuilding;
 import city.buildings.HouseBuilding;
 import city.buildings.MarketBuilding;

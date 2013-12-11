@@ -4,7 +4,6 @@ import trace.AlertLog;
 import trace.AlertTag;
 import utilities.RestaurantChungWaiterBase;
 import city.Application.FOOD_ITEMS;
-import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.buildings.RestaurantChungBuilding;
 import city.buildings.interfaces.RestaurantChung;

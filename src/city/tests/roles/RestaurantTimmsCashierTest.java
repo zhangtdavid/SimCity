@@ -3,8 +3,6 @@ package city.tests.roles;
 import junit.framework.TestCase;
 import city.buildings.RestaurantTimmsBuilding;
 import city.buildings.RestaurantTimmsBuilding.Check;
-import city.gui.exteriors.CityViewRestaurantTimms;
-import city.gui.exteriors.CityViewRestaurantZhang;
 import city.roles.RestaurantTimmsCashierRole;
 import city.roles.interfaces.RestaurantTimmsCashier;
 import city.tests.agents.mocks.MockPerson;

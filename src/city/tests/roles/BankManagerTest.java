@@ -4,7 +4,6 @@ import junit.framework.TestCase;
 import city.buildings.BankBuilding;
 import city.buildings.BankBuilding.Account;
 import city.buildings.BankBuilding.Loan;
-import city.buildings.interfaces.Bank;
 import city.roles.BankManagerRole;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.roles.mocks.MockBankCustomer;

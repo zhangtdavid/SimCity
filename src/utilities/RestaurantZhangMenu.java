@@ -1,10 +1,10 @@
 package utilities;
 
 import java.util.Collections;
-import java.util.Random;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.Random;
 
 public class RestaurantZhangMenu {
 	private static Map<String, Integer> menuItemsMap = Collections.synchronizedMap(new HashMap<String, Integer>());

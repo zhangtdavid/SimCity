@@ -9,7 +9,6 @@ import city.gui.interiors.RestaurantChungPanel;
 import city.roles.interfaces.RestaurantChungCashier;
 
 public class RestaurantChungCashierAnimation extends Animation implements RestaurantChungAnimatedCashier {
-	private RestaurantChungCashier agent = null;
 	
 //	Location Information
 //	=====================================================================
@@ -17,7 +16,7 @@ public class RestaurantChungCashierAnimation extends Animation implements Restau
 	private int xDestination = xPos, yDestination = yPos;
 
 	public RestaurantChungCashierAnimation(RestaurantChungCashier c) {
-		agent = c;
+		// agent = c;
 	}
 
 	public void updatePosition() {

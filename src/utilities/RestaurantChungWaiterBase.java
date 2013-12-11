@@ -5,7 +5,6 @@ import java.util.concurrent.Semaphore;
 import trace.AlertLog;
 import trace.AlertTag;
 import city.Application.FOOD_ITEMS;
-import city.animations.RestaurantChungWaiterAnimation;
 import city.animations.interfaces.RestaurantChungAnimatedWaiter;
 import city.bases.JobRole;
 import city.buildings.interfaces.RestaurantChung;

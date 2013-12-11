@@ -17,7 +17,6 @@ import city.roles.RestaurantJPCustomerRole;
 import city.roles.RestaurantJPHostRole;
 import city.roles.RestaurantJPWaiterRole;
 import city.roles.RestaurantJPWaiterSharedDataRole;
-import city.roles.RestaurantZhangCashierRole;
 import city.roles.interfaces.RestaurantJPCashier;
 import city.roles.interfaces.RestaurantJPCustomer;
 import city.roles.interfaces.RestaurantJPWaiter;

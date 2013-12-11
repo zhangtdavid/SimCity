@@ -257,7 +257,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 //  Classes 
 //	=====================================================================		
 	public class Transaction {
-		private MarketEmployee employee;
+		// private MarketEmployee employee;
 		private MarketCustomer customer;
 		private MarketCustomerDelivery customerDelivery;
 		private MarketCustomerDeliveryPayment customerDeliveryPayment;
@@ -273,7 +273,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		
 		// constructor for in person order
 		public Transaction(MarketEmployee e, MarketCustomer c, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-			employee = e;
+			// employee = e;
 			customer = c;
 			customerDelivery = null;
 			customerDeliveryPayment = null;
@@ -291,7 +291,7 @@ public class MarketCashierRole extends JobRole implements MarketCashier {
 		
 		// constructor for delivery order
 		public Transaction(MarketEmployee e, MarketCustomerDelivery c, MarketCustomerDeliveryPayment cPay, Map<FOOD_ITEMS, Integer> o, Map<FOOD_ITEMS, Integer> i, int id) {
-			employee = e;
+			// employee = e;
 			customer = null;
 			customerDelivery = c;
 			customerDeliveryPayment = cPay;

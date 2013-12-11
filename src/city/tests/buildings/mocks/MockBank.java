@@ -5,7 +5,6 @@ import java.util.List;
 
 import city.animations.BankCustomerAnimation;
 import city.buildings.BankBuilding.Account;
-import city.buildings.BankBuilding.Loan;
 import city.buildings.interfaces.Bank;
 import city.roles.interfaces.BankManager;
 import city.tests.bases.mocks.MockBuilding;

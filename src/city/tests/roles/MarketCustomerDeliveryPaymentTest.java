@@ -20,13 +20,13 @@ import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.MarketCustomerDeliveryPaymentRole;
+import city.tests.agents.mocks.MockPerson;
 import city.tests.roles.mocks.MockMarketCashier;
 import city.tests.roles.mocks.MockMarketCustomer;
 import city.tests.roles.mocks.MockMarketCustomerDelivery;
 import city.tests.roles.mocks.MockMarketDeliveryPerson;
 import city.tests.roles.mocks.MockMarketEmployee;
 import city.tests.roles.mocks.MockMarketManager;
-import city.tests.agents.mocks.MockPerson;
 
 public class MarketCustomerDeliveryPaymentTest extends TestCase {
 	Bank bank;

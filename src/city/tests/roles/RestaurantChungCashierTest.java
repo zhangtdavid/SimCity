@@ -3,9 +3,9 @@ package city.tests.roles;
 import java.util.HashMap;
 import java.util.Map;
 
+import junit.framework.TestCase;
 import utilities.MarketOrder;
 import utilities.MarketTransaction.MarketTransactionState;
-import junit.framework.TestCase;
 import city.Application.BUILDING;
 import city.Application.CityMap;
 import city.Application.FOOD_ITEMS;
@@ -16,6 +16,7 @@ import city.buildings.interfaces.Bank;
 import city.buildings.interfaces.Market;
 import city.buildings.interfaces.RestaurantChung;
 import city.roles.RestaurantChungCashierRole;
+import city.roles.interfaces.RestaurantChungCashier.TransactionState;
 import city.tests.agents.mocks.MockPerson;
 import city.tests.roles.mocks.MockBankManager;
 import city.tests.roles.mocks.MockRestaurantChungCook;
@@ -23,7 +24,6 @@ import city.tests.roles.mocks.MockRestaurantChungCustomer;
 import city.tests.roles.mocks.MockRestaurantChungHost;
 import city.tests.roles.mocks.MockRestaurantChungWaiterMessageCook;
 import city.tests.roles.mocks.MockRestaurantChungWaiterRevolvingStand;
-import city.roles.interfaces.RestaurantChungCashier.TransactionState;
 
 /**
  * 
