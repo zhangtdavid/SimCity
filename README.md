@@ -40,12 +40,6 @@ Please read the [Coding Standards](https://github.com/usc-csci201-fall2013/team1
  - The city operates on 2, 12-hour shifts. Half of the city's occupants are workers while the other half are people or customers at a given time. When people are not working, they can decide to stay at home, go to a restaurant, go the bank, or the market depending on their disposition. Workers actually work 24 hour shifts.
 
 ## Problems
- - Banks and markets are not yet fully integrated.
- - Tests for GUI have not been written. Roles and agents are only partially tested.
- - There is still work to be done in the animations. People do not walk in the streets. Banks and markets are not animated. The user cannot interact with the GUI to influence behaviors in the city.
- - Some restaurants do not work.
- - The console has many errors, mostly due to partial integration of the market into restaurants.
- - Everyone goes to work or goes to eat and then just stays there.
  
 ## Project Contributions
 ### John Timms (22%)
@@ -62,7 +56,7 @@ Designed and implemented bank, which is fully tested and functional within the c
 
 ### Shirley Chung (19%)
 
-*Market
+* Market
 
  - Shirley designed and implemented market interactions. This required creating all the roles associated with market, getting them to work with personAgent, integrating with bank to deposit money, and integrating with restaurants. JUnit testing worked for all the roles except for DeliveryPerson. A significant design change was implemented late in the project that did not allow for a complete change of the test. Animation for the market is implemented. It works for both in-person and delivery customers. The first customer in line sometimes does not get helped and employees freeze when they talk to the cashier. The delivery car leaves, goes to a restaurant, and returns. The code for handling a closed restaurant upon delivery was implemented, but his scenario was never tested.
 
