@@ -9,7 +9,9 @@ import java.util.concurrent.ConcurrentHashMap;
 import city.Application;
 import city.Application.BUILDING;
 import city.Application.FOOD_ITEMS;
+import city.animations.BankCustomerAnimation;
 import city.animations.MarketCashierAnimation;
+import city.animations.MarketCustomerAnimation;
 import city.animations.MarketEmployeeAnimation;
 import city.animations.interfaces.MarketAnimatedCashier;
 import city.animations.interfaces.MarketAnimatedEmployee;
@@ -21,6 +23,7 @@ import city.gui.exteriors.CityViewBuilding;
 import city.gui.interiors.MarketPanel;
 import city.roles.BankCustomerRole;
 import city.roles.MarketCashierRole;
+import city.roles.MarketCustomerRole;
 import city.roles.MarketDeliveryPersonRole;
 import city.roles.MarketEmployeeRole;
 import city.roles.MarketManagerRole;
@@ -175,7 +178,6 @@ public class MarketBuilding extends Building implements Market {
 			
 			if(!super.occupyingRoleExists(m)) {
 				manager = m;
-				//m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
 			}			
 		}
@@ -188,7 +190,6 @@ public class MarketBuilding extends Building implements Market {
 				anim.setVisible(true);
 				this.getPanel().addVisualizationElement(anim);
 				cashier = c;
-				//c.setActive();
 				super.addOccupyingRole(c, anim);
 			}
 		}
@@ -209,14 +210,18 @@ public class MarketBuilding extends Building implements Market {
 			MarketDeliveryPersonRole m = (MarketDeliveryPersonRole)r;
 			
 			if(!super.occupyingRoleExists(m)) {
-				//RestaurantChoiCustomerAnimation anim = new RestaurantChoiCustomerAnimation(c); 
-				//c.setGui(anim);	
-//				c.setAnimation(anim);
-				//anim.setVisible(true);
-				//panel.addVisualizationElement(anim);
 				this.addDeliveryPerson(m);
-				//m.setActive();
 				super.addOccupyingRole(m, null); // null --> anim
+			}
+		}
+		if(r instanceof MarketCustomerRole) {
+			MarketCustomerRole c = (MarketCustomerRole)r;
+			if(!super.occupyingRoleExists(c)) {
+				MarketCustomerAnimation anim = new MarketCustomerAnimation(c); 
+				c.setAnimation(anim);
+				anim.setVisible(true);
+				this.getPanel().addVisualizationElement(anim);
+				super.addOccupyingRole(c, anim);
 			}
 		}
 	}

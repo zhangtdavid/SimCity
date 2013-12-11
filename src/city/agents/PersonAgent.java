@@ -852,7 +852,7 @@ public class PersonAgent extends Agent implements Person {
 				carPassengerRole.setActive();
 				carPassengerRole.setPerson(this);
 				this.addRole(carPassengerRole);
-			} else if(this.cash <= (Bus.BUS_FARE * 10)) { // Only goes to bus if he has 10 times the amount of bus fare in cash
+			} else if(this.cash >= (Bus.BUS_FARE * 10)) { // Only goes to bus if he has 10 times the amount of bus fare in cash
 				BusStop b = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, this);
 				BusStop d = (BusStop) CityMap.findClosestBuilding(BUILDING.busStop, destination);
 				walkerRole = new WalkerRole(b);

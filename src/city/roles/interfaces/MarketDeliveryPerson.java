@@ -1,10 +1,13 @@
 package city.roles.interfaces;
 
 import java.util.Map;
+import java.util.Queue;
 
 import city.Application.FOOD_ITEMS;
 import city.bases.interfaces.RoleInterface;
 import city.buildings.interfaces.Market;
+import city.buildings.interfaces.Market.DeliveryState;
+import city.roles.MarketDeliveryPersonRole.MyDelivery;
 
 public interface MarketDeliveryPerson extends RoleInterface {
 	// Data
@@ -32,6 +35,10 @@ public interface MarketDeliveryPerson extends RoleInterface {
 	public void setMarket(Market market);
 
 	void msgArrivedAtDestination();
+
+	Queue<MyDelivery> getDeliveries();
+
+	DeliveryState getDeliveryState();
 
 
 	// Utilities

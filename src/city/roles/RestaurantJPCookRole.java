@@ -158,7 +158,6 @@ public class RestaurantJPCookRole extends JobRole implements RestaurantJPCook {
 		}
 		
 		if(!waitingToCheckStand) {
-			print("Waiting 5 seconds to check the stand");
 			waitingToCheckStand = true;
 			timer.schedule(new TimerTask() {
 				public void run() {
