@@ -19,7 +19,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	
 	// Data
 	
-	private BankBuilding building;
+	private Bank building;
 	private BuildingInterface business = null;
 	private Application.TRANSACTION_TYPE depositType;
 	private Application.BANK_SERVICE service;
@@ -35,13 +35,13 @@ public class BankCustomerRole extends Role implements BankCustomer {
 	// Constructor
 	
 	public BankCustomerRole(BuildingInterface bus, Bank b) {
-		building = (BankBuilding) b;
+		building = b;
 		business = bus;
 		st = STATE.none;
 	}
 	
 	public BankCustomerRole(Bank b) {
-		building = (BankBuilding)b;
+		building = b;
 		st = STATE.none;
 	}
 	
