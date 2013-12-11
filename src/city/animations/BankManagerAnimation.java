@@ -26,6 +26,7 @@ public class BankManagerAnimation extends Animation{
     
     private boolean moving;
     private boolean depositing = false;
+    private boolean talking = false;
     private String dialogue = new String();
     
     public Map<Integer, Integer> TellerLocations = new HashMap<Integer, Integer>();
@@ -64,6 +65,10 @@ public class BankManagerAnimation extends Animation{
         	g.setColor(Color.BLACK);
         	g.drawString(dialogue, 450, 260);
         }
+		if(talking){
+        	g.setColor(Color.BLACK);
+        	g.drawString(dialogue, xPos-50, yPos);
+        }
     }
     
     public void DoEnterBank(){
@@ -71,6 +76,13 @@ public class BankManagerAnimation extends Animation{
     }
     public void DoDirectDeposit(int amount){
     	dialogue = ("+$" + amount); 
-    	
+    	depositing = true;
     }
+
+	public void DoString(String string) {
+		dialogue = string;
+		talking = true;
+		// TODO Auto-generated method stub
+		
+	}
 }

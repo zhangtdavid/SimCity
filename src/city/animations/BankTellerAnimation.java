@@ -27,7 +27,6 @@ public class BankTellerAnimation extends Animation{
     public Map <Integer, Integer> TellerLocations = new HashMap<Integer, Integer>(); 
 
     public BankTellerAnimation(BankTellerRole r, int place) {
-        System.out.println(place);
     	agent = r;	//msgAvailable
 		xPos = -20;
 		yPos = -20;

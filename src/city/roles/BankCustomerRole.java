@@ -160,6 +160,7 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		st = STATE.inProgress;
 		if(gui!=null){
 		gui.DoGoToTeller(boothNumber, "Deposit $" + amount + " " + acctNum + " " + boothNumber);
+		building.removeWaitingCustomer(gui);
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
@@ -167,7 +168,6 @@ public class BankCustomerRole extends Role implements BankCustomer {
 			e.printStackTrace();
 		}
 		}
-		building.removeWaitingCustomer(gui);
 		netTransaction -= amount;
 		t.msgDeposit(amount, acctNum);
 		
@@ -230,7 +230,9 @@ public class BankCustomerRole extends Role implements BankCustomer {
 		amount = money;
 		st = STATE.entering;
 		super.setActive();
-		gui.DoGetInLine(building.getWaitingCustomersSize());
+		if(gui!= null)
+			gui.DoGetInLine(building.getWaitingCustomersSize());
+			
 	}
 	
 	public void setBusiness(Building business) {
