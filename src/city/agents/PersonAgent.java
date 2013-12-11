@@ -120,6 +120,7 @@ public class PersonAgent extends Agent implements Person {
 		super();
 		this.name = name;
 		this.cash = 0;
+		this.hasEaten = false;
 		this.home = residence;
 		this.currentLocation = residence;
 		this.animation = animation;
@@ -393,7 +394,6 @@ public class PersonAgent extends Agent implements Person {
 			Class<?> c0 = Class.forName(building.getCustomerRoleName());
 			Constructor<?> r0 = c0.getConstructor();
 			restaurantCustomerRole = (RoleInterface) r0.newInstance();
-			building.addOccupyingRole(restaurantCustomerRole);
 			this.addRole(restaurantCustomerRole);
 		} catch (ClassNotFoundException | NoSuchMethodException | SecurityException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException e) {
 			e.printStackTrace();
@@ -428,11 +428,6 @@ public class PersonAgent extends Agent implements Person {
 		MarketOrder order = new MarketOrder(items);
 		marketCustomerRole = new MarketCustomerRole(m, order);
 		this.addRole(marketCustomerRole);
-		// Market Customer Animation
-		MarketAnimatedCustomer anim = new MarketCustomerAnimation(marketCustomerRole);
-		marketCustomerRole.setAnimation(anim);	
-		anim.setVisible(true);
-		m.getPanel().addVisualizationElement(anim);
 	}
 
 	/**
