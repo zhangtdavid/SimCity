@@ -432,7 +432,9 @@ public class PersonAgent extends Agent implements Person {
 		MarketAnimatedCustomer anim = new MarketCustomerAnimation(marketCustomerRole);
 		marketCustomerRole.setAnimation(anim);	
 		anim.setVisible(true);
-		m.getPanel().addVisualizationElement(anim);
+		if(m != null)
+			if(m.getPanel() != null)
+				m.getPanel().addVisualizationElement(anim);
 	}
 
 	/**
@@ -858,12 +860,14 @@ public class PersonAgent extends Agent implements Person {
 				walkerRole = new WalkerRole(b);
 				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 				walkerAnimation.setVisible(true);
-				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				if(Application.getMainFrame() != null)
+					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 				walkerRole.setAnimation(walkerAnimation);
 				walkerRole.setPerson(this);
 				this.addRole(walkerRole);
 				walkerRole.setActive();
-				atDestination.acquire();
+				if(Application.sidewalks != null)
+					atDestination.acquire();
 				this.removeRole(walkerRole);
 				// TODO
 				// animation.goToBusStop(b);
@@ -879,12 +883,14 @@ public class PersonAgent extends Agent implements Person {
 				walkerRole = new WalkerRole(destination);
 				AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 				walkerAnimation.setVisible(true);
-				Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+				if(Application.getMainFrame() != null)
+					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 				walkerRole.setAnimation(walkerAnimation);
 				walkerRole.setPerson(this);
 				this.addRole(walkerRole);
 				walkerRole.setActive();
-				atDestination.acquire();
+				if(Application.sidewalks != null)
+					atDestination.acquire();
 			}
 		} else {
 			// Don't do anything, you're already where you should be
@@ -931,12 +937,14 @@ public class PersonAgent extends Agent implements Person {
 					walkerRole = new WalkerRole(destination);
 					AnimatedWalker walkerAnimation = new WalkerAnimation(walkerRole, currentLocation, Application.sidewalks);
 					walkerAnimation.setVisible(true);
-					Application.getMainFrame().cityView.addAnimation(walkerAnimation);
+					if(Application.getMainFrame() != null)
+						Application.getMainFrame().cityView.addAnimation(walkerAnimation);
 					walkerRole.setAnimation(walkerAnimation);
 					walkerRole.setPerson(this);
 					this.addRole(walkerRole);
 					walkerRole.setActive();
 					try {
+						if(Application.sidewalks != null)
 						atDestination.acquire();
 					} catch (InterruptedException e) {
 						e.printStackTrace();

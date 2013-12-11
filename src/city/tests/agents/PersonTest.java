@@ -690,7 +690,7 @@ public class PersonTest extends TestCase {
 		// Further setup
 		occupation = new MockGenericJob(workplace, 0, 12);
 		person.setOccupation(occupation);
-		person.setCash(0);
+		person.setCash(51);
 		person.setAnimation(animation);
 		
 		// Preconditions
