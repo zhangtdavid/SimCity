@@ -85,6 +85,7 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 				RestaurantJPCustomerAnimation anim = new RestaurantJPCustomerAnimation(c, customerCounter);
 				customerCounter++;
 				c.setHost(host);
+				c.setCashier(cashier);
 				c.setAnimation(anim);
 				anim.setVisible(true); // TODO set this in setActive()
 				this.getPanel().addVisualizationElement(anim);
@@ -135,7 +136,7 @@ public class RestaurantJPBuilding extends RestaurantBuilding implements Restaura
 				super.addOccupyingRole(c, anim);
 			}
 		}
-		if(r instanceof RestaurantZhangCashierRole) {
+		if(r instanceof RestaurantJPCashierRole) {
 			RestaurantJPCashierRole c = (RestaurantJPCashierRole)r;
 			if(!super.occupyingRoleExists(c)) { 
 				cashier = c;

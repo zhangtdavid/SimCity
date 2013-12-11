@@ -91,13 +91,13 @@ public abstract class RestaurantJPWaiterBase extends JobRole implements Restaura
 	}
 	
 	public void msgOrderIsReady(String choice, RestaurantJPTableClass t){
-		//Do("OrderDone message received from Cook");
 		for(MyCustomer myC : myCustomers){
-			if(myC.table == t)
-				if(myC.choice == choice)
+			if(myC.choice.equals(choice)){
 					myC.s = state.foodReady;
+					stateChanged();
+					return;
+			}
 		}
-		stateChanged();
 	}
 	
 	public void msgHereIsCheck(int check, RestaurantJPCashier csh, RestaurantJPCustomer c){
