@@ -319,6 +319,8 @@ public class RestaurantChungCookRole extends JobRole implements RestaurantChungC
         marketCustomerDelivery.setActive();
         marketCustomerDeliveryRoles.add((Role) marketCustomerDelivery);
     	restaurant.getRestaurantChungCashier().msgAddMarketOrder(selectedMarket, o.order);
+    	
+    	stateChanged();
     }
         
 //  Cooking
