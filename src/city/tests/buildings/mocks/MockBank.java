@@ -17,12 +17,6 @@ public class MockBank extends MockBuilding implements Bank {
 	}
 
 	@Override
-	public List<Loan> getLoans() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
 	public List<Account> getAccounts() {
 		// TODO Auto-generated method stub
 		return null;
@@ -54,6 +48,18 @@ public class MockBank extends MockBuilding implements Bank {
 
 	@Override
 	public void removeWaitingCustomer(BankCustomerAnimation gui) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	@Override
+	public int getWaitingCustomersSize() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	@Override
+	public void addWaitingCustomer(BankCustomerAnimation gui) {
 		// TODO Auto-generated method stub
 		
 	}
