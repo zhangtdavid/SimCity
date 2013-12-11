@@ -92,7 +92,16 @@ public class MarketBuilding extends Building implements Market {
 	
 	@Override
 	public boolean getBusinessIsOpen() {
-		boolean disposition = false;
+		boolean disposition = true;
+		
+		if (manager == null)
+			disposition = false;
+		if (cashier == null)
+			disposition = false;
+		if (employees.size() == 0)
+			disposition = false;
+		if (deliveryPeople.size() == 0)
+			disposition = false;
 
 		return disposition;
 	}

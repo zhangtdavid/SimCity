@@ -75,7 +75,16 @@ public class RestaurantChungBuilding extends RestaurantBuilding implements Resta
 	
 	@Override
 	public boolean getBusinessIsOpen() {
-		boolean disposition = false;
+		boolean disposition = true;
+		
+		if (host == null)
+			disposition = false;
+		if (cashier == null)
+			disposition = false;
+		if (cook == null)
+			disposition = false;
+		if (waiters.size() == 0)
+			disposition = false;
 
 		return disposition;
 	}
