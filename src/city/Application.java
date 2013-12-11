@@ -359,17 +359,17 @@ public class Application {
             bus1.startThread();
             
      // Create buildings
-            AptBuilding Apartment1 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 50);
+            AptBuilding Apartment1 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 75);
             AptBuilding Apartment2 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 100);
             AptBuilding Apartment3 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 150);
             AptBuilding Apartment4 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 200);
             AptBuilding Apartment5 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 250);
             AptBuilding Apartment6 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 300);
             AptBuilding Apartment7 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 350);
-            AptBuilding Apartment8 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 400);
-            AptBuilding Apartment9 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 50, 425);
+            AptBuilding Apartment8 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 25, 375);
+            AptBuilding Apartment9 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 75, 425);
             AptBuilding Apartment10 = (AptBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.APT, 100, 425);
-            BankBuilding bank1 = (BankBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.BANK, 425, 50);
+            BankBuilding bank1 = (BankBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.BANK, 425, 75);
             MarketBuilding market1 = (MarketBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.MARKET, 425, 100);
             RestaurantTimmsBuilding restaurantTimms = (RestaurantTimmsBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTTIMMS, 425, 150);
             RestaurantZhangBuilding restaurantZhang = (RestaurantZhangBuilding)createBuilding(CityViewBuilding.BUILDINGTYPE.RESTAURANTZHANG, 425, 200);
@@ -677,102 +677,156 @@ public class Application {
             
             
      
-                    /*// delivery Person's car
-                    CarAgent carDelivery = new CarAgent(market1, p2r1Market); // setting b to be the current location of the car
+                    // delivery Person's car
+                    CarAgent carDelivery = new CarAgent(market1, marketDelivery); // setting b to be the current location of the car
                     CarAnimation carAnim = new CarAnimation(carDelivery, market1);
                     carDelivery.setAnimation(carAnim);
                     mainFrame.cityView.addAnimation(carAnim);
-                    p2r1Market.setDeliveryCar(carDelivery);
+                    marketDelivery.setDeliveryCar(carDelivery);
                     carDelivery.startThread();
                     
                     
-                    CarAgent c0Chung = new CarAgent(busStop1, p0Chung);
-                    CarAnimation c0AnimChung = new CarAnimation(c0Chung, busStop1);
-                    c0Chung.setAnimation(c0AnimChung);
-                    mainFrame.cityView.addAnimation(c0AnimChung);
-                    CarAgent c1Chung = new CarAgent(busStop1, p1Chung);
-                    CarAnimation c1AnimChung = new CarAnimation(c1Chung, busStop1);
-                    c1Chung.setAnimation(c1AnimChung);
-                    mainFrame.cityView.addAnimation(c1AnimChung);
-                    CarAgent c2Chung = new CarAgent(busStop1, p2Chung);
-                    CarAnimation c2AnimChung = new CarAnimation(c2Chung, busStop1);
-                    c2Chung.setAnimation(c2AnimChung);
-                    mainFrame.cityView.addAnimation(c2AnimChung);
-                    CarAgent c3Chung = new CarAgent(busStop1, p3Chung);
-                    CarAnimation c3AnimChung = new CarAnimation(c3Chung, busStop1);
-                    c3Chung.setAnimation(c3AnimChung);
-                    mainFrame.cityView.addAnimation(c3AnimChung);
-                    CarAgent c4Chung = new CarAgent(busStop1, p4Chung);
-                    CarAnimation c4AnimChung = new CarAnimation(c4Chung, busStop1);
-                    c4Chung.setAnimation(c4AnimChung);
-                    mainFrame.cityView.addAnimation(c4AnimChung);
+                    CarAgent c1 = new CarAgent(Apartment1, p1);
+                    CarAnimation c1Anim = new CarAnimation(c1, Apartment1);
+                    c1.setAnimation(c1Anim);
+                    mainFrame.cityView.addAnimation(c1Anim);
                     
-                    CarAgent c0Choi = new CarAgent(Apartment3, p0Choi);
-                    CarAnimation c0AnimChoi = new CarAnimation(c0Choi, Apartment3);
-                    c0Choi.setAnimation(c0AnimChoi);
-                    mainFrame.cityView.addAnimation(c0AnimChoi);
-                                   
-                    CarAgent c1Choi = new CarAgent(busStop4, p1Choi);
-                    CarAnimation c1AnimChoi = new CarAnimation(c1Choi, busStop4);
-                    c1Choi.setAnimation(c1AnimChoi);
-                    mainFrame.cityView.addAnimation(c1AnimChoi);
-                    CarAgent c2Choi = new CarAgent(busStop4, p2Choi);
-                    CarAnimation c2AnimChoi = new CarAnimation(c2Choi, busStop4);
-                    c2Choi.setAnimation(c2AnimChoi);
-                    mainFrame.cityView.addAnimation(c2AnimChoi);
-                    CarAgent c3Choi = new CarAgent(busStop4, p3Choi);
-                    CarAnimation c3AnimChoi = new CarAnimation(c3Choi, busStop4);
-                    c3Choi.setAnimation(c3AnimChoi);
-                    mainFrame.cityView.addAnimation(c3AnimChoi);
-                    CarAgent c4Choi = new CarAgent(busStop4, p4Choi);
-                    CarAnimation c4AnimChoi = new CarAnimation(c4Choi, busStop4);
-                    c4Choi.setAnimation(c4AnimChoi);
-                    mainFrame.cityView.addAnimation(c4AnimChoi);
-                    CarAgent c5Choi = new CarAgent(busStop4, p5Choi);
-                    CarAnimation c5AnimChoi = new CarAnimation(c5Choi, busStop4);
-                    c5Choi.setAnimation(c5AnimChoi);
-                    mainFrame.cityView.addAnimation(c5AnimChoi);
-                    CarAgent c6Choi = new CarAgent(busStop4, p6Choi);
-                    CarAnimation c6AnimChoi = new CarAnimation(c6Choi, busStop4);
-                    c6Choi.setAnimation(c6AnimChoi);
-                    mainFrame.cityView.addAnimation(c6AnimChoi);
-                    CarAgent c7Choi = new CarAgent(busStop4, p7Choi);
-                    CarAnimation c7AnimChoi = new CarAnimation(c7Choi, busStop4);
-                    c7Choi.setAnimation(c7AnimChoi);
-                    mainFrame.cityView.addAnimation(c7AnimChoi);
-                    CarAgent c8Choi = new CarAgent(busStop4, p8Choi);
-                    CarAnimation c8AnimChoi = new CarAnimation(c8Choi, busStop4);
-                    c8Choi.setAnimation(c8AnimChoi);
-                    mainFrame.cityView.addAnimation(c8AnimChoi);
-                    CarAgent c9Choi = new CarAgent(busStop3, p9Choi);
-                    CarAnimation c9AnimChoi = new CarAnimation(c9Choi, busStop3);
-                    c9Choi.setAnimation(c9AnimChoi);
-                    mainFrame.cityView.addAnimation(c9AnimChoi);
-                    CarAgent c10Choi = new CarAgent(busStop3, p10Choi);
-                    CarAnimation c10AnimChoi = new CarAnimation(c10Choi, busStop3);
-                    c10Choi.setAnimation(c10AnimChoi);
-                    mainFrame.cityView.addAnimation(c10AnimChoi);
+                    CarAgent c2 = new CarAgent(Apartment1, p2);
+                    CarAnimation c2Anim = new CarAnimation(c2, Apartment1);
+                    c2.setAnimation(c2Anim);
+                    mainFrame.cityView.addAnimation(c2Anim);
                     
-                    CarAgent c0Market = new CarAgent(busStop1, p0Market);
-                    CarAnimation c0AnimMarket = new CarAnimation(c0Market, busStop1);
-                    c0Market.setAnimation(c0AnimMarket);
-                    mainFrame.cityView.addAnimation(c0AnimMarket);
-                    CarAgent c1Market = new CarAgent(busStop1, p1Market);
-                    CarAnimation c1AnimMarket = new CarAnimation(c1Market, busStop1);
-                    c1Market.setAnimation(c1AnimMarket);
-                    mainFrame.cityView.addAnimation(c1AnimMarket);
-                    CarAgent c2Market = new CarAgent(busStop1, p2Market);
-                    CarAnimation c2AnimMarket = new CarAnimation(c2Market, busStop1);
-                    c2Market.setAnimation(c2AnimMarket);
-                    mainFrame.cityView.addAnimation(c2AnimMarket);
-                    CarAgent c3Market = new CarAgent(busStop1, p3Market);
-                    CarAnimation c3AnimMarket = new CarAnimation(c3Market, busStop1);
-                    c3Market.setAnimation(c3AnimMarket);
-                    mainFrame.cityView.addAnimation(c3AnimMarket);
-                    CarAgent c4Market = new CarAgent(busStop1, p4Market);
-                    CarAnimation c4AnimMarket = new CarAnimation(c4Market, busStop1);
-                    c4Market.setAnimation(c4AnimMarket);
-                    mainFrame.cityView.addAnimation(c4AnimMarket);
+                    CarAgent c3 = new CarAgent(Apartment1, p3);
+                    CarAnimation c3Anim = new CarAnimation(c3, Apartment1);
+                    c3.setAnimation(c3Anim);
+                    mainFrame.cityView.addAnimation(c3Anim);
+                    
+                    CarAgent c4 = new CarAgent(Apartment1, p4);
+                    CarAnimation c4Anim = new CarAnimation(c4, Apartment1);
+                    c4.setAnimation(c4Anim);
+                    mainFrame.cityView.addAnimation(c4Anim);
+                    
+                    CarAgent c5 = new CarAgent(Apartment1, p5);
+                    CarAnimation c5Anim = new CarAnimation(c5, Apartment1);
+                    c5.setAnimation(c5Anim);
+                    mainFrame.cityView.addAnimation(c5Anim);
+                    /*
+                    CarAgent c6 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
+                    CarAgent c0 = new CarAgent(busStop1, p1);
+                    CarAnimation c0Anim = new CarAnimation(c0, Apartment1);
+                    c0.setAnimation(c0Anim);
+                    mainFrame.cityView.addAnimation(c0Anim);
                     
                     p0Choi.setCar(c0Choi);
                     p1Choi.setCar(c1Choi);
@@ -785,12 +839,25 @@ public class Application {
                     p8Choi.setCar(c8Choi);
                     p9Choi.setCar(c9Choi);
                     p10Choi.setCar(c10Choi);*/
-
+                    
+                    p1.setCar(c1);
+                    p2.setCar(c2);
+                    p3.setCar(c3);
+                    p4.setCar(c4);
+                    p5.setCar(c5);
+                    
+                    
 
             try {
                     Thread.sleep(1000);
             } catch (InterruptedException e) {}
 
+            c1.startThread();
+            c2.startThread();
+            c3.startThread();
+            c4.startThread();
+            c5.startThread();
+            
             p1.startThread();
             p2.startThread();
             p3.startThread();
@@ -980,7 +1047,7 @@ public class Application {
                         setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
                         return building;
                 case RESTAURANTJP:
-                        cityViewBuilding = new CityViewRestaurantJP(x, y, "RestaurantJP " + mainFrame.cityView.statics.size(), Color.orange, new RestaurantJPPanel(Color.orange));
+                        cityViewBuilding = new CityViewRestaurantJP(x, y, "RestaurantJP " + mainFrame.cityView.statics.size(), Color.orange, new RestaurantJPPanel(Color.darkGray));
                         building = new RestaurantJPBuilding("RestaurantJP " + mainFrame.cityView.statics.size(),
                                         (RestaurantJPPanel)(cityViewBuilding.getBuilding()), cityViewBuilding);
                         setBuilding(cityViewBuilding.getBuilding(), cityViewBuilding, building);
