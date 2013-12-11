@@ -252,12 +252,14 @@ public class BankTellerRole extends JobRole implements BankTeller {
 		print("Teller has been set active");
 		building.getManager().msgAvailable(this);
 		super.setActive();
-		gui.DoGoToStation();
+		if(gui != null){
+			gui.DoGoToStation();
 		try {
 			atDestination.acquire();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
+		}
 		}
 	}
 	

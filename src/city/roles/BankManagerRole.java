@@ -63,7 +63,7 @@ public class BankManagerRole extends JobRole implements BankManager {
 	@Override
 	public void msgAvailable(BankTeller t){
 		boolean flag = true;
-		print("Available message received from " + t.getPerson().getName() + ". Number of tellers = " + myTellers.size());
+		//print("Available message received from " + t.getPerson().getName() + ". Number of tellers = " + myTellers.size());
 		for(MyTeller myT : myTellers){
 			if(myT.teller == t){
 				myT.s = STATE.available;
@@ -170,7 +170,8 @@ public class BankManagerRole extends JobRole implements BankManager {
 	// Actions
 
 	private void AssignCustomer(BankCustomer bc, MyTeller myT){
-		gui.DoString("Go to " + myT.teller.getPerson().getName());
+		if(gui!=null)
+			gui.DoString("Go to " + myT.teller.getPerson().getName());
 		myT.s = STATE.busy;
 		customers.remove(bc);
 		myT.teller.msgAddressCustomer(bc);
@@ -247,7 +248,8 @@ public class BankManagerRole extends JobRole implements BankManager {
 	public void setActive() {
 		building.setManager(this);
 		super.setActive();
-		gui.DoEnterBank();
+		if(gui!=null)
+			gui.DoEnterBank();
 	}
 	
 	public void setInactive(){

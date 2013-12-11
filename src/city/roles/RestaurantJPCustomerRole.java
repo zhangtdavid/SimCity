@@ -32,7 +32,7 @@ public class RestaurantJPCustomerRole extends Role implements RestaurantJPCustom
 	RestaurantJPMenuClass myMenu = new RestaurantJPMenuClass();
 	String myOrder = new String();
 	int bill = 0;
-	RestaurantJPCashier cashier;
+	private RestaurantJPCashier cashier;
 	private RestaurantJPHostRole host;
 
 	//Constructor
