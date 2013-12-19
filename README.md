@@ -8,8 +8,6 @@ SimCity 201
 3. Choose "Existing local repository" and find this repo which you've just cloned. Use the "Import existing projects" wizard and click the checkbox next to the project named **SimCity201**.
 4. Click continue/finish, you should now have the entire project loaded into Eclipse.
 
-It is also suggested that you install EclEmma from the Eclipse Marketplace. This will be invaluable when writing tests. Contact @[timms](https://github.com/timms) if you have questions about using code coverage tools.
-
 ## Project Structure 
 
 The SimCity201 project is divided between two code folders. `lib` is insignificant, it simply includes some 3rd-party libraries used by the Agent code. All of the important code is contained in `src`.
@@ -29,9 +27,8 @@ Inside `src` are multiple packages:
 * `city.tests.mock` contains mocks for all classes in `city.agents` and `city.roles`.
 * `utilities` contains various classes used throughout the project.
 
-## Programming Conventions
-
-Please read the [Coding Standards](https://github.com/usc-csci201-fall2013/team17/wiki/Coding-Standards) wiki for full details.
+## License
+Please see the LICENSE.md for full license details.
 
 ## Project Outline
  - The project contains a city view alongside a building view alongside a control panel. The city view includes roads and buildings.
